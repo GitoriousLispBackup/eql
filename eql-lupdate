@@ -1,0 +1,2 @@
+ecl -shell tr.lisp
+lupdate tr.h gui/gui.ui -ts eql_de.ts eql_it.ts

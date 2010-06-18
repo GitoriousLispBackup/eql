@@ -1,0 +1,11 @@
+(let ((embedded-qt-lisp (find :eql *features*))) ; [EQL]
+  (defun wait-for-streams (streams timeout)
+    (loop
+       ;; [EQL]
+       (when embedded-qt-lisp
+         (eql:qprocess-events))
+       (when (check-slime-interrupts) (return :interrupt))
+       (let ((ready (remove-if-not #'stream-readable-p streams)))
+         (when ready (return ready)))
+       (when timeout (return nil))
+       (sleep (if embedded-qt-lisp 0.02 0.1))))) ; [EQL]

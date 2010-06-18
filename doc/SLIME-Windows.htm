@@ -1,0 +1,25 @@
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<h2>SLIME Windows</h2>
+<ul>
+<li>Patch your <code>slime/swank-backend.lisp</code>,  adding the marked code (see <code>patches/win32/swank-backend.lisp.snip</code>).
+<pre>
+<span class="added">(let ((embedded-qt-lisp (find :eql *features*))) ; [EQL]</span>
+  (defun wait-for-streams (streams timeout)
+    (loop
+       <span class="added">;; [EQL]
+       (when embedded-qt-lisp
+         (eql:qprocess-events))</span>
+       (when (check-slime-interrupts) (return :interrupt))
+       (let ((ready (remove-if-not #'stream-readable-p streams)))
+         (when ready (return ready)))
+       (when timeout (return nil))
+       (sleep <span class="added">(if embedded-qt-lisp 0.02</span> 0.1)))<span class="added">)) ; [EQL]</span></pre>
+<li>In your <code>.emacs</code> file, point your Lisp implementation to the <code>eql</code> executable: 
+<code>(setq inferior-lisp-program "/path-to-eql/eql")</code>
+<li>For help in SLIME mode, see the <code>qapropos</code> and <code>qgui</code> functions.
+</ul>
+Please make sure you have your SLIME Lisp set to <code>EQL</code> (see above) when starting it for the first time (that is, when it is compiled), otherwise it will complain about a missing <code>eql:qprocess-events</code> symbol (after compilation of <code>swank-backend.lisp</code>, you may switch between <code>EQL</code> and <code>ECL</code> at any time).
+</html>

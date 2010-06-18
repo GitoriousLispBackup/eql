@@ -1,0 +1,31 @@
+;;; Instead of busy waiting with communication-style NIL, use select()
+;;; on the sockets' streams.
+#+serve-event
+(let ((embedded-qt-lisp (find :eql *features*))) ; [EQL]
+  (defun poll-streams (streams timeout)
+    (let* ((serve-event::*descriptor-handlers*
+            (copy-list serve-event::*descriptor-handlers*))
+           (active-fds '())
+           (fd-stream-alist
+            (loop for s in streams
+                  for fd = (socket-fd s)
+                  collect (cons fd s)
+                  do (serve-event:add-fd-handler fd :input
+                                                 #'(lambda (fd)
+                                                     (push fd active-fds))))))
+      (serve-event:serve-event timeout)
+      (loop for fd in active-fds collect (cdr (assoc fd fd-stream-alist)))))
+
+  (defimplementation wait-for-input (streams &optional timeout)
+    (assert (member timeout '(nil t)))
+    (loop
+      ;; [EQL]
+      (when embedded-qt-lisp
+        (eql:qprocess-events))
+      (cond ((check-slime-interrupts) (return :interrupt))
+            (timeout (return (poll-streams streams 0)))
+            (t
+             (when-let (ready (poll-streams streams (if embedded-qt-lisp 0.02 0.2))) ; [EQL]
+               (return ready))))))  
+
+) ; #+serve-event (progn ...

@@ -1,0 +1,203 @@
+<html><body><p>
+<b>QADD-EVENT-FILTER (object event function)</b>
+<p>Adds a Lisp function to be called on a given event type. The event type has to be passed as integer value. If the object argument is <code>NIL</code>, the event will be captured for any object. If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.</p>
+<pre>
+  (qadd-event-filter nil +mouse-button-press+ #'(lambda (obj ev) (print obj) nil))
+</pre>
+</p><br>
+<p>
+<b>QAPP ()</b>
+<p>Convenience function returning <code>qApp</code>.</p>
+</p><br>
+<p>
+<b>QAPROPOS (&optional search class)</b>
+<p>Finds all occurrencies of the given search term in the given object's meta information.<br>Constructors are listed under <b>Methods</b>.</p>
+<pre>
+  (qapropos "html" "QTextEdit")
+  (qapropos nil "QWidget")
+  (qapropos)
+</pre>
+</p><br>
+<p>
+<b>QAPROPOS* (&optional search class)</b>
+<p>Similar to <code>qapropos</code>, returning the results as nested list.</p>
+</p><br>
+<p>
+<b>QCLEAR-EVENT-FILTERS ()</b>
+<p>Clears all added event filters.</p>
+</p><br>
+<p>
+<b>QCONNECT (caller signal receiver slot)</b>
+<p>Connects either a Qt signal to a Qt slot, or a Qt signal to a Lisp function.</p>
+<pre>
+  (qconnect edit "textChanged(QString)" label "setText(QString)")
+  (qconnect edit "textChanged(QString)" #'(lambda (txt) (print txt)))
+</pre>
+</p><br>
+<p>
+<b>QCOPY (object)</b>
+<p>Copies object if possible. Only few Qt classes allow copying.</p>
+<pre>
+  (qcopy pixmap)
+</pre>
+</p><br>
+<p>
+<b>QDELETE (object)</b>
+<br>
+<b>QDEL</b>
+<p>Deletes any Qt object, and sets the <code>pointer</code> value to <code>0</code>.</p>
+<pre>
+  (qdel widget)
+</pre>
+</p><br>
+<p>
+<b>QENUM (name key)</b>
+<p>Registered enumerators only (see <code>Q_ENUMS</code>).<br>Returns the integer value of the passed enumerator, passed as name and key. Needed only if an enumerator argument has to be passed as <code>int</code> value.</p>
+<pre>
+  (qfun item "setTextAlignment(int,int) 0 (qenum "Qt::Alignment" "AlignCenter"))
+</pre>
+</p><br>
+<p>
+<b>QEQL (object1 object2)</b>
+<p>Returns <code>T</code> for same instances of a Qt class.</p>
+</p><br>
+<p>
+<b>QFIND-CHILD (object name)</b>
+<p>Calls <code>qFindChild&lt;QObject*&gt;()</code>. Can be used to get the single widgets of a UI (see <code>qload-ui</code>), identified by <code>objectName</code>.</p>
+</p><br>
+<p>
+<b>QGUI (&optional process-events)</b>
+<p>Launches the <code>EQL</code> convenience GUI.<br>If you don't have an interactive environment, you can pass <code>T</code> to run a pseudo Qt event loop. A better option is to start the tool like so:<br><code>./eql -qgui</code>, in order to run the Qt event loop natively.</p>
+</p><br>
+<p>
+<b>QID (name)</b>
+<p>Returns the internally used ID of the object name. Non QObject classes have negative ids.</p>
+<pre>
+  (qid "QWidget")
+</pre>
+</p><br>
+<p>
+<b>QINVOKE-METHOD (object name &rest arguments)</b>
+<br>
+<b>QFUN</b>
+<p>Calls a Qt slot or method. Static methods can be called by passing the string name of an object.</p>
+<pre>
+  (qfun item "setText(int,QString)" 0 "Some objects are EQL.")
+  (qfun "QDateTime" "currentDateTime()") ; static method
+</pre>
+</p><br>
+<p>
+<b>QINVOKE-METHOD* (object class name &rest arguments)</b>
+<br>
+<b>QFUN*</b>
+<p>Similar to <code>qinvoke-method</code>, additionally passing a class name, enforcing a cast to that class.</p>
+<pre>
+  (qfun* event "QKeyEvent" "key()")
+</pre>
+</p><br>
+<p>
+<b>QLET (((var exp) ...) ...)</b>
+<p>Similar to <code>let*</code>. Creates temporary Qt objects, deleting them at the end of the <code>qlet</code> body. If <code>exp</code> is a string, it will be substituted with <code>(qnew exp)</code>.</p>
+<pre>
+  (qlet ((p "QPainter")) ...)
+</pre>
+</p><br>
+<p>
+<b>QLOAD-UI (file)</b>
+<p>Calls a custom <code>QUiLoader::load()</code> function, loading a UI file created by Qt Designer. Returns the top level widget of the UI. Use <code>qfind-child</code> to retrieve the child widgets.</p>
+</p><br>
+<p>
+<b>QMESSAGE-BOX (message)</b>
+<br>
+<b>QMSG</b>
+<p>Convenience function, calling:</p>
+<pre>
+  (qfun "QMessageBox" "information(QWidget*,QString,QString)" nil (tr "Information") message))
+</pre>
+</p><br>
+<p>
+<b>QNEW-INSTANCE (name &rest arguments)</b>
+<br>
+<b>QNEW</b>
+<p>Creates a new Qt object, optionally passing the given arguments to the constructor. Additionally you can pass any number of property/value pairs.</p>
+<pre>
+  (qnew "QWidget")
+  (qnew "QPixmap(int,int)" 50 50)
+  (qnew "QLabel" "text" "I love me.")
+</pre>
+</p><br>
+<p>
+<b>QNOBJECT-SUPER-CLASS (name)</b>
+<p>Returns the super class of non QObjects (lacking QMetaObject).</p>
+<pre>
+  (qnobject-super-class "QGraphicsLineItem")
+</pre>
+</p><br>
+<p>
+<b>QNULL-OBJECT (object)</b>
+<p>Checks for a <code>0</code> Qt object pointer.</p>
+</p><br>
+<p>
+<b>QOBJECT-NAMES (&optional type)</b>
+<p>Returns all supported object names. Passing either <code>:q</code> or <code>:n</code> returns only the QObject inherited, or not QObject inherited names, respectively.</p>
+</p><br>
+<p>
+<b>QOVERRIDE (object name function)</b>
+<p>Sets a Lisp function to be called on a virtual Qt method. If the Lisp function returns <code>NIL</code>, the default Qt method will be called afterwards.<br><br>To remove a function, pass <code>NIL</code> instead of the function argument.</p>
+<pre>
+  (qoverride edit "keyPressEvent(QKeyEvent*)" #'(lambda (ev) (print (qfun ev "key()")) nil))
+</pre>
+</p><br>
+<p>
+<b>QPROCESS-EVENTS ()</b>
+<p>Convenience function to call <code>qApp->processEvents()</code>.</p>
+</p><br>
+<p>
+<b>QPROPERTY (object name)</b>
+<br>
+<b>QGET</b>
+<p>Gets a Qt property. Enumerator values are returned as string names.</p>
+<pre>
+  (qget label "text")
+</pre>
+</p><br>
+<p>
+<b>QQUIT ()</b>
+<p>Quits both Qt and ECL.</p>
+</p><br>
+<p>
+<b>QSENDER ()</b>
+<p>Corresponding to <code>QObject::sender()</code>. To use inside a Lisp function connected to a Qt signal.</p>
+</p><br>
+<p>
+<b>QSET-NULL (object)</b>
+<p>Sets the Qt object pointer to <code>0</code>. This function is called automatically after <code>qdel</code>.</p>
+</p><br>
+<p>
+<b>QSET-PROPERTY (object name value)</b>
+<br>
+<b>QSET</b>
+<p>Sets a Qt property. Enumerator values have to be passed as string names.</p>
+<pre>
+  (qset label "alignment" "AlignCenter")
+</pre>
+</p><br>
+<p>
+<b>QSINGLE-SHOT (milliseconds function)</b>
+<p>Convenience function: a single shot timer for Lisp functions (using <code>QTimer::singleShot</code>). You can use only 1 at a time, so if you need real timers, use <code>QTimer</code> directly.</p>
+<pre>
+  (qsingle-shot 0 'on-qt-idle)
+</pre>
+</p><br>
+<p>
+<b>QSTATIC-META-OBJECT (name)</b>
+<p>Returns the static QMetaObject of the given QObject name.</p>
+<pre>
+  (qstatic-meta-object "QWidget")
+</pre>
+</p><br>
+<p>
+<b>QT-OBJECT-NAME (object)</b>
+<p>Returns the Qt class name.</p>
+</p><br>
+</body></html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<style>
+body, table { font-family: sans-serif; font-size: 10pt; }
+a:link { text-decoration: underline; color: blue; }
+a:hover { text-decoration: underline; color: blue; }
+a:visited { text-decoration: underline; color: blue; }
+a:visited:hover { text-decoration: underline; color: blue; }
+td { border: 1px solid gray; }
+table { border-collapse: collapse; }
+code, pre { color: mediumblue; }
+.added { color: red; }
+</style>
+</head>
+<body>
+<h2>Windows Easy Guide</h2>
+<p>Tested in Windows XP.
+<br>To keep it simple, we'll assume the following installation paths:</p>
+<table><tr><td>ECL</td><td><code>C:\ecl</code></td></tr>
+<tr><td>ECL install path</td><td><code>C:\ecl\msvc\package</code></td></tr>
+<tr><td>Qt</td><td><code>C:\qt\4.x.x</code></td></tr>
+<tr><td>Emacs</td><td><code>C:\emacs</code></td></tr>
+<tr><td>SLIME</td><td><code>C:\emacs\slime</code></td></tr>
+<tr><td>EQL</td><td><code>C:\eql</code></td></tr>
+</table>
+<p>Install the free <a href="http://www.microsoft.com/express/Downloads/#Visual_Studio_2008_Express_Downloads">Visual C++ 2008 Express Edition</a> (you may uncheck both of SQL Server and .NET, as you probably don't need them).</p>
+<p>Get the latest official release of <a href="http://sourceforge.net/projects/ecls/">ECL</a>.
+<ul>
+<li>After unpacking it to <code>C:\ecl</code>, edit the <code>C:\ecl\msvc\Makefile</code>
+<ul>
+<li>Find the line with <code>ECL_UNICODE</code>, and change it to: <code>ECL_UNICODE = <span class="added">1</span></code>
+<li>Find the 2 lines starting with <code>CFLAGS_CONFIG</code>, and insert to both of them this option: <code><span class="added">/Zm300</span></code> (bigger heap size)
+</ul>
+<li>Open the <b>Visual Studio 2008 Command Prompt</b> from the Windows main menu, change to the <code>C:\ecl\msvc</code> directory, and run <code>nmake</code>.
+<li>After the build, run <code>nmake install</code>. This will create a directory <code>package</code>.
+<li>Add the ECL install path to your Windows <code>Path</code> environment variable (see &lt;Control Panel:System:Advanced:Environment Variables&gt;):<br> <code>...<span class="added">;C:\ecl\msvc\package</span></code>.
+</ul></p>
+<p>Install the latest official release of <a href="http://qt.nokia.com/downloads">Qt4</a>. Choose the version <b>Qt libraries for Windows (VS 2008)</b>.</p>
+<p>Now you're ready to build EQL.
+<ul>
+<li>Open the <b>Qt command prompt</b> from the Windows main menu, and switch to the EQL source directory <code>C:\eql\src</code>.
+<li>If your ECL install path differs from the example path (see above), you need to adjust the <code>win32</code> section of <code>eql.pro</code>.
+<li>Run the command <code>ecl -shell make-eql-lib.lisp</code>.
+<li>Run <code>qmake</code>, then <code>nmake</code> (optionally you can run <code>qmake -tp vc</code>, and build your project from within <b>Visual Studio</b>, by opening the resulting <code>eql.vcproj</code>.)
+<li>Go back one directory <code>cd..</code>, and you should be able to start the EQL GUI: <code>eql -qgui</code>.
+</ul>
+<p>Get <a href="http://ftp.gnu.org/pub/gnu/emacs/windows/">Emacs for Windows</a> (e.g. emacs-23.2-bin-i386.zip).
+<ul>
+<li>Unpack it to <code>C:\emacs</code>.
+<li>To launch it, run <code>C:\emacs\bin\runemacs.exe</code>.
+</ul>
+<p>Get <a href="http://common-lisp.net/project/slime/">SLIME</a>. Choose the <b>cvs snapshot</b> (slime-current.tgz)</a>.
+<ul>
+<li>Unpack it to <code>C:\emacs\slime</code>.
+<li>Patch your <code>C:\emacs\slime\swank-backend.lisp</code> (see EQL documentation). This will make your SLIME interactive (processing Qt events).
+<li>Open your <code>C:\emacs\slime\swank-loader.lisp</code>, and insert the following lines at the top of the file (important: choose a path with <b>no spaces</b>). 
+<pre>
+(make-package :swank-loader)
+(defparameter swank-loader::*fasl-directory* "C:/emacs/slime/fasl/")
+</pre>
+</ul>
+The last step is your <code>_emacs</code> file. The path is <code>C:\Documents and Settings\&lt;username&gt;\Application Data\_emacs</code>.
+<br>If you have trouble to find the location: it's the same directory containing your <code>.emacs.d</code> directory.
+<br>The content is something like:
+<pre>
+  (setq inferior-lisp-program "C:/eql/eql.exe")
+  (add-to-list 'load-path "C:/emacs/slime/") 
+  (require 'slime)
+  (slime-setup '(slime-fancy))
+</pre>
+After firing up Emacs, and hitting <code>Meta-X slime</code>, your SLIME should compile and run.
+<br>As a final test, try this: <code>(eql:qgui)</code>.
+<br><br><br>
+</body>
+</html>
