@@ -1,7 +1,7 @@
 # copyright (c) 2010 power4projects software
 
-# final version (win32: disable console)
-#CONFIG += final
+# win32: uncomment to disable command prompt
+CONFIG += console
 
 # optional modules (experimental!)
 #CONFIG += opengl
@@ -18,22 +18,16 @@ MOC_DIR     = ./tmp/
 win32 {
     INCLUDEPATH += c:/ecl/msvc/package
     LIBS        += -Lc:/ecl/msvc/package
-    final {
-        DEFINES += FINAL_VERSION
-    }
-    else {
-        CONFIG += console
-    }
 }
 
 opengl {
     QT      += opengl
-    DEFINES += MODULE_OPENGL
+    DEFINES += EQL_OPENGL
 }
 
 svg {
     QT      += svg
-    DEFINES += MODULE_SVG
+    DEFINES += EQL_SVG
 }
 
 HEADERS += gen/_objects.h \

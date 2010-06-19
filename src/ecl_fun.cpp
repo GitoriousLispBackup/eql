@@ -5,7 +5,7 @@
 #include "dyn_object.h"
 #include "gen/_objects.h"
 
-#ifdef MODULE_OPENGL
+#ifdef EQL_OPENGL
 #include <QtOpenGL>
 #endif
 
@@ -32,11 +32,11 @@ struct QtObject {
         return id ? ((id > 0) ? Objects::qNames.at(id - 1) : Objects::nNames.at(-id - 1)) : QByteArray(); }
 };
 
-class UiLoader : public QUiLoader {
+class LUiLoader : public QUiLoader {
 public:
-    QWidget *createWidget(const QString &cl, QWidget *par, const QString &name) {
+    QWidget *createWidget(const QString &name, QWidget *par, const QString &objName) {
         QWidget *w = 0;
-        int id = Objects::q_names.value(cl.toAscii(), -1);
+        int id = Objects::q_names.value(name.toAscii(), -1);
         if(id != -1) {
             // qt_metacall to base constructor "C(uint)"
             QObject *caller = Objects::Q[id - 1];
@@ -44,7 +44,7 @@ public:
             int n = mo->indexOfMethod("C(uint)");
             if(n != -1) {
                 QMetaMethod mm(mo->method(n));
-                void *args[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                void *args[] = { 0, 0 };
                 void *pointer;
                 args[0] = &pointer; // return value
                 uint unique = Objects::unique();
@@ -54,11 +54,11 @@ public:
                     w = (QWidget*)pointer;
                     if(par) {
                         w->setParent(par); }
-                    Objects::ui_unique[name] = unique;
-                    w->setObjectName(name); }}
+                    Objects::ui_unique[objName] = unique;
+                    w->setObjectName(objName); }}
             else {
                 // fallback
-                w = QUiLoader::createWidget(cl, par, name); }}
+                w = QUiLoader::createWidget(name, par, objName); }}
         return w; }
 };
 
@@ -95,7 +95,7 @@ void iniCLFunctions() {
 enum UserMetaTypes {
     // must correspond exactly to "registerMetaTypes()"
     Start = QMetaType::User,
-#ifdef MODULE_OPENGL
+#ifdef EQL_OPENGL
     T_GLfloat,
     T_GLint,
     T_GLuint,
@@ -146,7 +146,7 @@ enum UserMetaTypes {
 
 void registerMetaTypes() {
     // must correspond exactly to "enum UserMetaTypes"
-#ifdef MODULE_OPENGL
+#ifdef EQL_OPENGL
     qRegisterMetaType<GLfloat>("GLfloat");
     qRegisterMetaType<GLint>("GLint");
     qRegisterMetaType<GLuint>("GLuint");
@@ -576,7 +576,9 @@ static cl_object from_qreallist(const QList<qreal> &l) {
     return cl_nreverse(l_lst); }
 
 static cl_object from_qcursor(const QCursor &cr) {
-    return make_base_string_copy(staticQtMetaObject->enumerator(staticQtMetaObject->indexOfEnumerator("CursorShape")).valueToKey(cr.shape())); }
+    return make_base_string_copy(staticQtMetaObject
+                                 ->enumerator(staticQtMetaObject
+                                              ->indexOfEnumerator("CursorShape")).valueToKey(cr.shape())); }
 
 static cl_object from_qfont(const QFont &f) {
     return from_qstring(f.toString()); }
@@ -1102,7 +1104,8 @@ static QList<QByteArray> metaInfo(const QByteArray &type, const QByteArray &qcla
                                 info << name.toAscii(); }}}}}}}
     return info; }
 
-static cl_object collect_info(const QByteArray &type, const QByteArray &qclass, const QByteArray &qsearch, bool non, bool *found) {
+static cl_object collect_info(const QByteArray &type, const QByteArray &qclass, const QByteArray &qsearch,
+                              bool non, bool *found) {
     cl_object l_info = Cnil;
     QList<QByteArray> info = metaInfo(type, qclass, qsearch, non);
     if(info.size()) {
@@ -1201,7 +1204,10 @@ cl_object qnew_instance2(cl_object l_name, cl_object l_args) {
                 // qt_metacall to given constructor "C(uint...)"
                 QMetaMethod mm(mo->method(n));
                 TypeList types(mm.parameterTypes());
-                void *args[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                const int MAX_ARGS = 16;
+                //               r = return, u = unique
+                //               r  u  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16
+                void *args[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
                 void *pointer;
                 args[0] = &pointer; // return value
                 uint unique = Objects::unique();
@@ -1209,7 +1215,7 @@ cl_object qnew_instance2(cl_object l_name, cl_object l_args) {
                 MetaArgList mArgs;
                 cl_object l_do_args = l_args;
                 if(p != -1) {
-                    for(int i = 0; (i < (types.length() - 1)) && (i < 9) && (l_do_args != Cnil); ++i) {
+                    for(int i = 0; (i < (types.length() - 1)) && (i < MAX_ARGS) && (l_do_args != Cnil); ++i) {
                         MetaArg m_arg(toMetaArg(types.at(i + 1), cl_car(l_do_args)));
                         args[i + 2] = m_arg.second;
                         mArgs << m_arg;
@@ -1237,10 +1243,10 @@ cl_object qcopy(cl_object l_obj) {
             // qt_metacall to copy constructor "CC(uint,<object*>)"
             QObject *caller = Objects::N[-o.id - 1];
             const QMetaObject *mo = caller->metaObject();
-            int n = mo->indexOfMethod(QString("CC(uint,L" + o.className().mid(1) + "*)").toAscii());
+            int n = mo->indexOfMethod(QByteArray("CC(uint,L") + o.className().mid(1) + "*)");
             if(n != -1) {
                 QMetaMethod mm(mo->method(n));
-                void *args[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                void *args[] = { 0, 0, 0 };
                 void *pointer;
                 args[0] = &pointer; // return value
                 uint unique = Objects::unique();
@@ -1365,7 +1371,7 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_class, cl_object l_name, 
                 int p = name.indexOf('(');
                 if(o.isStatic()) {
                     mo = methodMetaObject(o);
-                    n = mo->indexOfMethod(QString("S" + name.left(p + 1) + name.mid(p + 1)).toAscii()); }
+                    n = mo->indexOfMethod(QByteArray("S") + name.left(p + 1) + name.mid(p + 1)); }
                 else {
                     QString sep;
                     if(p != (name.length() - 2)) {
@@ -1407,7 +1413,10 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_class, cl_object l_name, 
             bool class_arg = method && !o.isStatic();
             cl_object l_do_args = l_args;
             if((types.length() - (class_arg ? 1 : 0)) == fixint(cl_length(l_args))) {
-                void *args[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                const int MAX_ARGS = 10;
+                //               r = return, o = object
+                //               r  o  1  2  3  4  5  6  7  8  9 10
+                void *args[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
                 MetaArg ret(retArg(mm.typeName()));
                 args[0] = ret.second; // return value
                 MetaArgList mArgs;
@@ -1415,7 +1424,7 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_class, cl_object l_name, 
                 QObject *q = o.isQObject() ? (QObject*)o.pointer : 0;
                 if(class_arg) {
                     args[++i + 1] = &(o.pointer); }
-                while((l_do_args != Cnil) && (i < 9)) {
+                while((l_do_args != Cnil) && (i < MAX_ARGS)) {
                     ++i;
                     MetaArg m_arg(toMetaArg(types.at(i), cl_car(l_do_args), q));
                     args[i + 1] = m_arg.second;
@@ -1716,7 +1725,7 @@ cl_object qload_ui(cl_object l_file) {
     /// Calls a custom <code>QUiLoader::load()</code> function, loading a UI file created by Qt Designer. Returns the top level widget of the UI. Use <code>qfind-child</code> to retrieve the child widgets.
     ecl_process_env()->nvalues = 1;
     if(ECL_STRINGP(l_file)) {
-        UiLoader ui;
+        LUiLoader ui;
         QFile f(toQString(l_file));
         if(f.open(QFile::ReadOnly)) {
             QWidget *w = ui.load(&f);
@@ -1784,4 +1793,5 @@ cl_object qquit() {
     /// args: ()
     /// Quits both Qt and ECL.
     qApp->quit();
+    cl_shutdown();
     exit(0); }

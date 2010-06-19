@@ -39,7 +39,6 @@
    #:qset-null
    #:qset-property
    #:qsingle-shot
-   #:qslot
    #:qstatic-meta-object
    #:qnew
    #:qdel

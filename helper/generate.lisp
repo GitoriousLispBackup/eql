@@ -16,8 +16,12 @@
 (use-package :util)
 
 (defconstant +message-generated+ "// THIS FILE IS GENERATED (see helper/)")
-(defconstant +9-var-names+ (loop for i from 1 to 9 collect (format nil "x~d" i))) ; qt_metacall limit (first is either object pointer or unique uint, 9 left)
+(defconstant +max-arguments+     50)
+(defconstant +var-names+         (loop for i from 1 to +max-arguments+ collect (format nil "x~d" i)))
 
+(defparameter *max-constructor-args*      0)
+(defparameter *max-method-args*           0)
+(defparameter *missing-types*             0)
 (defparameter *argument-types*            (make-hash-table :test #'equal))
 (defparameter *override-signatures*       (make-hash-table :test #'equal))
 (defparameter *override-id*               0)
@@ -154,10 +158,10 @@
                               name
                               (default-to-c arg enum-class)))
                   args
-                  +9-var-names+)))
+                  +var-names+)))
 
 (defun n-var-names (n)
-  (butlast +9-var-names+ (- 9 n)))
+  (butlast +var-names+ (- +max-arguments+ n)))
 
 (defun class-name* (x)
   (caaar x))
@@ -349,27 +353,27 @@
               ch
               ch))
     (add-module-includes s)
+    (format s "~%typedef QList<int> NumList;~%")
     (mapc #'(lambda (method override)
               (when (new-p (first method))
                 (let ((virtual (consp (rest override)))
                       (name (class-name* method))
                       (sub-name (sub-class-name method)))
-                  (format s "~%typedef QList<int> NumList;~
-                             ~%~
-                             ~%class L~a : public ~a {~a~
+                  (format s "~%class L~a : public ~a {~a~
                              ~%public:"
                           sub-name
                           name
                           (if (eql :q type) (format nil "~%    Q_OBJECT") ""))
                   (dolist (fun (rest method))
                     (when (constructor-p fun)
-                      (let ((args (function-args fun)))
-                        (when (<= (length args) 9) ; see +9-var-names+
+                      (let* ((args (function-args fun))
+                             (len (length args)))
+                        (when (<= len +max-arguments+)
                           (format s "~%    L~a(uint u~a~a) : ~aunique(u) {}"
                                   sub-name
                                   (if args ", " "")
                                   (add-var-names args)
-                                  (if args (format nil "~a(~{~a~^, ~}), " name (n-var-names (length args))) ""))))))
+                                  (if args (format nil "~a(~{~a~^, ~}), " name (n-var-names len)) ""))))))
                   (format s "~%~%    static NumList overrideIds;~
                              ~%    uint unique;~%")
                   (let ((1st t)
@@ -490,26 +494,30 @@
                                     (dolist (fun (rest obj))
                                       (let* ((fun-args (function-args fun))
                                              (len-fun-args (length fun-args)))
-                                        (when (<= len-fun-args 9) ; see +9-var-names+
+                                        (when (<= len-fun-args +max-arguments+)
                                           (if (constructor-p fun)
-                                              (format s "    Q_INVOKABLE void* C(uint u~a~a) { return new L~a(u~a~a); }~%"
-                                                      (if fun-args ", " "")
-                                                      (add-var-names fun-args cl-name)
-                                                      sub-cl-name
-                                                      (if fun-args ", " "")
-                                                      (format nil "~{~a~^, ~}" (n-var-names len-fun-args)))
-                                              (format s "    Q_INVOKABLE ~a ~a~a(~a~a~a)~a { ~a~a~a~a; }~%"
-                                                      (arg-to-c (return-arg fun) cl-name :return)
-                                                      (if (static-p fun) "S" "M")
-                                                      (function-name fun)
-                                                      (if (static-p fun) "" (format nil "~a* o" cl-name))
-                                                      (if (and fun-args (not (static-p fun))) ", " "")
-                                                      (add-var-names fun-args cl-name)
-                                                      (if (const-p fun) " const" "")
-                                                      (if (void-p (return-arg fun)) "" "return ")
-                                                      (if (static-p fun) (format nil "~a::" cl-name) "o->")
-                                                      (function-name fun)
-                                                      (if (value-p fun) "" (format nil "(~{~a~^, ~})" (n-var-names len-fun-args)))))))))
+                                              (progn
+                                                (setf *max-constructor-args* (max len-fun-args *max-constructor-args*))
+                                                (format s "    Q_INVOKABLE void* C(uint u~a~a) { return new L~a(u~a~a); }~%"
+                                                        (if fun-args ", " "")
+                                                        (add-var-names fun-args cl-name)
+                                                        sub-cl-name
+                                                        (if fun-args ", " "")
+                                                        (format nil "~{~a~^, ~}" (n-var-names len-fun-args))))
+                                              (progn
+                                                (setf *max-method-args* (max len-fun-args *max-method-args*))
+                                                (format s "    Q_INVOKABLE ~a ~a~a(~a~a~a)~a { ~a~a~a~a; }~%"
+                                                        (arg-to-c (return-arg fun) cl-name :return)
+                                                        (if (static-p fun) "S" "M")
+                                                        (function-name fun)
+                                                        (if (static-p fun) "" (format nil "~a* o" cl-name))
+                                                        (if (and fun-args (not (static-p fun))) ", " "")
+                                                        (add-var-names fun-args cl-name)
+                                                        (if (const-p fun) " const" "")
+                                                        (if (void-p (return-arg fun)) "" "return ")
+                                                        (if (static-p fun) (format nil "~a::" cl-name) "o->")
+                                                        (function-name fun)
+                                                        (if (value-p fun) "" (format nil "(~{~a~^, ~})" (n-var-names len-fun-args))))))))))
                                   (format s "};~%")))
                             methods)))
       ;; class hierarchy
@@ -764,6 +772,7 @@
                     (find* arg skip)
                     (find* arg *q-methods* #'caaar)
                     (find* arg *n-methods* #'caaar))
+          (incf *missing-types*)
           (write-line arg s))))))
 
 (progn
@@ -773,4 +782,8 @@
   (methods.h :q)
   (methods.h :n)
   (objects.cpp)
-  (missing-types))
+  (missing-types)
+  (dolist (var '(*max-constructor-args*
+                 *max-method-args*
+                 *missing-types*))
+    (format t "~&~s ~d~%" var (symbol-value var))))

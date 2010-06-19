@@ -19,6 +19,10 @@ int main(int argc, char **argv) {
     if(args.contains("-h") || (args.contains("--help"))) {
         std::cout << "Usage: eql [-qgui | -qtpl | file] [-lang xx]" << std::endl;
         exit(0); }
+#ifdef Q_OS_WIN32
+    // necessary when using SLIME
+    { QWidget ini; ini.setGeometry(0, 0, 0, 0); ini.show(); ini.close(); }
+#endif
 
 //  (3)
     QTranslator tr, trQt;
@@ -32,14 +36,6 @@ int main(int argc, char **argv) {
                 qapp.installTranslator(&tr);
                 if(trQt.load("qt_" + lang)) {
                     qapp.installTranslator(&trQt); }}}}
-
-#ifdef Q_OS_WIN32
-    // necessary when using SLIME
-    { QWidget ini; ini.setGeometry(0, 0, 0, 0); ini.show(); ini.close(); }
-#ifdef FINAL_VERSION
-    EQL::disableConsole();
-#endif
-#endif
 
 //  (4)
     EQL eql(args);

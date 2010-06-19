@@ -286,5 +286,5 @@ under certain conditions; see file 'Copyright' for details.")
                       ;; (CONTINUE), the reader will wait for an inexistent #\Newline.
                       (t
                        (return-from qtpl-read (read))))))
-    (loop
+    (loop               ; [EQL]
        (eql:qevents)))) ; [EQL]

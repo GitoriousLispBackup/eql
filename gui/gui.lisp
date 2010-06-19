@@ -213,7 +213,7 @@
                       (cons "QCursor"       "\"CrossCursor\"")
                       (cons "QDate"         "\"2009-12-25\"")
                       (cons "QDateTime"     "\"2009-12-25T08:15:05\"")
-                      (cons "QFont"         "\"Lucida Grande,11\"")
+                      (cons "QFont"         "\"Lucida Grande,11\" (or simply use the styleSheet property)")
                       (cons "QGradientStop" "(cons 0 \"orange\")")
                       (cons "QKeySequence"  "\"Alt+A\"")
                       (cons "QPoint"        "(list x y)")

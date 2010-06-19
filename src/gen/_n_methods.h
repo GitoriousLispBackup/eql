@@ -865,6 +865,7 @@ class N60 : public QObject { // QMatrix4x4
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LMatrix4x4(u); }
+    Q_INVOKABLE void* C(uint u, qreal x1, qreal x2, qreal x3, qreal x4, qreal x5, qreal x6, qreal x7, qreal x8, qreal x9, qreal x10, qreal x11, qreal x12, qreal x13, qreal x14, qreal x15, qreal x16) { return new LMatrix4x4(u, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16); }
     Q_INVOKABLE void* C(uint u, const QTransform& x1) { return new LMatrix4x4(u, x1); }
     Q_INVOKABLE void* C(uint u, const QMatrix& x1) { return new LMatrix4x4(u, x1); }
     Q_INVOKABLE QVector4D Mcolumn(QMatrix4x4* o, int x1) const { return o->column(x1); }
@@ -1255,6 +1256,7 @@ public:
     Q_INVOKABLE void MsetBrush(QPalette* o, QPalette::ColorGroup x1, QPalette::ColorRole x2, const QBrush& x3) { o->setBrush(x1, x2, x3); }
     Q_INVOKABLE void MsetColor(QPalette* o, QPalette::ColorGroup x1, QPalette::ColorRole x2, const QColor& x3) { o->setColor(x1, x2, x3); }
     Q_INVOKABLE void MsetColor(QPalette* o, QPalette::ColorRole x1, const QColor& x2) { o->setColor(x1, x2); }
+    Q_INVOKABLE void MsetColorGroup(QPalette* o, QPalette::ColorGroup x1, const QBrush& x2, const QBrush& x3, const QBrush& x4, const QBrush& x5, const QBrush& x6, const QBrush& x7, const QBrush& x8, const QBrush& x9, const QBrush& x10) { o->setColorGroup(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10); }
     Q_INVOKABLE void MsetCurrentColorGroup(QPalette* o, QPalette::ColorGroup x1) { o->setCurrentColorGroup(x1); }
     Q_INVOKABLE QBrush Mshadow(QPalette* o) const { return o->shadow(); }
     Q_INVOKABLE QBrush Mtext(QPalette* o) const { return o->text(); }

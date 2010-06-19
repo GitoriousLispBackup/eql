@@ -17,8 +17,6 @@ public:
     uint unique;
 };
 
-typedef QList<int> NumList;
-
 class LBitArray : public QBitArray {
 public:
     LBitArray(uint u) : unique(u) {}
@@ -28,8 +26,6 @@ public:
     static NumList overrideIds;
     uint unique;
 };
-
-typedef QList<int> NumList;
 
 class LBitmap : public QBitmap {
 public:
@@ -42,8 +38,6 @@ public:
     static NumList overrideIds;
     uint unique;
 };
-
-typedef QList<int> NumList;
 
 class LBrush : public QBrush {
 public:
@@ -62,8 +56,6 @@ public:
     uint unique;
 };
 
-typedef QList<int> NumList;
-
 class LConicalGradient : public QConicalGradient {
 public:
     LConicalGradient(uint u) : unique(u) {}
@@ -73,8 +65,6 @@ public:
     static NumList overrideIds;
     uint unique;
 };
-
-typedef QList<int> NumList;
 
 class LDir : public QDir {
 public:
@@ -86,8 +76,6 @@ public:
     uint unique;
 };
 
-typedef QList<int> NumList;
-
 class LFileIconProvider : public QFileIconProvider {
 public:
     LFileIconProvider(uint u) : unique(u) {}
@@ -98,16 +86,12 @@ public:
     QIcon icon(IconType x1) const { void *fun = Objects::overrideFun(unique, 204); if(fun) { const void *args[] = { &x1 }; return qVariantValue<QIcon>(callOverrideFun(0, fun, 204, args)); } return  QFileIconProvider::icon(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LFileInfo : public QFileInfo {
 public:
 
     static NumList overrideIds;
     uint unique;
 };
-
-typedef QList<int> NumList;
 
 class LFontMetrics : public QFontMetrics {
 public:
@@ -119,16 +103,12 @@ public:
     uint unique;
 };
 
-typedef QList<int> NumList;
-
 class LGradient : public QGradient {
 public:
 
     static NumList overrideIds;
     uint unique;
 };
-
-typedef QList<int> NumList;
 
 class LGraphicsEllipseItem : public QGraphicsEllipseItem {
 public:
@@ -147,8 +127,6 @@ public:
     QPainterPath shape() const { void *fun = Objects::overrideFun(unique, 99); if(fun) { return qVariantValue<QPainterPath>(callOverrideFun(0, fun, 99, 0)); } return  QGraphicsEllipseItem::shape(); }
     int type() const { void *fun = Objects::overrideFun(unique, 96); if(fun) { return callOverrideFun(0, fun, 96, 0).toInt(); } return  QGraphicsEllipseItem::type(); }
 };
-
-typedef QList<int> NumList;
 
 class LGraphicsItem : public QGraphicsItem {
 public:
@@ -191,8 +169,6 @@ public:
     void wheelEvent(QGraphicsSceneWheelEvent* x1) { void *fun = Objects::overrideFun(unique, 122); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(0, fun, 122, args).toBool()) return; } QGraphicsItem::wheelEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LGraphicsItemGroup : public QGraphicsItemGroup {
 public:
     LGraphicsItemGroup(uint u, QGraphicsItem* x1 = 0) : QGraphicsItemGroup(x1), unique(u) {}
@@ -233,8 +209,6 @@ public:
     bool sceneEventFilter(QGraphicsItem* x1, QEvent* x2) { void *fun = Objects::overrideFun(unique, 213); if(fun) { const void *args[] = { &x1, &x2 }; return callOverrideFun(0, fun, 213, args).toBool(); } return  QGraphicsItemGroup::sceneEventFilter(x1, x2); }
     void wheelEvent(QGraphicsSceneWheelEvent* x1) { void *fun = Objects::overrideFun(unique, 122); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(0, fun, 122, args).toBool()) return; } QGraphicsItemGroup::wheelEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LGraphicsLineItem : public QGraphicsLineItem {
 public:
@@ -279,8 +253,6 @@ public:
     void wheelEvent(QGraphicsSceneWheelEvent* x1) { void *fun = Objects::overrideFun(unique, 122); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(0, fun, 122, args).toBool()) return; } QGraphicsLineItem::wheelEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LGraphicsPathItem : public QGraphicsPathItem {
 public:
     LGraphicsPathItem(uint u, QGraphicsItem* x1 = 0) : QGraphicsPathItem(x1), unique(u) {}
@@ -297,8 +269,6 @@ public:
     QPainterPath shape() const { void *fun = Objects::overrideFun(unique, 99); if(fun) { return qVariantValue<QPainterPath>(callOverrideFun(0, fun, 99, 0)); } return  QGraphicsPathItem::shape(); }
     int type() const { void *fun = Objects::overrideFun(unique, 96); if(fun) { return callOverrideFun(0, fun, 96, 0).toInt(); } return  QGraphicsPathItem::type(); }
 };
-
-typedef QList<int> NumList;
 
 class LGraphicsPixmapItem : public QGraphicsPixmapItem {
 public:
@@ -342,8 +312,6 @@ public:
     void wheelEvent(QGraphicsSceneWheelEvent* x1) { void *fun = Objects::overrideFun(unique, 122); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(0, fun, 122, args).toBool()) return; } QGraphicsPixmapItem::wheelEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LGraphicsPolygonItem : public QGraphicsPolygonItem {
 public:
     LGraphicsPolygonItem(uint u, QGraphicsItem* x1 = 0) : QGraphicsPolygonItem(x1), unique(u) {}
@@ -360,8 +328,6 @@ public:
     QPainterPath shape() const { void *fun = Objects::overrideFun(unique, 99); if(fun) { return qVariantValue<QPainterPath>(callOverrideFun(0, fun, 99, 0)); } return  QGraphicsPolygonItem::shape(); }
     int type() const { void *fun = Objects::overrideFun(unique, 96); if(fun) { return callOverrideFun(0, fun, 96, 0).toInt(); } return  QGraphicsPolygonItem::type(); }
 };
-
-typedef QList<int> NumList;
 
 class LGraphicsRectItem : public QGraphicsRectItem {
 public:
@@ -381,8 +347,6 @@ public:
     int type() const { void *fun = Objects::overrideFun(unique, 96); if(fun) { return callOverrideFun(0, fun, 96, 0).toInt(); } return  QGraphicsRectItem::type(); }
 };
 
-typedef QList<int> NumList;
-
 class LGraphicsSimpleTextItem : public QGraphicsSimpleTextItem {
 public:
     LGraphicsSimpleTextItem(uint u, QGraphicsItem* x1 = 0) : QGraphicsSimpleTextItem(x1), unique(u) {}
@@ -400,8 +364,6 @@ public:
     int type() const { void *fun = Objects::overrideFun(unique, 96); if(fun) { return callOverrideFun(0, fun, 96, 0).toInt(); } return  QGraphicsSimpleTextItem::type(); }
 };
 
-typedef QList<int> NumList;
-
 class LIcon : public QIcon {
 public:
     LIcon(uint u) : unique(u) {}
@@ -412,8 +374,6 @@ public:
     static NumList overrideIds;
     uint unique;
 };
-
-typedef QList<int> NumList;
 
 class LImage : public QImage {
 public:
@@ -434,8 +394,6 @@ public:
     int metric(PaintDeviceMetric x1) const { void *fun = Objects::overrideFun(unique, 214); if(fun) { const void *args[] = { &x1 }; return callOverrideFun(0, fun, 214, args).toInt(); } return  QImage::metric(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LItemEditorFactory : public QItemEditorFactory {
 public:
     LItemEditorFactory(uint u) : unique(u) {}
@@ -447,8 +405,6 @@ public:
     QByteArray valuePropertyName(QVariant::Type x1) const { void *fun = Objects::overrideFun(unique, 216); if(fun) { const void *args[] = { &x1 }; return qVariantValue<QByteArray>(callOverrideFun(0, fun, 216, args)); } return  QItemEditorFactory::valuePropertyName(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LItemSelection : public QItemSelection {
 public:
     LItemSelection(uint u) : unique(u) {}
@@ -457,8 +413,6 @@ public:
     static NumList overrideIds;
     uint unique;
 };
-
-typedef QList<int> NumList;
 
 class LItemSelectionRange : public QItemSelectionRange {
 public:
@@ -471,8 +425,6 @@ public:
     uint unique;
 };
 
-typedef QList<int> NumList;
-
 class LLinearGradient : public QLinearGradient {
 public:
     LLinearGradient(uint u) : unique(u) {}
@@ -482,8 +434,6 @@ public:
     static NumList overrideIds;
     uint unique;
 };
-
-typedef QList<int> NumList;
 
 class LListWidgetItem : public QListWidgetItem {
 public:
@@ -500,8 +450,6 @@ public:
     void setData(int x1, const QVariant& x2) { void *fun = Objects::overrideFun(unique, 219); if(fun) { const void *args[] = { &x1, &x2 }; if(callOverrideFun(0, fun, 219, args).toBool()) return; } QListWidgetItem::setData(x1, x2); }
 };
 
-typedef QList<int> NumList;
-
 class LLocale : public QLocale {
 public:
     LLocale(uint u) : unique(u) {}
@@ -513,8 +461,6 @@ public:
     uint unique;
 };
 
-typedef QList<int> NumList;
-
 class LMatrix : public QMatrix {
 public:
     LMatrix(uint u) : unique(u) {}
@@ -525,19 +471,16 @@ public:
     uint unique;
 };
 
-typedef QList<int> NumList;
-
 class LMatrix4x4 : public QMatrix4x4 {
 public:
     LMatrix4x4(uint u) : unique(u) {}
+    LMatrix4x4(uint u, qreal x1, qreal x2, qreal x3, qreal x4, qreal x5, qreal x6, qreal x7, qreal x8, qreal x9, qreal x10, qreal x11, qreal x12, qreal x13, qreal x14, qreal x15, qreal x16) : QMatrix4x4(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16), unique(u) {}
     LMatrix4x4(uint u, const QTransform& x1) : QMatrix4x4(x1), unique(u) {}
     LMatrix4x4(uint u, const QMatrix& x1) : QMatrix4x4(x1), unique(u) {}
 
     static NumList overrideIds;
     uint unique;
 };
-
-typedef QList<int> NumList;
 
 class LModelIndex : public QModelIndex {
 public:
@@ -548,8 +491,6 @@ public:
     uint unique;
 };
 
-typedef QList<int> NumList;
-
 class LPainter : public QPainter {
 public:
     LPainter(uint u) : unique(u) {}
@@ -558,8 +499,6 @@ public:
     static NumList overrideIds;
     uint unique;
 };
-
-typedef QList<int> NumList;
 
 class LPainterPath : public QPainterPath {
 public:
@@ -570,8 +509,6 @@ public:
     static NumList overrideIds;
     uint unique;
 };
-
-typedef QList<int> NumList;
 
 class LPalette : public QPalette {
 public:
@@ -586,8 +523,6 @@ public:
     uint unique;
 };
 
-typedef QList<int> NumList;
-
 class LPen : public QPen {
 public:
     LPen(uint u) : unique(u) {}
@@ -600,8 +535,6 @@ public:
     uint unique;
 };
 
-typedef QList<int> NumList;
-
 class LPicture : public QPicture {
 public:
     LPicture(uint u, int x1 = -1) : QPicture(x1), unique(u) {}
@@ -613,8 +546,6 @@ public:
     void setData(const char* x1, uint x2) { void *fun = Objects::overrideFun(unique, 220); if(fun) { const void *args[] = { &x1, &x2 }; if(callOverrideFun(0, fun, 220, args).toBool()) return; } QPicture::setData(x1, x2); }
     int metric(PaintDeviceMetric x1) const { void *fun = Objects::overrideFun(unique, 214); if(fun) { const void *args[] = { &x1 }; return callOverrideFun(0, fun, 214, args).toInt(); } return  QPicture::metric(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LPixmap : public QPixmap {
 public:
@@ -630,8 +561,6 @@ public:
     int metric(PaintDeviceMetric x1) const { void *fun = Objects::overrideFun(unique, 214); if(fun) { const void *args[] = { &x1 }; return callOverrideFun(0, fun, 214, args).toInt(); } return  QPixmap::metric(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LPrinter : public QPrinter {
 public:
     LPrinter(uint u, PrinterMode x1 = ScreenResolution) : QPrinter(x1), unique(u) {}
@@ -641,8 +570,6 @@ public:
 
     int metric(PaintDeviceMetric x1) const { void *fun = Objects::overrideFun(unique, 214); if(fun) { const void *args[] = { &x1 }; return callOverrideFun(0, fun, 214, args).toInt(); } return  QPrinter::metric(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LQuaternion : public QQuaternion {
 public:
@@ -654,8 +581,6 @@ public:
     static NumList overrideIds;
     uint unique;
 };
-
-typedef QList<int> NumList;
 
 class LRadialGradient : public QRadialGradient {
 public:
@@ -669,8 +594,6 @@ public:
     uint unique;
 };
 
-typedef QList<int> NumList;
-
 class LRegExp : public QRegExp {
 public:
     LRegExp(uint u) : unique(u) {}
@@ -680,8 +603,6 @@ public:
     static NumList overrideIds;
     uint unique;
 };
-
-typedef QList<int> NumList;
 
 class LRegion : public QRegion {
 public:
@@ -696,8 +617,6 @@ public:
     uint unique;
 };
 
-typedef QList<int> NumList;
-
 class LSizePolicy : public QSizePolicy {
 public:
     LSizePolicy(uint u) : unique(u) {}
@@ -707,8 +626,6 @@ public:
     static NumList overrideIds;
     uint unique;
 };
-
-typedef QList<int> NumList;
 
 class LSpacerItem : public QSpacerItem {
 public:
@@ -733,8 +650,6 @@ public:
     QWidget* widget() { void *fun = Objects::overrideFun(unique, 222); if(fun) { return (QWidget*)qVariantValue<void*>(callOverrideFun(0, fun, 222, 0)); } return  QSpacerItem::widget(); }
 };
 
-typedef QList<int> NumList;
-
 class LStandardItem : public QStandardItem {
 public:
     LStandardItem(uint u) : unique(u) {}
@@ -751,8 +666,6 @@ public:
     int type() const { void *fun = Objects::overrideFun(unique, 96); if(fun) { return callOverrideFun(0, fun, 96, 0).toInt(); } return  QStandardItem::type(); }
 };
 
-typedef QList<int> NumList;
-
 class LTableWidgetItem : public QTableWidgetItem {
 public:
     LTableWidgetItem(uint u, int x1 = Type) : QTableWidgetItem(x1), unique(u) {}
@@ -768,8 +681,6 @@ public:
     void setData(int x1, const QVariant& x2) { void *fun = Objects::overrideFun(unique, 219); if(fun) { const void *args[] = { &x1, &x2 }; if(callOverrideFun(0, fun, 219, args).toBool()) return; } QTableWidgetItem::setData(x1, x2); }
 };
 
-typedef QList<int> NumList;
-
 class LTableWidgetSelectionRange : public QTableWidgetSelectionRange {
 public:
     LTableWidgetSelectionRange(uint u) : unique(u) {}
@@ -780,8 +691,6 @@ public:
     uint unique;
 };
 
-typedef QList<int> NumList;
-
 class LTextBlockFormat : public QTextBlockFormat {
 public:
     LTextBlockFormat(uint u) : unique(u) {}
@@ -790,8 +699,6 @@ public:
     uint unique;
 };
 
-typedef QList<int> NumList;
-
 class LTextCharFormat : public QTextCharFormat {
 public:
     LTextCharFormat(uint u) : unique(u) {}
@@ -799,8 +706,6 @@ public:
     static NumList overrideIds;
     uint unique;
 };
-
-typedef QList<int> NumList;
 
 class LTextCursor : public QTextCursor {
 public:
@@ -814,8 +719,6 @@ public:
     uint unique;
 };
 
-typedef QList<int> NumList;
-
 class LTextDocumentFragment : public QTextDocumentFragment {
 public:
     LTextDocumentFragment(uint u) : unique(u) {}
@@ -827,8 +730,6 @@ public:
     uint unique;
 };
 
-typedef QList<int> NumList;
-
 class LTextFormat : public QTextFormat {
 public:
     LTextFormat(uint u) : unique(u) {}
@@ -839,8 +740,6 @@ public:
     uint unique;
 };
 
-typedef QList<int> NumList;
-
 class LTextFrameFormat : public QTextFrameFormat {
 public:
     LTextFrameFormat(uint u) : unique(u) {}
@@ -849,8 +748,6 @@ public:
     uint unique;
 };
 
-typedef QList<int> NumList;
-
 class LTextImageFormat : public QTextImageFormat {
 public:
     LTextImageFormat(uint u) : unique(u) {}
@@ -858,8 +755,6 @@ public:
     static NumList overrideIds;
     uint unique;
 };
-
-typedef QList<int> NumList;
 
 class LTextLength : public QTextLength {
 public:
@@ -870,8 +765,6 @@ public:
     uint unique;
 };
 
-typedef QList<int> NumList;
-
 class LTextListFormat : public QTextListFormat {
 public:
     LTextListFormat(uint u) : unique(u) {}
@@ -879,8 +772,6 @@ public:
     static NumList overrideIds;
     uint unique;
 };
-
-typedef QList<int> NumList;
 
 class LTextOption : public QTextOption {
 public:
@@ -892,8 +783,6 @@ public:
     uint unique;
 };
 
-typedef QList<int> NumList;
-
 class LTextTableCell : public QTextTableCell {
 public:
     LTextTableCell(uint u) : unique(u) {}
@@ -903,8 +792,6 @@ public:
     uint unique;
 };
 
-typedef QList<int> NumList;
-
 class LTextTableCellFormat : public QTextTableCellFormat {
 public:
     LTextTableCellFormat(uint u) : unique(u) {}
@@ -913,8 +800,6 @@ public:
     uint unique;
 };
 
-typedef QList<int> NumList;
-
 class LTextTableFormat : public QTextTableFormat {
 public:
     LTextTableFormat(uint u) : unique(u) {}
@@ -922,8 +807,6 @@ public:
     static NumList overrideIds;
     uint unique;
 };
-
-typedef QList<int> NumList;
 
 class LTransform : public QTransform {
 public:
@@ -935,8 +818,6 @@ public:
     static NumList overrideIds;
     uint unique;
 };
-
-typedef QList<int> NumList;
 
 class LTreeWidgetItem : public QTreeWidgetItem {
 public:
@@ -958,8 +839,6 @@ public:
     void setData(int x1, int x2, const QVariant& x3) { void *fun = Objects::overrideFun(unique, 225); if(fun) { const void *args[] = { &x1, &x2, &x3 }; if(callOverrideFun(0, fun, 225, args).toBool()) return; } QTreeWidgetItem::setData(x1, x2, x3); }
 };
 
-typedef QList<int> NumList;
-
 class LUndoCommand : public QUndoCommand {
 public:
     LUndoCommand(uint u, QUndoCommand* x1 = 0) : QUndoCommand(x1), unique(u) {}
@@ -973,8 +852,6 @@ public:
     void redo() { void *fun = Objects::overrideFun(unique, 228); if(fun) { if(callOverrideFun(0, fun, 228, 0).toBool()) return; } QUndoCommand::redo(); }
     void undo() { void *fun = Objects::overrideFun(unique, 229); if(fun) { if(callOverrideFun(0, fun, 229, 0).toBool()) return; } QUndoCommand::undo(); }
 };
-
-typedef QList<int> NumList;
 
 class LVariant : public QVariant {
 public:
@@ -1014,8 +891,6 @@ public:
     uint unique;
 };
 
-typedef QList<int> NumList;
-
 class LVector2D : public QVector2D {
 public:
     LVector2D(uint u) : unique(u) {}
@@ -1028,8 +903,6 @@ public:
     static NumList overrideIds;
     uint unique;
 };
-
-typedef QList<int> NumList;
 
 class LVector3D : public QVector3D {
 public:
@@ -1044,8 +917,6 @@ public:
     static NumList overrideIds;
     uint unique;
 };
-
-typedef QList<int> NumList;
 
 class LVector4D : public QVector4D {
 public:

@@ -26,8 +26,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QAction::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LActionGroup : public QActionGroup {
     Q_OBJECT
 public:
@@ -43,8 +41,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QActionGroup::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LButtonGroup : public QButtonGroup {
     Q_OBJECT
 public:
@@ -59,8 +55,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QButtonGroup::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QButtonGroup::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LCalendarWidget : public QCalendarWidget {
     Q_OBJECT
@@ -108,8 +102,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QCalendarWidget::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QCalendarWidget::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LCheckBox : public QCheckBox {
     Q_OBJECT
@@ -160,8 +152,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QCheckBox::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QCheckBox::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LColumnView : public QColumnView {
     Q_OBJECT
@@ -233,8 +223,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QColumnView::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LComboBox : public QComboBox {
     Q_OBJECT
 public:
@@ -282,8 +270,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QComboBox::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QComboBox::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LCommandLinkButton : public QCommandLinkButton {
     Q_OBJECT
@@ -336,8 +322,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QCommandLinkButton::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LCompleter : public QCompleter {
     Q_OBJECT
 public:
@@ -356,8 +340,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QCompleter::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QCompleter::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LDateEdit : public QDateEdit {
     Q_OBJECT
@@ -412,8 +394,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QDateEdit::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QDateEdit::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LDateTimeEdit : public QDateTimeEdit {
     Q_OBJECT
@@ -471,8 +451,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QDateTimeEdit::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LDesktopWidget : public QDesktopWidget {
     Q_OBJECT
 public:
@@ -517,8 +495,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QDesktopWidget::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QDesktopWidget::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LDial : public QDial {
     Q_OBJECT
@@ -567,8 +543,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QDial::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LDialog : public QDialog {
     Q_OBJECT
 public:
@@ -616,8 +590,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QDialog::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LDockWidget : public QDockWidget {
     Q_OBJECT
 public:
@@ -664,8 +636,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QDockWidget::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QDockWidget::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LDoubleSpinBox : public QDoubleSpinBox {
     Q_OBJECT
@@ -719,8 +689,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QDoubleSpinBox::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LDrag : public QDrag {
     Q_OBJECT
 public:
@@ -735,8 +703,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QDrag::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QDrag::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LErrorMessage : public QErrorMessage {
     Q_OBJECT
@@ -784,8 +750,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QErrorMessage::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QErrorMessage::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LFileDialog : public QFileDialog {
     Q_OBJECT
@@ -835,8 +799,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QFileDialog::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LFontComboBox : public QFontComboBox {
     Q_OBJECT
 public:
@@ -885,8 +847,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QFontComboBox::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LFormLayout : public QFormLayout {
     Q_OBJECT
 public:
@@ -917,8 +877,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QFormLayout::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QFormLayout::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LFrame : public QFrame {
     Q_OBJECT
@@ -966,8 +924,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QFrame::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LGraphicsProxyWidget : public QGraphicsProxyWidget {
     Q_OBJECT
 public:
@@ -1003,8 +959,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QGraphicsProxyWidget::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QGraphicsProxyWidget::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LGraphicsScene : public QGraphicsScene {
     Q_OBJECT
@@ -1042,8 +996,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QGraphicsScene::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LGraphicsTextItem : public QGraphicsTextItem {
     Q_OBJECT
 public:
@@ -1066,8 +1018,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QGraphicsTextItem::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QGraphicsTextItem::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LGraphicsView : public QGraphicsView {
     Q_OBJECT
@@ -1120,8 +1070,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QGraphicsView::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LGraphicsWidget : public QGraphicsWidget {
     Q_OBJECT
 public:
@@ -1158,8 +1106,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QGraphicsWidget::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LGridLayout : public QGridLayout {
     Q_OBJECT
 public:
@@ -1192,8 +1138,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QGridLayout::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QGridLayout::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LGroupBox : public QGroupBox {
     Q_OBJECT
@@ -1242,8 +1186,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QGroupBox::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LHBoxLayout : public QHBoxLayout {
     Q_OBJECT
 public:
@@ -1276,8 +1218,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QHBoxLayout::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QHBoxLayout::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LInputDialog : public QInputDialog {
     Q_OBJECT
@@ -1327,8 +1267,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QInputDialog::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LItemDelegate : public QItemDelegate {
     Q_OBJECT
 public:
@@ -1355,8 +1293,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QItemDelegate::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LItemSelectionModel : public QItemSelectionModel {
     Q_OBJECT
 public:
@@ -1372,8 +1308,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QItemSelectionModel::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QItemSelectionModel::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LLCDNumber : public QLCDNumber {
     Q_OBJECT
@@ -1422,8 +1356,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QLCDNumber::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LLabel : public QLabel {
     Q_OBJECT
 public:
@@ -1471,8 +1403,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QLabel::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LLineEdit : public QLineEdit {
     Q_OBJECT
 public:
@@ -1519,8 +1449,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QLineEdit::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QLineEdit::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LListView : public QListView {
     Q_OBJECT
@@ -1588,8 +1516,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QListView::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QListView::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LListWidget : public QListWidget {
     Q_OBJECT
@@ -1661,8 +1587,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QListWidget::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LMainWindow : public QMainWindow {
     Q_OBJECT
 public:
@@ -1709,8 +1633,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QMainWindow::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QMainWindow::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LMenu : public QMenu {
     Q_OBJECT
@@ -1759,8 +1681,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QMenu::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LMenuBar : public QMenuBar {
     Q_OBJECT
 public:
@@ -1806,8 +1726,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QMenuBar::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QMenuBar::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LMessageBox : public QMessageBox {
     Q_OBJECT
@@ -1857,8 +1775,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QMessageBox::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LMimeData : public QMimeData {
     Q_OBJECT
 public:
@@ -1877,8 +1793,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QMimeData::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LMovie : public QMovie {
     Q_OBJECT
 public:
@@ -1895,8 +1809,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QMovie::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LObject : public QObject {
     Q_OBJECT
 public:
@@ -1911,8 +1823,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QObject::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QObject::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LPlainTextEdit : public QPlainTextEdit {
     Q_OBJECT
@@ -1967,8 +1877,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QPlainTextEdit::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LProgressBar : public QProgressBar {
     Q_OBJECT
 public:
@@ -2015,8 +1923,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QProgressBar::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QProgressBar::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LPushButton : public QPushButton {
     Q_OBJECT
@@ -2069,8 +1975,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QPushButton::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LRadioButton : public QRadioButton {
     Q_OBJECT
 public:
@@ -2121,8 +2025,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QRadioButton::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LScrollArea : public QScrollArea {
     Q_OBJECT
 public:
@@ -2170,8 +2072,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QScrollArea::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QScrollArea::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LScrollBar : public QScrollBar {
     Q_OBJECT
@@ -2221,8 +2121,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QScrollBar::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LSlider : public QSlider {
     Q_OBJECT
 public:
@@ -2270,8 +2168,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QSlider::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QSlider::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LSpinBox : public QSpinBox {
     Q_OBJECT
@@ -2325,8 +2221,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QSpinBox::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LSplashScreen : public QSplashScreen {
     Q_OBJECT
 public:
@@ -2375,8 +2269,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QSplashScreen::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LSplitter : public QSplitter {
     Q_OBJECT
 public:
@@ -2424,8 +2316,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QSplitter::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LStackedLayout : public QStackedLayout {
     Q_OBJECT
 public:
@@ -2456,8 +2346,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QStackedLayout::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QStackedLayout::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LStackedWidget : public QStackedWidget {
     Q_OBJECT
@@ -2505,8 +2393,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QStackedWidget::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LStandardItemModel : public QStandardItemModel {
     Q_OBJECT
 public:
@@ -2546,8 +2432,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QStandardItemModel::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QStandardItemModel::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LStatusBar : public QStatusBar {
     Q_OBJECT
@@ -2595,8 +2479,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QStatusBar::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LStringListModel : public QStringListModel {
     Q_OBJECT
 public:
@@ -2633,8 +2515,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QStringListModel::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QStringListModel::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LTabBar : public QTabBar {
     Q_OBJECT
@@ -2686,8 +2566,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QTabBar::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LTabWidget : public QTabWidget {
     Q_OBJECT
 public:
@@ -2735,8 +2613,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QTabWidget::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QTabWidget::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LTableView : public QTableView {
     Q_OBJECT
@@ -2805,8 +2681,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QTableView::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QTableView::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LTableWidget : public QTableWidget {
     Q_OBJECT
@@ -2880,8 +2754,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QTableWidget::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LTextBlockGroup : public QTextBlockGroup {
     Q_OBJECT
 public:
@@ -2898,8 +2770,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QTextBlockGroup::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QTextBlockGroup::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LTextBrowser : public QTextBrowser {
     Q_OBJECT
@@ -2953,8 +2823,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QTextBrowser::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LTextDocument : public QTextDocument {
     Q_OBJECT
 public:
@@ -2973,8 +2841,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QTextDocument::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QTextDocument::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LTextEdit : public QTextEdit {
     Q_OBJECT
@@ -3029,8 +2895,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QTextEdit::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LTextFrame : public QTextFrame {
     Q_OBJECT
 public:
@@ -3045,8 +2909,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QTextFrame::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QTextFrame::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LTextList : public QTextList {
     Q_OBJECT
@@ -3065,8 +2927,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QTextList::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LTextObject : public QTextObject {
     Q_OBJECT
 public:
@@ -3081,8 +2941,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QTextObject::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LTextTable : public QTextTable {
     Q_OBJECT
 public:
@@ -3096,8 +2954,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QTextTable::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QTextTable::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LThread : public QThread {
     Q_OBJECT
@@ -3114,8 +2970,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QThread::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QThread::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LTimeEdit : public QTimeEdit {
     Q_OBJECT
@@ -3171,8 +3025,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QTimeEdit::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LTimer : public QTimer {
     Q_OBJECT
 public:
@@ -3187,8 +3039,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QTimer::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QTimer::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LToolBar : public QToolBar {
     Q_OBJECT
@@ -3237,8 +3087,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QToolBar::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LToolBox : public QToolBox {
     Q_OBJECT
 public:
@@ -3286,8 +3134,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QToolBox::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QToolBox::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LToolButton : public QToolButton {
     Q_OBJECT
@@ -3338,8 +3184,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QToolButton::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LTranslator : public QTranslator {
     Q_OBJECT
 public:
@@ -3356,8 +3200,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QTranslator::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QTranslator::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LTreeView : public QTreeView {
     Q_OBJECT
@@ -3431,8 +3273,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QTreeView::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QTreeView::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LTreeWidget : public QTreeWidget {
     Q_OBJECT
@@ -3510,8 +3350,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QTreeWidget::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LUndoGroup : public QUndoGroup {
     Q_OBJECT
 public:
@@ -3527,8 +3365,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QUndoGroup::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LUndoStack : public QUndoStack {
     Q_OBJECT
 public:
@@ -3543,8 +3379,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QUndoStack::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QUndoStack::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LUndoView : public QUndoView {
     Q_OBJECT
@@ -3615,8 +3449,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QUndoView::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LVBoxLayout : public QVBoxLayout {
     Q_OBJECT
 public:
@@ -3649,8 +3481,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QVBoxLayout::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QVBoxLayout::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LWidget : public QWidget {
     Q_OBJECT
@@ -3697,8 +3527,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QWidget::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QWidget::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LWizard : public QWizard {
     Q_OBJECT
@@ -3751,8 +3579,6 @@ public:
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QWizard::timerEvent(x1); }
 };
 
-typedef QList<int> NumList;
-
 class LWizardPage : public QWizardPage {
     Q_OBJECT
 public:
@@ -3803,8 +3629,6 @@ public:
     void disconnectNotify(const char* x1) { void *fun = Objects::overrideFun(unique, 4); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QWizardPage::disconnectNotify(x1); }
     void timerEvent(QTimerEvent* x1) { void *fun = Objects::overrideFun(unique, 5); if(fun) { const void *args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QWizardPage::timerEvent(x1); }
 };
-
-typedef QList<int> NumList;
 
 class LWorkspace : public QWorkspace {
     Q_OBJECT
