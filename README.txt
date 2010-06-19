@@ -18,13 +18,14 @@ If you want to include the QtOpenGL and QtSvg modules: (experimental!)
 
 
 
-BUILD (see also: "Windows Easy Guide" in doc/)
+BUILD / REBUILD (see also: "Windows Easy Guide" in doc/)
 
 1) Switch to the src/ directory, and run:
-    ecl -shell make-eql-lib.lisp
+    ecl -shell make-eql-lib.lisp (build + rebuild)
 
 2) Run:
     qmake
+    make clean (rebuild only)
     make (nmake in Windows)
 
 (In Windows you first need to adapt the win32 section of eql.pro).
