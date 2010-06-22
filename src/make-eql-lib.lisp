@@ -1,9 +1,6 @@
-;; dummies
-(progn
-  (make-package :c)
-  (defun c::build-static-library ()))
+(make-package :c)
 
-(defparameter *lisp-files* (list #-win32 "serve-event" "util" "package" "ini"))
+(defvar *lisp-files* (list #-win32 "serve-event" "util" "package" "ini"))
 
 (dolist (file *lisp-files*)
   (compile-file (format nil "lisp/~a" file) :system-p t))

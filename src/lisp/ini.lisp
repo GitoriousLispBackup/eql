@@ -115,7 +115,7 @@
   "args: (object class name &rest arguments)
    alias: qfun*
    Similar to <code>qinvoke-method</code>, additionally passing a class name, enforcing a cast to that class.
-       (qfun* event \"QKeyEvent\" \"key()\")"
+       (qfun* event \"QKeyEvent\" \"key\")"
   (qinvoke-method2 obj name slot args))
 
 (defun qconnect (from signal to &optional slot)
@@ -131,8 +131,8 @@
   "args: (message)
    alias: qmsg
    Convenience function, calling:
-       (qfun \"QMessageBox\" \"information(QWidget*,QString,QString)\" nil (tr \"Information\") message))"
-  (qfun "QMessageBox" "information(QWidget*,QString,QString)" nil (tr "Information") msg))
+       (qfun \"QMessageBox\" \"information\" nil (tr \"Information\") message))"
+  (qfun "QMessageBox" "information" nil (tr "Information") msg))
 
 (defun qevents ()
   (eql:qprocess-events)

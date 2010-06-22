@@ -54,7 +54,7 @@
 <b>QENUM (name key)</b>
 <p>Registered enumerators only (see <code>Q_ENUMS</code>).<br>Returns the integer value of the passed enumerator, passed as name and key. Needed only if an enumerator argument has to be passed as <code>int</code> value.</p>
 <pre>
-  (qfun item "setTextAlignment(int,int) 0 (qenum "Qt::Alignment" "AlignCenter"))
+  (qfun item "setTextAlignment" 0 (qenum "Qt::Alignment" "AlignCenter"))
 </pre>
 </p><br>
 <p>
@@ -80,10 +80,10 @@
 <b>QINVOKE-METHOD (object name &rest arguments)</b>
 <br>
 <b>QFUN</b>
-<p>Calls a Qt slot or method. Static methods can be called by passing the string name of an object.</p>
+<p>Calls a Qt slot or method. Static methods can be called by passing the string name of an object.<br>For overloaded Qt methods you may need to pass the argument types (as for <code>qconnect</code> and <code>qoverride</code>). In these (very few) ambiguous cases you will see a runtime error message, together with a list off all possible candidates.</p>
 <pre>
-  (qfun item "setText(int,QString)" 0 "Some objects are EQL.")
-  (qfun "QDateTime" "currentDateTime()") ; static method
+  (qfun item "setText" 0 "Some objects are EQL.")
+  (qfun "QDateTime" "currentDateTime") ; static method
 </pre>
 </p><br>
 <p>
@@ -92,7 +92,7 @@
 <b>QFUN*</b>
 <p>Similar to <code>qinvoke-method</code>, additionally passing a class name, enforcing a cast to that class.</p>
 <pre>
-  (qfun* event "QKeyEvent" "key()")
+  (qfun* event "QKeyEvent" "key")
 </pre>
 </p><br>
 <p>
@@ -112,18 +112,19 @@
 <b>QMSG</b>
 <p>Convenience function, calling:</p>
 <pre>
-  (qfun "QMessageBox" "information(QWidget*,QString,QString)" nil (tr "Information") message))
+  (qfun "QMessageBox" "information" nil (tr "Information") message))
 </pre>
 </p><br>
 <p>
 <b>QNEW-INSTANCE (name &rest arguments)</b>
 <br>
 <b>QNEW</b>
-<p>Creates a new Qt object, optionally passing the given arguments to the constructor. Additionally you can pass any number of property/value pairs.</p>
+<p>Creates a new Qt object, optionally passing the given arguments to the constructor. Additionally you can pass any number of property/value pairs.<br>Please note how you can abbreviate long type lists.</p>
 <pre>
   (qnew "QWidget")
   (qnew "QPixmap(int,int)" 50 50)
   (qnew "QLabel" "text" "I love me.")
+  (qnew "QMatrix4x4(qreal...)" 1 2 3 4 1 2 3 4 1 2 3 4 1 2 3 4)
 </pre>
 </p><br>
 <p>
@@ -145,7 +146,7 @@
 <b>QOVERRIDE (object name function)</b>
 <p>Sets a Lisp function to be called on a virtual Qt method. If the Lisp function returns <code>NIL</code>, the default Qt method will be called afterwards.<br><br>To remove a function, pass <code>NIL</code> instead of the function argument.</p>
 <pre>
-  (qoverride edit "keyPressEvent(QKeyEvent*)" #'(lambda (ev) (print (qfun ev "key()")) nil))
+  (qoverride edit "keyPressEvent(QKeyEvent*)" #'(lambda (ev) (print (qfun ev "key")) nil))
 </pre>
 </p><br>
 <p>

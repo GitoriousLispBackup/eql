@@ -12,12 +12,11 @@
 class EQL : public QObject {
     Q_OBJECT
 public:
-    EQL(const QStringList&);
+    EQL();
     ~EQL();
 
     static bool ini;
     static QString home();
-    static void disableConsole();
 
     void *fun;
     void exec(const QStringList&);

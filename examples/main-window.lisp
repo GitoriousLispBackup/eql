@@ -30,15 +30,15 @@
   (qconnect *action-open* "triggered()" 'file-open)
   (qconnect *action-save* "triggered()" 'file-save)
   (qset *edit* "html" (read-file (in-home "examples/utf8.htm")))
-  (qfun *main* "show()"))
+  (qfun *main* "show"))
 
 (defun file-open ()
-  (let ((file (qfun "QFileDialog" "getOpenFileName()")))
+  (let ((file (qfun "QFileDialog" "getOpenFileName")))
     (unless (empty-string file)
       (qset *edit* "html" (read-file file)))))
 
 (defun file-save ()
-  (let ((file (qfun "QFileDialog" "getSaveFileName()")))
+  (let ((file (qfun "QFileDialog" "getSaveFileName")))
     (unless (empty-string file)
       (with-open-file (s file :direction :output :if-exists :supersede)
         (write-string (qget *edit* "html") s)))))

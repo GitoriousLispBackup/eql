@@ -2,7 +2,7 @@
 
 #include "eql.h"
 #include "ecl_fun.h"
-#include "gen/_objects.h"
+#include "gen/_lobjects.h"
 #include <QApplication>
 #include <QTimer>
 #include <QStringList>
@@ -11,11 +11,10 @@ extern "C" void ini_EQL(cl_object);
 
 bool EQL::ini = false;
 
-EQL::EQL(const QStringList &args) : QObject(), fun(0) {
+EQL::EQL() : QObject(), fun(0) {
     iniCLFunctions();
     registerMetaTypes();
-    Objects::ini(this);
-    exec(args); }
+    LObjects::ini(this); }
 
 EQL::~EQL() {
     cl_shutdown(); }
@@ -39,15 +38,6 @@ static void eval(const char *lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
         si_safe_eval(2, ecl_read_from_cstring(lisp_code), Cnil); }
     CL_CATCH_ALL_END; }
-
-void EQL::disableConsole() {
-    eval("(progn"
-         "  (setf *terminal-io*"
-         "        (make-two-way-stream"
-         "          (make-string-input-stream \"\")"
-         "          (make-string-output-stream)))"
-         "  (setf *error-output* "
-         "        (two-way-stream-output-stream *terminal-io*)))"); }
 
 void EQL::exec(const QStringList &args) {
     bool quit = false;

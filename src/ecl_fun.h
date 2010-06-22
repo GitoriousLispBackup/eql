@@ -18,6 +18,8 @@
                                      make_constant_base_string(name), \
                                      cl_find_package(make_constant_base_string(pkg)));
 
+#define LEN(x) fixint(cl_length(x))
+
 #define LIST1(a) \
     CONS(a, Cnil)
 #define LIST2(a, b) \

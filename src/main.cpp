@@ -38,6 +38,7 @@ int main(int argc, char **argv) {
                     qapp.installTranslator(&trQt); }}}}
 
 //  (4)
-    EQL eql(args);
+    EQL eql;
+    eql.exec(args);
 
     return qapp.exec(); }

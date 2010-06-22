@@ -5,4 +5,4 @@
 (let ((window (qnew "QWidget"
                     "size" (list 320 240)
                     "windowTitle" "Top-level widget")))
-  (qfun window "show()"))
+  (qfun window "show"))

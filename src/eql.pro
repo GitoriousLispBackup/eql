@@ -30,7 +30,7 @@ svg {
     DEFINES += EQL_SVG
 }
 
-HEADERS += gen/_objects.h \
+HEADERS += gen/_lobjects.h \
            gen/_q_classes.h \
            gen/_n_classes.h \
            gen/_q_methods.h \
@@ -39,7 +39,7 @@ HEADERS += gen/_objects.h \
            ecl_fun.h \
            eql.h
 
-SOURCES += gen/_objects.cpp \
+SOURCES += gen/_lobjects.cpp \
            dyn_object.cpp \
            ecl_fun.cpp \
            eql.cpp \

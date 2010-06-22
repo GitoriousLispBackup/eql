@@ -2,7 +2,7 @@
 ;;;
 ;;; This is a port of the Qt Example "Colliding Mice"
 ;;;
-;;; Note: very seldom crashes (at least in OSX) are not related to this tool, as they happen even in the original Qt example.
+;;; Note: seldom crashes (OSX 10.4, Qt 4.6.2) are not related to this tool, as they happen even in the original Qt example.
 
 (defpackage :colliding-mice
   (:use :common-lisp :util :eql)
@@ -19,19 +19,18 @@
 
 (defstruct mouse
   (item (qnew "QGraphicsItem"))
-  (brush (brush (qfun "QColor" "fromRgb(int,int,int)"
-                      (random 256) (random 256) (random 256))))
+  (brush (brush (qfun "QColor" "fromRgb" (random 256) (random 256) (random 256))))
   (angle 0)
   (speed 0)
   (eye-direction 0))
 
 (let ((shape (let ((p (qnew "QPainterPath")))
-               (qfun p "addRect(QRectF)" (list -10 -20 20 40))
+               (qfun p "addRect" (list -10 -20 20 40))
                p)))
   (defun mouse ()
     (let* ((mouse (make-mouse))
            (item (mouse-item mouse)))
-      (qfun item "setRotation(qreal)" (random (* 360 16)))
+      (qfun item "setRotation" (random (* 360 16)))
       (qoverride item "boundingRect()"
                  #'(lambda () '(-18.5 -22.5 36.5 60.5)))
       (qoverride item "shape()"
@@ -44,7 +43,7 @@
 
 (defun brush (color &optional (style "SolidPattern"))
   (let ((b (qnew "QBrush")))
-    (qfun b "setStyle(Qt::BrushStyle)" style)
+    (qfun b "setStyle" style)
     (when color
       (qfun b "setColor(QColor)" color))
     b))
@@ -55,10 +54,10 @@
       (red   (brush "red"))
       (no-brush (brush nil "NoBrush"))
       (tail (let ((p (qnew "QPainterPath")))
-              (qfun p "moveTo(QPointF)" '(0 20))
-              (qfun p "cubicTo(QPointF,QPointF,QPointF)" '(-5 22) '(-5 22) '(0 25))
-              (qfun p "cubicTo(QPointF,QPointF,QPointF)" '(5  27) '(5  32) '(0 30))
-              (qfun p "cubicTo(QPointF,QPointF,QPointF)" '(-5 32) '(-5 42) '(0 35))
+              (qfun p "moveTo" '(0 20))
+              (qfun p "cubicTo" '(-5 22) '(-5 22) '(0 25))
+              (qfun p "cubicTo" '(5  27) '(5  32) '(0 30))
+              (qfun p "cubicTo" '(-5 32) '(-5 42) '(0 35))
               p)))
   (defun paint (mouse painter)
     (flet ((! (fun arg)
@@ -78,15 +77,14 @@
         (! "drawEllipse(QRectF)" (list (+ dir 4) -17 4 4)))
       ;; ears
       (let ((me (mouse-item mouse)))
-        (! "setBrush(QBrush)" (if (null (qfun (qfun me "scene()")
-                                              "collidingItems(const QGraphicsItem*)" me))
+        (! "setBrush(QBrush)" (if (null (qfun (qfun me "scene") "collidingItems" me))
                                   olive
                                   red)))
       (! "drawEllipse(QRect)" '(-17 -12 16 16))
       (! "drawEllipse(QRect)" '(1 -12 16 16))
       ;; tail
       (! "setBrush(QBrush)" no-brush)
-      (! "drawPath(QPainterPath)" tail))))
+      (! "drawPath" tail))))
 
 (defun advance (mouse step)
   (unless (zerop step)
@@ -130,7 +128,7 @@
                                                 ((> sin 0) -0.25)
                                                 (t 0))))))
         ;; try not to crash with any other mice
-        (let ((danger-mice (qfun (qfun me "scene()")
+        (let ((danger-mice (qfun (qfun me "scene")
                                  "items(QPolygonF,Qt::ItemSelectionMode,Qt::SortOrder)"
                                  (append (map-to '(0 0))
                                          (map-to '(-30 -50))
@@ -166,9 +164,9 @@
           (let ((dx (* 10 (sin (mouse-angle mouse)))))
             (setf (mouse-eye-direction mouse)
                   (if (< (abs (/ dx 5)) 1) 0 (/ dx 5)))
-            (qfun me "setRotation(qreal)"
-                  (+ dx (qfun me "rotation()")))
-            (qfun me "setPos(QPointF)"
+            (qfun me "setRotation"
+                  (+ dx (qfun me "rotation")))
+            (qfun me "setPos"
                   (qfun me "mapToParent(QPointF)"
                         (list 0 (- (+ 3 (* 3 (sin (mouse-speed mouse))))))))))))))
 
@@ -180,28 +178,25 @@
                     "windowTitle" "Colliding Mice"
                     "size" (list 400 300)))
         (timer (qnew "QTimer")))
-    (qfun scene "setItemIndexMethod(QGraphicsScene::ItemIndexMethod)" +no-index+)
-    (qfun view "setScene(QGraphicsScene*)" scene)
-    (qfun view "setRenderHint(QPainter::RenderHint)" +antialiasing+)
-    (qfun view "setBackgroundBrush(QBrush)"
-          (let ((brush (qnew "QBrush")))
-            (qfun brush "setTexture(QPixmap)"
-                  (let ((pix (qnew "QPixmap")))
-                    (qfun pix "load(QString)" (in-home "examples/icons/cheese.jpg"))
-                    pix))
-            brush))
-    (qfun view "setCacheMode(QGraphicsView::CacheMode)" "CacheBackground")
-    (qfun view "setViewportUpdateMode(QGraphicsView::ViewportUpdateMode)" "BoundingRectViewportUpdate")
-    (qfun view "setDragMode(QGraphicsView::DragMode)" "ScrollHandDrag")
+    (qfun scene "setItemIndexMethod" +no-index+)
+    (qfun view "setScene" scene)
+    (qfun view "setRenderHint" +antialiasing+)
+    (qfun view "setBackgroundBrush"
+          (qnew "QBrush(QPixmap)"
+                (qnew "QPixmap(QString)"
+                      (in-home "examples/icons/cheese.jpg"))))
+    (qfun view "setCacheMode" "CacheBackground")
+    (qfun view "setViewportUpdateMode" "BoundingRectViewportUpdate")
+    (qfun view "setDragMode" "ScrollHandDrag")
     (dotimes (i *mouse-count*)
       (flet ((p ()
                (/ (* i +2pi+) *mouse-count*)))
         (let ((item (mouse)))
-          (qfun item "setPos(QPointF)" (list (* 200 (sin (p)))
-                                             (* 200 (cos (p)))))
-          (qfun scene "addItem(QGraphicsItem*)" item))))
+          (qfun item "setPos" (list (* 200 (sin (p)))
+                                    (* 200 (cos (p)))))
+          (qfun scene "addItem" item))))
     (qconnect timer "timeout()" scene "advance()")
-    (qfun timer "start(int)" 30)
-    (qfun view "show()")))
+    (qfun timer "start" 30)
+    (qfun view "show")))
 
 (start)

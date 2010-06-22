@@ -1,5 +1,5 @@
-#ifndef EQL_OBJECTS_H
-#define EQL_OBJECTS_H
+#ifndef LOBJECTS_H
+#define LOBJECTS_H
 
 #include <QtGui>
 
@@ -15,7 +15,7 @@ Q_DECLARE_METATYPE(QTableWidgetSelectionRange)
 class EQL;
 class DynObject;
 
-class Objects {
+class LObjects {
 public:
     static QObject **Q;
     static QObject **N;
@@ -38,7 +38,7 @@ public:
     static const char *nObjectSuperClass(const QByteArray&);
     static StrList override(const QByteArray&);
     static void *overrideFun(uint, int);
-    static void setOverrideFun(uint, const QByteArray&, void*);
+    static void setOverrideFun(uint, int, void*);
 };
 
 #endif

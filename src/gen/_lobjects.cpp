@@ -1,6 +1,6 @@
 // THIS FILE IS GENERATED (see helper/)
 
-#include "_objects.h"
+#include "_lobjects.h"
 #include "_q_classes.h"
 #include "_n_classes.h"
 #include "_q_methods.h"
@@ -8,19 +8,19 @@
 #include "../dyn_object.h"
 #include "../eql.h"
 
-EQL *Objects::eql = 0;
-DynObject *Objects::dynObject = 0;
-QObject **Objects::Q = 0;
-QObject **Objects::N = 0;
-uint Objects::i_unique = 0;
-char ***Objects::override_arg_types = 0;
-QList<QByteArray> Objects::qNames;
-QList<QByteArray> Objects::nNames;
-QMap<QByteArray, int> Objects::q_names;
-QMap<QByteArray, int> Objects::n_names;
-QHash<QString, uint> Objects::ui_unique;
-QHash<QByteArray, uint> Objects::override_function_ids;
-QHash<quint64, void*> Objects::override_lisp_functions;
+EQL *LObjects::eql = 0;
+DynObject *LObjects::dynObject = 0;
+QObject **LObjects::Q = 0;
+QObject **LObjects::N = 0;
+uint LObjects::i_unique = 0;
+char ***LObjects::override_arg_types = 0;
+QList<QByteArray> LObjects::qNames;
+QList<QByteArray> LObjects::nNames;
+QMap<QByteArray, int> LObjects::q_names;
+QMap<QByteArray, int> LObjects::n_names;
+QHash<QString, uint> LObjects::ui_unique;
+QHash<QByteArray, uint> LObjects::override_function_ids;
+QHash<quint64, void*> LObjects::override_lisp_functions;
 NumList LAction::overrideIds = NumList();
 NumList LActionGroup::overrideIds = NumList();
 NumList LButtonGroup::overrideIds = NumList();
@@ -177,7 +177,7 @@ NumList LVector2D::overrideIds = NumList();
 NumList LVector3D::overrideIds = NumList();
 NumList LVector4D::overrideIds = NumList();
 
-void Objects::ini(EQL *e) {
+void LObjects::ini(EQL *e) {
     static bool ok = false;
     if(!ok) {
         ok = true;
@@ -869,15 +869,15 @@ void Objects::ini(EQL *e) {
         qNames = q_names.keys();
         nNames = n_names.keys(); }}
 
-void *Objects::overrideFun(uint unique, int id) {
+void *LObjects::overrideFun(uint unique, int id) {
     return override_lisp_functions.value(229 * (quint64)unique + id, 0); }
 
-void Objects::setOverrideFun(uint unique, const QByteArray &name, void *fun) {
-    override_lisp_functions[229 * (quint64)unique + override_function_ids.value(name)] = fun; }
+void LObjects::setOverrideFun(uint unique, int id, void *fun) {
+    override_lisp_functions[229 * (quint64)unique + id] = fun; }
 
-const QMetaObject *Objects::staticMetaObject(const QByteArray &name, int n) {
+const QMetaObject *LObjects::staticMetaObject(const QByteArray &name, int n) {
     if(n == -1) {
-        n = Objects::q_names.value(name); }
+        n = LObjects::q_names.value(name); }
     const QMetaObject *m = 0;
     switch(n) {
         case 1: m = &QAbstractButton::staticMetaObject; break;
@@ -992,7 +992,7 @@ const QMetaObject *Objects::staticMetaObject(const QByteArray &name, int n) {
         case 110: m = &QWorkspace::staticMetaObject; break; }
     return m; }
 
-void Objects::deleteNObject(int n, void *p) {
+void LObjects::deleteNObject(int n, void *p) {
     switch(n) {
         case 3: delete (LBasicTimer*)p; break;
         case 4: delete (LBitArray*)p; break;
@@ -1061,9 +1061,9 @@ void Objects::deleteNObject(int n, void *p) {
         case 108: delete (LVector3D*)p; break;
         case 109: delete (LVector4D*)p; break; }}
 
-const char *Objects::nObjectSuperClass(const QByteArray &name) {
+const char *LObjects::nObjectSuperClass(const QByteArray &name) {
     const char *s = 0;
-    switch(Objects::n_names.value(name)) {
+    switch(LObjects::n_names.value(name)) {
         case 1: s = "QGraphicsItem"; break;
         case 2: s = "QEvent"; break;
         case 5: s = "QPixmap"; break;
@@ -1122,7 +1122,7 @@ const char *Objects::nObjectSuperClass(const QByteArray &name) {
         case 110: s = "QInputEvent"; break; }
     return s; }
 
-StrList Objects::override(const QByteArray &name) {
+StrList LObjects::override(const QByteArray &name) {
     NumList ids;
     int n = q_names.value(name, -1);
     if(n != -1) {

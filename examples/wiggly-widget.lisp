@@ -25,18 +25,18 @@
 
 (defun start ()
   (qset *wiggly* "font" (font-add-size (qget *wiggly* "font") 20))
-  (qfun *wiggly* "setBackgroundRole(QPalette::ColorRole)" +light+)
+  (qfun *wiggly* "setBackgroundRole" +light+)
   (let ((dlg (qnew "QDialog" "size" (list 600 200)))
         (vbox (qnew "QVBoxLayout")))
-    (qfun dlg "setLayout(QLayout*)" vbox)
-    (with- (qfun vbox "addWidget(QWidget*)")
+    (qfun dlg "setLayout" vbox)
+    (with- (qfun vbox "addWidget")
       (list *wiggly* *edit*))
-    (qfun *timer* "start(int,QObject*)" 60 *wiggly*)
+    (qfun *timer* "start" 60 *wiggly*)
     (with- (qoverride *wiggly*)
       (list "paintEvent(QPaintEvent*)" "timerEvent(QTimerEvent*)")
       (list 'paint 'timeout))
     (qset *edit* "text" "EQL - Embedded Qt Lisp")
-    (qfun dlg "show()")))
+    (qfun dlg "show")))
 
 (let ((painter (qnew "QPainter"))
       (pen (qnew "QPen")))
@@ -47,33 +47,29 @@
                  (x (/ (- (qget *wiggly* "width")
                           (qfun fm "width(QString)" txt))
                        2))
-                 (y (/ (- (+ (qget *wiggly* "height") (qfun fm "ascent()"))
-                          (qfun fm "descent()"))
+                 (y (/ (- (+ (qget *wiggly* "height") (qfun fm "ascent"))
+                          (qfun fm "descent"))
                        2))
-                 (h (qfun fm "height()")))
+                 (h (qfun fm "height")))
             (dotimes (i (length txt))
               (let ((ix (mod (+ i *step*) 16))
                     (ch (char txt i)))
-                (qfun pen "setColor(QColor)" (qfun "QColor" "fromHsv(int,int,int)"
-                                                   (* 16 (- 15 ix))
-                                                   255
-                                                   191))
+                (qfun pen "setColor" (qfun "QColor" "fromHsv" (* 16 (- 15 ix)) 255 191))
                 (qfun painter "setPen(QPen)" pen)
                 (qfun painter "drawText(QPoint,QString)"
                       (list (floor x)
                             (floor (- y (/ (* h (svref +sinus+ ix)) 400))))
                       (string ch))
                 (incf x (qfun fm "width(QChar)" ch))))))
-    (qfun painter "end()")
-    t)) ; overridden: no need to call QWidget::paintEvent()
+    (qfun painter "end")
+    t)) ; overridden
 
 (defun timeout (ev)
-  (if (= (qfun ev "timerId()") (qfun *timer* "timerId()"))
+  (if (= (qfun ev "timerId") (qfun *timer* "timerId"))
       (progn
         (incf *step*)
-        (qfun *wiggly* "update()")
+        (qfun *wiggly* "update")
         t)
-      nil)) ; overridden: call QWidget::timerEvent()
+      nil)) ; overridden
 
 (start)
-
