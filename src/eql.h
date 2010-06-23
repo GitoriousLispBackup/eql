@@ -4,10 +4,13 @@
 #define EQL_H
 
 #include <QObject>
+#include <QByteArray>
 #include <QStringList>
-#include <QtDebug>
+#include <ecl/ecl.h>
 
 #define QSLOT(x) "1"#x
+
+typedef void (*lisp_ini)(cl_object);
 
 class EQL : public QObject {
     Q_OBJECT
@@ -19,7 +22,9 @@ public:
     static QString home();
 
     void *fun;
+    void eval(const char*);
     void exec(const QStringList&);
+    void exec(lisp_ini, const QByteArray&, const QByteArray& = "CL-USER");
 
 public Q_SLOTS:
     void singleShot();

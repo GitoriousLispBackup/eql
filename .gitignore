@@ -14,10 +14,11 @@ Makefile
 eql
 eql.app
 gui/.*
+my_app/tr.h
+my_app/my_app.app/*
+my_app/.*
+my_app/*.user
 r
 src/*.user
 src/ECL*
-src/lisp/*.c
-src/lisp/*.data
-src/lisp/*.h
 src/tmp

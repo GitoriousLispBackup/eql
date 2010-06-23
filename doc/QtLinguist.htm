@@ -3,20 +3,19 @@
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <h2>Qt Linguist</h2>
-For any new project:
+For every new project:
 <ul>
 <li>In Lisp, wrap the strings you want to translate in the <code>tr</code> function (as you would do in Qt). Important: the strings must be literals.
-<li>In the file <code>tr.lisp</code>, adapt the <code>*packages-files*</code> parameter (listing all package names/files).
-<li>Adapt the <code>eql-lupdate</code> file, adding your Qt Designer <code>*.ui</code> files (if any), and listing the respective  <code>*.ts</code> files for all languages you want to support.
-<li>Adapt the <code>eql-lrelease</code> file, simply listing all <code>*.ts</code> files (see above).
+<li>In the file <code>my_app/tr.lisp</code>, adapt the <code>*packages-files*</code> parameter (listing all package names/files).
+<li>Adapt the <code>my_app/eql-lupdate</code> file, adding your Qt Designer <code>*.ui</code> files (if any), and listing the respective  <code>*.ts</code> files for all languages you want to support.
+<li>Adapt the <code>my_app/eql-lrelease</code> file, simply listing all <code>*.ts</code> files (see above).
 </ul>
-For any new release (in order to create the <code>*.qm</code> files):
+For every new release (in order to create the <code>*.qm</code> files):
 <ul>
-<li>Run the <code>eql-lupdate</code> script; this will create/update the single <code>*.ts</code> files for every language.
+<li>Run the <code>my_app/eql-lupdate</code> script; this will create/update the single <code>*.ts</code> files for every language.
 <li>Use Qt Linguist on the <code>*.ts</code> files (as usual).
-<li>Run the <code>eql-lrelease</code> script.
+<li>Run the <code>my_app/eql-lrelease</code> script.
 </ul>
-<p>Note: you may need to copy the respective <code>qt_*.qm</code> files (see <code>translations/</code> int the Qt sources), in order to load the translated texts used by Qt itself.</p>
-<p>Now you should be able to run your application using the <code>-lang</code> command line argument.</p>
-Example: <code>./eql -lang it</code>
+<p>Note: you may need to copy the respective <code>qt_*.qm</code> files (see <code>translations/</code> in the Qt sources), in order to load the translated texts used by Qt itself.</p>
+<p>See <code>my_app/main.cpp</code> for an example how to load your translation files.</p>
 </html>

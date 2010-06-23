@@ -1,19 +1,32 @@
 # copyright (c) 2010 power4projects software
 
-# win32: uncomment to disable command prompt
-CONFIG += console
+# Uncomment this for building a shared library to use in your applications (see my_app/my_app.pro)
+#CONFIG += eql_dll
 
 # optional modules (experimental!)
 #CONFIG += opengl
 #CONFIG += svg
 
-TEMPLATE    = app
 CONFIG     += no_keywords release uitools
-LIBS       += -lecl -L. -leql
+LIBS       += -lecl -L. -lini
 TARGET      = eql
-DESTDIR     = ../
 OBJECTS_DIR = ./tmp/
 MOC_DIR     = ./tmp/
+
+eql_dll {
+    TEMPLATE = lib
+    CONFIG  += dll
+    DESTDIR  = ../my_app/
+}
+else {
+    TEMPLATE = app
+    SOURCES += main.cpp
+    DESTDIR  = ../
+
+    win32 {
+        CONFIG += console
+    }
+}
 
 win32 {
     INCLUDEPATH += c:/ecl/msvc/package
@@ -42,5 +55,4 @@ HEADERS += gen/_lobjects.h \
 SOURCES += gen/_lobjects.cpp \
            dyn_object.cpp \
            ecl_fun.cpp \
-           eql.cpp \
-           main.cpp
+           eql.cpp

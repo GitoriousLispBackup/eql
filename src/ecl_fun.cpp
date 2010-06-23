@@ -1399,7 +1399,7 @@ cl_object qset_property(cl_object l_obj, cl_object l_name, cl_object l_val) {
 cl_object qinvoke_method2(cl_object l_obj, cl_object l_class, cl_object l_name, cl_object l_args) {
     /// args: (object name &rest arguments)
     /// alias: qfun
-    /// Calls a Qt slot or method. Static methods can be called by passing the string name of an object.<br>For overloaded Qt methods you may need to pass the argument types (as for <code>qconnect</code> and <code>qoverride</code>). In these (very few) ambiguous cases you will see a runtime error message, together with a list off all possible candidates.
+    /// Calls a Qt slot or method. Static methods can be called by passing the string name of an object.<br>For overloaded Qt methods you may need to pass the argument types (as for <code>qconnect</code> and <code>qoverride</code>). In these (very few) ambiguous cases you will see a runtime error message, together with a list of all possible candidates.
     ///     (qfun item "setText" 0 "Some objects are EQL.")
     ///     (qfun "QDateTime" "currentDateTime") ; static method
     static QHash<QByteArray, int> i_slot;

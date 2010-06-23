@@ -1,8 +1,7 @@
 ;;; copyright (c) 2010 power4projects software
 
 (defparameter *packages-files*
-  '((:ini . "src/lisp/ini")
-    (:gui . "gui/gui"))
+  '((:example . "lisp/my"))
   "Pairs of package names and pathnames")
 
 (defun start ()
