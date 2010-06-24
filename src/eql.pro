@@ -1,6 +1,6 @@
 # copyright (c) 2010 power4projects software
 
-# Uncomment this for building a shared library to use in your applications (see my_app/my_app.pro)
+# Uncomment to build a shared library (see my_app/my_app.pro)
 #CONFIG += eql_dll
 
 # optional modules (experimental!)
@@ -8,6 +8,7 @@
 #CONFIG += svg
 
 CONFIG     += no_keywords release uitools
+DEFINES    += EQL_LIBRARY
 LIBS       += -lecl -L. -lini
 TARGET      = eql
 OBJECTS_DIR = ./tmp/
@@ -49,6 +50,7 @@ HEADERS += gen/_lobjects.h \
            gen/_q_methods.h \
            gen/_n_methods.h \
            dyn_object.h \
+           eql_global.h \
            ecl_fun.h \
            eql.h
 

@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
             qapp.installTranslator(&trQt); }}
 
     EQL eql;
-    eql.exec(ini_app,     // your application (see lisp/ and make-my-lib.lisp)
+    eql.exec(ini_app,     // see make-my-lib.lisp
              "(START)",   // the initial form to be evaluated
              "EXAMPLE");  // your package name
 

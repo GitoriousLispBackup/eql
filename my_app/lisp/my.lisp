@@ -7,4 +7,4 @@
 
 (defun start ()
   (qfun (qnew "QLabel" "text" (tr "<h1>example application"))
-	"show"))
+        "show"))

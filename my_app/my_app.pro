@@ -1,7 +1,7 @@
 TEMPLATE     = app
 CONFIG      += no_keywords release
 INCLUDEPATH += ../src
-LIBS        += -lecl -L. -leql -lmy_app
+LIBS        += -lecl -L. -leql -lmy_lib
 TARGET       = my_app
 DESTDIR      = ./
 OBJECTS_DIR  = ./tmp/

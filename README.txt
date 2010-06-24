@@ -23,10 +23,10 @@ BUILD / REBUILD (see also: "Windows Easy Guide" in doc/)
 1) Switch to the src/ directory, and run:
     ecl -shell make-eql-lib.lisp (build + rebuild)
 
-2) Run:
+2) Run: (win32: nmake instead of make)
     qmake
     make clean (rebuild only)
-    make (nmake in Windows)
+    make 
 
 (In Windows you first need to adapt the win32 section of eql.pro).
 
@@ -43,14 +43,14 @@ In OSX you may want to create a convenience link:
 RUN
 
 You can run a simple interactive REPL UI doing:
-    ./eql -qgui
+    ./eql -qgui (win32: eql -qgui)
 
 OSX and Unix only:
 In order to run a top-level processing Qt events, do:
     ./eql -qtpl
 
 To run a Lisp file without top-level, do:
-    ./eql examples/clock
+    ./eql examples/clock (win32: eql examples\clock)
 
 If you start the eql executable without arguments, it will
 start the usual ECL top-level (without processing Qt events).

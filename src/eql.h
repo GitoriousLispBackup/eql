@@ -7,12 +7,13 @@
 #include <QByteArray>
 #include <QStringList>
 #include <ecl/ecl.h>
+#include "eql_global.h"
 
 #define QSLOT(x) "1"#x
 
 typedef void (*lisp_ini)(cl_object);
 
-class EQL : public QObject {
+class EQL_EXPORT EQL : public QObject {
     Q_OBJECT
 public:
     EQL();
