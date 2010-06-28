@@ -80,7 +80,7 @@
 <b>QINVOKE-METHOD (object name &rest arguments)</b>
 <br>
 <b>QFUN</b>
-<p>Calls a Qt slot or method. Static methods can be called by passing the string name of an object.<br>For overloaded Qt methods you may need to pass the argument types (as for <code>qconnect</code> and <code>qoverride</code>). In these (very few) ambiguous cases you will see a runtime error message, together with a list off all possible candidates.</p>
+<p>Calls a Qt slot or method. Static methods can be called by passing the string name of an object.<br>For overloaded Qt methods you may need to pass the argument types (as for <code>qconnect</code> and <code>qoverride</code>). In these (very few) ambiguous cases you will see a runtime error message, together with a list of all possible candidates.</p>
 <pre>
   (qfun item "setText" 0 "Some objects are EQL.")
   (qfun "QDateTime" "currentDateTime") ; static method

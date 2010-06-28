@@ -6,18 +6,18 @@
 #include <QEvent>
 #include <QApplication>
 
-QObject *DynObject::currentSender = 0;
+QObject* DynObject::currentSender = 0;
 
-DynObject::DynObject(QObject *par) : QObject(par), filters(false) {
+DynObject::DynObject(QObject* par) : QObject(par), filters(false) {
     qApp->installEventFilter(this); }
 
-int DynObject::qt_metacall(QMetaObject::Call c, int id, void **args) {
+int DynObject::qt_metacall(QMetaObject::Call c, int id, void** args) {
     if((QMetaObject::InvokeMetaMethod == c) && (id < functions.size())) {
         currentSender = senders.at(id);
         callConnectFun(functions.at(id), types.at(id), args); }
     return -1; }
 
-bool DynObject::connect(QObject *from, const char *signal, DynObject *dyn, void *fun) {
+bool DynObject::connect(QObject* from, const char* signal, DynObject* dyn, void* fun) {
     int id_sig = from->metaObject()->indexOfSignal(signal + 1);
     if(id_sig != -1) {
         int id_slot = dyn->functions.size();
@@ -27,7 +27,7 @@ bool DynObject::connect(QObject *from, const char *signal, DynObject *dyn, void 
         return QMetaObject::connect(from, id_sig, dyn, id_slot); }
     return false; }
 
-bool DynObject::disconnect(QObject *from, const char *signal, DynObject *dyn, void *fun) {
+bool DynObject::disconnect(QObject* from, const char* signal, DynObject* dyn, void* fun) {
     int id_sig = from->metaObject()->indexOfSignal(signal + 1);
     if(id_sig != -1) {
         int id_slot = dyn->functions.indexOf(fun);
@@ -38,7 +38,7 @@ bool DynObject::disconnect(QObject *from, const char *signal, DynObject *dyn, vo
             return QMetaObject::disconnect(from, id_sig, dyn, id_slot); }}
     return false; }
 
-void DynObject::addEventFilter(QObject *obj, int type, void *fun) {
+void DynObject::addEventFilter(QObject* obj, int type, void* fun) {
     filters = true;
     ev_types << type;
     ev_funs << fun;
@@ -50,7 +50,7 @@ void DynObject::clearEventFilters() {
     ev_funs.clear();
     ev_objects.clear(); }
 
-bool DynObject::eventFilter(QObject *obj, QEvent *ev) {
+bool DynObject::eventFilter(QObject* obj, QEvent* ev) {
     if(filters) {
         for(int i = 0; i < ev_objects.size(); ++i) {
             if(!ev_objects.at(i) || (obj == ev_objects.at(i))) {

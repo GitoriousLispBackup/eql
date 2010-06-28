@@ -1,3 +1,6 @@
+(unless (find-package :eql)
+  (error "Please use the eql executable (see README)"))
+
 (make-package :c)
 
 (defvar *lisp-files* (list "my")) ; list all files of your application

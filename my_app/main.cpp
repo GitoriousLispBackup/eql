@@ -6,7 +6,7 @@
 
 extern "C" void ini_app(cl_object);
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
 
     cl_boot(1, argv);
     QApplication qapp(argc, argv);

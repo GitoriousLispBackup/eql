@@ -24,7 +24,7 @@
                (when (starts-with "cl_object " ex)
                  (add-curr)
                  (let ((fun (trim (subseq ex 10))))
-                   (push (string-substitute (string-trim "2" (subseq fun 0 (position #\( fun))) "_" "-")
+                   (push (substitute #\- #\_ (string-trim "2" (subseq fun 0 (position #\( fun))))
                          curr)))
                (push (trim line) curr))
              (setf ex line)))

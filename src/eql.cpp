@@ -35,18 +35,18 @@ void EQL::singleShot() {
         cl_funcall(1, (cl_object)fun);
         fun = 0; }}
 
-void EQL::eval(const char *lisp_code) {
+static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
         si_safe_eval(2, ecl_read_from_cstring(lisp_code), Cnil); }
     CL_CATCH_ALL_END; }
 
-void EQL::exec(const QStringList &args) {
-    bool quit = false;
+void EQL::exec(const QStringList& args) {
     si_select_package(make_simple_base_string("EQL"));
     eval(QString("(SET-HOME \"%1\")").arg(home()).toAscii().constData());
     if(args.contains("-qgui")) {
         eval("(QGUI)"); }
-    const char *lisp_code = 0;
+    bool quit = false;
+    const char* lisp_code = 0;
     QString load;
     if(args.count() == 1) {
         quit = true;
@@ -62,7 +62,8 @@ void EQL::exec(const QStringList &args) {
     if(quit) {
         qquit(); }}
 
-void EQL::exec(lisp_ini ini, const QByteArray &command, const QByteArray &package) {
+void EQL::exec(lisp_ini ini, const QByteArray& command, const QByteArray& package) {
+    eval(QString("(EQL::SET-HOME \"%1\")").arg(home()).toAscii().constData());
     read_VV(OBJNULL, ini);
     si_select_package(make_simple_base_string((char*)package.constData()));
     eval(command.constData()); }

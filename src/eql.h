@@ -22,8 +22,7 @@ public:
     static bool ini;
     static QString home();
 
-    void *fun;
-    void eval(const char*);
+    void* fun;
     void exec(const QStringList&);
     void exec(lisp_ini, const QByteArray&, const QByteArray& = "CL-USER");
 

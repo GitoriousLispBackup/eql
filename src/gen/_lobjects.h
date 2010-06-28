@@ -17,12 +17,12 @@ class DynObject;
 
 class LObjects {
 public:
-    static QObject **Q;
-    static QObject **N;
+    static QObject** Q;
+    static QObject** N;
     static uint i_unique;
-    static char ***override_arg_types;
-    static DynObject *dynObject;
-    static EQL *eql;
+    static char*** override_arg_types;
+    static DynObject* dynObject;
+    static EQL* eql;
     static QList<QByteArray> qNames;
     static QList<QByteArray> nNames;
     static QMap<QByteArray, int> q_names;
@@ -34,10 +34,10 @@ public:
     static void ini(EQL*);
     static uint unique() { return ++i_unique; }
     static void deleteNObject(int, void*);
-    static const QMetaObject *staticMetaObject(const QByteArray&, int n = -1);
-    static const char *nObjectSuperClass(const QByteArray&);
+    static const QMetaObject* staticMetaObject(const QByteArray&, int n = -1);
+    static const char* nObjectSuperClass(const QByteArray&);
     static StrList override(const QByteArray&);
-    static void *overrideFun(uint, int);
+    static void* overrideFun(uint, int);
     static void setOverrideFun(uint, int, void*);
 };
 

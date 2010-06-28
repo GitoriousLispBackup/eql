@@ -1,5 +1,5 @@
 TEMPLATE     = app
-CONFIG      += no_keywords release
+CONFIG      += no_keywords uitools release
 INCLUDEPATH += ../src
 LIBS        += -lecl -L. -leql -lmy_lib
 TARGET       = my_app

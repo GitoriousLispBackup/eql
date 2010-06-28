@@ -12,9 +12,9 @@ typedef QList<QByteArray> StrList;
 class DynObject: public QObject {
     // no Q_OBJECT: custom connect, disconnect, qt_metacall
 public:
-    DynObject(QObject *par = 0);
+    DynObject(QObject* par = 0);
 
-    static QObject *currentSender;
+    static QObject* currentSender;
 
     bool filters;
     QList<void*> functions;

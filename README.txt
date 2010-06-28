@@ -1,10 +1,17 @@
 # contact: gmail, polos.ruetz
 
 
+TESTED WITH: (patches for other configurations welcome!)
+
+- ECL 10.4.1 unicode
+- Qt 4.6.x (OSX: Carbon)
+- Linux, OSX 10.4, Windows XP (Visual Studio Express 2008)
+
+
 REQUIREMENTS
 
-- ECL >= 10.4 (preferably with unicode)
-- Qt  >= 4.6 (4.5 will not work!) http://qt.nokia.com/
+- ECL >= 10.4 official releases only (not CVS HEAD), enabling unicode
+- Qt  >= 4.6 (4.5 will not work) http://qt.nokia.com/
 - SLIME from CVS (e.g. 2010-06-01)
 
 

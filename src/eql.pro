@@ -7,7 +7,7 @@
 #CONFIG += opengl
 #CONFIG += svg
 
-CONFIG     += no_keywords release uitools
+CONFIG     += no_keywords uitools release
 DEFINES    += EQL_LIBRARY
 LIBS       += -lecl -L. -lini
 TARGET      = eql

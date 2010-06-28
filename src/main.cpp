@@ -7,14 +7,18 @@
 #include "eql.h"
 #include <iostream>
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
 
     cl_boot(1, argv);
 
     QApplication qapp(argc, argv);
     QStringList args(QCoreApplication::arguments());
     if(args.contains("-h") || (args.contains("--help"))) {
+#ifdef Q_OS_WIN32
+        std::cout << "Usage: eql [-qgui] [file]" << std::endl;
+#else
         std::cout << "Usage: eql [-qgui | -qtpl] [file]" << std::endl;
+#endif
         exit(0); }
 #ifdef Q_OS_WIN32
     // necessary when using SLIME

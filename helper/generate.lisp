@@ -62,8 +62,7 @@
                          enum
                          (upper-case-p (char type 0))
                          (search "QHash" type :test #'string=))))
-        (unless (gethash type *argument-types*)
-          (setf (gethash type *argument-types*) t))))))
+        (setf (gethash type *argument-types*) t)))))
 
 (defun split-arg (arg)
   (let* ((s (no-spaces arg))
@@ -421,20 +420,20 @@
                                   (push sig-id sig-ids))
                                 (unless (find* fun-name fun-names)
                                   (push fun-name fun-names)
-                                  (format s "~%    ~a ~a(~a)~a { void *fun = LObjects::overrideFun(unique, ~d); if(fun) { ~a~a~a~a}"
+                                  (format s "~%    ~a ~a(~a)~a { void* fun = LObjects::overrideFun(unique, ~d); if(fun) { ~a~a~a~a}"
                                           (arg-to-c ret)
                                           fun-name
                                           (add-var-names args)
                                           (if (const-p fun) " const" "")
                                           sig-id
-                                          (if args (format nil "const void *args[] = { ~{&~a~^, ~} }; " (n-var-names (length args))) "")
+                                          (if args (format nil "const void* args[] = { ~{&~a~^, ~} }; " (n-var-names (length args))) "")
                                           (if void (format nil "if(~a" call) (format nil "return ~a" (from-qvariant ret call)))
-                                          (if void ".toBool()) return; }" "; } return ")
+                                          (if void ".toBool()) return; }" "; } return")
                                           (if (pure-virtual-p fun name)
                                               (let ((val (arg-to-c-null-value ret)))
                                                 (if (empty-string val)
                                                     ""
-                                                    (format nil "~a; " val)))
+                                                    (format nil " ~a; " val)))
                                               (format nil " ~a::~a(~{~a~^, ~}); "
                                                       name
                                                       fun-name
@@ -571,12 +570,12 @@
                ~%#include \"../dyn_object.h\"~
                ~%#include \"../eql.h\"~
                ~%~
-               ~%EQL *LObjects::eql = 0;~
-               ~%DynObject *LObjects::dynObject = 0;~
-               ~%QObject **LObjects::Q = 0;~
-               ~%QObject **LObjects::N = 0;~
+               ~%EQL* LObjects::eql = 0;~
+               ~%DynObject* LObjects::dynObject = 0;~
+               ~%QObject** LObjects::Q = 0;~
+               ~%QObject** LObjects::N = 0;~
                ~%uint LObjects::i_unique = 0;~
-               ~%char ***LObjects::override_arg_types = 0;~
+               ~%char*** LObjects::override_arg_types = 0;~
                ~%QList<QByteArray> LObjects::qNames;~
                ~%QList<QByteArray> LObjects::nNames;~
                ~%QMap<QByteArray, int> LObjects::q_names;~
@@ -587,14 +586,14 @@
             +message-generated+)
     (dolist (ids *override-signature-ids*)
       (format s "NumList L~a::overrideIds = NumList()~{ << ~a~};~%" (first ids) (rest ids)))
-    (format s "~%void LObjects::ini(EQL *e) {~
+    (format s "~%void LObjects::ini(EQL* e) {~
                ~%    static bool ok = false;~
                ~%    if(!ok) {~
                ~%        ok = true;~
                ~%        eql = e;~
                ~%        dynObject = new DynObject;~
-               ~%        Q = new QObject *[~d];~
-               ~%        N = new QObject *[~d];"
+               ~%        Q = new QObject* [~d];~
+               ~%        N = new QObject* [~d];"
           (length *q-methods*)
           (length *n-methods*))
     (mapc #'(lambda (class len)
@@ -613,11 +612,11 @@
       (dolist (fun *override-functions*)
         (incf i)
         (format s "~%        override_function_ids[~s] = ~d;" fun i)))
-    (format s "~%        override_arg_types = new char **[~d];" (length *override-arguments*))
+    (format s "~%        override_arg_types = new char** [~d];" (length *override-arguments*))
     (let ((i -1))
       (mapc #'(lambda (args ret)
                 (incf i)
-                (format s "~%        { static char *s[] = { ~s, ~a }; override_arg_types[~d] = s; }"
+                (format s "~%        { static char* s[] = { ~s, ~a }; override_arg_types[~d] = s; }"
                         ret
                         (if args (format nil "~{~s, ~}0" args) "0")
                         i))
@@ -627,16 +626,16 @@
       (format s "~%        qNames = q_names.keys();~
                  ~%        nNames = n_names.keys(); }}~
                  ~%~
-                 ~%void *LObjects::overrideFun(uint unique, int id) {~
+                 ~%void* LObjects::overrideFun(uint unique, int id) {~
                  ~%    return override_lisp_functions.value(~d * (quint64)unique + id, 0); }~
                  ~%~
-                 ~%void LObjects::setOverrideFun(uint unique, int id, void *fun) {~
+                 ~%void LObjects::setOverrideFun(uint unique, int id, void* fun) {~
                  ~%    override_lisp_functions[~d * (quint64)unique + id] = fun; }~
                  ~%~
-                 ~%const QMetaObject *LObjects::staticMetaObject(const QByteArray &name, int n) {~
+                 ~%const QMetaObject* LObjects::staticMetaObject(const QByteArray& name, int n) {~
                  ~%    if(n == -1) {~
                  ~%        n = LObjects::q_names.value(name); }~
-                 ~%    const QMetaObject *m = 0;~
+                 ~%    const QMetaObject* m = 0;~
                  ~%    switch(n) {"
               max max))
     (let ((i 0))
@@ -645,7 +644,7 @@
     (format s " }~
                ~%    return m; }~
                ~%~
-               ~%void LObjects::deleteNObject(int n, void *p) {~
+               ~%void LObjects::deleteNObject(int n, void* p) {~
                ~%    switch(n) {")
     (let ((i 0))
       (dolist (obj *n-methods*)
@@ -654,8 +653,8 @@
           (format s "~%        case ~d: delete (L~a*)p; break;" i (sub-class-name obj)))))
     (format s " }}~
                ~%~
-               ~%const char *LObjects::nObjectSuperClass(const QByteArray &name) {~
-               ~%    const char *s = 0;~
+               ~%const char* LObjects::nObjectSuperClass(const QByteArray& name) {~
+               ~%    const char* s = 0;~
                ~%    switch(LObjects::n_names.value(name)) {")
     (let ((i 0))
       (dolist (obj *n-methods*)
@@ -665,7 +664,7 @@
     (format s " }~
                ~%    return s; }~
                ~%~
-               ~%StrList LObjects::override(const QByteArray &name) {~
+               ~%StrList LObjects::override(const QByteArray& name) {~
                ~%    NumList ids;~
                ~%    int n = q_names.value(name, -1);~
                ~%    if(n != -1) {~
@@ -687,7 +686,7 @@
     (format s " }}~
                ~%    StrList funs;~
                ~%    Q_FOREACH(int id, ids) {~
-               ~%        char *ret = override_arg_types[id - 1][0];~
+               ~%        char* ret = override_arg_types[id - 1][0];~
                ~%        funs << QString(\"%1 %2\")~
                ~%                .arg(ret ? ret : \"void\")~
                ~%                .arg(QString(override_function_ids.key(id))).toAscii(); }~

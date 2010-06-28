@@ -168,7 +168,8 @@
                (tb2 (search* "</table>" html tb1))
                (funs (subseq html tb1 tb2))
                tr1 (tr2 0))
-          (loop (setf tr1 (search* "<tr" funs tr2))
+          (loop
+             (setf tr1 (search* "<tr" funs tr2))
              (unless tr1
                (return))
              (setf tr2 (search* "</tr>" funs tr1))
@@ -183,7 +184,7 @@
                            ;; template problem
                            (and (string= "QVariant" class)
                                 (string= "bool canConvert () const" fun)))
-                 (setf fun (string-substitute fun " ," ","))
+                 (setf fun (string-substitute "," " ," fun))
                  (when (starts-with "virtual" fun)
                    (format so "~%   \"~a~a\"" (if protected "protected " "") fun))
                  (unless protected

@@ -65,14 +65,14 @@
 (defun ends-with (sub str)
   (str-with sub str nil))
 
-(defun string-substitute (str from &optional (to ""))
-  (let ((l (length from)))
+(defun string-substitute (new old str)
+  (let ((l (length old)))
     (with-output-to-string (s)
-      (do ((e (search from str) (search from str :start2 (+ e l)))
+      (do ((e (search old str) (search old str :start2 (+ e l)))
            (b 0 (+ e l)))
           ((not e) (write-string (subseq str b) s))
         (write-string (subseq str b e) s)
-        (write-string to s)))))
+        (write-string new s)))))
 
 (defun ensure-list (x)
   (if (listp x) x (list x)))
