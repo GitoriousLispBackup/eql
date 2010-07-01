@@ -1,10 +1,10 @@
 HOWTO
 
-If you miss a Qt class, add it in ./my-class-lists/<name>/:
+If you miss a Qt class, add it in ./my-class-lists/<module>/:
     q-names.lisp: QObject derived classes
     n-names.lisp: non QObject derived classes
 
-Run the commands in the following order:
+Run these commands in order:
 (after setting the *qt-html-documentation-path* in parse.lisp)
     ecl -shell parse.lisp
     ecl -shell generate.lisp

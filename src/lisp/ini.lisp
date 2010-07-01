@@ -163,7 +163,8 @@ The top-level loop of ECL. It is called by default when ECL is invoked."
     (let* ((*debugger-hook* nil)
            + ++ +++ - * ** *** / // ///)
 
-      (in-package "CL-USER")
+      ;;(in-package "CL-USER") [EQL]
+      (in-package "EQL") ;     [EQL]
 
       (unless *lisp-initialized*
         (let ((*break-enable* nil))

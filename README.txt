@@ -1,4 +1,5 @@
 # contact: gmail, polos.ruetz
+# mailing list: http://groups.google.com/group/eql-user/topics
 
 
 TESTED WITH: (patches for other configurations welcome!)
@@ -6,6 +7,7 @@ TESTED WITH: (patches for other configurations welcome!)
 - ECL 10.4.1 unicode
 - Qt 4.6.x (OSX: Carbon)
 - Linux, OSX 10.4, Windows XP (Visual Studio Express 2008)
+
 
 
 REQUIREMENTS
@@ -18,7 +20,7 @@ REQUIREMENTS
 
 PREPARE BUILD (optional; new users: skip this)
 
-If you want to include the QtOpenGL and QtSvg modules: (experimental!)
+If you want to include additional modules: (experimental!)
 - uncomment the modules in helper/qt-modules.lisp
 - follow the helper/README (parse & generate)
 - uncomment the modules in src/eql.pro (section: optional modules)

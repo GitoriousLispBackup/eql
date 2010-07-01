@@ -1,1 +1,1 @@
-(defparameter *qt-modules* nil) ; (list "opengl" "svg"))
+(defparameter *qt-modules* nil) ; (list "help" "opengl" "svg"))

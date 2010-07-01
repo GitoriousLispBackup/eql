@@ -4,6 +4,7 @@
 #CONFIG += eql_dll
 
 # optional modules (experimental!)
+#CONFIG += help
 #CONFIG += opengl
 #CONFIG += svg
 
@@ -34,14 +35,17 @@ win32 {
     LIBS        += -Lc:/ecl/msvc/package
 }
 
+help {
+    QT += help
+}
+
 opengl {
     QT      += opengl
     DEFINES += EQL_OPENGL
 }
 
 svg {
-    QT      += svg
-    DEFINES += EQL_SVG
+    QT += svg
 }
 
 HEADERS += gen/_lobjects.h \

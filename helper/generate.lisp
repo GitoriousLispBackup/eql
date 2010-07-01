@@ -335,8 +335,8 @@
   (mapc #'(lambda (name include)
             (when (find* name *qt-modules*)
               (format s "#include <~a>~%" include)))
-        (list "opengl" "svg")
-        (list "QtOpenGL" "QtSvg")))
+        (list "help" "opengl" "svg")
+        (list "QtHelp" "QtOpenGL" "QtSvg")))
 
 (defun classes.h (type)
   (with-open-file (s (format nil "../src/gen/_~c_classes.h" (if (eql :q type) #\q #\n))
@@ -389,11 +389,19 @@
                                           (find* name '("QListWidget"
                                                         "QTableWidget"
                                                         "QTreeWidget")))
+                                     (and (string= "QHelpIndexModel" name)
+                                          (find* fun-name '("columnCount"
+                                                            "hasChildren"
+                                                            "parent")))
+                                     (and (string= "QHelpSearchResultWidget" name)
+                                          (find* fun-name '("changeEvent")))
+                                     (and (string= "QHelpSearchQueryWidget" name)
+                                          (find* fun-name '("changeEvent"
+                                                            "focusInEvent")))
                                      (and (string= "QStringListModel" name)
                                           (find* fun-name '("columnCount"
+                                                            "hasChildren"
                                                             "parent")))
-                                     (and (string= "hasChildren" fun-name)
-                                          (string= "QStringListModel" name))
                                      ;; exclude some very low-level ones
                                      (find* fun-name '("event"
                                                        "eventFilter"
