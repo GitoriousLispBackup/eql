@@ -1,6 +1,6 @@
 # copyright (c) 2010 power4projects software
 
-# Uncomment to build a shared library (see my_app/my_app.pro)
+# uncomment to build a shared library (see my_app/my_app.pro)
 #CONFIG += eql_dll
 
 # optional modules (experimental!)

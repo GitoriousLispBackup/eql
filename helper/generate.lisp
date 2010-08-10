@@ -561,8 +561,8 @@
                (and (not q)
                     (upper-case-p 1st)))
            (format nil "(~a)~a.toInt()" (arg-type arg) x))
-          (q (arg-type arg)
-             (format nil "qVariantValue<~a>(~a)" (arg-type arg) x))
+          (q
+           (format nil "qVariantValue<~a>(~a)" (arg-type arg) x))
           (t
            (format nil "~a.to~a()" x (string-capitalize (arg-type arg)))))))
 

@@ -44,7 +44,8 @@
 (defparameter *search-help*     (qfind-child *gui* "search_help"))
 (defparameter *select*          (qfind-child *gui* "select"))
 (defparameter *selected-widget* (qfind-child *gui* "selected_widget"))
-(defparameter *completer-list*  (qnew "QStringListModel"))
+
+(defparameter *completer-list* (qnew "QStringListModel"))
 
 (defun gui ()
   (qset *gui* "windowTitle" "EQL - Embedded Qt Lisp")

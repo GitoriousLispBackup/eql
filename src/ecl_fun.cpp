@@ -29,7 +29,9 @@ struct QtObject {
     bool isQObject() const { return (id > 0); }
     bool isStatic() const { return !pointer; }
     QByteArray className() const {
-        return id ? ((id > 0) ? LObjects::qNames.at(id - 1) : LObjects::nNames.at(-id - 1)) : QByteArray(); }
+        return id
+                ? ((id > 0) ? LObjects::qNames.at(id - 1) : LObjects::nNames.at(-id - 1))
+                : QByteArray(); }
 };
 
 class LUiLoader : public QUiLoader {
@@ -45,7 +47,7 @@ public:
             if(n != -1) {
                 QMetaMethod mm(mo->method(n));
                 void* args[] = { 0, 0 };
-                void* pointer;
+                void* pointer = 0;
                 args[0] = &pointer; // return value
                 uint unique = LObjects::unique();
                 args[1] = &unique;
@@ -230,7 +232,7 @@ static QByteArray prettyFunName(const QByteArray& name, bool this_arg) {
         pretty.truncate(pretty.length() - 1); }
     return pretty; }
 
-enum CallType { Slot, Method, Static  };
+enum CallType { Slot, Method, Static };
 
 static int findMethodIndex(CallType type, const QByteArray& name, const QMetaObject* mo, int len) {
     int n = -1;
@@ -437,8 +439,7 @@ static QPolygon toQPolygon(cl_object l_lst) {
         cl_object l_el = l_lst;
         while(l_el != Cnil) {
             p << QPoint(toInt(cl_first(l_el)), toInt(cl_second(l_el)));
-            l_el = cl_cdr(l_el);
-            l_el = cl_cdr(l_el); }}
+            l_el = cl_cddr(l_el); }}
     return p; }
 
 static QPolygonF toQPolygonF(cl_object l_lst) {
@@ -447,8 +448,7 @@ static QPolygonF toQPolygonF(cl_object l_lst) {
         cl_object l_el = l_lst;
         while(l_el != Cnil) {
             p << QPointF(toReal(cl_first(l_el)), toReal(cl_second(l_el)));
-            l_el = cl_cdr(l_el);
-            l_el = cl_cdr(l_el); }}
+            l_el = cl_cddr(l_el); }}
     return p; }
 
 static QFont toQFont(cl_object l_f) {
@@ -1249,7 +1249,7 @@ cl_object qnew_instance2(cl_object l_name, cl_object l_args) {
                 //               r = return, u = unique
                 //               r  u  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16
                 void* args[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-                void* pointer;
+                void* pointer = 0;
                 args[0] = &pointer; // return value
                 uint unique = LObjects::unique();
                 args[1] = &unique;
@@ -1288,7 +1288,7 @@ cl_object qcopy(cl_object l_obj) {
             if(n != -1) {
                 QMetaMethod mm(mo->method(n));
                 void* args[] = { 0, 0, 0 };
-                void* pointer;
+                void* pointer = 0;
                 args[0] = &pointer; // return value
                 uint unique = LObjects::unique();
                 args[1] = &unique;
@@ -1609,13 +1609,13 @@ QVariant callOverrideFun(const QObject* caller, void* fun, int id, const void** 
         case 1: l_ret = cl_funcall(2, l_fun, to_lisp_arg(mArgs.at(0), q));
             break;
         case 2: l_ret = cl_funcall(3, l_fun,
-                                    to_lisp_arg(mArgs.at(0), q),
-                                    to_lisp_arg(mArgs.at(1), q));
+                                   to_lisp_arg(mArgs.at(0), q),
+                                   to_lisp_arg(mArgs.at(1), q));
             break;
         case 3: l_ret = cl_funcall(4, l_fun,
-                                    to_lisp_arg(mArgs.at(0), q),
-                                    to_lisp_arg(mArgs.at(1), q),
-                                    to_lisp_arg(mArgs.at(2), q));
+                                   to_lisp_arg(mArgs.at(0), q),
+                                   to_lisp_arg(mArgs.at(1), q),
+                                   to_lisp_arg(mArgs.at(2), q));
             break;
         default: {
             cl_object l_args = Cnil;
@@ -1690,7 +1690,7 @@ cl_object qclear_event_filters() {
 
 cl_object tr(cl_object l_str) {
     ecl_process_env()->nvalues = 1;
-    cl_object l_ret = from_qstring(QObject::tr(toQByteArray(l_str).constData()));
+    cl_object l_ret = from_qstring(QObject::tr(toQString(l_str).toUtf8()));
     return l_ret; }
 
 cl_object qt_object_name(cl_object l_obj) {
@@ -1721,7 +1721,7 @@ cl_object qobject_names2(cl_object l_type) {
 
 cl_object qenum2(cl_object l_name, cl_object l_key) {
     /// args: (name key)
-    /// Registered enumerators only (see <code>Q_ENUMS</code>).<br>Returns the integer value of the passed enumerator, passed as name and key. Needed only if an enumerator argument has to be passed as <code>int</code> value.
+    /// Registered enumerators only (see <code>Q_ENUMS</code> in Qt Assistant).<br>Returns the integer value of the passed enumerator, passed as name and key. Needed only if an enumerator argument has to be passed as <code>int</code> value.
     ///    (qfun item "setTextAlignment" 0 (qenum "Qt::Alignment" "AlignCenter"))
     ecl_process_env()->nvalues = 1;
     if(ECL_STRINGP(l_name) && ECL_STRINGP(l_key)) {

@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QWidget>
 #include <QStringList>
+#include <QTextCodec>
 #include <ecl/ecl.h>
 #include "eql.h"
 #include <iostream>
@@ -20,6 +21,11 @@ int main(int argc, char** argv) {
         std::cout << "Usage: eql [-qgui | -qtpl] [file]" << std::endl;
 #endif
         exit(0); }
+
+    QTextCodec* utf8 = QTextCodec::codecForName("UTF-8");
+    QTextCodec::setCodecForCStrings(utf8);
+    QTextCodec::setCodecForTr(utf8);
+
 #ifdef Q_OS_WIN32
     // necessary when using SLIME
     { QWidget ini; ini.setGeometry(0, 0, 0, 0); ini.show(); ini.close(); }

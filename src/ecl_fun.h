@@ -23,17 +23,17 @@
 #define LIST1(a) \
     CONS(a, Cnil)
 #define LIST2(a, b) \
-    CONS(a, CONS(b, Cnil))
+    CONS(a, LIST1(b))
 #define LIST3(a, b, c) \
-    CONS(a, CONS(b, CONS(c, Cnil)))
+    CONS(a, LIST2(b, c))
 #define LIST4(a, b, c, d) \
-    CONS(a, CONS(b, CONS(c, CONS(d, Cnil))))
+    CONS(a, LIST3(b, c, d))
 #define LIST5(a, b, c, d, e) \
-    CONS(a, CONS(b, CONS(c, CONS(d, CONS(e, Cnil)))))
+    CONS(a, LIST4(b, c, d, e))
 #define LIST6(a, b, c, d, e, f) \
-    CONS(a, CONS(b, CONS(c, CONS(d, CONS(e, CONS(f, Cnil))))))
+    CONS(a, LIST5(b, c, d, e, f))
 #define LIST7(a, b, c, d, e, f, g) \
-    CONS(a, CONS(b, CONS(c, CONS(d, CONS(e, CONS(f, (CONS(g, Cnil))))))))
+    CONS(a, LIST6(b, c, d, e, f, g))
 
 #define TO_QT_TYPE(name) \
     static name to##name(cl_object x) { \
