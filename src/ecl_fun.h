@@ -197,6 +197,7 @@ cl_object qload_ui             (cl_object);
 cl_object qnew_instance2       (cl_object, cl_object);
 cl_object qnobject_super_class (cl_object);
 cl_object qobject_names2       (cl_object);
+cl_object qok                  ();
 cl_object qoverride            (cl_object, cl_object, cl_object);
 cl_object qprocess_events      ();
 cl_object qproperty            (cl_object, cl_object);

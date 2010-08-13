@@ -5,10 +5,10 @@
 ;;;     "=QPalette"
 
 (setf *n-names*
-      (append *n-names*
-              (list "QGLColormap"
-                    "QGLContext"
-                    "QGLFormat"
+      (nconc *n-names*
+	     (list "QGLColormap"
+		   "QGLContext"
+		   "QGLFormat"
                     "QGLFramebufferObject"
                     "QGLFramebufferObjectFormat"
                     "QGLPixelBuffer"

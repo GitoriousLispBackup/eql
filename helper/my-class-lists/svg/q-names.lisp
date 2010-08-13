@@ -2,8 +2,8 @@
 ;;;     "//QAbstractButton"
 
 (setf *q-names*
-      (append *q-names*
-              (list "QGraphicsSvgItem"
-                    "QSvgRenderer"
-                    "QSvgWidget"
-                    )))
+      (nconc *q-names*
+	     (list "QGraphicsSvgItem"
+		   "QSvgRenderer"
+		   "QSvgWidget"
+		   )))

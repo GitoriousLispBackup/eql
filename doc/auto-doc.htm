@@ -52,7 +52,7 @@
 </p><br>
 <p>
 <b>QENUM (name key)</b>
-<p>Registered enumerators only (see <code>Q_ENUMS</code>).<br>Returns the integer value of the passed enumerator, passed as name and key. Needed only if an enumerator argument has to be passed as <code>int</code> value.</p>
+<p>Registered enumerators only (see <code>Q_ENUMS</code> in Qt Assistant).<br>Returns the integer value of the passed enumerator, passed as name and key. Needed only if an enumerator argument has to be passed as <code>int</code> value.</p>
 <pre>
   (qfun item "setTextAlignment" 0 (qenum "Qt::Alignment" "AlignCenter"))
 </pre>
@@ -141,6 +141,13 @@
 <p>
 <b>QOBJECT-NAMES (&optional type)</b>
 <p>Returns all supported object names. Passing either <code>:q</code> or <code>:n</code> returns only the QObject inherited, or not QObject inherited names, respectively.</p>
+</p><br>
+<p>
+<b>QOK ()</b>
+<p>Needed to get the boolean <b>ok</b> value in cases like this:</p>
+<pre>
+  (qfun "QFontDialog" "getFont(bool*)" nil)
+</pre>
 </p><br>
 <p>
 <b>QOVERRIDE (object name function)</b>

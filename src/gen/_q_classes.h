@@ -847,6 +847,54 @@ public:
     void timerEvent(QTimerEvent* x1) { void* fun = LObjects::overrideFun(unique, 5); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QFontComboBox::timerEvent(x1); }
 };
 
+class LFontDialog : public QFontDialog {
+    Q_OBJECT
+public:
+    LFontDialog(uint u, QWidget* x1 = 0) : QFontDialog(x1), unique(u) {}
+    LFontDialog(uint u, const QFont& x1, QWidget* x2 = 0) : QFontDialog(x1, x2), unique(u) {}
+
+    static NumList overrideIds;
+    uint unique;
+
+    void setVisible(bool x1) { void* fun = LObjects::overrideFun(unique, 77); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 77, args).toBool()) return; } QFontDialog::setVisible(x1); }
+    QSize minimumSizeHint() const { void* fun = LObjects::overrideFun(unique, 6); if(fun) { return qVariantValue<QSize>(callOverrideFun(this, fun, 6, 0)); } return QFontDialog::minimumSizeHint(); }
+    QSize sizeHint() const { void* fun = LObjects::overrideFun(unique, 7); if(fun) { return qVariantValue<QSize>(callOverrideFun(this, fun, 7, 0)); } return QFontDialog::sizeHint(); }
+    int heightForWidth(int x1) const { void* fun = LObjects::overrideFun(unique, 9); if(fun) { const void* args[] = { &x1 }; return callOverrideFun(this, fun, 9, args).toInt(); } return QFontDialog::heightForWidth(x1); }
+    QVariant inputMethodQuery(Qt::InputMethodQuery x1) const { void* fun = LObjects::overrideFun(unique, 10); if(fun) { const void* args[] = { &x1 }; return qVariantValue<QVariant>(callOverrideFun(this, fun, 10, args)); } return QFontDialog::inputMethodQuery(x1); }
+    void actionEvent(QActionEvent* x1) { void* fun = LObjects::overrideFun(unique, 11); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 11, args).toBool()) return; } QFontDialog::actionEvent(x1); }
+    void changeEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 12); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 12, args).toBool()) return; } QFontDialog::changeEvent(x1); }
+    void closeEvent(QCloseEvent* x1) { void* fun = LObjects::overrideFun(unique, 13); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 13, args).toBool()) return; } QFontDialog::closeEvent(x1); }
+    void contextMenuEvent(QContextMenuEvent* x1) { void* fun = LObjects::overrideFun(unique, 14); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 14, args).toBool()) return; } QFontDialog::contextMenuEvent(x1); }
+    void dragEnterEvent(QDragEnterEvent* x1) { void* fun = LObjects::overrideFun(unique, 15); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 15, args).toBool()) return; } QFontDialog::dragEnterEvent(x1); }
+    void dragLeaveEvent(QDragLeaveEvent* x1) { void* fun = LObjects::overrideFun(unique, 16); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 16, args).toBool()) return; } QFontDialog::dragLeaveEvent(x1); }
+    void dragMoveEvent(QDragMoveEvent* x1) { void* fun = LObjects::overrideFun(unique, 17); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 17, args).toBool()) return; } QFontDialog::dragMoveEvent(x1); }
+    void dropEvent(QDropEvent* x1) { void* fun = LObjects::overrideFun(unique, 18); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 18, args).toBool()) return; } QFontDialog::dropEvent(x1); }
+    void enterEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 19); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 19, args).toBool()) return; } QFontDialog::enterEvent(x1); }
+    void focusInEvent(QFocusEvent* x1) { void* fun = LObjects::overrideFun(unique, 20); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 20, args).toBool()) return; } QFontDialog::focusInEvent(x1); }
+    bool focusNextPrevChild(bool x1) { void* fun = LObjects::overrideFun(unique, 21); if(fun) { const void* args[] = { &x1 }; return callOverrideFun(this, fun, 21, args).toBool(); } return QFontDialog::focusNextPrevChild(x1); }
+    void focusOutEvent(QFocusEvent* x1) { void* fun = LObjects::overrideFun(unique, 22); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 22, args).toBool()) return; } QFontDialog::focusOutEvent(x1); }
+    void hideEvent(QHideEvent* x1) { void* fun = LObjects::overrideFun(unique, 23); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 23, args).toBool()) return; } QFontDialog::hideEvent(x1); }
+    void inputMethodEvent(QInputMethodEvent* x1) { void* fun = LObjects::overrideFun(unique, 24); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 24, args).toBool()) return; } QFontDialog::inputMethodEvent(x1); }
+    void keyPressEvent(QKeyEvent* x1) { void* fun = LObjects::overrideFun(unique, 25); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 25, args).toBool()) return; } QFontDialog::keyPressEvent(x1); }
+    void keyReleaseEvent(QKeyEvent* x1) { void* fun = LObjects::overrideFun(unique, 26); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 26, args).toBool()) return; } QFontDialog::keyReleaseEvent(x1); }
+    void leaveEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 27); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 27, args).toBool()) return; } QFontDialog::leaveEvent(x1); }
+    void mouseDoubleClickEvent(QMouseEvent* x1) { void* fun = LObjects::overrideFun(unique, 28); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 28, args).toBool()) return; } QFontDialog::mouseDoubleClickEvent(x1); }
+    void mouseMoveEvent(QMouseEvent* x1) { void* fun = LObjects::overrideFun(unique, 29); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 29, args).toBool()) return; } QFontDialog::mouseMoveEvent(x1); }
+    void mousePressEvent(QMouseEvent* x1) { void* fun = LObjects::overrideFun(unique, 30); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 30, args).toBool()) return; } QFontDialog::mousePressEvent(x1); }
+    void mouseReleaseEvent(QMouseEvent* x1) { void* fun = LObjects::overrideFun(unique, 31); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 31, args).toBool()) return; } QFontDialog::mouseReleaseEvent(x1); }
+    void moveEvent(QMoveEvent* x1) { void* fun = LObjects::overrideFun(unique, 32); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 32, args).toBool()) return; } QFontDialog::moveEvent(x1); }
+    void paintEvent(QPaintEvent* x1) { void* fun = LObjects::overrideFun(unique, 33); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 33, args).toBool()) return; } QFontDialog::paintEvent(x1); }
+    void resizeEvent(QResizeEvent* x1) { void* fun = LObjects::overrideFun(unique, 34); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 34, args).toBool()) return; } QFontDialog::resizeEvent(x1); }
+    void showEvent(QShowEvent* x1) { void* fun = LObjects::overrideFun(unique, 35); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 35, args).toBool()) return; } QFontDialog::showEvent(x1); }
+    void tabletEvent(QTabletEvent* x1) { void* fun = LObjects::overrideFun(unique, 36); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 36, args).toBool()) return; } QFontDialog::tabletEvent(x1); }
+    void wheelEvent(QWheelEvent* x1) { void* fun = LObjects::overrideFun(unique, 37); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 37, args).toBool()) return; } QFontDialog::wheelEvent(x1); }
+    void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 1); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 1, args).toBool()) return; } QFontDialog::childEvent(x1); }
+    void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 2); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 2, args).toBool()) return; } QFontDialog::connectNotify(x1); }
+    void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 3); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 3, args).toBool()) return; } QFontDialog::customEvent(x1); }
+    void disconnectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 4); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 4, args).toBool()) return; } QFontDialog::disconnectNotify(x1); }
+    void timerEvent(QTimerEvent* x1) { void* fun = LObjects::overrideFun(unique, 5); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(this, fun, 5, args).toBool()) return; } QFontDialog::timerEvent(x1); }
+};
+
 class LFormLayout : public QFormLayout {
     Q_OBJECT
 public:

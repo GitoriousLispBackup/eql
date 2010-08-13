@@ -5,7 +5,7 @@
 ;;;     "=QPalette"
 
 (setf *n-names*
-      (append *n-names*
-              (list "QHelpContentItem"
-                    "QHelpSearchQuery"
-                    )))
+      (nconc *n-names*
+	     (list "QHelpContentItem"
+		   "QHelpSearchQuery"
+		   )))

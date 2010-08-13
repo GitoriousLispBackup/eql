@@ -36,6 +36,7 @@
         "QErrorMessage"
         "QFileDialog"
         "QFontComboBox"
+        "QFontDialog"
         "QFormLayout"
         "QFrame"
         "//QGraphicsEffect"

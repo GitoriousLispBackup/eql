@@ -5,6 +5,6 @@
 ;;;     "=QPalette"
 
 (setf *n-names*
-      (append *n-names*
-              (list "QSvgGenerator"
-                    )))
+      (nconc *n-names*
+	     (list "QSvgGenerator"
+		   )))

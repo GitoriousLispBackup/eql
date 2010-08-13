@@ -16,6 +16,7 @@ typedef QList<QByteArray>        StrList;
 
 static const char SIG = '2';
 static const char SLO = '1';
+static bool _ok_ = false;
 static int _n_cstr_ = -1;
 static const QMetaObject* staticQtMetaObject = QtMetaObject::get();
 
@@ -83,6 +84,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object("qnew-instance2"),       (cl_objectfn_fixed)qnew_instance2,           2);
     cl_def_c_function(c_string_to_object("qnobject-super-class"), (cl_objectfn_fixed)qnobject_super_class,     1);
     cl_def_c_function(c_string_to_object("qobject-names2"),       (cl_objectfn_fixed)qobject_names2,           1);
+    cl_def_c_function(c_string_to_object("qok"),                  (cl_objectfn_fixed)qok,                      0);
     cl_def_c_function(c_string_to_object("qoverride"),            (cl_objectfn_fixed)qoverride,                3);
     cl_def_c_function(c_string_to_object("qprocess-events"),      (cl_objectfn_fixed)qprocess_events,          0);
     cl_def_c_function(c_string_to_object("qproperty"),            (cl_objectfn_fixed)qproperty,                2);
@@ -102,6 +104,7 @@ enum UserMetaTypes {
     T_GLint,
     T_GLuint,
 #endif
+    T_bool_ok_pointer,
     T_QGradientStop,
     T_QList_QAbstractButton,
     T_QList_QAction,
@@ -153,6 +156,7 @@ void registerMetaTypes() {
     qRegisterMetaType<GLint>("GLint");
     qRegisterMetaType<GLuint>("GLuint");
 #endif
+    qRegisterMetaType<bool*>("bool*");
     qRegisterMetaType<QGradientStop>("QGradientStop");
     qRegisterMetaType<QList<QAbstractButton*> >("QList<QAbstractButton*>");
     qRegisterMetaType<QList<QAction*> >("QList<QAction*>");
@@ -785,6 +789,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg, QObject* q = 
         case QMetaType::QPixmap:                 p = toQPixmapPointer(l_arg); break;
         case QMetaType::QTextFormat:             p = toQTextFormatPointer(l_arg); break;
         case QMetaType::QTextLength:             p = toQTextLengthPointer(l_arg); break;
+        case T_bool_ok_pointer:                  p = new void*(&_ok_); break;
         case T_QGradientStop:                    p = new QGradientStop(toQGradientStop(l_arg)); break;
         case T_QList_QAbstractButton:            p = new QList<QAbstractButton*>(toQAbstractButtonList(l_arg)); break;
         case T_QList_QAction:                    p = new QList<QAction*>(toQActionList(l_arg)); break;
@@ -905,6 +910,7 @@ static cl_object to_lisp_arg(const MetaArg& arg, QObject* q) {
             case QMetaType::QTextLength:             l_ret = from_qtextlength(*(QTextLength*)p); break;
             case QMetaType::QTime:                   l_ret = from_qtime(*(QTime*)p); break;
             case QMetaType::QUrl:                    l_ret = from_qurl(*(QUrl*)p); break;
+            case T_bool_ok_pointer:                  l_ret = _ok_ ? Ct : Cnil; break;
             case T_QGradientStop:                    l_ret = from_qgradientstop(*(QGradientStop*)p); break;
             case T_QList_QAbstractButton:            l_ret = from_qabstractbuttonlist(*(QList<QAbstractButton*>*)p); break;
             case T_QList_QAction:                    l_ret = from_qactionlist(*(QList<QAction*>*)p); break;
@@ -1035,6 +1041,9 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
             if(is_ret) {
                 QMetaType::destroy(n, p); }
             break;
+        case T_bool_ok_pointer:
+            delete (void**)p;
+	    break;
         default:
             if(n > QMetaType::User) {
                 QMetaType::destroy(n, p); }
@@ -1839,6 +1848,13 @@ cl_object qsingle_shot(cl_object l_msec, cl_object l_fun) {
     LObjects::eql->fun = getLispFun(l_fun);
     QTimer::singleShot(toInt(l_msec), LObjects::eql, QSLOT(singleShot()));
     return Ct; }
+
+cl_object qok() {
+    /// args: ()
+    /// Needed to get the boolean <b>ok</b> value in cases like this:
+    ///    (qfun "QFontDialog" "getFont(bool*)" nil)
+    ecl_process_env()->nvalues = 1;
+    return _ok_ ? Ct : Cnil; }
 
 cl_object qquit() {
     /// args: ()

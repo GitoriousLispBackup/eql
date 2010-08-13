@@ -178,6 +178,8 @@
    "virtual void setVisible ( bool )")
   (("QFontComboBox" . "QComboBox")
    "virtual QSize sizeHint () const")
+  (("QFontDialog" . "QDialog")
+   "virtual void setVisible ( bool )")
   (("QFormLayout" . "QLayout")
    "virtual void addItem ( QLayoutItem * )"
    "virtual int count () const"

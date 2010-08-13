@@ -71,4 +71,7 @@
         (! "</p><br>"))
       (write-string "</body></html>" s))))
 
-(help)
+(progn
+  (help)
+  (eql:qq))
+

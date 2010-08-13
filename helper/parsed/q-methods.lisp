@@ -813,6 +813,22 @@
    "void setWritingSystem ( QFontDatabase::WritingSystem )"
    "QFontDatabase::WritingSystem writingSystem () const"
    "virtual QSize sizeHint () const")
+  (("QFontDialog" . "QDialog")
+   "new QFontDialog ( QWidget * = 0 )"
+   "new QFontDialog ( const QFont &, QWidget * = 0 )"
+   "QFont currentFont () const"
+   "void open ( QObject *, const char * )"
+   "FontDialogOptions options () const"
+   "QFont selectedFont () const"
+   "void setCurrentFont ( const QFont & )"
+   "void setOption ( FontDialogOption, bool = true )"
+   "void setOptions ( FontDialogOptions )"
+   "bool testOption ( FontDialogOption ) const"
+   "virtual void setVisible ( bool )"
+   "static QFont getFont ( bool *, const QFont &, QWidget *, const QString &, FontDialogOptions )"
+   "static QFont getFont ( bool *, const QFont &, QWidget *, const QString & )"
+   "static QFont getFont ( bool *, const QFont &, QWidget * = 0 )"
+   "static QFont getFont ( bool *, QWidget * = 0 )")
   (("QFormLayout" . "QLayout")
    "new QFormLayout ( QWidget * = 0 )"
    "void addRow ( QWidget *, QWidget * )"

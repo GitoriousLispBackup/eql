@@ -30,6 +30,7 @@
    #:qnobject-super-class
    #:qnull-object
    #:qobject-names
+   #:qok
    #:qoverride
    #:qprocess-events
    #:qproperty

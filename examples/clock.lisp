@@ -12,7 +12,7 @@
 
 (defconstant +antialiasing+ 1)
 
-(defparameter *clock* (qnew "QWidget"
+(defparameter *clock* (qnew "QWidget(QWidget*,Qt::WindowFlags)" nil "WindowStaysOnTopHint"
                             "size" (list 170 170)
                             "pos" (list 50 50)))
 
@@ -85,7 +85,7 @@
             (! "setPen(QPen)" pen-second)
             (! "setBrush(QBrush)" brush-second)
             (! "drawEllipse(QRectF)" '(-1.5 -1.5 3 3))
-            (! "setOpacity" 0.5)
+            (! "setOpacity" 0.7)
             (! "drawLine(QLine)" '(-15 0 52 0))
             (! "drawEllipse(QRect)" '(53 -4 8 8))))
         (! "end")))

@@ -83,7 +83,10 @@
         "WId"
         "X11"
         "XEvent"
-        "**"))
+        "**"
+	"QFont getFont ( bool * , QWidget * , const char * )"                 ; "const char *" is ignored
+	"QFont getFont ( bool * , const QFont & , QWidget * , const char * )" ; "const char *" is ignored
+	))
 
 (defparameter *not-found* 0)
 

@@ -2,8 +2,8 @@
 ;;;     "//QAbstractButton"
 
 (setf *q-names*
-      (append *q-names*
-              (list "QGLShader"
-                    "QGLShaderProgram"
-                    "QGLWidget"
-                    )))
+      (nconc *q-names*
+	     (list "QGLShader"
+		   "QGLShaderProgram"
+		   "QGLWidget"
+		   )))

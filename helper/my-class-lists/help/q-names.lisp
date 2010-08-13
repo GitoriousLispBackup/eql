@@ -2,13 +2,13 @@
 ;;;     "//QAbstractButton"
 
 (setf *q-names*
-      (append *q-names*
-              (list "QHelpContentModel"
-                    "QHelpContentWidget"
-                    "QHelpEngineCore"
-                    "//QHelpIndexModel"
-                    "QHelpIndexWidget"
-                    "QHelpSearchEngine"
-                    "QHelpSearchQueryWidget"
-                    "QHelpSearchResultWidget"
-                    )))
+      (nconc *q-names*
+	     (list "QHelpContentModel"
+		   "QHelpContentWidget"
+		   "QHelpEngineCore"
+		   "//QHelpIndexModel"
+		   "QHelpIndexWidget"
+		   "QHelpSearchEngine"
+		   "QHelpSearchQueryWidget"
+		   "QHelpSearchResultWidget"
+		   )))
