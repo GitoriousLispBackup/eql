@@ -3,10 +3,7 @@
 <head>
 <style>
 body, table { font-family: sans-serif; font-size: 10pt; }
-a:link { text-decoration: underline; color: blue; }
-a:hover { text-decoration: underline; color: blue; }
-a:visited { text-decoration: underline; color: blue; }
-a:visited:hover { text-decoration: underline; color: blue; }
+a:link, a:hover, a:visited, a:visited:hover { text-decoration: underline; font-weight: bold; color: chocolate; }
 td { border: 1px solid gray; }
 table { border-collapse: collapse; }
 code, pre { color: mediumblue; }
@@ -34,9 +31,19 @@ code, pre { color: mediumblue; }
 </ul>
 <li>Open the <b>Visual Studio 2008 Command Prompt</b> from the Windows main menu, change to the <code>C:\ecl\msvc</code> directory, and run <code>nmake</code>.
 <li>After the build, run <code>nmake install</code>. This will create a directory <code>package</code>.
-<li>Add the ECL install path to your Windows <code>Path</code> environment variable (see &lt;Control Panel:System:Advanced:Environment Variables&gt;):<br> <code>...<span class="added">;C:\ecl\msvc\package</span></code>.
 </ul></p>
 <p>Install the latest official release of <a href="http://qt.nokia.com/downloads">Qt4</a>. Choose the version <b>Qt libraries for Windows (VS 2008)</b>.</p>
+<p>
+Make sure all of the following are in your <code>Path</code> environment variable, see &lt;Control Panel:System:Advanced:Environment Variables&gt;.
+<br>(If you add them for your user account only, do it like so: <code>%PATH%;C:\...</code>)
+<code>
+<ul>
+<li>C:\Program Files\Microsoft Visual Studio 9.0\VC\bin
+<li>C:\ecl\msvc\package
+<li>C:\qt\4.x.x\bin
+</ul>
+</code>
+</p>
 <p>Now you're ready to build EQL.
 <ul>
 <li>Open the <b>Qt command prompt</b> from the Windows main menu, and switch to the EQL source directory <code>C:\eql\src</code>.
@@ -60,8 +67,16 @@ code, pre { color: mediumblue; }
 (defparameter swank-loader::*fasl-directory* "C:/emacs/slime/fasl/")
 </pre>
 </ul>
-The last step is your <code>_emacs</code> file. The path is <code>C:\Documents and Settings\&lt;username&gt;\Application Data\_emacs</code>.
-<br>If you have trouble to find the location: it's the same directory containing your <code>.emacs.d</code> directory.
+The last step is your <code>.emacs</code> file.
+<br>(Run Emacs and select "Options / Save Options"; then create the file in the same directory where you find the <code>.emacs.d</code> directory.)
+<br>Example paths are:
+<code>
+<ul>
+<li>C:\.emacs 
+<li>C:\Documents and Settings\&lt;username&gt;\Application Data\.emacs
+</ul>
+</code>
+(Don't try to create the file with Explorer, simply use any editor.)
 <br>The content is something like:
 <pre>
   (setq inferior-lisp-program "C:/eql/eql.exe")
@@ -69,8 +84,9 @@ The last step is your <code>_emacs</code> file. The path is <code>C:\Documents a
   (require 'slime)
   (slime-setup '(slime-fancy))
 </pre>
-After firing up Emacs, and hitting <code>Meta-X slime</code>, your SLIME should compile and run.
+After firing up Emacs, and hitting <code>Meta-X slime</code>, your SLIME should compile and run. <small style="color: red">1)</small>
 <br>As a final test, try this: <code>(eql:qgui)</code>.
-<br><br><br>
+<br><br>
+<small style="color: red">1)</small><small> It happened to me that SLIME didn't compile on a Windows 7, Intel Atom box (even without EQL patch), so I copied a compiled SLIME (with EQL patch) from another machine (same bit size), and it worked.</small>
 </body>
 </html>

@@ -208,7 +208,7 @@
         (qfun override "sortByColumn" 1 "AscendingOrder")))))
 
 (defun populate-primitives ()
-  (dolist (type (list (cons "QByteArray"    "\"a Latin1 string\"")
+  (dolist (type (list (cons "QByteArray"    "(vector -50 0 50)")
                       (cons "QChar"         "#\\a")
                       (cons "QColor"        "\"#ff0000\" or \"red\"")
                       (cons "QCursor"       "\"CrossCursor\"")
