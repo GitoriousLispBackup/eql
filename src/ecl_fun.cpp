@@ -66,7 +66,7 @@ public:
 };
 
 void iniCLFunctions() {
-    cl_object eql(make_simple_base_string("EQL"));
+    cl_object eql(make_simple_base_string((char*)"EQL"));
     cl_make_package(1, eql);
     si_select_package(eql);
     cl_def_c_function(c_string_to_object("qadd-event-filter"),    (cl_objectfn_fixed)qadd_event_filter,        3);
@@ -1617,7 +1617,7 @@ QVariant callOverrideFun(const QObject* caller, void* fun, int id, const void** 
     cl_object l_fun = (cl_object)fun;
     MetaArgList mArgs;
     int i = 0;
-    char* type = 0;
+    const char* type = 0;
     while((type = LObjects::override_arg_types[n][i + 1])) {
         mArgs << MetaArg(type, (void*)args[i]);
         ++i; }
@@ -1643,7 +1643,7 @@ QVariant callOverrideFun(const QObject* caller, void* fun, int id, const void** 
                 l_args = CONS(to_lisp_arg(arg, q), l_args); }
             l_ret = cl_apply(2, l_fun, cl_nreverse(l_args)); }}
     QVariant ret(false);
-    char* ret_type = LObjects::override_arg_types[n][0];
+    const char* ret_type = LObjects::override_arg_types[n][0];
     if(ret_type) {
         QByteArray type(ret_type);
         QtObject o = toQtObject(l_ret);

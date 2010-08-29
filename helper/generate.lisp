@@ -193,7 +193,11 @@
 
 (defun arg-to-c (arg &optional enum-class return)
   (format nil "~a~a~a"
-          (if (const-p arg) "const " "")
+          (if (and (const-p arg)
+		   (or (not return)
+		       (not (string= "int" (first arg)))))
+	      "const "
+	      "")
           (add-enum-class (first arg) enum-class)
           (cond ((and (not return)
                       (reference-p arg))
@@ -583,7 +587,7 @@
                ~%QObject** LObjects::Q = 0;~
                ~%QObject** LObjects::N = 0;~
                ~%uint LObjects::i_unique = 0;~
-               ~%char*** LObjects::override_arg_types = 0;~
+               ~%const char*** LObjects::override_arg_types = 0;~
                ~%QList<QByteArray> LObjects::qNames;~
                ~%QList<QByteArray> LObjects::nNames;~
                ~%QMap<QByteArray, int> LObjects::q_names;~
@@ -620,11 +624,11 @@
       (dolist (fun *override-functions*)
         (incf i)
         (format s "~%        override_function_ids[~s] = ~d;" fun i)))
-    (format s "~%        override_arg_types = new char** [~d];" (length *override-arguments*))
+    (format s "~%        override_arg_types = new const char** [~d];" (length *override-arguments*))
     (let ((i -1))
       (mapc #'(lambda (args ret)
                 (incf i)
-                (format s "~%        { static char* s[] = { ~s, ~a }; override_arg_types[~d] = s; }"
+                (format s "~%        { static const char* s[] = { ~s, ~a }; override_arg_types[~d] = s; }"
                         ret
                         (if args (format nil "~{~s, ~}0" args) "0")
                         i))
@@ -694,7 +698,7 @@
     (format s " }}~
                ~%    StrList funs;~
                ~%    Q_FOREACH(int id, ids) {~
-               ~%        char* ret = override_arg_types[id - 1][0];~
+               ~%        const char* ret = override_arg_types[id - 1][0];~
                ~%        funs << QString(\"%1 %2\")~
                ~%                .arg(ret ? ret : \"void\")~
                ~%                .arg(QString(override_function_ids.key(id))).toAscii(); }~

@@ -13,7 +13,7 @@ DynObject* LObjects::dynObject = 0;
 QObject** LObjects::Q = 0;
 QObject** LObjects::N = 0;
 uint LObjects::i_unique = 0;
-char*** LObjects::override_arg_types = 0;
+const char*** LObjects::override_arg_types = 0;
 QList<QByteArray> LObjects::qNames;
 QList<QByteArray> LObjects::nNames;
 QMap<QByteArray, int> LObjects::q_names;
@@ -638,236 +638,236 @@ void LObjects::ini(EQL* e) {
         override_function_ids["mergeWith(QUndoCommand*)"] = 227;
         override_function_ids["redo()"] = 228;
         override_function_ids["undo()"] = 229;
-        override_arg_types = new char** [229];
-        { static char* s[] = { 0, "QChildEvent*", 0 }; override_arg_types[0] = s; }
-        { static char* s[] = { 0, "const char*", 0 }; override_arg_types[1] = s; }
-        { static char* s[] = { 0, "QEvent*", 0 }; override_arg_types[2] = s; }
-        { static char* s[] = { 0, "const char*", 0 }; override_arg_types[3] = s; }
-        { static char* s[] = { 0, "QTimerEvent*", 0 }; override_arg_types[4] = s; }
-        { static char* s[] = { "QSize", 0 }; override_arg_types[5] = s; }
-        { static char* s[] = { "QSize", 0 }; override_arg_types[6] = s; }
-        { static char* s[] = { 0, "QPainter*", "QRect", "QDate", 0 }; override_arg_types[7] = s; }
-        { static char* s[] = { "int", "int", 0 }; override_arg_types[8] = s; }
-        { static char* s[] = { "QVariant", "Qt::InputMethodQuery", 0 }; override_arg_types[9] = s; }
-        { static char* s[] = { 0, "QActionEvent*", 0 }; override_arg_types[10] = s; }
-        { static char* s[] = { 0, "QEvent*", 0 }; override_arg_types[11] = s; }
-        { static char* s[] = { 0, "QCloseEvent*", 0 }; override_arg_types[12] = s; }
-        { static char* s[] = { 0, "QContextMenuEvent*", 0 }; override_arg_types[13] = s; }
-        { static char* s[] = { 0, "QDragEnterEvent*", 0 }; override_arg_types[14] = s; }
-        { static char* s[] = { 0, "QDragLeaveEvent*", 0 }; override_arg_types[15] = s; }
-        { static char* s[] = { 0, "QDragMoveEvent*", 0 }; override_arg_types[16] = s; }
-        { static char* s[] = { 0, "QDropEvent*", 0 }; override_arg_types[17] = s; }
-        { static char* s[] = { 0, "QEvent*", 0 }; override_arg_types[18] = s; }
-        { static char* s[] = { 0, "QFocusEvent*", 0 }; override_arg_types[19] = s; }
-        { static char* s[] = { "bool", "bool", 0 }; override_arg_types[20] = s; }
-        { static char* s[] = { 0, "QFocusEvent*", 0 }; override_arg_types[21] = s; }
-        { static char* s[] = { 0, "QHideEvent*", 0 }; override_arg_types[22] = s; }
-        { static char* s[] = { 0, "QInputMethodEvent*", 0 }; override_arg_types[23] = s; }
-        { static char* s[] = { 0, "QKeyEvent*", 0 }; override_arg_types[24] = s; }
-        { static char* s[] = { 0, "QKeyEvent*", 0 }; override_arg_types[25] = s; }
-        { static char* s[] = { 0, "QEvent*", 0 }; override_arg_types[26] = s; }
-        { static char* s[] = { 0, "QMouseEvent*", 0 }; override_arg_types[27] = s; }
-        { static char* s[] = { 0, "QMouseEvent*", 0 }; override_arg_types[28] = s; }
-        { static char* s[] = { 0, "QMouseEvent*", 0 }; override_arg_types[29] = s; }
-        { static char* s[] = { 0, "QMouseEvent*", 0 }; override_arg_types[30] = s; }
-        { static char* s[] = { 0, "QMoveEvent*", 0 }; override_arg_types[31] = s; }
-        { static char* s[] = { 0, "QPaintEvent*", 0 }; override_arg_types[32] = s; }
-        { static char* s[] = { 0, "QResizeEvent*", 0 }; override_arg_types[33] = s; }
-        { static char* s[] = { 0, "QShowEvent*", 0 }; override_arg_types[34] = s; }
-        { static char* s[] = { 0, "QTabletEvent*", 0 }; override_arg_types[35] = s; }
-        { static char* s[] = { 0, "QWheelEvent*", 0 }; override_arg_types[36] = s; }
-        { static char* s[] = { 0, 0 }; override_arg_types[37] = s; }
-        { static char* s[] = { "bool", "QPoint", 0 }; override_arg_types[38] = s; }
-        { static char* s[] = { 0, 0 }; override_arg_types[39] = s; }
-        { static char* s[] = { "QModelIndex", "QPoint", 0 }; override_arg_types[40] = s; }
-        { static char* s[] = { 0, "QModelIndex", "ScrollHint", 0 }; override_arg_types[41] = s; }
-        { static char* s[] = { 0, 0 }; override_arg_types[42] = s; }
-        { static char* s[] = { 0, "QAbstractItemModel*", 0 }; override_arg_types[43] = s; }
-        { static char* s[] = { 0, "QModelIndex", 0 }; override_arg_types[44] = s; }
-        { static char* s[] = { 0, "QItemSelectionModel*", 0 }; override_arg_types[45] = s; }
-        { static char* s[] = { "QRect", "QModelIndex", 0 }; override_arg_types[46] = s; }
-        { static char* s[] = { "QAbstractItemView*", "QModelIndex", 0 }; override_arg_types[47] = s; }
-        { static char* s[] = { 0, "QString", 0 }; override_arg_types[48] = s; }
-        { static char* s[] = { "int", "int", 0 }; override_arg_types[49] = s; }
-        { static char* s[] = { "int", "int", 0 }; override_arg_types[50] = s; }
-        { static char* s[] = { "bool", "QModelIndex", "EditTrigger", "QEvent*", 0 }; override_arg_types[51] = s; }
-        { static char* s[] = { "int", 0 }; override_arg_types[52] = s; }
-        { static char* s[] = { "bool", "QModelIndex", 0 }; override_arg_types[53] = s; }
-        { static char* s[] = { "QModelIndex", "CursorAction", "Qt::KeyboardModifiers", 0 }; override_arg_types[54] = s; }
-        { static char* s[] = { "QModelIndexList", 0 }; override_arg_types[55] = s; }
-        { static char* s[] = { "QItemSelectionModel::SelectionFlags", "QModelIndex", "QEvent*", 0 }; override_arg_types[56] = s; }
-        { static char* s[] = { 0, "QRect", "QItemSelectionModel::SelectionFlags", 0 }; override_arg_types[57] = s; }
-        { static char* s[] = { 0, "Qt::DropActions", 0 }; override_arg_types[58] = s; }
-        { static char* s[] = { "int", 0 }; override_arg_types[59] = s; }
-        { static char* s[] = { "QStyleOptionViewItem", 0 }; override_arg_types[60] = s; }
-        { static char* s[] = { "QRegion", "QItemSelection", 0 }; override_arg_types[61] = s; }
-        { static char* s[] = { 0, "int", "int", 0 }; override_arg_types[62] = s; }
-        { static char* s[] = { "bool", "QEvent*", 0 }; override_arg_types[63] = s; }
-        { static char* s[] = { 0, 0 }; override_arg_types[64] = s; }
-        { static char* s[] = { 0, 0 }; override_arg_types[65] = s; }
-        { static char* s[] = { "QString", "QModelIndex", 0 }; override_arg_types[66] = s; }
-        { static char* s[] = { "QStringList", "QString", 0 }; override_arg_types[67] = s; }
-        { static char* s[] = { 0, 0 }; override_arg_types[68] = s; }
-        { static char* s[] = { 0, "int", 0 }; override_arg_types[69] = s; }
-        { static char* s[] = { "QDateTime", "QString", 0 }; override_arg_types[70] = s; }
-        { static char* s[] = { "QString", "QDateTime", 0 }; override_arg_types[71] = s; }
-        { static char* s[] = { 0, "QString", 0 }; override_arg_types[72] = s; }
-        { static char* s[] = { "QValidator::State", "QString", "int", 0 }; override_arg_types[73] = s; }
-        { static char* s[] = { "StepEnabled", 0 }; override_arg_types[74] = s; }
-        { static char* s[] = { 0, "SliderChange", 0 }; override_arg_types[75] = s; }
-        { static char* s[] = { 0, "bool", 0 }; override_arg_types[76] = s; }
-        { static char* s[] = { "QString", "double", 0 }; override_arg_types[77] = s; }
-        { static char* s[] = { "double", "QString", 0 }; override_arg_types[78] = s; }
-        { static char* s[] = { 0, "QLayoutItem*", 0 }; override_arg_types[79] = s; }
-        { static char* s[] = { "int", 0 }; override_arg_types[80] = s; }
-        { static char* s[] = { "Qt::Orientations", 0 }; override_arg_types[81] = s; }
-        { static char* s[] = { "bool", 0 }; override_arg_types[82] = s; }
-        { static char* s[] = { 0, 0 }; override_arg_types[83] = s; }
-        { static char* s[] = { "QLayoutItem*", "int", 0 }; override_arg_types[84] = s; }
-        { static char* s[] = { "QSize", 0 }; override_arg_types[85] = s; }
-        { static char* s[] = { 0, "QRect", 0 }; override_arg_types[86] = s; }
-        { static char* s[] = { "QLayoutItem*", "int", 0 }; override_arg_types[87] = s; }
-        { static char* s[] = { "int", "QWidget*", 0 }; override_arg_types[88] = s; }
-        { static char* s[] = { "QRect", 0 }; override_arg_types[89] = s; }
-        { static char* s[] = { "bool", 0 }; override_arg_types[90] = s; }
-        { static char* s[] = { "QLayout*", 0 }; override_arg_types[91] = s; }
-        { static char* s[] = { "QSize", 0 }; override_arg_types[92] = s; }
-        { static char* s[] = { 0, "QPainter*", "QStyleOptionGraphicsItem*", "QWidget*", 0 }; override_arg_types[93] = s; }
-        { static char* s[] = { 0, "QRectF", 0 }; override_arg_types[94] = s; }
-        { static char* s[] = { "int", 0 }; override_arg_types[95] = s; }
-        { static char* s[] = { 0, "QPainter*", "QStyleOptionGraphicsItem*", "QWidget*", 0 }; override_arg_types[96] = s; }
-        { static char* s[] = { "QRectF", 0 }; override_arg_types[97] = s; }
-        { static char* s[] = { "QPainterPath", 0 }; override_arg_types[98] = s; }
-        { static char* s[] = { 0, "QEvent*", 0 }; override_arg_types[99] = s; }
-        { static char* s[] = { 0, "QEvent*", 0 }; override_arg_types[100] = s; }
-        { static char* s[] = { 0, "QStyleOption*", 0 }; override_arg_types[101] = s; }
-        { static char* s[] = { 0, "QGraphicsSceneMoveEvent*", 0 }; override_arg_types[102] = s; }
-        { static char* s[] = { 0, 0 }; override_arg_types[103] = s; }
-        { static char* s[] = { 0, "QGraphicsSceneResizeEvent*", 0 }; override_arg_types[104] = s; }
-        { static char* s[] = { 0, "QEvent*", 0 }; override_arg_types[105] = s; }
-        { static char* s[] = { 0, "QEvent*", 0 }; override_arg_types[106] = s; }
-        { static char* s[] = { "bool", "QEvent*", 0 }; override_arg_types[107] = s; }
-        { static char* s[] = { "Qt::WindowFrameSection", "QPointF", 0 }; override_arg_types[108] = s; }
-        { static char* s[] = { 0, "QGraphicsSceneContextMenuEvent*", 0 }; override_arg_types[109] = s; }
-        { static char* s[] = { 0, "QGraphicsSceneDragDropEvent*", 0 }; override_arg_types[110] = s; }
-        { static char* s[] = { 0, "QGraphicsSceneDragDropEvent*", 0 }; override_arg_types[111] = s; }
-        { static char* s[] = { 0, "QGraphicsSceneDragDropEvent*", 0 }; override_arg_types[112] = s; }
-        { static char* s[] = { 0, "QPainter*", "QRectF", 0 }; override_arg_types[113] = s; }
-        { static char* s[] = { 0, "QPainter*", "QRectF", 0 }; override_arg_types[114] = s; }
-        { static char* s[] = { 0, "QGraphicsSceneDragDropEvent*", 0 }; override_arg_types[115] = s; }
-        { static char* s[] = { 0, "QGraphicsSceneHelpEvent*", 0 }; override_arg_types[116] = s; }
-        { static char* s[] = { 0, "QGraphicsSceneMouseEvent*", 0 }; override_arg_types[117] = s; }
-        { static char* s[] = { 0, "QGraphicsSceneMouseEvent*", 0 }; override_arg_types[118] = s; }
-        { static char* s[] = { 0, "QGraphicsSceneMouseEvent*", 0 }; override_arg_types[119] = s; }
-        { static char* s[] = { 0, "QGraphicsSceneMouseEvent*", 0 }; override_arg_types[120] = s; }
-        { static char* s[] = { 0, "QGraphicsSceneWheelEvent*", 0 }; override_arg_types[121] = s; }
-        { static char* s[] = { "bool", "QPointF", 0 }; override_arg_types[122] = s; }
-        { static char* s[] = { "bool", "QGraphicsItem*", 0 }; override_arg_types[123] = s; }
-        { static char* s[] = { "QPainterPath", 0 }; override_arg_types[124] = s; }
-        { static char* s[] = { "int", "int", 0 }; override_arg_types[125] = s; }
-        { static char* s[] = { 0, "int", 0 }; override_arg_types[126] = s; }
-        { static char* s[] = { "QWidget*", "QWidget*", "QStyleOptionViewItem", "QModelIndex", 0 }; override_arg_types[127] = s; }
-        { static char* s[] = { 0, "QPainter*", "QStyleOptionViewItem", "QModelIndex", 0 }; override_arg_types[128] = s; }
-        { static char* s[] = { 0, "QWidget*", "QModelIndex", 0 }; override_arg_types[129] = s; }
-        { static char* s[] = { 0, "QWidget*", "QAbstractItemModel*", "QModelIndex", 0 }; override_arg_types[130] = s; }
-        { static char* s[] = { "QSize", "QStyleOptionViewItem", "QModelIndex", 0 }; override_arg_types[131] = s; }
-        { static char* s[] = { 0, "QWidget*", "QStyleOptionViewItem", "QModelIndex", 0 }; override_arg_types[132] = s; }
-        { static char* s[] = { 0, "QPainter*", "QStyleOptionViewItem", "QRect", "Qt::CheckState", 0 }; override_arg_types[133] = s; }
-        { static char* s[] = { 0, "QPainter*", "QStyleOptionViewItem", "QRect", "QPixmap", 0 }; override_arg_types[134] = s; }
-        { static char* s[] = { 0, "QPainter*", "QStyleOptionViewItem", "QRect", "QString", 0 }; override_arg_types[135] = s; }
-        { static char* s[] = { 0, "QPainter*", "QStyleOptionViewItem", "QRect", 0 }; override_arg_types[136] = s; }
-        { static char* s[] = { "bool", "QEvent*", "QAbstractItemModel*", "QStyleOptionViewItem", "QModelIndex", 0 }; override_arg_types[137] = s; }
-        { static char* s[] = { "bool", "int", "QMimeData*", "Qt::DropAction", 0 }; override_arg_types[138] = s; }
-        { static char* s[] = { "QMimeData*", "QList<QListWidgetItem*>", 0 }; override_arg_types[139] = s; }
-        { static char* s[] = { "QStringList", 0 }; override_arg_types[140] = s; }
-        { static char* s[] = { "Qt::DropActions", 0 }; override_arg_types[141] = s; }
-        { static char* s[] = { "QMenu*", 0 }; override_arg_types[142] = s; }
-        { static char* s[] = { "QStringList", 0 }; override_arg_types[143] = s; }
-        { static char* s[] = { "bool", "QString", 0 }; override_arg_types[144] = s; }
-        { static char* s[] = { "QVariant", "QString", "QVariant::Type", 0 }; override_arg_types[145] = s; }
-        { static char* s[] = { "QVariant", "int", "QUrl", 0 }; override_arg_types[146] = s; }
-        { static char* s[] = { "bool", "QMimeData*", 0 }; override_arg_types[147] = s; }
-        { static char* s[] = { "QMimeData*", 0 }; override_arg_types[148] = s; }
-        { static char* s[] = { 0, "QMimeData*", 0 }; override_arg_types[149] = s; }
-        { static char* s[] = { "QString", 0 }; override_arg_types[150] = s; }
-        { static char* s[] = { "QString", "int", 0 }; override_arg_types[151] = s; }
-        { static char* s[] = { 0, "QPainter*", 0 }; override_arg_types[152] = s; }
-        { static char* s[] = { "int", "QModelIndex", 0 }; override_arg_types[153] = s; }
-        { static char* s[] = { "QVariant", "QModelIndex", "int", 0 }; override_arg_types[154] = s; }
-        { static char* s[] = { "bool", "QMimeData*", "Qt::DropAction", "int", "int", "QModelIndex", 0 }; override_arg_types[155] = s; }
-        { static char* s[] = { "Qt::ItemFlags", "QModelIndex", 0 }; override_arg_types[156] = s; }
-        { static char* s[] = { "bool", "QModelIndex", 0 }; override_arg_types[157] = s; }
-        { static char* s[] = { "QVariant", "int", "Qt::Orientation", "int", 0 }; override_arg_types[158] = s; }
-        { static char* s[] = { "QModelIndex", "int", "int", "QModelIndex", 0 }; override_arg_types[159] = s; }
-        { static char* s[] = { "bool", "int", "int", "QModelIndex", 0 }; override_arg_types[160] = s; }
-        { static char* s[] = { "bool", "int", "int", "QModelIndex", 0 }; override_arg_types[161] = s; }
-        { static char* s[] = { "QMimeData*", "QModelIndexList", 0 }; override_arg_types[162] = s; }
-        { static char* s[] = { "QModelIndex", "QModelIndex", 0 }; override_arg_types[163] = s; }
-        { static char* s[] = { "bool", "int", "int", "QModelIndex", 0 }; override_arg_types[164] = s; }
-        { static char* s[] = { "bool", "int", "int", "QModelIndex", 0 }; override_arg_types[165] = s; }
-        { static char* s[] = { "int", "QModelIndex", 0 }; override_arg_types[166] = s; }
-        { static char* s[] = { "bool", "QModelIndex", "QVariant", "int", 0 }; override_arg_types[167] = s; }
-        { static char* s[] = { "bool", "int", "Qt::Orientation", "QVariant", "int", 0 }; override_arg_types[168] = s; }
-        { static char* s[] = { 0, "int", "Qt::SortOrder", 0 }; override_arg_types[169] = s; }
-        { static char* s[] = { "QModelIndex", "QModelIndex", 0 }; override_arg_types[170] = s; }
-        { static char* s[] = { "bool", "QModelIndex", 0 }; override_arg_types[171] = s; }
-        { static char* s[] = { 0, "QModelIndex", 0 }; override_arg_types[172] = s; }
-        { static char* s[] = { "QModelIndexList", "QModelIndex", "int", "QVariant", "int", "Qt::MatchFlags", 0 }; override_arg_types[173] = s; }
-        { static char* s[] = { "QSize", "QModelIndex", 0 }; override_arg_types[174] = s; }
-        { static char* s[] = { 0, "int", 0 }; override_arg_types[175] = s; }
-        { static char* s[] = { 0, 0 }; override_arg_types[176] = s; }
-        { static char* s[] = { 0, "int", 0 }; override_arg_types[177] = s; }
-        { static char* s[] = { "QSize", "int", 0 }; override_arg_types[178] = s; }
-        { static char* s[] = { "bool", "int", "int", "QMimeData*", "Qt::DropAction", 0 }; override_arg_types[179] = s; }
-        { static char* s[] = { "QMimeData*", "QList<QTableWidgetItem*>", 0 }; override_arg_types[180] = s; }
-        { static char* s[] = { 0, "QTextBlock", 0 }; override_arg_types[181] = s; }
-        { static char* s[] = { 0, "QTextBlock", 0 }; override_arg_types[182] = s; }
-        { static char* s[] = { 0, "QTextBlock", 0 }; override_arg_types[183] = s; }
-        { static char* s[] = { "QTextObject*", "QTextFormat", 0 }; override_arg_types[184] = s; }
-        { static char* s[] = { 0, 0 }; override_arg_types[185] = s; }
-        { static char* s[] = { 0, "int", 0 }; override_arg_types[186] = s; }
-        { static char* s[] = { 0, "int", 0 }; override_arg_types[187] = s; }
-        { static char* s[] = { "QString", "const char*", "const char*", "const char*", 0 }; override_arg_types[188] = s; }
-        { static char* s[] = { 0, "QModelIndex", "QModelIndex", 0 }; override_arg_types[189] = s; }
-        { static char* s[] = { 0, 0 }; override_arg_types[190] = s; }
-        { static char* s[] = { 0, "QPainter*", "QRect", "QModelIndex", 0 }; override_arg_types[191] = s; }
-        { static char* s[] = { 0, "QPainter*", "QStyleOptionViewItem", "QModelIndex", 0 }; override_arg_types[192] = s; }
-        { static char* s[] = { "bool", "QTreeWidgetItem*", "int", "QMimeData*", "Qt::DropAction", 0 }; override_arg_types[193] = s; }
-        { static char* s[] = { "QMimeData*", "QList<QTreeWidgetItem*>", 0 }; override_arg_types[194] = s; }
-        { static char* s[] = { "int", 0 }; override_arg_types[195] = s; }
-        { static char* s[] = { "bool", 0 }; override_arg_types[196] = s; }
-        { static char* s[] = { 0, "int", 0 }; override_arg_types[197] = s; }
-        { static char* s[] = { 0, "int", 0 }; override_arg_types[198] = s; }
-        { static char* s[] = { 0, 0 }; override_arg_types[199] = s; }
-        { static char* s[] = { 0, 0 }; override_arg_types[200] = s; }
-        { static char* s[] = { "bool", 0 }; override_arg_types[201] = s; }
-        { static char* s[] = { "bool", 0 }; override_arg_types[202] = s; }
-        { static char* s[] = { "QIcon", "IconType", 0 }; override_arg_types[203] = s; }
-        { static char* s[] = { 0, "int", 0 }; override_arg_types[204] = s; }
-        { static char* s[] = { "bool", "QGraphicsItem*", "Qt::ItemSelectionMode", 0 }; override_arg_types[205] = s; }
-        { static char* s[] = { "bool", "QPainterPath", "Qt::ItemSelectionMode", 0 }; override_arg_types[206] = s; }
-        { static char* s[] = { 0, "QGraphicsSceneHoverEvent*", 0 }; override_arg_types[207] = s; }
-        { static char* s[] = { 0, "QGraphicsSceneHoverEvent*", 0 }; override_arg_types[208] = s; }
-        { static char* s[] = { 0, "QGraphicsSceneHoverEvent*", 0 }; override_arg_types[209] = s; }
-        { static char* s[] = { "QVariant", "GraphicsItemChange", "QVariant", 0 }; override_arg_types[210] = s; }
-        { static char* s[] = { "bool", "QEvent*", 0 }; override_arg_types[211] = s; }
-        { static char* s[] = { "bool", "QGraphicsItem*", "QEvent*", 0 }; override_arg_types[212] = s; }
-        { static char* s[] = { "int", "PaintDeviceMetric", 0 }; override_arg_types[213] = s; }
-        { static char* s[] = { "QWidget*", "QVariant::Type", "QWidget*", 0 }; override_arg_types[214] = s; }
-        { static char* s[] = { "QByteArray", "QVariant::Type", 0 }; override_arg_types[215] = s; }
-        { static char* s[] = { "QListWidgetItem*", 0 }; override_arg_types[216] = s; }
-        { static char* s[] = { "QVariant", "int", 0 }; override_arg_types[217] = s; }
-        { static char* s[] = { 0, "int", "QVariant", 0 }; override_arg_types[218] = s; }
-        { static char* s[] = { 0, "const char*", "uint", 0 }; override_arg_types[219] = s; }
-        { static char* s[] = { "QSpacerItem*", 0 }; override_arg_types[220] = s; }
-        { static char* s[] = { "QWidget*", 0 }; override_arg_types[221] = s; }
-        { static char* s[] = { 0, "QVariant", "int", 0 }; override_arg_types[222] = s; }
-        { static char* s[] = { "QVariant", "int", "int", 0 }; override_arg_types[223] = s; }
-        { static char* s[] = { 0, "int", "int", "QVariant", 0 }; override_arg_types[224] = s; }
-        { static char* s[] = { "int", 0 }; override_arg_types[225] = s; }
-        { static char* s[] = { "bool", "QUndoCommand*", 0 }; override_arg_types[226] = s; }
-        { static char* s[] = { 0, 0 }; override_arg_types[227] = s; }
-        { static char* s[] = { 0, 0 }; override_arg_types[228] = s; }
+        override_arg_types = new const char** [229];
+        { static const char* s[] = { 0, "QChildEvent*", 0 }; override_arg_types[0] = s; }
+        { static const char* s[] = { 0, "const char*", 0 }; override_arg_types[1] = s; }
+        { static const char* s[] = { 0, "QEvent*", 0 }; override_arg_types[2] = s; }
+        { static const char* s[] = { 0, "const char*", 0 }; override_arg_types[3] = s; }
+        { static const char* s[] = { 0, "QTimerEvent*", 0 }; override_arg_types[4] = s; }
+        { static const char* s[] = { "QSize", 0 }; override_arg_types[5] = s; }
+        { static const char* s[] = { "QSize", 0 }; override_arg_types[6] = s; }
+        { static const char* s[] = { 0, "QPainter*", "QRect", "QDate", 0 }; override_arg_types[7] = s; }
+        { static const char* s[] = { "int", "int", 0 }; override_arg_types[8] = s; }
+        { static const char* s[] = { "QVariant", "Qt::InputMethodQuery", 0 }; override_arg_types[9] = s; }
+        { static const char* s[] = { 0, "QActionEvent*", 0 }; override_arg_types[10] = s; }
+        { static const char* s[] = { 0, "QEvent*", 0 }; override_arg_types[11] = s; }
+        { static const char* s[] = { 0, "QCloseEvent*", 0 }; override_arg_types[12] = s; }
+        { static const char* s[] = { 0, "QContextMenuEvent*", 0 }; override_arg_types[13] = s; }
+        { static const char* s[] = { 0, "QDragEnterEvent*", 0 }; override_arg_types[14] = s; }
+        { static const char* s[] = { 0, "QDragLeaveEvent*", 0 }; override_arg_types[15] = s; }
+        { static const char* s[] = { 0, "QDragMoveEvent*", 0 }; override_arg_types[16] = s; }
+        { static const char* s[] = { 0, "QDropEvent*", 0 }; override_arg_types[17] = s; }
+        { static const char* s[] = { 0, "QEvent*", 0 }; override_arg_types[18] = s; }
+        { static const char* s[] = { 0, "QFocusEvent*", 0 }; override_arg_types[19] = s; }
+        { static const char* s[] = { "bool", "bool", 0 }; override_arg_types[20] = s; }
+        { static const char* s[] = { 0, "QFocusEvent*", 0 }; override_arg_types[21] = s; }
+        { static const char* s[] = { 0, "QHideEvent*", 0 }; override_arg_types[22] = s; }
+        { static const char* s[] = { 0, "QInputMethodEvent*", 0 }; override_arg_types[23] = s; }
+        { static const char* s[] = { 0, "QKeyEvent*", 0 }; override_arg_types[24] = s; }
+        { static const char* s[] = { 0, "QKeyEvent*", 0 }; override_arg_types[25] = s; }
+        { static const char* s[] = { 0, "QEvent*", 0 }; override_arg_types[26] = s; }
+        { static const char* s[] = { 0, "QMouseEvent*", 0 }; override_arg_types[27] = s; }
+        { static const char* s[] = { 0, "QMouseEvent*", 0 }; override_arg_types[28] = s; }
+        { static const char* s[] = { 0, "QMouseEvent*", 0 }; override_arg_types[29] = s; }
+        { static const char* s[] = { 0, "QMouseEvent*", 0 }; override_arg_types[30] = s; }
+        { static const char* s[] = { 0, "QMoveEvent*", 0 }; override_arg_types[31] = s; }
+        { static const char* s[] = { 0, "QPaintEvent*", 0 }; override_arg_types[32] = s; }
+        { static const char* s[] = { 0, "QResizeEvent*", 0 }; override_arg_types[33] = s; }
+        { static const char* s[] = { 0, "QShowEvent*", 0 }; override_arg_types[34] = s; }
+        { static const char* s[] = { 0, "QTabletEvent*", 0 }; override_arg_types[35] = s; }
+        { static const char* s[] = { 0, "QWheelEvent*", 0 }; override_arg_types[36] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[37] = s; }
+        { static const char* s[] = { "bool", "QPoint", 0 }; override_arg_types[38] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[39] = s; }
+        { static const char* s[] = { "QModelIndex", "QPoint", 0 }; override_arg_types[40] = s; }
+        { static const char* s[] = { 0, "QModelIndex", "ScrollHint", 0 }; override_arg_types[41] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[42] = s; }
+        { static const char* s[] = { 0, "QAbstractItemModel*", 0 }; override_arg_types[43] = s; }
+        { static const char* s[] = { 0, "QModelIndex", 0 }; override_arg_types[44] = s; }
+        { static const char* s[] = { 0, "QItemSelectionModel*", 0 }; override_arg_types[45] = s; }
+        { static const char* s[] = { "QRect", "QModelIndex", 0 }; override_arg_types[46] = s; }
+        { static const char* s[] = { "QAbstractItemView*", "QModelIndex", 0 }; override_arg_types[47] = s; }
+        { static const char* s[] = { 0, "QString", 0 }; override_arg_types[48] = s; }
+        { static const char* s[] = { "int", "int", 0 }; override_arg_types[49] = s; }
+        { static const char* s[] = { "int", "int", 0 }; override_arg_types[50] = s; }
+        { static const char* s[] = { "bool", "QModelIndex", "EditTrigger", "QEvent*", 0 }; override_arg_types[51] = s; }
+        { static const char* s[] = { "int", 0 }; override_arg_types[52] = s; }
+        { static const char* s[] = { "bool", "QModelIndex", 0 }; override_arg_types[53] = s; }
+        { static const char* s[] = { "QModelIndex", "CursorAction", "Qt::KeyboardModifiers", 0 }; override_arg_types[54] = s; }
+        { static const char* s[] = { "QModelIndexList", 0 }; override_arg_types[55] = s; }
+        { static const char* s[] = { "QItemSelectionModel::SelectionFlags", "QModelIndex", "QEvent*", 0 }; override_arg_types[56] = s; }
+        { static const char* s[] = { 0, "QRect", "QItemSelectionModel::SelectionFlags", 0 }; override_arg_types[57] = s; }
+        { static const char* s[] = { 0, "Qt::DropActions", 0 }; override_arg_types[58] = s; }
+        { static const char* s[] = { "int", 0 }; override_arg_types[59] = s; }
+        { static const char* s[] = { "QStyleOptionViewItem", 0 }; override_arg_types[60] = s; }
+        { static const char* s[] = { "QRegion", "QItemSelection", 0 }; override_arg_types[61] = s; }
+        { static const char* s[] = { 0, "int", "int", 0 }; override_arg_types[62] = s; }
+        { static const char* s[] = { "bool", "QEvent*", 0 }; override_arg_types[63] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[64] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[65] = s; }
+        { static const char* s[] = { "QString", "QModelIndex", 0 }; override_arg_types[66] = s; }
+        { static const char* s[] = { "QStringList", "QString", 0 }; override_arg_types[67] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[68] = s; }
+        { static const char* s[] = { 0, "int", 0 }; override_arg_types[69] = s; }
+        { static const char* s[] = { "QDateTime", "QString", 0 }; override_arg_types[70] = s; }
+        { static const char* s[] = { "QString", "QDateTime", 0 }; override_arg_types[71] = s; }
+        { static const char* s[] = { 0, "QString", 0 }; override_arg_types[72] = s; }
+        { static const char* s[] = { "QValidator::State", "QString", "int", 0 }; override_arg_types[73] = s; }
+        { static const char* s[] = { "StepEnabled", 0 }; override_arg_types[74] = s; }
+        { static const char* s[] = { 0, "SliderChange", 0 }; override_arg_types[75] = s; }
+        { static const char* s[] = { 0, "bool", 0 }; override_arg_types[76] = s; }
+        { static const char* s[] = { "QString", "double", 0 }; override_arg_types[77] = s; }
+        { static const char* s[] = { "double", "QString", 0 }; override_arg_types[78] = s; }
+        { static const char* s[] = { 0, "QLayoutItem*", 0 }; override_arg_types[79] = s; }
+        { static const char* s[] = { "int", 0 }; override_arg_types[80] = s; }
+        { static const char* s[] = { "Qt::Orientations", 0 }; override_arg_types[81] = s; }
+        { static const char* s[] = { "bool", 0 }; override_arg_types[82] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[83] = s; }
+        { static const char* s[] = { "QLayoutItem*", "int", 0 }; override_arg_types[84] = s; }
+        { static const char* s[] = { "QSize", 0 }; override_arg_types[85] = s; }
+        { static const char* s[] = { 0, "QRect", 0 }; override_arg_types[86] = s; }
+        { static const char* s[] = { "QLayoutItem*", "int", 0 }; override_arg_types[87] = s; }
+        { static const char* s[] = { "int", "QWidget*", 0 }; override_arg_types[88] = s; }
+        { static const char* s[] = { "QRect", 0 }; override_arg_types[89] = s; }
+        { static const char* s[] = { "bool", 0 }; override_arg_types[90] = s; }
+        { static const char* s[] = { "QLayout*", 0 }; override_arg_types[91] = s; }
+        { static const char* s[] = { "QSize", 0 }; override_arg_types[92] = s; }
+        { static const char* s[] = { 0, "QPainter*", "QStyleOptionGraphicsItem*", "QWidget*", 0 }; override_arg_types[93] = s; }
+        { static const char* s[] = { 0, "QRectF", 0 }; override_arg_types[94] = s; }
+        { static const char* s[] = { "int", 0 }; override_arg_types[95] = s; }
+        { static const char* s[] = { 0, "QPainter*", "QStyleOptionGraphicsItem*", "QWidget*", 0 }; override_arg_types[96] = s; }
+        { static const char* s[] = { "QRectF", 0 }; override_arg_types[97] = s; }
+        { static const char* s[] = { "QPainterPath", 0 }; override_arg_types[98] = s; }
+        { static const char* s[] = { 0, "QEvent*", 0 }; override_arg_types[99] = s; }
+        { static const char* s[] = { 0, "QEvent*", 0 }; override_arg_types[100] = s; }
+        { static const char* s[] = { 0, "QStyleOption*", 0 }; override_arg_types[101] = s; }
+        { static const char* s[] = { 0, "QGraphicsSceneMoveEvent*", 0 }; override_arg_types[102] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[103] = s; }
+        { static const char* s[] = { 0, "QGraphicsSceneResizeEvent*", 0 }; override_arg_types[104] = s; }
+        { static const char* s[] = { 0, "QEvent*", 0 }; override_arg_types[105] = s; }
+        { static const char* s[] = { 0, "QEvent*", 0 }; override_arg_types[106] = s; }
+        { static const char* s[] = { "bool", "QEvent*", 0 }; override_arg_types[107] = s; }
+        { static const char* s[] = { "Qt::WindowFrameSection", "QPointF", 0 }; override_arg_types[108] = s; }
+        { static const char* s[] = { 0, "QGraphicsSceneContextMenuEvent*", 0 }; override_arg_types[109] = s; }
+        { static const char* s[] = { 0, "QGraphicsSceneDragDropEvent*", 0 }; override_arg_types[110] = s; }
+        { static const char* s[] = { 0, "QGraphicsSceneDragDropEvent*", 0 }; override_arg_types[111] = s; }
+        { static const char* s[] = { 0, "QGraphicsSceneDragDropEvent*", 0 }; override_arg_types[112] = s; }
+        { static const char* s[] = { 0, "QPainter*", "QRectF", 0 }; override_arg_types[113] = s; }
+        { static const char* s[] = { 0, "QPainter*", "QRectF", 0 }; override_arg_types[114] = s; }
+        { static const char* s[] = { 0, "QGraphicsSceneDragDropEvent*", 0 }; override_arg_types[115] = s; }
+        { static const char* s[] = { 0, "QGraphicsSceneHelpEvent*", 0 }; override_arg_types[116] = s; }
+        { static const char* s[] = { 0, "QGraphicsSceneMouseEvent*", 0 }; override_arg_types[117] = s; }
+        { static const char* s[] = { 0, "QGraphicsSceneMouseEvent*", 0 }; override_arg_types[118] = s; }
+        { static const char* s[] = { 0, "QGraphicsSceneMouseEvent*", 0 }; override_arg_types[119] = s; }
+        { static const char* s[] = { 0, "QGraphicsSceneMouseEvent*", 0 }; override_arg_types[120] = s; }
+        { static const char* s[] = { 0, "QGraphicsSceneWheelEvent*", 0 }; override_arg_types[121] = s; }
+        { static const char* s[] = { "bool", "QPointF", 0 }; override_arg_types[122] = s; }
+        { static const char* s[] = { "bool", "QGraphicsItem*", 0 }; override_arg_types[123] = s; }
+        { static const char* s[] = { "QPainterPath", 0 }; override_arg_types[124] = s; }
+        { static const char* s[] = { "int", "int", 0 }; override_arg_types[125] = s; }
+        { static const char* s[] = { 0, "int", 0 }; override_arg_types[126] = s; }
+        { static const char* s[] = { "QWidget*", "QWidget*", "QStyleOptionViewItem", "QModelIndex", 0 }; override_arg_types[127] = s; }
+        { static const char* s[] = { 0, "QPainter*", "QStyleOptionViewItem", "QModelIndex", 0 }; override_arg_types[128] = s; }
+        { static const char* s[] = { 0, "QWidget*", "QModelIndex", 0 }; override_arg_types[129] = s; }
+        { static const char* s[] = { 0, "QWidget*", "QAbstractItemModel*", "QModelIndex", 0 }; override_arg_types[130] = s; }
+        { static const char* s[] = { "QSize", "QStyleOptionViewItem", "QModelIndex", 0 }; override_arg_types[131] = s; }
+        { static const char* s[] = { 0, "QWidget*", "QStyleOptionViewItem", "QModelIndex", 0 }; override_arg_types[132] = s; }
+        { static const char* s[] = { 0, "QPainter*", "QStyleOptionViewItem", "QRect", "Qt::CheckState", 0 }; override_arg_types[133] = s; }
+        { static const char* s[] = { 0, "QPainter*", "QStyleOptionViewItem", "QRect", "QPixmap", 0 }; override_arg_types[134] = s; }
+        { static const char* s[] = { 0, "QPainter*", "QStyleOptionViewItem", "QRect", "QString", 0 }; override_arg_types[135] = s; }
+        { static const char* s[] = { 0, "QPainter*", "QStyleOptionViewItem", "QRect", 0 }; override_arg_types[136] = s; }
+        { static const char* s[] = { "bool", "QEvent*", "QAbstractItemModel*", "QStyleOptionViewItem", "QModelIndex", 0 }; override_arg_types[137] = s; }
+        { static const char* s[] = { "bool", "int", "QMimeData*", "Qt::DropAction", 0 }; override_arg_types[138] = s; }
+        { static const char* s[] = { "QMimeData*", "QList<QListWidgetItem*>", 0 }; override_arg_types[139] = s; }
+        { static const char* s[] = { "QStringList", 0 }; override_arg_types[140] = s; }
+        { static const char* s[] = { "Qt::DropActions", 0 }; override_arg_types[141] = s; }
+        { static const char* s[] = { "QMenu*", 0 }; override_arg_types[142] = s; }
+        { static const char* s[] = { "QStringList", 0 }; override_arg_types[143] = s; }
+        { static const char* s[] = { "bool", "QString", 0 }; override_arg_types[144] = s; }
+        { static const char* s[] = { "QVariant", "QString", "QVariant::Type", 0 }; override_arg_types[145] = s; }
+        { static const char* s[] = { "QVariant", "int", "QUrl", 0 }; override_arg_types[146] = s; }
+        { static const char* s[] = { "bool", "QMimeData*", 0 }; override_arg_types[147] = s; }
+        { static const char* s[] = { "QMimeData*", 0 }; override_arg_types[148] = s; }
+        { static const char* s[] = { 0, "QMimeData*", 0 }; override_arg_types[149] = s; }
+        { static const char* s[] = { "QString", 0 }; override_arg_types[150] = s; }
+        { static const char* s[] = { "QString", "int", 0 }; override_arg_types[151] = s; }
+        { static const char* s[] = { 0, "QPainter*", 0 }; override_arg_types[152] = s; }
+        { static const char* s[] = { "int", "QModelIndex", 0 }; override_arg_types[153] = s; }
+        { static const char* s[] = { "QVariant", "QModelIndex", "int", 0 }; override_arg_types[154] = s; }
+        { static const char* s[] = { "bool", "QMimeData*", "Qt::DropAction", "int", "int", "QModelIndex", 0 }; override_arg_types[155] = s; }
+        { static const char* s[] = { "Qt::ItemFlags", "QModelIndex", 0 }; override_arg_types[156] = s; }
+        { static const char* s[] = { "bool", "QModelIndex", 0 }; override_arg_types[157] = s; }
+        { static const char* s[] = { "QVariant", "int", "Qt::Orientation", "int", 0 }; override_arg_types[158] = s; }
+        { static const char* s[] = { "QModelIndex", "int", "int", "QModelIndex", 0 }; override_arg_types[159] = s; }
+        { static const char* s[] = { "bool", "int", "int", "QModelIndex", 0 }; override_arg_types[160] = s; }
+        { static const char* s[] = { "bool", "int", "int", "QModelIndex", 0 }; override_arg_types[161] = s; }
+        { static const char* s[] = { "QMimeData*", "QModelIndexList", 0 }; override_arg_types[162] = s; }
+        { static const char* s[] = { "QModelIndex", "QModelIndex", 0 }; override_arg_types[163] = s; }
+        { static const char* s[] = { "bool", "int", "int", "QModelIndex", 0 }; override_arg_types[164] = s; }
+        { static const char* s[] = { "bool", "int", "int", "QModelIndex", 0 }; override_arg_types[165] = s; }
+        { static const char* s[] = { "int", "QModelIndex", 0 }; override_arg_types[166] = s; }
+        { static const char* s[] = { "bool", "QModelIndex", "QVariant", "int", 0 }; override_arg_types[167] = s; }
+        { static const char* s[] = { "bool", "int", "Qt::Orientation", "QVariant", "int", 0 }; override_arg_types[168] = s; }
+        { static const char* s[] = { 0, "int", "Qt::SortOrder", 0 }; override_arg_types[169] = s; }
+        { static const char* s[] = { "QModelIndex", "QModelIndex", 0 }; override_arg_types[170] = s; }
+        { static const char* s[] = { "bool", "QModelIndex", 0 }; override_arg_types[171] = s; }
+        { static const char* s[] = { 0, "QModelIndex", 0 }; override_arg_types[172] = s; }
+        { static const char* s[] = { "QModelIndexList", "QModelIndex", "int", "QVariant", "int", "Qt::MatchFlags", 0 }; override_arg_types[173] = s; }
+        { static const char* s[] = { "QSize", "QModelIndex", 0 }; override_arg_types[174] = s; }
+        { static const char* s[] = { 0, "int", 0 }; override_arg_types[175] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[176] = s; }
+        { static const char* s[] = { 0, "int", 0 }; override_arg_types[177] = s; }
+        { static const char* s[] = { "QSize", "int", 0 }; override_arg_types[178] = s; }
+        { static const char* s[] = { "bool", "int", "int", "QMimeData*", "Qt::DropAction", 0 }; override_arg_types[179] = s; }
+        { static const char* s[] = { "QMimeData*", "QList<QTableWidgetItem*>", 0 }; override_arg_types[180] = s; }
+        { static const char* s[] = { 0, "QTextBlock", 0 }; override_arg_types[181] = s; }
+        { static const char* s[] = { 0, "QTextBlock", 0 }; override_arg_types[182] = s; }
+        { static const char* s[] = { 0, "QTextBlock", 0 }; override_arg_types[183] = s; }
+        { static const char* s[] = { "QTextObject*", "QTextFormat", 0 }; override_arg_types[184] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[185] = s; }
+        { static const char* s[] = { 0, "int", 0 }; override_arg_types[186] = s; }
+        { static const char* s[] = { 0, "int", 0 }; override_arg_types[187] = s; }
+        { static const char* s[] = { "QString", "const char*", "const char*", "const char*", 0 }; override_arg_types[188] = s; }
+        { static const char* s[] = { 0, "QModelIndex", "QModelIndex", 0 }; override_arg_types[189] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[190] = s; }
+        { static const char* s[] = { 0, "QPainter*", "QRect", "QModelIndex", 0 }; override_arg_types[191] = s; }
+        { static const char* s[] = { 0, "QPainter*", "QStyleOptionViewItem", "QModelIndex", 0 }; override_arg_types[192] = s; }
+        { static const char* s[] = { "bool", "QTreeWidgetItem*", "int", "QMimeData*", "Qt::DropAction", 0 }; override_arg_types[193] = s; }
+        { static const char* s[] = { "QMimeData*", "QList<QTreeWidgetItem*>", 0 }; override_arg_types[194] = s; }
+        { static const char* s[] = { "int", 0 }; override_arg_types[195] = s; }
+        { static const char* s[] = { "bool", 0 }; override_arg_types[196] = s; }
+        { static const char* s[] = { 0, "int", 0 }; override_arg_types[197] = s; }
+        { static const char* s[] = { 0, "int", 0 }; override_arg_types[198] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[199] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[200] = s; }
+        { static const char* s[] = { "bool", 0 }; override_arg_types[201] = s; }
+        { static const char* s[] = { "bool", 0 }; override_arg_types[202] = s; }
+        { static const char* s[] = { "QIcon", "IconType", 0 }; override_arg_types[203] = s; }
+        { static const char* s[] = { 0, "int", 0 }; override_arg_types[204] = s; }
+        { static const char* s[] = { "bool", "QGraphicsItem*", "Qt::ItemSelectionMode", 0 }; override_arg_types[205] = s; }
+        { static const char* s[] = { "bool", "QPainterPath", "Qt::ItemSelectionMode", 0 }; override_arg_types[206] = s; }
+        { static const char* s[] = { 0, "QGraphicsSceneHoverEvent*", 0 }; override_arg_types[207] = s; }
+        { static const char* s[] = { 0, "QGraphicsSceneHoverEvent*", 0 }; override_arg_types[208] = s; }
+        { static const char* s[] = { 0, "QGraphicsSceneHoverEvent*", 0 }; override_arg_types[209] = s; }
+        { static const char* s[] = { "QVariant", "GraphicsItemChange", "QVariant", 0 }; override_arg_types[210] = s; }
+        { static const char* s[] = { "bool", "QEvent*", 0 }; override_arg_types[211] = s; }
+        { static const char* s[] = { "bool", "QGraphicsItem*", "QEvent*", 0 }; override_arg_types[212] = s; }
+        { static const char* s[] = { "int", "PaintDeviceMetric", 0 }; override_arg_types[213] = s; }
+        { static const char* s[] = { "QWidget*", "QVariant::Type", "QWidget*", 0 }; override_arg_types[214] = s; }
+        { static const char* s[] = { "QByteArray", "QVariant::Type", 0 }; override_arg_types[215] = s; }
+        { static const char* s[] = { "QListWidgetItem*", 0 }; override_arg_types[216] = s; }
+        { static const char* s[] = { "QVariant", "int", 0 }; override_arg_types[217] = s; }
+        { static const char* s[] = { 0, "int", "QVariant", 0 }; override_arg_types[218] = s; }
+        { static const char* s[] = { 0, "const char*", "uint", 0 }; override_arg_types[219] = s; }
+        { static const char* s[] = { "QSpacerItem*", 0 }; override_arg_types[220] = s; }
+        { static const char* s[] = { "QWidget*", 0 }; override_arg_types[221] = s; }
+        { static const char* s[] = { 0, "QVariant", "int", 0 }; override_arg_types[222] = s; }
+        { static const char* s[] = { "QVariant", "int", "int", 0 }; override_arg_types[223] = s; }
+        { static const char* s[] = { 0, "int", "int", "QVariant", 0 }; override_arg_types[224] = s; }
+        { static const char* s[] = { "int", 0 }; override_arg_types[225] = s; }
+        { static const char* s[] = { "bool", "QUndoCommand*", 0 }; override_arg_types[226] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[227] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[228] = s; }
         qNames = q_names.keys();
         nNames = n_names.keys(); }}
 
@@ -1291,7 +1291,7 @@ StrList LObjects::override(const QByteArray& name) {
             case 109: ids = LVector4D::overrideIds; break; }}
     StrList funs;
     Q_FOREACH(int id, ids) {
-        char* ret = override_arg_types[id - 1][0];
+        const char* ret = override_arg_types[id - 1][0];
         funs << QString("%1 %2")
                 .arg(ret ? ret : "void")
                 .arg(QString(override_function_ids.key(id))).toAscii(); }

@@ -581,8 +581,8 @@ public:
     Q_INVOKABLE qreal Mx(QGraphicsItem* o) const { return o->x(); }
     Q_INVOKABLE qreal My(QGraphicsItem* o) const { return o->y(); }
     Q_INVOKABLE qreal MzValue(QGraphicsItem* o) const { return o->zValue(); }
-    Q_INVOKABLE const int SType() { return QGraphicsItem::Type; }
-    Q_INVOKABLE const int SUserType() { return QGraphicsItem::UserType; }
+    Q_INVOKABLE int SType() { return QGraphicsItem::Type; }
+    Q_INVOKABLE int SUserType() { return QGraphicsItem::UserType; }
 };
 
 class N30 : public QObject { // QGraphicsLayoutItem

@@ -41,7 +41,7 @@ static void eval(const char* lisp_code) {
     CL_CATCH_ALL_END; }
 
 void EQL::exec(const QStringList& args) {
-    si_select_package(make_simple_base_string("EQL"));
+    si_select_package(make_simple_base_string((char*)"EQL"));
     eval(QString("(SET-HOME \"%1\")").arg(home()).toAscii().constData());
     if(args.contains("-qgui")) {
         eval("(QGUI)"); }

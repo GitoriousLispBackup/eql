@@ -20,7 +20,7 @@ public:
     static QObject** Q;
     static QObject** N;
     static uint i_unique;
-    static char*** override_arg_types;
+    static const char*** override_arg_types;
     static DynObject* dynObject;
     static EQL* eql;
     static QList<QByteArray> qNames;
