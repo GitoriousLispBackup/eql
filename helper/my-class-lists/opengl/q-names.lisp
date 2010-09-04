@@ -3,7 +3,7 @@
 
 (setf *q-names*
       (nconc *q-names*
-	     (list "QGLShader"
-		   "QGLShaderProgram"
-		   "QGLWidget"
-		   )))
+             (list "QGLShader"
+                   "QGLShaderProgram"
+                   "QGLWidget"
+                   )))

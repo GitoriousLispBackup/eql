@@ -97,7 +97,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object("tr"),                   (cl_objectfn_fixed)tr,                       1); }
 
 enum UserMetaTypes {
-    // must correspond exactly to "registerMetaTypes()"
+    // must correspond exactly to "void registerMetaTypes()"
     Start = QMetaType::User,
 #ifdef EQL_OPENGL
     T_GLfloat,
@@ -150,7 +150,7 @@ enum UserMetaTypes {
 };
 
 void registerMetaTypes() {
-    // must correspond exactly to "enum UserMetaTypes"
+    // must correspond exactly to "enum UserMetaTypes()"
 #ifdef EQL_OPENGL
     qRegisterMetaType<GLfloat>("GLfloat");
     qRegisterMetaType<GLint>("GLint");
@@ -229,7 +229,7 @@ static const QMetaObject* methodMetaObjectFromName(const QByteArray& name, bool 
             ->metaObject(); }
 
 static QByteArray prettyFunName(const QByteArray& name, bool this_arg) {
-    QByteArray pretty(name.mid(1));
+    QByteArray pretty(name.mid(QChar(name.at(0)).isUpper() ? 1 : 0));
     if(this_arg) {
         pretty = pretty.left(pretty.indexOf('(') + 1) +
                  pretty.mid(pretty.indexOf(',') + 1); }
@@ -342,6 +342,10 @@ static T toFloat(cl_object l_num) {
 
 static qreal toReal(cl_object l_num) {
     return toFloat<qreal>(l_num); }
+
+static QSizePolicy toQSizePolicy(cl_object l_sp) {
+    QSizePolicy::Policy sp = (QSizePolicy::Policy)toInt(l_sp);
+    return QSizePolicy(sp, sp); }
 
 static QChar toQChar(cl_object l_ch) {
     QChar ch;
@@ -575,6 +579,7 @@ static QVariant toQVariant(cl_object l_obj, const char* s_type, QVariant::Type n
         case QVariant::RectF:       var = toQRectF(l_obj); break;
         case QVariant::Size:        var = toQSize(l_obj); break;
         case QVariant::SizeF:       var = toQSizeF(l_obj); break;
+        case QVariant::SizePolicy:  var = toQSizePolicy(l_obj); break;
         case QVariant::String:      var = toQString(l_obj); break;
         case QVariant::StringList:  var = toQStringList(l_obj); break;
         case QVariant::TextFormat:  var = toQTextFormat(l_obj); break;
@@ -719,7 +724,7 @@ TO_CL_VECTOR_VAL(QTextLength, qtextlength)
 TO_CL_VECTOR_VAL2(QRgb, qrgb, ecl_make_unsigned_integer)
 TO_CL_VECTOR_VAL2(qreal, qreal, ecl_make_doublefloat)
 
-static cl_object to_lisp_object(const QVariant& var) {
+static cl_object from_qvariant(const QVariant& var) {
     cl_object l_obj = Cnil;
     int t = var.type();
     switch(t) {
@@ -750,6 +755,7 @@ static cl_object to_lisp_object(const QVariant& var) {
         case QVariant::RectF:       l_obj = from_qrectf(var.toRectF()); break;
         case QVariant::Size:        l_obj = from_qsize(var.toSize()); break;
         case QVariant::SizeF:       l_obj = from_qsizef(var.toSizeF()); break;
+        case QVariant::SizePolicy:  l_obj = MAKE_FIXNUM(var.toInt()); break;
         case QVariant::String:      l_obj = from_qstring(var.toString()); break;
         case QVariant::StringList:  l_obj = from_qstringlist(var.toStringList()); break;
         case QVariant::TextFormat:  l_obj = from_qtextformat(qVariantValue<QTextFormat>(var)); break;
@@ -1363,7 +1369,7 @@ cl_object qproperty(cl_object l_obj, cl_object l_name) {
                               : QString(me.valueToKey(var.toInt())); }
                     const cl_env_ptr l_env = ecl_process_env();
                     l_env->nvalues = 2;
-                    l_env->values[0] = to_lisp_object(var);
+                    l_env->values[0] = from_qvariant(var);
                     l_env->values[1] = Ct;
                     return l_env->values[0]; }}}}
     ecl_process_env()->nvalues = 1;
@@ -1412,10 +1418,10 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_class, cl_object l_name, 
         if(ECL_STRINGP(l_class)) {
             qclass = toCString(l_class); }
         QByteArray name(QMetaObject::normalizedSignature(toCString(l_name)));
-        QByteArray cacheName((qclass.isEmpty() ? o.className() : qclass) + '_' + name);
+        int len_args = LEN(l_args);
+        QByteArray cacheName((qclass.isEmpty() ? o.className() : qclass) + '_' + name + char('A' + len_args));
         bool method = false;
         const QMetaObject* mo = 0;
-        int len_args = LEN(l_args);
         int n = i_slot.value(cacheName, -1);
         if(n != -1) {
             mo = staticMetaObject(o); }
@@ -1736,7 +1742,7 @@ cl_object qobject_names2(cl_object l_type) {
     QStringList lst;
     Q_FOREACH(QByteArray name, names) {
         lst << QString(name); }
-    cl_object l_ret = to_lisp_object(lst);
+    cl_object l_ret = from_qvariant(lst);
     return l_ret; }
 
 cl_object qenum2(cl_object l_name, cl_object l_key) {

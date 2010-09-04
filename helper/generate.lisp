@@ -194,10 +194,10 @@
 (defun arg-to-c (arg &optional enum-class return)
   (format nil "~a~a~a"
           (if (and (const-p arg)
-		   (or (not return)
-		       (not (string= "int" (first arg)))))
-	      "const "
-	      "")
+                   (or (not return)
+                       (not (string= "int" (first arg)))))
+              "const "
+              "")
           (add-enum-class (first arg) enum-class)
           (cond ((and (not return)
                       (reference-p arg))
@@ -537,20 +537,24 @@
         (loop
            (let (hit)
              (dolist (class classes)
-               (unless (char= #\! (char class 10)) ; not done
-                 (let* ((name (read-from-string (subseq class 7 12)))
-                        (p (search "public" class :test #'string=))
-                        (inherits (read-from-string (subseq class (+ 7 p) (+ 12 p)))))
-                   (if 1st
-                       (when (search " public QObject" class :test #'string=)
-                         (push name done)
-                         (write-string class s)
-                         (setf (char class 10) #\!)) ; done
-                       (when (find inherits done)
-                         (push name done)
-                         (write-string class s)
-                         (setf (char class 10) #\!) ; done
-                         (setf hit t))))))
+               (flet ((class-done ()
+                        (char= #\! (char class 10)))
+                      (set-class-done ()
+                        (setf (char class 10) #\!)))
+                 (unless (class-done)
+                   (let* ((name (read-from-string (subseq class 7 12)))
+                          (p (search "public" class :test #'string=))
+                          (inherits (read-from-string (subseq class (+ 7 p) (+ 12 p)))))
+                     (if 1st
+                         (when (search " public QObject" class :test #'string=)
+                           (push name done)
+                           (write-string class s)
+                           (set-class-done))
+                         (when (find inherits done)
+                           (push name done)
+                           (write-string class s)
+                           (set-class-done)
+                           (setf hit t)))))))
              (unless (or 1st hit)
                (return)))
            (setf 1st nil))))

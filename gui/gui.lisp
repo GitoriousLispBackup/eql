@@ -259,7 +259,10 @@
   (let ((txt (prin1-to-string (qfun item "text"
                                     (min 1 (1- (qget (qfun item "treeWidget") "columnCount")))))))
     (qfun (qfun "QApplication" "clipboard") "setText" txt)
-    (qfun *edit* "setText" (concatenate 'string (qget *edit* "text") txt)))
+    (let ((curr (qget *edit* "text")))
+      (when (and (starts-with "(" curr)
+                 (not (ends-with "\"" curr)))
+        (qfun *edit* "setText" (concatenate 'string (qget *edit* "text") txt)))))
   (qfun *edit* "setFocus"))
 
 (defun display (x &optional color)

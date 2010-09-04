@@ -9,7 +9,7 @@
   ;; tested with Qt 4.6.2 (4.5 will not work!)
   #+darwin "/Developer/Documentation/Qt/html/"
   #+win32  "C:/qt/4.6.2/doc/html/"
-  #+linux  "/usr/local/Trolltech/Qt-4.6.2/doc/html/")
+  #+linux  "/usr/share/doc/packages/libqt4/html/")
 
 (defconstant +skip+
   (list "(preliminary)"
@@ -84,9 +84,9 @@
         "X11"
         "XEvent"
         "**"
-	"QFont getFont ( bool * , QWidget * , const char * )"                 ; "const char *" is ignored
-	"QFont getFont ( bool * , const QFont & , QWidget * , const char * )" ; "const char *" is ignored
-	))
+        "QFont getFont ( bool * , QWidget * , const char * )"                 ; "const char *" is ignored
+        "QFont getFont ( bool * , const QFont & , QWidget * , const char * )" ; "const char *" is ignored
+        ))
 
 (defparameter *not-found* 0)
 
@@ -94,7 +94,7 @@
   (format nil "~a~(~a~).html" *qt-html-documentation-path* class))
 
 (unless (probe-file (html-file "QWidget"))
-  (error "Please set the *qt-html-documentation-path* first!")
+  (error "Please set the *qt-html-documentation-path* first")
   (ext:quit))
 
 (defun text (str)

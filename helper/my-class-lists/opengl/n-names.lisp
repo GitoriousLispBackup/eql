@@ -6,9 +6,9 @@
 
 (setf *n-names*
       (nconc *n-names*
-	     (list "QGLColormap"
-		   "QGLContext"
-		   "QGLFormat"
+             (list "QGLColormap"
+                   "QGLContext"
+                   "QGLFormat"
                     "QGLFramebufferObject"
                     "QGLFramebufferObjectFormat"
                     "QGLPixelBuffer"

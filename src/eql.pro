@@ -3,7 +3,7 @@
 # uncomment to build a shared library (see my_app/my_app.pro)
 #CONFIG += eql_dll
 
-# optional modules (experimental!)
+# optional modules (see helper/missing-types.txt)
 #CONFIG += help
 #CONFIG += opengl
 #CONFIG += svg
@@ -33,10 +33,6 @@ else {
 win32 {
     INCLUDEPATH += c:/ecl/msvc/package
     LIBS        += -Lc:/ecl/msvc/package
-}
-
-help {
-    QT += help
 }
 
 opengl {

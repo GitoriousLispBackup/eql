@@ -6,5 +6,5 @@
 
 (setf *n-names*
       (nconc *n-names*
-	     (list "QSvgGenerator"
-		   )))
+             (list "QSvgGenerator"
+                   )))

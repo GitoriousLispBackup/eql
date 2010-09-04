@@ -3,12 +3,12 @@
 
 (setf *q-names*
       (nconc *q-names*
-	     (list "QHelpContentModel"
-		   "QHelpContentWidget"
-		   "QHelpEngineCore"
-		   "//QHelpIndexModel"
-		   "QHelpIndexWidget"
-		   "QHelpSearchEngine"
-		   "QHelpSearchQueryWidget"
-		   "QHelpSearchResultWidget"
-		   )))
+             (list "QHelpContentModel"
+                   "QHelpContentWidget"
+                   "QHelpEngineCore"
+                   "//QHelpIndexModel"
+                   "QHelpIndexWidget"
+                   "QHelpSearchEngine"
+                   "QHelpSearchQueryWidget"
+                   "QHelpSearchResultWidget"
+                   )))

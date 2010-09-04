@@ -20,7 +20,7 @@ REQUIREMENTS
 
 PREPARE BUILD (optional; new users: skip this)
 
-If you want to include additional modules: (experimental!)
+If you want to include additional modules:
 - uncomment the modules in helper/qt-modules.lisp
 - follow the helper/README (parse & generate)
 - uncomment the modules in src/eql.pro (section: optional modules)

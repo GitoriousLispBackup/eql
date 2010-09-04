@@ -7,7 +7,7 @@
 *.lib
 *.o
 *.obj
-*.so
+*.so*
 *.DS_Store
 *.~
 *~
@@ -15,6 +15,7 @@ Makefile
 eql
 eql.app
 gui/.*
+my_app/my_app
 my_app/tr.h
 my_app/my_app.app/*
 my_app/.*

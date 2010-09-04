@@ -6,6 +6,6 @@
 
 (setf *n-names*
       (nconc *n-names*
-	     (list "QHelpContentItem"
-		   "QHelpSearchQuery"
-		   )))
+             (list "QHelpContentItem"
+                   "QHelpSearchQuery"
+                   )))

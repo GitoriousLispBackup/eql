@@ -3,6 +3,7 @@
 (defpackage :util
   (:use :common-lisp)
   (:export
+   #:do-
    #:empty-string
    #:ensure-list
    #:ends-with
@@ -49,6 +50,15 @@
   `(do ()
        ((not ,exp))
      ,@body))
+
+(defmacro do- (to &body body)
+  `(progn
+     ,@(mapcar #'(lambda (line)
+                   (append to (if (or (atom line)
+                                      (eql 'quote (first line)))
+                                  (list line)
+                                  line)))
+               body)))
 
 (defun empty-string (s)
   (zerop (length s)))

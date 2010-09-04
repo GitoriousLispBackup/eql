@@ -3,7 +3,7 @@
 
 (setf *q-names*
       (nconc *q-names*
-	     (list "QGraphicsSvgItem"
-		   "QSvgRenderer"
-		   "QSvgWidget"
-		   )))
+             (list "QGraphicsSvgItem"
+                   "QSvgRenderer"
+                   "QSvgWidget"
+                   )))
