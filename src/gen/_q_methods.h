@@ -64,7 +64,7 @@ public:
     Q_INVOKABLE QVariant Mdata(QAbstractItemModel* o, const QModelIndex& x1, int x2 = Qt::DisplayRole) const { return o->data(x1, x2); }
     Q_INVOKABLE bool MdropMimeData(QAbstractItemModel* o, const QMimeData* x1, Qt::DropAction x2, int x3, int x4, const QModelIndex& x5) { return o->dropMimeData(x1, x2, x3, x4, x5); }
     Q_INVOKABLE void MfetchMore(QAbstractItemModel* o, const QModelIndex& x1) { o->fetchMore(x1); }
-    Q_INVOKABLE Qt::ItemFlags Mflags(QAbstractItemModel* o, const QModelIndex& x1) const { return o->flags(x1); }
+    Q_INVOKABLE int Mflags(QAbstractItemModel* o, const QModelIndex& x1) const { return o->flags(x1); }
     Q_INVOKABLE bool MhasChildren(QAbstractItemModel* o, const QModelIndex& x1 = QModelIndex()) const { return o->hasChildren(x1); }
     Q_INVOKABLE bool MhasIndex(QAbstractItemModel* o, int x1, int x2, const QModelIndex& x3 = QModelIndex()) const { return o->hasIndex(x1, x2, x3); }
     Q_INVOKABLE QVariant MheaderData(QAbstractItemModel* o, int x1, Qt::Orientation x2, int x3 = Qt::DisplayRole) const { return o->headerData(x1, x2, x3); }
@@ -88,8 +88,8 @@ public:
     Q_INVOKABLE QModelIndex Msibling(QAbstractItemModel* o, int x1, int x2, const QModelIndex& x3) const { return o->sibling(x1, x2, x3); }
     Q_INVOKABLE void Msort(QAbstractItemModel* o, int x1, Qt::SortOrder x2 = Qt::AscendingOrder) { o->sort(x1, x2); }
     Q_INVOKABLE QSize Mspan(QAbstractItemModel* o, const QModelIndex& x1) const { return o->span(x1); }
-    Q_INVOKABLE Qt::DropActions MsupportedDragActions(QAbstractItemModel* o) const { return o->supportedDragActions(); }
-    Q_INVOKABLE Qt::DropActions MsupportedDropActions(QAbstractItemModel* o) const { return o->supportedDropActions(); }
+    Q_INVOKABLE int MsupportedDragActions(QAbstractItemModel* o) const { return o->supportedDragActions(); }
+    Q_INVOKABLE int MsupportedDropActions(QAbstractItemModel* o) const { return o->supportedDropActions(); }
 };
 
 class Q5 : public Q3 { // QAbstractListModel
@@ -109,7 +109,7 @@ public:
     Q_INVOKABLE void MsetSourceModel(QAbstractProxyModel* o, QAbstractItemModel* x1) { o->setSourceModel(x1); }
     Q_INVOKABLE QAbstractItemModel* MsourceModel(QAbstractProxyModel* o) const { return o->sourceModel(); }
     Q_INVOKABLE QVariant Mdata(QAbstractProxyModel* o, const QModelIndex& x1, int x2 = Qt::DisplayRole) const { return o->data(x1, x2); }
-    Q_INVOKABLE Qt::ItemFlags Mflags(QAbstractProxyModel* o, const QModelIndex& x1) const { return o->flags(x1); }
+    Q_INVOKABLE int Mflags(QAbstractProxyModel* o, const QModelIndex& x1) const { return o->flags(x1); }
     Q_INVOKABLE QVariant MheaderData(QAbstractProxyModel* o, int x1, Qt::Orientation x2, int x3) const { return o->headerData(x1, x2, x3); }
     Q_INVOKABLE void Mrevert(QAbstractProxyModel* o) { o->revert(); }
     Q_INVOKABLE bool MsetData(QAbstractProxyModel* o, const QModelIndex& x1, const QVariant& x2, int x3 = Qt::EditRole) { return o->setData(x1, x2, x3); }
@@ -154,9 +154,9 @@ public:
     Q_INVOKABLE bool MisSeparator(QAction* o) const { return o->isSeparator(); }
     Q_INVOKABLE bool MisVisible(QAction* o) const { return o->isVisible(); }
     Q_INVOKABLE QMenu* Mmenu(QAction* o) const { return o->menu(); }
-    Q_INVOKABLE QAction::MenuRole MmenuRole(QAction* o) const { return o->menuRole(); }
+    Q_INVOKABLE int MmenuRole(QAction* o) const { return o->menuRole(); }
     Q_INVOKABLE QWidget* MparentWidget(QAction* o) const { return o->parentWidget(); }
-    Q_INVOKABLE QAction::Priority Mpriority(QAction* o) const { return o->priority(); }
+    Q_INVOKABLE int Mpriority(QAction* o) const { return o->priority(); }
     Q_INVOKABLE void MsetActionGroup(QAction* o, QActionGroup* x1) { o->setActionGroup(x1); }
     Q_INVOKABLE void MsetAutoRepeat(QAction* o, bool x1) { o->setAutoRepeat(x1); }
     Q_INVOKABLE void MsetCheckable(QAction* o, bool x1) { o->setCheckable(x1); }
@@ -179,10 +179,10 @@ public:
     Q_INVOKABLE void MsetToolTip(QAction* o, const QString& x1) { o->setToolTip(x1); }
     Q_INVOKABLE void MsetWhatsThis(QAction* o, const QString& x1) { o->setWhatsThis(x1); }
     Q_INVOKABLE QKeySequence Mshortcut(QAction* o) const { return o->shortcut(); }
-    Q_INVOKABLE Qt::ShortcutContext MshortcutContext(QAction* o) const { return o->shortcutContext(); }
+    Q_INVOKABLE int MshortcutContext(QAction* o) const { return o->shortcutContext(); }
     Q_INVOKABLE QList<QKeySequence> Mshortcuts(QAction* o) const { return o->shortcuts(); }
     Q_INVOKABLE bool MshowStatusText(QAction* o, QWidget* x1 = 0) { return o->showStatusText(x1); }
-    Q_INVOKABLE QAction::SoftKeyRole MsoftKeyRole(QAction* o) const { return o->softKeyRole(); }
+    Q_INVOKABLE int MsoftKeyRole(QAction* o) const { return o->softKeyRole(); }
     Q_INVOKABLE QString MstatusTip(QAction* o) const { return o->statusTip(); }
     Q_INVOKABLE QString Mtext(QAction* o) const { return o->text(); }
     Q_INVOKABLE QString MtoolTip(QAction* o) const { return o->toolTip(); }
@@ -247,10 +247,10 @@ public:
     Q_INVOKABLE void* C(uint u, QObject* x1 = 0) { return new LCompleter(u, x1); }
     Q_INVOKABLE void* C(uint u, QAbstractItemModel* x1, QObject* x2 = 0) { return new LCompleter(u, x1, x2); }
     Q_INVOKABLE void* C(uint u, const QStringList& x1, QObject* x2 = 0) { return new LCompleter(u, x1, x2); }
-    Q_INVOKABLE Qt::CaseSensitivity McaseSensitivity(QCompleter* o) const { return o->caseSensitivity(); }
+    Q_INVOKABLE int McaseSensitivity(QCompleter* o) const { return o->caseSensitivity(); }
     Q_INVOKABLE int McompletionColumn(QCompleter* o) const { return o->completionColumn(); }
     Q_INVOKABLE int McompletionCount(QCompleter* o) const { return o->completionCount(); }
-    Q_INVOKABLE QCompleter::CompletionMode McompletionMode(QCompleter* o) const { return o->completionMode(); }
+    Q_INVOKABLE int McompletionMode(QCompleter* o) const { return o->completionMode(); }
     Q_INVOKABLE QAbstractItemModel* McompletionModel(QCompleter* o) const { return o->completionModel(); }
     Q_INVOKABLE QString McompletionPrefix(QCompleter* o) const { return o->completionPrefix(); }
     Q_INVOKABLE int McompletionRole(QCompleter* o) const { return o->completionRole(); }
@@ -259,7 +259,7 @@ public:
     Q_INVOKABLE int McurrentRow(QCompleter* o) const { return o->currentRow(); }
     Q_INVOKABLE int MmaxVisibleItems(QCompleter* o) const { return o->maxVisibleItems(); }
     Q_INVOKABLE QAbstractItemModel* Mmodel(QCompleter* o) const { return o->model(); }
-    Q_INVOKABLE QCompleter::ModelSorting MmodelSorting(QCompleter* o) const { return o->modelSorting(); }
+    Q_INVOKABLE int MmodelSorting(QCompleter* o) const { return o->modelSorting(); }
     Q_INVOKABLE QString MpathFromIndex(QCompleter* o, const QModelIndex& x1) const { return o->pathFromIndex(x1); }
     Q_INVOKABLE QAbstractItemView* Mpopup(QCompleter* o) const { return o->popup(); }
     Q_INVOKABLE void MsetCaseSensitivity(QCompleter* o, Qt::CaseSensitivity x1) { o->setCaseSensitivity(x1); }
@@ -325,8 +325,8 @@ class Q31 : public Q65 { // QDrag
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QWidget* x1) { return new LDrag(u, x1); }
-    Q_INVOKABLE Qt::DropAction Mexec(QDrag* o, Qt::DropActions x1 = Qt::MoveAction) { return o->exec(x1); }
-    Q_INVOKABLE Qt::DropAction Mexec(QDrag* o, Qt::DropActions x1, Qt::DropAction x2) { return o->exec(x1, x2); }
+    Q_INVOKABLE int Mexec(QDrag* o, Qt::DropActions x1 = Qt::MoveAction) { return o->exec(x1); }
+    Q_INVOKABLE int Mexec(QDrag* o, Qt::DropActions x1, Qt::DropAction x2) { return o->exec(x1, x2); }
     Q_INVOKABLE QPoint MhotSpot(QDrag* o) const { return o->hotSpot(); }
     Q_INVOKABLE QMimeData* MmimeData(QDrag* o) const { return o->mimeData(); }
     Q_INVOKABLE QPixmap Mpixmap(QDrag* o) const { return o->pixmap(); }
@@ -391,7 +391,7 @@ public:
     Q_INVOKABLE bool MisSortCacheEnabled(QGraphicsScene* o) const { return o->isSortCacheEnabled(); }
     Q_INVOKABLE QGraphicsItem* MitemAt(QGraphicsScene* o, const QPointF& x1, const QTransform& x2) const { return o->itemAt(x1, x2); }
     Q_INVOKABLE QGraphicsItem* MitemAt(QGraphicsScene* o, qreal x1, qreal x2, const QTransform& x3) const { return o->itemAt(x1, x2, x3); }
-    Q_INVOKABLE QGraphicsScene::ItemIndexMethod MitemIndexMethod(QGraphicsScene* o) const { return o->itemIndexMethod(); }
+    Q_INVOKABLE int MitemIndexMethod(QGraphicsScene* o) const { return o->itemIndexMethod(); }
     Q_INVOKABLE QList<QGraphicsItem*> Mitems(QGraphicsScene* o) const { return o->items(); }
     Q_INVOKABLE QList<QGraphicsItem*> Mitems(QGraphicsScene* o, Qt::SortOrder x1) const { return o->items(x1); }
     Q_INVOKABLE QList<QGraphicsItem*> Mitems(QGraphicsScene* o, const QPointF& x1, Qt::ItemSelectionMode x2, Qt::SortOrder x3, const QTransform& x4 = QTransform()) const { return o->items(x1, x2, x3, x4); }
@@ -454,7 +454,7 @@ public:
     Q_INVOKABLE void MsetTextWidth(QGraphicsTextItem* o, qreal x1) { o->setTextWidth(x1); }
     Q_INVOKABLE bool MtabChangesFocus(QGraphicsTextItem* o) const { return o->tabChangesFocus(); }
     Q_INVOKABLE QTextCursor MtextCursor(QGraphicsTextItem* o) const { return o->textCursor(); }
-    Q_INVOKABLE Qt::TextInteractionFlags MtextInteractionFlags(QGraphicsTextItem* o) const { return o->textInteractionFlags(); }
+    Q_INVOKABLE int MtextInteractionFlags(QGraphicsTextItem* o) const { return o->textInteractionFlags(); }
     Q_INVOKABLE qreal MtextWidth(QGraphicsTextItem* o) const { return o->textWidth(); }
     Q_INVOKABLE QString MtoHtml(QGraphicsTextItem* o) const { return o->toHtml(); }
     Q_INVOKABLE QString MtoPlainText(QGraphicsTextItem* o) const { return o->toPlainText(); }
@@ -475,7 +475,7 @@ public:
     Q_INVOKABLE void MaddAction(QGraphicsWidget* o, QAction* x1) { o->addAction(x1); }
     Q_INVOKABLE void MaddActions(QGraphicsWidget* o, QList<QAction*> x1) { o->addActions(x1); }
     Q_INVOKABLE void MadjustSize(QGraphicsWidget* o) { o->adjustSize(); }
-    Q_INVOKABLE Qt::FocusPolicy MfocusPolicy(QGraphicsWidget* o) const { return o->focusPolicy(); }
+    Q_INVOKABLE int MfocusPolicy(QGraphicsWidget* o) const { return o->focusPolicy(); }
     Q_INVOKABLE QGraphicsWidget* MfocusWidget(QGraphicsWidget* o) const { return o->focusWidget(); }
     Q_INVOKABLE QFont Mfont(QGraphicsWidget* o) const { return o->font(); }
     Q_INVOKABLE int MgrabShortcut(QGraphicsWidget* o, const QKeySequence& x1, Qt::ShortcutContext x2 = Qt::WindowShortcut) { return o->grabShortcut(x1, x2); }
@@ -483,7 +483,7 @@ public:
     Q_INVOKABLE void MinsertActions(QGraphicsWidget* o, QAction* x1, QList<QAction*> x2) { o->insertActions(x1, x2); }
     Q_INVOKABLE bool MisActiveWindow(QGraphicsWidget* o) const { return o->isActiveWindow(); }
     Q_INVOKABLE QGraphicsLayout* Mlayout(QGraphicsWidget* o) const { return o->layout(); }
-    Q_INVOKABLE Qt::LayoutDirection MlayoutDirection(QGraphicsWidget* o) const { return o->layoutDirection(); }
+    Q_INVOKABLE int MlayoutDirection(QGraphicsWidget* o) const { return o->layoutDirection(); }
     Q_INVOKABLE void MpaintWindowFrame(QGraphicsWidget* o, QPainter* x1, const QStyleOptionGraphicsItem* x2, QWidget* x3 = 0) { o->paintWindowFrame(x1, x2, x3); }
     Q_INVOKABLE QPalette Mpalette(QGraphicsWidget* o) const { return o->palette(); }
     Q_INVOKABLE QRectF Mrect(QGraphicsWidget* o) const { return o->rect(); }
@@ -510,11 +510,11 @@ public:
     Q_INVOKABLE bool MtestAttribute(QGraphicsWidget* o, Qt::WidgetAttribute x1) const { return o->testAttribute(x1); }
     Q_INVOKABLE void MunsetLayoutDirection(QGraphicsWidget* o) { o->unsetLayoutDirection(); }
     Q_INVOKABLE void MunsetWindowFrameMargins(QGraphicsWidget* o) { o->unsetWindowFrameMargins(); }
-    Q_INVOKABLE Qt::WindowFlags MwindowFlags(QGraphicsWidget* o) const { return o->windowFlags(); }
+    Q_INVOKABLE int MwindowFlags(QGraphicsWidget* o) const { return o->windowFlags(); }
     Q_INVOKABLE QRectF MwindowFrameGeometry(QGraphicsWidget* o) const { return o->windowFrameGeometry(); }
     Q_INVOKABLE QRectF MwindowFrameRect(QGraphicsWidget* o) const { return o->windowFrameRect(); }
     Q_INVOKABLE QString MwindowTitle(QGraphicsWidget* o) const { return o->windowTitle(); }
-    Q_INVOKABLE Qt::WindowType MwindowType(QGraphicsWidget* o) const { return o->windowType(); }
+    Q_INVOKABLE int MwindowType(QGraphicsWidget* o) const { return o->windowType(); }
     Q_INVOKABLE QRectF MboundingRect(QGraphicsWidget* o) const { return o->boundingRect(); }
     Q_INVOKABLE void Mpaint(QGraphicsWidget* o, QPainter* x1, const QStyleOptionGraphicsItem* x2, QWidget* x3 = 0) { o->paint(x1, x2, x3); }
     Q_INVOKABLE void MsetGeometry(QGraphicsWidget* o, const QRectF& x1) { o->setGeometry(x1); }
@@ -601,11 +601,11 @@ public:
     Q_INVOKABLE void MsetMenuBar(QLayout* o, QWidget* x1) { o->setMenuBar(x1); }
     Q_INVOKABLE void MsetSizeConstraint(QLayout* o, QLayout::SizeConstraint x1) { o->setSizeConstraint(x1); }
     Q_INVOKABLE void MsetSpacing(QLayout* o, int x1) { o->setSpacing(x1); }
-    Q_INVOKABLE QLayout::SizeConstraint MsizeConstraint(QLayout* o) const { return o->sizeConstraint(); }
+    Q_INVOKABLE int MsizeConstraint(QLayout* o) const { return o->sizeConstraint(); }
     Q_INVOKABLE int Mspacing(QLayout* o) const { return o->spacing(); }
     Q_INVOKABLE QLayoutItem* MtakeAt(QLayout* o, int x1) { return o->takeAt(x1); }
     Q_INVOKABLE void Mupdate(QLayout* o) { o->update(); }
-    Q_INVOKABLE Qt::Orientations MexpandingDirections(QLayout* o) const { return o->expandingDirections(); }
+    Q_INVOKABLE int MexpandingDirections(QLayout* o) const { return o->expandingDirections(); }
     Q_INVOKABLE QRect Mgeometry(QLayout* o) const { return o->geometry(); }
     Q_INVOKABLE void Minvalidate(QLayout* o) { o->invalidate(); }
     Q_INVOKABLE bool MisEmpty(QLayout* o) const { return o->isEmpty(); }
@@ -649,7 +649,7 @@ public:
     Q_INVOKABLE void* C(uint u, QObject* x1 = 0) { return new LMovie(u, x1); }
     Q_INVOKABLE void* C(uint u, const QString& x1, const QByteArray& x2 = QByteArray(), QObject* x3 = 0) { return new LMovie(u, x1, x2, x3); }
     Q_INVOKABLE QColor MbackgroundColor(QMovie* o) const { return o->backgroundColor(); }
-    Q_INVOKABLE QMovie::CacheMode McacheMode(QMovie* o) const { return o->cacheMode(); }
+    Q_INVOKABLE int McacheMode(QMovie* o) const { return o->cacheMode(); }
     Q_INVOKABLE int McurrentFrameNumber(QMovie* o) const { return o->currentFrameNumber(); }
     Q_INVOKABLE QImage McurrentImage(QMovie* o) const { return o->currentImage(); }
     Q_INVOKABLE QPixmap McurrentPixmap(QMovie* o) const { return o->currentPixmap(); }
@@ -668,7 +668,7 @@ public:
     Q_INVOKABLE void MsetFormat(QMovie* o, const QByteArray& x1) { o->setFormat(x1); }
     Q_INVOKABLE void MsetScaledSize(QMovie* o, const QSize& x1) { o->setScaledSize(x1); }
     Q_INVOKABLE int Mspeed(QMovie* o) const { return o->speed(); }
-    Q_INVOKABLE QMovie::MovieState Mstate(QMovie* o) const { return o->state(); }
+    Q_INVOKABLE int Mstate(QMovie* o) const { return o->state(); }
     Q_INVOKABLE QList<QByteArray> SsupportedFormats() { return QMovie::supportedFormats(); }
 };
 
@@ -683,7 +683,7 @@ public:
     Q_INVOKABLE void Mrelease(QSessionManager* o) { o->release(); }
     Q_INVOKABLE void MrequestPhase2(QSessionManager* o) { o->requestPhase2(); }
     Q_INVOKABLE QStringList MrestartCommand(QSessionManager* o) const { return o->restartCommand(); }
-    Q_INVOKABLE QSessionManager::RestartHint MrestartHint(QSessionManager* o) const { return o->restartHint(); }
+    Q_INVOKABLE int MrestartHint(QSessionManager* o) const { return o->restartHint(); }
     Q_INVOKABLE QString MsessionId(QSessionManager* o) const { return o->sessionId(); }
     Q_INVOKABLE QString MsessionKey(QSessionManager* o) const { return o->sessionKey(); }
     Q_INVOKABLE void MsetDiscardCommand(QSessionManager* o, const QStringList& x1) { o->setDiscardCommand(x1); }
@@ -704,7 +704,7 @@ public:
     Q_INVOKABLE QWidget* McurrentWidget(QStackedLayout* o) const { return o->currentWidget(); }
     Q_INVOKABLE int MinsertWidget(QStackedLayout* o, int x1, QWidget* x2) { return o->insertWidget(x1, x2); }
     Q_INVOKABLE void MsetStackingMode(QStackedLayout* o, QStackedLayout::StackingMode x1) { o->setStackingMode(x1); }
-    Q_INVOKABLE QStackedLayout::StackingMode MstackingMode(QStackedLayout* o) const { return o->stackingMode(); }
+    Q_INVOKABLE int MstackingMode(QStackedLayout* o) const { return o->stackingMode(); }
     Q_INVOKABLE QWidget* Mwidget(QStackedLayout* o, int x1) const { return o->widget(x1); }
     Q_INVOKABLE void MaddItem(QStackedLayout* o, QLayoutItem* x1) { o->addItem(x1); }
     Q_INVOKABLE int Mcount(QStackedLayout* o) const { return o->count(); }
@@ -756,7 +756,7 @@ public:
     Q_INVOKABLE int McolumnCount(QStandardItemModel* o, const QModelIndex& x1 = QModelIndex()) const { return o->columnCount(x1); }
     Q_INVOKABLE QVariant Mdata(QStandardItemModel* o, const QModelIndex& x1, int x2 = Qt::DisplayRole) const { return o->data(x1, x2); }
     Q_INVOKABLE bool MdropMimeData(QStandardItemModel* o, const QMimeData* x1, Qt::DropAction x2, int x3, int x4, const QModelIndex& x5) { return o->dropMimeData(x1, x2, x3, x4, x5); }
-    Q_INVOKABLE Qt::ItemFlags Mflags(QStandardItemModel* o, const QModelIndex& x1) const { return o->flags(x1); }
+    Q_INVOKABLE int Mflags(QStandardItemModel* o, const QModelIndex& x1) const { return o->flags(x1); }
     Q_INVOKABLE bool MhasChildren(QStandardItemModel* o, const QModelIndex& x1 = QModelIndex()) const { return o->hasChildren(x1); }
     Q_INVOKABLE QVariant MheaderData(QStandardItemModel* o, int x1, Qt::Orientation x2, int x3 = Qt::DisplayRole) const { return o->headerData(x1, x2, x3); }
     Q_INVOKABLE QModelIndex Mindex(QStandardItemModel* o, int x1, int x2, const QModelIndex& x3 = QModelIndex()) const { return o->index(x1, x2, x3); }
@@ -771,7 +771,7 @@ public:
     Q_INVOKABLE bool MsetData(QStandardItemModel* o, const QModelIndex& x1, const QVariant& x2, int x3 = Qt::EditRole) { return o->setData(x1, x2, x3); }
     Q_INVOKABLE bool MsetHeaderData(QStandardItemModel* o, int x1, Qt::Orientation x2, const QVariant& x3, int x4 = Qt::EditRole) { return o->setHeaderData(x1, x2, x3, x4); }
     Q_INVOKABLE void Msort(QStandardItemModel* o, int x1, Qt::SortOrder x2 = Qt::AscendingOrder) { o->sort(x1, x2); }
-    Q_INVOKABLE Qt::DropActions MsupportedDropActions(QStandardItemModel* o) const { return o->supportedDropActions(); }
+    Q_INVOKABLE int MsupportedDropActions(QStandardItemModel* o) const { return o->supportedDropActions(); }
 };
 
 class Q81 : public Q5 { // QStringListModel
@@ -782,13 +782,13 @@ public:
     Q_INVOKABLE void MsetStringList(QStringListModel* o, const QStringList& x1) { o->setStringList(x1); }
     Q_INVOKABLE QStringList MstringList(QStringListModel* o) const { return o->stringList(); }
     Q_INVOKABLE QVariant Mdata(QStringListModel* o, const QModelIndex& x1, int x2) const { return o->data(x1, x2); }
-    Q_INVOKABLE Qt::ItemFlags Mflags(QStringListModel* o, const QModelIndex& x1) const { return o->flags(x1); }
+    Q_INVOKABLE int Mflags(QStringListModel* o, const QModelIndex& x1) const { return o->flags(x1); }
     Q_INVOKABLE bool MinsertRows(QStringListModel* o, int x1, int x2, const QModelIndex& x3 = QModelIndex()) { return o->insertRows(x1, x2, x3); }
     Q_INVOKABLE bool MremoveRows(QStringListModel* o, int x1, int x2, const QModelIndex& x3 = QModelIndex()) { return o->removeRows(x1, x2, x3); }
     Q_INVOKABLE int MrowCount(QStringListModel* o, const QModelIndex& x1 = QModelIndex()) const { return o->rowCount(x1); }
     Q_INVOKABLE bool MsetData(QStringListModel* o, const QModelIndex& x1, const QVariant& x2, int x3 = Qt::EditRole) { return o->setData(x1, x2, x3); }
     Q_INVOKABLE void Msort(QStringListModel* o, int x1, Qt::SortOrder x2 = Qt::AscendingOrder) { o->sort(x1, x2); }
-    Q_INVOKABLE Qt::DropActions MsupportedDropActions(QStringListModel* o) const { return o->supportedDropActions(); }
+    Q_INVOKABLE int MsupportedDropActions(QStringListModel* o) const { return o->supportedDropActions(); }
 };
 
 class Q88 : public Q65 { // QTextDocument
@@ -881,7 +881,7 @@ public:
     Q_INVOKABLE void Mexit(QThread* o, int x1 = 0) { o->exit(x1); }
     Q_INVOKABLE bool MisFinished(QThread* o) const { return o->isFinished(); }
     Q_INVOKABLE bool MisRunning(QThread* o) const { return o->isRunning(); }
-    Q_INVOKABLE QThread::Priority Mpriority(QThread* o) const { return o->priority(); }
+    Q_INVOKABLE int Mpriority(QThread* o) const { return o->priority(); }
     Q_INVOKABLE void MsetPriority(QThread* o, QThread::Priority x1) { o->setPriority(x1); }
     Q_INVOKABLE void MsetStackSize(QThread* o, uint x1) { o->setStackSize(x1); }
     Q_INVOKABLE uint MstackSize(QThread* o) const { return o->stackSize(); }
@@ -962,7 +962,7 @@ public:
     Q_INVOKABLE void Mfixup(QValidator* o, QString& x1) const { o->fixup(x1); }
     Q_INVOKABLE QLocale Mlocale(QValidator* o) const { return o->locale(); }
     Q_INVOKABLE void MsetLocale(QValidator* o, const QLocale& x1) { o->setLocale(x1); }
-    Q_INVOKABLE QValidator::State Mvalidate(QValidator* o, QString& x1, int& x2) const { return o->validate(x1, x2); }
+    Q_INVOKABLE int Mvalidate(QValidator* o, QString& x1, int& x2) const { return o->validate(x1, x2); }
 };
 
 class Q108 : public Q65 { // QWidget
@@ -978,7 +978,7 @@ public:
     Q_INVOKABLE void MaddActions(QWidget* o, QList<QAction*> x1) { o->addActions(x1); }
     Q_INVOKABLE void MadjustSize(QWidget* o) { o->adjustSize(); }
     Q_INVOKABLE bool MautoFillBackground(QWidget* o) const { return o->autoFillBackground(); }
-    Q_INVOKABLE QPalette::ColorRole MbackgroundRole(QWidget* o) const { return o->backgroundRole(); }
+    Q_INVOKABLE int MbackgroundRole(QWidget* o) const { return o->backgroundRole(); }
     Q_INVOKABLE QSize MbaseSize(QWidget* o) const { return o->baseSize(); }
     Q_INVOKABLE QWidget* MchildAt(QWidget* o, int x1, int x2) const { return o->childAt(x1, x2); }
     Q_INVOKABLE QWidget* MchildAt(QWidget* o, const QPoint& x1) const { return o->childAt(x1); }
@@ -988,15 +988,15 @@ public:
     Q_INVOKABLE void MclearMask(QWidget* o) { o->clearMask(); }
     Q_INVOKABLE QMargins McontentsMargins(QWidget* o) const { return o->contentsMargins(); }
     Q_INVOKABLE QRect McontentsRect(QWidget* o) const { return o->contentsRect(); }
-    Q_INVOKABLE Qt::ContextMenuPolicy McontextMenuPolicy(QWidget* o) const { return o->contextMenuPolicy(); }
+    Q_INVOKABLE int McontextMenuPolicy(QWidget* o) const { return o->contextMenuPolicy(); }
     Q_INVOKABLE QCursor Mcursor(QWidget* o) const { return o->cursor(); }
     Q_INVOKABLE void MensurePolished(QWidget* o) const { o->ensurePolished(); }
-    Q_INVOKABLE Qt::FocusPolicy MfocusPolicy(QWidget* o) const { return o->focusPolicy(); }
+    Q_INVOKABLE int MfocusPolicy(QWidget* o) const { return o->focusPolicy(); }
     Q_INVOKABLE QWidget* MfocusProxy(QWidget* o) const { return o->focusProxy(); }
     Q_INVOKABLE QWidget* MfocusWidget(QWidget* o) const { return o->focusWidget(); }
     Q_INVOKABLE QFont Mfont(QWidget* o) const { return o->font(); }
     Q_INVOKABLE QFontMetrics MfontMetrics(QWidget* o) const { return o->fontMetrics(); }
-    Q_INVOKABLE QPalette::ColorRole MforegroundRole(QWidget* o) const { return o->foregroundRole(); }
+    Q_INVOKABLE int MforegroundRole(QWidget* o) const { return o->foregroundRole(); }
     Q_INVOKABLE QRect MframeGeometry(QWidget* o) const { return o->frameGeometry(); }
     Q_INVOKABLE QSize MframeSize(QWidget* o) const { return o->frameSize(); }
     Q_INVOKABLE QRect Mgeometry(QWidget* o) const { return o->geometry(); }
@@ -1012,7 +1012,7 @@ public:
     Q_INVOKABLE int Mheight(QWidget* o) const { return o->height(); }
     Q_INVOKABLE int MheightForWidth(QWidget* o, int x1) const { return o->heightForWidth(x1); }
     Q_INVOKABLE QInputContext* MinputContext(QWidget* o) { return o->inputContext(); }
-    Q_INVOKABLE Qt::InputMethodHints MinputMethodHints(QWidget* o) const { return o->inputMethodHints(); }
+    Q_INVOKABLE int MinputMethodHints(QWidget* o) const { return o->inputMethodHints(); }
     Q_INVOKABLE QVariant MinputMethodQuery(QWidget* o, Qt::InputMethodQuery x1) const { return o->inputMethodQuery(x1); }
     Q_INVOKABLE void MinsertAction(QWidget* o, QAction* x1, QAction* x2) { o->insertAction(x1, x2); }
     Q_INVOKABLE void MinsertActions(QWidget* o, QAction* x1, QList<QAction*> x2) { o->insertActions(x1, x2); }
@@ -1030,7 +1030,7 @@ public:
     Q_INVOKABLE bool MisWindow(QWidget* o) const { return o->isWindow(); }
     Q_INVOKABLE bool MisWindowModified(QWidget* o) const { return o->isWindowModified(); }
     Q_INVOKABLE QLayout* Mlayout(QWidget* o) const { return o->layout(); }
-    Q_INVOKABLE Qt::LayoutDirection MlayoutDirection(QWidget* o) const { return o->layoutDirection(); }
+    Q_INVOKABLE int MlayoutDirection(QWidget* o) const { return o->layoutDirection(); }
     Q_INVOKABLE QLocale Mlocale(QWidget* o) const { return o->locale(); }
     Q_INVOKABLE QPoint MmapFrom(QWidget* o, QWidget* x1, const QPoint& x2) const { return o->mapFrom(x1, x2); }
     Q_INVOKABLE QPoint MmapFromGlobal(QWidget* o, const QPoint& x1) const { return o->mapFromGlobal(x1); }
@@ -1157,15 +1157,15 @@ public:
     Q_INVOKABLE int Mwidth(QWidget* o) const { return o->width(); }
     Q_INVOKABLE QWidget* Mwindow(QWidget* o) const { return o->window(); }
     Q_INVOKABLE QString MwindowFilePath(QWidget* o) const { return o->windowFilePath(); }
-    Q_INVOKABLE Qt::WindowFlags MwindowFlags(QWidget* o) const { return o->windowFlags(); }
+    Q_INVOKABLE int MwindowFlags(QWidget* o) const { return o->windowFlags(); }
     Q_INVOKABLE QIcon MwindowIcon(QWidget* o) const { return o->windowIcon(); }
     Q_INVOKABLE QString MwindowIconText(QWidget* o) const { return o->windowIconText(); }
-    Q_INVOKABLE Qt::WindowModality MwindowModality(QWidget* o) const { return o->windowModality(); }
+    Q_INVOKABLE int MwindowModality(QWidget* o) const { return o->windowModality(); }
     Q_INVOKABLE qreal MwindowOpacity(QWidget* o) const { return o->windowOpacity(); }
     Q_INVOKABLE QString MwindowRole(QWidget* o) const { return o->windowRole(); }
-    Q_INVOKABLE Qt::WindowStates MwindowState(QWidget* o) const { return o->windowState(); }
+    Q_INVOKABLE int MwindowState(QWidget* o) const { return o->windowState(); }
     Q_INVOKABLE QString MwindowTitle(QWidget* o) const { return o->windowTitle(); }
-    Q_INVOKABLE Qt::WindowType MwindowType(QWidget* o) const { return o->windowType(); }
+    Q_INVOKABLE int MwindowType(QWidget* o) const { return o->windowType(); }
     Q_INVOKABLE int Mx(QWidget* o) const { return o->x(); }
     Q_INVOKABLE int My(QWidget* o) const { return o->y(); }
     Q_INVOKABLE QWidget* SkeyboardGrabber() { return QWidget::keyboardGrabber(); }
@@ -1245,7 +1245,7 @@ public:
     Q_INVOKABLE bool MisSliderDown(QAbstractSlider* o) const { return o->isSliderDown(); }
     Q_INVOKABLE int Mmaximum(QAbstractSlider* o) const { return o->maximum(); }
     Q_INVOKABLE int Mminimum(QAbstractSlider* o) const { return o->minimum(); }
-    Q_INVOKABLE Qt::Orientation Morientation(QAbstractSlider* o) const { return o->orientation(); }
+    Q_INVOKABLE int Morientation(QAbstractSlider* o) const { return o->orientation(); }
     Q_INVOKABLE int MpageStep(QAbstractSlider* o) const { return o->pageStep(); }
     Q_INVOKABLE void MsetInvertedAppearance(QAbstractSlider* o, bool x1) { o->setInvertedAppearance(x1); }
     Q_INVOKABLE void MsetInvertedControls(QAbstractSlider* o, bool x1) { o->setInvertedControls(x1); }
@@ -1266,9 +1266,9 @@ public:
 class Q9 : public Q108 { // QAbstractSpinBox
     Q_OBJECT
 public:
-    Q_INVOKABLE Qt::Alignment Malignment(QAbstractSpinBox* o) const { return o->alignment(); }
-    Q_INVOKABLE QAbstractSpinBox::ButtonSymbols MbuttonSymbols(QAbstractSpinBox* o) const { return o->buttonSymbols(); }
-    Q_INVOKABLE QAbstractSpinBox::CorrectionMode McorrectionMode(QAbstractSpinBox* o) const { return o->correctionMode(); }
+    Q_INVOKABLE int Malignment(QAbstractSpinBox* o) const { return o->alignment(); }
+    Q_INVOKABLE int MbuttonSymbols(QAbstractSpinBox* o) const { return o->buttonSymbols(); }
+    Q_INVOKABLE int McorrectionMode(QAbstractSpinBox* o) const { return o->correctionMode(); }
     Q_INVOKABLE void Mfixup(QAbstractSpinBox* o, QString& x1) const { o->fixup(x1); }
     Q_INVOKABLE bool MhasAcceptableInput(QAbstractSpinBox* o) const { return o->hasAcceptableInput(); }
     Q_INVOKABLE bool MhasFrame(QAbstractSpinBox* o) const { return o->hasFrame(); }
@@ -1288,7 +1288,7 @@ public:
     Q_INVOKABLE QString MspecialValueText(QAbstractSpinBox* o) const { return o->specialValueText(); }
     Q_INVOKABLE void MstepBy(QAbstractSpinBox* o, int x1) { o->stepBy(x1); }
     Q_INVOKABLE QString Mtext(QAbstractSpinBox* o) const { return o->text(); }
-    Q_INVOKABLE QValidator::State Mvalidate(QAbstractSpinBox* o, QString& x1, int& x2) const { return o->validate(x1, x2); }
+    Q_INVOKABLE int Mvalidate(QAbstractSpinBox* o, QString& x1, int& x2) const { return o->validate(x1, x2); }
     Q_INVOKABLE bool Mwrapping(QAbstractSpinBox* o) const { return o->wrapping(); }
     Q_INVOKABLE bool Mevent(QAbstractSpinBox* o, QEvent* x1) { return o->event(x1); }
     Q_INVOKABLE QVariant MinputMethodQuery(QAbstractSpinBox* o, Qt::InputMethodQuery x1) const { return o->inputMethodQuery(x1); }
@@ -1331,12 +1331,12 @@ public:
     Q_INVOKABLE bool SisEffectEnabled(Qt::UIEffect x1) { return QApplication::isEffectEnabled(x1); }
     Q_INVOKABLE bool SisLeftToRight() { return QApplication::isLeftToRight(); }
     Q_INVOKABLE bool SisRightToLeft() { return QApplication::isRightToLeft(); }
-    Q_INVOKABLE Qt::LayoutDirection SkeyboardInputDirection() { return QApplication::keyboardInputDirection(); }
+    Q_INVOKABLE int SkeyboardInputDirection() { return QApplication::keyboardInputDirection(); }
     Q_INVOKABLE int SkeyboardInputInterval() { return QApplication::keyboardInputInterval(); }
     Q_INVOKABLE QLocale SkeyboardInputLocale() { return QApplication::keyboardInputLocale(); }
-    Q_INVOKABLE Qt::KeyboardModifiers SkeyboardModifiers() { return QApplication::keyboardModifiers(); }
-    Q_INVOKABLE Qt::LayoutDirection SlayoutDirection() { return QApplication::layoutDirection(); }
-    Q_INVOKABLE Qt::MouseButtons SmouseButtons() { return QApplication::mouseButtons(); }
+    Q_INVOKABLE int SkeyboardModifiers() { return QApplication::keyboardModifiers(); }
+    Q_INVOKABLE int SlayoutDirection() { return QApplication::layoutDirection(); }
+    Q_INVOKABLE int SmouseButtons() { return QApplication::mouseButtons(); }
     Q_INVOKABLE QCursor* SoverrideCursor() { return QApplication::overrideCursor(); }
     Q_INVOKABLE QPalette Spalette() { return QApplication::palette(); }
     Q_INVOKABLE QPalette Spalette(const QWidget* x1) { return QApplication::palette(x1); }
@@ -1370,7 +1370,7 @@ public:
     Q_INVOKABLE QWidget* StopLevelAt(const QPoint& x1) { return QApplication::topLevelAt(x1); }
     Q_INVOKABLE QWidget* StopLevelAt(int x1, int x2) { return QApplication::topLevelAt(x1, x2); }
     Q_INVOKABLE QWidgetList StopLevelWidgets() { return QApplication::topLevelWidgets(); }
-    Q_INVOKABLE QApplication::Type Stype() { return QApplication::type(); }
+    Q_INVOKABLE int Stype() { return QApplication::type(); }
     Q_INVOKABLE int SwheelScrollLines() { return QApplication::wheelScrollLines(); }
     Q_INVOKABLE QWidget* SwidgetAt(const QPoint& x1) { return QApplication::widgetAt(x1); }
     Q_INVOKABLE QWidget* SwidgetAt(int x1, int x2) { return QApplication::widgetAt(x1, x2); }
@@ -1386,7 +1386,7 @@ public:
     Q_INVOKABLE void MaddStretch(QBoxLayout* o, int x1 = 0) { o->addStretch(x1); }
     Q_INVOKABLE void MaddStrut(QBoxLayout* o, int x1) { o->addStrut(x1); }
     Q_INVOKABLE void MaddWidget(QBoxLayout* o, QWidget* x1, int x2 = 0, Qt::Alignment x3 = 0) { o->addWidget(x1, x2, x3); }
-    Q_INVOKABLE QBoxLayout::Direction Mdirection(QBoxLayout* o) const { return o->direction(); }
+    Q_INVOKABLE int Mdirection(QBoxLayout* o) const { return o->direction(); }
     Q_INVOKABLE void MinsertLayout(QBoxLayout* o, int x1, QLayout* x2, int x3 = 0) { o->insertLayout(x1, x2, x3); }
     Q_INVOKABLE void MinsertSpacerItem(QBoxLayout* o, int x1, QSpacerItem* x2) { o->insertSpacerItem(x1, x2); }
     Q_INVOKABLE void MinsertSpacing(QBoxLayout* o, int x1, int x2) { o->insertSpacing(x1, x2); }
@@ -1401,7 +1401,7 @@ public:
     Q_INVOKABLE int Mstretch(QBoxLayout* o, int x1) const { return o->stretch(x1); }
     Q_INVOKABLE void MaddItem(QBoxLayout* o, QLayoutItem* x1) { o->addItem(x1); }
     Q_INVOKABLE int Mcount(QBoxLayout* o) const { return o->count(); }
-    Q_INVOKABLE Qt::Orientations MexpandingDirections(QBoxLayout* o) const { return o->expandingDirections(); }
+    Q_INVOKABLE int MexpandingDirections(QBoxLayout* o) const { return o->expandingDirections(); }
     Q_INVOKABLE bool MhasHeightForWidth(QBoxLayout* o) const { return o->hasHeightForWidth(); }
     Q_INVOKABLE int MheightForWidth(QBoxLayout* o, int x1) const { return o->heightForWidth(x1); }
     Q_INVOKABLE void Minvalidate(QBoxLayout* o) { o->invalidate(); }
@@ -1420,9 +1420,9 @@ public:
     Q_INVOKABLE void* C(uint u, QWidget* x1 = 0) { return new LCalendarWidget(u, x1); }
     Q_INVOKABLE int MdateEditAcceptDelay(QCalendarWidget* o) const { return o->dateEditAcceptDelay(); }
     Q_INVOKABLE QTextCharFormat MdateTextFormat(QCalendarWidget* o, const QDate& x1) const { return o->dateTextFormat(x1); }
-    Q_INVOKABLE Qt::DayOfWeek MfirstDayOfWeek(QCalendarWidget* o) const { return o->firstDayOfWeek(); }
+    Q_INVOKABLE int MfirstDayOfWeek(QCalendarWidget* o) const { return o->firstDayOfWeek(); }
     Q_INVOKABLE QTextCharFormat MheaderTextFormat(QCalendarWidget* o) const { return o->headerTextFormat(); }
-    Q_INVOKABLE QCalendarWidget::HorizontalHeaderFormat MhorizontalHeaderFormat(QCalendarWidget* o) const { return o->horizontalHeaderFormat(); }
+    Q_INVOKABLE int MhorizontalHeaderFormat(QCalendarWidget* o) const { return o->horizontalHeaderFormat(); }
     Q_INVOKABLE bool MisDateEditEnabled(QCalendarWidget* o) const { return o->isDateEditEnabled(); }
     Q_INVOKABLE bool MisGridVisible(QCalendarWidget* o) const { return o->isGridVisible(); }
     Q_INVOKABLE bool MisNavigationBarVisible(QCalendarWidget* o) const { return o->isNavigationBarVisible(); }
@@ -1430,7 +1430,7 @@ public:
     Q_INVOKABLE QDate MminimumDate(QCalendarWidget* o) const { return o->minimumDate(); }
     Q_INVOKABLE int MmonthShown(QCalendarWidget* o) const { return o->monthShown(); }
     Q_INVOKABLE QDate MselectedDate(QCalendarWidget* o) const { return o->selectedDate(); }
-    Q_INVOKABLE QCalendarWidget::SelectionMode MselectionMode(QCalendarWidget* o) const { return o->selectionMode(); }
+    Q_INVOKABLE int MselectionMode(QCalendarWidget* o) const { return o->selectionMode(); }
     Q_INVOKABLE void MsetDateEditAcceptDelay(QCalendarWidget* o, int x1) { o->setDateEditAcceptDelay(x1); }
     Q_INVOKABLE void MsetDateEditEnabled(QCalendarWidget* o, bool x1) { o->setDateEditEnabled(x1); }
     Q_INVOKABLE void MsetDateTextFormat(QCalendarWidget* o, const QDate& x1, const QTextCharFormat& x2) { o->setDateTextFormat(x1, x2); }
@@ -1442,7 +1442,7 @@ public:
     Q_INVOKABLE void MsetSelectionMode(QCalendarWidget* o, QCalendarWidget::SelectionMode x1) { o->setSelectionMode(x1); }
     Q_INVOKABLE void MsetVerticalHeaderFormat(QCalendarWidget* o, QCalendarWidget::VerticalHeaderFormat x1) { o->setVerticalHeaderFormat(x1); }
     Q_INVOKABLE void MsetWeekdayTextFormat(QCalendarWidget* o, Qt::DayOfWeek x1, const QTextCharFormat& x2) { o->setWeekdayTextFormat(x1, x2); }
-    Q_INVOKABLE QCalendarWidget::VerticalHeaderFormat MverticalHeaderFormat(QCalendarWidget* o) const { return o->verticalHeaderFormat(); }
+    Q_INVOKABLE int MverticalHeaderFormat(QCalendarWidget* o) const { return o->verticalHeaderFormat(); }
     Q_INVOKABLE QTextCharFormat MweekdayTextFormat(QCalendarWidget* o, Qt::DayOfWeek x1) const { return o->weekdayTextFormat(x1); }
     Q_INVOKABLE int MyearShown(QCalendarWidget* o) const { return o->yearShown(); }
     Q_INVOKABLE QSize MminimumSizeHint(QCalendarWidget* o) const { return o->minimumSizeHint(); }
@@ -1454,7 +1454,7 @@ class Q17 : public Q1 { // QCheckBox
 public:
     Q_INVOKABLE void* C(uint u, QWidget* x1 = 0) { return new LCheckBox(u, x1); }
     Q_INVOKABLE void* C(uint u, const QString& x1, QWidget* x2 = 0) { return new LCheckBox(u, x1, x2); }
-    Q_INVOKABLE Qt::CheckState McheckState(QCheckBox* o) const { return o->checkState(); }
+    Q_INVOKABLE int McheckState(QCheckBox* o) const { return o->checkState(); }
     Q_INVOKABLE bool MisTristate(QCheckBox* o) const { return o->isTristate(); }
     Q_INVOKABLE void MsetCheckState(QCheckBox* o, Qt::CheckState x1) { o->setCheckState(x1); }
     Q_INVOKABLE void MsetTristate(QCheckBox* o, bool x1 = true) { o->setTristate(x1); }
@@ -1481,7 +1481,7 @@ public:
     Q_INVOKABLE void MinsertItem(QComboBox* o, int x1, const QString& x2, const QVariant& x3 = QVariant()) { o->insertItem(x1, x2, x3); }
     Q_INVOKABLE void MinsertItem(QComboBox* o, int x1, const QIcon& x2, const QString& x3, const QVariant& x4 = QVariant()) { o->insertItem(x1, x2, x3, x4); }
     Q_INVOKABLE void MinsertItems(QComboBox* o, int x1, const QStringList& x2) { o->insertItems(x1, x2); }
-    Q_INVOKABLE QComboBox::InsertPolicy MinsertPolicy(QComboBox* o) const { return o->insertPolicy(); }
+    Q_INVOKABLE int MinsertPolicy(QComboBox* o) const { return o->insertPolicy(); }
     Q_INVOKABLE void MinsertSeparator(QComboBox* o, int x1) { o->insertSeparator(x1); }
     Q_INVOKABLE bool MisEditable(QComboBox* o) const { return o->isEditable(); }
     Q_INVOKABLE QVariant MitemData(QComboBox* o, int x1, int x2 = Qt::UserRole) const { return o->itemData(x1, x2); }
@@ -1517,7 +1517,7 @@ public:
     Q_INVOKABLE void MsetValidator(QComboBox* o, const QValidator* x1) { o->setValidator(x1); }
     Q_INVOKABLE void MsetView(QComboBox* o, QAbstractItemView* x1) { o->setView(x1); }
     Q_INVOKABLE void MshowPopup(QComboBox* o) { o->showPopup(); }
-    Q_INVOKABLE QComboBox::SizeAdjustPolicy MsizeAdjustPolicy(QComboBox* o) const { return o->sizeAdjustPolicy(); }
+    Q_INVOKABLE int MsizeAdjustPolicy(QComboBox* o) const { return o->sizeAdjustPolicy(); }
     Q_INVOKABLE const QValidator* Mvalidator(QComboBox* o) const { return o->validator(); }
     Q_INVOKABLE QAbstractItemView* Mview(QComboBox* o) const { return o->view(); }
     Q_INVOKABLE bool Mevent(QComboBox* o, QEvent* x1) { return o->event(x1); }
@@ -1540,19 +1540,19 @@ public:
     Q_INVOKABLE void MclearMinimumDate(QDateTimeEdit* o) { o->clearMinimumDate(); }
     Q_INVOKABLE void MclearMinimumDateTime(QDateTimeEdit* o) { o->clearMinimumDateTime(); }
     Q_INVOKABLE void MclearMinimumTime(QDateTimeEdit* o) { o->clearMinimumTime(); }
-    Q_INVOKABLE QDateTimeEdit::Section McurrentSection(QDateTimeEdit* o) const { return o->currentSection(); }
+    Q_INVOKABLE int McurrentSection(QDateTimeEdit* o) const { return o->currentSection(); }
     Q_INVOKABLE int McurrentSectionIndex(QDateTimeEdit* o) const { return o->currentSectionIndex(); }
     Q_INVOKABLE QDate Mdate(QDateTimeEdit* o) const { return o->date(); }
     Q_INVOKABLE QDateTime MdateTime(QDateTimeEdit* o) const { return o->dateTime(); }
     Q_INVOKABLE QString MdisplayFormat(QDateTimeEdit* o) const { return o->displayFormat(); }
-    Q_INVOKABLE QDateTimeEdit::Sections MdisplayedSections(QDateTimeEdit* o) const { return o->displayedSections(); }
+    Q_INVOKABLE int MdisplayedSections(QDateTimeEdit* o) const { return o->displayedSections(); }
     Q_INVOKABLE QDate MmaximumDate(QDateTimeEdit* o) const { return o->maximumDate(); }
     Q_INVOKABLE QDateTime MmaximumDateTime(QDateTimeEdit* o) const { return o->maximumDateTime(); }
     Q_INVOKABLE QTime MmaximumTime(QDateTimeEdit* o) const { return o->maximumTime(); }
     Q_INVOKABLE QDate MminimumDate(QDateTimeEdit* o) const { return o->minimumDate(); }
     Q_INVOKABLE QDateTime MminimumDateTime(QDateTimeEdit* o) const { return o->minimumDateTime(); }
     Q_INVOKABLE QTime MminimumTime(QDateTimeEdit* o) const { return o->minimumTime(); }
-    Q_INVOKABLE QDateTimeEdit::Section MsectionAt(QDateTimeEdit* o, int x1) const { return o->sectionAt(x1); }
+    Q_INVOKABLE int MsectionAt(QDateTimeEdit* o, int x1) const { return o->sectionAt(x1); }
     Q_INVOKABLE int MsectionCount(QDateTimeEdit* o) const { return o->sectionCount(); }
     Q_INVOKABLE QString MsectionText(QDateTimeEdit* o, QDateTimeEdit::Section x1) const { return o->sectionText(x1); }
     Q_INVOKABLE void MsetCalendarPopup(QDateTimeEdit* o, bool x1) { o->setCalendarPopup(x1); }
@@ -1572,7 +1572,7 @@ public:
     Q_INVOKABLE void MsetTimeRange(QDateTimeEdit* o, const QTime& x1, const QTime& x2) { o->setTimeRange(x1, x2); }
     Q_INVOKABLE void MsetTimeSpec(QDateTimeEdit* o, Qt::TimeSpec x1) { o->setTimeSpec(x1); }
     Q_INVOKABLE QTime Mtime(QDateTimeEdit* o) const { return o->time(); }
-    Q_INVOKABLE Qt::TimeSpec MtimeSpec(QDateTimeEdit* o) const { return o->timeSpec(); }
+    Q_INVOKABLE int MtimeSpec(QDateTimeEdit* o) const { return o->timeSpec(); }
     Q_INVOKABLE void Mclear(QDateTimeEdit* o) { o->clear(); }
     Q_INVOKABLE bool Mevent(QDateTimeEdit* o, QEvent* x1) { return o->event(x1); }
     Q_INVOKABLE QSize MsizeHint(QDateTimeEdit* o) const { return o->sizeHint(); }
@@ -1628,8 +1628,8 @@ class Q29 : public Q108 { // QDockWidget
 public:
     Q_INVOKABLE void* C(uint u, const QString& x1, QWidget* x2 = 0, Qt::WindowFlags x3 = 0) { return new LDockWidget(u, x1, x2, x3); }
     Q_INVOKABLE void* C(uint u, QWidget* x1 = 0, Qt::WindowFlags x2 = 0) { return new LDockWidget(u, x1, x2); }
-    Q_INVOKABLE Qt::DockWidgetAreas MallowedAreas(QDockWidget* o) const { return o->allowedAreas(); }
-    Q_INVOKABLE QDockWidget::DockWidgetFeatures Mfeatures(QDockWidget* o) const { return o->features(); }
+    Q_INVOKABLE int MallowedAreas(QDockWidget* o) const { return o->allowedAreas(); }
+    Q_INVOKABLE int Mfeatures(QDockWidget* o) const { return o->features(); }
     Q_INVOKABLE bool MisAreaAllowed(QDockWidget* o, Qt::DockWidgetArea x1) const { return o->isAreaAllowed(x1); }
     Q_INVOKABLE bool MisFloating(QDockWidget* o) const { return o->isFloating(); }
     Q_INVOKABLE void MsetAllowedAreas(QDockWidget* o, Qt::DockWidgetAreas x1) { o->setAllowedAreas(x1); }
@@ -1664,7 +1664,7 @@ public:
     Q_INVOKABLE double Mvalue(QDoubleSpinBox* o) const { return o->value(); }
     Q_INVOKABLE double MvalueFromText(QDoubleSpinBox* o, const QString& x1) const { return o->valueFromText(x1); }
     Q_INVOKABLE void Mfixup(QDoubleSpinBox* o, QString& x1) const { o->fixup(x1); }
-    Q_INVOKABLE QValidator::State Mvalidate(QDoubleSpinBox* o, QString& x1, int& x2) const { return o->validate(x1, x2); }
+    Q_INVOKABLE int Mvalidate(QDoubleSpinBox* o, QString& x1, int& x2) const { return o->validate(x1, x2); }
 };
 
 class Q32 : public Q28 { // QErrorMessage
@@ -1678,12 +1678,12 @@ class Q33 : public Q28 { // QFileDialog
 public:
     Q_INVOKABLE void* C(uint u, QWidget* x1, Qt::WindowFlags x2) { return new LFileDialog(u, x1, x2); }
     Q_INVOKABLE void* C(uint u, QWidget* x1 = 0, const QString& x2 = QString(), const QString& x3 = QString(), const QString& x4 = QString()) { return new LFileDialog(u, x1, x2, x3, x4); }
-    Q_INVOKABLE QFileDialog::AcceptMode MacceptMode(QFileDialog* o) const { return o->acceptMode(); }
+    Q_INVOKABLE int MacceptMode(QFileDialog* o) const { return o->acceptMode(); }
     Q_INVOKABLE bool MconfirmOverwrite(QFileDialog* o) const { return o->confirmOverwrite(); }
     Q_INVOKABLE QString MdefaultSuffix(QFileDialog* o) const { return o->defaultSuffix(); }
     Q_INVOKABLE QDir Mdirectory(QFileDialog* o) const { return o->directory(); }
-    Q_INVOKABLE QFileDialog::FileMode MfileMode(QFileDialog* o) const { return o->fileMode(); }
-    Q_INVOKABLE QDir::Filters Mfilter(QFileDialog* o) const { return o->filter(); }
+    Q_INVOKABLE int MfileMode(QFileDialog* o) const { return o->fileMode(); }
+    Q_INVOKABLE int Mfilter(QFileDialog* o) const { return o->filter(); }
     Q_INVOKABLE QStringList Mhistory(QFileDialog* o) const { return o->history(); }
     Q_INVOKABLE QFileIconProvider* MiconProvider(QFileDialog* o) const { return o->iconProvider(); }
     Q_INVOKABLE bool MisNameFilterDetailsVisible(QFileDialog* o) const { return o->isNameFilterDetailsVisible(); }
@@ -1692,7 +1692,7 @@ public:
     Q_INVOKABLE QString MlabelText(QFileDialog* o, QFileDialog::DialogLabel x1) const { return o->labelText(x1); }
     Q_INVOKABLE QStringList MnameFilters(QFileDialog* o) const { return o->nameFilters(); }
     Q_INVOKABLE void Mopen(QFileDialog* o, QObject* x1, const char* x2) { o->open(x1, x2); }
-    Q_INVOKABLE QFileDialog::Options Moptions(QFileDialog* o) const { return o->options(); }
+    Q_INVOKABLE int Moptions(QFileDialog* o) const { return o->options(); }
     Q_INVOKABLE QAbstractProxyModel* MproxyModel(QFileDialog* o) const { return o->proxyModel(); }
     Q_INVOKABLE bool MresolveSymlinks(QFileDialog* o) const { return o->resolveSymlinks(); }
     Q_INVOKABLE bool MrestoreState(QFileDialog* o, const QByteArray& x1) { return o->restoreState(x1); }
@@ -1724,7 +1724,7 @@ public:
     Q_INVOKABLE void MsetViewMode(QFileDialog* o, QFileDialog::ViewMode x1) { o->setViewMode(x1); }
     Q_INVOKABLE QList<QUrl> MsidebarUrls(QFileDialog* o) const { return o->sidebarUrls(); }
     Q_INVOKABLE bool MtestOption(QFileDialog* o, QFileDialog::Option x1) const { return o->testOption(x1); }
-    Q_INVOKABLE QFileDialog::ViewMode MviewMode(QFileDialog* o) const { return o->viewMode(); }
+    Q_INVOKABLE int MviewMode(QFileDialog* o) const { return o->viewMode(); }
     Q_INVOKABLE void MsetVisible(QFileDialog* o, bool x1) { o->setVisible(x1); }
     Q_INVOKABLE QString SgetExistingDirectory(QWidget* x1 = 0, const QString& x2 = QString(), const QString& x3 = QString(), QFileDialog::Options x4 = QFileDialog::ShowDirsOnly) { return QFileDialog::getExistingDirectory(x1, x2, x3, x4); }
     Q_INVOKABLE QString SgetOpenFileName(QWidget* x1 = 0, const QString& x2 = QString(), const QString& x3 = QString(), const QString& x4 = QString(), QString* x5 = 0, QFileDialog::Options x6 = 0) { return QFileDialog::getOpenFileName(x1, x2, x3, x4, x5, x6); }
@@ -1737,10 +1737,10 @@ class Q34 : public Q20 { // QFontComboBox
 public:
     Q_INVOKABLE void* C(uint u, QWidget* x1 = 0) { return new LFontComboBox(u, x1); }
     Q_INVOKABLE QFont McurrentFont(QFontComboBox* o) const { return o->currentFont(); }
-    Q_INVOKABLE QFontComboBox::FontFilters MfontFilters(QFontComboBox* o) const { return o->fontFilters(); }
+    Q_INVOKABLE int MfontFilters(QFontComboBox* o) const { return o->fontFilters(); }
     Q_INVOKABLE void MsetFontFilters(QFontComboBox* o, QFontComboBox::FontFilters x1) { o->setFontFilters(x1); }
     Q_INVOKABLE void MsetWritingSystem(QFontComboBox* o, QFontDatabase::WritingSystem x1) { o->setWritingSystem(x1); }
-    Q_INVOKABLE QFontDatabase::WritingSystem MwritingSystem(QFontComboBox* o) const { return o->writingSystem(); }
+    Q_INVOKABLE int MwritingSystem(QFontComboBox* o) const { return o->writingSystem(); }
     Q_INVOKABLE QSize MsizeHint(QFontComboBox* o) const { return o->sizeHint(); }
 };
 
@@ -1751,7 +1751,7 @@ public:
     Q_INVOKABLE void* C(uint u, const QFont& x1, QWidget* x2 = 0) { return new LFontDialog(u, x1, x2); }
     Q_INVOKABLE QFont McurrentFont(QFontDialog* o) const { return o->currentFont(); }
     Q_INVOKABLE void Mopen(QFontDialog* o, QObject* x1, const char* x2) { o->open(x1, x2); }
-    Q_INVOKABLE QFontDialog::FontDialogOptions Moptions(QFontDialog* o) const { return o->options(); }
+    Q_INVOKABLE int Moptions(QFontDialog* o) const { return o->options(); }
     Q_INVOKABLE QFont MselectedFont(QFontDialog* o) const { return o->selectedFont(); }
     Q_INVOKABLE void MsetCurrentFont(QFontDialog* o, const QFont& x1) { o->setCurrentFont(x1); }
     Q_INVOKABLE void MsetOption(QFontDialog* o, QFontDialog::FontDialogOption x1, bool x2 = true) { o->setOption(x1, x2); }
@@ -1774,8 +1774,8 @@ public:
     Q_INVOKABLE void MaddRow(QFormLayout* o, const QString& x1, QLayout* x2) { o->addRow(x1, x2); }
     Q_INVOKABLE void MaddRow(QFormLayout* o, QWidget* x1) { o->addRow(x1); }
     Q_INVOKABLE void MaddRow(QFormLayout* o, QLayout* x1) { o->addRow(x1); }
-    Q_INVOKABLE QFormLayout::FieldGrowthPolicy MfieldGrowthPolicy(QFormLayout* o) const { return o->fieldGrowthPolicy(); }
-    Q_INVOKABLE Qt::Alignment MformAlignment(QFormLayout* o) const { return o->formAlignment(); }
+    Q_INVOKABLE int MfieldGrowthPolicy(QFormLayout* o) const { return o->fieldGrowthPolicy(); }
+    Q_INVOKABLE int MformAlignment(QFormLayout* o) const { return o->formAlignment(); }
     Q_INVOKABLE int MhorizontalSpacing(QFormLayout* o) const { return o->horizontalSpacing(); }
     Q_INVOKABLE void MinsertRow(QFormLayout* o, int x1, QWidget* x2, QWidget* x3) { o->insertRow(x1, x2, x3); }
     Q_INVOKABLE void MinsertRow(QFormLayout* o, int x1, QWidget* x2, QLayout* x3) { o->insertRow(x1, x2, x3); }
@@ -1784,11 +1784,11 @@ public:
     Q_INVOKABLE void MinsertRow(QFormLayout* o, int x1, QWidget* x2) { o->insertRow(x1, x2); }
     Q_INVOKABLE void MinsertRow(QFormLayout* o, int x1, QLayout* x2) { o->insertRow(x1, x2); }
     Q_INVOKABLE QLayoutItem* MitemAt(QFormLayout* o, int x1, QFormLayout::ItemRole x2) const { return o->itemAt(x1, x2); }
-    Q_INVOKABLE Qt::Alignment MlabelAlignment(QFormLayout* o) const { return o->labelAlignment(); }
+    Q_INVOKABLE int MlabelAlignment(QFormLayout* o) const { return o->labelAlignment(); }
     Q_INVOKABLE QWidget* MlabelForField(QFormLayout* o, QWidget* x1) const { return o->labelForField(x1); }
     Q_INVOKABLE QWidget* MlabelForField(QFormLayout* o, QLayout* x1) const { return o->labelForField(x1); }
     Q_INVOKABLE int MrowCount(QFormLayout* o) const { return o->rowCount(); }
-    Q_INVOKABLE QFormLayout::RowWrapPolicy MrowWrapPolicy(QFormLayout* o) const { return o->rowWrapPolicy(); }
+    Q_INVOKABLE int MrowWrapPolicy(QFormLayout* o) const { return o->rowWrapPolicy(); }
     Q_INVOKABLE void MsetFieldGrowthPolicy(QFormLayout* o, QFormLayout::FieldGrowthPolicy x1) { o->setFieldGrowthPolicy(x1); }
     Q_INVOKABLE void MsetFormAlignment(QFormLayout* o, Qt::Alignment x1) { o->setFormAlignment(x1); }
     Q_INVOKABLE void MsetHorizontalSpacing(QFormLayout* o, int x1) { o->setHorizontalSpacing(x1); }
@@ -1803,7 +1803,7 @@ public:
     Q_INVOKABLE int MverticalSpacing(QFormLayout* o) const { return o->verticalSpacing(); }
     Q_INVOKABLE void MaddItem(QFormLayout* o, QLayoutItem* x1) { o->addItem(x1); }
     Q_INVOKABLE int Mcount(QFormLayout* o) const { return o->count(); }
-    Q_INVOKABLE Qt::Orientations MexpandingDirections(QFormLayout* o) const { return o->expandingDirections(); }
+    Q_INVOKABLE int MexpandingDirections(QFormLayout* o) const { return o->expandingDirections(); }
     Q_INVOKABLE bool MhasHeightForWidth(QFormLayout* o) const { return o->hasHeightForWidth(); }
     Q_INVOKABLE int MheightForWidth(QFormLayout* o, int x1) const { return o->heightForWidth(x1); }
     Q_INVOKABLE void Minvalidate(QFormLayout* o) { o->invalidate(); }
@@ -1819,8 +1819,8 @@ class Q37 : public Q108 { // QFrame
 public:
     Q_INVOKABLE void* C(uint u, QWidget* x1 = 0, Qt::WindowFlags x2 = 0) { return new LFrame(u, x1, x2); }
     Q_INVOKABLE QRect MframeRect(QFrame* o) const { return o->frameRect(); }
-    Q_INVOKABLE QFrame::Shadow MframeShadow(QFrame* o) const { return o->frameShadow(); }
-    Q_INVOKABLE QFrame::Shape MframeShape(QFrame* o) const { return o->frameShape(); }
+    Q_INVOKABLE int MframeShadow(QFrame* o) const { return o->frameShadow(); }
+    Q_INVOKABLE int MframeShape(QFrame* o) const { return o->frameShape(); }
     Q_INVOKABLE int MframeStyle(QFrame* o) const { return o->frameStyle(); }
     Q_INVOKABLE int MframeWidth(QFrame* o) const { return o->frameWidth(); }
     Q_INVOKABLE int MlineWidth(QFrame* o) const { return o->lineWidth(); }
@@ -1863,7 +1863,7 @@ public:
     Q_INVOKABLE int McolumnStretch(QGridLayout* o, int x1) const { return o->columnStretch(x1); }
     Q_INVOKABLE int MhorizontalSpacing(QGridLayout* o) const { return o->horizontalSpacing(); }
     Q_INVOKABLE QLayoutItem* MitemAtPosition(QGridLayout* o, int x1, int x2) const { return o->itemAtPosition(x1, x2); }
-    Q_INVOKABLE Qt::Corner MoriginCorner(QGridLayout* o) const { return o->originCorner(); }
+    Q_INVOKABLE int MoriginCorner(QGridLayout* o) const { return o->originCorner(); }
     Q_INVOKABLE int MrowCount(QGridLayout* o) const { return o->rowCount(); }
     Q_INVOKABLE int MrowMinimumHeight(QGridLayout* o, int x1) const { return o->rowMinimumHeight(x1); }
     Q_INVOKABLE int MrowStretch(QGridLayout* o, int x1) const { return o->rowStretch(x1); }
@@ -1878,7 +1878,7 @@ public:
     Q_INVOKABLE int Mspacing(QGridLayout* o) const { return o->spacing(); }
     Q_INVOKABLE int MverticalSpacing(QGridLayout* o) const { return o->verticalSpacing(); }
     Q_INVOKABLE int Mcount(QGridLayout* o) const { return o->count(); }
-    Q_INVOKABLE Qt::Orientations MexpandingDirections(QGridLayout* o) const { return o->expandingDirections(); }
+    Q_INVOKABLE int MexpandingDirections(QGridLayout* o) const { return o->expandingDirections(); }
     Q_INVOKABLE bool MhasHeightForWidth(QGridLayout* o) const { return o->hasHeightForWidth(); }
     Q_INVOKABLE int MheightForWidth(QGridLayout* o, int x1) const { return o->heightForWidth(x1); }
     Q_INVOKABLE void Minvalidate(QGridLayout* o) { o->invalidate(); }
@@ -1896,7 +1896,7 @@ class Q46 : public Q108 { // QGroupBox
 public:
     Q_INVOKABLE void* C(uint u, QWidget* x1 = 0) { return new LGroupBox(u, x1); }
     Q_INVOKABLE void* C(uint u, const QString& x1, QWidget* x2 = 0) { return new LGroupBox(u, x1, x2); }
-    Q_INVOKABLE Qt::Alignment Malignment(QGroupBox* o) const { return o->alignment(); }
+    Q_INVOKABLE int Malignment(QGroupBox* o) const { return o->alignment(); }
     Q_INVOKABLE bool MisCheckable(QGroupBox* o) const { return o->isCheckable(); }
     Q_INVOKABLE bool MisChecked(QGroupBox* o) const { return o->isChecked(); }
     Q_INVOKABLE bool MisFlat(QGroupBox* o) const { return o->isFlat(); }
@@ -1925,7 +1925,7 @@ public:
     Q_INVOKABLE double MdoubleMaximum(QInputDialog* o) const { return o->doubleMaximum(); }
     Q_INVOKABLE double MdoubleMinimum(QInputDialog* o) const { return o->doubleMinimum(); }
     Q_INVOKABLE double MdoubleValue(QInputDialog* o) const { return o->doubleValue(); }
-    Q_INVOKABLE QInputDialog::InputMode MinputMode(QInputDialog* o) const { return o->inputMode(); }
+    Q_INVOKABLE int MinputMode(QInputDialog* o) const { return o->inputMode(); }
     Q_INVOKABLE int MintMaximum(QInputDialog* o) const { return o->intMaximum(); }
     Q_INVOKABLE int MintMinimum(QInputDialog* o) const { return o->intMinimum(); }
     Q_INVOKABLE int MintStep(QInputDialog* o) const { return o->intStep(); }
@@ -1934,7 +1934,7 @@ public:
     Q_INVOKABLE QString MlabelText(QInputDialog* o) const { return o->labelText(); }
     Q_INVOKABLE QString MokButtonText(QInputDialog* o) const { return o->okButtonText(); }
     Q_INVOKABLE void Mopen(QInputDialog* o, QObject* x1, const char* x2) { o->open(x1, x2); }
-    Q_INVOKABLE QInputDialog::InputDialogOptions Moptions(QInputDialog* o) const { return o->options(); }
+    Q_INVOKABLE int Moptions(QInputDialog* o) const { return o->options(); }
     Q_INVOKABLE void MsetCancelButtonText(QInputDialog* o, const QString& x1) { o->setCancelButtonText(x1); }
     Q_INVOKABLE void MsetComboBoxEditable(QInputDialog* o, bool x1) { o->setComboBoxEditable(x1); }
     Q_INVOKABLE void MsetComboBoxItems(QInputDialog* o, const QStringList& x1) { o->setComboBoxItems(x1); }
@@ -1956,7 +1956,7 @@ public:
     Q_INVOKABLE void MsetTextEchoMode(QInputDialog* o, QLineEdit::EchoMode x1) { o->setTextEchoMode(x1); }
     Q_INVOKABLE void MsetTextValue(QInputDialog* o, const QString& x1) { o->setTextValue(x1); }
     Q_INVOKABLE bool MtestOption(QInputDialog* o, QInputDialog::InputDialogOption x1) const { return o->testOption(x1); }
-    Q_INVOKABLE QLineEdit::EchoMode MtextEchoMode(QInputDialog* o) const { return o->textEchoMode(); }
+    Q_INVOKABLE int MtextEchoMode(QInputDialog* o) const { return o->textEchoMode(); }
     Q_INVOKABLE QString MtextValue(QInputDialog* o) const { return o->textValue(); }
     Q_INVOKABLE void Mdone(QInputDialog* o, int x1) { o->done(x1); }
     Q_INVOKABLE QSize MminimumSizeHint(QInputDialog* o) const { return o->minimumSizeHint(); }
@@ -1977,8 +1977,8 @@ public:
     Q_INVOKABLE bool McheckOverflow(QLCDNumber* o, int x1) const { return o->checkOverflow(x1); }
     Q_INVOKABLE int MdigitCount(QLCDNumber* o) const { return o->digitCount(); }
     Q_INVOKABLE int MintValue(QLCDNumber* o) const { return o->intValue(); }
-    Q_INVOKABLE QLCDNumber::Mode Mmode(QLCDNumber* o) const { return o->mode(); }
-    Q_INVOKABLE QLCDNumber::SegmentStyle MsegmentStyle(QLCDNumber* o) const { return o->segmentStyle(); }
+    Q_INVOKABLE int Mmode(QLCDNumber* o) const { return o->mode(); }
+    Q_INVOKABLE int MsegmentStyle(QLCDNumber* o) const { return o->segmentStyle(); }
     Q_INVOKABLE void MsetDigitCount(QLCDNumber* o, int x1) { o->setDigitCount(x1); }
     Q_INVOKABLE void MsetMode(QLCDNumber* o, QLCDNumber::Mode x1) { o->setMode(x1); }
     Q_INVOKABLE void MsetSegmentStyle(QLCDNumber* o, QLCDNumber::SegmentStyle x1) { o->setSegmentStyle(x1); }
@@ -1992,7 +1992,7 @@ class Q54 : public Q37 { // QLabel
 public:
     Q_INVOKABLE void* C(uint u, QWidget* x1 = 0, Qt::WindowFlags x2 = 0) { return new LLabel(u, x1, x2); }
     Q_INVOKABLE void* C(uint u, const QString& x1, QWidget* x2 = 0, Qt::WindowFlags x3 = 0) { return new LLabel(u, x1, x2, x3); }
-    Q_INVOKABLE Qt::Alignment Malignment(QLabel* o) const { return o->alignment(); }
+    Q_INVOKABLE int Malignment(QLabel* o) const { return o->alignment(); }
     Q_INVOKABLE QWidget* Mbuddy(QLabel* o) const { return o->buddy(); }
     Q_INVOKABLE bool MhasScaledContents(QLabel* o) const { return o->hasScaledContents(); }
     Q_INVOKABLE int Mindent(QLabel* o) const { return o->indent(); }
@@ -2011,8 +2011,8 @@ public:
     Q_INVOKABLE void MsetTextInteractionFlags(QLabel* o, Qt::TextInteractionFlags x1) { o->setTextInteractionFlags(x1); }
     Q_INVOKABLE void MsetWordWrap(QLabel* o, bool x1) { o->setWordWrap(x1); }
     Q_INVOKABLE QString Mtext(QLabel* o) const { return o->text(); }
-    Q_INVOKABLE Qt::TextFormat MtextFormat(QLabel* o) const { return o->textFormat(); }
-    Q_INVOKABLE Qt::TextInteractionFlags MtextInteractionFlags(QLabel* o) const { return o->textInteractionFlags(); }
+    Q_INVOKABLE int MtextFormat(QLabel* o) const { return o->textFormat(); }
+    Q_INVOKABLE int MtextInteractionFlags(QLabel* o) const { return o->textInteractionFlags(); }
     Q_INVOKABLE bool MwordWrap(QLabel* o) const { return o->wordWrap(); }
     Q_INVOKABLE int MheightForWidth(QLabel* o, int x1) const { return o->heightForWidth(x1); }
     Q_INVOKABLE QSize MminimumSizeHint(QLabel* o) const { return o->minimumSizeHint(); }
@@ -2024,7 +2024,7 @@ class Q56 : public Q108 { // QLineEdit
 public:
     Q_INVOKABLE void* C(uint u, QWidget* x1 = 0) { return new LLineEdit(u, x1); }
     Q_INVOKABLE void* C(uint u, const QString& x1, QWidget* x2 = 0) { return new LLineEdit(u, x1, x2); }
-    Q_INVOKABLE Qt::Alignment Malignment(QLineEdit* o) const { return o->alignment(); }
+    Q_INVOKABLE int Malignment(QLineEdit* o) const { return o->alignment(); }
     Q_INVOKABLE void Mbackspace(QLineEdit* o) { o->backspace(); }
     Q_INVOKABLE QCompleter* Mcompleter(QLineEdit* o) const { return o->completer(); }
     Q_INVOKABLE QMenu* McreateStandardContextMenu(QLineEdit* o) { return o->createStandardContextMenu(); }
@@ -2038,7 +2038,7 @@ public:
     Q_INVOKABLE void Mdeselect(QLineEdit* o) { o->deselect(); }
     Q_INVOKABLE QString MdisplayText(QLineEdit* o) const { return o->displayText(); }
     Q_INVOKABLE bool MdragEnabled(QLineEdit* o) const { return o->dragEnabled(); }
-    Q_INVOKABLE QLineEdit::EchoMode MechoMode(QLineEdit* o) const { return o->echoMode(); }
+    Q_INVOKABLE int MechoMode(QLineEdit* o) const { return o->echoMode(); }
     Q_INVOKABLE void Mend(QLineEdit* o, bool x1) { o->end(x1); }
     Q_INVOKABLE bool MhasAcceptableInput(QLineEdit* o) const { return o->hasAcceptableInput(); }
     Q_INVOKABLE bool MhasFrame(QLineEdit* o) const { return o->hasFrame(); }
@@ -2087,10 +2087,10 @@ public:
     Q_INVOKABLE QToolBar* MaddToolBar(QMainWindow* o, const QString& x1) { return o->addToolBar(x1); }
     Q_INVOKABLE void MaddToolBarBreak(QMainWindow* o, Qt::ToolBarArea x1 = Qt::TopToolBarArea) { o->addToolBarBreak(x1); }
     Q_INVOKABLE QWidget* McentralWidget(QMainWindow* o) const { return o->centralWidget(); }
-    Q_INVOKABLE Qt::DockWidgetArea Mcorner(QMainWindow* o, Qt::Corner x1) const { return o->corner(x1); }
+    Q_INVOKABLE int Mcorner(QMainWindow* o, Qt::Corner x1) const { return o->corner(x1); }
     Q_INVOKABLE QMenu* McreatePopupMenu(QMainWindow* o) { return o->createPopupMenu(); }
-    Q_INVOKABLE QMainWindow::DockOptions MdockOptions(QMainWindow* o) const { return o->dockOptions(); }
-    Q_INVOKABLE Qt::DockWidgetArea MdockWidgetArea(QMainWindow* o, QDockWidget* x1) const { return o->dockWidgetArea(x1); }
+    Q_INVOKABLE int MdockOptions(QMainWindow* o) const { return o->dockOptions(); }
+    Q_INVOKABLE int MdockWidgetArea(QMainWindow* o, QDockWidget* x1) const { return o->dockWidgetArea(x1); }
     Q_INVOKABLE bool MdocumentMode(QMainWindow* o) const { return o->documentMode(); }
     Q_INVOKABLE QSize MiconSize(QMainWindow* o) const { return o->iconSize(); }
     Q_INVOKABLE void MinsertToolBar(QMainWindow* o, QToolBar* x1, QToolBar* x2) { o->insertToolBar(x1, x2); }
@@ -2119,13 +2119,13 @@ public:
     Q_INVOKABLE void MsetUnifiedTitleAndToolBarOnMac(QMainWindow* o, bool x1) { o->setUnifiedTitleAndToolBarOnMac(x1); }
     Q_INVOKABLE void MsplitDockWidget(QMainWindow* o, QDockWidget* x1, QDockWidget* x2, Qt::Orientation x3) { o->splitDockWidget(x1, x2, x3); }
     Q_INVOKABLE QStatusBar* MstatusBar(QMainWindow* o) const { return o->statusBar(); }
-    Q_INVOKABLE QTabWidget::TabPosition MtabPosition(QMainWindow* o, Qt::DockWidgetArea x1) const { return o->tabPosition(x1); }
-    Q_INVOKABLE QTabWidget::TabShape MtabShape(QMainWindow* o) const { return o->tabShape(); }
+    Q_INVOKABLE int MtabPosition(QMainWindow* o, Qt::DockWidgetArea x1) const { return o->tabPosition(x1); }
+    Q_INVOKABLE int MtabShape(QMainWindow* o) const { return o->tabShape(); }
     Q_INVOKABLE QList<QDockWidget*> MtabifiedDockWidgets(QMainWindow* o, QDockWidget* x1) const { return o->tabifiedDockWidgets(x1); }
     Q_INVOKABLE void MtabifyDockWidget(QMainWindow* o, QDockWidget* x1, QDockWidget* x2) { o->tabifyDockWidget(x1, x2); }
-    Q_INVOKABLE Qt::ToolBarArea MtoolBarArea(QMainWindow* o, QToolBar* x1) const { return o->toolBarArea(x1); }
+    Q_INVOKABLE int MtoolBarArea(QMainWindow* o, QToolBar* x1) const { return o->toolBarArea(x1); }
     Q_INVOKABLE bool MtoolBarBreak(QMainWindow* o, QToolBar* x1) const { return o->toolBarBreak(x1); }
-    Q_INVOKABLE Qt::ToolButtonStyle MtoolButtonStyle(QMainWindow* o) const { return o->toolButtonStyle(); }
+    Q_INVOKABLE int MtoolButtonStyle(QMainWindow* o) const { return o->toolButtonStyle(); }
     Q_INVOKABLE bool MunifiedTitleAndToolBarOnMac(QMainWindow* o) const { return o->unifiedTitleAndToolBarOnMac(); }
 };
 
@@ -2204,13 +2204,13 @@ public:
     Q_INVOKABLE QPushButton* MaddButton(QMessageBox* o, const QString& x1, QMessageBox::ButtonRole x2) { return o->addButton(x1, x2); }
     Q_INVOKABLE QPushButton* MaddButton(QMessageBox* o, QMessageBox::StandardButton x1) { return o->addButton(x1); }
     Q_INVOKABLE QAbstractButton* Mbutton(QMessageBox* o, QMessageBox::StandardButton x1) const { return o->button(x1); }
-    Q_INVOKABLE QMessageBox::ButtonRole MbuttonRole(QMessageBox* o, QAbstractButton* x1) const { return o->buttonRole(x1); }
+    Q_INVOKABLE int MbuttonRole(QMessageBox* o, QAbstractButton* x1) const { return o->buttonRole(x1); }
     Q_INVOKABLE QList<QAbstractButton*> Mbuttons(QMessageBox* o) const { return o->buttons(); }
     Q_INVOKABLE QAbstractButton* MclickedButton(QMessageBox* o) const { return o->clickedButton(); }
     Q_INVOKABLE QPushButton* MdefaultButton(QMessageBox* o) const { return o->defaultButton(); }
     Q_INVOKABLE QString MdetailedText(QMessageBox* o) const { return o->detailedText(); }
     Q_INVOKABLE QAbstractButton* MescapeButton(QMessageBox* o) const { return o->escapeButton(); }
-    Q_INVOKABLE QMessageBox::Icon Micon(QMessageBox* o) const { return o->icon(); }
+    Q_INVOKABLE int Micon(QMessageBox* o) const { return o->icon(); }
     Q_INVOKABLE QPixmap MiconPixmap(QMessageBox* o) const { return o->iconPixmap(); }
     Q_INVOKABLE QString MinformativeText(QMessageBox* o) const { return o->informativeText(); }
     Q_INVOKABLE void Mopen(QMessageBox* o, QObject* x1, const char* x2) { o->open(x1, x2); }
@@ -2228,37 +2228,37 @@ public:
     Q_INVOKABLE void MsetTextFormat(QMessageBox* o, Qt::TextFormat x1) { o->setTextFormat(x1); }
     Q_INVOKABLE void MsetWindowModality(QMessageBox* o, Qt::WindowModality x1) { o->setWindowModality(x1); }
     Q_INVOKABLE void MsetWindowTitle(QMessageBox* o, const QString& x1) { o->setWindowTitle(x1); }
-    Q_INVOKABLE QMessageBox::StandardButton MstandardButton(QMessageBox* o, QAbstractButton* x1) const { return o->standardButton(x1); }
-    Q_INVOKABLE QMessageBox::StandardButtons MstandardButtons(QMessageBox* o) const { return o->standardButtons(); }
+    Q_INVOKABLE int MstandardButton(QMessageBox* o, QAbstractButton* x1) const { return o->standardButton(x1); }
+    Q_INVOKABLE int MstandardButtons(QMessageBox* o) const { return o->standardButtons(); }
     Q_INVOKABLE QString Mtext(QMessageBox* o) const { return o->text(); }
-    Q_INVOKABLE Qt::TextFormat MtextFormat(QMessageBox* o) const { return o->textFormat(); }
+    Q_INVOKABLE int MtextFormat(QMessageBox* o) const { return o->textFormat(); }
     Q_INVOKABLE void MsetVisible(QMessageBox* o, bool x1) { o->setVisible(x1); }
     Q_INVOKABLE void Sabout(QWidget* x1, const QString& x2, const QString& x3) { QMessageBox::about(x1, x2, x3); }
     Q_INVOKABLE void SaboutQt(QWidget* x1, const QString& x2 = QString()) { QMessageBox::aboutQt(x1, x2); }
-    Q_INVOKABLE QMessageBox::StandardButton Scritical(QWidget* x1, const QString& x2, const QString& x3, QMessageBox::StandardButtons x4 = QMessageBox::Ok, QMessageBox::StandardButton x5 = QMessageBox::NoButton) { return QMessageBox::critical(x1, x2, x3, x4, x5); }
-    Q_INVOKABLE QMessageBox::StandardButton Sinformation(QWidget* x1, const QString& x2, const QString& x3, QMessageBox::StandardButtons x4 = QMessageBox::Ok, QMessageBox::StandardButton x5 = QMessageBox::NoButton) { return QMessageBox::information(x1, x2, x3, x4, x5); }
-    Q_INVOKABLE QMessageBox::StandardButton Squestion(QWidget* x1, const QString& x2, const QString& x3, QMessageBox::StandardButtons x4 = QMessageBox::Ok, QMessageBox::StandardButton x5 = QMessageBox::NoButton) { return QMessageBox::question(x1, x2, x3, x4, x5); }
-    Q_INVOKABLE QMessageBox::StandardButton Swarning(QWidget* x1, const QString& x2, const QString& x3, QMessageBox::StandardButtons x4 = QMessageBox::Ok, QMessageBox::StandardButton x5 = QMessageBox::NoButton) { return QMessageBox::warning(x1, x2, x3, x4, x5); }
+    Q_INVOKABLE int Scritical(QWidget* x1, const QString& x2, const QString& x3, QMessageBox::StandardButtons x4 = QMessageBox::Ok, QMessageBox::StandardButton x5 = QMessageBox::NoButton) { return QMessageBox::critical(x1, x2, x3, x4, x5); }
+    Q_INVOKABLE int Sinformation(QWidget* x1, const QString& x2, const QString& x3, QMessageBox::StandardButtons x4 = QMessageBox::Ok, QMessageBox::StandardButton x5 = QMessageBox::NoButton) { return QMessageBox::information(x1, x2, x3, x4, x5); }
+    Q_INVOKABLE int Squestion(QWidget* x1, const QString& x2, const QString& x3, QMessageBox::StandardButtons x4 = QMessageBox::Ok, QMessageBox::StandardButton x5 = QMessageBox::NoButton) { return QMessageBox::question(x1, x2, x3, x4, x5); }
+    Q_INVOKABLE int Swarning(QWidget* x1, const QString& x2, const QString& x3, QMessageBox::StandardButtons x4 = QMessageBox::Ok, QMessageBox::StandardButton x5 = QMessageBox::NoButton) { return QMessageBox::warning(x1, x2, x3, x4, x5); }
 };
 
 class Q67 : public Q108 { // QProgressBar
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QWidget* x1 = 0) { return new LProgressBar(u, x1); }
-    Q_INVOKABLE Qt::Alignment Malignment(QProgressBar* o) const { return o->alignment(); }
+    Q_INVOKABLE int Malignment(QProgressBar* o) const { return o->alignment(); }
     Q_INVOKABLE QString Mformat(QProgressBar* o) const { return o->format(); }
     Q_INVOKABLE bool MinvertedAppearance(QProgressBar* o) { return o->invertedAppearance(); }
     Q_INVOKABLE bool MisTextVisible(QProgressBar* o) const { return o->isTextVisible(); }
     Q_INVOKABLE int Mmaximum(QProgressBar* o) const { return o->maximum(); }
     Q_INVOKABLE int Mminimum(QProgressBar* o) const { return o->minimum(); }
-    Q_INVOKABLE Qt::Orientation Morientation(QProgressBar* o) const { return o->orientation(); }
+    Q_INVOKABLE int Morientation(QProgressBar* o) const { return o->orientation(); }
     Q_INVOKABLE void MsetAlignment(QProgressBar* o, Qt::Alignment x1) { o->setAlignment(x1); }
     Q_INVOKABLE void MsetFormat(QProgressBar* o, const QString& x1) { o->setFormat(x1); }
     Q_INVOKABLE void MsetInvertedAppearance(QProgressBar* o, bool x1) { o->setInvertedAppearance(x1); }
     Q_INVOKABLE void MsetTextDirection(QProgressBar* o, QProgressBar::Direction x1) { o->setTextDirection(x1); }
     Q_INVOKABLE void MsetTextVisible(QProgressBar* o, bool x1) { o->setTextVisible(x1); }
     Q_INVOKABLE QString Mtext(QProgressBar* o) const { return o->text(); }
-    Q_INVOKABLE QProgressBar::Direction MtextDirection(QProgressBar* o) { return o->textDirection(); }
+    Q_INVOKABLE int MtextDirection(QProgressBar* o) { return o->textDirection(); }
     Q_INVOKABLE int Mvalue(QProgressBar* o) const { return o->value(); }
     Q_INVOKABLE QSize MminimumSizeHint(QProgressBar* o) const { return o->minimumSizeHint(); }
     Q_INVOKABLE QSize MsizeHint(QProgressBar* o) const { return o->sizeHint(); }
@@ -2307,7 +2307,7 @@ public:
     Q_INVOKABLE void MsetTickInterval(QSlider* o, int x1) { o->setTickInterval(x1); }
     Q_INVOKABLE void MsetTickPosition(QSlider* o, QSlider::TickPosition x1) { o->setTickPosition(x1); }
     Q_INVOKABLE int MtickInterval(QSlider* o) const { return o->tickInterval(); }
-    Q_INVOKABLE QSlider::TickPosition MtickPosition(QSlider* o) const { return o->tickPosition(); }
+    Q_INVOKABLE int MtickPosition(QSlider* o) const { return o->tickPosition(); }
     Q_INVOKABLE bool Mevent(QSlider* o, QEvent* x1) { return o->event(x1); }
     Q_INVOKABLE QSize MminimumSizeHint(QSlider* o) const { return o->minimumSizeHint(); }
     Q_INVOKABLE QSize MsizeHint(QSlider* o) const { return o->sizeHint(); }
@@ -2356,7 +2356,7 @@ public:
     Q_INVOKABLE void MinsertWidget(QSplitter* o, int x1, QWidget* x2) { o->insertWidget(x1, x2); }
     Q_INVOKABLE bool MisCollapsible(QSplitter* o, int x1) const { return o->isCollapsible(x1); }
     Q_INVOKABLE bool MopaqueResize(QSplitter* o) const { return o->opaqueResize(); }
-    Q_INVOKABLE Qt::Orientation Morientation(QSplitter* o) const { return o->orientation(); }
+    Q_INVOKABLE int Morientation(QSplitter* o) const { return o->orientation(); }
     Q_INVOKABLE void Mrefresh(QSplitter* o) { o->refresh(); }
     Q_INVOKABLE bool MrestoreState(QSplitter* o, const QByteArray& x1) { return o->restoreState(x1); }
     Q_INVOKABLE QByteArray MsaveState(QSplitter* o) const { return o->saveState(); }
@@ -2410,7 +2410,7 @@ public:
     Q_INVOKABLE int McurrentIndex(QTabBar* o) const { return o->currentIndex(); }
     Q_INVOKABLE bool MdocumentMode(QTabBar* o) const { return o->documentMode(); }
     Q_INVOKABLE bool MdrawBase(QTabBar* o) const { return o->drawBase(); }
-    Q_INVOKABLE Qt::TextElideMode MelideMode(QTabBar* o) const { return o->elideMode(); }
+    Q_INVOKABLE int MelideMode(QTabBar* o) const { return o->elideMode(); }
     Q_INVOKABLE bool Mexpanding(QTabBar* o) const { return o->expanding(); }
     Q_INVOKABLE QSize MiconSize(QTabBar* o) const { return o->iconSize(); }
     Q_INVOKABLE int MinsertTab(QTabBar* o, int x1, const QString& x2) { return o->insertTab(x1, x2); }
@@ -2419,7 +2419,7 @@ public:
     Q_INVOKABLE bool MisTabEnabled(QTabBar* o, int x1) const { return o->isTabEnabled(x1); }
     Q_INVOKABLE void MmoveTab(QTabBar* o, int x1, int x2) { o->moveTab(x1, x2); }
     Q_INVOKABLE void MremoveTab(QTabBar* o, int x1) { o->removeTab(x1); }
-    Q_INVOKABLE QTabBar::SelectionBehavior MselectionBehaviorOnRemove(QTabBar* o) const { return o->selectionBehaviorOnRemove(); }
+    Q_INVOKABLE int MselectionBehaviorOnRemove(QTabBar* o) const { return o->selectionBehaviorOnRemove(); }
     Q_INVOKABLE void MsetDocumentMode(QTabBar* o, bool x1) { o->setDocumentMode(x1); }
     Q_INVOKABLE void MsetDrawBase(QTabBar* o, bool x1) { o->setDrawBase(x1); }
     Q_INVOKABLE void MsetElideMode(QTabBar* o, Qt::TextElideMode x1) { o->setElideMode(x1); }
@@ -2438,7 +2438,7 @@ public:
     Q_INVOKABLE void MsetTabWhatsThis(QTabBar* o, int x1, const QString& x2) { o->setTabWhatsThis(x1, x2); }
     Q_INVOKABLE void MsetTabsClosable(QTabBar* o, bool x1) { o->setTabsClosable(x1); }
     Q_INVOKABLE void MsetUsesScrollButtons(QTabBar* o, bool x1) { o->setUsesScrollButtons(x1); }
-    Q_INVOKABLE QTabBar::Shape Mshape(QTabBar* o) const { return o->shape(); }
+    Q_INVOKABLE int Mshape(QTabBar* o) const { return o->shape(); }
     Q_INVOKABLE int MtabAt(QTabBar* o, const QPoint& x1) const { return o->tabAt(x1); }
     Q_INVOKABLE QWidget* MtabButton(QTabBar* o, int x1, QTabBar::ButtonPosition x2) const { return o->tabButton(x1, x2); }
     Q_INVOKABLE QVariant MtabData(QTabBar* o, int x1) const { return o->tabData(x1); }
@@ -2466,7 +2466,7 @@ public:
     Q_INVOKABLE int McurrentIndex(QTabWidget* o) const { return o->currentIndex(); }
     Q_INVOKABLE QWidget* McurrentWidget(QTabWidget* o) const { return o->currentWidget(); }
     Q_INVOKABLE bool MdocumentMode(QTabWidget* o) const { return o->documentMode(); }
-    Q_INVOKABLE Qt::TextElideMode MelideMode(QTabWidget* o) const { return o->elideMode(); }
+    Q_INVOKABLE int MelideMode(QTabWidget* o) const { return o->elideMode(); }
     Q_INVOKABLE QSize MiconSize(QTabWidget* o) const { return o->iconSize(); }
     Q_INVOKABLE int MindexOf(QTabWidget* o, QWidget* x1) const { return o->indexOf(x1); }
     Q_INVOKABLE int MinsertTab(QTabWidget* o, int x1, QWidget* x2, const QString& x3) { return o->insertTab(x1, x2, x3); }
@@ -2489,8 +2489,8 @@ public:
     Q_INVOKABLE void MsetTabsClosable(QTabWidget* o, bool x1) { o->setTabsClosable(x1); }
     Q_INVOKABLE void MsetUsesScrollButtons(QTabWidget* o, bool x1) { o->setUsesScrollButtons(x1); }
     Q_INVOKABLE QIcon MtabIcon(QTabWidget* o, int x1) const { return o->tabIcon(x1); }
-    Q_INVOKABLE QTabWidget::TabPosition MtabPosition(QTabWidget* o) const { return o->tabPosition(); }
-    Q_INVOKABLE QTabWidget::TabShape MtabShape(QTabWidget* o) const { return o->tabShape(); }
+    Q_INVOKABLE int MtabPosition(QTabWidget* o) const { return o->tabPosition(); }
+    Q_INVOKABLE int MtabShape(QTabWidget* o) const { return o->tabShape(); }
     Q_INVOKABLE QString MtabText(QTabWidget* o, int x1) const { return o->tabText(x1); }
     Q_INVOKABLE QString MtabToolTip(QTabWidget* o, int x1) const { return o->tabToolTip(x1); }
     Q_INVOKABLE QString MtabWhatsThis(QTabWidget* o, int x1) const { return o->tabWhatsThis(x1); }
@@ -2579,7 +2579,7 @@ public:
     Q_INVOKABLE QAction* MaddAction(QToolBar* o, const QIcon& x1, const QString& x2, const QObject* x3, const char* x4) { return o->addAction(x1, x2, x3, x4); }
     Q_INVOKABLE QAction* MaddSeparator(QToolBar* o) { return o->addSeparator(); }
     Q_INVOKABLE QAction* MaddWidget(QToolBar* o, QWidget* x1) { return o->addWidget(x1); }
-    Q_INVOKABLE Qt::ToolBarAreas MallowedAreas(QToolBar* o) const { return o->allowedAreas(); }
+    Q_INVOKABLE int MallowedAreas(QToolBar* o) const { return o->allowedAreas(); }
     Q_INVOKABLE void Mclear(QToolBar* o) { o->clear(); }
     Q_INVOKABLE QSize MiconSize(QToolBar* o) const { return o->iconSize(); }
     Q_INVOKABLE QAction* MinsertSeparator(QToolBar* o, QAction* x1) { return o->insertSeparator(x1); }
@@ -2588,13 +2588,13 @@ public:
     Q_INVOKABLE bool MisFloatable(QToolBar* o) const { return o->isFloatable(); }
     Q_INVOKABLE bool MisFloating(QToolBar* o) const { return o->isFloating(); }
     Q_INVOKABLE bool MisMovable(QToolBar* o) const { return o->isMovable(); }
-    Q_INVOKABLE Qt::Orientation Morientation(QToolBar* o) const { return o->orientation(); }
+    Q_INVOKABLE int Morientation(QToolBar* o) const { return o->orientation(); }
     Q_INVOKABLE void MsetAllowedAreas(QToolBar* o, Qt::ToolBarAreas x1) { o->setAllowedAreas(x1); }
     Q_INVOKABLE void MsetFloatable(QToolBar* o, bool x1) { o->setFloatable(x1); }
     Q_INVOKABLE void MsetMovable(QToolBar* o, bool x1) { o->setMovable(x1); }
     Q_INVOKABLE void MsetOrientation(QToolBar* o, Qt::Orientation x1) { o->setOrientation(x1); }
     Q_INVOKABLE QAction* MtoggleViewAction(QToolBar* o) const { return o->toggleViewAction(); }
-    Q_INVOKABLE Qt::ToolButtonStyle MtoolButtonStyle(QToolBar* o) const { return o->toolButtonStyle(); }
+    Q_INVOKABLE int MtoolButtonStyle(QToolBar* o) const { return o->toolButtonStyle(); }
     Q_INVOKABLE QWidget* MwidgetForAction(QToolBar* o, QAction* x1) const { return o->widgetForAction(x1); }
 };
 
@@ -2626,15 +2626,15 @@ class Q99 : public Q1 { // QToolButton
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QWidget* x1 = 0) { return new LToolButton(u, x1); }
-    Q_INVOKABLE Qt::ArrowType MarrowType(QToolButton* o) const { return o->arrowType(); }
+    Q_INVOKABLE int MarrowType(QToolButton* o) const { return o->arrowType(); }
     Q_INVOKABLE bool MautoRaise(QToolButton* o) const { return o->autoRaise(); }
     Q_INVOKABLE QMenu* Mmenu(QToolButton* o) const { return o->menu(); }
-    Q_INVOKABLE QToolButton::ToolButtonPopupMode MpopupMode(QToolButton* o) const { return o->popupMode(); }
+    Q_INVOKABLE int MpopupMode(QToolButton* o) const { return o->popupMode(); }
     Q_INVOKABLE void MsetArrowType(QToolButton* o, Qt::ArrowType x1) { o->setArrowType(x1); }
     Q_INVOKABLE void MsetAutoRaise(QToolButton* o, bool x1) { o->setAutoRaise(x1); }
     Q_INVOKABLE void MsetMenu(QToolButton* o, QMenu* x1) { o->setMenu(x1); }
     Q_INVOKABLE void MsetPopupMode(QToolButton* o, QToolButton::ToolButtonPopupMode x1) { o->setPopupMode(x1); }
-    Q_INVOKABLE Qt::ToolButtonStyle MtoolButtonStyle(QToolButton* o) const { return o->toolButtonStyle(); }
+    Q_INVOKABLE int MtoolButtonStyle(QToolButton* o) const { return o->toolButtonStyle(); }
     Q_INVOKABLE QSize MminimumSizeHint(QToolButton* o) const { return o->minimumSizeHint(); }
     Q_INVOKABLE QSize MsizeHint(QToolButton* o) const { return o->sizeHint(); }
 };
@@ -2658,7 +2658,7 @@ public:
     Q_INVOKABLE QVariant Mfield(QWizard* o, const QString& x1) const { return o->field(x1); }
     Q_INVOKABLE bool MhasVisitedPage(QWizard* o, int x1) const { return o->hasVisitedPage(x1); }
     Q_INVOKABLE int MnextId(QWizard* o) const { return o->nextId(); }
-    Q_INVOKABLE QWizard::WizardOptions Moptions(QWizard* o) const { return o->options(); }
+    Q_INVOKABLE int Moptions(QWizard* o) const { return o->options(); }
     Q_INVOKABLE QWizardPage* Mpage(QWizard* o, int x1) const { return o->page(x1); }
     Q_INVOKABLE QList<int> MpageIds(QWizard* o) const { return o->pageIds(); }
     Q_INVOKABLE QPixmap Mpixmap(QWizard* o, QWizard::WizardPixmap x1) const { return o->pixmap(x1); }
@@ -2676,12 +2676,12 @@ public:
     Q_INVOKABLE void MsetTitleFormat(QWizard* o, Qt::TextFormat x1) { o->setTitleFormat(x1); }
     Q_INVOKABLE void MsetWizardStyle(QWizard* o, QWizard::WizardStyle x1) { o->setWizardStyle(x1); }
     Q_INVOKABLE int MstartId(QWizard* o) const { return o->startId(); }
-    Q_INVOKABLE Qt::TextFormat MsubTitleFormat(QWizard* o) const { return o->subTitleFormat(); }
+    Q_INVOKABLE int MsubTitleFormat(QWizard* o) const { return o->subTitleFormat(); }
     Q_INVOKABLE bool MtestOption(QWizard* o, QWizard::WizardOption x1) const { return o->testOption(x1); }
-    Q_INVOKABLE Qt::TextFormat MtitleFormat(QWizard* o) const { return o->titleFormat(); }
+    Q_INVOKABLE int MtitleFormat(QWizard* o) const { return o->titleFormat(); }
     Q_INVOKABLE bool MvalidateCurrentPage(QWizard* o) { return o->validateCurrentPage(); }
     Q_INVOKABLE QList<int> MvisitedPages(QWizard* o) const { return o->visitedPages(); }
-    Q_INVOKABLE QWizard::WizardStyle MwizardStyle(QWizard* o) const { return o->wizardStyle(); }
+    Q_INVOKABLE int MwizardStyle(QWizard* o) const { return o->wizardStyle(); }
     Q_INVOKABLE void MsetVisible(QWizard* o, bool x1) { o->setVisible(x1); }
     Q_INVOKABLE QSize MsizeHint(QWizard* o) const { return o->sizeHint(); }
 };
@@ -2692,7 +2692,7 @@ public:
     Q_INVOKABLE void MaddScrollBarWidget(QAbstractScrollArea* o, QWidget* x1, Qt::Alignment x2) { o->addScrollBarWidget(x1, x2); }
     Q_INVOKABLE QWidget* McornerWidget(QAbstractScrollArea* o) const { return o->cornerWidget(); }
     Q_INVOKABLE QScrollBar* MhorizontalScrollBar(QAbstractScrollArea* o) const { return o->horizontalScrollBar(); }
-    Q_INVOKABLE Qt::ScrollBarPolicy MhorizontalScrollBarPolicy(QAbstractScrollArea* o) const { return o->horizontalScrollBarPolicy(); }
+    Q_INVOKABLE int MhorizontalScrollBarPolicy(QAbstractScrollArea* o) const { return o->horizontalScrollBarPolicy(); }
     Q_INVOKABLE QSize MmaximumViewportSize(QAbstractScrollArea* o) const { return o->maximumViewportSize(); }
     Q_INVOKABLE QWidgetList MscrollBarWidgets(QAbstractScrollArea* o, Qt::Alignment x1) { return o->scrollBarWidgets(x1); }
     Q_INVOKABLE void MsetCornerWidget(QAbstractScrollArea* o, QWidget* x1) { o->setCornerWidget(x1); }
@@ -2702,7 +2702,7 @@ public:
     Q_INVOKABLE void MsetVerticalScrollBarPolicy(QAbstractScrollArea* o, Qt::ScrollBarPolicy x1) { o->setVerticalScrollBarPolicy(x1); }
     Q_INVOKABLE void MsetViewport(QAbstractScrollArea* o, QWidget* x1) { o->setViewport(x1); }
     Q_INVOKABLE QScrollBar* MverticalScrollBar(QAbstractScrollArea* o) const { return o->verticalScrollBar(); }
-    Q_INVOKABLE Qt::ScrollBarPolicy MverticalScrollBarPolicy(QAbstractScrollArea* o) const { return o->verticalScrollBarPolicy(); }
+    Q_INVOKABLE int MverticalScrollBarPolicy(QAbstractScrollArea* o) const { return o->verticalScrollBarPolicy(); }
     Q_INVOKABLE QWidget* Mviewport(QAbstractScrollArea* o) const { return o->viewport(); }
     Q_INVOKABLE QSize MminimumSizeHint(QAbstractScrollArea* o) const { return o->minimumSizeHint(); }
     Q_INVOKABLE QSize MsizeHint(QAbstractScrollArea* o) const { return o->sizeHint(); }
@@ -2730,13 +2730,13 @@ class Q43 : public Q7 { // QGraphicsView
 public:
     Q_INVOKABLE void* C(uint u, QWidget* x1 = 0) { return new LGraphicsView(u, x1); }
     Q_INVOKABLE void* C(uint u, QGraphicsScene* x1, QWidget* x2 = 0) { return new LGraphicsView(u, x1, x2); }
-    Q_INVOKABLE Qt::Alignment Malignment(QGraphicsView* o) const { return o->alignment(); }
+    Q_INVOKABLE int Malignment(QGraphicsView* o) const { return o->alignment(); }
     Q_INVOKABLE QBrush MbackgroundBrush(QGraphicsView* o) const { return o->backgroundBrush(); }
-    Q_INVOKABLE QGraphicsView::CacheMode McacheMode(QGraphicsView* o) const { return o->cacheMode(); }
+    Q_INVOKABLE int McacheMode(QGraphicsView* o) const { return o->cacheMode(); }
     Q_INVOKABLE void McenterOn(QGraphicsView* o, const QPointF& x1) { o->centerOn(x1); }
     Q_INVOKABLE void McenterOn(QGraphicsView* o, qreal x1, qreal x2) { o->centerOn(x1, x2); }
     Q_INVOKABLE void McenterOn(QGraphicsView* o, const QGraphicsItem* x1) { o->centerOn(x1); }
-    Q_INVOKABLE QGraphicsView::DragMode MdragMode(QGraphicsView* o) const { return o->dragMode(); }
+    Q_INVOKABLE int MdragMode(QGraphicsView* o) const { return o->dragMode(); }
     Q_INVOKABLE void MensureVisible(QGraphicsView* o, const QRectF& x1, int x2 = 50, int x3 = 50) { o->ensureVisible(x1, x2, x3); }
     Q_INVOKABLE void MensureVisible(QGraphicsView* o, qreal x1, qreal x2, qreal x3, qreal x4, int x5 = 50, int x6 = 50) { o->ensureVisible(x1, x2, x3, x4, x5, x6); }
     Q_INVOKABLE void MensureVisible(QGraphicsView* o, const QGraphicsItem* x1, int x2 = 50, int x3 = 50) { o->ensureVisible(x1, x2, x3); }
@@ -2768,15 +2768,15 @@ public:
     Q_INVOKABLE QPointF MmapToScene(QGraphicsView* o, int x1, int x2) const { return o->mapToScene(x1, x2); }
     Q_INVOKABLE QPolygonF MmapToScene(QGraphicsView* o, int x1, int x2, int x3, int x4) const { return o->mapToScene(x1, x2, x3, x4); }
     Q_INVOKABLE QMatrix Mmatrix(QGraphicsView* o) const { return o->matrix(); }
-    Q_INVOKABLE QGraphicsView::OptimizationFlags MoptimizationFlags(QGraphicsView* o) const { return o->optimizationFlags(); }
+    Q_INVOKABLE int MoptimizationFlags(QGraphicsView* o) const { return o->optimizationFlags(); }
     Q_INVOKABLE void Mrender(QGraphicsView* o, QPainter* x1, const QRectF& x2 = QRectF(), const QRect& x3 = QRect(), Qt::AspectRatioMode x4 = Qt::KeepAspectRatio) { o->render(x1, x2, x3, x4); }
-    Q_INVOKABLE QPainter::RenderHints MrenderHints(QGraphicsView* o) const { return o->renderHints(); }
+    Q_INVOKABLE int MrenderHints(QGraphicsView* o) const { return o->renderHints(); }
     Q_INVOKABLE void MresetCachedContent(QGraphicsView* o) { o->resetCachedContent(); }
     Q_INVOKABLE void MresetMatrix(QGraphicsView* o) { o->resetMatrix(); }
     Q_INVOKABLE void MresetTransform(QGraphicsView* o) { o->resetTransform(); }
-    Q_INVOKABLE QGraphicsView::ViewportAnchor MresizeAnchor(QGraphicsView* o) const { return o->resizeAnchor(); }
+    Q_INVOKABLE int MresizeAnchor(QGraphicsView* o) const { return o->resizeAnchor(); }
     Q_INVOKABLE void Mrotate(QGraphicsView* o, qreal x1) { o->rotate(x1); }
-    Q_INVOKABLE Qt::ItemSelectionMode MrubberBandSelectionMode(QGraphicsView* o) const { return o->rubberBandSelectionMode(); }
+    Q_INVOKABLE int MrubberBandSelectionMode(QGraphicsView* o) const { return o->rubberBandSelectionMode(); }
     Q_INVOKABLE void Mscale(QGraphicsView* o, qreal x1, qreal x2) { o->scale(x1, x2); }
     Q_INVOKABLE QGraphicsScene* Mscene(QGraphicsView* o) const { return o->scene(); }
     Q_INVOKABLE QRectF MsceneRect(QGraphicsView* o) const { return o->sceneRect(); }
@@ -2801,10 +2801,10 @@ public:
     Q_INVOKABLE void MsetViewportUpdateMode(QGraphicsView* o, QGraphicsView::ViewportUpdateMode x1) { o->setViewportUpdateMode(x1); }
     Q_INVOKABLE void Mshear(QGraphicsView* o, qreal x1, qreal x2) { o->shear(x1, x2); }
     Q_INVOKABLE QTransform Mtransform(QGraphicsView* o) const { return o->transform(); }
-    Q_INVOKABLE QGraphicsView::ViewportAnchor MtransformationAnchor(QGraphicsView* o) const { return o->transformationAnchor(); }
+    Q_INVOKABLE int MtransformationAnchor(QGraphicsView* o) const { return o->transformationAnchor(); }
     Q_INVOKABLE void Mtranslate(QGraphicsView* o, qreal x1, qreal x2) { o->translate(x1, x2); }
     Q_INVOKABLE QTransform MviewportTransform(QGraphicsView* o) const { return o->viewportTransform(); }
-    Q_INVOKABLE QGraphicsView::ViewportUpdateMode MviewportUpdateMode(QGraphicsView* o) const { return o->viewportUpdateMode(); }
+    Q_INVOKABLE int MviewportUpdateMode(QGraphicsView* o) const { return o->viewportUpdateMode(); }
     Q_INVOKABLE QVariant MinputMethodQuery(QGraphicsView* o, Qt::InputMethodQuery x1) const { return o->inputMethodQuery(x1); }
     Q_INVOKABLE QSize MsizeHint(QGraphicsView* o) const { return o->sizeHint(); }
 };
@@ -2831,7 +2831,7 @@ public:
     Q_INVOKABLE bool Mfind(QPlainTextEdit* o, const QString& x1, QTextDocument::FindFlags x2 = 0) { return o->find(x1, x2); }
     Q_INVOKABLE bool MisReadOnly(QPlainTextEdit* o) const { return o->isReadOnly(); }
     Q_INVOKABLE bool MisUndoRedoEnabled(QPlainTextEdit* o) const { return o->isUndoRedoEnabled(); }
-    Q_INVOKABLE QPlainTextEdit::LineWrapMode MlineWrapMode(QPlainTextEdit* o) const { return o->lineWrapMode(); }
+    Q_INVOKABLE int MlineWrapMode(QPlainTextEdit* o) const { return o->lineWrapMode(); }
     Q_INVOKABLE QVariant MloadResource(QPlainTextEdit* o, int x1, const QUrl& x2) { return o->loadResource(x1, x2); }
     Q_INVOKABLE int MmaximumBlockCount(QPlainTextEdit* o) const { return o->maximumBlockCount(); }
     Q_INVOKABLE void MmergeCurrentCharFormat(QPlainTextEdit* o, const QTextCharFormat& x1) { o->mergeCurrentCharFormat(x1); }
@@ -2858,16 +2858,16 @@ public:
     Q_INVOKABLE bool MtabChangesFocus(QPlainTextEdit* o) const { return o->tabChangesFocus(); }
     Q_INVOKABLE int MtabStopWidth(QPlainTextEdit* o) const { return o->tabStopWidth(); }
     Q_INVOKABLE QTextCursor MtextCursor(QPlainTextEdit* o) const { return o->textCursor(); }
-    Q_INVOKABLE Qt::TextInteractionFlags MtextInteractionFlags(QPlainTextEdit* o) const { return o->textInteractionFlags(); }
+    Q_INVOKABLE int MtextInteractionFlags(QPlainTextEdit* o) const { return o->textInteractionFlags(); }
     Q_INVOKABLE QString MtoPlainText(QPlainTextEdit* o) const { return o->toPlainText(); }
-    Q_INVOKABLE QTextOption::WrapMode MwordWrapMode(QPlainTextEdit* o) const { return o->wordWrapMode(); }
+    Q_INVOKABLE int MwordWrapMode(QPlainTextEdit* o) const { return o->wordWrapMode(); }
 };
 
 class Q70 : public Q7 { // QScrollArea
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QWidget* x1 = 0) { return new LScrollArea(u, x1); }
-    Q_INVOKABLE Qt::Alignment Malignment(QScrollArea* o) const { return o->alignment(); }
+    Q_INVOKABLE int Malignment(QScrollArea* o) const { return o->alignment(); }
     Q_INVOKABLE void MensureVisible(QScrollArea* o, int x1, int x2, int x3 = 50, int x4 = 50) { o->ensureVisible(x1, x2, x3, x4); }
     Q_INVOKABLE void MensureWidgetVisible(QScrollArea* o, QWidget* x1, int x2 = 50, int x3 = 50) { o->ensureWidgetVisible(x1, x2, x3); }
     Q_INVOKABLE void MsetAlignment(QScrollArea* o, Qt::Alignment x1) { o->setAlignment(x1); }
@@ -2886,9 +2886,9 @@ public:
     Q_INVOKABLE void* C(uint u, QWidget* x1 = 0) { return new LTextEdit(u, x1); }
     Q_INVOKABLE void* C(uint u, const QString& x1, QWidget* x2 = 0) { return new LTextEdit(u, x1, x2); }
     Q_INVOKABLE bool MacceptRichText(QTextEdit* o) const { return o->acceptRichText(); }
-    Q_INVOKABLE Qt::Alignment Malignment(QTextEdit* o) const { return o->alignment(); }
+    Q_INVOKABLE int Malignment(QTextEdit* o) const { return o->alignment(); }
     Q_INVOKABLE QString ManchorAt(QTextEdit* o, const QPoint& x1) const { return o->anchorAt(x1); }
-    Q_INVOKABLE QTextEdit::AutoFormatting MautoFormatting(QTextEdit* o) const { return o->autoFormatting(); }
+    Q_INVOKABLE int MautoFormatting(QTextEdit* o) const { return o->autoFormatting(); }
     Q_INVOKABLE bool McanPaste(QTextEdit* o) const { return o->canPaste(); }
     Q_INVOKABLE QMenu* McreateStandardContextMenu(QTextEdit* o) { return o->createStandardContextMenu(); }
     Q_INVOKABLE QMenu* McreateStandardContextMenu(QTextEdit* o, const QPoint& x1) { return o->createStandardContextMenu(x1); }
@@ -2910,7 +2910,7 @@ public:
     Q_INVOKABLE bool MisReadOnly(QTextEdit* o) const { return o->isReadOnly(); }
     Q_INVOKABLE bool MisUndoRedoEnabled(QTextEdit* o) const { return o->isUndoRedoEnabled(); }
     Q_INVOKABLE int MlineWrapColumnOrWidth(QTextEdit* o) const { return o->lineWrapColumnOrWidth(); }
-    Q_INVOKABLE QTextEdit::LineWrapMode MlineWrapMode(QTextEdit* o) const { return o->lineWrapMode(); }
+    Q_INVOKABLE int MlineWrapMode(QTextEdit* o) const { return o->lineWrapMode(); }
     Q_INVOKABLE QVariant MloadResource(QTextEdit* o, int x1, const QUrl& x2) { return o->loadResource(x1, x2); }
     Q_INVOKABLE void MmergeCurrentCharFormat(QTextEdit* o, const QTextCharFormat& x1) { o->mergeCurrentCharFormat(x1); }
     Q_INVOKABLE void MmoveCursor(QTextEdit* o, QTextCursor::MoveOperation x1, QTextCursor::MoveMode x2 = QTextCursor::MoveAnchor) { o->moveCursor(x1, x2); }
@@ -2937,10 +2937,10 @@ public:
     Q_INVOKABLE QColor MtextBackgroundColor(QTextEdit* o) const { return o->textBackgroundColor(); }
     Q_INVOKABLE QColor MtextColor(QTextEdit* o) const { return o->textColor(); }
     Q_INVOKABLE QTextCursor MtextCursor(QTextEdit* o) const { return o->textCursor(); }
-    Q_INVOKABLE Qt::TextInteractionFlags MtextInteractionFlags(QTextEdit* o) const { return o->textInteractionFlags(); }
+    Q_INVOKABLE int MtextInteractionFlags(QTextEdit* o) const { return o->textInteractionFlags(); }
     Q_INVOKABLE QString MtoHtml(QTextEdit* o) const { return o->toHtml(); }
     Q_INVOKABLE QString MtoPlainText(QTextEdit* o) const { return o->toPlainText(); }
-    Q_INVOKABLE QTextOption::WrapMode MwordWrapMode(QTextEdit* o) const { return o->wordWrapMode(); }
+    Q_INVOKABLE int MwordWrapMode(QTextEdit* o) const { return o->wordWrapMode(); }
 };
 
 class Q4 : public Q7 { // QAbstractItemView
@@ -2950,13 +2950,13 @@ public:
     Q_INVOKABLE int MautoScrollMargin(QAbstractItemView* o) const { return o->autoScrollMargin(); }
     Q_INVOKABLE void MclosePersistentEditor(QAbstractItemView* o, const QModelIndex& x1) { o->closePersistentEditor(x1); }
     Q_INVOKABLE QModelIndex McurrentIndex(QAbstractItemView* o) const { return o->currentIndex(); }
-    Q_INVOKABLE Qt::DropAction MdefaultDropAction(QAbstractItemView* o) const { return o->defaultDropAction(); }
-    Q_INVOKABLE QAbstractItemView::DragDropMode MdragDropMode(QAbstractItemView* o) const { return o->dragDropMode(); }
+    Q_INVOKABLE int MdefaultDropAction(QAbstractItemView* o) const { return o->defaultDropAction(); }
+    Q_INVOKABLE int MdragDropMode(QAbstractItemView* o) const { return o->dragDropMode(); }
     Q_INVOKABLE bool MdragDropOverwriteMode(QAbstractItemView* o) const { return o->dragDropOverwriteMode(); }
     Q_INVOKABLE bool MdragEnabled(QAbstractItemView* o) const { return o->dragEnabled(); }
-    Q_INVOKABLE QAbstractItemView::EditTriggers MeditTriggers(QAbstractItemView* o) const { return o->editTriggers(); }
+    Q_INVOKABLE int MeditTriggers(QAbstractItemView* o) const { return o->editTriggers(); }
     Q_INVOKABLE bool MhasAutoScroll(QAbstractItemView* o) const { return o->hasAutoScroll(); }
-    Q_INVOKABLE QAbstractItemView::ScrollMode MhorizontalScrollMode(QAbstractItemView* o) const { return o->horizontalScrollMode(); }
+    Q_INVOKABLE int MhorizontalScrollMode(QAbstractItemView* o) const { return o->horizontalScrollMode(); }
     Q_INVOKABLE QSize MiconSize(QAbstractItemView* o) const { return o->iconSize(); }
     Q_INVOKABLE QModelIndex MindexAt(QAbstractItemView* o, const QPoint& x1) const { return o->indexAt(x1); }
     Q_INVOKABLE QWidget* MindexWidget(QAbstractItemView* o, const QModelIndex& x1) const { return o->indexWidget(x1); }
@@ -2969,8 +2969,8 @@ public:
     Q_INVOKABLE void MopenPersistentEditor(QAbstractItemView* o, const QModelIndex& x1) { o->openPersistentEditor(x1); }
     Q_INVOKABLE QModelIndex MrootIndex(QAbstractItemView* o) const { return o->rootIndex(); }
     Q_INVOKABLE void MscrollTo(QAbstractItemView* o, const QModelIndex& x1, QAbstractItemView::ScrollHint x2 = QAbstractItemView::EnsureVisible) { o->scrollTo(x1, x2); }
-    Q_INVOKABLE QAbstractItemView::SelectionBehavior MselectionBehavior(QAbstractItemView* o) const { return o->selectionBehavior(); }
-    Q_INVOKABLE QAbstractItemView::SelectionMode MselectionMode(QAbstractItemView* o) const { return o->selectionMode(); }
+    Q_INVOKABLE int MselectionBehavior(QAbstractItemView* o) const { return o->selectionBehavior(); }
+    Q_INVOKABLE int MselectionMode(QAbstractItemView* o) const { return o->selectionMode(); }
     Q_INVOKABLE QItemSelectionModel* MselectionModel(QAbstractItemView* o) const { return o->selectionModel(); }
     Q_INVOKABLE void MsetAlternatingRowColors(QAbstractItemView* o, bool x1) { o->setAlternatingRowColors(x1); }
     Q_INVOKABLE void MsetAutoScroll(QAbstractItemView* o, bool x1) { o->setAutoScroll(x1); }
@@ -2999,8 +2999,8 @@ public:
     Q_INVOKABLE QSize MsizeHintForIndex(QAbstractItemView* o, const QModelIndex& x1) const { return o->sizeHintForIndex(x1); }
     Q_INVOKABLE int MsizeHintForRow(QAbstractItemView* o, int x1) const { return o->sizeHintForRow(x1); }
     Q_INVOKABLE bool MtabKeyNavigation(QAbstractItemView* o) const { return o->tabKeyNavigation(); }
-    Q_INVOKABLE Qt::TextElideMode MtextElideMode(QAbstractItemView* o) const { return o->textElideMode(); }
-    Q_INVOKABLE QAbstractItemView::ScrollMode MverticalScrollMode(QAbstractItemView* o) const { return o->verticalScrollMode(); }
+    Q_INVOKABLE int MtextElideMode(QAbstractItemView* o) const { return o->textElideMode(); }
+    Q_INVOKABLE int MverticalScrollMode(QAbstractItemView* o) const { return o->verticalScrollMode(); }
     Q_INVOKABLE QRect MvisualRect(QAbstractItemView* o, const QModelIndex& x1) const { return o->visualRect(x1); }
     Q_INVOKABLE QVariant MinputMethodQuery(QAbstractItemView* o, Qt::InputMethodQuery x1) const { return o->inputMethodQuery(x1); }
 };
@@ -3030,7 +3030,7 @@ class Q48 : public Q4 { // QHeaderView
 public:
     Q_INVOKABLE bool McascadingSectionResizes(QHeaderView* o) const { return o->cascadingSectionResizes(); }
     Q_INVOKABLE int Mcount(QHeaderView* o) const { return o->count(); }
-    Q_INVOKABLE Qt::Alignment MdefaultAlignment(QHeaderView* o) const { return o->defaultAlignment(); }
+    Q_INVOKABLE int MdefaultAlignment(QHeaderView* o) const { return o->defaultAlignment(); }
     Q_INVOKABLE int MdefaultSectionSize(QHeaderView* o) const { return o->defaultSectionSize(); }
     Q_INVOKABLE int MhiddenSectionCount(QHeaderView* o) const { return o->hiddenSectionCount(); }
     Q_INVOKABLE void MhideSection(QHeaderView* o, int x1) { o->hideSection(x1); }
@@ -3047,8 +3047,8 @@ public:
     Q_INVOKABLE int MminimumSectionSize(QHeaderView* o) const { return o->minimumSectionSize(); }
     Q_INVOKABLE void MmoveSection(QHeaderView* o, int x1, int x2) { o->moveSection(x1, x2); }
     Q_INVOKABLE int Moffset(QHeaderView* o) const { return o->offset(); }
-    Q_INVOKABLE Qt::Orientation Morientation(QHeaderView* o) const { return o->orientation(); }
-    Q_INVOKABLE QHeaderView::ResizeMode MresizeMode(QHeaderView* o, int x1) const { return o->resizeMode(x1); }
+    Q_INVOKABLE int Morientation(QHeaderView* o) const { return o->orientation(); }
+    Q_INVOKABLE int MresizeMode(QHeaderView* o, int x1) const { return o->resizeMode(x1); }
     Q_INVOKABLE void MresizeSection(QHeaderView* o, int x1, int x2) { o->resizeSection(x1, x2); }
     Q_INVOKABLE void MresizeSections(QHeaderView* o, QHeaderView::ResizeMode x1) { o->resizeSections(x1); }
     Q_INVOKABLE bool MrestoreState(QHeaderView* o, const QByteArray& x1) { return o->restoreState(x1); }
@@ -3073,7 +3073,7 @@ public:
     Q_INVOKABLE void MsetSortIndicatorShown(QHeaderView* o, bool x1) { o->setSortIndicatorShown(x1); }
     Q_INVOKABLE void MsetStretchLastSection(QHeaderView* o, bool x1) { o->setStretchLastSection(x1); }
     Q_INVOKABLE void MshowSection(QHeaderView* o, int x1) { o->showSection(x1); }
-    Q_INVOKABLE Qt::SortOrder MsortIndicatorOrder(QHeaderView* o) const { return o->sortIndicatorOrder(); }
+    Q_INVOKABLE int MsortIndicatorOrder(QHeaderView* o) const { return o->sortIndicatorOrder(); }
     Q_INVOKABLE int MsortIndicatorSection(QHeaderView* o) const { return o->sortIndicatorSection(); }
     Q_INVOKABLE bool MstretchLastSection(QHeaderView* o) const { return o->stretchLastSection(); }
     Q_INVOKABLE int MstretchSectionCount(QHeaderView* o) const { return o->stretchSectionCount(); }
@@ -3091,15 +3091,15 @@ public:
     Q_INVOKABLE void* C(uint u, QWidget* x1 = 0) { return new LListView(u, x1); }
     Q_INVOKABLE int MbatchSize(QListView* o) const { return o->batchSize(); }
     Q_INVOKABLE void MclearPropertyFlags(QListView* o) { o->clearPropertyFlags(); }
-    Q_INVOKABLE QListView::Flow Mflow(QListView* o) const { return o->flow(); }
+    Q_INVOKABLE int Mflow(QListView* o) const { return o->flow(); }
     Q_INVOKABLE QSize MgridSize(QListView* o) const { return o->gridSize(); }
     Q_INVOKABLE bool MisRowHidden(QListView* o, int x1) const { return o->isRowHidden(x1); }
     Q_INVOKABLE bool MisSelectionRectVisible(QListView* o) const { return o->isSelectionRectVisible(); }
     Q_INVOKABLE bool MisWrapping(QListView* o) const { return o->isWrapping(); }
-    Q_INVOKABLE QListView::LayoutMode MlayoutMode(QListView* o) const { return o->layoutMode(); }
+    Q_INVOKABLE int MlayoutMode(QListView* o) const { return o->layoutMode(); }
     Q_INVOKABLE int MmodelColumn(QListView* o) const { return o->modelColumn(); }
-    Q_INVOKABLE QListView::Movement Mmovement(QListView* o) const { return o->movement(); }
-    Q_INVOKABLE QListView::ResizeMode MresizeMode(QListView* o) const { return o->resizeMode(); }
+    Q_INVOKABLE int Mmovement(QListView* o) const { return o->movement(); }
+    Q_INVOKABLE int MresizeMode(QListView* o) const { return o->resizeMode(); }
     Q_INVOKABLE void MsetBatchSize(QListView* o, int x1) { o->setBatchSize(x1); }
     Q_INVOKABLE void MsetFlow(QListView* o, QListView::Flow x1) { o->setFlow(x1); }
     Q_INVOKABLE void MsetGridSize(QListView* o, const QSize& x1) { o->setGridSize(x1); }
@@ -3116,7 +3116,7 @@ public:
     Q_INVOKABLE void MsetWrapping(QListView* o, bool x1) { o->setWrapping(x1); }
     Q_INVOKABLE int Mspacing(QListView* o) const { return o->spacing(); }
     Q_INVOKABLE bool MuniformItemSizes(QListView* o) const { return o->uniformItemSizes(); }
-    Q_INVOKABLE QListView::ViewMode MviewMode(QListView* o) const { return o->viewMode(); }
+    Q_INVOKABLE int MviewMode(QListView* o) const { return o->viewMode(); }
     Q_INVOKABLE bool MwordWrap(QListView* o) const { return o->wordWrap(); }
     Q_INVOKABLE QModelIndex MindexAt(QListView* o, const QPoint& x1) const { return o->indexAt(x1); }
     Q_INVOKABLE void MscrollTo(QListView* o, const QModelIndex& x1, QListView::ScrollHint x2 = QListView::EnsureVisible) { o->scrollTo(x1, x2); }
@@ -3169,7 +3169,7 @@ public:
     Q_INVOKABLE int McolumnSpan(QTableView* o, int x1, int x2) const { return o->columnSpan(x1, x2); }
     Q_INVOKABLE int McolumnViewportPosition(QTableView* o, int x1) const { return o->columnViewportPosition(x1); }
     Q_INVOKABLE int McolumnWidth(QTableView* o, int x1) const { return o->columnWidth(x1); }
-    Q_INVOKABLE Qt::PenStyle MgridStyle(QTableView* o) const { return o->gridStyle(); }
+    Q_INVOKABLE int MgridStyle(QTableView* o) const { return o->gridStyle(); }
     Q_INVOKABLE QHeaderView* MhorizontalHeader(QTableView* o) const { return o->horizontalHeader(); }
     Q_INVOKABLE bool MisColumnHidden(QTableView* o, int x1) const { return o->isColumnHidden(x1); }
     Q_INVOKABLE bool MisCornerButtonEnabled(QTableView* o) const { return o->isCornerButtonEnabled(); }

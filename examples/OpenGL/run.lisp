@@ -1,3 +1,5 @@
+#+unix (si::trap-fpe t nil)
+
 (require :asdf)
 
 (asdf:operate 'asdf:load-op :cl-opengl)

@@ -25,14 +25,14 @@
         *pixmap-label-area* (qnew "QScrollArea"
                                   "sizePolicy" +ignored+
                                   "minimumSize" (list 50 50)))
-  (let ((widget-area       (qnew "QScrollArea"
-                                 "widgetResizable" t
-                                 "horizontalScrollBarPolicy" "ScrollBarAlwaysOff"
-                                 "verticalScrollBarPolicy"   "ScrollBarAlwaysOff"
-                                 "sizePolicy" +ignored+
-                                 "minimumSize" (list 50 50)))
-        (central-widget    (qnew "QWidget"))
-        (central-layout    (qnew "QGridLayout"))
+  (let ((widget-area    (qnew "QScrollArea"
+                              "widgetResizable" t
+                              "horizontalScrollBarPolicy" "ScrollBarAlwaysOff"
+                              "verticalScrollBarPolicy"   "ScrollBarAlwaysOff"
+                              "sizePolicy" +ignored+
+                              "minimumSize" (list 50 50)))
+        (central-widget (qnew "QWidget"))
+        (central-layout (qnew "QGridLayout"))
         (x-slider (create-slider '*x-rotation-changed* 'set-x-rotation))
         (y-slider (create-slider '*y-rotation-changed* 'set-y-rotation))
         (z-slider (create-slider '*z-rotation-changed* 'set-z-rotation)))

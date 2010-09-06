@@ -6,6 +6,7 @@
   (:use :common-lisp :util :eql)
   (:export
    #:*gl-widget*
+   #:*timer*
    #:*x-rotation-changed*
    #:*y-rotation-changed*
    #:*z-rotation-changed*
@@ -19,6 +20,7 @@
 (defconstant +360+ (* 360 16))
 
 (defparameter *gl-widget* nil)
+(defparameter *timer*     nil)
 
 (defparameter *gear1*     0)
 (defparameter *gear2*     0)
@@ -34,16 +36,16 @@
 (defparameter *z-rotation-changed* nil)
 
 (defun create-gl-widget ()
-  (setf *gl-widget* (qnew "QGLWidget"))
+  (setf *gl-widget* (qnew "QGLWidget")
+        *timer*     (qnew "QTimer"))
   (do- (qoverride *gl-widget*)
     ("initializeGL()"                'initialize-gl)
     ("paintGL()"                     'paint-gl)
     ("resizeGL(int,int)"             'resize-gl)
     ("mousePressEvent(QMouseEvent*)" 'mouse-press-event)
     ("mouseMoveEvent(QMouseEvent*)"  'mouse-move-event))
-  (let ((timer (qnew "QTimer")))
-    (qconnect timer "timeout()" 'advance-gears)
-    (qfun timer "start" 20)))
+  (qconnect *timer* "timeout()" 'advance-gears)
+  (qfun *timer* "start" 20))
 
 (defmacro set-rotation (axis)
   (flet ((axis-symbol (frm)
@@ -86,29 +88,33 @@
   (gl:pop-matrix))
 
 (defun resize-gl (width height)
-  (let ((side (min width height)))
-    (gl:viewport (/ (- width side) 2) (/ (- height side) 2) side side)
-    (gl:matrix-mode :projection)
-    (gl:load-identity)
-    (gl:frustum -1 1 -1 1 5 60)
-    (gl:matrix-mode :modelview)
-    (gl:load-identity)
-    (gl:translate 0 0 -40)))
+  (if (qget *gl-widget* "visible") ; needed in OSX
+      (let ((side (min width height)))
+        (gl:viewport (/ (- width side) 2) (/ (- height side) 2) side side)
+        (gl:matrix-mode :projection)
+        (gl:load-identity)
+        (gl:frustum -1 1 -1 1 5 60)
+        (gl:matrix-mode :modelview)
+        (gl:load-identity)
+        (gl:translate 0 0 -40))
+      (qsingle-shot 0 #'(lambda () (apply #'resize-gl (qget *gl-widget* "size"))))))
 
 (defun mouse-press-event (event)
   (setf *last-pos* (qfun event "pos")))
 
 (defun mouse-move-event (event)
   (let ((dx (- (qfun event "x") (first  *last-pos*)))
-        (dy (- (qfun event "y") (second *last-pos*))))
-    ;;; N.B. (qfun event "buttons") will not work in EQL (internal Qt enum problem)
-    ;; left mouse button
-    (set-x-rotation (+ *x-rot* (* 8 dy)))
-    (set-y-rotation (+ *y-rot* (* 8 dx)))
-    ;; right mouse button
-    ;;(set-x-rotation (+ *x-rot* (* 8 dy)))
-    ;;(set-z-rotation (+ *z-rot* (* 8 dx)))))
-    (setf *last-pos* (qfun event "pos"))))
+        (dy (- (qfun event "y") (second *last-pos*)))
+        (buttons (qfun event "buttons")))
+    (flet ((button (enum)
+             (not (zerop (logand enum buttons)))))
+      (cond ((button (qenum "Qt::MouseButtons" "LeftButton"))
+             (set-x-rotation (+ *x-rot* (* 8 dy)))
+             (set-y-rotation (+ *y-rot* (* 8 dx))))
+            ((button (qenum "Qt::MouseButtons" "RightButton"))
+             (set-x-rotation (+ *x-rot* (* 8 dy)))
+             (set-z-rotation (+ *z-rot* (* 8 dx)))))
+      (setf *last-pos* (qfun event "pos")))))
 
 (defun advance-gears ()
   (incf *gear1-rot* (* 2 16))

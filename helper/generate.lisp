@@ -192,19 +192,25 @@
   (string= "void" (first arg)))
 
 (defun arg-to-c (arg &optional enum-class return)
-  (format nil "~a~a~a"
-          (if (and (const-p arg)
-                   (or (not return)
-                       (not (string= "int" (first arg)))))
-              "const "
-              "")
-          (add-enum-class (first arg) enum-class)
-          (cond ((and (not return)
-                      (reference-p arg))
-                 "&")
-                ((pointer-p arg)
-                 "*")
-                (t ""))))
+  (let* ((type (add-enum-class (first arg) enum-class))
+         (enum-as-int (and return
+                           (find #\: type)
+                           (not (find #\< type))
+                           (not (find* type '("QCoreApplication::EventFilter"
+                                              "QPainterPath::Element"))))))
+    (format nil "~a~a~a"
+            (if (and (const-p arg)
+                     (or (not return)
+                         (not (string= "int" (first arg)))))
+                "const "
+                "")
+            (if enum-as-int "int" type)
+            (cond ((and (not return)
+                        (reference-p arg))
+                   "&")
+                  ((pointer-p arg)
+                   "*")
+                  (t "")))))
 
 (defun arg-to-c-null-value (arg)
   (let ((type (arg-type arg)))
