@@ -130,7 +130,7 @@
                     (tr "Grabber")
                     (tr "Enter pixmap size:")
                     +normal+
-                    (format nil "~d x ~d" (qget *gl-widget* "width") (qget *gl-widget* "height"))
+                    (format nil "~{~d~^ x ~}" (qget *gl-widget* "size"))
                     nil))) ; ok
     (if (qok)
         (progn
