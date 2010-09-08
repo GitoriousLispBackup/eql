@@ -766,7 +766,7 @@ static cl_object from_qvariant(const QVariant& var) {
         case QVariant::ULongLong:   l_obj = MAKE_FIXNUM(var.toULongLong()); }
     return l_obj; }
 
-static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg, QObject* q = 0) {
+static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
     void* p = 0;
     const int n = QMetaType::type(sType);
     switch(n) {
@@ -869,8 +869,8 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg, QObject* q = 
                     const QMetaObject* mo = 0;
                     if(sType.startsWith("Qt")) {
                         mo = staticQtMetaObject; }
-                    else if(q) {
-                        mo = q->metaObject(); }
+                    else {
+                        mo = LObjects::staticMetaObject(sType.left(i_enum)); }
                     int n = -1;
                     if(mo) {
                         n = mo->indexOfEnumerator(sType.mid(i_enum + 2));
@@ -885,7 +885,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg, QObject* q = 
                         p = i; }}}}
     return MetaArg(sType, p); }
 
-static cl_object to_lisp_arg(const MetaArg& arg, QObject* q) {
+static cl_object to_lisp_arg(const MetaArg& arg) {
     cl_object l_ret = Cnil;
     void* p = arg.second;
     if(p) {
@@ -990,8 +990,8 @@ static cl_object to_lisp_arg(const MetaArg& arg, QObject* q) {
                         const QMetaObject* mo = 0;
                         if(sType.startsWith("Qt")) {
                             mo = staticQtMetaObject; }
-                        else if(q) {
-                            mo = q->metaObject(); }
+                        else {
+                            mo = LObjects::staticMetaObject(sType.left(i_enum)); }
                         int n = -1;
                         if(mo) {
                             n = mo->indexOfEnumerator(sType.mid(i_enum + 2));
@@ -1497,10 +1497,9 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_class, cl_object l_name, 
                 int i = -1;
                 if(this_arg) {
                     args[++i + 1] = &(o.pointer); }
-                QObject* q = o.isQObject() ? (QObject*)o.pointer : 0;
                 while((l_do_args != Cnil) && (i < MAX_ARGS)) {
                     ++i;
-                    MetaArg m_arg(toMetaArg(types.at(i), cl_car(l_do_args), q));
+                    MetaArg m_arg(toMetaArg(types.at(i), cl_car(l_do_args)));
                     args[i + 1] = m_arg.second;
                     mArgs << m_arg;
                     l_do_args = cl_cdr(l_do_args); }
@@ -1508,11 +1507,11 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_class, cl_object l_name, 
                 if(method) {
                     caller = o.isQObject() ? LObjects::Q[o.id - 1] : LObjects::N[-o.id - 1]; }
                 else {
-                    caller = q; }
+                    caller = o.isQObject() ? (QObject*)o.pointer : 0; }
                 if(caller) {
                     caller->qt_metacall(QMetaObject::InvokeMetaMethod, n, args);
                     clearMetaArgList(mArgs);
-                    cl_object l_ret = to_lisp_arg(ret, q);
+                    cl_object l_ret = to_lisp_arg(ret);
                     clearMetaArg(ret, true);
                     const cl_env_ptr l_env = ecl_process_env();
                     l_env->nvalues = 2;
@@ -1578,28 +1577,27 @@ cl_object qsender() {
 void callConnectFun(void* fun, const StrList& types, void** args) {
     cl_object l_fun = (cl_object)fun;
     int i = 0;
-    QObject* q = (QObject*)DynObject::currentSender;
     MetaArgList mArgs;
     Q_FOREACH(QByteArray type, types) {
         mArgs << MetaArg(type, args[++i]); }
     switch(types.size()) {
         case 0: cl_funcall(1, l_fun);
             break;
-        case 1: cl_funcall(2, l_fun, to_lisp_arg(mArgs.at(0), q));
+        case 1: cl_funcall(2, l_fun, to_lisp_arg(mArgs.at(0)));
             break;
         case 2: cl_funcall(3, l_fun,
-                           to_lisp_arg(mArgs.at(0), q),
-                           to_lisp_arg(mArgs.at(1), q));
+                           to_lisp_arg(mArgs.at(0)),
+                           to_lisp_arg(mArgs.at(1)));
             break;
         case 3: cl_funcall(4, l_fun,
-                           to_lisp_arg(mArgs.at(0), q),
-                           to_lisp_arg(mArgs.at(1), q),
-                           to_lisp_arg(mArgs.at(2), q));
+                           to_lisp_arg(mArgs.at(0)),
+                           to_lisp_arg(mArgs.at(1)),
+                           to_lisp_arg(mArgs.at(2)));
             break;
         default: {
             cl_object l_args = Cnil;
             Q_FOREACH(MetaArg arg, mArgs) {
-                l_args = CONS(to_lisp_arg(arg, q), l_args); }
+                l_args = CONS(to_lisp_arg(arg), l_args); }
             cl_apply(2, l_fun, cl_nreverse(l_args)); }}}
 
 cl_object qoverride(cl_object l_obj, cl_object l_name, cl_object l_fun) {
@@ -1618,7 +1616,7 @@ cl_object qoverride(cl_object l_obj, cl_object l_name, cl_object l_fun) {
     error("QOVERRIDE", LIST3(l_obj, l_name, l_fun));
     return Cnil; }
 
-QVariant callOverrideFun(const QObject* caller, void* fun, int id, const void** args) {
+QVariant callOverrideFun(void* fun, int id, const void** args) {
     int n = id - 1;
     cl_object l_fun = (cl_object)fun;
     MetaArgList mArgs;
@@ -1627,26 +1625,25 @@ QVariant callOverrideFun(const QObject* caller, void* fun, int id, const void** 
     while((type = LObjects::override_arg_types[n][i + 1])) {
         mArgs << MetaArg(type, (void*)args[i]);
         ++i; }
-    QObject* q = (QObject*)caller;
     cl_object l_ret = Cnil;
     switch(i) {
         case 0: l_ret = cl_funcall(1, l_fun);
             break;
-        case 1: l_ret = cl_funcall(2, l_fun, to_lisp_arg(mArgs.at(0), q));
+        case 1: l_ret = cl_funcall(2, l_fun, to_lisp_arg(mArgs.at(0)));
             break;
         case 2: l_ret = cl_funcall(3, l_fun,
-                                   to_lisp_arg(mArgs.at(0), q),
-                                   to_lisp_arg(mArgs.at(1), q));
+                                   to_lisp_arg(mArgs.at(0)),
+                                   to_lisp_arg(mArgs.at(1)));
             break;
         case 3: l_ret = cl_funcall(4, l_fun,
-                                   to_lisp_arg(mArgs.at(0), q),
-                                   to_lisp_arg(mArgs.at(1), q),
-                                   to_lisp_arg(mArgs.at(2), q));
+                                   to_lisp_arg(mArgs.at(0)),
+                                   to_lisp_arg(mArgs.at(1)),
+                                   to_lisp_arg(mArgs.at(2)));
             break;
         default: {
             cl_object l_args = Cnil;
             Q_FOREACH(MetaArg arg, mArgs) {
-                l_args = CONS(to_lisp_arg(arg, q), l_args); }
+                l_args = CONS(to_lisp_arg(arg), l_args); }
             l_ret = cl_apply(2, l_fun, cl_nreverse(l_args)); }}
     QVariant ret(false);
     const char* ret_type = LObjects::override_arg_types[n][0];
@@ -1753,15 +1750,15 @@ cl_object qenum2(cl_object l_name, cl_object l_key) {
     if(ECL_STRINGP(l_name) && ECL_STRINGP(l_key)) {
         QByteArray name(toCString(l_name));
         QByteArray key(toCString(l_key));
-        int p = name.indexOf("::");
-        if(p != -1) {
+        int i = name.indexOf("::");
+        if(i != -1) {
             const QMetaObject* mo;
             if(name.startsWith("Qt")) {
                 mo = staticQtMetaObject; }
             else {
-                mo = LObjects::staticMetaObject(name.left(p)); }
+                mo = LObjects::staticMetaObject(name.left(i)); }
             if(mo) {
-                int n = mo->indexOfEnumerator(name.mid(p + 2));
+                int n = mo->indexOfEnumerator(name.mid(i + 2));
                 if(n != -1) {
                     QMetaEnum me = mo->enumerator(n);
                     int val = (me.isFlag() ? me.keysToValue(key) : me.keyToValue(key));

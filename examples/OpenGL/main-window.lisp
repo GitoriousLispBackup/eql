@@ -128,7 +128,7 @@
   (let ((text (qfun "QInputDialog" "getText" *me*
                     (tr "Grabber")
                     (tr "Enter pixmap size:")
-                    (qenum "QLineEdit::EchoMode" "Normal")
+                    "Normal"
                     (format nil "~{~d~^ x ~}" (qget *gl-widget* "size"))
                     nil))) ; ok
     (if (qok)

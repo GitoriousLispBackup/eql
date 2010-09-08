@@ -212,7 +212,7 @@ cl_object tr                   (cl_object);
 void iniCLFunctions();
 void registerMetaTypes();
 void callConnectFun(void*, const QList<QByteArray>&, void**);
-QVariant callOverrideFun(const QObject*, void*, int, const void**);
+QVariant callOverrideFun(void*, int, const void**);
 bool callEventFun(void*, QObject*, QEvent*);
 
 struct QtMetaObject : private QObject {

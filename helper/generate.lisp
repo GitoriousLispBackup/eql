@@ -430,8 +430,7 @@
                                                  (push arg-names *override-arguments*)
                                                  (push (if (void-p ret) 0 ret-name) *override-return-arguments*))
                                                id))
-                                     (call (format nil "callOverrideFun(~a, fun, ~d, ~a)"
-                                                   (if (eql :q type) "this" "0")
+                                     (call (format nil "callOverrideFun(fun, ~d, ~a)"
                                                    sig-id
                                                    (if (function-args fun) "args" "0"))))
                                 (when 1st
