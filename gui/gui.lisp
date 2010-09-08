@@ -14,8 +14,8 @@
 
 (defconstant +history-file+       (in-home "gui/.command-history"))
 (defconstant +max-history+        50)
-(defconstant +mouse-button-press+ 2)
-(defconstant +start+              1)
+(defconstant +mouse-button-press+ 2 "event")
+(defconstant +start+              1 "move operation")
 
 (defparameter *   nil)
 (defparameter **  nil)

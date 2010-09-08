@@ -11,8 +11,7 @@
 
 (in-package :main-window)
 
-(defconstant +normal+  0              "echo mode")
-(defconstant +ignored+ (logior 1 4 8) "size policy")
+(defconstant +ignored+ (logior 1 4 8) "policy")
 
 (defparameter *me*                nil)
 (defparameter *pixmap-label*      nil)
@@ -129,7 +128,7 @@
   (let ((text (qfun "QInputDialog" "getText" *me*
                     (tr "Grabber")
                     (tr "Enter pixmap size:")
-                    +normal+
+                    (qenum "QLineEdit::EchoMode" "Normal")
                     (format nil "~{~d~^ x ~}" (qget *gl-widget* "size"))
                     nil))) ; ok
     (if (qok)

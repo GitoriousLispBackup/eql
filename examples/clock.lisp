@@ -10,7 +10,7 @@
 
 (in-package :clock)
 
-(defconstant +antialiasing+ 1)
+(defconstant +antialiasing+ 1 "render hint")
 
 (defparameter *clock* (qnew "QWidget(QWidget*,Qt::WindowFlags)" nil "WindowStaysOnTopHint"
                             "size" (list 170 170)

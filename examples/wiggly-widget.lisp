@@ -9,8 +9,9 @@
 
 (in-package :wiggly-widget)
 
+(defconstant +light+ 2 "color role")
+
 (defconstant +sinus+ #(0 38 71 92 100 92 71 38 0 -38 -71 -92 -100 -92 -71 -38))
-(defconstant +light+ 2)
 
 (defparameter *step* 0)
 

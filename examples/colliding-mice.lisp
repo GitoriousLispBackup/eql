@@ -11,9 +11,10 @@
 
 (in-package :colliding-mice)
 
-(defconstant +antialiasing+ 1)
-(defconstant +no-index+     -1)
-(defconstant +2pi+          (* 2 pi))
+(defconstant +antialiasing+ 1  "render hint")
+(defconstant +no-index+     -1 "item index method")
+
+(defconstant +2pi+ (* 2 pi))
 
 (defparameter *mouse-count* 7)
 

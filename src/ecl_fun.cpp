@@ -1759,7 +1759,7 @@ cl_object qenum2(cl_object l_name, cl_object l_key) {
             if(name.startsWith("Qt")) {
                 mo = staticQtMetaObject; }
             else {
-                mo = LObjects::staticMetaObject(name.mid(p + 2)); }
+                mo = LObjects::staticMetaObject(name.left(p)); }
             if(mo) {
                 int n = mo->indexOfEnumerator(name.mid(p + 2));
                 if(n != -1) {
