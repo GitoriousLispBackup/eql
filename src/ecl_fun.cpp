@@ -347,6 +347,12 @@ static QSizePolicy toQSizePolicy(cl_object l_sp) {
     QSizePolicy::Policy sp = (QSizePolicy::Policy)toInt(l_sp);
     return QSizePolicy(sp, sp); }
 
+static char toChar(cl_object l_ch) {
+    char ch;
+    if(CHARACTERP(l_ch)) {
+        ch = toInt(cl_char_code(l_ch)); }
+    return ch; }
+
 static QChar toQChar(cl_object l_ch) {
     QChar ch;
     if(CHARACTERP(l_ch)) {
@@ -395,7 +401,7 @@ static int classId(cl_object l_class) {
         id = -LObjects::n_names.value(name, 0); }
     return id; }
 
-static QtObject toQtObject(cl_object l_obj) {
+static QtObject toQtObject(cl_object l_obj, cl_object l_cast = Cnil, bool* qobject_align = 0) {
     STATIC_SYMBOL_PKG(s_qt_object_p,       "QT-OBJECT-P",       "EQL")
     STATIC_SYMBOL_PKG(s_qt_object_pointer, "QT-OBJECT-POINTER", "EQL")
     STATIC_SYMBOL_PKG(s_qt_object_unique,  "QT-OBJECT-UNIQUE",  "EQL")
@@ -404,7 +410,12 @@ static QtObject toQtObject(cl_object l_obj) {
     if(cl_funcall(2, s_qt_object_p, l_obj) == Ct) {
         o.pointer = (void*)fixnnint(cl_funcall(2, s_qt_object_pointer, l_obj));
         o.unique = fixnnint(cl_funcall(2, s_qt_object_unique, l_obj));
-        o.id = toInt(cl_funcall(2, s_qt_object_id, l_obj)); }
+        o.id = toInt(cl_funcall(2, s_qt_object_id, l_obj));
+        if(l_cast != Cnil) {
+            int id_orig = o.id;
+            o.id = classId(l_cast);
+            if((id_orig > 0) && (o.id < 0)) {
+                *qobject_align = true; }}}
     else { // string name, for static methods
         o.id = classId(l_obj); }
     return o; }
@@ -590,6 +601,9 @@ static QVariant toQVariant(cl_object l_obj, const char* s_type, QVariant::Type n
         case QVariant::ULongLong:   var = toUInt<qulonglong>(l_obj); break; }
     return var; }
 
+static cl_object from_char(char ch) {
+    return cl_code_char(MAKE_FIXNUM((int)ch)); }
+
 static cl_object from_qchar(const QChar& ch) {
     return cl_code_char(MAKE_FIXNUM(ch.unicode())); }
 
@@ -771,6 +785,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
     const int n = QMetaType::type(sType);
     switch(n) {
         case QMetaType::Bool:                    p = new bool(l_arg != Cnil); break;
+        case QMetaType::Char:                    p = new char(toChar(l_arg)); break;
         case QMetaType::Double:                  p = new double(toFloat<double>(l_arg)); break;
         case QMetaType::Float:                   p = new float(toFloat<float>(l_arg)); break;
         case QMetaType::Int:                     p = new int(toInt(l_arg)); break;
@@ -858,7 +873,11 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
             if(sType.endsWith('*')) {
                 if(sType.startsWith('Q') || sType.startsWith("const Q")) {
                     QtObject o = toQtObject(l_arg);
-                    void** v = new void*(o.pointer);
+                    ulong l = (ulong)o.pointer;
+                    // cast from QObject to non QObject + multiple inheritance problem
+                    if((o.id > 0) && LObjects::n_names.contains(sType.left(sType.length() - 1))) {
+                        l += sizeof(QObject); }
+                    void** v = new void*((void*)l);
                     p = v; }
                 else if("const char*" == sType) {
                     if(ECL_STRINGP(l_arg)) {
@@ -893,6 +912,7 @@ static cl_object to_lisp_arg(const MetaArg& arg) {
         const int n = QMetaType::type(sType);
         switch(n) {
             case QMetaType::Bool:                    l_ret = *(bool*)p ? Ct : Cnil; break;
+            case QMetaType::Char:                    l_ret = from_char(*(char*)p); break;
             case QMetaType::Double:                  l_ret = ecl_make_doublefloat(*(double*)p); break;
             case QMetaType::Float:                   l_ret = ecl_make_singlefloat(*(float*)p); break;
             case QMetaType::Int:                     l_ret = MAKE_FIXNUM(*(int*)p); break;
@@ -1009,6 +1029,7 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
     const int n = QMetaType::type(sType);
     switch(n) {
         case QMetaType::Double:
+        case QMetaType::Char:
         case QMetaType::Float:
         case QMetaType::Int:
         case QMetaType::LongLong:
@@ -1404,7 +1425,7 @@ cl_object qset_property(cl_object l_obj, cl_object l_name, cl_object l_val) {
     error("QSET-PROPERTY", LIST3(l_obj, l_name, l_val));
     return Cnil; }
 
-cl_object qinvoke_method2(cl_object l_obj, cl_object l_class, cl_object l_name, cl_object l_args) {
+cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, cl_object l_args) {
     /// args: (object name &rest arguments)
     /// alias: qfun
     /// Calls a Qt slot or method. Static methods can be called by passing the string name of an object.<br>For overloaded Qt methods you may need to pass the argument types (as for <code>qconnect</code> and <code>qoverride</code>). In these (very few) ambiguous cases you will see a runtime error message, together with a list of all possible candidates.
@@ -1412,14 +1433,15 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_class, cl_object l_name, 
     ///     (qfun "QDateTime" "currentDateTime") ; static method
     static QHash<QByteArray, int> i_slot;
     static QHash<QByteArray, int> i_method;
-    QtObject o = toQtObject(l_obj);
+    bool qobject_align = false;
+    QtObject o = toQtObject(l_obj, l_cast, &qobject_align);
     if(ECL_STRINGP(l_name)) {
-        QByteArray qclass;
-        if(ECL_STRINGP(l_class)) {
-            qclass = toCString(l_class); }
+        QByteArray castClass;
+        if(ECL_STRINGP(l_cast)) {
+            castClass = toCString(l_cast); }
         QByteArray name(QMetaObject::normalizedSignature(toCString(l_name)));
         int len_args = LEN(l_args);
-        QByteArray cacheName((qclass.isEmpty() ? o.className() : qclass) + '_' + name + char('A' + len_args));
+        QByteArray cacheName((castClass.isEmpty() ? o.className() : castClass) + '_' + name + char('A' + len_args));
         bool method = false;
         const QMetaObject* mo = 0;
         int n = i_slot.value(cacheName, -1);
@@ -1432,7 +1454,7 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_class, cl_object l_name, 
                 mo = methodMetaObject(o); }}
         if(n == -1) {
             mo = staticMetaObject(o);
-            if(qclass.isEmpty() && o.isQObject()) {
+            if(castClass.isEmpty() && o.isQObject()) {
                 n = findMethodIndex(Slot, name, mo, len_args); }
             if(n == -1) {
                 method = true;
@@ -1450,7 +1472,7 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_class, cl_object l_name, 
                         sep = ","; }
                     // ordinary methods start with 'M'
                     QString _name("M" + name.left(p + 1) + "%1*" + sep + name.mid(p + 1));
-                    if(qclass.isEmpty()) {
+                    if(castClass.isEmpty()) {
                         const QMetaObject* _mo = mo;
                         mo = methodMetaObject(o);
                         if(o.isQObject()) {
@@ -1471,10 +1493,9 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_class, cl_object l_name, 
                                 mo = mo->superClass(); }
                             while(_class && mo); }}
                     else {
-                        // (very rare) need of cast e.g. cast QEvent to QKeyEvent
-                        if(!o.isQObject()) {
-                            mo = methodMetaObject(o); }
-                        n = findMethodIndex(Method, _name.arg(qclass.constData()).toAscii(), mo, len_args); }}}
+                        // very rare need of cast, see QFUN* for examples
+                        mo = methodMetaObject(o);
+                        n = findMethodIndex(Method, _name.arg(castClass.constData()).toAscii(), mo, len_args); }}}
             if(n != -1) {
                 if(method) {
                     i_method[cacheName] = n; }
@@ -1495,8 +1516,14 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_class, cl_object l_name, 
                 args[0] = ret.second; // return value
                 MetaArgList mArgs;
                 int i = -1;
+                void* _this = 0;
                 if(this_arg) {
-                    args[++i + 1] = &(o.pointer); }
+                    ulong l = (ulong)o.pointer;
+                    if(qobject_align) {
+                        // cast from QObject to non QObject + multiple inheritance problem
+                        l += sizeof(QObject); }
+                    _this = (void*)l;
+                    args[++i + 1] = &_this; }
                 while((l_do_args != Cnil) && (i < MAX_ARGS)) {
                     ++i;
                     MetaArg m_arg(toMetaArg(types.at(i), cl_car(l_do_args)));
@@ -1508,8 +1535,8 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_class, cl_object l_name, 
                     caller = o.isQObject() ? LObjects::Q[o.id - 1] : LObjects::N[-o.id - 1]; }
                 else {
                     caller = o.isQObject() ? (QObject*)o.pointer : 0; }
-                if(caller) {
-                    caller->qt_metacall(QMetaObject::InvokeMetaMethod, n, args);
+                if(caller) {               
+                    caller->qt_metacall(QMetaObject::InvokeMetaMethod, n, args);                    
                     clearMetaArgList(mArgs);
                     cl_object l_ret = to_lisp_arg(ret);
                     clearMetaArg(ret, true);
@@ -1521,7 +1548,7 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_class, cl_object l_name, 
                 else {
                     clearMetaArgList(mArgs); }}}}
     ecl_process_env()->nvalues = 1;
-    error("QINVOKE-METHOD", LIST4(l_obj, l_class, l_name, l_args));
+    error("QINVOKE-METHOD", LIST4(l_obj, l_cast, l_name, l_args));
     return Cnil; }
 
 static void* getLispFun(cl_object l_fun) {

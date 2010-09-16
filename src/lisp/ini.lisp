@@ -5,11 +5,6 @@
 (defmacro alias (s1 s2)
   `(setf (symbol-function ',s1) (function ,s2)))
 
-(defmacro with- (exp &rest args)
-  (let ((args* (loop for i from 1 to (length args) collect (gensym))))
-    `(mapc (lambda ,args* ,(append exp args*))
-           ,@args)))
-
 (defmacro qlet ((&rest pairs) &body body)
   "args: (((var exp) ...) ...)
    Similar to <code>let*</code>. Creates temporary Qt objects, deleting them at the end of the <code>qlet</code> body. If <code>exp</code> is a string, it will be substituted with <code>(qnew exp)</code>.
@@ -115,7 +110,8 @@
   "args: (object class name &rest arguments)
    alias: qfun*
    Similar to <code>qinvoke-method</code>, additionally passing a class name, enforcing a cast to that class.
-       (qfun* event \"QKeyEvent\" \"key\")"
+       (qfun* event \"QKeyEvent\" \"key\")
+       (qfun* graphics-text-item \"QGraphicsItem\" \"setPos\" (list x y)) // multiple inheritance"
   (qinvoke-method2 obj name slot args))
 
 (defun qconnect (from signal to &optional slot)

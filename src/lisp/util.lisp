@@ -4,6 +4,7 @@
   (:use :common-lisp)
   (:export
    #:do-
+   #:do-string
    #:empty-string
    #:ensure-list
    #:ends-with
@@ -50,6 +51,11 @@
   `(do ()
        ((not ,exp))
      ,@body))
+
+(defmacro do-string ((var str) &body body)
+  `(map nil #'(lambda (,var)
+                ,@body)
+        ,str))
 
 (defmacro do- (to &body body)
   `(progn

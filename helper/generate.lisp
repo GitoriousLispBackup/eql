@@ -196,6 +196,7 @@
          (enum-as-int (and return
                            (find #\: type)
                            (not (find #\< type))
+                           ;; exclude typedefs and classes
                            (not (find* type '("QCoreApplication::EventFilter"
                                               "QPainterPath::Element"))))))
     (format nil "~a~a~a"
@@ -715,6 +716,7 @@
 
 (defun missing-types ()
   (let ((skip (list "bool"
+                    "char"
                     "double"
                     "float"
                     "int"

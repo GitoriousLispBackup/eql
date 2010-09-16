@@ -11,6 +11,7 @@
 *.DS_Store
 *.~
 *~
+t.lisp
 *2.lisp
 Makefile
 eql

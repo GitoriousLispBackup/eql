@@ -23,8 +23,9 @@
                             (in-home (format nil "examples/icons/~a.png" name)))))
 
 (defun start ()
-  (qset *main* "pos" (list 50 50))
-  (qset *main* "size" (list 700 500))
+  (do- (qset *main*)
+    ("pos" (list 50 50))
+    ("size" (list 700 500)))
   (set-icon *action-open* "open")
   (set-icon *action-save* "save")
   (qconnect *action-open* "triggered()" 'file-open)

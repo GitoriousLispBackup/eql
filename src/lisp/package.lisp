@@ -55,8 +55,7 @@
    #:qt-object-p
    #:qt-object-pointer
    #:qt-object-unique
-   #:tr
-   #:with-))
+   #:tr))
 
 #-win32
 (progn

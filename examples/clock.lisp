@@ -25,15 +25,17 @@
 
 (defun pen (width &optional (color "black"))
   (let ((pen (qnew "QPen")))
-    (qfun pen "setCapStyle" "RoundCap")
-    (qfun pen "setWidth" width)
-    (qfun pen "setColor" color)
+    (do- (qfun pen)
+      ("setCapStyle" "RoundCap")
+      ("setWidth" width)
+      ("setColor" color))
     pen))
 
 (defun brush (color)
   (let ((brush (qnew "QBrush")))
-    (qfun brush "setStyle" "SolidPattern")
-    (qfun brush "setColor(QColor)" color)
+    (do- (qfun brush)
+      ("setStyle" "SolidPattern")
+      ("setColor(QColor)" color))
     brush))
 
 (let ((painter (qnew "QPainter"))
