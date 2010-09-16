@@ -133,9 +133,10 @@
     (append (reverse up) down)))
 
 (defun set-tree (tree &optional (cols 2) lb1 lb2 lb3)
-  (with- (qset tree)
-    (list "alternatingRowColors" "sortingEnabled" "rootIsDecorated")
-    (list t t nil))
+  (do- (qset tree)
+    ("alternatingRowColors" t)
+    ("sortingEnabled" t)
+    ("rootIsDecorated" nil))
   (let ((lbs (list (if lb1 lb1 (tr "Type"))
                    (if lb2 lb2 (tr "Name"))
                    lb3)))
@@ -329,8 +330,9 @@
         (show-error err color)))))
 
 (defun focus-me ()
-  (with- (qfun *gui*)
-    (list "activateWindow" "raise"))
+  (do- (qfun *gui*)
+    "activateWindow"
+    "raise")
   (qfun *edit* "setFocus"))
 
 (let (listen)
