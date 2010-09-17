@@ -699,6 +699,25 @@
    "virtual QSize minimumSizeHint () const"
    "virtual void setVisible ( bool )"
    "virtual QSize sizeHint () const")
+  (("QDialogButtonBox" . "QWidget")
+   "new QDialogButtonBox ( QWidget * = 0 )"
+   "new QDialogButtonBox ( Qt::Orientation, QWidget * = 0 )"
+   "new QDialogButtonBox ( StandardButtons, Qt::Orientation = Qt::Horizontal, QWidget * = 0 )"
+   "void addButton ( QAbstractButton *, ButtonRole )"
+   "QPushButton * addButton ( const QString &, ButtonRole )"
+   "QPushButton * addButton ( StandardButton )"
+   "QPushButton * button ( StandardButton ) const"
+   "ButtonRole buttonRole ( QAbstractButton * ) const"
+   "QList<QAbstractButton *> buttons () const"
+   "bool centerButtons () const"
+   "void clear ()"
+   "Qt::Orientation orientation () const"
+   "void removeButton ( QAbstractButton * )"
+   "void setCenterButtons ( bool )"
+   "void setOrientation ( Qt::Orientation )"
+   "void setStandardButtons ( StandardButtons )"
+   "StandardButton standardButton ( QAbstractButton * ) const"
+   "StandardButtons standardButtons () const")
   (("QDockWidget" . "QWidget")
    "new QDockWidget ( const QString &, QWidget * = 0, Qt::WindowFlags = 0 )"
    "new QDockWidget ( QWidget * = 0, Qt::WindowFlags = 0 )"
@@ -1826,6 +1845,13 @@
    "Qt::TextInteractionFlags textInteractionFlags () const"
    "QString toPlainText () const"
    "QTextOption::WrapMode wordWrapMode () const")
+  (("QPrintPreviewDialog" . "QDialog")
+   "new QPrintPreviewDialog ( QPrinter *, QWidget * = 0, Qt::WindowFlags = 0 )"
+   "new QPrintPreviewDialog ( QWidget * = 0, Qt::WindowFlags = 0 )"
+   "void open ( QObject *, const char * )"
+   "QPrinter * printer ()"
+   "virtual void done ( int )"
+   "virtual void setVisible ( bool )")
   (("QProgressBar" . "QWidget")
    "new QProgressBar ( QWidget * = 0 )"
    "Qt::Alignment alignment () const"
@@ -2061,6 +2087,12 @@
    "virtual bool setData ( const QModelIndex &, const QVariant &, int = Qt::EditRole )"
    "virtual void sort ( int, Qt::SortOrder = Qt::AscendingOrder )"
    "virtual Qt::DropActions supportedDropActions () const")
+  (("QSyntaxHighlighter" . "QObject")
+   "new QSyntaxHighlighter ( QObject * )"
+   "new QSyntaxHighlighter ( QTextDocument * )"
+   "new QSyntaxHighlighter ( QTextEdit * )"
+   "QTextDocument * document () const"
+   "void setDocument ( QTextDocument * )")
   (("QTabBar" . "QWidget")
    "new QTabBar ( QWidget * = 0 )"
    "int addTab ( const QString & )"

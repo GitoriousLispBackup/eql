@@ -166,6 +166,7 @@
    "virtual QSize minimumSizeHint () const"
    "virtual void setVisible ( bool )"
    "virtual QSize sizeHint () const")
+  (("QDialogButtonBox" . "QWidget"))
   (("QDockWidget" . "QWidget"))
   (("QDoubleSpinBox" . "QAbstractSpinBox")
    "virtual QString textFromValue ( double ) const"
@@ -372,6 +373,9 @@
    "protected virtual bool canInsertFromMimeData ( const QMimeData * ) const"
    "protected virtual QMimeData * createMimeDataFromSelection () const"
    "protected virtual void insertFromMimeData ( const QMimeData * )")
+  (("QPrintPreviewDialog" . "QDialog")
+   "virtual void done ( int )"
+   "virtual void setVisible ( bool )")
   (("QProgressBar" . "QWidget")
    "virtual QString text () const"
    "virtual QSize minimumSizeHint () const"
@@ -439,6 +443,8 @@
    "virtual bool setData ( const QModelIndex &, const QVariant &, int = Qt::EditRole )"
    "virtual void sort ( int, Qt::SortOrder = Qt::AscendingOrder )"
    "virtual Qt::DropActions supportedDropActions () const")
+  (("QSyntaxHighlighter" . "QObject")
+   "protected virtual void highlightBlock ( const QString & ) = 0")
   (("QTabBar" . "QWidget")
    "virtual QSize minimumSizeHint () const"
    "virtual QSize sizeHint () const"

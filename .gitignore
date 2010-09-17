@@ -9,6 +9,8 @@
 *.obj
 *.so*
 *.DS_Store
+*.qm
+*.ts
 *.~
 *~
 t.lisp
