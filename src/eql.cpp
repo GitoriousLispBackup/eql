@@ -43,20 +43,26 @@ static void eval(const char* lisp_code) {
 void EQL::exec(const QStringList& args) {
     si_select_package(make_simple_base_string((char*)"EQL"));
     eval(QString("(SET-HOME \"%1\")").arg(home()).toAscii().constData());
-    if(args.contains("-qgui")) {
-        eval("(QGUI)"); }
+    bool qgui = false;
+    int count = args.count();
+    if(count > 1) {
+        if(args.at(1) == "-qgui") {
+            qgui = true;
+            eval("(QGUI)"); }}
     bool quit = false;
     const char* lisp_code = 0;
     QString load;
-    if(args.count() == 1) {
+    if(count == 1) {
         quit = true;
         lisp_code = "(SI:TOP-LEVEL)"; }
     else if(args.contains("-qtpl")) {
         quit = true;
         lisp_code = "(SI::QTOP-LEVEL)"; } // see src/lisp/ini.lisp
-    else if((args.count() == 2) && !args.at(1).startsWith("-")) {
-        load = QString("(LOAD \"%1\")").arg(args.at(1));
-        lisp_code = load.toAscii().constData(); }
+    else if(count >= 2) {
+        if(!(qgui && (count == 2))) {
+            load = QString("(LOAD \"%1\")")
+                   .arg(args.at(((count > 2) && qgui) ? 2 : 1));
+            lisp_code = load.toAscii().constData(); }}
     if(lisp_code) {
         eval(lisp_code); }
     if(quit) {
