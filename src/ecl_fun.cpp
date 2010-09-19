@@ -237,11 +237,11 @@ static QByteArray prettyFunName(const QByteArray& name, bool this_arg) {
         pretty.truncate(pretty.length() - 1); }
     return pretty; }
 
-enum CallType { Slot, Method, Static };
+enum CallType { SignalOrSlot, Method, Static };
 
 static int findMethodIndex(CallType type, const QByteArray& name, const QMetaObject* mo, int len) {
     int n = -1;
-    bool static_or_slot = ((Static == type) || (Slot == type));
+    bool this_arg = (Method == type);
     QByteArray search(name);
     bool exact = true;
     if(search.endsWith(')')) {
@@ -251,7 +251,7 @@ static int findMethodIndex(CallType type, const QByteArray& name, const QMetaObj
             if(!search.endsWith(',')) {
                 search.append(','); }}}
     else {
-        if(!len && static_or_slot) {
+        if(!len && !this_arg) {
             if(search.endsWith('(')) {
                 search.append(')'); }
             else {
@@ -264,11 +264,11 @@ static int findMethodIndex(CallType type, const QByteArray& name, const QMetaObj
         if(!search.contains('(')) {
             search.append('('); }
         StrList candidates;
-        int min = (Slot == type) ? 0 : mo->methodOffset();
+        int min = (SignalOrSlot == type) ? 0 : mo->methodOffset();
         for(int i = mo->methodCount() - 1; i >= min; --i) {
             QByteArray sig(mo->method(i).signature());
             int len_args = sig.count(',');
-            if(static_or_slot) {
+            if(!this_arg) {
                 if(!sig.endsWith("()")) {
                     ++len_args; }}
             if(len_args == len) {
@@ -278,9 +278,9 @@ static int findMethodIndex(CallType type, const QByteArray& name, const QMetaObj
         if(candidates.size() > 1) {
             n = -1;
             qDebug() << "[EQL:error] QINVOKE-METHOD ambiguous, candidates are:";
-            qDebug() << "->" << prettyFunName(name, !static_or_slot);
+            qDebug() << "->" << prettyFunName(name, this_arg);
             Q_FOREACH(QByteArray sig, candidates) {
-                qDebug() << "  " << prettyFunName(sig, !static_or_slot); }}}
+                qDebug() << "  " << prettyFunName(sig, this_arg); }}}
     return n; }
 
 static cl_object q_keyword() {
@@ -348,7 +348,7 @@ static QSizePolicy toQSizePolicy(cl_object l_sp) {
     return QSizePolicy(sp, sp); }
 
 static char toChar(cl_object l_ch) {
-    char ch;
+    char ch = 0;
     if(CHARACTERP(l_ch)) {
         ch = toInt(cl_char_code(l_ch)); }
     return ch; }
@@ -1455,7 +1455,7 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
         if(n == -1) {
             mo = staticMetaObject(o);
             if(castClass.isEmpty() && o.isQObject()) {
-                n = findMethodIndex(Slot, name, mo, len_args); }
+                n = findMethodIndex(SignalOrSlot, name, mo, len_args); }
             if(n == -1) {
                 method = true;
                 int p = name.indexOf('(');

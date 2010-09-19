@@ -111,7 +111,7 @@
    alias: qfun*
    Similar to <code>qinvoke-method</code>, additionally passing a class name, enforcing a cast to that class.
        (qfun* event \"QKeyEvent\" \"key\")
-       (qfun* graphics-text-item \"QGraphicsItem\" \"setPos\" (list x y)) // multiple inheritance"
+       (qfun* graphics-text-item \"QGraphicsItem\" \"setPos\" (list x y)) ; multiple inheritance problem"
   (qinvoke-method2 obj name slot args))
 
 (defun qconnect (from signal to &optional slot)
