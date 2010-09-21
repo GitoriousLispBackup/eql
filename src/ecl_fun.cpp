@@ -94,6 +94,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object("qsingle-shot"),         (cl_objectfn_fixed)qsingle_shot,             2);
     cl_def_c_function(c_string_to_object("qstatic-meta-object"),  (cl_objectfn_fixed)qstatic_meta_object,      1);
     cl_def_c_function(c_string_to_object("qt-object-name"),       (cl_objectfn_fixed)qt_object_name,           1);
+    cl_def_c_function(c_string_to_object("qutf8"),                (cl_objectfn_fixed)qutf8,                    1);
     cl_def_c_function(c_string_to_object("tr"),                   (cl_objectfn_fixed)tr,                       1); }
 
 enum UserMetaTypes {
@@ -1428,9 +1429,10 @@ cl_object qset_property(cl_object l_obj, cl_object l_name, cl_object l_val) {
 cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, cl_object l_args) {
     /// args: (object name &rest arguments)
     /// alias: qfun
-    /// Calls a Qt slot or method. Static methods can be called by passing the string name of an object.<br>For overloaded Qt methods you may need to pass the argument types (as for <code>qconnect</code> and <code>qoverride</code>). In these (very few) ambiguous cases you will see a runtime error message, together with a list of all possible candidates.
+    /// Calls any of Qt methods, slots, signals ("emit" in jargon). Static methods can be called by passing the string name of an object.<br>For overloaded Qt methods you may need to pass the argument types (as for <code>qconnect</code> and <code>qoverride</code>). In these (very few) ambiguous cases you will see a runtime error message, together with a list of all possible candidates.
     ///     (qfun item "setText" 0 "Some objects are EQL.")
     ///     (qfun "QDateTime" "currentDateTime") ; static method
+    ///     (qfun slider "valueChanged" 10) ; emit signal
     static QHash<QByteArray, int> i_slot;
     static QHash<QByteArray, int> i_method;
     bool qobject_align = false;
@@ -1741,6 +1743,13 @@ cl_object qclear_event_filters() {
 cl_object tr(cl_object l_str) {
     ecl_process_env()->nvalues = 1;
     cl_object l_ret = from_qstring(QObject::tr(toQString(l_str).toUtf8()));
+    return l_ret; }
+
+cl_object qutf8(cl_object l_str) {
+    /// args: (string)
+    /// Returns the string converted to UTF8. Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.
+    ecl_process_env()->nvalues = 1;
+    cl_object l_ret = from_cstring(toQString(l_str).toUtf8());
     return l_ret; }
 
 cl_object qt_object_name(cl_object l_obj) {

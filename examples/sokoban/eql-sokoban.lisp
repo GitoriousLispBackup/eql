@@ -93,7 +93,7 @@
 (defun create-items ()
   (clear-items)
   (flet ((add (types)
-	   (dolist (type (ensure-list types))
+           (dolist (type (ensure-list types))
              (let ((item (create-item type)))
                (push item (cdr (assoc type *items*)))
                (qfun *scene* "addItem" item)))))
@@ -111,29 +111,29 @@
 (let (pixmaps)
   (defun create-item (type)
     (let* ((char (type-char type))
-	   (file (in-home (format nil "examples/sokoban/pics/~(~a~).png" type)))
-	   (pixmap (assoc file pixmaps :test #'string=))
-	   (item (if (or pixmap
-			 (probe-file file))
-		     (qnew "QGraphicsPixmapItem(QPixmap)"
-			   (cdr (if pixmap
-				    pixmap
-				    (first (push (cons file (qnew "QPixmap(QString)" file))
-						 pixmaps)))))
-		     (let ((item (qnew "QGraphicsTextItem"))) ; simple text item dummies (when pics are missing)
-		       (qfun item "setHtml"
-			     (format nil "<span style='font-family:monospace; font-size:12pt; font-weight:bold; color:~a;'>~c"
-				     (case type
-				       (:wall    "blue")
-				       (:object  "orange")
-				       (:object2 "gold")
-				       (:goal    "white")
-				       (:player  "red")
-				       (:player2 "magenta"))
-				     char))
-		       item))))
+           (file (in-home (format nil "examples/sokoban/pics/~(~a~).png" type)))
+           (pixmap (assoc file pixmaps :test #'string=))
+           (item (if (or pixmap
+                         (probe-file file))
+                     (qnew "QGraphicsPixmapItem(QPixmap)"
+                           (cdr (if pixmap
+                                    pixmap
+                                    (first (push (cons file (qnew "QPixmap(QString)" file))
+                                                 pixmaps)))))
+                     (let ((item (qnew "QGraphicsTextItem"))) ; simple text item dummies (when pics are missing)
+                       (qfun item "setHtml"
+                             (format nil "<span style='font-family:monospace; font-size:12pt; font-weight:bold; color:~a;'>~c"
+                                     (case type
+                                       (:wall    "blue")
+                                       (:object  "orange")
+                                       (:object2 "gold")
+                                       (:goal    "white")
+                                       (:player  "red")
+                                       (:player2 "magenta"))
+                                     char))
+                       item))))
       (unless *item-size*
-	(setf *item-size* (cddr (qfun item "boundingRect"))))
+        (setf *item-size* (cddr (qfun item "boundingRect"))))
       item)))
 
 (defun key-pressed (event)
@@ -165,16 +165,16 @@
          (y 0))
     (unless (eql :wall type)
       (dolist (item items)
-	(qfun* item "QGraphicsItem" "setVisible" nil)))
+        (qfun* item "QGraphicsItem" "setVisible" nil)))
     (dolist (row (maze-text *maze*))
       (let ((x 0))
-	(do-string (curr-char row)
-	  (when (char= char curr-char)
-	    (do- (qfun* (first items) "QGraphicsItem")
-	      ("setPos" (list x y))
-	      ("setVisible" t))
-	    (setf items (rest items)))
-	  (incf x (first *item-size*))))
+        (do-string (curr-char row)
+          (when (char= char curr-char)
+            (do- (qfun* (first items) "QGraphicsItem")
+              ("setPos" (list x y))
+              ("setVisible" t))
+            (setf items (rest items)))
+          (incf x (first *item-size*))))
       (incf y (second *item-size*)))))
   
 (defun draw ()
