@@ -25,6 +25,7 @@
    #:qinvoke-method*
    #:qlet
    #:qload-ui
+   #:qlocal8bit
    #:qmessage-box
    #:qnew-instance
    #:qnobject-super-class

@@ -120,6 +120,11 @@
    "virtual void setGeometry ( const QRect & )"
    "virtual QSize sizeHint () const"
    "virtual QLayoutItem * takeAt ( int )")
+  (("QBuffer" . "QIODevice")
+   "virtual bool atEnd () const"
+   "virtual bool canReadLine () const"
+   "virtual void close ()"
+   "virtual bool open ( OpenMode )")
   (("QButtonGroup" . "QObject"))
   (("QCalendarWidget" . "QWidget")
    "virtual QSize minimumSizeHint () const"
@@ -281,6 +286,15 @@
    "virtual QSize sizeHint () const"
    "protected virtual void paintSection ( QPainter *, const QRect &, int ) const"
    "protected virtual QSize sectionSizeFromContents ( int ) const")
+  (("QIODevice" . "QObject")
+   "virtual bool atEnd () const"
+   "virtual bool canReadLine () const"
+   "virtual void close ()"
+   "virtual bool isSequential () const"
+   "virtual bool open ( OpenMode )"
+   "virtual bool reset ()"
+   "virtual bool waitForBytesWritten ( int )"
+   "virtual bool waitForReadyRead ( int )")
   (("QInputContext" . "QObject")
    "virtual QList<QAction *> actions ()"
    "virtual bool filterEvent ( const QEvent * )"

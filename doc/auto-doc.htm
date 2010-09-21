@@ -109,6 +109,10 @@
 <p>Calls a custom <code>QUiLoader::load()</code> function, loading a UI file created by Qt Designer. Returns the top level widget of the UI. Use <code>qfind-child</code> to retrieve the child widgets.</p>
 </p><br>
 <p>
+<b>QLOCAL8BIT (string)</b>
+<p>Returns the string converted using <code>QString(string).toLocal8Bit()</code> (see <code>QLocale</code> settings). Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.</p>
+</p><br>
+<p>
 <b>QMESSAGE-BOX (message)</b>
 <br>
 <b>QMSG</b>
@@ -212,6 +216,6 @@
 </p><br>
 <p>
 <b>QUTF8 (string)</b>
-<p>Returns the string converted to UTF8. Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.</p>
+<p>Returns the string converted using <code>QString(string).toUtf8()</code>. Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.</p>
 </p><br>
 </body></html>

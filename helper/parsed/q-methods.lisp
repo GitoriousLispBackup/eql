@@ -392,6 +392,19 @@
    "virtual void setGeometry ( const QRect & )"
    "virtual QSize sizeHint () const"
    "virtual QLayoutItem * takeAt ( int )")
+  (("QBuffer" . "QIODevice")
+   "new QBuffer ( QObject * = 0 )"
+   "new QBuffer ( QByteArray *, QObject * = 0 )"
+   "QByteArray & buffer ()"
+   "const QByteArray & buffer () const"
+   "const QByteArray & data () const"
+   "void setBuffer ( QByteArray * )"
+   "void setData ( const QByteArray & )"
+   "void setData ( const char *, int )"
+   "virtual bool atEnd () const"
+   "virtual bool canReadLine () const"
+   "virtual void close ()"
+   "virtual bool open ( OpenMode )")
   (("QButtonGroup" . "QObject")
    "new QButtonGroup ( QObject * = 0 )"
    "void addButton ( QAbstractButton * )"
@@ -1276,6 +1289,26 @@
    "virtual void reset ()"
    "virtual void setModel ( QAbstractItemModel * )"
    "virtual QSize sizeHint () const")
+  (("QIODevice" . "QObject")
+   "virtual bool atEnd () const"
+   "virtual bool canReadLine () const"
+   "virtual void close ()"
+   "QString errorString () const"
+   "bool getChar ( char * )"
+   "bool isOpen () const"
+   "bool isReadable () const"
+   "virtual bool isSequential () const"
+   "bool isTextModeEnabled () const"
+   "bool isWritable () const"
+   "virtual bool open ( OpenMode )"
+   "OpenMode openMode () const"
+   "bool putChar ( char )"
+   "QByteArray readAll ()"
+   "virtual bool reset ()"
+   "void setTextModeEnabled ( bool )"
+   "void ungetChar ( char )"
+   "virtual bool waitForBytesWritten ( int )"
+   "virtual bool waitForReadyRead ( int )")
   (("QInputContext" . "QObject")
    "virtual QList<QAction *> actions ()"
    "virtual bool filterEvent ( const QEvent * )"

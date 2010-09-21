@@ -194,6 +194,7 @@ cl_object qfind_child          (cl_object, cl_object);
 cl_object qid                  (cl_object);
 cl_object qinvoke_method2      (cl_object, cl_object, cl_object, cl_object);
 cl_object qload_ui             (cl_object);
+cl_object qlocal8bit           (cl_object);
 cl_object qnew_instance2       (cl_object, cl_object);
 cl_object qnobject_super_class (cl_object);
 cl_object qobject_names2       (cl_object);

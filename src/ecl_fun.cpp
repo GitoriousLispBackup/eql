@@ -81,6 +81,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object("qid"),                  (cl_objectfn_fixed)qid,                      1);
     cl_def_c_function(c_string_to_object("qinvoke-method2"),      (cl_objectfn_fixed)qinvoke_method2,          4);
     cl_def_c_function(c_string_to_object("qload-ui"),             (cl_objectfn_fixed)qload_ui,                 1);
+    cl_def_c_function(c_string_to_object("qlocal8bit"),           (cl_objectfn_fixed)qlocal8bit,               1);
     cl_def_c_function(c_string_to_object("qnew-instance2"),       (cl_objectfn_fixed)qnew_instance2,           2);
     cl_def_c_function(c_string_to_object("qnobject-super-class"), (cl_objectfn_fixed)qnobject_super_class,     1);
     cl_def_c_function(c_string_to_object("qobject-names2"),       (cl_objectfn_fixed)qobject_names2,           1);
@@ -1745,9 +1746,16 @@ cl_object tr(cl_object l_str) {
     cl_object l_ret = from_qstring(QObject::tr(toQString(l_str).toUtf8()));
     return l_ret; }
 
+cl_object qlocal8bit(cl_object l_str) {
+    /// args: (string)
+    /// Returns the string converted using <code>QString(string).toLocal8Bit()</code> (see <code>QLocale</code> settings). Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.
+    ecl_process_env()->nvalues = 1;
+    cl_object l_ret = from_cstring(toQString(l_str).toLocal8Bit());
+    return l_ret; }
+
 cl_object qutf8(cl_object l_str) {
     /// args: (string)
-    /// Returns the string converted to UTF8. Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.
+    /// Returns the string converted using <code>QString(string).toUtf8()</code>. Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.
     ecl_process_env()->nvalues = 1;
     cl_object l_ret = from_cstring(toQString(l_str).toUtf8());
     return l_ret; }
