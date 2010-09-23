@@ -50,6 +50,7 @@
    #:qfun*
    #:qmsg
    #:qq
+   #:qtranslate
    #:qt-object
    #:qt-object-id
    #:qt-object-name

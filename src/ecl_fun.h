@@ -207,9 +207,9 @@ cl_object qsender              ();
 cl_object qset_property        (cl_object, cl_object, cl_object);
 cl_object qsingle_shot         (cl_object, cl_object);
 cl_object qstatic_meta_object  (cl_object);
+cl_object qtranslate           (cl_object, cl_object, cl_object);
 cl_object qt_object_name       (cl_object);
 cl_object qutf8                (cl_object);
-cl_object tr                   (cl_object);
 
 void iniCLFunctions();
 void registerMetaTypes();

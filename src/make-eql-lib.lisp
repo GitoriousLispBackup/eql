@@ -1,6 +1,8 @@
 (unless (find :unicode *features*)
   (error "Please build ECL with unicode support (configure --enable-unicode)"))
 
+(setf *break-on-signals* 'error)
+
 (make-package :c)
 
 (defvar *lisp-files* (list #-win32 "serve-event" "util" "package" "ini"))

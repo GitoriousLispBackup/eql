@@ -94,9 +94,9 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object("qset-property"),        (cl_objectfn_fixed)qset_property,            3);
     cl_def_c_function(c_string_to_object("qsingle-shot"),         (cl_objectfn_fixed)qsingle_shot,             2);
     cl_def_c_function(c_string_to_object("qstatic-meta-object"),  (cl_objectfn_fixed)qstatic_meta_object,      1);
+    cl_def_c_function(c_string_to_object("qtranslate"),           (cl_objectfn_fixed)qtranslate,               3);
     cl_def_c_function(c_string_to_object("qt-object-name"),       (cl_objectfn_fixed)qt_object_name,           1);
-    cl_def_c_function(c_string_to_object("qutf8"),                (cl_objectfn_fixed)qutf8,                    1);
-    cl_def_c_function(c_string_to_object("tr"),                   (cl_objectfn_fixed)tr,                       1); }
+    cl_def_c_function(c_string_to_object("qutf8"),                (cl_objectfn_fixed)qutf8,                    1); }
 
 enum UserMetaTypes {
     // must correspond exactly to "void registerMetaTypes()"
@@ -1741,9 +1741,16 @@ cl_object qclear_event_filters() {
 
 // *** convenience functions ***
 
-cl_object tr(cl_object l_str) {
+cl_object qtranslate(cl_object l_con, cl_object l_src, cl_object l_n) {
     ecl_process_env()->nvalues = 1;
-    cl_object l_ret = from_qstring(QObject::tr(toQString(l_str).toUtf8()));
+    QByteArray context(toQString(l_con).toUtf8());
+    QByteArray source(toQString(l_src).toUtf8());
+    int n = toInt(l_n);
+    cl_object l_ret;
+    if(n == -1) {
+        l_ret = from_qstring(QCoreApplication::translate(context, source, 0, QCoreApplication::CodecForTr)); }
+    else {
+        l_ret = from_qstring(QCoreApplication::translate(context, source, 0, QCoreApplication::CodecForTr, n)); }
     return l_ret; }
 
 cl_object qlocal8bit(cl_object l_str) {

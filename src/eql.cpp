@@ -11,6 +11,11 @@ extern "C" void ini_EQL(cl_object);
 
 bool EQL::ini = false;
 
+static void eval(const char* lisp_code) {
+    CL_CATCH_ALL_BEGIN(ecl_process_env()) {
+        si_safe_eval(2, ecl_read_from_cstring(lisp_code), Cnil); }
+    CL_CATCH_ALL_END; }
+
 EQL::EQL() : QObject(), fun(0) {
     iniCLFunctions();
     registerMetaTypes();
@@ -34,11 +39,6 @@ void EQL::singleShot() {
     if(fun) {
         cl_funcall(1, (cl_object)fun);
         fun = 0; }}
-
-static void eval(const char* lisp_code) {
-    CL_CATCH_ALL_BEGIN(ecl_process_env()) {
-        si_safe_eval(2, ecl_read_from_cstring(lisp_code), Cnil); }
-    CL_CATCH_ALL_END; }
 
 void EQL::exec(const QStringList& args) {
     si_select_package(make_simple_base_string((char*)"EQL"));

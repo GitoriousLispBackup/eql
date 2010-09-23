@@ -49,6 +49,18 @@
             (qt-object-name obj)
             (qt-object-pointer obj))))
 
+(defmacro tr (src &optional con (n -1))
+  "args: (source &optional context n)
+   Macro expanding to <code>qtranslate</code>, which calls <code>QCoreApplication::translate()</code>. Both <code>source</code> and <code>context</code> can be Lisp forms evaluating to constant strings (using <code>eval</code>). The <code>n</code> argument is for plurals, see Qt Assistant."
+  ;; see compiler-macro in my_app/tr.lisp
+  (let ((source (ignore-errors (eval src)))
+        (context (ignore-errors (eval con))))
+    `(eql:qtranslate ,(if (stringp context)
+                          context
+                          (if *compile-file-truename* (file-namestring *compile-file-truename*) ""))
+                     ,source
+                     ,n)))
+
 (defun qset-null (obj)
   "args: (object)
    Sets the Qt object pointer to <code>0</code>. This function is called automatically after <code>qdel</code>."
@@ -127,8 +139,8 @@
   "args: (message)
    alias: qmsg
    Convenience function, calling:
-       (qfun \"QMessageBox\" \"information\" nil (tr \"Information\") message))"
-  (qfun "QMessageBox" "information" nil (tr "Information") msg))
+       (qfun \"QMessageBox\" \"information\" nil \"EQL\" message))"
+  (qfun "QMessageBox" "information" nil "EQL" msg))
 
 (defun qevents ()
   (eql:qprocess-events)

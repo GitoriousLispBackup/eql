@@ -57,7 +57,7 @@
   (let ((size (get-size)))
     (when (every #'(lambda (x) (> x 0))
                  size)
-      (set-pixmap (apply #'qfun *gl-widget* "renderPixmap" size)))))
+      (set-pixmap (apply 'qfun *gl-widget* "renderPixmap" size)))))
 
 (defun grab-frame-buffer ()
   (set-pixmap (qfun "QPixmap" "fromImage" (qfun *gl-widget* "grabFrameBuffer"))))

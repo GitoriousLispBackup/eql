@@ -5,13 +5,13 @@
 <h2>Qt Linguist</h2>
 For every new project:
 <ul>
-<li>In Lisp, wrap the strings you want to translate in the <code>tr</code> function (as you would do in Qt). Important: the strings must be literals.
-<li>In the file <code>my_app/tr.lisp</code>, adapt the <code>*packages-files*</code> parameter (listing all package names/files).
+<li>In Lisp, wrap the strings you want to translate in the <code>tr</code> macro (as you would do in Qt), optionally passing a context and/or a plural indicator (see Qt Assistant). Both string and context can be Lisp forms evaluating to constant strings.
 <li>Adapt the <code>my_app/eql-lupdate</code> file, adding your Qt Designer <code>*.ui</code> files (if any), and listing the respective  <code>*.ts</code> files for all languages you want to support.
 <li>Adapt the <code>my_app/eql-lrelease</code> file, simply listing all <code>*.ts</code> files (see above).
 </ul>
 For every new release (in order to create the <code>*.qm</code> files):
 <ul>
+<li>In <code>my_app/</code>, run <code>../eql make-my-lib.lisp</code> (compiling all files). This will find all source strings to translate and save them in the file  <code>tr.h</code> (only a dummy needed for the Qt <code>lupdate</code> function). This is done using a compiler macro, see <code>my_app/tr.lisp</code>.</i> 
 <li>Run the <code>my_app/eql-lupdate</code> script; this will create/update the single <code>*.ts</code> files for every language.
 <li>Use Qt Linguist on the <code>*.ts</code> files (as usual).
 <li>Run the <code>my_app/eql-lrelease</code> script.

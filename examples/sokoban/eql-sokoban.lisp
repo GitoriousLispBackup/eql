@@ -12,8 +12,6 @@
 
 (in-package :eql-sokoban)
 
-(defconstant +antialiasing+ 1 "render hint")
-
 (defconstant +item-types+ '((#\# . :wall)
                             (#\$ . :object)
                             (#\* . :object2)
@@ -21,11 +19,13 @@
                             (#\@ . :player)
                             (#\& . :player2)))
 
+(defconstant +antialiasing+ 1 "render hint")
+
 (defparameter *items*           nil)
 (defparameter *item-size*       nil)
 (defparameter *level*           0)
 (defparameter *maze*            nil)
-(defparameter *my-mazes*        (mapcar #'copy-maze *mazes*))
+(defparameter *my-mazes*        (mapcar 'copy-maze *mazes*))
 (defparameter *scene*           nil)
 (defparameter *view*            nil)
 (defparameter *scene-size*      (list 600 500))
@@ -41,7 +41,7 @@
   (cdr (assoc char +item-types+)))
 
 (defun type-char (type)
-  (car (find type +item-types+ :key #'cdr)))
+  (car (find type +item-types+ :key 'cdr)))
 
 (defun create-view ()
   (setf *scene* (qnew "QGraphicsScene"
@@ -112,7 +112,7 @@
   (defun create-item (type)
     (let* ((char (type-char type))
            (file (in-home (format nil "examples/sokoban/pics/~(~a~).png" type)))
-           (pixmap (assoc file pixmaps :test #'string=))
+           (pixmap (assoc file pixmaps :test 'string=))
            (item (if (or pixmap
                          (probe-file file))
                      (qnew "QGraphicsPixmapItem(QPixmap)"
@@ -159,10 +159,9 @@
   (draw))
 
 (defun draw-items (type)
-  (let* ((char (type-char type))
-         (size (maze-dimensions *maze*))
-         (items (assoc* type *items*))
-         (y 0))
+  (let ((char (type-char type))
+        (items (assoc* type *items*))
+        (y 0))
     (unless (eql :wall type)
       (dolist (item items)
         (qfun* item "QGraphicsItem" "setVisible" nil)))

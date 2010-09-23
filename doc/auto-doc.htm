@@ -118,7 +118,7 @@
 <b>QMSG</b>
 <p>Convenience function, calling:</p>
 <pre>
-  (qfun "QMessageBox" "information" nil (tr "Information") message))
+  (qfun "QMessageBox" "information" nil "EQL" message))
 </pre>
 </p><br>
 <p>
@@ -217,5 +217,9 @@
 <p>
 <b>QUTF8 (string)</b>
 <p>Returns the string converted using <code>QString(string).toUtf8()</code>. Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.</p>
+</p><br>
+<p>
+<b>TR (source &optional context n)</b>
+<p>Macro expanding to <code>qtranslate</code>, which calls <code>QCoreApplication::translate()</code>. Both <code>source</code> and <code>context</code> can be Lisp forms evaluating to constant strings (using <code>eval</code>). The <code>n</code> argument is for plurals, see Qt Assistant.</p>
 </p><br>
 </body></html>
