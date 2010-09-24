@@ -51,7 +51,7 @@
 
 (defmacro tr (src &optional con (n -1))
   "args: (source &optional context n)
-   Macro expanding to <code>qtranslate</code>, which calls <code>QCoreApplication::translate()</code>. Both <code>source</code> and <code>context</code> can be Lisp forms evaluating to constant strings (using <code>eval</code>). The <code>n</code> argument is for plurals, see Qt Assistant."
+   Macro expanding to <code>qtranslate</code>, which calls <code>QCoreApplication::translate()</code>. Both <code>source</code> and <code>context</code> can be Lisp forms evaluating to constant strings.<br>The <code>context</code> argument defaults to the Lisp file name, and the <code>n</code> argument is a plural indicator (see Qt Assistant)."
   ;; see compiler-macro in my_app/tr.lisp
   (let ((source (ignore-errors (eval src)))
         (context (ignore-errors (eval con))))

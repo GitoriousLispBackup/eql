@@ -3,7 +3,7 @@
 
 (in-package :eql-tr)
 
-(defparameter *sources* (make-hash-table :test #'equal))
+(defparameter *sources* (make-hash-table :test 'equal))
 
 (progn
   (when (probe-file "tr.h")

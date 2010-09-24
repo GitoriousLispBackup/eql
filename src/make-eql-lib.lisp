@@ -12,6 +12,6 @@
 
 (c:build-static-library "ini"
                         :lisp-files (mapcar #'(lambda (file)
-                                                (format nil "lisp/~a.~a" file #+win32 "obj" #-win32 "o"))
+                                                (format nil "lisp/~a.~a" file #+msvc "obj" #-msvc "o"))
                                             *lisp-files*)
                         :init-name "ini_EQL")

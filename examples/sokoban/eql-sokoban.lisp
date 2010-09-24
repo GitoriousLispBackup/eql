@@ -177,10 +177,10 @@
       (incf y (second *item-size*)))))
   
 (defun draw ()
-  (when *print-text-maze*
-    (format t "~{~&~A~%~}" (maze-text *maze*)))
   (dolist (type '(:player :object :goal :player2 :object2))
-    (draw-items type)))
+    (draw-items type))
+  (when *print-text-maze*
+    (format t "~{~&~A~%~}" (maze-text *maze*))))
 
 (defun zoom (direction)
   (let ((f (if (eql :in direction) 3/2 2/3)))
