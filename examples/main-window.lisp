@@ -12,8 +12,14 @@
 (defparameter *action-open* (qfind-child *main* "action_open"))
 (defparameter *action-save* (qfind-child *main* "action_save"))
 
+(defun os-pathname (name)
+  #+(or darwin linux)
+  (qutf8 name)
+  #+win32
+  (qlocal8bit name))
+
 (defun read-file (file)
-  (with-open-file (s file :direction :input)
+  (with-open-file (s (os-pathname file) :direction :input)
     (let ((str (make-string (file-length s))))
       (read-sequence str s)
       str)))
@@ -41,7 +47,7 @@
 (defun file-save ()
   (let ((file (qfun "QFileDialog" "getSaveFileName")))
     (unless (empty-string file)
-      (with-open-file (s file :direction :output :if-exists :supersede)
+      (with-open-file (s (os-pathname file) :direction :output :if-exists :supersede)
         (write-string (qget *edit* "html") s)))))
 
 (start)

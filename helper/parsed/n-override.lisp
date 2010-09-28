@@ -35,18 +35,18 @@
    "virtual bool contains ( const QPointF & ) const"
    "virtual bool isObscuredBy ( const QGraphicsItem * ) const"
    "virtual QPainterPath opaqueArea () const"
-   "virtual void paint ( QPainter *, const QStyleOptionGraphicsItem *, QWidget * = 0 )"
+   "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * = 0 )"
    "virtual QPainterPath shape () const"
    "virtual int type () const")
   (("QGraphicsItem" . NIL)
    "virtual void advance ( int )"
    "virtual QRectF boundingRect () const = 0"
-   "virtual bool collidesWithItem ( const QGraphicsItem *, Qt::ItemSelectionMode = Qt::IntersectsItemShape ) const"
-   "virtual bool collidesWithPath ( const QPainterPath &, Qt::ItemSelectionMode = Qt::IntersectsItemShape ) const"
+   "virtual bool collidesWithItem ( const QGraphicsItem * , Qt::ItemSelectionMode = Qt::IntersectsItemShape ) const"
+   "virtual bool collidesWithPath ( const QPainterPath & , Qt::ItemSelectionMode = Qt::IntersectsItemShape ) const"
    "virtual bool contains ( const QPointF & ) const"
    "virtual bool isObscuredBy ( const QGraphicsItem * ) const"
    "virtual QPainterPath opaqueArea () const"
-   "virtual void paint ( QPainter *, const QStyleOptionGraphicsItem *, QWidget * = 0 ) = 0"
+   "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * = 0 ) = 0"
    "virtual QPainterPath shape () const"
    "virtual int type () const"
    "protected virtual void contextMenuEvent ( QGraphicsSceneContextMenuEvent * )"
@@ -61,7 +61,7 @@
    "protected virtual void hoverMoveEvent ( QGraphicsSceneHoverEvent * )"
    "protected virtual void inputMethodEvent ( QInputMethodEvent * )"
    "protected virtual QVariant inputMethodQuery ( Qt::InputMethodQuery ) const"
-   "protected virtual QVariant itemChange ( GraphicsItemChange, const QVariant & )"
+   "protected virtual QVariant itemChange ( GraphicsItemChange , const QVariant & )"
    "protected virtual void keyPressEvent ( QKeyEvent * )"
    "protected virtual void keyReleaseEvent ( QKeyEvent * )"
    "protected virtual void mouseDoubleClickEvent ( QGraphicsSceneMouseEvent * )"
@@ -69,13 +69,13 @@
    "protected virtual void mousePressEvent ( QGraphicsSceneMouseEvent * )"
    "protected virtual void mouseReleaseEvent ( QGraphicsSceneMouseEvent * )"
    "protected virtual bool sceneEvent ( QEvent * )"
-   "protected virtual bool sceneEventFilter ( QGraphicsItem *, QEvent * )"
+   "protected virtual bool sceneEventFilter ( QGraphicsItem * , QEvent * )"
    "protected virtual void wheelEvent ( QGraphicsSceneWheelEvent * )")
   (("QGraphicsItemGroup" . "QGraphicsItem")
    "virtual QRectF boundingRect () const"
    "virtual bool isObscuredBy ( const QGraphicsItem * ) const"
    "virtual QPainterPath opaqueArea () const"
-   "virtual void paint ( QPainter *, const QStyleOptionGraphicsItem *, QWidget * = 0 )"
+   "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * = 0 )"
    "virtual int type () const")
   (("QGraphicsLayout" . "QGraphicsLayoutItem")
    "virtual int count () const = 0"
@@ -87,13 +87,13 @@
   (("QGraphicsLayoutItem" . NIL)
    "virtual void setGeometry ( const QRectF & )"
    "virtual void updateGeometry ()"
-   "protected virtual QSizeF sizeHint ( Qt::SizeHint, const QSizeF & = QSizeF() ) const = 0")
+   "protected virtual QSizeF sizeHint ( Qt::SizeHint , const QSizeF & = QSizeF() ) const = 0")
   (("QGraphicsLineItem" . "QGraphicsItem")
    "virtual QRectF boundingRect () const"
    "virtual bool contains ( const QPointF & ) const"
    "virtual bool isObscuredBy ( const QGraphicsItem * ) const"
    "virtual QPainterPath opaqueArea () const"
-   "virtual void paint ( QPainter *, const QStyleOptionGraphicsItem *, QWidget * = 0 )"
+   "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * = 0 )"
    "virtual QPainterPath shape () const"
    "virtual int type () const")
   (("QGraphicsPathItem" . "QAbstractGraphicsShapeItem")
@@ -101,7 +101,7 @@
    "virtual bool contains ( const QPointF & ) const"
    "virtual bool isObscuredBy ( const QGraphicsItem * ) const"
    "virtual QPainterPath opaqueArea () const"
-   "virtual void paint ( QPainter *, const QStyleOptionGraphicsItem *, QWidget * = 0 )"
+   "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * = 0 )"
    "virtual QPainterPath shape () const"
    "virtual int type () const")
   (("QGraphicsPixmapItem" . "QGraphicsItem")
@@ -109,7 +109,7 @@
    "virtual bool contains ( const QPointF & ) const"
    "virtual bool isObscuredBy ( const QGraphicsItem * ) const"
    "virtual QPainterPath opaqueArea () const"
-   "virtual void paint ( QPainter *, const QStyleOptionGraphicsItem *, QWidget * )"
+   "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * )"
    "virtual QPainterPath shape () const"
    "virtual int type () const")
   (("QGraphicsPolygonItem" . "QAbstractGraphicsShapeItem")
@@ -117,7 +117,7 @@
    "virtual bool contains ( const QPointF & ) const"
    "virtual bool isObscuredBy ( const QGraphicsItem * ) const"
    "virtual QPainterPath opaqueArea () const"
-   "virtual void paint ( QPainter *, const QStyleOptionGraphicsItem *, QWidget * = 0 )"
+   "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * = 0 )"
    "virtual QPainterPath shape () const"
    "virtual int type () const")
   (("QGraphicsRectItem" . "QAbstractGraphicsShapeItem")
@@ -125,7 +125,7 @@
    "virtual bool contains ( const QPointF & ) const"
    "virtual bool isObscuredBy ( const QGraphicsItem * ) const"
    "virtual QPainterPath opaqueArea () const"
-   "virtual void paint ( QPainter *, const QStyleOptionGraphicsItem *, QWidget * = 0 )"
+   "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * = 0 )"
    "virtual QPainterPath shape () const"
    "virtual int type () const")
   (("QGraphicsSceneContextMenuEvent" . "QGraphicsSceneEvent"))
@@ -142,7 +142,7 @@
    "virtual bool contains ( const QPointF & ) const"
    "virtual bool isObscuredBy ( const QGraphicsItem * ) const"
    "virtual QPainterPath opaqueArea () const"
-   "virtual void paint ( QPainter *, const QStyleOptionGraphicsItem *, QWidget * )"
+   "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * )"
    "virtual QPainterPath shape () const"
    "virtual int type () const")
   (("QHideEvent" . "QEvent"))
@@ -151,7 +151,7 @@
   (("QInputEvent" . "QEvent"))
   (("QInputMethodEvent" . "QEvent"))
   (("QItemEditorFactory" . NIL)
-   "virtual QWidget * createEditor ( QVariant::Type, QWidget * ) const"
+   "virtual QWidget * createEditor ( QVariant::Type , QWidget * ) const"
    "virtual QByteArray valuePropertyName ( QVariant::Type ) const")
   (("QItemSelection" . NIL))
   (("QItemSelectionRange" . NIL))
@@ -175,7 +175,7 @@
   (("QListWidgetItem" . NIL)
    "virtual QListWidgetItem * clone () const"
    "virtual QVariant data ( int ) const"
-   "virtual void setData ( int, const QVariant & )")
+   "virtual void setData ( int , const QVariant & )")
   (("QLocale" . NIL))
   (("QMatrix" . NIL))
   (("QMatrix4x4" . NIL))
@@ -191,7 +191,7 @@
   (("QPalette" . NIL))
   (("QPen" . NIL))
   (("QPicture" . "QPaintDevice")
-   "virtual void setData ( const char *, uint )")
+   "virtual void setData ( const char * , uint )")
   (("QPixmap" . "QPaintDevice"))
   (("QPrinter" . "QPaintDevice"))
   (("QQuaternion" . NIL))
@@ -213,12 +213,12 @@
   (("QStandardItem" . NIL)
    "virtual QStandardItem * clone () const"
    "virtual QVariant data ( int = Qt::UserRole + 1 ) const"
-   "virtual void setData ( const QVariant &, int = Qt::UserRole + 1 )"
+   "virtual void setData ( const QVariant & , int = Qt::UserRole + 1 )"
    "virtual int type () const")
   (("QTableWidgetItem" . NIL)
    "virtual QTableWidgetItem * clone () const"
    "virtual QVariant data ( int ) const"
-   "virtual void setData ( int, const QVariant & )")
+   "virtual void setData ( int , const QVariant & )")
   (("QTableWidgetSelectionRange" . NIL))
   (("QTabletEvent" . "QInputEvent"))
   (("QTextBlock" . NIL))
@@ -240,8 +240,8 @@
   (("QTransform" . NIL))
   (("QTreeWidgetItem" . NIL)
    "virtual QTreeWidgetItem * clone () const"
-   "virtual QVariant data ( int, int ) const"
-   "virtual void setData ( int, int, const QVariant & )")
+   "virtual QVariant data ( int , int ) const"
+   "virtual void setData ( int , int , const QVariant & )")
   (("QUndoCommand" . NIL)
    "virtual int id () const"
    "virtual bool mergeWith ( const QUndoCommand * )"

@@ -6,7 +6,7 @@
 (use-package :util)
 
 (defparameter *qt-html-documentation-path*
-  ;; tested with Qt 4.6.2 (4.5 will not work!)
+  ;; tested with Qt 4.6.x and 4.7.0 (4.5 will not work!)
   #+darwin "/Developer/Documentation/Qt/html/"
   #+win32  "C:/qt/4.6.2/doc/html/"
   #+linux  "/usr/share/doc/packages/libqt4/html/")
@@ -139,7 +139,7 @@
                          (write-char* ch)))))))))))
 
 (defun search* (str1 str2 &optional (start 0))
-  (search str1 str2 :test #'string-equal :start2 start))
+  (search str1 str2 :test 'string-equal :start2 start))
 
 (let (html)
   (defun read-html (class)
@@ -152,7 +152,7 @@
             (incf *not-found*)
             (warn (format nil "Html file not found: ~s" path))))))
   (defun super-class ()
-    (let ((p (search "<p>Inherits" html :test #'string=)))
+    (let ((p (search "<p>Inherits" html :test 'string=)))
       (when p
         (let ((super (text (subseq html (search* "<" html (1+ p)) (search* "</" html p)))))
           (unless (find #\< super) ; template
@@ -165,7 +165,7 @@
                  ~%   \"bool begin ( QPixmap * )\""))
     (let ((static (starts-with "static" type))
           (protected (starts-with "protected" type))
-          (p (search* (format nil ">~a<" type) html)))
+          (p (search* (format nil "<h2>~a</h2>" type) html)))
       (when p
         (let* ((tb1 (search* "<table" html p))
                (tb2 (search* "</table>" html tb1))
@@ -176,18 +176,17 @@
              (unless tr1
                (return))
              (setf tr2 (search* "</tr>" funs tr1))
-             (let* ((fun (text (subseq funs tr1 tr2)))
+             (let* ((fun (string-trim " " (text (subseq funs tr1 tr2))))
                     (new (or (starts-with (format nil "Q_INVOKABLE ~a (" class) fun)
                              (starts-with (format nil "~a (" class) fun))))
                (unless (or (and new no-new)
                            (find #\~ fun) ; destructor
                            (dolist (str +skip+)
-                             (when (search str fun :test #'string=)
+                             (when (search str fun :test 'string=)
                                (return t)))
                            ;; template problem
                            (and (string= "QVariant" class)
                                 (string= "bool canConvert () const" fun)))
-                 (setf fun (string-substitute "," " ," fun))
                  (when (starts-with "virtual" fun)
                    (format so "~%   \"~a~a\"" (if protected "protected " "") fun))
                  (unless protected
@@ -217,9 +216,9 @@
   (format so "))~%"))
 
 (defun sort-names (names)
-  (sort (remove-duplicates names :test #'string=)
-        #'string<
-        :key #'(lambda (str) (string-trim "=/" str))))
+  (sort (remove-duplicates names :test 'string=)
+        'string<
+        :key (lambda (str) (string-trim "=/" str))))
 
 (defun start ()
   (flet ((load-module (name)
@@ -229,18 +228,18 @@
       (load-module m)))
   (setf *q-names* (sort-names *q-names*)
         *n-names* (sort-names *n-names*))
-  (mapc #'(lambda (names non)
-            (let ((pre (if non #\n #\q)))
-              (with-open-file (s (format nil "parsed/~c-methods.lisp" pre) :direction :output :if-exists :supersede)
-                (with-open-file (so (format nil "parsed/~c-override.lisp" pre) :direction :output :if-exists :supersede)
-                  (format so "(defparameter *~c-override* '(~%" pre)
-                  (format s "(defparameter *~c-methods* '(~%" pre)
-                  (parse-classes (mapcar #'(lambda (name)
-                                             (string-trim "= " (if-it (position #\( name)
-                                                                      (subseq name 0 it)
-                                                                      name)))
-                                         names)
-                                 s so non)))))
+  (mapc (lambda (names non)
+          (let ((pre (if non #\n #\q)))
+            (with-open-file (s (format nil "parsed/~c-methods.lisp" pre) :direction :output :if-exists :supersede)
+              (with-open-file (so (format nil "parsed/~c-override.lisp" pre) :direction :output :if-exists :supersede)
+                (format so "(defparameter *~c-override* '(~%" pre)
+                (format s "(defparameter *~c-methods* '(~%" pre)
+                (parse-classes (mapcar (lambda (name)
+                                         (string-trim "= " (if-it (position #\( name)
+                                                                  (subseq name 0 it)
+                                                                  name)))
+                                       names)
+                               s so non)))))
         (list *q-names* *n-names*)
         (list nil :non))
   (if (zerop *not-found*)

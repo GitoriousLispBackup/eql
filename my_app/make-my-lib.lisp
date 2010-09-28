@@ -1,5 +1,5 @@
 (unless (find-package :eql)
-  (error "Please use the eql executable (see README)"))
+  (error "Please use the EQL executable (see README)"))
 
 (setf *break-on-signals* 'error)
 
@@ -7,7 +7,9 @@
 
 (make-package :c)
 
-(defparameter *lisp-files* (list "my")) ; list all files of your application
+(defparameter *lisp-files*
+  (list "my")
+  "All Lisp files of the application.")
 
 (dolist (f *lisp-files*)
   (let ((file (format nil "lisp/~a" f)))
@@ -15,8 +17,8 @@
     (compile-file file :system-p t)))
 
 (c:build-static-library "my_lib"
-                        :lisp-files (mapcar #'(lambda (file)
-                                                (format nil "lisp/~a.~a" file #+msvc "obj" #-msvc "o"))
+                        :lisp-files (mapcar (lambda (file)
+                                              (format nil "lisp/~a.~a" file #+msvc "obj" #-msvc "o"))
                                             *lisp-files*)
                         :init-name "ini_app")
 

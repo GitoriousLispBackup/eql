@@ -55,7 +55,7 @@
 
 (defun render-into-pixmap ()
   (let ((size (get-size)))
-    (when (every #'(lambda (x) (> x 0))
+    (when (every (lambda (x) (> x 0))
                  size)
       (set-pixmap (apply 'qfun *gl-widget* "renderPixmap" size)))))
 
@@ -82,9 +82,9 @@
       (action :render-into-pixmap (tr "&Render into Pixmap...") "Ctrl+R" 'render-into-pixmap)
       (action :grab-frame-buffer  (tr "&Grab Frame Buffer")     "Ctrl+G" 'grab-frame-buffer)
       (action :clear-pixmap       (tr "&Clear Pixmap")          "Ctrl+L" 'clear-pixmap)
-      (action :exit               (tr "E&xit")                  "Ctrl+Q" #'(lambda () (qfun *me* "close")))
+      (action :exit               (tr "E&xit")                  "Ctrl+Q" (lambda () (qfun *me* "close")))
       (action :about    (tr "&About")    nil 'about)
-      (action :about-qt (tr "About &Qt") nil #'(lambda () (qfun (qapp) "aboutQt"))))
+      (action :about-qt (tr "About &Qt") nil (lambda () (qfun (qapp) "aboutQt"))))
     actions))
 
 (defun create-menus (actions)
@@ -112,7 +112,7 @@
                       "tickInterval" (* 15  16)
                       "tickPosition" "TicksRight")))
     (qconnect slider "valueChanged(int)" setter)
-    (setf (symbol-value changed) #'(lambda (x) (qset slider "value" x)))
+    (setf (symbol-value changed) (lambda (x) (qset slider "value" x)))
     slider))
 
 (defun set-pixmap (pixmap)

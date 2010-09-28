@@ -18,7 +18,7 @@
 
 (defun start ()
   (let ((timer (qnew "QTimer")))
-    (qconnect timer "timeout()" #'(lambda () (qfun *clock* "update")))
+    (qconnect timer "timeout()" (lambda () (qfun *clock* "update")))
     (qoverride *clock* "paintEvent(QPaintEvent*)" 'paint)
     (qfun timer "start" 500)
     (qfun *clock* "show")))
@@ -55,7 +55,7 @@
         (! "begin(QWidget*)" *clock*)
         (let* ((size  (qget *clock* "size"))
                (scale (/ (apply 'min size) 170)))
-          (! "translate(QPointF)" (mapcar #'(lambda (x) (/ x 2)) size))
+          (! "translate(QPointF)" (mapcar (lambda (x) (/ x 2)) size))
           (! "scale" scale scale))
         (! "rotate" -90)
         (! "setRenderHint" +antialiasing+)

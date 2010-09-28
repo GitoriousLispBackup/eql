@@ -1564,7 +1564,7 @@ cl_object qconnect2(cl_object l_caller, cl_object l_signal, cl_object l_receiver
     /// args: (caller signal receiver slot)
     /// Connects either a Qt signal to a Qt slot, or a Qt signal to a Lisp function.
     ///     (qconnect edit "textChanged(QString)" label "setText(QString)")
-    ///     (qconnect edit "textChanged(QString)" #'(lambda (txt) (print txt)))
+    ///     (qconnect edit "textChanged(QString)" (lambda (txt) (print txt)))
     ecl_process_env()->nvalues = 1;
     QtObject o1 = toQtObject(l_caller);
     if(ECL_STRINGP(l_signal)) {
@@ -1633,7 +1633,7 @@ void callConnectFun(void* fun, const StrList& types, void** args) {
 cl_object qoverride(cl_object l_obj, cl_object l_name, cl_object l_fun) {
     /// args: (object name function)
     /// Sets a Lisp function to be called on a virtual Qt method. If the Lisp function returns <code>NIL</code>, the default Qt method will be called afterwards.<br><br>To remove a function, pass <code>NIL</code> instead of the function argument.
-    ///     (qoverride edit "keyPressEvent(QKeyEvent*)" #'(lambda (ev) (print (qfun ev "key")) nil))
+    ///     (qoverride edit "keyPressEvent(QKeyEvent*)" (lambda (ev) (print (qfun ev "key")) nil))
     ecl_process_env()->nvalues = 1;
     QtObject o = toQtObject(l_obj);
     void* fun = (Cnil == l_fun) ? 0 : getLispFun(l_fun);
@@ -1706,7 +1706,7 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
 cl_object qadd_event_filter(cl_object l_obj, cl_object l_ev, cl_object l_fun) {
     /// args: (object event function)
     /// Adds a Lisp function to be called on a given event type. The event type has to be passed as integer value. If the object argument is <code>NIL</code>, the event will be captured for any object. If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.
-    ///     (qadd-event-filter nil +mouse-button-press+ #'(lambda (obj ev) (print obj) nil))
+    ///     (qadd-event-filter nil +mouse-button-press+ (lambda (obj ev) (print obj) nil))
     ecl_process_env()->nvalues = 1;
     void* fun = getLispFun(l_fun);
     if(fun) {
@@ -1755,14 +1755,14 @@ cl_object qtranslate(cl_object l_con, cl_object l_src, cl_object l_n) {
 
 cl_object qlocal8bit(cl_object l_str) {
     /// args: (string)
-    /// Returns the string converted using <code>QString(string).toLocal8Bit()</code> (see <code>QLocale</code> settings). Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.
+    /// Returns the string converted using <code>QString::toLocal8Bit()</code> (see <code>QLocale</code> settings). Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.
     ecl_process_env()->nvalues = 1;
     cl_object l_ret = from_cstring(toQString(l_str).toLocal8Bit());
     return l_ret; }
 
 cl_object qutf8(cl_object l_str) {
     /// args: (string)
-    /// Returns the string converted using <code>QString(string).toUtf8()</code>. Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.
+    /// Returns the string converted using <code>QString::toUtf8()</code>.
     ecl_process_env()->nvalues = 1;
     cl_object l_ret = from_cstring(toQString(l_str).toUtf8());
     return l_ret; }

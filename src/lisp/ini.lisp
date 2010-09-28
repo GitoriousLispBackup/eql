@@ -9,14 +9,14 @@
   "args: (((var exp) ...) ...)
    Similar to <code>let*</code>. Creates temporary Qt objects, deleting them at the end of the <code>qlet</code> body. If <code>exp</code> is a string, it will be substituted with <code>(qnew exp)</code>.
        (qlet ((p \"QPainter\")) ...)"
-  (let ((vars (mapcar #'first pairs))
-        (exps (mapcar #'(lambda (x)
-                          (let ((exp (second x)))
-                            (if (stringp exp)
-                                (list 'qnew exp)
-                                exp)))
+  (let ((vars (mapcar 'first pairs))
+        (exps (mapcar (lambda (x)
+                        (let ((exp (second x)))
+                          (if (stringp exp)
+                              (list 'qnew exp)
+                              exp)))
                       pairs)))
-    `(let* ,(mapcar #'list vars exps)
+    `(let* ,(mapcar 'list vars exps)
        ,@body
        ,(if (second vars)
             `(dolist (x (list ,@(nreverse vars)))
@@ -263,37 +263,37 @@ under certain conditions; see file 'Copyright' for details.")
   (finish-output)
   #-win32
   (serve-event:with-fd-handler ; [EQL]
-      (0 :input #'(lambda (fd) ; [EQL]
-                    ;; (loop     [EQL]
-                    (case (peek-char nil *standard-input* nil :EOF)
-                      ((#\))
-                       (warn "Ignoring an unmatched right parenthesis.")
-                       (read-char))
-                      ((#\space #\tab)
-                       (read-char))
-                      ((#\newline #\return)
-                       (read-char)
-                       ;; avoid repeating prompt on successive empty lines:
+      (0 :input (lambda (fd)   ; [EQL]
+                  ;; (loop       [EQL]
+                  (case (peek-char nil *standard-input* nil :EOF)
+                    ((#\))
+                     (warn "Ignoring an unmatched right parenthesis.")
+                     (read-char))
+                    ((#\space #\tab)
+                     (read-char))
+                    ((#\newline #\return)
+                     (read-char)
+                     ;; avoid repeating prompt on successive empty lines:
                        (let ((command (tpl-make-command :newline "")))
                          (when command (return-from qtpl-read command))))
-                      (:EOF
-                       (terpri)
-                       (return-from qtpl-read (tpl-make-command :EOF "")))
-                      (#\:
-                       (return-from qtpl-read (tpl-make-command (read-preserving-whitespace)
-                                                 (read-line))))
-                      (#\?
-                       (read-char)
-                       (case (peek-char nil *standard-input* nil :EOF)
-                         ((#\space #\tab #\newline #\return :EOF)
-                          (return-from qtpl-read (tpl-make-command :HELP (read-line))))
-                         (t
-                          (unread-char #\?)
-                          (return-from qtpl-read (read-preserving-whitespace)))))
-                      ;; We use READ-PRESERVING-WHITESPACE because with READ, if an
-                      ;; error happens within the reader, and we perform a ":C" or
-                      ;; (CONTINUE), the reader will wait for an inexistent #\Newline.
-                      (t
-                       (return-from qtpl-read (read))))))
+                    (:EOF
+                     (terpri)
+                     (return-from qtpl-read (tpl-make-command :EOF "")))
+                    (#\:
+                     (return-from qtpl-read (tpl-make-command (read-preserving-whitespace)
+                                                              (read-line))))
+                    (#\?
+                     (read-char)
+                     (case (peek-char nil *standard-input* nil :EOF)
+                       ((#\space #\tab #\newline #\return :EOF)
+                        (return-from qtpl-read (tpl-make-command :HELP (read-line))))
+                       (t
+                        (unread-char #\?)
+                        (return-from qtpl-read (read-preserving-whitespace)))))
+                    ;; We use READ-PRESERVING-WHITESPACE because with READ, if an
+                    ;; error happens within the reader, and we perform a ":C" or
+                    ;; (CONTINUE), the reader will wait for an inexistent #\Newline.
+                    (t
+                     (return-from qtpl-read (read))))))
     (loop               ; [EQL]
        (eql:qevents)))) ; [EQL]

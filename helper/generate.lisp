@@ -22,8 +22,8 @@
 (defparameter *max-constructor-args*      0)
 (defparameter *max-method-args*           0)
 (defparameter *missing-types*             0)
-(defparameter *argument-types*            (make-hash-table :test #'equal))
-(defparameter *override-signatures*       (make-hash-table :test #'equal))
+(defparameter *argument-types*            (make-hash-table :test 'equal))
+(defparameter *override-signatures*       (make-hash-table :test 'equal))
 (defparameter *override-id*               0)
 (defparameter *override-functions*        nil)
 (defparameter *override-arguments*        nil)
@@ -36,8 +36,8 @@
 (defun no-spaces (s)
   (remove #\Space s))
 
-(defun find* (x lst &optional (key #'identity))
-  (find x lst :test #'string= :key key))
+(defun find* (x lst &optional (key 'identity))
+  (find x lst :test 'string= :key key))
 
 (defun split-args (args)
   (let ((s (copy-seq args))
@@ -50,7 +50,7 @@
           (#\> (setf skip nil))
           (#\, (unless skip
                  (setf (char s i) sep))))))
-    (mapcar #'split-arg (split s sep))))
+    (mapcar 'split-arg (split s sep))))
 
 (defun add-to-types (type)
   (unless (empty-string type)
@@ -61,7 +61,7 @@
                 (not (or (string= "void" type)
                          enum
                          (upper-case-p (char type 0))
-                         (search "QHash" type :test #'string=))))
+                         (search "QHash" type :test 'string=))))
         (setf (gethash type *argument-types*) t)))))
 
 (defun split-arg (arg)
@@ -146,16 +146,16 @@
 (defun args-to-simple-c (args)
   (when args
     (if (consp args)
-        (mapcar #'arg-to-simple-c args)
+        (mapcar 'arg-to-simple-c args)
         (list (arg-to-simple-c args))))) 
 
 (defun add-var-names (args &optional enum-class)
   (format nil "~{~a~^, ~}"
-          (mapcar #'(lambda (arg name)
-                      (format nil "~a ~a~a"
-                              (arg-to-c arg enum-class)
-                              name
-                              (default-to-c arg enum-class)))
+          (mapcar (lambda (arg name)
+                    (format nil "~a ~a~a"
+                            (arg-to-c arg enum-class)
+                            name
+                            (default-to-c arg enum-class)))
                   args
                   +var-names+)))
 
@@ -263,7 +263,7 @@
                   (if-it (position #\( name)
                          (let* ((names (split (subseq name (1+ it) (1- (length name)))
                                               #\|)))
-                           (join (mapcar #'(lambda (name) (format nil "~a::~a" class name))
+                           (join (mapcar (lambda (name) (format nil "~a::~a" class name))
                                          names)
                                  #\|))
                          (format nil "~a::~a" class name)))
@@ -298,7 +298,7 @@
   (find :static x))
 
 (defun pure-virtual-p (fun class)
-  (when-it (find :pure fun :key #'(lambda (x) (when (consp x) (car x))))
+  (when-it (find :pure fun :key (lambda (x) (when (consp x) (car x))))
            (string= class (cdr it))))
 
 (defun virtual-p (x)
@@ -311,23 +311,23 @@
             ((eql :default v) (setf ret t))))))
 
 (defun sort-names (names)
-  (sort (remove-duplicates names :test #'string=)
-        #'string<
-        :key #'(lambda (str) (string-trim "=/" str))))
+  (sort (remove-duplicates names :test 'string=)
+        'string<
+        :key (lambda (str) (string-trim "=/" str))))
 
 (defun ini ()
   (setf *q-names* (sort-names *q-names*)
         *n-names* (sort-names *n-names*))
-  (mapc #'(lambda (objects names split-class)
-            (mapc #'(lambda (obj name)
-                      (when split-class
-                        (setf (caar obj) (split-class name)))
-                      (let ((class (if split-class (caaar obj) (caar obj))))
-                        (setf (rest obj) (mapcar #'(lambda (fun)
-                                                     (split-fun fun class))
-                                                 (rest obj)))))
-                  objects
-                  names))
+  (mapc (lambda (objects names split-class)
+          (mapc (lambda (obj name)
+                  (when split-class
+                    (setf (caar obj) (split-class name)))
+                  (let ((class (if split-class (caaar obj) (caar obj))))
+                    (setf (rest obj) (mapcar (lambda (fun)
+                                               (split-fun fun class))
+                                             (rest obj)))))
+                objects
+                names))
         (list *q-methods* *n-methods* *q-override* *n-override*)
         (list *q-names* *n-names* *q-names* *n-names*)
         (list t t nil nil)))
@@ -339,13 +339,13 @@
        (if-it (cdar curr)
               (progn
                 (push it all)
-                (setf curr (find* (cdar curr) *q-override* #'caar)))
+                (setf curr (find* (cdar curr) *q-override* 'caar)))
               (return (nreverse all))))))
 
 (defun add-module-includes (s)
-  (mapc #'(lambda (name include)
-            (when (find* name *qt-modules*)
-              (format s "#include <~a>~%" include)))
+  (mapc (lambda (name include)
+          (when (find* name *qt-modules*)
+            (format s "#include <~a>~%" include)))
         (list "help" "opengl" "svg")
         (list "QtHelp" "QtOpenGL" "QtSvg")))
 
@@ -364,104 +364,104 @@
               ch))
     (add-module-includes s)
     (format s "~%typedef QList<int> NumList;~%")
-    (mapc #'(lambda (method override)
-              (when (new-p (first method))
-                (let ((virtual (consp (rest override)))
-                      (name (class-name* method))
-                      (sub-name (sub-class-name method)))
-                  (format s "~%class L~a : public ~a {~a~
-                             ~%public:"
-                          sub-name
-                          name
-                          (if (eql :q type) (format nil "~%    Q_OBJECT") ""))
-                  (dolist (fun (rest method))
-                    (when (constructor-p fun)
-                      (let* ((args (function-args fun))
+    (mapc (lambda (method override)
+            (when (new-p (first method))
+              (let ((virtual (consp (rest override)))
+                    (name (class-name* method))
+                    (sub-name (sub-class-name method)))
+                (format s "~%class L~a : public ~a {~a~
+                           ~%public:"
+                        sub-name
+                        name
+                        (if (eql :q type) (format nil "~%    Q_OBJECT") ""))
+                (dolist (fun (rest method))
+                  (when (constructor-p fun)
+                    (let* ((args (function-args fun))
                              (len (length args)))
-                        (when (<= len +max-arguments+)
-                          (format s "~%    L~a(uint u~a~a) : ~aunique(u) {}"
-                                  sub-name
-                                  (if args ", " "")
-                                  (add-var-names args)
-                                  (if args (format nil "~a(~{~a~^, ~}), " name (n-var-names len)) ""))))))
-                  (format s "~%~%    static NumList overrideIds;~
+                      (when (<= len +max-arguments+)
+                        (format s "~%    L~a(uint u~a~a) : ~aunique(u) {}"
+                                sub-name
+                                (if args ", " "")
+                                (add-var-names args)
+                                (if args (format nil "~a(~{~a~^, ~}), " name (n-var-names len)) ""))))))
+                (format s "~%~%    static NumList overrideIds;~
                              ~%    uint unique;~%")
-                  (let ((1st t)
-                        (sig-ids (list (sub-class-name method)))
-                        fun-names virtuals)
-                    (dolist (super (super-classes override))
-                      (dolist (fun (rest (find* super (if (eql :q type) *q-override* *n-override*) #'caar)))
-                        (when (virtual-p fun)
-                          (setf virtuals t)
-                          (let ((fun-name (function-name fun)))
-                            (unless (or
-                                     ;; private functions
-                                     (and (string= "setModel" fun-name)
-                                          (find* name '("QListWidget"
-                                                        "QTableWidget"
-                                                        "QTreeWidget")))
-                                     (and (string= "QHelpIndexModel" name)
-                                          (find* fun-name '("columnCount"
-                                                            "hasChildren"
-                                                            "parent")))
-                                     (and (string= "QHelpSearchResultWidget" name)
-                                          (find* fun-name '("changeEvent")))
-                                     (and (string= "QHelpSearchQueryWidget" name)
-                                          (find* fun-name '("changeEvent"
-                                                            "focusInEvent")))
-                                     (and (string= "QStringListModel" name)
-                                          (find* fun-name '("columnCount"
-                                                            "hasChildren"
-                                                            "parent")))
-                                     ;; exclude some very low-level ones
-                                     (find* fun-name '("event"
-                                                       "eventFilter"
-                                                       "metaObject")))
-                              (let* ((ret (return-arg fun))
-                                     (void (void-p ret))
-                                     (args (function-args fun))
-                                     (sig (signature fun))
-                                     (arg-names (args-to-simple-c (function-args fun)))
-                                     (ret-name (arg-to-simple-c ret))
-                                     (sig-id (let ((id (gethash sig *override-signatures*)))
-                                               (unless id
-                                                 (setf id (setf (gethash sig *override-signatures*)
-                                                                (incf *override-id*)))
-                                                 (push sig *override-functions*)
-                                                 (push arg-names *override-arguments*)
-                                                 (push (if (void-p ret) 0 ret-name) *override-return-arguments*))
-                                               id))
-                                     (call (format nil "callOverrideFun(fun, ~d, ~a)"
-                                                   sig-id
-                                                   (if (function-args fun) "args" "0"))))
-                                (when 1st
-                                  (push sig-id sig-ids))
-                                (unless (find* fun-name fun-names)
-                                  (push fun-name fun-names)
-                                  (format s "~%    ~a ~a(~a)~a { void* fun = LObjects::overrideFun(unique, ~d); if(fun) { ~a~a~a~a}"
-                                          (arg-to-c ret)
-                                          fun-name
-                                          (add-var-names args)
-                                          (if (const-p fun) " const" "")
-                                          sig-id
-                                          (if args (format nil "const void* args[] = { ~{&~a~^, ~} }; " (n-var-names (length args))) "")
-                                          (if void (format nil "if(~a" call) (format nil "return ~a" (from-qvariant ret call)))
-                                          (if void ".toBool()) return; }" "; } return")
-                                          (if (pure-virtual-p fun name)
-                                              (let ((val (arg-to-c-null-value ret)))
-                                                (if (empty-string val)
-                                                    ""
-                                                    (format nil " ~a; " val)))
-                                              (format nil " ~a::~a(~{~a~^, ~}); "
-                                                      name
-                                                      fun-name
-                                                      (n-var-names (length args)))))))))))
-                      (when 1st
-                        (setf 1st nil)
-                        (push (nreverse sig-ids) *override-signature-ids*)))
-                    (when virtuals
-                      (terpri s))
-                    (format s "};~%" s)))))
+                (let ((1st t)
+                      (sig-ids (list (sub-class-name method)))
+                      fun-names virtuals)
+                  (dolist (super (super-classes override))
+                    (dolist (fun (rest (find* super (if (eql :q type) *q-override* *n-override*) 'caar)))
+                      (when (virtual-p fun)
+                        (setf virtuals t)
+                        (let ((fun-name (function-name fun)))
+                          (unless (or
+                                   ;; private functions
+                                   (and (string= "setModel" fun-name)
+                                        (find* name '("QListWidget"
+                                                      "QTableWidget"
+                                                      "QTreeWidget")))
+                                   (and (string= "QHelpIndexModel" name)
+                                        (find* fun-name '("columnCount"
+                                                          "hasChildren"
+                                                          "parent")))
+                                   (and (string= "QHelpSearchResultWidget" name)
+                                        (find* fun-name '("changeEvent")))
+                                   (and (string= "QHelpSearchQueryWidget" name)
+                                        (find* fun-name '("changeEvent"
+                                                          "focusInEvent")))
+                                   (and (string= "QStringListModel" name)
+                                        (find* fun-name '("columnCount"
+                                                          "hasChildren"
+                                                          "parent")))
+                                   ;; exclude some very low-level ones
+                                   (find* fun-name '("event"
+                                                     "eventFilter"
+                                                     "metaObject")))
+                            (let* ((ret (return-arg fun))
+                                   (void (void-p ret))
+                                   (args (function-args fun))
+                                   (sig (signature fun))
+                                   (arg-names (args-to-simple-c (function-args fun)))
+                                   (ret-name (arg-to-simple-c ret))
+                                   (sig-id (let ((id (gethash sig *override-signatures*)))
+                                             (unless id
+                                               (setf id (setf (gethash sig *override-signatures*)
+                                                              (incf *override-id*)))
+                                               (push sig *override-functions*)
+                                               (push arg-names *override-arguments*)
+                                               (push (if (void-p ret) 0 ret-name) *override-return-arguments*))
+                                             id))
+                                   (call (format nil "callOverrideFun(fun, ~d, ~a)"
+                                                 sig-id
+                                                 (if (function-args fun) "args" "0"))))
+                              (when 1st
+                                (push sig-id sig-ids))
+                              (unless (find* fun-name fun-names)
+                                (push fun-name fun-names)
+                                (format s "~%    ~a ~a(~a)~a { void* fun = LObjects::overrideFun(unique, ~d); if(fun) { ~a~a~a~a}"
+                                        (arg-to-c ret)
+                                        fun-name
+                                        (add-var-names args)
+                                        (if (const-p fun) " const" "")
+                                        sig-id
+                                        (if args (format nil "const void* args[] = { ~{&~a~^, ~} }; " (n-var-names (length args))) "")
+                                        (if void (format nil "if(~a" call) (format nil "return ~a" (from-qvariant ret call)))
+                                        (if void ".toBool()) return; }" "; } return")
+                                        (if (pure-virtual-p fun name)
+                                            (let ((val (arg-to-c-null-value ret)))
+                                              (if (empty-string val)
+                                                  ""
+                                                  (format nil " ~a; " val)))
+                                            (format nil " ~a::~a(~{~a~^, ~}); "
+                                                    name
+                                                    fun-name
+                                                    (n-var-names (length args)))))))))))
+                    (when 1st
+                      (setf 1st nil)
+                      (push (nreverse sig-ids) *override-signature-ids*)))
+                  (when virtuals
+                    (terpri s))
+                  (format s "};~%" s)))))
           (if (eql :q type) *q-methods* *n-methods*)
           (if (eql :q type) *q-override* *n-override*))
     (format s "~%#endif~%"))
@@ -488,54 +488,54 @@
     (let* ((class (if (eql :q type) "Q" "N"))
            (n 0)
            (methods (if (eql :q type) *q-methods* *n-methods*))
-           (classes (mapcar #'(lambda (obj)
-                                (with-output-to-string (s)
-                                  (let ((cl-name (class-name* obj))
-                                        (sub-cl-name (sub-class-name obj)))
-                                    (format s "~%class ~a~d : public ~a { // ~a~
-                                               ~%    Q_OBJECT~
-                                               ~%public:~%"
-                                            class
-                                            (incf n)
-                                            (if-it (super-class obj)
-                                                   (format nil "~a~d"
-                                                           class
-                                                           (1+ (if-it* (position it methods :test #'string= :key #'class-name*)
-                                                                       it*
-                                                                       (error (format t "~%Class missing: ~s~%~%" it)))))
-                                                   "QObject")
-                                            cl-name)
-                                    (when (copy-p obj)
-                                      (format s "    Q_INVOKABLE void* CC(uint u, L~a* o) { L~a* copy = new L~a(u); *copy = *o; return copy; }~%"
-                                              sub-cl-name sub-cl-name sub-cl-name))
-                                    (dolist (fun (rest obj))
-                                      (let* ((fun-args (function-args fun))
-                                             (len-fun-args (length fun-args)))
-                                        (when (<= len-fun-args +max-arguments+)
-                                          (if (constructor-p fun)
-                                              (progn
-                                                (setf *max-constructor-args* (max len-fun-args *max-constructor-args*))
-                                                (format s "    Q_INVOKABLE void* C(uint u~a~a) { return new L~a(u~a~a); }~%"
-                                                        (if fun-args ", " "")
-                                                        (add-var-names fun-args cl-name)
-                                                        sub-cl-name
-                                                        (if fun-args ", " "")
-                                                        (format nil "~{~a~^, ~}" (n-var-names len-fun-args))))
-                                              (progn
-                                                (setf *max-method-args* (max len-fun-args *max-method-args*))
-                                                (format s "    Q_INVOKABLE ~a ~a~a(~a~a~a)~a { ~a~a~a~a; }~%"
-                                                        (arg-to-c (return-arg fun) cl-name :return)
-                                                        (if (static-p fun) "S" "M")
-                                                        (function-name fun)
-                                                        (if (static-p fun) "" (format nil "~a* o" cl-name))
-                                                        (if (and fun-args (not (static-p fun))) ", " "")
-                                                        (add-var-names fun-args cl-name)
-                                                        (if (const-p fun) " const" "")
-                                                        (if (void-p (return-arg fun)) "" "return ")
-                                                        (if (static-p fun) (format nil "~a::" cl-name) "o->")
-                                                        (function-name fun)
-                                                        (if (value-p fun) "" (format nil "(~{~a~^, ~})" (n-var-names len-fun-args))))))))))
-                                  (format s "};~%")))
+           (classes (mapcar (lambda (obj)
+                              (with-output-to-string (s)
+                                (let ((cl-name (class-name* obj))
+                                      (sub-cl-name (sub-class-name obj)))
+                                  (format s "~%class ~a~d : public ~a { // ~a~
+                                             ~%    Q_OBJECT~
+                                             ~%public:~%"
+                                          class
+                                          (incf n)
+                                          (if-it (super-class obj)
+                                                 (format nil "~a~d"
+                                                         class
+                                                         (1+ (if-it* (position it methods :test 'string= :key 'class-name*)
+                                                                     it*
+                                                                     (error (format t "~%Class missing: ~s~%~%" it)))))
+                                                 "QObject")
+                                          cl-name)
+                                  (when (copy-p obj)
+                                    (format s "    Q_INVOKABLE void* CC(uint u, L~a* o) { L~a* copy = new L~a(u); *copy = *o; return copy; }~%"
+                                            sub-cl-name sub-cl-name sub-cl-name))
+                                  (dolist (fun (rest obj))
+                                    (let* ((fun-args (function-args fun))
+                                           (len-fun-args (length fun-args)))
+                                      (when (<= len-fun-args +max-arguments+)
+                                        (if (constructor-p fun)
+                                            (progn
+                                              (setf *max-constructor-args* (max len-fun-args *max-constructor-args*))
+                                              (format s "    Q_INVOKABLE void* C(uint u~a~a) { return new L~a(u~a~a); }~%"
+                                                      (if fun-args ", " "")
+                                                      (add-var-names fun-args cl-name)
+                                                      sub-cl-name
+                                                      (if fun-args ", " "")
+                                                      (format nil "~{~a~^, ~}" (n-var-names len-fun-args))))
+                                            (progn
+                                              (setf *max-method-args* (max len-fun-args *max-method-args*))
+                                              (format s "    Q_INVOKABLE ~a ~a~a(~a~a~a)~a { ~a~a~a~a; }~%"
+                                                      (arg-to-c (return-arg fun) cl-name :return)
+                                                      (if (static-p fun) "S" "M")
+                                                      (function-name fun)
+                                                      (if (static-p fun) "" (format nil "~a* o" cl-name))
+                                                      (if (and fun-args (not (static-p fun))) ", " "")
+                                                      (add-var-names fun-args cl-name)
+                                                      (if (const-p fun) " const" "")
+                                                      (if (void-p (return-arg fun)) "" "return ")
+                                                      (if (static-p fun) (format nil "~a::" cl-name) "o->")
+                                                      (function-name fun)
+                                                      (if (value-p fun) "" (format nil "(~{~a~^, ~})" (n-var-names len-fun-args))))))))))
+                                (format s "};~%")))
                             methods)))
       ;; class hierarchy
       (let ((1st t)
@@ -549,10 +549,10 @@
                         (setf (char class 10) #\!)))
                  (unless (class-done)
                    (let* ((name (read-from-string (subseq class 7 12)))
-                          (p (search "public" class :test #'string=))
+                          (p (search "public" class :test 'string=))
                           (inherits (read-from-string (subseq class (+ 7 p) (+ 12 p)))))
                      (if 1st
-                         (when (search " public QObject" class :test #'string=)
+                         (when (search " public QObject" class :test 'string=)
                            (push name done)
                            (write-string class s)
                            (set-class-done))
@@ -618,10 +618,10 @@
                ~%        N = new QObject* [~d];"
           (length *q-methods*)
           (length *n-methods*))
-    (mapc #'(lambda (class len)
-              (format s "~%        ")
-              (dotimes (n len)
-                (format s "~a[~d] = new ~a~d; " class n class (1+ n))))
+    (mapc (lambda (class len)
+            (format s "~%        ")
+            (dotimes (n len)
+              (format s "~a[~d] = new ~a~d; " class n class (1+ n))))
           (list "Q" "N")
           (list (length *q-methods*) (length *n-methods*)))
     (let ((i 0))
@@ -636,12 +636,12 @@
         (format s "~%        override_function_ids[~s] = ~d;" fun i)))
     (format s "~%        override_arg_types = new const char** [~d];" (length *override-arguments*))
     (let ((i -1))
-      (mapc #'(lambda (args ret)
-                (incf i)
-                (format s "~%        { static const char* s[] = { ~s, ~a }; override_arg_types[~d] = s; }"
-                        ret
-                        (if args (format nil "~{~s, ~}0" args) "0")
-                        i))
+      (mapc (lambda (args ret)
+              (incf i)
+              (format s "~%        { static const char* s[] = { ~s, ~a }; override_arg_types[~d] = s; }"
+                      ret
+                      (if args (format nil "~{~s, ~}0" args) "0")
+                      i))
             *override-arguments*
             *override-return-arguments*))
     (let ((max (length *override-functions*)))
@@ -694,7 +694,7 @@
     (let ((i 0))
       (dolist (obj *q-methods*)
         (incf i)
-        (when (find* (sub-class-name obj) *override-signature-ids* #'first)
+        (when (find* (sub-class-name obj) *override-signature-ids* 'first)
           (format s "~%            case ~d: ids = L~a::overrideIds; break;" i (sub-class-name obj)))))
     (format s " }}~
                ~%    else {~
@@ -703,7 +703,7 @@
     (let ((i 0))
       (dolist (obj *n-methods*)
         (incf i)
-        (when (find* (sub-class-name obj) *override-signature-ids* #'first)
+        (when (find* (sub-class-name obj) *override-signature-ids* 'first)
           (format s "~%            case ~d: ids = L~a::overrideIds; break;" i (sub-class-name obj)))))
     (format s " }}~
                ~%    StrList funs;~
@@ -790,11 +790,11 @@
                     "QVariant"
                     "QWidgetList")))
     (with-open-file (s "missing-types.txt" :direction :output :if-exists :supersede)
-      (dolist (arg (sort (loop for arg being the hash-keys in *argument-types* collect arg) #'string<))
-        (unless (or (search "QStyle" arg :test #'string=)
+      (dolist (arg (sort (loop for arg being the hash-keys in *argument-types* collect arg) 'string<))
+        (unless (or (search "QStyle" arg :test 'string=)
                     (find* arg skip)
-                    (find* arg *q-methods* #'caaar)
-                    (find* arg *n-methods* #'caaar))
+                    (find* arg *q-methods* 'caaar)
+                    (find* arg *n-methods* 'caaar))
           (incf *missing-types*)
           (write-line arg s))))))
 

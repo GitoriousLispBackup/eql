@@ -42,8 +42,8 @@
     (when it* ,@body)))
 
 (defmacro with-gensyms (syms &body body)
-  `(let ,(mapcar #'(lambda (s)
-                     `(,s (gensym)))
+  `(let ,(mapcar (lambda (s)
+                   `(,s (gensym)))
                  syms)
      ,@body))
 
@@ -53,17 +53,17 @@
      ,@body))
 
 (defmacro do-string ((var str) &body body)
-  `(map nil #'(lambda (,var)
-                ,@body)
+  `(map nil (lambda (,var)
+              ,@body)
         ,str))
 
 (defmacro do- (to &body body)
   `(progn
-     ,@(mapcar #'(lambda (line)
-                   (append to (if (or (atom line)
-                                      (eql 'quote (first line)))
-                                  (list line)
-                                  line)))
+     ,@(mapcar (lambda (line)
+                 (append to (if (or (atom line)
+                                    (eql 'quote (first line)))
+                                (list line)
+                                line)))
                body)))
 
 (defun empty-string (s)

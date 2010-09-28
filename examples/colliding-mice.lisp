@@ -33,13 +33,13 @@
            (item (mouse-item mouse)))
       (qfun item "setRotation" (random (* 360 16)))
       (qoverride item "boundingRect()"
-                 #'(lambda () '(-18.5 -22.5 36.5 60.5)))
+                 (lambda () '(-18.5 -22.5 36.5 60.5)))
       (qoverride item "shape()"
-                 #'(lambda () shape))
+                 (lambda () shape))
       (qoverride item "paint(QPainter*,QStyleOptionGraphicsItem*,QWidget*)"
-                 #'(lambda (painter s w) (paint mouse painter)))
+                 (lambda (painter s w) (paint mouse painter)))
       (qoverride item "advance(int)"
-                 #'(lambda (step) (advance mouse step)))
+                 (lambda (step) (advance mouse step)))
       item)))
 
 (defun brush (color &optional (style "SolidPattern"))
