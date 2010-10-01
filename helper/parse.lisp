@@ -16,7 +16,9 @@
         "(deprecated)"
         "<Attribute>"
         "<ExtraSelection>"
+        "<FormatRange>"
         "<WizardButton>"
+        "<WritingSystem>"
         "[4][4]"
         "const char * const[]"
         "defaultAction"
@@ -41,12 +43,14 @@
         "DefaultAction"
         "EditFocus"
         "Engine"
+        "FILE"
         "Handle"
         "HANDLE"
         "HBITMAP"
         "HCURSOR"
         "HDC"
         "HICON"
+        "KeyValue"
         "NavigationMode"
         "MSG"
         "PaperSources"
@@ -54,9 +58,9 @@
         "RenderFlags"
         "RSgImage"
         "T "
+        "Q_PID"
         "QDataStream"
         "QDecoration"
-        "QFileInfo"
         "QFontInfo"
         "QGenericArgument"
         "QGenericMatrix"
@@ -74,6 +78,7 @@
         "QMetaMethod"
         "QMetaProperty"
         "QPrinterInfo"
+        "QSet<"
         "QSymbianEvent"
         "QTextLayout"
         "QTextObjectInterface"
@@ -152,7 +157,7 @@
             (incf *not-found*)
             (warn (format nil "Html file not found: ~s" path))))))
   (defun super-class ()
-    (let ((p (search "<p>Inherits" html :test 'string=)))
+    (let ((p (search "<p>Inherits" html)))
       (when p
         (let ((super (text (subseq html (search* "<" html (1+ p)) (search* "</" html p)))))
           (unless (find #\< super) ; template
@@ -182,7 +187,7 @@
                (unless (or (and new no-new)
                            (find #\~ fun) ; destructor
                            (dolist (str +skip+)
-                             (when (search str fun :test 'string=)
+                             (when (search str fun)
                                (return t)))
                            ;; template problem
                            (and (string= "QVariant" class)

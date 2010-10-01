@@ -8,16 +8,20 @@
 (load "parsed/n-override")
 
 (flet ((load-module (name)
-         (dolist (qn (list #\q #\n))
-           (load (format nil "my-class-lists/~a/~c-names" name qn)))))
+         (dolist (q-n (list #\q #\n))
+           (load (format nil "my-class-lists/~a/~c-names" name q-n)))))
   (dolist (m (cons "gui" *qt-modules*))
     (load-module m)))
 
 (use-package :util)
 
-(defconstant +message-generated+ "// THIS FILE IS GENERATED (see helper/)")
-(defconstant +max-arguments+     50)
-(defconstant +var-names+         (loop for i from 1 to +max-arguments+ collect (format nil "x~d" i)))
+(defconstant +message-generated+            "// THIS FILE IS GENERATED (see helper/)")
+(defconstant +max-arguments+                50)
+(defconstant +var-names+                    (loop for i from 1 to +max-arguments+ collect (format nil "x~d" i)))
+(defconstant +special-typedefs-and-classes+ (list "QCoreApplication::EventFilter"
+                                                  "QEasingCurve::EasingFunction"
+                                                  "QPainterPath::Element"
+                                                  "QPixmapCache::Key"))
 
 (defparameter *max-constructor-args*      0)
 (defparameter *max-method-args*           0)
@@ -61,7 +65,7 @@
                 (not (or (string= "void" type)
                          enum
                          (upper-case-p (char type 0))
-                         (search "QHash" type :test 'string=))))
+                         (search "QHash" type))))
         (setf (gethash type *argument-types*) t)))))
 
 (defun split-arg (arg)
@@ -89,7 +93,10 @@
       (nreverse arg*))))
 
 (defun split-fun (fun class)
-  (macrolet ((append-if (cond val)
+  (macrolet ((cut-p (x str)
+               `(when (starts-with ,x ,str)
+                  (setf ,str (subseq ,str (length ,x)))))
+             (append-if (cond val)
                `(when ,cond
                   (setf fun-list (append fun-list (list ,val))))))
     (let* ((fun* fun)
@@ -101,14 +108,10 @@
            (p1 (position #\Space fun* :from-end t :end (if p2 (- p2 2) (length fun*))))
            (name (trim (subseq fun* p1 p2)))
            (ret (no-spaces (subseq fun* 0 p1)))
-           (new       (when (starts-with "new" ret)
-                        (setf ret (subseq ret 3))))
-           (protected (when (starts-with "protected" ret)
-                        (setf ret (subseq ret 9))))
-           (static    (when (starts-with "static" ret)
-                        (setf ret (subseq ret 6))))
-           (virtual   (when (starts-with "virtual" ret)
-                        (setf ret (subseq ret 7))))
+           (new       (cut-p "new" ret))
+           (protected (cut-p "protected" ret))
+           (static    (cut-p "static" ret))
+           (virtual   (cut-p "virtual" ret))
            (ret-const (starts-with "const" ret))
            (ret-ptr (ends-with "*" ret))
            (ret-ref (ends-with "&" ret))
@@ -195,23 +198,22 @@
   (let* ((type (add-enum-class (first arg) enum-class))
          (enum-as-int (and return
                            (find #\: type)
-                           (not (find #\< type))
-                           ;; exclude typedefs and classes
-                           (not (find* type '("QCoreApplication::EventFilter"
-                                              "QPainterPath::Element"))))))
-    (format nil "~a~a~a"
-            (if (and (const-p arg)
-                     (or (not return)
-                         (not (string= "int" (first arg)))))
-                "const "
-                "")
-            (if enum-as-int "int" type)
-            (cond ((and (not return)
-                        (reference-p arg))
-                   "&")
-                  ((pointer-p arg)
-                   "*")
-                  (t "")))))
+                           (not (find #\< type)))))
+    (unless (and enum-as-int
+                 (find* type +special-typedefs-and-classes+))
+      (format nil "~a~a~a"
+              (if (and (const-p arg)
+                       (or (not return)
+                           (not (string= "int" (first arg)))))
+                  "const "
+                  "")
+              (if enum-as-int "int" type)
+              (cond ((and (not return)
+                          (reference-p arg))
+                     "&")
+                    ((pointer-p arg)
+                     "*")
+                    (t ""))))))
 
 (defun arg-to-c-null-value (arg)
   (let ((type (arg-type arg)))
@@ -225,7 +227,7 @@
           ((string= "bool" type)
            "false")
           (t
-           ""))))
+           (error (format nil "No C null value defined for ~s" arg))))))
 
 (defun arg-to-simple-c (arg)
   (format nil "~a~a~a"
@@ -297,9 +299,15 @@
 (defun static-p (x)
   (find :static x))
 
-(defun pure-virtual-p (fun class)
-  (when-it (find :pure fun :key (lambda (x) (when (consp x) (car x))))
-           (string= class (cdr it))))
+(let (pure-virtuals)
+  (defun pure-virtual-p (fun class super)
+    (when-it (find :pure fun :key (lambda (x) (when (consp x) (car x))))
+             (let ((fun* (function-name fun))
+                   (class* (cdr it)))
+               (when (or (string= class class*)
+                         (and (string= super class*)
+                              (find (cons fun* super) pure-virtuals :test 'equal)))
+                 (push (cons fun* class) pure-virtuals))))))
 
 (defun virtual-p (x)
   (find :virtual x))
@@ -395,12 +403,13 @@
                         (setf virtuals t)
                         (let ((fun-name (function-name fun)))
                           (unless (or
-                                   ;; private functions
+                                   ;; exclude reimplemented virtual, now private functions
                                    (and (string= "setModel" fun-name)
                                         (find* name '("QListWidget"
                                                       "QTableWidget"
                                                       "QTreeWidget")))
-                                   (and (string= "QHelpIndexModel" name)
+                                   (and (find* name '("QAbstractTableModel"
+                                                      "QHelpIndexModel"))
                                         (find* fun-name '("columnCount"
                                                           "hasChildren"
                                                           "parent")))
@@ -447,7 +456,7 @@
                                         (if args (format nil "const void* args[] = { ~{&~a~^, ~} }; " (n-var-names (length args))) "")
                                         (if void (format nil "if(~a" call) (format nil "return ~a" (from-qvariant ret call)))
                                         (if void ".toBool()) return; }" "; } return")
-                                        (if (pure-virtual-p fun name)
+                                        (if (pure-virtual-p fun name super)
                                             (let ((val (arg-to-c-null-value ret)))
                                               (if (empty-string val)
                                                   ""
@@ -521,20 +530,27 @@
                                                       sub-cl-name
                                                       (if fun-args ", " "")
                                                       (format nil "~{~a~^, ~}" (n-var-names len-fun-args))))
-                                            (progn
-                                              (setf *max-method-args* (max len-fun-args *max-method-args*))
-                                              (format s "    Q_INVOKABLE ~a ~a~a(~a~a~a)~a { ~a~a~a~a; }~%"
-                                                      (arg-to-c (return-arg fun) cl-name :return)
-                                                      (if (static-p fun) "S" "M")
-                                                      (function-name fun)
-                                                      (if (static-p fun) "" (format nil "~a* o" cl-name))
-                                                      (if (and fun-args (not (static-p fun))) ", " "")
-                                                      (add-var-names fun-args cl-name)
-                                                      (if (const-p fun) " const" "")
-                                                      (if (void-p (return-arg fun)) "" "return ")
-                                                      (if (static-p fun) (format nil "~a::" cl-name) "o->")
-                                                      (function-name fun)
-                                                      (if (value-p fun) "" (format nil "(~{~a~^, ~})" (n-var-names len-fun-args))))))))))
+                                            (let ((c-ret-arg (arg-to-c (return-arg fun) cl-name :return))
+                                                  (c-args (add-var-names fun-args cl-name)))
+                                              (when (and c-ret-arg
+                                                         (every (lambda (x)
+                                                                  (not (search x c-args)))
+                                                                +special-typedefs-and-classes+))
+                                                (format s "    Q_INVOKABLE ~a ~a~a(~a~a~a)~a { ~a~a~a~a; }~%"
+                                                        c-ret-arg
+                                                        (if (static-p fun) "S" "M")
+                                                        (function-name fun)
+                                                        (if (static-p fun) "" (format nil "~a* o" cl-name))
+                                                        (if (and fun-args (not (static-p fun))) ", " "")
+                                                        c-args
+                                                        (if (const-p fun) " const" "")
+                                                        (if (void-p (return-arg fun)) "" "return ")
+                                                        (if (static-p fun) (format nil "~a::" cl-name) "o->")
+                                                        (function-name fun)
+                                                        (if (value-p fun)
+                                                            ""
+                                                            (format nil "(~{~a~^, ~})" (n-var-names len-fun-args))))
+                                                (setf *max-method-args* (max len-fun-args *max-method-args*)))))))))
                                 (format s "};~%")))
                             methods)))
       ;; class hierarchy
@@ -549,10 +565,10 @@
                         (setf (char class 10) #\!)))
                  (unless (class-done)
                    (let* ((name (read-from-string (subseq class 7 12)))
-                          (p (search "public" class :test 'string=))
+                          (p (search "public" class))
                           (inherits (read-from-string (subseq class (+ 7 p) (+ 12 p)))))
                      (if 1st
-                         (when (search " public QObject" class :test 'string=)
+                         (when (search " public QObject" class)
                            (push name done)
                            (write-string class s)
                            (set-class-done))
@@ -567,18 +583,19 @@
     (format s "~%#endif~%")))
 
 (defun from-qvariant (arg x)
-  (let* ((1st (char (arg-type arg) 0))
+  (let* ((type (arg-type arg))
+         (1st (char type 0))
          (q (char= #\Q 1st)))
     (cond ((pointer-p arg)
            (format nil "(~a)qVariantValue<void*>(~a)" (arg-to-c arg) x))
-          ((or (search "::" (arg-type arg))
+          ((or (search "::" type)
                (and (not q)
                     (upper-case-p 1st)))
-           (format nil "(~a)~a.toInt()" (arg-type arg) x))
+           (format nil "(~a)~a.toInt()" type x))
           (q
-           (format nil "qVariantValue<~a>(~a)" (arg-type arg) x))
+           (format nil "qVariantValue<~a~a>(~a)" type (if (ends-with ">" type) " " "") x))
           (t
-           (format nil "~a.to~a()" x (string-capitalize (arg-type arg)))))))
+           (format nil "~a.to~a()" x (string-capitalize (if (string= "qreal" type) "real" type)))))))
 
 (defun lobjects.cpp ()
   (with-open-file (s "../src/gen/_lobjects.cpp" :direction :output :if-exists :supersede)
@@ -729,23 +746,27 @@
                     "GLuint"
                     "QByteArray"
                     "QChar"
-                    "QFile"
+                    "QFileInfoList"
                     "QFont"
                     "QGradientStop"
                     "QItemEditorCreatorBase"
                     "QKeySequence"
                     "QLine"
                     "QLineF"
+                    "QList<QAbstractAnimation*>"
                     "QList<QAbstractButton*>"
+                    "QList<QAbstractState*>"
                     "QList<QAction*>"
                     "QList<QByteArray>"
                     "QList<QDockWidget*>"
+                    "QList<QGesture*>"
                     "QList<QGraphicsItem*>"
                     "QList<QGraphicsTransform*>"
                     "QList<QGraphicsView*>"
                     "QList<QGraphicsWidget*>"
                     "QList<QKeySequence>"
                     "QList<QListWidgetItem*>"
+                    "QList<QMdiSubWindow*>"
                     "QList<QPolygonF>"
                     "QList<QSize>"
                     "QList<QStandardItem*>"
@@ -758,7 +779,6 @@
                     "QList<QWidget*>"
                     "QList<int>"
                     "QList<qreal>"
-                    "QMargins"
                     "QMatrix"
                     "QModelIndexList"
                     "QObjectList"
@@ -791,8 +811,7 @@
                     "QWidgetList")))
     (with-open-file (s "missing-types.txt" :direction :output :if-exists :supersede)
       (dolist (arg (sort (loop for arg being the hash-keys in *argument-types* collect arg) 'string<))
-        (unless (or (search "QStyle" arg :test 'string=)
-                    (find* arg skip)
+        (unless (or (find* arg skip)
                     (find* arg *q-methods* 'caaar)
                     (find* arg *n-methods* 'caaar))
           (incf *missing-types*)

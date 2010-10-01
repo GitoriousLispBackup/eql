@@ -2,6 +2,43 @@
   (("QAbstractGraphicsShapeItem" . "QGraphicsItem")
    "virtual bool isObscuredBy ( const QGraphicsItem * ) const"
    "virtual QPainterPath opaqueArea () const")
+  (("QAccessible" . NIL))
+  (("QAccessibleEvent" . "QEvent"))
+  (("QAccessibleInterface" . "QAccessible")
+   "virtual QString actionText ( int , Text , int ) const = 0"
+   "virtual int childAt ( int , int ) const = 0"
+   "virtual int childCount () const = 0"
+   "virtual bool doAction ( int , int , const QVariantList & = QVariantList() ) = 0"
+   "virtual int indexOfChild ( const QAccessibleInterface * ) const = 0"
+   "virtual bool isValid () const = 0"
+   "virtual QObject * object () const = 0"
+   "virtual QRect rect ( int ) const = 0"
+   "virtual Relation relationTo ( int , const QAccessibleInterface * , int ) const = 0"
+   "virtual Role role ( int ) const = 0"
+   "virtual void setText ( Text , int , const QString & ) = 0"
+   "virtual State state ( int ) const = 0"
+   "virtual QString text ( Text , int ) const = 0"
+   "virtual int userActionCount ( int ) const = 0")
+  (("QAccessibleObject" . "QAccessibleInterface")
+   "virtual QString actionText ( int , Text , int ) const"
+   "virtual bool doAction ( int , int , const QVariantList & )"
+   "virtual bool isValid () const"
+   "virtual QObject * object () const"
+   "virtual QRect rect ( int ) const"
+   "virtual void setText ( Text , int , const QString & )"
+   "virtual int userActionCount ( int ) const")
+  (("QAccessibleWidget" . "QAccessibleObject")
+   "virtual QString actionText ( int , Text , int ) const"
+   "virtual int childAt ( int , int ) const"
+   "virtual int childCount () const"
+   "virtual bool doAction ( int , int , const QVariantList & )"
+   "virtual int indexOfChild ( const QAccessibleInterface * ) const"
+   "virtual QRect rect ( int ) const"
+   "virtual Relation relationTo ( int , const QAccessibleInterface * , int ) const"
+   "virtual Role role ( int ) const"
+   "virtual State state ( int ) const"
+   "virtual QString text ( Text , int ) const"
+   "virtual int userActionCount ( int ) const")
   (("QActionEvent" . "QEvent"))
   (("QBasicTimer" . NIL))
   (("QBitArray" . NIL))
@@ -12,10 +49,13 @@
   (("QColor" . NIL))
   (("QConicalGradient" . "QGradient"))
   (("QContextMenuEvent" . "QInputEvent"))
+  (("QCryptographicHash" . NIL))
   (("QCursor" . NIL))
   (("QDate" . NIL))
   (("QDateTime" . NIL))
+  (("QDesktopServices" . NIL))
   (("QDir" . NIL))
+  (("QDirIterator" . NIL))
   (("QDragEnterEvent" . "QDragMoveEvent"))
   (("QDragLeaveEvent" . "QEvent"))
   (("QDragMoveEvent" . "QDropEvent"))
@@ -23,13 +63,26 @@
    "virtual QByteArray encodedData ( const char * ) const"
    "virtual const char * format ( int = 0 ) const"
    "virtual bool provides ( const char * ) const")
+  (("QDynamicPropertyChangeEvent" . "QEvent"))
+  (("QEasingCurve" . NIL))
   (("QEvent" . NIL))
   (("QFileIconProvider" . NIL)
-   "virtual QIcon icon ( IconType ) const")
+   "virtual QIcon icon ( IconType ) const"
+   "virtual QIcon icon ( const QFileInfo & ) const"
+   "virtual QString type ( const QFileInfo & ) const")
   (("QFileInfo" . NIL))
+  (("QFileOpenEvent" . "QEvent"))
   (("QFocusEvent" . "QEvent"))
+  (("QFontDatabase" . NIL))
   (("QFontMetrics" . NIL))
+  (("QGestureEvent" . "QEvent"))
   (("QGradient" . NIL))
+  (("QGraphicsAnchorLayout" . "QGraphicsLayout")
+   "virtual int count () const"
+   "virtual void invalidate ()"
+   "virtual QGraphicsLayoutItem * itemAt ( int ) const"
+   "virtual void removeAt ( int )"
+   "virtual void setGeometry ( const QRectF & )")
   (("QGraphicsEllipseItem" . "QAbstractGraphicsShapeItem")
    "virtual QRectF boundingRect () const"
    "virtual bool contains ( const QPointF & ) const"
@@ -38,6 +91,13 @@
    "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * = 0 )"
    "virtual QPainterPath shape () const"
    "virtual int type () const")
+  (("QGraphicsGridLayout" . "QGraphicsLayout")
+   "virtual int count () const"
+   "virtual void invalidate ()"
+   "virtual QGraphicsLayoutItem * itemAt ( int ) const"
+   "virtual void removeAt ( int )"
+   "virtual void setGeometry ( const QRectF & )"
+   "virtual QSizeF sizeHint ( Qt::SizeHint , const QSizeF & = QSizeF() ) const")
   (("QGraphicsItem" . NIL)
    "virtual void advance ( int )"
    "virtual QRectF boundingRect () const = 0"
@@ -96,6 +156,13 @@
    "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * = 0 )"
    "virtual QPainterPath shape () const"
    "virtual int type () const")
+  (("QGraphicsLinearLayout" . "QGraphicsLayout")
+   "virtual int count () const"
+   "virtual void invalidate ()"
+   "virtual QGraphicsLayoutItem * itemAt ( int ) const"
+   "virtual void removeAt ( int )"
+   "virtual void setGeometry ( const QRectF & )"
+   "virtual QSizeF sizeHint ( Qt::SizeHint , const QSizeF & = QSizeF() ) const")
   (("QGraphicsPathItem" . "QAbstractGraphicsShapeItem")
    "virtual QRectF boundingRect () const"
    "virtual bool contains ( const QPointF & ) const"
@@ -145,8 +212,11 @@
    "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * )"
    "virtual QPainterPath shape () const"
    "virtual int type () const")
+  (("QHelpEvent" . "QEvent"))
   (("QHideEvent" . "QEvent"))
+  (("QHoverEvent" . "QEvent"))
   (("QIcon" . NIL))
+  (("QIconDragEvent" . "QEvent"))
   (("QImage" . "QPaintDevice"))
   (("QInputEvent" . "QEvent"))
   (("QInputMethodEvent" . "QEvent"))
@@ -171,34 +241,49 @@
    "virtual QSize sizeHint () const = 0"
    "virtual QSpacerItem * spacerItem ()"
    "virtual QWidget * widget ()")
+  (("QLibraryInfo" . NIL))
   (("QLinearGradient" . "QGradient"))
   (("QListWidgetItem" . NIL)
    "virtual QListWidgetItem * clone () const"
    "virtual QVariant data ( int ) const"
    "virtual void setData ( int , const QVariant & )")
   (("QLocale" . NIL))
+  (("QMargins" . NIL))
   (("QMatrix" . NIL))
   (("QMatrix4x4" . NIL))
   (("QMetaObject" . NIL))
   (("QModelIndex" . NIL))
   (("QMouseEvent" . "QInputEvent"))
   (("QMoveEvent" . "QEvent"))
+  (("QMutex" . NIL))
+  (("QMutexLocker" . NIL))
   (("QPaintDevice" . NIL)
    "protected virtual int metric ( PaintDeviceMetric ) const")
   (("QPaintEvent" . "QEvent"))
   (("QPainter" . NIL))
   (("QPainterPath" . NIL))
+  (("QPainterPathStroker" . NIL))
   (("QPalette" . NIL))
   (("QPen" . NIL))
+  (("QPersistentModelIndex" . NIL))
   (("QPicture" . "QPaintDevice")
    "virtual void setData ( const char * , uint )")
   (("QPixmap" . "QPaintDevice"))
+  (("QPixmapCache" . NIL))
   (("QPrinter" . "QPaintDevice"))
+  (("QPrinterInfo" . NIL))
+  (("QProcessEnvironment" . NIL))
   (("QQuaternion" . NIL))
   (("QRadialGradient" . "QGradient"))
+  (("QReadLocker" . NIL))
+  (("QReadWriteLock" . NIL))
   (("QRegExp" . NIL))
   (("QRegion" . NIL))
   (("QResizeEvent" . "QEvent"))
+  (("QRunnable" . NIL)
+   "virtual void run () = 0")
+  (("QSemaphore" . NIL))
+  (("QShortcutEvent" . "QEvent"))
   (("QShowEvent" . "QEvent"))
   (("QSizePolicy" . NIL))
   (("QSpacerItem" . "QLayoutItem")
@@ -215,6 +300,8 @@
    "virtual QVariant data ( int = Qt::UserRole + 1 ) const"
    "virtual void setData ( const QVariant & , int = Qt::UserRole + 1 )"
    "virtual int type () const")
+  (("QStatusTipEvent" . "QEvent"))
+  (("QSystemSemaphore" . NIL))
   (("QTableWidgetItem" . NIL)
    "virtual QTableWidgetItem * clone () const"
    "virtual QVariant data ( int ) const"
@@ -223,13 +310,26 @@
   (("QTabletEvent" . "QInputEvent"))
   (("QTextBlock" . NIL))
   (("QTextBlockFormat" . "QTextFormat"))
+  (("QTextBoundaryFinder" . NIL))
   (("QTextCharFormat" . "QTextFormat"))
+  (("QTextCodec" . NIL)
+   "virtual QList<QByteArray> aliases () const"
+   "virtual int mibEnum () const = 0"
+   "virtual QByteArray name () const = 0"
+   "protected virtual QByteArray convertFromUnicode ( const QChar * , int , ConverterState * ) const = 0"
+   "protected virtual QString convertToUnicode ( const char * , int , ConverterState * ) const = 0")
   (("QTextCursor" . NIL))
+  (("QTextDecoder" . NIL))
   (("QTextDocumentFragment" . NIL))
+  (("QTextDocumentWriter" . NIL))
+  (("QTextEncoder" . NIL))
   (("QTextFormat" . NIL))
+  (("QTextFragment" . NIL))
   (("QTextFrameFormat" . "QTextFormat"))
   (("QTextImageFormat" . "QTextCharFormat"))
+  (("QTextLayout" . NIL))
   (("QTextLength" . NIL))
+  (("QTextLine" . NIL))
   (("QTextListFormat" . "QTextFormat"))
   (("QTextOption" . NIL))
   (("QTextTableCell" . NIL))
@@ -237,6 +337,8 @@
   (("QTextTableFormat" . "QTextFrameFormat"))
   (("QTime" . NIL))
   (("QTimerEvent" . "QEvent"))
+  (("QToolTip" . NIL))
+  (("QTouchEvent" . "QInputEvent"))
   (("QTransform" . NIL))
   (("QTreeWidgetItem" . NIL)
    "virtual QTreeWidgetItem * clone () const"
@@ -252,5 +354,21 @@
   (("QVector2D" . NIL))
   (("QVector3D" . NIL))
   (("QVector4D" . NIL))
+  (("QWaitCondition" . NIL))
+  (("QWhatsThis" . NIL))
+  (("QWhatsThisClickedEvent" . "QEvent"))
   (("QWheelEvent" . "QInputEvent"))
+  (("QWidgetItem" . "QLayoutItem")
+   "virtual Qt::Orientations expandingDirections () const"
+   "virtual QRect geometry () const"
+   "virtual bool hasHeightForWidth () const"
+   "virtual int heightForWidth ( int ) const"
+   "virtual bool isEmpty () const"
+   "virtual QSize maximumSize () const"
+   "virtual QSize minimumSize () const"
+   "virtual void setGeometry ( const QRect & )"
+   "virtual QSize sizeHint () const"
+   "virtual QWidget * widget ()")
+  (("QWindowStateChangeEvent" . "QEvent"))
+  (("QWriteLocker" . NIL))
 ))

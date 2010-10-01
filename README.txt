@@ -6,7 +6,7 @@ TESTED WITH: (patches for other configurations welcome!)
 
 - ECL 10.4.1 unicode
 - Qt 4.6.x (OSX: Carbon)
-- Linux, OSX 10.4, Windows XP (Visual Studio Express 2008)
+- Linux, OSX 10.4, Windows XP & 7 (Visual Studio Express 2008)
 
 
 
@@ -23,43 +23,53 @@ PREPARE BUILD (optional; new users: skip this)
 If you want to include additional modules:
 - uncomment the modules in helper/qt-modules.lisp
 - follow the helper/README (parse & generate)
-- uncomment the modules in src/eql.pro (section: optional modules)
+- uncomment the modules in src/eql_lib.pro (section: optional modules)
 
 
 
 BUILD / REBUILD (see also: "Windows Easy Guide" in doc/)
 
+In Windows you first need to adapt the win32 section of both src/eql_lib.pro and src/eql_exe.pro.
+
 1) Switch to the src/ directory, and run:
     ecl -shell make-eql-lib.lisp (build + rebuild)
 
-2) Run: (win32: nmake instead of make)
-    qmake
+2) Run: (MSVC: nmake instead of make)
+    qmake eql_lib.pro
     make clean (rebuild only)
     make 
 
-(In Windows you first need to adapt the win32 section of eql.pro).
+    qmake eql_exe.pro
+    make clean (rebuild only)
+    make 
 
-This will build the eql executable (which depends only on the shared
-libraries of both ECL and Qt).
+This will build both the EQL executable and shared library.
 
 3) cd ..
 
-In OSX you may want to create a convenience link:
-    ln -s eql.app/Contents/MacOS/eql eql
+[Linux]: you need to create a link to the EQL shared library, something like:
+             cd /usr/lib
+             sudo ln -s ~/eql/libeql.so.1 libeql.so.1
+
+[OSX]:   you may want to create a convenience link:
+             ln -s eql.app/Contents/MacOS/eql eql
+         you need to create a link to the EQL shared library, something like:
+             cd /usr/lib
+             sudo ln -s ~/eql/libeql.1.dylib libeql.1.dylib
 
 
 
 RUN
 
 You can run a simple interactive REPL UI doing:
-    ./eql -qgui (win32: eql -qgui)
+    ./eql -qgui (MSVC: eql -qgui)
 
 OSX and Unix only:
 In order to run a top-level processing Qt events, do:
     ./eql -qtpl
 
 To run a Lisp file without top-level, do:
-    ./eql examples/clock (win32: eql examples\clock)
+    ./eql examples/clock (MSVC: eql examples/clock)
 
 If you start the eql executable without arguments, it will
 start the usual ECL top-level (without processing Qt events).

@@ -6,6 +6,54 @@
    "void setPen ( const QPen & )"
    "virtual bool isObscuredBy ( const QGraphicsItem * ) const"
    "virtual QPainterPath opaqueArea () const")
+  (("QAccessible" . NIL)
+   "static void installFactory ( InterfaceFactory )"
+   "static bool isActive ()"
+   "static QAccessibleInterface * queryAccessibleInterface ( QObject * )"
+   "static void removeFactory ( InterfaceFactory )"
+   "static void setRootObject ( QObject * )"
+   "static void updateAccessibility ( QObject * , int , Event )")
+  (("QAccessibleEvent" . "QEvent")
+   "int child () const"
+   "void setValue ( const QString & )"
+   "QString value () const")
+  (("QAccessibleInterface" . "QAccessible")
+   "virtual QString actionText ( int , Text , int ) const = 0"
+   "virtual int childAt ( int , int ) const = 0"
+   "virtual int childCount () const = 0"
+   "virtual bool doAction ( int , int , const QVariantList & = QVariantList() ) = 0"
+   "virtual int indexOfChild ( const QAccessibleInterface * ) const = 0"
+   "QVariant invokeMethod ( Method , int = 0, const QVariantList & = QVariantList() )"
+   "virtual bool isValid () const = 0"
+   "virtual QObject * object () const = 0"
+   "virtual QRect rect ( int ) const = 0"
+   "virtual Relation relationTo ( int , const QAccessibleInterface * , int ) const = 0"
+   "virtual Role role ( int ) const = 0"
+   "virtual void setText ( Text , int , const QString & ) = 0"
+   "virtual State state ( int ) const = 0"
+   "virtual QString text ( Text , int ) const = 0"
+   "virtual int userActionCount ( int ) const = 0")
+  (("QAccessibleObject" . "QAccessibleInterface")
+   "virtual QString actionText ( int , Text , int ) const"
+   "virtual bool doAction ( int , int , const QVariantList & )"
+   "virtual bool isValid () const"
+   "virtual QObject * object () const"
+   "virtual QRect rect ( int ) const"
+   "virtual void setText ( Text , int , const QString & )"
+   "virtual int userActionCount ( int ) const")
+  (("QAccessibleWidget" . "QAccessibleObject")
+   "new QAccessibleWidget ( QWidget * , Role = Client, const QString & = QString() )"
+   "virtual QString actionText ( int , Text , int ) const"
+   "virtual int childAt ( int , int ) const"
+   "virtual int childCount () const"
+   "virtual bool doAction ( int , int , const QVariantList & )"
+   "virtual int indexOfChild ( const QAccessibleInterface * ) const"
+   "virtual QRect rect ( int ) const"
+   "virtual Relation relationTo ( int , const QAccessibleInterface * , int ) const"
+   "virtual Role role ( int ) const"
+   "virtual State state ( int ) const"
+   "virtual QString text ( Text , int ) const"
+   "virtual int userActionCount ( int ) const")
   (("QActionEvent" . "QEvent")
    "QAction * action () const"
    "QAction * before () const")
@@ -169,6 +217,13 @@
    "Reason reason () const"
    "int x () const"
    "int y () const")
+  (("QCryptographicHash" . NIL)
+   "new QCryptographicHash ( Algorithm )"
+   "void addData ( const char * , int )"
+   "void addData ( const QByteArray & )"
+   "void reset ()"
+   "QByteArray result () const"
+   "static QByteArray hash ( const QByteArray & , Algorithm )")
   (("QCursor" . NIL)
    "const QBitmap * bitmap () const"
    "QPoint hotSpot () const"
@@ -237,10 +292,11 @@
    "static QDateTime fromString ( const QString & , Qt::DateFormat = Qt::TextDate )"
    "static QDateTime fromString ( const QString & , const QString & )"
    "static QDateTime fromTime_t ( uint )")
+  (("QDesktopServices" . NIL)
+   "static QString displayName ( StandardLocation )"
+   "static bool openUrl ( const QUrl & )"
+   "static QString storageLocation ( StandardLocation )")
   (("QDir" . NIL)
-   "new QDir ( const QDir & )"
-   "new QDir ( const QString & = QString() )"
-   "new QDir ( const QString & , const QString & , SortFlags = SortFlags( Name | IgnoreCase ), Filters = AllEntries )"
    "QString absoluteFilePath ( const QString & ) const"
    "QString absolutePath () const"
    "QString canonicalPath () const"
@@ -248,6 +304,8 @@
    "bool cdUp ()"
    "uint count () const"
    "QString dirName () const"
+   "QFileInfoList entryInfoList ( const QStringList & , Filters = NoFilter, SortFlags = NoSort ) const"
+   "QFileInfoList entryInfoList ( Filters = NoFilter, SortFlags = NoSort ) const"
    "QStringList entryList ( const QStringList & , Filters = NoFilter, SortFlags = NoSort ) const"
    "QStringList entryList ( Filters = NoFilter, SortFlags = NoSort ) const"
    "bool exists ( const QString & ) const"
@@ -278,6 +336,7 @@
    "static QString cleanPath ( const QString & )"
    "static QDir current ()"
    "static QString currentPath ()"
+   "static QFileInfoList drives ()"
    "static QString fromNativeSeparators ( const QString & )"
    "static QDir home ()"
    "static QString homePath ()"
@@ -294,6 +353,17 @@
    "static QDir temp ()"
    "static QString tempPath ()"
    "static QString toNativeSeparators ( const QString & )")
+  (("QDirIterator" . NIL)
+   "new QDirIterator ( const QDir & , IteratorFlags = NoIteratorFlags )"
+   "new QDirIterator ( const QString & , IteratorFlags = NoIteratorFlags )"
+   "new QDirIterator ( const QString & , QDir::Filters , IteratorFlags = NoIteratorFlags )"
+   "new QDirIterator ( const QString & , const QStringList & , QDir::Filters = QDir::NoFilter, IteratorFlags = NoIteratorFlags )"
+   "QFileInfo fileInfo () const"
+   "QString fileName () const"
+   "QString filePath () const"
+   "bool hasNext () const"
+   "QString next ()"
+   "QString path () const")
   (("QDragEnterEvent" . "QDragMoveEvent"))
   (("QDragLeaveEvent" . "QEvent"))
   (("QDragMoveEvent" . "QDropEvent")
@@ -316,6 +386,22 @@
    "virtual QByteArray encodedData ( const char * ) const"
    "virtual const char * format ( int = 0 ) const"
    "virtual bool provides ( const char * ) const")
+  (("QDynamicPropertyChangeEvent" . "QEvent")
+   "QByteArray propertyName () const")
+  (("QEasingCurve" . NIL)
+   "new QEasingCurve ( Type = Linear )"
+   "new QEasingCurve ( const QEasingCurve & )"
+   "qreal amplitude () const"
+   "EasingFunction customType () const"
+   "qreal overshoot () const"
+   "qreal period () const"
+   "void setAmplitude ( qreal )"
+   "void setCustomType ( EasingFunction )"
+   "void setOvershoot ( qreal )"
+   "void setPeriod ( qreal )"
+   "void setType ( Type )"
+   "Type type () const"
+   "qreal valueForProgress ( qreal ) const")
   (("QEvent" . NIL)
    "void accept ()"
    "void ignore ()"
@@ -326,8 +412,15 @@
    "static int registerEventType ( int = -1 )")
   (("QFileIconProvider" . NIL)
    "new QFileIconProvider ()"
-   "virtual QIcon icon ( IconType ) const")
+   "virtual QIcon icon ( IconType ) const"
+   "virtual QIcon icon ( const QFileInfo & ) const"
+   "virtual QString type ( const QFileInfo & ) const")
   (("QFileInfo" . NIL)
+   "new QFileInfo ()"
+   "new QFileInfo ( const QString & )"
+   "new QFileInfo ( const QFile & )"
+   "new QFileInfo ( const QDir & , const QString & )"
+   "new QFileInfo ( const QFileInfo & )"
    "QDir absoluteDir () const"
    "QString absoluteFilePath () const"
    "QString absolutePath () const"
@@ -371,10 +464,37 @@
    "void setFile ( const QDir & , const QString & )"
    "QString suffix () const"
    "QString symLinkTarget () const")
+  (("QFileOpenEvent" . "QEvent")
+   "QString file () const"
+   "QUrl url () const")
   (("QFocusEvent" . "QEvent")
    "bool gotFocus () const"
    "bool lostFocus () const"
    "Qt::FocusReason reason () const")
+  (("QFontDatabase" . NIL)
+   "new QFontDatabase ()"
+   "bool bold ( const QString & , const QString & ) const"
+   "QStringList families ( WritingSystem = Any ) const"
+   "QFont font ( const QString & , const QString & , int ) const"
+   "bool isBitmapScalable ( const QString & , const QString & = QString() ) const"
+   "bool isFixedPitch ( const QString & , const QString & = QString() ) const"
+   "bool isScalable ( const QString & , const QString & = QString() ) const"
+   "bool isSmoothlyScalable ( const QString & , const QString & = QString() ) const"
+   "bool italic ( const QString & , const QString & ) const"
+   "QList<int> pointSizes ( const QString & , const QString & = QString() )"
+   "QList<int> smoothSizes ( const QString & , const QString & )"
+   "QString styleString ( const QFont & )"
+   "QStringList styles ( const QString & ) const"
+   "int weight ( const QString & , const QString & ) const"
+   "static int addApplicationFont ( const QString & )"
+   "static int addApplicationFontFromData ( const QByteArray & )"
+   "static QStringList applicationFontFamilies ( int )"
+   "static bool removeAllApplicationFonts ()"
+   "static bool removeApplicationFont ( int )"
+   "static QList<int> standardSizes ()"
+   "static bool supportsThreadedFontRendering ()"
+   "static QString writingSystemName ( WritingSystem )"
+   "static QString writingSystemSample ( WritingSystem )")
   (("QFontMetrics" . NIL)
    "new QFontMetrics ( const QFont & )"
    "new QFontMetrics ( const QFont & , QPaintDevice * )"
@@ -402,6 +522,25 @@
    "int width ( const QString & , int = -1 ) const"
    "int width ( QChar ) const"
    "int xHeight () const")
+  (("QGestureEvent" . "QEvent")
+   "void accept ()"
+   "void accept ( QGesture * )"
+   "void accept ( Qt::GestureType )"
+   "QList<QGesture *> activeGestures () const"
+   "QList<QGesture *> canceledGestures () const"
+   "QGesture * gesture ( Qt::GestureType ) const"
+   "QList<QGesture *> gestures () const"
+   "void ignore ()"
+   "void ignore ( QGesture * )"
+   "void ignore ( Qt::GestureType )"
+   "bool isAccepted () const"
+   "bool isAccepted ( QGesture * ) const"
+   "bool isAccepted ( Qt::GestureType ) const"
+   "QPointF mapToGraphicsScene ( const QPointF & ) const"
+   "void setAccepted ( bool )"
+   "void setAccepted ( QGesture * , bool )"
+   "void setAccepted ( Qt::GestureType , bool )"
+   "QWidget * widget () const")
   (("QGradient" . NIL)
    "CoordinateMode coordinateMode () const"
    "void setColorAt ( qreal , const QColor & )"
@@ -411,6 +550,22 @@
    "Spread spread () const"
    "QGradientStops stops () const"
    "Type type () const")
+  (("QGraphicsAnchorLayout" . "QGraphicsLayout")
+   "new QGraphicsAnchorLayout ( QGraphicsLayoutItem * = 0 )"
+   "QGraphicsAnchor * addAnchor ( QGraphicsLayoutItem * , Qt::AnchorPoint , QGraphicsLayoutItem * , Qt::AnchorPoint )"
+   "void addAnchors ( QGraphicsLayoutItem * , QGraphicsLayoutItem * , Qt::Orientations = Qt::Horizontal | Qt::Vertical )"
+   "void addCornerAnchors ( QGraphicsLayoutItem * , Qt::Corner , QGraphicsLayoutItem * , Qt::Corner )"
+   "QGraphicsAnchor * anchor ( QGraphicsLayoutItem * , Qt::AnchorPoint , QGraphicsLayoutItem * , Qt::AnchorPoint )"
+   "qreal horizontalSpacing () const"
+   "void setHorizontalSpacing ( qreal )"
+   "void setSpacing ( qreal )"
+   "void setVerticalSpacing ( qreal )"
+   "qreal verticalSpacing () const"
+   "virtual int count () const"
+   "virtual void invalidate ()"
+   "virtual QGraphicsLayoutItem * itemAt ( int ) const"
+   "virtual void removeAt ( int )"
+   "virtual void setGeometry ( const QRectF & )")
   (("QGraphicsEllipseItem" . "QAbstractGraphicsShapeItem")
    "new QGraphicsEllipseItem ( QGraphicsItem * = 0 )"
    "new QGraphicsEllipseItem ( const QRectF & , QGraphicsItem * = 0 )"
@@ -429,6 +584,52 @@
    "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * = 0 )"
    "virtual QPainterPath shape () const"
    "virtual int type () const")
+  (("QGraphicsGridLayout" . "QGraphicsLayout")
+   "new QGraphicsGridLayout ( QGraphicsLayoutItem * = 0 )"
+   "void addItem ( QGraphicsLayoutItem * , int , int , int , int , Qt::Alignment = 0 )"
+   "void addItem ( QGraphicsLayoutItem * , int , int , Qt::Alignment = 0 )"
+   "Qt::Alignment alignment ( QGraphicsLayoutItem * ) const"
+   "Qt::Alignment columnAlignment ( int ) const"
+   "int columnCount () const"
+   "qreal columnMaximumWidth ( int ) const"
+   "qreal columnMinimumWidth ( int ) const"
+   "qreal columnPreferredWidth ( int ) const"
+   "qreal columnSpacing ( int ) const"
+   "int columnStretchFactor ( int ) const"
+   "qreal horizontalSpacing () const"
+   "QGraphicsLayoutItem * itemAt ( int , int ) const"
+   "Qt::Alignment rowAlignment ( int ) const"
+   "int rowCount () const"
+   "qreal rowMaximumHeight ( int ) const"
+   "qreal rowMinimumHeight ( int ) const"
+   "qreal rowPreferredHeight ( int ) const"
+   "qreal rowSpacing ( int ) const"
+   "int rowStretchFactor ( int ) const"
+   "void setAlignment ( QGraphicsLayoutItem * , Qt::Alignment )"
+   "void setColumnAlignment ( int , Qt::Alignment )"
+   "void setColumnFixedWidth ( int , qreal )"
+   "void setColumnMaximumWidth ( int , qreal )"
+   "void setColumnMinimumWidth ( int , qreal )"
+   "void setColumnPreferredWidth ( int , qreal )"
+   "void setColumnSpacing ( int , qreal )"
+   "void setColumnStretchFactor ( int , int )"
+   "void setHorizontalSpacing ( qreal )"
+   "void setRowAlignment ( int , Qt::Alignment )"
+   "void setRowFixedHeight ( int , qreal )"
+   "void setRowMaximumHeight ( int , qreal )"
+   "void setRowMinimumHeight ( int , qreal )"
+   "void setRowPreferredHeight ( int , qreal )"
+   "void setRowSpacing ( int , qreal )"
+   "void setRowStretchFactor ( int , int )"
+   "void setSpacing ( qreal )"
+   "void setVerticalSpacing ( qreal )"
+   "qreal verticalSpacing () const"
+   "virtual int count () const"
+   "virtual void invalidate ()"
+   "virtual QGraphicsLayoutItem * itemAt ( int ) const"
+   "virtual void removeAt ( int )"
+   "virtual void setGeometry ( const QRectF & )"
+   "virtual QSizeF sizeHint ( Qt::SizeHint , const QSizeF & = QSizeF() ) const")
   (("QGraphicsItem" . NIL)
    "new QGraphicsItem ( QGraphicsItem * = 0 )"
    "bool acceptDrops () const"
@@ -629,6 +830,7 @@
    "virtual void widgetEvent ( QEvent * )"
    "virtual void updateGeometry ()")
   (("QGraphicsLayoutItem" . NIL)
+   "new QGraphicsLayoutItem ( QGraphicsLayoutItem * = 0, bool = false )"
    "QRectF contentsRect () const"
    "QSizeF effectiveSizeHint ( Qt::SizeHint , const QSizeF & = QSizeF() ) const"
    "QRectF geometry () const"
@@ -679,6 +881,30 @@
    "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * = 0 )"
    "virtual QPainterPath shape () const"
    "virtual int type () const")
+  (("QGraphicsLinearLayout" . "QGraphicsLayout")
+   "new QGraphicsLinearLayout ( QGraphicsLayoutItem * = 0 )"
+   "new QGraphicsLinearLayout ( Qt::Orientation , QGraphicsLayoutItem * = 0 )"
+   "void addItem ( QGraphicsLayoutItem * )"
+   "void addStretch ( int = 1 )"
+   "Qt::Alignment alignment ( QGraphicsLayoutItem * ) const"
+   "void insertItem ( int , QGraphicsLayoutItem * )"
+   "void insertStretch ( int , int = 1 )"
+   "qreal itemSpacing ( int ) const"
+   "Qt::Orientation orientation () const"
+   "void removeItem ( QGraphicsLayoutItem * )"
+   "void setAlignment ( QGraphicsLayoutItem * , Qt::Alignment )"
+   "void setItemSpacing ( int , qreal )"
+   "void setOrientation ( Qt::Orientation )"
+   "void setSpacing ( qreal )"
+   "void setStretchFactor ( QGraphicsLayoutItem * , int )"
+   "qreal spacing () const"
+   "int stretchFactor ( QGraphicsLayoutItem * ) const"
+   "virtual int count () const"
+   "virtual void invalidate ()"
+   "virtual QGraphicsLayoutItem * itemAt ( int ) const"
+   "virtual void removeAt ( int )"
+   "virtual void setGeometry ( const QRectF & )"
+   "virtual QSizeF sizeHint ( Qt::SizeHint , const QSizeF & = QSizeF() ) const")
   (("QGraphicsPathItem" . "QAbstractGraphicsShapeItem")
    "new QGraphicsPathItem ( QGraphicsItem * = 0 )"
    "new QGraphicsPathItem ( const QPainterPath & , QGraphicsItem * = 0 )"
@@ -811,7 +1037,17 @@
    "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * )"
    "virtual QPainterPath shape () const"
    "virtual int type () const")
+  (("QHelpEvent" . "QEvent")
+   "const QPoint & globalPos () const"
+   "int globalX () const"
+   "int globalY () const"
+   "const QPoint & pos () const"
+   "int x () const"
+   "int y () const")
   (("QHideEvent" . "QEvent"))
+  (("QHoverEvent" . "QEvent")
+   "const QPoint & oldPos () const"
+   "const QPoint & pos () const")
   (("QIcon" . NIL)
    "new QIcon ()"
    "new QIcon ( const QPixmap & )"
@@ -833,6 +1069,7 @@
    "static void setThemeSearchPaths ( const QStringList & )"
    "static QString themeName ()"
    "static QStringList themeSearchPaths ()")
+  (("QIconDragEvent" . "QEvent"))
   (("QImage" . "QPaintDevice")
    "new QImage ()"
    "new QImage ( const QSize & , Format )"
@@ -977,6 +1214,12 @@
    "virtual QSize sizeHint () const = 0"
    "virtual QSpacerItem * spacerItem ()"
    "virtual QWidget * widget ()")
+  (("QLibraryInfo" . NIL)
+   "static QDate buildDate ()"
+   "static QString buildKey ()"
+   "static QString licensedProducts ()"
+   "static QString licensee ()"
+   "static QString location ( LibraryLocation )")
   (("QLinearGradient" . "QGradient")
    "new QLinearGradient ()"
    "new QLinearGradient ( const QPointF & , const QPointF & )"
@@ -1085,6 +1328,18 @@
    "static QString languageToString ( Language )"
    "static void setDefault ( const QLocale & )"
    "static QLocale system ()")
+  (("QMargins" . NIL)
+   "new QMargins ()"
+   "new QMargins ( int , int , int , int )"
+   "int bottom () const"
+   "bool isNull () const"
+   "int left () const"
+   "int right () const"
+   "void setBottom ( int )"
+   "void setLeft ( int )"
+   "void setRight ( int )"
+   "void setTop ( int )"
+   "int top () const")
   (("QMatrix" . NIL)
    "new QMatrix ()"
    "new QMatrix ( qreal , qreal , qreal , qreal , qreal , qreal )"
@@ -1208,6 +1463,17 @@
   (("QMoveEvent" . "QEvent")
    "const QPoint & oldPos () const"
    "const QPoint & pos () const")
+  (("QMutex" . NIL)
+   "new QMutex ( RecursionMode = NonRecursive )"
+   "void lock ()"
+   "bool tryLock ()"
+   "bool tryLock ( int )"
+   "void unlock ()")
+  (("QMutexLocker" . NIL)
+   "new QMutexLocker ( QMutex * )"
+   "QMutex * mutex () const"
+   "void relock ()"
+   "void unlock ()")
   (("QPaintDevice" . NIL)
    "int colorCount () const"
    "int depth () const"
@@ -1467,6 +1733,24 @@
    "QPainterPath translated ( qreal , qreal ) const"
    "QPainterPath translated ( const QPointF & ) const"
    "QPainterPath united ( const QPainterPath & ) const")
+  (("QPainterPathStroker" . NIL)
+   "new QPainterPathStroker ()"
+   "Qt::PenCapStyle capStyle () const"
+   "QPainterPath createStroke ( const QPainterPath & ) const"
+   "qreal curveThreshold () const"
+   "qreal dashOffset () const"
+   "QVector<qreal> dashPattern () const"
+   "Qt::PenJoinStyle joinStyle () const"
+   "qreal miterLimit () const"
+   "void setCapStyle ( Qt::PenCapStyle )"
+   "void setCurveThreshold ( qreal )"
+   "void setDashOffset ( qreal )"
+   "void setDashPattern ( Qt::PenStyle )"
+   "void setDashPattern ( const QVector<qreal> & )"
+   "void setJoinStyle ( Qt::PenJoinStyle )"
+   "void setMiterLimit ( qreal )"
+   "void setWidth ( qreal )"
+   "qreal width () const")
   (("QPalette" . NIL)
    "new QPalette ()"
    "new QPalette ( const QColor & )"
@@ -1537,6 +1821,18 @@
    "Qt::PenStyle style () const"
    "int width () const"
    "qreal widthF () const")
+  (("QPersistentModelIndex" . NIL)
+   "new QPersistentModelIndex ( const QModelIndex & )"
+   "new QPersistentModelIndex ( const QPersistentModelIndex & )"
+   "QModelIndex child ( int , int ) const"
+   "int column () const"
+   "QVariant data ( int = Qt::DisplayRole ) const"
+   "Qt::ItemFlags flags () const"
+   "bool isValid () const"
+   "const QAbstractItemModel * model () const"
+   "QModelIndex parent () const"
+   "int row () const"
+   "QModelIndex sibling ( int , int ) const")
   (("QPicture" . "QPaintDevice")
    "new QPicture ( int = -1 )"
    "new QPicture ( const QPicture & )"
@@ -1594,6 +1890,17 @@
    "static QPixmap grabWidget ( QWidget * , int = 0, int = 0, int = -1, int = -1 )"
    "static QTransform trueMatrix ( const QTransform & , int , int )"
    "static QMatrix trueMatrix ( const QMatrix & , int , int )")
+  (("QPixmapCache" . NIL)
+   "static int cacheLimit ()"
+   "static void clear ()"
+   "static bool find ( const QString & , QPixmap * )"
+   "static bool find ( const Key & , QPixmap * )"
+   "static bool insert ( const QString & , const QPixmap & )"
+   "static Key insert ( const QPixmap & )"
+   "static void remove ( const QString & )"
+   "static void remove ( const Key & )"
+   "static bool replace ( const Key & , const QPixmap & )"
+   "static void setCacheLimit ( int )")
   (("QPrinter" . "QPaintDevice")
    "new QPrinter ( PrinterMode = ScreenResolution )"
    "bool abort ()"
@@ -1650,6 +1957,22 @@
    "void setResolution ( int )"
    "QList<int> supportedResolutions () const"
    "int toPage () const")
+  (("QPrinterInfo" . NIL)
+   "bool isDefault () const"
+   "bool isNull () const"
+   "QString printerName () const"
+   "QList<QPrinter::PaperSize> supportedPaperSizes () const")
+  (("QProcessEnvironment" . NIL)
+   "new QProcessEnvironment ()"
+   "new QProcessEnvironment ( const QProcessEnvironment & )"
+   "void clear ()"
+   "bool contains ( const QString & ) const"
+   "void insert ( const QString & , const QString & )"
+   "bool isEmpty () const"
+   "void remove ( const QString & )"
+   "QStringList toStringList () const"
+   "QString value ( const QString & , const QString & = QString() ) const"
+   "static QProcessEnvironment systemEnvironment ()")
   (("QQuaternion" . NIL)
    "new QQuaternion ()"
    "new QQuaternion ( qreal , qreal , qreal , qreal )"
@@ -1693,6 +2016,21 @@
    "void setFocalPoint ( const QPointF & )"
    "void setFocalPoint ( qreal , qreal )"
    "void setRadius ( qreal )")
+  (("QReadLocker" . NIL)
+   "new QReadLocker ( QReadWriteLock * )"
+   "QReadWriteLock * readWriteLock () const"
+   "void relock ()"
+   "void unlock ()")
+  (("QReadWriteLock" . NIL)
+   "new QReadWriteLock ()"
+   "new QReadWriteLock ( RecursionMode )"
+   "void lockForRead ()"
+   "void lockForWrite ()"
+   "bool tryLockForRead ()"
+   "bool tryLockForRead ( int )"
+   "bool tryLockForWrite ()"
+   "bool tryLockForWrite ( int )"
+   "void unlock ()")
   (("QRegExp" . NIL)
    "new QRegExp ()"
    "new QRegExp ( const QString & , Qt::CaseSensitivity = Qt::CaseSensitive, PatternSyntax = RegExp )"
@@ -1746,6 +2084,22 @@
   (("QResizeEvent" . "QEvent")
    "const QSize & oldSize () const"
    "const QSize & size () const")
+  (("QRunnable" . NIL)
+   "new QRunnable ()"
+   "bool autoDelete () const"
+   "virtual void run () = 0"
+   "void setAutoDelete ( bool )")
+  (("QSemaphore" . NIL)
+   "new QSemaphore ( int = 0 )"
+   "void acquire ( int = 1 )"
+   "int available () const"
+   "void release ( int = 1 )"
+   "bool tryAcquire ( int = 1 )"
+   "bool tryAcquire ( int , int )")
+  (("QShortcutEvent" . "QEvent")
+   "bool isAmbiguous () const"
+   "const QKeySequence & key () const"
+   "int shortcutId () const")
   (("QShowEvent" . "QEvent"))
   (("QSizePolicy" . NIL)
    "new QSizePolicy ()"
@@ -1858,6 +2212,16 @@
    "QString toolTip () const"
    "virtual int type () const"
    "QString whatsThis () const")
+  (("QStatusTipEvent" . "QEvent")
+   "QString tip () const")
+  (("QSystemSemaphore" . NIL)
+   "new QSystemSemaphore ( const QString & , int = 0, AccessMode = Open )"
+   "bool acquire ()"
+   "SystemSemaphoreError error () const"
+   "QString errorString () const"
+   "QString key () const"
+   "bool release ( int = 1 )"
+   "void setKey ( const QString & , int = 0, AccessMode = Open )")
   (("QTableWidgetItem" . NIL)
    "new QTableWidgetItem ( int = Type )"
    "new QTableWidgetItem ( const QString & , int = Type )"
@@ -1974,6 +2338,22 @@
    "QList<QTextOption::Tab> tabPositions () const"
    "qreal textIndent () const"
    "qreal topMargin () const")
+  (("QTextBoundaryFinder" . NIL)
+   "new QTextBoundaryFinder ()"
+   "new QTextBoundaryFinder ( const QTextBoundaryFinder & )"
+   "new QTextBoundaryFinder ( BoundaryType , const QString & )"
+   "new QTextBoundaryFinder ( BoundaryType , const QChar * , int , unsigned char * = 0, int = 0 )"
+   "BoundaryReasons boundaryReasons () const"
+   "bool isAtBoundary () const"
+   "bool isValid () const"
+   "int position () const"
+   "void setPosition ( int )"
+   "QString string () const"
+   "void toEnd ()"
+   "int toNextBoundary ()"
+   "int toPreviousBoundary ()"
+   "void toStart ()"
+   "BoundaryType type () const")
   (("QTextCharFormat" . "QTextFormat")
    "new QTextCharFormat ()"
    "QString anchorHref () const"
@@ -2023,6 +2403,34 @@
    "QColor underlineColor () const"
    "UnderlineStyle underlineStyle () const"
    "VerticalAlignment verticalAlignment () const")
+  (("QTextCodec" . NIL)
+   "virtual QList<QByteArray> aliases () const"
+   "bool canEncode ( QChar ) const"
+   "bool canEncode ( const QString & ) const"
+   "QByteArray fromUnicode ( const QString & ) const"
+   "QByteArray fromUnicode ( const QChar * , int , ConverterState * = 0 ) const"
+   "QTextDecoder * makeDecoder () const"
+   "QTextEncoder * makeEncoder () const"
+   "virtual int mibEnum () const = 0"
+   "virtual QByteArray name () const = 0"
+   "QString toUnicode ( const QByteArray & ) const"
+   "QString toUnicode ( const char * , int , ConverterState * = 0 ) const"
+   "QString toUnicode ( const char * ) const"
+   "static QList<QByteArray> availableCodecs ()"
+   "static QList<int> availableMibs ()"
+   "static QTextCodec * codecForCStrings ()"
+   "static QTextCodec * codecForHtml ( const QByteArray & , QTextCodec * )"
+   "static QTextCodec * codecForHtml ( const QByteArray & )"
+   "static QTextCodec * codecForLocale ()"
+   "static QTextCodec * codecForMib ( int )"
+   "static QTextCodec * codecForName ( const QByteArray & )"
+   "static QTextCodec * codecForName ( const char * )"
+   "static QTextCodec * codecForTr ()"
+   "static QTextCodec * codecForUtfText ( const QByteArray & , QTextCodec * )"
+   "static QTextCodec * codecForUtfText ( const QByteArray & )"
+   "static void setCodecForCStrings ( QTextCodec * )"
+   "static void setCodecForLocale ( QTextCodec * )"
+   "static void setCodecForTr ( QTextCodec * )")
   (("QTextCursor" . NIL)
    "new QTextCursor ()"
    "new QTextCursor ( QTextDocument * )"
@@ -2089,6 +2497,11 @@
    "void setPosition ( int , MoveMode = MoveAnchor )"
    "void setVisualNavigation ( bool )"
    "bool visualNavigation () const")
+  (("QTextDecoder" . NIL)
+   "new QTextDecoder ( const QTextCodec * )"
+   "QString toUnicode ( const char * , int )"
+   "void toUnicode ( QString * , const char * , int )"
+   "QString toUnicode ( const QByteArray & )")
   (("QTextDocumentFragment" . NIL)
    "new QTextDocumentFragment ()"
    "new QTextDocumentFragment ( const QTextDocument * )"
@@ -2101,6 +2514,22 @@
    "static QTextDocumentFragment fromHtml ( const QString & )"
    "static QTextDocumentFragment fromHtml ( const QString & , const QTextDocument * )"
    "static QTextDocumentFragment fromPlainText ( const QString & )")
+  (("QTextDocumentWriter" . NIL)
+   "new QTextDocumentWriter ()"
+   "new QTextDocumentWriter ( const QString & , const QByteArray & = QByteArray() )"
+   "QTextCodec * codec () const"
+   "QString fileName () const"
+   "QByteArray format () const"
+   "void setCodec ( QTextCodec * )"
+   "void setFileName ( const QString & )"
+   "void setFormat ( const QByteArray & )"
+   "bool write ( const QTextDocument * )"
+   "bool write ( const QTextDocumentFragment & )"
+   "static QList<QByteArray> supportedDocumentFormats ()")
+  (("QTextEncoder" . NIL)
+   "new QTextEncoder ( const QTextCodec * )"
+   "QByteArray fromUnicode ( const QString & )"
+   "QByteArray fromUnicode ( const QChar * , int )")
   (("QTextFormat" . NIL)
    "new QTextFormat ()"
    "new QTextFormat ( int )"
@@ -2149,6 +2578,16 @@
    "QTextTableCellFormat toTableCellFormat () const"
    "QTextTableFormat toTableFormat () const"
    "int type () const")
+  (("QTextFragment" . NIL)
+   "new QTextFragment ()"
+   "new QTextFragment ( const QTextFragment & )"
+   "QTextCharFormat charFormat () const"
+   "int charFormatIndex () const"
+   "bool contains ( int ) const"
+   "bool isValid () const"
+   "int length () const"
+   "int position () const"
+   "QString text () const")
   (("QTextFrameFormat" . "QTextFormat")
    "new QTextFrameFormat ()"
    "qreal border () const"
@@ -2189,12 +2628,67 @@
    "void setName ( const QString & )"
    "void setWidth ( qreal )"
    "qreal width () const")
+  (("QTextLayout" . NIL)
+   "void beginLayout ()"
+   "QRectF boundingRect () const"
+   "bool cacheEnabled () const"
+   "void clearAdditionalFormats ()"
+   "void clearLayout ()"
+   "QTextLine createLine ()"
+   "void drawCursor ( QPainter * , const QPointF & , int , int ) const"
+   "void drawCursor ( QPainter * , const QPointF & , int ) const"
+   "void endLayout ()"
+   "QFont font () const"
+   "bool isValidCursorPosition ( int ) const"
+   "QTextLine lineAt ( int ) const"
+   "int lineCount () const"
+   "QTextLine lineForTextPosition ( int ) const"
+   "qreal maximumWidth () const"
+   "qreal minimumWidth () const"
+   "int nextCursorPosition ( int , CursorMode = SkipCharacters ) const"
+   "QPointF position () const"
+   "int preeditAreaPosition () const"
+   "QString preeditAreaText () const"
+   "int previousCursorPosition ( int , CursorMode = SkipCharacters ) const"
+   "void setCacheEnabled ( bool )"
+   "void setFont ( const QFont & )"
+   "void setPosition ( const QPointF & )"
+   "void setPreeditArea ( int , const QString & )"
+   "void setText ( const QString & )"
+   "void setTextOption ( const QTextOption & )"
+   "QString text () const"
+   "QTextOption textOption () const")
   (("QTextLength" . NIL)
    "new QTextLength ()"
    "new QTextLength ( Type , qreal )"
    "qreal rawValue () const"
    "Type type () const"
    "qreal value ( qreal ) const")
+  (("QTextLine" . NIL)
+   "new QTextLine ()"
+   "qreal ascent () const"
+   "qreal cursorToX ( int , Edge = Leading ) const"
+   "qreal descent () const"
+   "qreal height () const"
+   "bool isValid () const"
+   "qreal leading () const"
+   "bool leadingIncluded () const"
+   "int lineNumber () const"
+   "QRectF naturalTextRect () const"
+   "qreal naturalTextWidth () const"
+   "QPointF position () const"
+   "QRectF rect () const"
+   "void setLeadingIncluded ( bool )"
+   "void setLineWidth ( qreal )"
+   "void setNumColumns ( int )"
+   "void setNumColumns ( int , qreal )"
+   "void setPosition ( const QPointF & )"
+   "int textLength () const"
+   "int textStart () const"
+   "qreal width () const"
+   "qreal x () const"
+   "int xToCursor ( qreal , CursorPosition = CursorBetweenCharacters ) const"
+   "qreal y () const")
   (("QTextListFormat" . "QTextFormat")
    "new QTextListFormat ()"
    "int indent () const"
@@ -2283,6 +2777,21 @@
    "static bool isValid ( int , int , int , int = 0 )")
   (("QTimerEvent" . "QEvent")
    "int timerId () const")
+  (("QToolTip" . NIL)
+   "static QFont font ()"
+   "static void hideText ()"
+   "static bool isVisible ()"
+   "static QPalette palette ()"
+   "static void setFont ( const QFont & )"
+   "static void setPalette ( const QPalette & )"
+   "static void showText ( const QPoint & , const QString & , QWidget * , const QRect & )"
+   "static void showText ( const QPoint & , const QString & , QWidget * = 0 )"
+   "static QString text ()")
+  (("QTouchEvent" . "QInputEvent")
+   "QTouchEvent::DeviceType deviceType () const"
+   "Qt::TouchPointStates touchPointStates () const"
+   "const QList<QTouchEvent::TouchPoint> & touchPoints () const"
+   "QWidget * widget () const")
   (("QTransform" . NIL)
    "new QTransform ()"
    "new QTransform ( qreal , qreal , qreal , qreal , qreal , qreal , qreal , qreal , qreal = 1.0 )"
@@ -2631,6 +3140,21 @@
    "qreal y () const"
    "qreal z () const"
    "static qreal dotProduct ( const QVector4D & , const QVector4D & )")
+  (("QWaitCondition" . NIL)
+   "new QWaitCondition ()"
+   "bool wait ( QMutex * , unsigned long = ULONG_MAX )"
+   "bool wait ( QReadWriteLock * , unsigned long = ULONG_MAX )"
+   "void wakeAll ()"
+   "void wakeOne ()")
+  (("QWhatsThis" . NIL)
+   "static QAction * createAction ( QObject * = 0 )"
+   "static void enterWhatsThisMode ()"
+   "static void hideText ()"
+   "static bool inWhatsThisMode ()"
+   "static void leaveWhatsThisMode ()"
+   "static void showText ( const QPoint & , const QString & , QWidget * = 0 )")
+  (("QWhatsThisClickedEvent" . "QEvent")
+   "QString href () const")
   (("QWheelEvent" . "QInputEvent")
    "Qt::MouseButtons buttons () const"
    "int delta () const"
@@ -2641,4 +3165,23 @@
    "const QPoint & pos () const"
    "int x () const"
    "int y () const")
+  (("QWidgetItem" . "QLayoutItem")
+   "new QWidgetItem ( QWidget * )"
+   "virtual Qt::Orientations expandingDirections () const"
+   "virtual QRect geometry () const"
+   "virtual bool hasHeightForWidth () const"
+   "virtual int heightForWidth ( int ) const"
+   "virtual bool isEmpty () const"
+   "virtual QSize maximumSize () const"
+   "virtual QSize minimumSize () const"
+   "virtual void setGeometry ( const QRect & )"
+   "virtual QSize sizeHint () const"
+   "virtual QWidget * widget ()")
+  (("QWindowStateChangeEvent" . "QEvent")
+   "Qt::WindowStates oldState () const")
+  (("QWriteLocker" . NIL)
+   "new QWriteLocker ( QReadWriteLock * )"
+   "QReadWriteLock * readWriteLock () const"
+   "void relock ()"
+   "void unlock ()")
 ))

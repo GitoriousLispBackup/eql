@@ -52,7 +52,7 @@
 </p><br>
 <p>
 <b>QENUM (name key)</b>
-<p>Registered enumerators only (see <code>Q_ENUMS</code> in Qt Assistant).<br>Returns the integer value of the passed enumerator, passed as name and key. Needed only if an enumerator argument has to be passed as <code>int</code> value.</p>
+<p>Registered enumerators only (see <code>Q_ENUMS</code> and <code>Q_FLAGS</code> in Qt Assistant).<br>Returns the integer value of the passed enumerator, passed as name and key. Needed only if an enumerator argument has to be passed as <code>int</code> value.<br><br>Enumerators in non <code>QObject</code> derived classes can't be registered, so you always need to use/define integer constants in these cases.</p>
 <pre>
   (qfun item "setTextAlignment" 0 (qenum "Qt::Alignment" "AlignCenter"))
 </pre>
@@ -216,10 +216,10 @@
 </p><br>
 <p>
 <b>QUTF8 (string)</b>
-<p>Returns the string converted using <code>QString::toUtf8()</code>.</p>
+<p>Returns the string converted using <code>QString::toUtf8()</code>. Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.</p>
 </p><br>
 <p>
 <b>TR (source &optional context n)</b>
-<p>Macro expanding to <code>qtranslate</code>, which calls <code>QCoreApplication::translate()</code>. Both <code>source</code> and <code>context</code> can be Lisp forms evaluating to constant strings.<br>The <code>context</code> argument defaults to the Lisp file name, and the <code>n</code> argument is a plural indicator (see Qt Assistant).</p>
+<p>Macro expanding to <code>qtranslate</code>, which calls <code>QCoreApplication::translate()</code>. Both <code>source</code> and <code>context</code> can be Lisp forms evaluating to constant strings (at compile time).<br>The <code>context</code> argument defaults to the Lisp file name, and the <code>n</code> argument is a plural indicator (see Qt Assistant).</p>
 </p><br>
 </body></html>

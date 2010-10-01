@@ -1,34 +1,16 @@
-# copyright (c) 2010 power4projects software
-
-# uncomment to build a shared library (see my_app/my_app.pro)
-#CONFIG += eql_dll
-
-# optional modules (see helper/missing-types.txt)
+# optional modules (see also: helper/missing-types.txt)
 #CONFIG += help
 #CONFIG += opengl
 #CONFIG += svg
 
-CONFIG     += no_keywords uitools release
-DEFINES    += EQL_LIBRARY
-LIBS       += -lecl -L. -lini
+TEMPLATE    = lib
+CONFIG      += dll no_keywords uitools release
+DEFINES     += EQL_LIBRARY
+LIBS        += -lecl -L. -lini
 TARGET      = eql
+DESTDIR     = ../
 OBJECTS_DIR = ./tmp/
 MOC_DIR     = ./tmp/
-
-eql_dll {
-    TEMPLATE = lib
-    CONFIG  += dll
-    DESTDIR  = ../my_app/
-}
-else {
-    TEMPLATE = app
-    SOURCES += main.cpp
-    DESTDIR  = ../
-
-    win32 {
-        CONFIG += console
-    }
-}
 
 win32 {
     INCLUDEPATH += c:/ecl/msvc/package

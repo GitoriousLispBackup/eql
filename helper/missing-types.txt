@@ -1,4 +1,10 @@
 QMatrix3x3
+QStyleHintReturn
+QStyleOption
+QStyleOptionComplex
+QStyleOptionGraphicsItem
+QStyleOptionViewItem
+QVariantList
 short
 uchar
 ulong
