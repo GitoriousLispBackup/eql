@@ -12,7 +12,8 @@
   #+linux  "/usr/share/doc/packages/libqt4/html/")
 
 (defconstant +skip+
-  (list "(preliminary)"
+  (list "( Type )"
+        "(preliminary)"
         "(deprecated)"
         "<Attribute>"
         "<ExtraSelection>"
@@ -183,7 +184,8 @@
              (setf tr2 (search* "</tr>" funs tr1))
              (let* ((fun (string-trim " " (text (subseq funs tr1 tr2))))
                     (new (or (starts-with (format nil "Q_INVOKABLE ~a (" class) fun)
-                             (starts-with (format nil "~a (" class) fun))))
+                             (starts-with (format nil "~a (" class) fun)))
+                    (virtual (starts-with "virtual" fun)))
                (unless (or (and new no-new)
                            (find #\~ fun) ; destructor
                            (dolist (str +skip+)
@@ -192,13 +194,13 @@
                            ;; template problem
                            (and (string= "QVariant" class)
                                 (string= "bool canConvert () const" fun)))
-                 (when (starts-with "virtual" fun)
-                   (format so "~%   \"~a~a\"" (if protected "protected " "") fun))
-                 (unless protected
-                   (format s "~%   \"~a~a\"" (cond (static "static ")
-                                                   (new "new ") ; constructor
-                                                   (t ""))
-                           (subseq fun (if (starts-with "Q_INVOKABLE" fun) 12 0))))))))))))
+                 (if virtual
+                     (format so "~%   \"~a\"" fun)
+                     (format s "~%   \"~a~a\"" (cond (new "new ") ; constructor
+                                                      (protected "protected ")
+                                                      (static "static ")
+                                                      (t ""))
+                             (subseq fun (if (starts-with "Q_INVOKABLE" fun) 12 0))))))))))))
 
 (defun parse-classes (classes s so non)
   (dolist (class classes)
@@ -210,9 +212,10 @@
         (format s "  ((~s . ~s)" class* super)
         (format so "  ((~s . ~s)" class* super))
       (dolist (type (list "public functions"
+                          "protected functions"
                           "reimplemented public functions"
-                          "static public members"
-                          "protected functions"))
+                          "reimplemented protected functions"
+                          "static public members"))
         (parse type class* s so no-new)
         (write-char #\.))
       (format s ")~%")

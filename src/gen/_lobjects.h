@@ -8,6 +8,7 @@ typedef QList<QByteArray> StrList;
 
 Q_DECLARE_METATYPE(QFileInfo)
 Q_DECLARE_METATYPE(QItemSelection)
+Q_DECLARE_METATYPE(QList<QAction*>)
 Q_DECLARE_METATYPE(QList<QByteArray>)
 Q_DECLARE_METATYPE(QModelIndex)
 Q_DECLARE_METATYPE(QModelIndexList)

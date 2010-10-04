@@ -5,7 +5,6 @@
    "int currentLoopTime () const"
    "int currentTime () const"
    "Direction direction () const"
-   "virtual int duration () const = 0"
    "QAnimationGroup * group () const"
    "int loopCount () const"
    "void setDirection ( Direction )"
@@ -13,6 +12,7 @@
    "State state () const"
    "int totalDuration () const")
   (("QAbstractButton" . "QWidget")
+   "new QAbstractButton ( QWidget * = 0 )"
    "bool autoExclusive () const"
    "bool autoRepeat () const"
    "int autoRepeatDelay () const"
@@ -35,47 +35,37 @@
    "QKeySequence shortcut () const"
    "QString text () const")
   (("QAbstractItemDelegate" . "QObject")
-   "virtual QWidget * createEditor ( QWidget * , const QStyleOptionViewItem & , const QModelIndex & ) const"
-   "virtual bool editorEvent ( QEvent * , QAbstractItemModel * , const QStyleOptionViewItem & , const QModelIndex & )"
-   "virtual void paint ( QPainter * , const QStyleOptionViewItem & , const QModelIndex & ) const = 0"
-   "virtual void setEditorData ( QWidget * , const QModelIndex & ) const"
-   "virtual void setModelData ( QWidget * , QAbstractItemModel * , const QModelIndex & ) const"
-   "virtual QSize sizeHint ( const QStyleOptionViewItem & , const QModelIndex & ) const = 0"
-   "virtual void updateEditorGeometry ( QWidget * , const QStyleOptionViewItem & , const QModelIndex & ) const")
+   "new QAbstractItemDelegate ( QObject * = 0 )")
   (("QAbstractItemModel" . "QObject")
-   "virtual QModelIndex buddy ( const QModelIndex & ) const"
-   "virtual bool canFetchMore ( const QModelIndex & ) const"
-   "virtual int columnCount ( const QModelIndex & = QModelIndex() ) const = 0"
-   "virtual QVariant data ( const QModelIndex & , int = Qt::DisplayRole ) const = 0"
-   "virtual bool dropMimeData ( const QMimeData * , Qt::DropAction , int , int , const QModelIndex & )"
-   "virtual void fetchMore ( const QModelIndex & )"
-   "virtual Qt::ItemFlags flags ( const QModelIndex & ) const"
-   "virtual bool hasChildren ( const QModelIndex & = QModelIndex() ) const"
+   "new QAbstractItemModel ( QObject * = 0 )"
    "bool hasIndex ( int , int , const QModelIndex & = QModelIndex() ) const"
-   "virtual QVariant headerData ( int , Qt::Orientation , int = Qt::DisplayRole ) const"
-   "virtual QModelIndex index ( int , int , const QModelIndex & = QModelIndex() ) const = 0"
    "bool insertColumn ( int , const QModelIndex & = QModelIndex() )"
-   "virtual bool insertColumns ( int , int , const QModelIndex & = QModelIndex() )"
    "bool insertRow ( int , const QModelIndex & = QModelIndex() )"
-   "virtual bool insertRows ( int , int , const QModelIndex & = QModelIndex() )"
-   "virtual QModelIndexList match ( const QModelIndex & , int , const QVariant & , int = 1, Qt::MatchFlags = Qt::MatchFlags( Qt::MatchStartsWith | Qt::MatchWrap ) ) const"
-   "virtual QMimeData * mimeData ( const QModelIndexList & ) const"
-   "virtual QStringList mimeTypes () const"
-   "virtual QModelIndex parent ( const QModelIndex & ) const = 0"
    "bool removeColumn ( int , const QModelIndex & = QModelIndex() )"
-   "virtual bool removeColumns ( int , int , const QModelIndex & = QModelIndex() )"
    "bool removeRow ( int , const QModelIndex & = QModelIndex() )"
-   "virtual bool removeRows ( int , int , const QModelIndex & = QModelIndex() )"
-   "virtual int rowCount ( const QModelIndex & = QModelIndex() ) const = 0"
-   "virtual bool setData ( const QModelIndex & , const QVariant & , int = Qt::EditRole )"
-   "virtual bool setHeaderData ( int , Qt::Orientation , const QVariant & , int = Qt::EditRole )"
    "void setSupportedDragActions ( Qt::DropActions )"
    "QModelIndex sibling ( int , int , const QModelIndex & ) const"
-   "virtual void sort ( int , Qt::SortOrder = Qt::AscendingOrder )"
-   "virtual QSize span ( const QModelIndex & ) const"
    "Qt::DropActions supportedDragActions () const"
-   "virtual Qt::DropActions supportedDropActions () const")
+   "protected void beginInsertColumns ( const QModelIndex & , int , int )"
+   "protected void beginInsertRows ( const QModelIndex & , int , int )"
+   "protected bool beginMoveColumns ( const QModelIndex & , int , int , const QModelIndex & , int )"
+   "protected bool beginMoveRows ( const QModelIndex & , int , int , const QModelIndex & , int )"
+   "protected void beginRemoveColumns ( const QModelIndex & , int , int )"
+   "protected void beginRemoveRows ( const QModelIndex & , int , int )"
+   "protected void beginResetModel ()"
+   "protected void changePersistentIndex ( const QModelIndex & , const QModelIndex & )"
+   "protected void changePersistentIndexList ( const QModelIndexList & , const QModelIndexList & )"
+   "protected void endInsertColumns ()"
+   "protected void endInsertRows ()"
+   "protected void endMoveColumns ()"
+   "protected void endMoveRows ()"
+   "protected void endRemoveColumns ()"
+   "protected void endRemoveRows ()"
+   "protected void endResetModel ()"
+   "protected QModelIndexList persistentIndexList () const"
+   "protected void reset ()")
   (("QAbstractItemView" . "QAbstractScrollArea")
+   "new QAbstractItemView ( QWidget * = 0 )"
    "bool alternatingRowColors () const"
    "int autoScrollMargin () const"
    "void closePersistentEditor ( const QModelIndex & )"
@@ -88,17 +78,14 @@
    "bool hasAutoScroll () const"
    "ScrollMode horizontalScrollMode () const"
    "QSize iconSize () const"
-   "virtual QModelIndex indexAt ( const QPoint & ) const = 0"
    "QWidget * indexWidget ( const QModelIndex & ) const"
    "QAbstractItemDelegate * itemDelegate () const"
    "QAbstractItemDelegate * itemDelegate ( const QModelIndex & ) const"
    "QAbstractItemDelegate * itemDelegateForColumn ( int ) const"
    "QAbstractItemDelegate * itemDelegateForRow ( int ) const"
-   "virtual void keyboardSearch ( const QString & )"
    "QAbstractItemModel * model () const"
    "void openPersistentEditor ( const QModelIndex & )"
    "QModelIndex rootIndex () const"
-   "virtual void scrollTo ( const QModelIndex & , ScrollHint = EnsureVisible ) = 0"
    "QAbstractItemView::SelectionBehavior selectionBehavior () const"
    "QAbstractItemView::SelectionMode selectionMode () const"
    "QItemSelectionModel * selectionModel () const"
@@ -117,27 +104,28 @@
    "void setItemDelegate ( QAbstractItemDelegate * )"
    "void setItemDelegateForColumn ( int , QAbstractItemDelegate * )"
    "void setItemDelegateForRow ( int , QAbstractItemDelegate * )"
-   "virtual void setModel ( QAbstractItemModel * )"
    "void setSelectionBehavior ( QAbstractItemView::SelectionBehavior )"
    "void setSelectionMode ( QAbstractItemView::SelectionMode )"
-   "virtual void setSelectionModel ( QItemSelectionModel * )"
    "void setTabKeyNavigation ( bool )"
    "void setTextElideMode ( Qt::TextElideMode )"
    "void setVerticalScrollMode ( ScrollMode )"
    "bool showDropIndicator () const"
-   "virtual int sizeHintForColumn ( int ) const"
    "QSize sizeHintForIndex ( const QModelIndex & ) const"
-   "virtual int sizeHintForRow ( int ) const"
    "bool tabKeyNavigation () const"
    "Qt::TextElideMode textElideMode () const"
    "ScrollMode verticalScrollMode () const"
-   "virtual QRect visualRect ( const QModelIndex & ) const = 0"
-   "virtual QVariant inputMethodQuery ( Qt::InputMethodQuery ) const")
+   "protected QPoint dirtyRegionOffset () const"
+   "protected DropIndicatorPosition dropIndicatorPosition () const"
+   "protected void executeDelayedItemsLayout ()"
+   "protected void scheduleDelayedItemsLayout ()"
+   "protected void scrollDirtyRegion ( int , int )"
+   "protected void setDirtyRegion ( const QRegion & )"
+   "protected void setState ( State )"
+   "protected State state () const")
   (("QAbstractListModel" . "QAbstractItemModel")
-   "virtual bool dropMimeData ( const QMimeData * , Qt::DropAction , int , int , const QModelIndex & )"
-   "virtual QModelIndex index ( int , int = 0, const QModelIndex & = QModelIndex() ) const")
+   "new QAbstractListModel ( QObject * = 0 )")
   (("QAbstractPrintDialog" . "QDialog")
-   "virtual int exec () = 0"
+   "new QAbstractPrintDialog ( QPrinter * , QWidget * = 0 )"
    "int fromPage () const"
    "int maxPage () const"
    "int minPage () const"
@@ -149,20 +137,10 @@
    "void setPrintRange ( PrintRange )"
    "int toPage () const")
   (("QAbstractProxyModel" . "QAbstractItemModel")
-   "virtual QModelIndex mapFromSource ( const QModelIndex & ) const = 0"
-   "virtual QItemSelection mapSelectionFromSource ( const QItemSelection & ) const"
-   "virtual QItemSelection mapSelectionToSource ( const QItemSelection & ) const"
-   "virtual QModelIndex mapToSource ( const QModelIndex & ) const = 0"
-   "virtual void setSourceModel ( QAbstractItemModel * )"
-   "QAbstractItemModel * sourceModel () const"
-   "virtual QVariant data ( const QModelIndex & , int = Qt::DisplayRole ) const"
-   "virtual Qt::ItemFlags flags ( const QModelIndex & ) const"
-   "virtual QVariant headerData ( int , Qt::Orientation , int ) const"
-   "virtual void revert ()"
-   "virtual bool setData ( const QModelIndex & , const QVariant & , int = Qt::EditRole )"
-   "virtual bool setHeaderData ( int , Qt::Orientation , const QVariant & , int = Qt::EditRole )"
-   "virtual bool submit ()")
+   "new QAbstractProxyModel ( QObject * = 0 )"
+   "QAbstractItemModel * sourceModel () const")
   (("QAbstractScrollArea" . "QFrame")
+   "new QAbstractScrollArea ( QWidget * = 0 )"
    "void addScrollBarWidget ( QWidget * , Qt::Alignment )"
    "QWidget * cornerWidget () const"
    "QScrollBar * horizontalScrollBar () const"
@@ -178,9 +156,10 @@
    "QScrollBar * verticalScrollBar () const"
    "Qt::ScrollBarPolicy verticalScrollBarPolicy () const"
    "QWidget * viewport () const"
-   "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "protected void setViewportMargins ( int , int , int , int )"
+   "protected void setViewportMargins ( const QMargins & )")
   (("QAbstractSlider" . "QWidget")
+   "new QAbstractSlider ( QWidget * = 0 )"
    "bool hasTracking () const"
    "bool invertedAppearance () const"
    "bool invertedControls () const"
@@ -202,12 +181,14 @@
    "int singleStep () const"
    "int sliderPosition () const"
    "void triggerAction ( SliderAction )"
-   "int value () const")
+   "int value () const"
+   "protected SliderAction repeatAction () const"
+   "protected void setRepeatAction ( SliderAction , int = 500, int = 50 )")
   (("QAbstractSpinBox" . "QWidget")
+   "new QAbstractSpinBox ( QWidget * = 0 )"
    "Qt::Alignment alignment () const"
    "ButtonSymbols buttonSymbols () const"
    "CorrectionMode correctionMode () const"
-   "virtual void fixup ( QString & ) const"
    "bool hasAcceptableInput () const"
    "bool hasFrame () const"
    "void interpretText ()"
@@ -224,32 +205,25 @@
    "void setSpecialValueText ( const QString & )"
    "void setWrapping ( bool )"
    "QString specialValueText () const"
-   "virtual void stepBy ( int )"
    "QString text () const"
-   "virtual QValidator::State validate ( QString & , int & ) const"
    "bool wrapping () const"
-   "virtual bool event ( QEvent * )"
-   "virtual QVariant inputMethodQuery ( Qt::InputMethodQuery ) const"
-   "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "protected void initStyleOption ( QStyleOptionSpinBox * ) const"
+   "protected QLineEdit * lineEdit () const"
+   "protected void setLineEdit ( QLineEdit * )")
   (("QAbstractState" . "QObject")
    "QStateMachine * machine () const"
-   "QState * parentState () const")
-  (("QAbstractTableModel" . "QAbstractItemModel")
-   "virtual bool dropMimeData ( const QMimeData * , Qt::DropAction , int , int , const QModelIndex & )"
-   "virtual QModelIndex index ( int , int , const QModelIndex & = QModelIndex() ) const")
+   "QState * parentState () const"
+   "new QAbstractState ( QState * = 0 )")
+  (("QAbstractTableModel" . "QAbstractItemModel"))
   (("QAbstractTextDocumentLayout" . "QObject")
+   "new QAbstractTextDocumentLayout ( QTextDocument * )"
    "QString anchorAt ( const QPointF & ) const"
-   "virtual QRectF blockBoundingRect ( const QTextBlock & ) const = 0"
    "QTextDocument * document () const"
-   "virtual QSizeF documentSize () const = 0"
-   "virtual void draw ( QPainter * , const PaintContext & ) = 0"
-   "virtual QRectF frameBoundingRect ( QTextFrame * ) const = 0"
-   "virtual int hitTest ( const QPointF & , Qt::HitTestAccuracy ) const = 0"
-   "virtual int pageCount () const = 0"
    "QPaintDevice * paintDevice () const"
-   "void setPaintDevice ( QPaintDevice * )")
+   "void setPaintDevice ( QPaintDevice * )"
+   "protected QTextCharFormat format ( int )")
   (("QAbstractTransition" . "QObject")
+   "new QAbstractTransition ( QState * = 0 )"
    "void addAnimation ( QAbstractAnimation * )"
    "QList<QAbstractAnimation *> animations () const"
    "QStateMachine * machine () const"
@@ -334,15 +308,12 @@
    "void removeAnimation ( QAbstractAnimation * )"
    "QAbstractAnimation * takeAnimation ( int )")
   (("QApplication" . "QCoreApplication")
-   "virtual void commitData ( QSessionManager & )"
    "QInputContext * inputContext () const"
    "bool isSessionRestored () const"
-   "virtual void saveState ( QSessionManager & )"
    "QString sessionId () const"
    "QString sessionKey () const"
    "void setInputContext ( QInputContext * )"
    "QString styleSheet () const"
-   "virtual bool notify ( QObject * , QEvent * )"
    "static QWidget * activeModalWidget ()"
    "static QWidget * activePopupWidget ()"
    "static QWidget * activeWindow ()"
@@ -411,6 +382,7 @@
    "static QWidget * widgetAt ( int , int )"
    "static QIcon windowIcon ()")
   (("QBoxLayout" . "QLayout")
+   "new QBoxLayout ( Direction , QWidget * = 0 )"
    "void addLayout ( QLayout * , int = 0 )"
    "void addSpacerItem ( QSpacerItem * )"
    "void addSpacing ( int )"
@@ -430,19 +402,7 @@
    "bool setStretchFactor ( QLayout * , int )"
    "int spacing () const"
    "int stretch ( int ) const"
-   "virtual void addItem ( QLayoutItem * )"
-   "virtual int count () const"
-   "virtual Qt::Orientations expandingDirections () const"
-   "virtual bool hasHeightForWidth () const"
-   "virtual int heightForWidth ( int ) const"
-   "virtual void invalidate ()"
-   "virtual QLayoutItem * itemAt ( int ) const"
-   "virtual QSize maximumSize () const"
-   "virtual int minimumHeightForWidth ( int ) const"
-   "virtual QSize minimumSize () const"
-   "virtual void setGeometry ( const QRect & )"
-   "virtual QSize sizeHint () const"
-   "virtual QLayoutItem * takeAt ( int )")
+   "protected void insertItem ( int , QLayoutItem * )")
   (("QBuffer" . "QIODevice")
    "new QBuffer ( QObject * = 0 )"
    "new QBuffer ( QByteArray * , QObject * = 0 )"
@@ -451,11 +411,7 @@
    "const QByteArray & data () const"
    "void setBuffer ( QByteArray * )"
    "void setData ( const QByteArray & )"
-   "void setData ( const char * , int )"
-   "virtual bool atEnd () const"
-   "virtual bool canReadLine () const"
-   "virtual void close ()"
-   "virtual bool open ( OpenMode )")
+   "void setData ( const char * , int )")
   (("QButtonGroup" . "QObject")
    "new QButtonGroup ( QObject * = 0 )"
    "void addButton ( QAbstractButton * )"
@@ -470,11 +426,7 @@
    "void setExclusive ( bool )"
    "void setId ( QAbstractButton * , int )")
   (("QCDEStyle" . "QMotifStyle")
-   "new QCDEStyle ( bool = false )"
-   "virtual void drawControl ( ControlElement , const QStyleOption * , QPainter * , const QWidget * = 0 ) const"
-   "virtual void drawPrimitive ( PrimitiveElement , const QStyleOption * , QPainter * , const QWidget * = 0 ) const"
-   "virtual int pixelMetric ( PixelMetric , const QStyleOption * = 0, const QWidget * = 0 ) const"
-   "virtual QPalette standardPalette () const")
+   "new QCDEStyle ( bool = false )")
   (("QCalendarWidget" . "QWidget")
    "new QCalendarWidget ( QWidget * = 0 )"
    "int dateEditAcceptDelay () const"
@@ -504,8 +456,8 @@
    "VerticalHeaderFormat verticalHeaderFormat () const"
    "QTextCharFormat weekdayTextFormat ( Qt::DayOfWeek ) const"
    "int yearShown () const"
-   "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "protected void updateCell ( const QDate & )"
+   "protected void updateCells ()")
   (("QCheckBox" . "QAbstractButton")
    "new QCheckBox ( QWidget * = 0 )"
    "new QCheckBox ( const QString & , QWidget * = 0 )"
@@ -513,29 +465,9 @@
    "bool isTristate () const"
    "void setCheckState ( Qt::CheckState )"
    "void setTristate ( bool = true )"
-   "virtual QSize sizeHint () const")
+   "protected void initStyleOption ( QStyleOptionButton * ) const")
   (("QCleanlooksStyle" . "QWindowsStyle")
-   "new QCleanlooksStyle ()"
-   "virtual void drawComplexControl ( ComplexControl , const QStyleOptionComplex * , QPainter * , const QWidget * ) const"
-   "virtual void drawControl ( ControlElement , const QStyleOption * , QPainter * , const QWidget * ) const"
-   "virtual void drawItemPixmap ( QPainter * , const QRect & , int , const QPixmap & ) const"
-   "virtual void drawItemText ( QPainter * , const QRect & , int , const QPalette & , bool , const QString & , QPalette::ColorRole = QPalette::NoRole ) const"
-   "virtual void drawPrimitive ( PrimitiveElement , const QStyleOption * , QPainter * , const QWidget * = 0 ) const"
-   "virtual QPixmap generatedIconPixmap ( QIcon::Mode , const QPixmap & , const QStyleOption * ) const"
-   "virtual SubControl hitTestComplexControl ( ComplexControl , const QStyleOptionComplex * , const QPoint & , const QWidget * = 0 ) const"
-   "virtual QRect itemPixmapRect ( const QRect & , int , const QPixmap & ) const"
-   "virtual int pixelMetric ( PixelMetric , const QStyleOption * = 0, const QWidget * = 0 ) const"
-   "virtual void polish ( QWidget * )"
-   "virtual void polish ( QApplication * )"
-   "virtual void polish ( QPalette & )"
-   "virtual QSize sizeFromContents ( ContentsType , const QStyleOption * , const QSize & , const QWidget * ) const"
-   "virtual QPalette standardPalette () const"
-   "virtual QPixmap standardPixmap ( StandardPixmap , const QStyleOption * , const QWidget * = 0 ) const"
-   "virtual int styleHint ( StyleHint , const QStyleOption * = 0, const QWidget * = 0, QStyleHintReturn * = 0 ) const"
-   "virtual QRect subControlRect ( ComplexControl , const QStyleOptionComplex * , SubControl , const QWidget * ) const"
-   "virtual QRect subElementRect ( SubElement , const QStyleOption * , const QWidget * = 0 ) const"
-   "virtual void unpolish ( QWidget * )"
-   "virtual void unpolish ( QApplication * )")
+   "new QCleanlooksStyle ()")
   (("QClipboard" . "QObject")
    "void clear ( Mode = Clipboard )"
    "QImage image ( Mode = Clipboard ) const"
@@ -564,7 +496,6 @@
    "void setOption ( ColorDialogOption , bool = true )"
    "void setOptions ( ColorDialogOptions )"
    "bool testOption ( ColorDialogOption ) const"
-   "virtual void setVisible ( bool )"
    "static QRgb customColor ( int )"
    "static int customCount ()"
    "static QColor getColor ( const QColor & , QWidget * , const QString & , ColorDialogOptions = 0 )"
@@ -579,14 +510,7 @@
    "void setColumnWidths ( const QList<int> & )"
    "void setPreviewWidget ( QWidget * )"
    "void setResizeGripsVisible ( bool )"
-   "virtual QModelIndex indexAt ( const QPoint & ) const"
-   "virtual void scrollTo ( const QModelIndex & , ScrollHint = EnsureVisible )"
-   "virtual void selectAll ()"
-   "virtual void setModel ( QAbstractItemModel * )"
-   "virtual void setRootIndex ( const QModelIndex & )"
-   "virtual void setSelectionModel ( QItemSelectionModel * )"
-   "virtual QSize sizeHint () const"
-   "virtual QRect visualRect ( const QModelIndex & ) const")
+   "protected void initializeColumn ( QAbstractItemView * ) const")
   (("QComboBox" . "QWidget")
    "new QComboBox ( QWidget * = 0 )"
    "void addItem ( const QString & , const QVariant & = QVariant() )"
@@ -600,7 +524,6 @@
    "int findData ( const QVariant & , int = Qt::UserRole, Qt::MatchFlags = Qt::MatchExactly | Qt::MatchCaseSensitive ) const"
    "int findText ( const QString & , Qt::MatchFlags = Qt::MatchExactly | Qt::MatchCaseSensitive ) const"
    "bool hasFrame () const"
-   "virtual void hidePopup ()"
    "QSize iconSize () const"
    "void insertItem ( int , const QString & , const QVariant & = QVariant() )"
    "void insertItem ( int , const QIcon & , const QString & , const QVariant & = QVariant() )"
@@ -640,13 +563,10 @@
    "void setSizeAdjustPolicy ( SizeAdjustPolicy )"
    "void setValidator ( const QValidator * )"
    "void setView ( QAbstractItemView * )"
-   "virtual void showPopup ()"
    "SizeAdjustPolicy sizeAdjustPolicy () const"
    "const QValidator * validator () const"
    "QAbstractItemView * view () const"
-   "virtual bool event ( QEvent * )"
-   "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "protected void initStyleOption ( QStyleOptionComboBox * ) const")
   (("QCommandLinkButton" . "QPushButton")
    "new QCommandLinkButton ( QWidget * = 0 )"
    "new QCommandLinkButton ( const QString & , QWidget * = 0 )"
@@ -654,23 +574,7 @@
    "QString description () const"
    "void setDescription ( const QString & )")
   (("QCommonStyle" . "QStyle")
-   "new QCommonStyle ()"
-   "virtual void drawComplexControl ( ComplexControl , const QStyleOptionComplex * , QPainter * , const QWidget * = 0 ) const"
-   "virtual void drawControl ( ControlElement , const QStyleOption * , QPainter * , const QWidget * = 0 ) const"
-   "virtual void drawPrimitive ( PrimitiveElement , const QStyleOption * , QPainter * , const QWidget * = 0 ) const"
-   "virtual QPixmap generatedIconPixmap ( QIcon::Mode , const QPixmap & , const QStyleOption * ) const"
-   "virtual SubControl hitTestComplexControl ( ComplexControl , const QStyleOptionComplex * , const QPoint & , const QWidget * = 0 ) const"
-   "virtual int pixelMetric ( PixelMetric , const QStyleOption * = 0, const QWidget * = 0 ) const"
-   "virtual void polish ( QPalette & )"
-   "virtual void polish ( QApplication * )"
-   "virtual void polish ( QWidget * )"
-   "virtual QSize sizeFromContents ( ContentsType , const QStyleOption * , const QSize & , const QWidget * = 0 ) const"
-   "virtual QPixmap standardPixmap ( StandardPixmap , const QStyleOption * = 0, const QWidget * = 0 ) const"
-   "virtual int styleHint ( StyleHint , const QStyleOption * = 0, const QWidget * = 0, QStyleHintReturn * = 0 ) const"
-   "virtual QRect subControlRect ( ComplexControl , const QStyleOptionComplex * , SubControl , const QWidget * = 0 ) const"
-   "virtual QRect subElementRect ( SubElement , const QStyleOption * , const QWidget * = 0 ) const"
-   "virtual void unpolish ( QWidget * )"
-   "virtual void unpolish ( QApplication * )")
+   "new QCommonStyle ()")
   (("QCompleter" . "QObject")
    "new QCompleter ( QObject * = 0 )"
    "new QCompleter ( QAbstractItemModel * , QObject * = 0 )"
@@ -688,7 +592,6 @@
    "int maxVisibleItems () const"
    "QAbstractItemModel * model () const"
    "ModelSorting modelSorting () const"
-   "virtual QString pathFromIndex ( const QModelIndex & ) const"
    "QAbstractItemView * popup () const"
    "void setCaseSensitivity ( Qt::CaseSensitivity )"
    "void setCompletionColumn ( int )"
@@ -700,11 +603,9 @@
    "void setModelSorting ( ModelSorting )"
    "void setPopup ( QAbstractItemView * )"
    "void setWidget ( QWidget * )"
-   "virtual QStringList splitPath ( const QString & ) const"
    "QWidget * widget () const"
    "bool wrapAround () const")
   (("QCoreApplication" . "QObject")
-   "virtual bool notify ( QObject * , QEvent * )"
    "EventFilter setEventFilter ( EventFilter )"
    "static void addLibraryPath ( const QString & )"
    "static QString applicationDirPath ()"
@@ -812,10 +713,7 @@
    "void setTimeSpec ( Qt::TimeSpec )"
    "QTime time () const"
    "Qt::TimeSpec timeSpec () const"
-   "virtual void clear ()"
-   "virtual bool event ( QEvent * )"
-   "virtual QSize sizeHint () const"
-   "virtual void stepBy ( int )")
+   "protected void initStyleOption ( QStyleOptionSpinBox * ) const")
   (("QDesktopWidget" . "QWidget")
    "const QRect availableGeometry ( int = -1 ) const"
    "const QRect availableGeometry ( const QWidget * ) const"
@@ -836,18 +734,14 @@
    "bool notchesVisible () const"
    "void setNotchTarget ( double )"
    "bool wrapping () const"
-   "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "protected void initStyleOption ( QStyleOptionSlider * ) const")
   (("QDialog" . "QWidget")
    "new QDialog ( QWidget * = 0, Qt::WindowFlags = 0 )"
    "bool isSizeGripEnabled () const"
    "int result () const"
    "void setModal ( bool )"
    "void setResult ( int )"
-   "void setSizeGripEnabled ( bool )"
-   "virtual QSize minimumSizeHint () const"
-   "virtual void setVisible ( bool )"
-   "virtual QSize sizeHint () const")
+   "void setSizeGripEnabled ( bool )")
   (("QDialogButtonBox" . "QWidget")
    "new QDialogButtonBox ( QWidget * = 0 )"
    "new QDialogButtonBox ( Qt::Orientation , QWidget * = 0 )"
@@ -892,21 +786,7 @@
    "void setReadOnly ( bool )"
    "void setResolveSymlinks ( bool )"
    "void setSorting ( QDir::SortFlags )"
-   "QDir::SortFlags sorting () const"
-   "virtual int columnCount ( const QModelIndex & = QModelIndex() ) const"
-   "virtual QVariant data ( const QModelIndex & , int = Qt::DisplayRole ) const"
-   "virtual bool dropMimeData ( const QMimeData * , Qt::DropAction , int , int , const QModelIndex & )"
-   "virtual Qt::ItemFlags flags ( const QModelIndex & ) const"
-   "virtual bool hasChildren ( const QModelIndex & = QModelIndex() ) const"
-   "virtual QVariant headerData ( int , Qt::Orientation , int = Qt::DisplayRole ) const"
-   "virtual QModelIndex index ( int , int , const QModelIndex & = QModelIndex() ) const"
-   "virtual QMimeData * mimeData ( const QModelIndexList & ) const"
-   "virtual QStringList mimeTypes () const"
-   "virtual QModelIndex parent ( const QModelIndex & ) const"
-   "virtual int rowCount ( const QModelIndex & = QModelIndex() ) const"
-   "virtual bool setData ( const QModelIndex & , const QVariant & , int = Qt::EditRole )"
-   "virtual void sort ( int , Qt::SortOrder = Qt::AscendingOrder )"
-   "virtual Qt::DropActions supportedDropActions () const")
+   "QDir::SortFlags sorting () const")
   (("QDockWidget" . "QWidget")
    "new QDockWidget ( const QString & , QWidget * = 0, Qt::WindowFlags = 0 )"
    "new QDockWidget ( QWidget * = 0, Qt::WindowFlags = 0 )"
@@ -921,7 +801,8 @@
    "void setWidget ( QWidget * )"
    "QWidget * titleBarWidget () const"
    "QAction * toggleViewAction () const"
-   "QWidget * widget () const")
+   "QWidget * widget () const"
+   "protected void initStyleOption ( QStyleOptionDockWidget * ) const")
   (("QDoubleSpinBox" . "QAbstractSpinBox")
    "new QDoubleSpinBox ( QWidget * = 0 )"
    "QString cleanText () const"
@@ -938,11 +819,7 @@
    "void setSuffix ( const QString & )"
    "double singleStep () const"
    "QString suffix () const"
-   "virtual QString textFromValue ( double ) const"
-   "double value () const"
-   "virtual double valueFromText ( const QString & ) const"
-   "virtual void fixup ( QString & ) const"
-   "virtual QValidator::State validate ( QString & , int & ) const")
+   "double value () const")
   (("QDoubleValidator" . "QValidator")
    "new QDoubleValidator ( QObject * )"
    "new QDoubleValidator ( double , double , int , QObject * )"
@@ -952,10 +829,8 @@
    "void setBottom ( double )"
    "void setDecimals ( int )"
    "void setNotation ( Notation )"
-   "virtual void setRange ( double , double , int = 0 )"
    "void setTop ( double )"
-   "double top () const"
-   "virtual QValidator::State validate ( QString & , int & ) const")
+   "double top () const")
   (("QDrag" . "QObject")
    "new QDrag ( QWidget * )"
    "Qt::DropAction exec ( Qt::DropActions = Qt::MoveAction )"
@@ -987,6 +862,9 @@
    "void setEventSource ( QObject * )"
    "void setEventType ( QEvent::Type )")
   (("QFile" . "QIODevice")
+   "new QFile ( const QString & )"
+   "new QFile ( QObject * )"
+   "new QFile ( const QString & , QObject * )"
    "bool copy ( const QString & )"
    "FileError error () const"
    "bool exists () const"
@@ -1003,10 +881,6 @@
    "QString symLinkTarget () const"
    "bool unmap ( uchar * )"
    "void unsetError ()"
-   "virtual bool atEnd () const"
-   "virtual void close ()"
-   "virtual bool isSequential () const"
-   "virtual bool open ( OpenMode )"
    "static bool copy ( const QString & , const QString & )"
    "static QString decodeName ( const QByteArray & )"
    "static QString decodeName ( const char * )"
@@ -1070,7 +944,6 @@
    "QList<QUrl> sidebarUrls () const"
    "bool testOption ( Option ) const"
    "ViewMode viewMode () const"
-   "virtual void setVisible ( bool )"
    "static QString getExistingDirectory ( QWidget * = 0, const QString & = QString(), const QString & = QString(), Options = ShowDirsOnly )"
    "static QString getOpenFileName ( QWidget * = 0, const QString & = QString(), const QString & = QString(), const QString & = QString(), QString * = 0, Options = 0 )"
    "static QStringList getOpenFileNames ( QWidget * = 0, const QString & = QString(), const QString & = QString(), const QString & = QString(), QString * = 0, Options = 0 )"
@@ -1104,23 +977,7 @@
    "void setReadOnly ( bool )"
    "void setResolveSymlinks ( bool )"
    "QModelIndex setRootPath ( const QString & )"
-   "QString type ( const QModelIndex & ) const"
-   "virtual bool canFetchMore ( const QModelIndex & ) const"
-   "virtual int columnCount ( const QModelIndex & = QModelIndex() ) const"
-   "virtual QVariant data ( const QModelIndex & , int = Qt::DisplayRole ) const"
-   "virtual bool dropMimeData ( const QMimeData * , Qt::DropAction , int , int , const QModelIndex & )"
-   "virtual void fetchMore ( const QModelIndex & )"
-   "virtual Qt::ItemFlags flags ( const QModelIndex & ) const"
-   "virtual bool hasChildren ( const QModelIndex & = QModelIndex() ) const"
-   "virtual QVariant headerData ( int , Qt::Orientation , int = Qt::DisplayRole ) const"
-   "virtual QModelIndex index ( int , int , const QModelIndex & = QModelIndex() ) const"
-   "virtual QMimeData * mimeData ( const QModelIndexList & ) const"
-   "virtual QStringList mimeTypes () const"
-   "virtual QModelIndex parent ( const QModelIndex & ) const"
-   "virtual int rowCount ( const QModelIndex & = QModelIndex() ) const"
-   "virtual bool setData ( const QModelIndex & , const QVariant & , int = Qt::EditRole )"
-   "virtual void sort ( int , Qt::SortOrder = Qt::AscendingOrder )"
-   "virtual Qt::DropActions supportedDropActions () const")
+   "QString type ( const QModelIndex & ) const")
   (("QFileSystemWatcher" . "QObject")
    "new QFileSystemWatcher ( QObject * = 0 )"
    "new QFileSystemWatcher ( const QStringList & , QObject * = 0 )"
@@ -1135,15 +992,15 @@
   (("QFocusFrame" . "QWidget")
    "new QFocusFrame ( QWidget * = 0 )"
    "void setWidget ( QWidget * )"
-   "QWidget * widget () const")
+   "QWidget * widget () const"
+   "protected void initStyleOption ( QStyleOption * ) const")
   (("QFontComboBox" . "QComboBox")
    "new QFontComboBox ( QWidget * = 0 )"
    "QFont currentFont () const"
    "FontFilters fontFilters () const"
    "void setFontFilters ( FontFilters )"
    "void setWritingSystem ( QFontDatabase::WritingSystem )"
-   "QFontDatabase::WritingSystem writingSystem () const"
-   "virtual QSize sizeHint () const")
+   "QFontDatabase::WritingSystem writingSystem () const")
   (("QFontDialog" . "QDialog")
    "new QFontDialog ( QWidget * = 0 )"
    "new QFontDialog ( const QFont & , QWidget * = 0 )"
@@ -1155,7 +1012,6 @@
    "void setOption ( FontDialogOption , bool = true )"
    "void setOptions ( FontDialogOptions )"
    "bool testOption ( FontDialogOption ) const"
-   "virtual void setVisible ( bool )"
    "static QFont getFont ( bool * , const QFont & , QWidget * , const QString & , FontDialogOptions )"
    "static QFont getFont ( bool * , const QFont & , QWidget * , const QString & )"
    "static QFont getFont ( bool * , const QFont & , QWidget * = 0 )"
@@ -1194,18 +1050,7 @@
    "void setVerticalSpacing ( int )"
    "void setWidget ( int , ItemRole , QWidget * )"
    "int spacing () const"
-   "int verticalSpacing () const"
-   "virtual void addItem ( QLayoutItem * )"
-   "virtual int count () const"
-   "virtual Qt::Orientations expandingDirections () const"
-   "virtual bool hasHeightForWidth () const"
-   "virtual int heightForWidth ( int ) const"
-   "virtual void invalidate ()"
-   "virtual QLayoutItem * itemAt ( int ) const"
-   "virtual QSize minimumSize () const"
-   "virtual void setGeometry ( const QRect & )"
-   "virtual QSize sizeHint () const"
-   "virtual QLayoutItem * takeAt ( int )")
+   "int verticalSpacing () const")
   (("QFrame" . "QWidget")
    "new QFrame ( QWidget * = 0, Qt::WindowFlags = 0 )"
    "QRect frameRect () const"
@@ -1220,8 +1065,7 @@
    "void setFrameShape ( Shape )"
    "void setFrameStyle ( int )"
    "void setLineWidth ( int )"
-   "void setMidLineWidth ( int )"
-   "virtual QSize sizeHint () const")
+   "void setMidLineWidth ( int )")
   (("QGesture" . "QObject")
    "new QGesture ( QObject * = 0 )"
    "GestureCancelPolicy gestureCancelPolicy () const"
@@ -1241,8 +1085,7 @@
   (("QGraphicsBlurEffect" . "QGraphicsEffect")
    "new QGraphicsBlurEffect ( QObject * = 0 )"
    "BlurHints blurHints () const"
-   "qreal blurRadius () const"
-   "virtual QRectF boundingRectFor ( const QRectF & ) const")
+   "qreal blurRadius () const")
   (("QGraphicsColorizeEffect" . "QGraphicsEffect")
    "new QGraphicsColorizeEffect ( QObject * = 0 )"
    "QColor color () const"
@@ -1253,12 +1096,15 @@
    "QColor color () const"
    "QPointF offset () const"
    "qreal xOffset () const"
-   "qreal yOffset () const"
-   "virtual QRectF boundingRectFor ( const QRectF & ) const")
+   "qreal yOffset () const")
   (("QGraphicsEffect" . "QObject")
+   "new QGraphicsEffect ( QObject * = 0 )"
    "QRectF boundingRect () const"
-   "virtual QRectF boundingRectFor ( const QRectF & ) const"
-   "bool isEnabled () const")
+   "bool isEnabled () const"
+   "protected void drawSource ( QPainter * )"
+   "protected QRectF sourceBoundingRect ( Qt::CoordinateSystem = Qt::LogicalCoordinates ) const"
+   "protected bool sourceIsPixmap () const"
+   "protected void updateBoundingRect ()")
   (("QGraphicsObject" . "QObject")
    "void grabGesture ( Qt::GestureType , Qt::GestureFlags = Qt::GestureFlags() )"
    "void ungrabGesture ( Qt::GestureType )")
@@ -1271,10 +1117,7 @@
    "QGraphicsProxyWidget * createProxyForChildWidget ( QWidget * )"
    "void setWidget ( QWidget * )"
    "QRectF subWidgetRect ( const QWidget * ) const"
-   "QWidget * widget () const"
-   "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * )"
-   "virtual void setGeometry ( const QRectF & )"
-   "virtual int type () const")
+   "QWidget * widget () const")
   (("QGraphicsRotation" . "QGraphicsTransform")
    "new QGraphicsRotation ( QObject * = 0 )"
    "qreal angle () const"
@@ -1283,8 +1126,7 @@
    "void setAngle ( qreal )"
    "void setAxis ( const QVector3D & )"
    "void setAxis ( Qt::Axis )"
-   "void setOrigin ( const QVector3D & )"
-   "virtual void applyTo ( QMatrix4x4 * ) const")
+   "void setOrigin ( const QVector3D & )")
   (("QGraphicsScale" . "QGraphicsTransform")
    "new QGraphicsScale ( QObject * = 0 )"
    "QVector3D origin () const"
@@ -1294,8 +1136,7 @@
    "void setZScale ( qreal )"
    "qreal xScale () const"
    "qreal yScale () const"
-   "qreal zScale () const"
-   "virtual void applyTo ( QMatrix4x4 * ) const")
+   "qreal zScale () const")
   (("QGraphicsScene" . "QObject")
    "new QGraphicsScene ( QObject * = 0 )"
    "new QGraphicsScene ( const QRectF & , QObject * = 0 )"
@@ -1326,7 +1167,6 @@
    "QBrush foregroundBrush () const"
    "bool hasFocus () const"
    "qreal height () const"
-   "virtual QVariant inputMethodQuery ( Qt::InputMethodQuery ) const"
    "void invalidate ( qreal , qreal , qreal , qreal , SceneLayers = AllLayers )"
    "bool isActive () const"
    "bool isSortCacheEnabled () const"
@@ -1394,17 +1234,9 @@
    "Qt::TextInteractionFlags textInteractionFlags () const"
    "qreal textWidth () const"
    "QString toHtml () const"
-   "QString toPlainText () const"
-   "virtual QRectF boundingRect () const"
-   "virtual bool contains ( const QPointF & ) const"
-   "virtual bool isObscuredBy ( const QGraphicsItem * ) const"
-   "virtual QPainterPath opaqueArea () const"
-   "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * )"
-   "virtual QPainterPath shape () const"
-   "virtual int type () const")
+   "QString toPlainText () const")
   (("QGraphicsTransform" . "QObject")
-   "new QGraphicsTransform ( QObject * = 0 )"
-   "virtual void applyTo ( QMatrix4x4 * ) const = 0")
+   "new QGraphicsTransform ( QObject * = 0 )")
   (("QGraphicsView" . "QAbstractScrollArea")
    "new QGraphicsView ( QWidget * = 0 )"
    "new QGraphicsView ( QGraphicsScene * , QWidget * = 0 )"
@@ -1482,9 +1314,7 @@
    "ViewportAnchor transformationAnchor () const"
    "void translate ( qreal , qreal )"
    "QTransform viewportTransform () const"
-   "ViewportUpdateMode viewportUpdateMode () const"
-   "virtual QVariant inputMethodQuery ( Qt::InputMethodQuery ) const"
-   "virtual QSize sizeHint () const")
+   "ViewportUpdateMode viewportUpdateMode () const")
   (("QGraphicsWidget" . "QGraphicsObject")
    "new QGraphicsWidget ( QGraphicsItem * = 0, Qt::WindowFlags = 0 )"
    "QList<QAction *> actions () const"
@@ -1500,7 +1330,6 @@
    "bool isActiveWindow () const"
    "QGraphicsLayout * layout () const"
    "Qt::LayoutDirection layoutDirection () const"
-   "virtual void paintWindowFrame ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * = 0 )"
    "QPalette palette () const"
    "QRectF rect () const"
    "void releaseShortcut ( int )"
@@ -1531,11 +1360,6 @@
    "QRectF windowFrameRect () const"
    "QString windowTitle () const"
    "Qt::WindowType windowType () const"
-   "virtual QRectF boundingRect () const"
-   "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * = 0 )"
-   "virtual void setGeometry ( const QRectF & )"
-   "virtual QPainterPath shape () const"
-   "virtual int type () const"
    "static void setTabOrder ( QGraphicsWidget * , QGraphicsWidget * )")
   (("QGridLayout" . "QLayout")
    "new QGridLayout ( QWidget * )"
@@ -1564,19 +1388,7 @@
    "void setSpacing ( int )"
    "void setVerticalSpacing ( int )"
    "int spacing () const"
-   "int verticalSpacing () const"
-   "virtual int count () const"
-   "virtual Qt::Orientations expandingDirections () const"
-   "virtual bool hasHeightForWidth () const"
-   "virtual int heightForWidth ( int ) const"
-   "virtual void invalidate ()"
-   "virtual QLayoutItem * itemAt ( int ) const"
-   "virtual QSize maximumSize () const"
-   "virtual int minimumHeightForWidth ( int ) const"
-   "virtual QSize minimumSize () const"
-   "virtual void setGeometry ( const QRect & )"
-   "virtual QSize sizeHint () const"
-   "virtual QLayoutItem * takeAt ( int )")
+   "int verticalSpacing () const")
   (("QGroupBox" . "QWidget")
    "new QGroupBox ( QWidget * = 0 )"
    "new QGroupBox ( const QString & , QWidget * = 0 )"
@@ -1589,11 +1401,12 @@
    "void setFlat ( bool )"
    "void setTitle ( const QString & )"
    "QString title () const"
-   "virtual QSize minimumSizeHint () const")
+   "protected void initStyleOption ( QStyleOptionGroupBox * ) const")
   (("QHBoxLayout" . "QBoxLayout")
    "new QHBoxLayout ()"
    "new QHBoxLayout ( QWidget * )")
   (("QHeaderView" . "QAbstractItemView")
+   "new QHeaderView ( Qt::Orientation , QWidget * = 0 )"
    "bool cascadingSectionResizes () const"
    "int count () const"
    "Qt::Alignment defaultAlignment () const"
@@ -1646,9 +1459,7 @@
    "void swapSections ( int , int )"
    "int visualIndex ( int ) const"
    "int visualIndexAt ( int ) const"
-   "virtual void reset ()"
-   "virtual void setModel ( QAbstractItemModel * )"
-   "virtual QSize sizeHint () const")
+   "protected void initStyleOption ( QStyleOptionHeader * ) const")
   (("QHistoryState" . "QAbstractState")
    "new QHistoryState ( QState * = 0 )"
    "new QHistoryState ( HistoryType , QState * = 0 )"
@@ -1657,39 +1468,24 @@
    "void setDefaultState ( QAbstractState * )"
    "void setHistoryType ( HistoryType )")
   (("QIODevice" . "QObject")
-   "virtual bool atEnd () const"
-   "virtual bool canReadLine () const"
-   "virtual void close ()"
    "QString errorString () const"
    "bool getChar ( char * )"
    "bool isOpen () const"
    "bool isReadable () const"
-   "virtual bool isSequential () const"
    "bool isTextModeEnabled () const"
    "bool isWritable () const"
-   "virtual bool open ( OpenMode )"
    "OpenMode openMode () const"
    "bool putChar ( char )"
    "QByteArray readAll ()"
-   "virtual bool reset ()"
    "void setTextModeEnabled ( bool )"
    "void ungetChar ( char )"
-   "virtual bool waitForBytesWritten ( int )"
-   "virtual bool waitForReadyRead ( int )")
+   "protected void setErrorString ( const QString & )"
+   "protected void setOpenMode ( OpenMode )")
   (("QInputContext" . "QObject")
-   "virtual QList<QAction *> actions ()"
-   "virtual bool filterEvent ( const QEvent * )"
+   "new QInputContext ( QObject * = 0 )"
    "QWidget * focusWidget () const"
-   "virtual QFont font () const"
-   "virtual QString identifierName () = 0"
-   "virtual bool isComposing () const = 0"
-   "virtual QString language () = 0"
-   "virtual void reset () = 0"
    "void sendEvent ( const QInputMethodEvent & )"
-   "virtual void setFocusWidget ( QWidget * )"
-   "QTextFormat standardFormat ( StandardFormat ) const"
-   "virtual void update ()"
-   "virtual void widgetDestroyed ( QWidget * )")
+   "QTextFormat standardFormat ( StandardFormat ) const")
   (("QInputDialog" . "QDialog")
    "new QInputDialog ( QWidget * = 0, Qt::WindowFlags = 0 )"
    "QString cancelButtonText () const"
@@ -1731,10 +1527,6 @@
    "bool testOption ( InputDialogOption ) const"
    "QLineEdit::EchoMode textEchoMode () const"
    "QString textValue () const"
-   "virtual void done ( int )"
-   "virtual QSize minimumSizeHint () const"
-   "virtual void setVisible ( bool )"
-   "virtual QSize sizeHint () const"
    "static double getDouble ( QWidget * , const QString & , const QString & , double = 0, double = -2147483647, double = 2147483647, int = 1, bool * = 0, Qt::WindowFlags = 0 )"
    "static int getInt ( QWidget * , const QString & , const QString & , int = 0, int = -2147483647, int = 2147483647, int = 1, bool * = 0, Qt::WindowFlags = 0 )"
    "static QString getItem ( QWidget * , const QString & , const QString & , const QStringList & , int = 0, bool = true, bool * = 0, Qt::WindowFlags = 0 )"
@@ -1744,22 +1536,15 @@
    "new QIntValidator ( int , int , QObject * )"
    "int bottom () const"
    "void setBottom ( int )"
-   "virtual void setRange ( int , int )"
    "void setTop ( int )"
-   "int top () const"
-   "virtual QValidator::State validate ( QString & , int & ) const")
+   "int top () const")
   (("QItemDelegate" . "QAbstractItemDelegate")
    "new QItemDelegate ( QObject * = 0 )"
    "bool hasClipping () const"
    "QItemEditorFactory * itemEditorFactory () const"
    "void setClipping ( bool )"
    "void setItemEditorFactory ( QItemEditorFactory * )"
-   "virtual QWidget * createEditor ( QWidget * , const QStyleOptionViewItem & , const QModelIndex & ) const"
-   "virtual void paint ( QPainter * , const QStyleOptionViewItem & , const QModelIndex & ) const"
-   "virtual void setEditorData ( QWidget * , const QModelIndex & ) const"
-   "virtual void setModelData ( QWidget * , QAbstractItemModel * , const QModelIndex & ) const"
-   "virtual QSize sizeHint ( const QStyleOptionViewItem & , const QModelIndex & ) const"
-   "virtual void updateEditorGeometry ( QWidget * , const QStyleOptionViewItem & , const QModelIndex & ) const")
+   "protected void drawBackground ( QPainter * , const QStyleOptionViewItem & , const QModelIndex & ) const")
   (("QItemSelectionModel" . "QObject")
    "new QItemSelectionModel ( QAbstractItemModel * )"
    "new QItemSelectionModel ( QAbstractItemModel * , QObject * )"
@@ -1774,7 +1559,8 @@
    "QModelIndexList selectedColumns ( int = 0 ) const"
    "QModelIndexList selectedIndexes () const"
    "QModelIndexList selectedRows ( int = 0 ) const"
-   "const QItemSelection selection () const")
+   "const QItemSelection selection () const"
+   "protected void emitSelectionChanged ( const QItemSelection & , const QItemSelection & )")
   (("QKeyEventTransition" . "QEventTransition")
    "new QKeyEventTransition ( QState * = 0 )"
    "new QKeyEventTransition ( QObject * , QEvent::Type , int , QState * = 0 )"
@@ -1795,8 +1581,7 @@
    "void setMode ( Mode )"
    "void setSegmentStyle ( SegmentStyle )"
    "bool smallDecimalPoint () const"
-   "double value () const"
-   "virtual QSize sizeHint () const")
+   "double value () const")
   (("QLabel" . "QFrame")
    "new QLabel ( QWidget * = 0, Qt::WindowFlags = 0 )"
    "new QLabel ( const QString & , QWidget * = 0, Qt::WindowFlags = 0 )"
@@ -1821,20 +1606,13 @@
    "QString text () const"
    "Qt::TextFormat textFormat () const"
    "Qt::TextInteractionFlags textInteractionFlags () const"
-   "bool wordWrap () const"
-   "virtual int heightForWidth ( int ) const"
-   "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "bool wordWrap () const")
   (("QLayout" . "QObject")
    "bool activate ()"
-   "virtual void addItem ( QLayoutItem * ) = 0"
    "void addWidget ( QWidget * )"
    "QMargins contentsMargins () const"
    "QRect contentsRect () const"
-   "virtual int count () const = 0"
-   "virtual int indexOf ( QWidget * ) const"
    "bool isEnabled () const"
-   "virtual QLayoutItem * itemAt ( int ) const = 0"
    "QWidget * menuBar () const"
    "QWidget * parentWidget () const"
    "void removeItem ( QLayoutItem * )"
@@ -1850,16 +1628,10 @@
    "void setSpacing ( int )"
    "SizeConstraint sizeConstraint () const"
    "int spacing () const"
-   "virtual QLayoutItem * takeAt ( int ) = 0"
    "void update ()"
-   "virtual Qt::Orientations expandingDirections () const"
-   "virtual QRect geometry () const"
-   "virtual void invalidate ()"
-   "virtual bool isEmpty () const"
-   "virtual QLayout * layout ()"
-   "virtual QSize maximumSize () const"
-   "virtual QSize minimumSize () const"
-   "virtual void setGeometry ( const QRect & )"
+   "protected void addChildLayout ( QLayout * )"
+   "protected void addChildWidget ( QWidget * )"
+   "protected QRect alignmentRect ( const QRect & ) const"
    "static QSize closestAcceptableSize ( const QWidget * , const QSize & )")
   (("QLibrary" . "QObject")
    "new QLibrary ( QObject * = 0 )"
@@ -1926,10 +1698,8 @@
    "QString text () const"
    "QMargins textMargins () const"
    "const QValidator * validator () const"
-   "virtual bool event ( QEvent * )"
-   "virtual QVariant inputMethodQuery ( Qt::InputMethodQuery ) const"
-   "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "protected QRect cursorRect () const"
+   "protected void initStyleOption ( QStyleOptionFrame * ) const")
   (("QListView" . "QAbstractItemView")
    "new QListView ( QWidget * = 0 )"
    "int batchSize () const"
@@ -1961,9 +1731,8 @@
    "bool uniformItemSizes () const"
    "ViewMode viewMode () const"
    "bool wordWrap () const"
-   "virtual QModelIndex indexAt ( const QPoint & ) const"
-   "virtual void scrollTo ( const QModelIndex & , ScrollHint = EnsureVisible )"
-   "virtual QRect visualRect ( const QModelIndex & ) const")
+   "protected QRect rectForIndex ( const QModelIndex & ) const"
+   "protected void setPositionForIndex ( const QPoint & , const QModelIndex & )")
   (("QListWidget" . "QListView")
    "new QListWidget ( QWidget * = 0 )"
    "void addItem ( const QString & )"
@@ -1996,7 +1765,9 @@
    "void sortItems ( Qt::SortOrder = Qt::AscendingOrder )"
    "QListWidgetItem * takeItem ( int )"
    "QRect visualItemRect ( const QListWidgetItem * ) const"
-   "virtual void dropEvent ( QDropEvent * )")
+   "protected QModelIndex indexFromItem ( QListWidgetItem * ) const"
+   "protected QListWidgetItem * itemFromIndex ( const QModelIndex & ) const"
+   "protected QList<QListWidgetItem *> items ( const QMimeData * ) const")
   (("QMainWindow" . "QWidget")
    "new QMainWindow ( QWidget * = 0, Qt::WindowFlags = 0 )"
    "void addDockWidget ( Qt::DockWidgetArea , QDockWidget * )"
@@ -2007,7 +1778,6 @@
    "void addToolBarBreak ( Qt::ToolBarArea = Qt::TopToolBarArea )"
    "QWidget * centralWidget () const"
    "Qt::DockWidgetArea corner ( Qt::Corner ) const"
-   "virtual QMenu * createPopupMenu ()"
    "DockOptions dockOptions () const"
    "Qt::DockWidgetArea dockWidgetArea ( QDockWidget * ) const"
    "bool documentMode () const"
@@ -2066,9 +1836,7 @@
    "QTabWidget::TabPosition tabPosition () const"
    "QTabWidget::TabShape tabShape () const"
    "bool testOption ( AreaOption ) const"
-   "ViewMode viewMode () const"
-   "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "ViewMode viewMode () const")
   (("QMdiSubWindow" . "QWidget")
    "new QMdiSubWindow ( QWidget * = 0, Qt::WindowFlags = 0 )"
    "bool isShaded () const"
@@ -2082,9 +1850,7 @@
    "void setWidget ( QWidget * )"
    "QMenu * systemMenu () const"
    "bool testOption ( SubWindowOption ) const"
-   "QWidget * widget () const"
-   "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "QWidget * widget () const")
   (("QMenu" . "QWidget")
    "new QMenu ( QWidget * = 0 )"
    "new QMenu ( const QString & , QWidget * = 0 )"
@@ -2119,7 +1885,8 @@
    "void setTearOffEnabled ( bool )"
    "void setTitle ( const QString & )"
    "QString title () const"
-   "virtual QSize sizeHint () const"
+   "protected int columnCount () const"
+   "protected void initStyleOption ( QStyleOptionMenuItem * , const QAction * ) const"
    "static QAction * exec ( QList<QAction *> , const QPoint & , QAction * , QWidget * )"
    "static QAction * exec ( QList<QAction *> , const QPoint & , QAction * = 0 )")
   (("QMenuBar" . "QWidget")
@@ -2140,9 +1907,7 @@
    "void setActiveAction ( QAction * )"
    "void setDefaultUp ( bool )"
    "void setNativeMenuBar ( bool )"
-   "virtual int heightForWidth ( int ) const"
-   "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "protected void initStyleOption ( QStyleOptionMenuItem * , const QAction * ) const")
   (("QMessageBox" . "QDialog")
    "new QMessageBox ( QWidget * = 0 )"
    "new QMessageBox ( Icon , const QString & , const QString & , StandardButtons = NoButton, QWidget * = 0, Qt::WindowFlags = Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint )"
@@ -2178,7 +1943,6 @@
    "StandardButtons standardButtons () const"
    "QString text () const"
    "Qt::TextFormat textFormat () const"
-   "virtual void setVisible ( bool )"
    "static void about ( QWidget * , const QString & , const QString & )"
    "static void aboutQt ( QWidget * , const QString & = QString() )"
    "static StandardButton critical ( QWidget * , const QString & , const QString & , StandardButtons = Ok, StandardButton = NoButton )"
@@ -2190,9 +1954,7 @@
    "void clear ()"
    "QVariant colorData () const"
    "QByteArray data ( const QString & ) const"
-   "virtual QStringList formats () const"
    "bool hasColor () const"
-   "virtual bool hasFormat ( const QString & ) const"
    "bool hasHtml () const"
    "bool hasImage () const"
    "bool hasText () const"
@@ -2211,19 +1973,7 @@
   (("QMotifStyle" . "QCommonStyle")
    "new QMotifStyle ( bool = false )"
    "void setUseHighlightColors ( bool )"
-   "bool useHighlightColors () const"
-   "virtual void drawComplexControl ( ComplexControl , const QStyleOptionComplex * , QPainter * , const QWidget * = 0 ) const"
-   "virtual void drawControl ( ControlElement , const QStyleOption * , QPainter * , const QWidget * = 0 ) const"
-   "virtual void drawPrimitive ( PrimitiveElement , const QStyleOption * , QPainter * , const QWidget * = 0 ) const"
-   "virtual bool event ( QEvent * )"
-   "virtual int pixelMetric ( PixelMetric , const QStyleOption * = 0, const QWidget * = 0 ) const"
-   "virtual void polish ( QPalette & )"
-   "virtual QSize sizeFromContents ( ContentsType , const QStyleOption * , const QSize & , const QWidget * = 0 ) const"
-   "virtual QPalette standardPalette () const"
-   "virtual QPixmap standardPixmap ( StandardPixmap , const QStyleOption * , const QWidget * = 0 ) const"
-   "virtual int styleHint ( StyleHint , const QStyleOption * = 0, const QWidget * = 0, QStyleHintReturn * = 0 ) const"
-   "virtual QRect subControlRect ( ComplexControl , const QStyleOptionComplex * , SubControl , const QWidget * = 0 ) const"
-   "virtual QRect subElementRect ( SubElement , const QStyleOption * , const QWidget * = 0 ) const")
+   "bool useHighlightColors () const")
   (("QMouseEventTransition" . "QEventTransition")
    "new QMouseEventTransition ( QState * = 0 )"
    "new QMouseEventTransition ( QObject * , QEvent::Type , Qt::MouseButton , QState * = 0 )"
@@ -2268,13 +2018,10 @@
    "void dumpObjectInfo ()"
    "void dumpObjectTree ()"
    "QList<QByteArray> dynamicPropertyNames () const"
-   "virtual bool event ( QEvent * )"
-   "virtual bool eventFilter ( QObject * , QEvent * )"
    "bool inherits ( const char * ) const"
    "void installEventFilter ( QObject * )"
    "bool isWidgetType () const"
    "void killTimer ( int )"
-   "virtual const QMetaObject * metaObject () const"
    "void moveToThread ( QThread * )"
    "QString objectName () const"
    "QObject * parent () const"
@@ -2286,6 +2033,8 @@
    "bool signalsBlocked () const"
    "int startTimer ( int )"
    "QThread * thread () const"
+   "protected int receivers ( const char * ) const"
+   "protected QObject * sender () const"
    "static bool connect ( const QObject * , const char * , const QObject * , const char * , Qt::ConnectionType = Qt::AutoConnection )"
    "static bool disconnect ( const QObject * , const char * , const QObject * , const char * )"
    "static const QMetaObject staticMetaObject"
@@ -2299,8 +2048,7 @@
    "QPrinter * printer ()"
    "void setOption ( PageSetupDialogOption , bool = true )"
    "void setOptions ( PageSetupDialogOptions )"
-   "bool testOption ( PageSetupDialogOption ) const"
-   "virtual void setVisible ( bool )")
+   "bool testOption ( PageSetupDialogOption ) const")
   (("QPanGesture" . "QGesture")
    "qreal acceleration () const"
    "QPointF delta () const"
@@ -2310,13 +2058,11 @@
    "void setLastOffset ( const QPointF & )"
    "void setOffset ( const QPointF & )")
   (("QParallelAnimationGroup" . "QAnimationGroup")
-   "new QParallelAnimationGroup ( QObject * = 0 )"
-   "virtual int duration () const")
+   "new QParallelAnimationGroup ( QObject * = 0 )")
   (("QPauseAnimation" . "QAbstractAnimation")
    "new QPauseAnimation ( QObject * = 0 )"
    "new QPauseAnimation ( int , QObject * = 0 )"
-   "void setDuration ( int )"
-   "virtual int duration () const")
+   "void setDuration ( int )")
   (("QPinchGesture" . "QGesture")
    "QPointF centerPoint () const"
    "ChangeFlags changeFlags () const"
@@ -2345,13 +2091,7 @@
    "int cursorWidth () const"
    "void ensureBlockLayout ( const QTextBlock & ) const"
    "void requestUpdate ()"
-   "void setCursorWidth ( int )"
-   "virtual QRectF blockBoundingRect ( const QTextBlock & ) const"
-   "virtual QSizeF documentSize () const"
-   "virtual void draw ( QPainter *, const PaintContext & )"
-   "virtual QRectF frameBoundingRect ( QTextFrame * ) const"
-   "virtual int hitTest ( const QPointF &, Qt::HitTestAccuracy ) const"
-   "virtual int pageCount () const")
+   "void setCursorWidth ( int )")
   (("QPlainTextEdit" . "QAbstractScrollArea")
    "new QPlainTextEdit ( QWidget * = 0 )"
    "new QPlainTextEdit ( const QString & , QWidget * = 0 )"
@@ -2373,7 +2113,6 @@
    "bool isReadOnly () const"
    "bool isUndoRedoEnabled () const"
    "LineWrapMode lineWrapMode () const"
-   "virtual QVariant loadResource ( int , const QUrl & )"
    "int maximumBlockCount () const"
    "void mergeCurrentCharFormat ( const QTextCharFormat & )"
    "void moveCursor ( QTextCursor::MoveOperation , QTextCursor::MoveMode = QTextCursor::MoveAnchor )"
@@ -2401,25 +2140,14 @@
    "QTextCursor textCursor () const"
    "Qt::TextInteractionFlags textInteractionFlags () const"
    "QString toPlainText () const"
-   "QTextOption::WrapMode wordWrapMode () const")
+   "QTextOption::WrapMode wordWrapMode () const"
+   "protected QRectF blockBoundingGeometry ( const QTextBlock & ) const"
+   "protected QRectF blockBoundingRect ( const QTextBlock & ) const"
+   "protected QPointF contentOffset () const"
+   "protected QTextBlock firstVisibleBlock () const"
+   "protected QAbstractTextDocumentLayout::PaintContext getPaintContext () const")
   (("QPlastiqueStyle" . "QWindowsStyle")
-   "new QPlastiqueStyle ()"
-   "virtual void drawComplexControl ( ComplexControl , const QStyleOptionComplex * , QPainter * , const QWidget * ) const"
-   "virtual void drawControl ( ControlElement , const QStyleOption * , QPainter * , const QWidget * ) const"
-   "virtual void drawPrimitive ( PrimitiveElement , const QStyleOption * , QPainter * , const QWidget * = 0 ) const"
-   "virtual SubControl hitTestComplexControl ( ComplexControl , const QStyleOptionComplex * , const QPoint & , const QWidget * = 0 ) const"
-   "virtual int pixelMetric ( PixelMetric , const QStyleOption * = 0, const QWidget * = 0 ) const"
-   "virtual void polish ( QWidget * )"
-   "virtual void polish ( QApplication * )"
-   "virtual void polish ( QPalette & )"
-   "virtual QSize sizeFromContents ( ContentsType , const QStyleOption * , const QSize & , const QWidget * ) const"
-   "virtual QPalette standardPalette () const"
-   "virtual QPixmap standardPixmap ( StandardPixmap , const QStyleOption * , const QWidget * = 0 ) const"
-   "virtual int styleHint ( StyleHint , const QStyleOption * = 0, const QWidget * = 0, QStyleHintReturn * = 0 ) const"
-   "virtual QRect subControlRect ( ComplexControl , const QStyleOptionComplex * , SubControl , const QWidget * ) const"
-   "virtual QRect subElementRect ( SubElement , const QStyleOption * , const QWidget * ) const"
-   "virtual void unpolish ( QWidget * )"
-   "virtual void unpolish ( QApplication * )")
+   "new QPlastiqueStyle ()")
   (("QPluginLoader" . "QObject")
    "new QPluginLoader ( QObject * = 0 )"
    "new QPluginLoader ( const QString & , QObject * = 0 )"
@@ -2441,17 +2169,12 @@
    "QPrinter * printer ()"
    "void setOption ( PrintDialogOption , bool = true )"
    "void setOptions ( PrintDialogOptions )"
-   "bool testOption ( PrintDialogOption ) const"
-   "virtual void done ( int )"
-   "virtual int exec ()"
-   "virtual void setVisible ( bool )")
+   "bool testOption ( PrintDialogOption ) const")
   (("QPrintPreviewDialog" . "QDialog")
    "new QPrintPreviewDialog ( QPrinter * , QWidget * = 0, Qt::WindowFlags = 0 )"
    "new QPrintPreviewDialog ( QWidget * = 0, Qt::WindowFlags = 0 )"
    "void open ( QObject * , const char * )"
-   "QPrinter * printer ()"
-   "virtual void done ( int )"
-   "virtual void setVisible ( bool )")
+   "QPrinter * printer ()")
   (("QPrintPreviewWidget" . "QWidget")
    "new QPrintPreviewWidget ( QPrinter * , QWidget * = 0, Qt::WindowFlags = 0 )"
    "new QPrintPreviewWidget ( QWidget * = 0, Qt::WindowFlags = 0 )"
@@ -2460,8 +2183,7 @@
    "int pageCount () const"
    "ViewMode viewMode () const"
    "qreal zoomFactor () const"
-   "ZoomMode zoomMode () const"
-   "virtual void setVisible ( bool )")
+   "ZoomMode zoomMode () const")
   (("QProcess" . "QIODevice")
    "new QProcess ( QObject * = 0 )"
    "void closeReadChannel ( ProcessChannel )"
@@ -2488,12 +2210,7 @@
    "bool waitForFinished ( int = 30000 )"
    "bool waitForStarted ( int = 30000 )"
    "QString workingDirectory () const"
-   "virtual bool atEnd () const"
-   "virtual bool canReadLine () const"
-   "virtual void close ()"
-   "virtual bool isSequential () const"
-   "virtual bool waitForBytesWritten ( int = 30000 )"
-   "virtual bool waitForReadyRead ( int = 30000 )"
+   "protected void setProcessState ( ProcessState )"
    "static int execute ( const QString & , const QStringList & )"
    "static int execute ( const QString & )"
    "static bool startDetached ( const QString & , const QStringList & )"
@@ -2513,11 +2230,9 @@
    "void setInvertedAppearance ( bool )"
    "void setTextDirection ( QProgressBar::Direction )"
    "void setTextVisible ( bool )"
-   "virtual QString text () const"
    "QProgressBar::Direction textDirection ()"
    "int value () const"
-   "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "protected void initStyleOption ( QStyleOptionProgressBar * ) const")
   (("QProgressDialog" . "QDialog")
    "new QProgressDialog ( QWidget * = 0, Qt::WindowFlags = 0 )"
    "new QProgressDialog ( const QString & , const QString & , int , int , QWidget * = 0, Qt::WindowFlags = 0 )"
@@ -2534,8 +2249,7 @@
    "void setCancelButton ( QPushButton * )"
    "void setLabel ( QLabel * )"
    "int value () const"
-   "bool wasCanceled () const"
-   "virtual QSize sizeHint () const")
+   "bool wasCanceled () const")
   (("QPropertyAnimation" . "QVariantAnimation")
    "new QPropertyAnimation ( QObject * = 0 )"
    "new QPropertyAnimation ( QObject * , const QByteArray & , QObject * = 0 )"
@@ -2555,18 +2269,16 @@
    "void setDefault ( bool )"
    "void setFlat ( bool )"
    "void setMenu ( QMenu * )"
-   "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "protected void initStyleOption ( QStyleOptionButton * ) const")
   (("QRadioButton" . "QAbstractButton")
    "new QRadioButton ( QWidget * = 0 )"
    "new QRadioButton ( const QString & , QWidget * = 0 )"
-   "virtual QSize sizeHint () const")
+   "protected void initStyleOption ( QStyleOptionButton * ) const")
   (("QRegExpValidator" . "QValidator")
    "new QRegExpValidator ( QObject * )"
    "new QRegExpValidator ( const QRegExp & , QObject * )"
    "const QRegExp & regExp () const"
-   "void setRegExp ( const QRegExp & )"
-   "virtual QValidator::State validate ( QString & , int & ) const")
+   "void setRegExp ( const QRegExp & )")
   (("QRubberBand" . "QWidget")
    "new QRubberBand ( Shape , QWidget * = 0 )"
    "void move ( int , int )"
@@ -2575,7 +2287,8 @@
    "void resize ( const QSize & )"
    "void setGeometry ( const QRect & )"
    "void setGeometry ( int , int , int , int )"
-   "Shape shape () const")
+   "Shape shape () const"
+   "protected void initStyleOption ( QStyleOptionRubberBand * ) const")
   (("QScrollArea" . "QAbstractScrollArea")
    "new QScrollArea ( QWidget * = 0 )"
    "Qt::Alignment alignment () const"
@@ -2586,20 +2299,16 @@
    "void setWidgetResizable ( bool )"
    "QWidget * takeWidget ()"
    "QWidget * widget () const"
-   "bool widgetResizable () const"
-   "virtual bool focusNextPrevChild ( bool )"
-   "virtual QSize sizeHint () const")
+   "bool widgetResizable () const")
   (("QScrollBar" . "QAbstractSlider")
    "new QScrollBar ( QWidget * = 0 )"
    "new QScrollBar ( Qt::Orientation , QWidget * = 0 )"
-   "virtual bool event ( QEvent * )"
-   "virtual QSize sizeHint () const")
+   "protected void initStyleOption ( QStyleOptionSlider * ) const")
   (("QSequentialAnimationGroup" . "QAnimationGroup")
    "new QSequentialAnimationGroup ( QObject * = 0 )"
    "QPauseAnimation * addPause ( int )"
    "QAbstractAnimation * currentAnimation () const"
-   "QPauseAnimation * insertPause ( int , int )"
-   "virtual int duration () const")
+   "QPauseAnimation * insertPause ( int , int )")
   (("QSessionManager" . "QObject")
    "bool allowsErrorInteraction ()"
    "bool allowsInteraction ()"
@@ -2678,9 +2387,7 @@
    "void setSignal ( const QByteArray & )"
    "QByteArray signal () const")
   (("QSizeGrip" . "QWidget")
-   "new QSizeGrip ( QWidget * )"
-   "virtual void setVisible ( bool )"
-   "virtual QSize sizeHint () const")
+   "new QSizeGrip ( QWidget * )")
   (("QSlider" . "QAbstractSlider")
    "new QSlider ( QWidget * = 0 )"
    "new QSlider ( Qt::Orientation , QWidget * = 0 )"
@@ -2688,9 +2395,7 @@
    "void setTickPosition ( TickPosition )"
    "int tickInterval () const"
    "TickPosition tickPosition () const"
-   "virtual bool event ( QEvent * )"
-   "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "protected void initStyleOption ( QStyleOptionSlider * ) const")
   (("QSortFilterProxyModel" . "QAbstractProxyModel")
    "new QSortFilterProxyModel ( QObject * = 0 )"
    "bool dynamicSortFilter () const"
@@ -2711,35 +2416,7 @@
    "int sortColumn () const"
    "Qt::SortOrder sortOrder () const"
    "int sortRole () const"
-   "virtual QModelIndex buddy ( const QModelIndex & ) const"
-   "virtual bool canFetchMore ( const QModelIndex & ) const"
-   "virtual int columnCount ( const QModelIndex & = QModelIndex() ) const"
-   "virtual QVariant data ( const QModelIndex & , int = Qt::DisplayRole ) const"
-   "virtual bool dropMimeData ( const QMimeData * , Qt::DropAction , int , int , const QModelIndex & )"
-   "virtual void fetchMore ( const QModelIndex & )"
-   "virtual Qt::ItemFlags flags ( const QModelIndex & ) const"
-   "virtual bool hasChildren ( const QModelIndex & = QModelIndex() ) const"
-   "virtual QVariant headerData ( int , Qt::Orientation , int = Qt::DisplayRole ) const"
-   "virtual QModelIndex index ( int , int , const QModelIndex & = QModelIndex() ) const"
-   "virtual bool insertColumns ( int , int , const QModelIndex & = QModelIndex() )"
-   "virtual bool insertRows ( int , int , const QModelIndex & = QModelIndex() )"
-   "virtual QModelIndex mapFromSource ( const QModelIndex & ) const"
-   "virtual QItemSelection mapSelectionFromSource ( const QItemSelection & ) const"
-   "virtual QItemSelection mapSelectionToSource ( const QItemSelection & ) const"
-   "virtual QModelIndex mapToSource ( const QModelIndex & ) const"
-   "virtual QModelIndexList match ( const QModelIndex & , int , const QVariant & , int = 1, Qt::MatchFlags = Qt::MatchFlags( Qt::MatchStartsWith | Qt::MatchWrap ) ) const"
-   "virtual QMimeData * mimeData ( const QModelIndexList & ) const"
-   "virtual QStringList mimeTypes () const"
-   "virtual QModelIndex parent ( const QModelIndex & ) const"
-   "virtual bool removeColumns ( int , int , const QModelIndex & = QModelIndex() )"
-   "virtual bool removeRows ( int , int , const QModelIndex & = QModelIndex() )"
-   "virtual int rowCount ( const QModelIndex & = QModelIndex() ) const"
-   "virtual bool setData ( const QModelIndex & , const QVariant & , int = Qt::EditRole )"
-   "virtual bool setHeaderData ( int , Qt::Orientation , const QVariant & , int = Qt::EditRole )"
-   "virtual void setSourceModel ( QAbstractItemModel * )"
-   "virtual void sort ( int , Qt::SortOrder = Qt::AscendingOrder )"
-   "virtual QSize span ( const QModelIndex & ) const"
-   "virtual Qt::DropActions supportedDropActions () const")
+   "protected void invalidateFilter ()")
   (("QSound" . "QObject")
    "new QSound ( const QString & , QObject * = 0 )"
    "QString fileName () const"
@@ -2794,14 +2471,16 @@
    "void setStretchFactor ( int , int )"
    "QList<int> sizes () const"
    "QWidget * widget ( int ) const"
-   "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "protected int closestLegalPosition ( int , int )"
+   "protected void moveSplitter ( int , int )"
+   "protected void setRubberBand ( int )")
   (("QSplitterHandle" . "QWidget")
    "bool opaqueResize () const"
    "Qt::Orientation orientation () const"
    "void setOrientation ( Qt::Orientation )"
    "QSplitter * splitter () const"
-   "virtual QSize sizeHint () const")
+   "protected int closestLegalPosition ( int )"
+   "protected void moveSplitter ( int )")
   (("QStackedLayout" . "QLayout")
    "new QStackedLayout ()"
    "new QStackedLayout ( QWidget * )"
@@ -2812,14 +2491,7 @@
    "int insertWidget ( int , QWidget * )"
    "void setStackingMode ( StackingMode )"
    "StackingMode stackingMode () const"
-   "QWidget * widget ( int ) const"
-   "virtual void addItem ( QLayoutItem * )"
-   "virtual int count () const"
-   "virtual QLayoutItem * itemAt ( int ) const"
-   "virtual QSize minimumSize () const"
-   "virtual void setGeometry ( const QRect & )"
-   "virtual QSize sizeHint () const"
-   "virtual QLayoutItem * takeAt ( int )")
+   "QWidget * widget ( int ) const")
   (("QStackedWidget" . "QFrame")
    "new QStackedWidget ( QWidget * = 0 )"
    "int addWidget ( QWidget * )"
@@ -2865,26 +2537,7 @@
    "QStandardItem * takeItem ( int , int = 0 )"
    "QList<QStandardItem *> takeRow ( int )"
    "QStandardItem * takeVerticalHeaderItem ( int )"
-   "QStandardItem * verticalHeaderItem ( int ) const"
-   "virtual int columnCount ( const QModelIndex & = QModelIndex() ) const"
-   "virtual QVariant data ( const QModelIndex & , int = Qt::DisplayRole ) const"
-   "virtual bool dropMimeData ( const QMimeData * , Qt::DropAction , int , int , const QModelIndex & )"
-   "virtual Qt::ItemFlags flags ( const QModelIndex & ) const"
-   "virtual bool hasChildren ( const QModelIndex & = QModelIndex() ) const"
-   "virtual QVariant headerData ( int , Qt::Orientation , int = Qt::DisplayRole ) const"
-   "virtual QModelIndex index ( int , int , const QModelIndex & = QModelIndex() ) const"
-   "virtual bool insertColumns ( int , int , const QModelIndex & = QModelIndex() )"
-   "virtual bool insertRows ( int , int , const QModelIndex & = QModelIndex() )"
-   "virtual QMimeData * mimeData ( const QModelIndexList & ) const"
-   "virtual QStringList mimeTypes () const"
-   "virtual QModelIndex parent ( const QModelIndex & ) const"
-   "virtual bool removeColumns ( int , int , const QModelIndex & = QModelIndex() )"
-   "virtual bool removeRows ( int , int , const QModelIndex & = QModelIndex() )"
-   "virtual int rowCount ( const QModelIndex & = QModelIndex() ) const"
-   "virtual bool setData ( const QModelIndex & , const QVariant & , int = Qt::EditRole )"
-   "virtual bool setHeaderData ( int , Qt::Orientation , const QVariant & , int = Qt::EditRole )"
-   "virtual void sort ( int , Qt::SortOrder = Qt::AscendingOrder )"
-   "virtual Qt::DropActions supportedDropActions () const")
+   "QStandardItem * verticalHeaderItem ( int ) const")
   (("QState" . "QAbstractState")
    "new QState ( QState * = 0 )"
    "new QState ( ChildMode , QState * = 0 )"
@@ -2916,8 +2569,7 @@
    "void removeDefaultAnimation ( QAbstractAnimation * )"
    "void removeState ( QAbstractState * )"
    "void setAnimated ( bool )"
-   "void setGlobalRestorePolicy ( QStateMachine::RestorePolicy )"
-   "virtual bool eventFilter ( QObject * , QEvent * )")
+   "void setGlobalRestorePolicy ( QStateMachine::RestorePolicy )")
   (("QStatusBar" . "QWidget")
    "new QStatusBar ( QWidget * = 0 )"
    "void addPermanentWidget ( QWidget * , int = 0 )"
@@ -2927,45 +2579,19 @@
    "int insertWidget ( int , QWidget * , int = 0 )"
    "bool isSizeGripEnabled () const"
    "void removeWidget ( QWidget * )"
-   "void setSizeGripEnabled ( bool )")
+   "void setSizeGripEnabled ( bool )"
+   "protected void hideOrShow ()"
+   "protected void reformat ()")
   (("QStringListModel" . "QAbstractListModel")
    "new QStringListModel ( QObject * = 0 )"
    "new QStringListModel ( const QStringList & , QObject * = 0 )"
    "void setStringList ( const QStringList & )"
-   "QStringList stringList () const"
-   "virtual QVariant data ( const QModelIndex & , int ) const"
-   "virtual Qt::ItemFlags flags ( const QModelIndex & ) const"
-   "virtual bool insertRows ( int , int , const QModelIndex & = QModelIndex() )"
-   "virtual bool removeRows ( int , int , const QModelIndex & = QModelIndex() )"
-   "virtual int rowCount ( const QModelIndex & = QModelIndex() ) const"
-   "virtual bool setData ( const QModelIndex & , const QVariant & , int = Qt::EditRole )"
-   "virtual void sort ( int , Qt::SortOrder = Qt::AscendingOrder )"
-   "virtual Qt::DropActions supportedDropActions () const")
+   "QStringList stringList () const")
   (("QStyle" . "QObject")
    "int combinedLayoutSpacing ( QSizePolicy::ControlTypes , QSizePolicy::ControlTypes , Qt::Orientation , QStyleOption * = 0, QWidget * = 0 ) const"
-   "virtual void drawComplexControl ( ComplexControl , const QStyleOptionComplex * , QPainter * , const QWidget * = 0 ) const = 0"
-   "virtual void drawControl ( ControlElement , const QStyleOption * , QPainter * , const QWidget * = 0 ) const = 0"
-   "virtual void drawItemPixmap ( QPainter * , const QRect & , int , const QPixmap & ) const"
-   "virtual void drawItemText ( QPainter * , const QRect & , int , const QPalette & , bool , const QString & , QPalette::ColorRole = QPalette::NoRole ) const"
-   "virtual void drawPrimitive ( PrimitiveElement , const QStyleOption * , QPainter * , const QWidget * = 0 ) const = 0"
-   "virtual QPixmap generatedIconPixmap ( QIcon::Mode , const QPixmap & , const QStyleOption * ) const = 0"
-   "virtual SubControl hitTestComplexControl ( ComplexControl , const QStyleOptionComplex * , const QPoint & , const QWidget * = 0 ) const = 0"
-   "virtual QRect itemPixmapRect ( const QRect & , int , const QPixmap & ) const"
-   "virtual QRect itemTextRect ( const QFontMetrics & , const QRect & , int , bool , const QString & ) const"
    "int layoutSpacing ( QSizePolicy::ControlType , QSizePolicy::ControlType , Qt::Orientation , const QStyleOption * = 0, const QWidget * = 0 ) const"
-   "virtual int pixelMetric ( PixelMetric , const QStyleOption * = 0, const QWidget * = 0 ) const = 0"
-   "virtual void polish ( QWidget * )"
-   "virtual void polish ( QApplication * )"
-   "virtual void polish ( QPalette & )"
    "const QStyle * proxy () const"
-   "virtual QSize sizeFromContents ( ContentsType , const QStyleOption * , const QSize & , const QWidget * = 0 ) const = 0"
    "QIcon standardIcon ( StandardPixmap , const QStyleOption * = 0, const QWidget * = 0 ) const"
-   "virtual QPalette standardPalette () const"
-   "virtual int styleHint ( StyleHint , const QStyleOption * = 0, const QWidget * = 0, QStyleHintReturn * = 0 ) const = 0"
-   "virtual QRect subControlRect ( ComplexControl , const QStyleOptionComplex * , SubControl , const QWidget * = 0 ) const = 0"
-   "virtual QRect subElementRect ( SubElement , const QStyleOption * , const QWidget * = 0 ) const = 0"
-   "virtual void unpolish ( QWidget * )"
-   "virtual void unpolish ( QApplication * )"
    "static QRect alignedRect ( Qt::LayoutDirection , Qt::Alignment , const QSize & , const QRect & )"
    "static int sliderPositionFromValue ( int , int , int , int , bool = false )"
    "static int sliderValueFromPosition ( int , int , int , int , bool = false )"
@@ -2974,15 +2600,8 @@
    "static QRect visualRect ( Qt::LayoutDirection , const QRect & , const QRect & )")
   (("QStyledItemDelegate" . "QAbstractItemDelegate")
    "new QStyledItemDelegate ( QObject * = 0 )"
-   "virtual QString displayText ( const QVariant & , const QLocale & ) const"
    "QItemEditorFactory * itemEditorFactory () const"
-   "void setItemEditorFactory ( QItemEditorFactory * )"
-   "virtual QWidget * createEditor ( QWidget * , const QStyleOptionViewItem & , const QModelIndex & ) const"
-   "virtual void paint ( QPainter * , const QStyleOptionViewItem & , const QModelIndex & ) const"
-   "virtual void setEditorData ( QWidget * , const QModelIndex & ) const"
-   "virtual void setModelData ( QWidget * , QAbstractItemModel * , const QModelIndex & ) const"
-   "virtual QSize sizeHint ( const QStyleOptionViewItem & , const QModelIndex & ) const"
-   "virtual void updateEditorGeometry ( QWidget * , const QStyleOptionViewItem & , const QModelIndex & ) const")
+   "void setItemEditorFactory ( QItemEditorFactory * )")
   (("QSwipeGesture" . "QGesture")
    "SwipeDirection horizontalDirection () const"
    "void setSwipeAngle ( qreal )"
@@ -2993,7 +2612,17 @@
    "new QSyntaxHighlighter ( QTextDocument * )"
    "new QSyntaxHighlighter ( QTextEdit * )"
    "QTextDocument * document () const"
-   "void setDocument ( QTextDocument * )")
+   "void setDocument ( QTextDocument * )"
+   "protected QTextBlock currentBlock () const"
+   "protected int currentBlockState () const"
+   "protected QTextBlockUserData * currentBlockUserData () const"
+   "protected QTextCharFormat format ( int ) const"
+   "protected int previousBlockState () const"
+   "protected void setCurrentBlockState ( int )"
+   "protected void setCurrentBlockUserData ( QTextBlockUserData * )"
+   "protected void setFormat ( int , int , const QTextCharFormat & )"
+   "protected void setFormat ( int , int , const QColor & )"
+   "protected void setFormat ( int , int , const QFont & )")
   (("QSystemTrayIcon" . "QObject")
    "new QSystemTrayIcon ( QObject * = 0 )"
    "new QSystemTrayIcon ( const QIcon & , QObject * = 0 )"
@@ -3056,8 +2685,7 @@
    "QString tabWhatsThis ( int ) const"
    "bool tabsClosable () const"
    "bool usesScrollButtons () const"
-   "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "protected void initStyleOption ( QStyleOptionTab * , int ) const")
   (("QTabWidget" . "QWidget")
    "new QTabWidget ( QWidget * = 0 )"
    "int addTab ( QWidget * , const QString & )"
@@ -3099,8 +2727,9 @@
    "bool tabsClosable () const"
    "bool usesScrollButtons () const"
    "QWidget * widget ( int ) const"
-   "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "protected void initStyleOption ( QStyleOptionTabWidgetFrame * ) const"
+   "protected void setTabBar ( QTabBar * )"
+   "protected QTabBar * tabBar () const")
   (("QTableView" . "QAbstractItemView")
    "new QTableView ( QWidget * = 0 )"
    "void clearSpans ()"
@@ -3132,11 +2761,7 @@
    "bool showGrid () const"
    "void sortByColumn ( int , Qt::SortOrder )"
    "QHeaderView * verticalHeader () const"
-   "bool wordWrap () const"
-   "virtual QModelIndex indexAt ( const QPoint & ) const"
-   "virtual void setModel ( QAbstractItemModel * )"
-   "virtual void setRootIndex ( const QModelIndex & )"
-   "virtual void setSelectionModel ( QItemSelectionModel * )")
+   "bool wordWrap () const")
   (("QTableWidget" . "QTableView")
    "new QTableWidget ( QWidget * = 0 )"
    "new QTableWidget ( int , int , QWidget * = 0 )"
@@ -3181,14 +2806,19 @@
    "QTableWidgetItem * verticalHeaderItem ( int ) const"
    "int visualColumn ( int ) const"
    "QRect visualItemRect ( const QTableWidgetItem * ) const"
-   "int visualRow ( int ) const")
+   "int visualRow ( int ) const"
+   "protected QModelIndex indexFromItem ( QTableWidgetItem * ) const"
+   "protected QTableWidgetItem * itemFromIndex ( const QModelIndex & ) const"
+   "protected QList<QTableWidgetItem *> items ( const QMimeData * ) const")
   (("QTapAndHoldGesture" . "QGesture")
    "QPointF position () const"
    "void setPosition ( const QPointF & )")
   (("QTapGesture" . "QGesture")
    "QPointF position () const"
    "void setPosition ( const QPointF & )")
-  (("QTextBlockGroup" . "QTextObject"))
+  (("QTextBlockGroup" . "QTextObject")
+   "new QTextBlockGroup ( QTextDocument * )"
+   "protected QList<QTextBlock> blockList () const")
   (("QTextBrowser" . "QTextEdit")
    "new QTextBrowser ( QWidget * = 0 )"
    "int backwardHistoryCount () const"
@@ -3204,8 +2834,7 @@
    "void setOpenExternalLinks ( bool )"
    "void setOpenLinks ( bool )"
    "void setSearchPaths ( const QStringList & )"
-   "QUrl source () const"
-   "virtual QVariant loadResource ( int , const QUrl & )")
+   "QUrl source () const")
   (("QTextDocument" . "QObject")
    "new QTextDocument ( QObject * = 0 )"
    "new QTextDocument ( const QString & , QObject * = 0 )"
@@ -3218,7 +2847,6 @@
    "int blockCount () const"
    "QChar characterAt ( int ) const"
    "int characterCount () const"
-   "virtual void clear ()"
    "QTextDocument * clone ( QObject * = 0 ) const"
    "QFont defaultFont () const"
    "QString defaultStyleSheet () const"
@@ -3305,7 +2933,6 @@
    "bool isUndoRedoEnabled () const"
    "int lineWrapColumnOrWidth () const"
    "LineWrapMode lineWrapMode () const"
-   "virtual QVariant loadResource ( int , const QUrl & )"
    "void mergeCurrentCharFormat ( const QTextCharFormat & )"
    "void moveCursor ( QTextCursor::MoveOperation , QTextCursor::MoveMode = QTextCursor::MoveAnchor )"
    "bool overwriteMode () const"
@@ -3359,7 +2986,9 @@
    "QTextDocument * document () const"
    "QTextFormat format () const"
    "int formatIndex () const"
-   "int objectIndex () const")
+   "int objectIndex () const"
+   "new QTextObject ( QTextDocument * )"
+   "protected void setFormat ( const QTextFormat & )")
   (("QTextTable" . "QTextFrame")
    "void appendColumns ( int )"
    "void appendRows ( int )"
@@ -3390,6 +3019,7 @@
    "void setStackSize ( uint )"
    "uint stackSize () const"
    "bool wait ( unsigned long = ULONG_MAX )"
+   "protected int exec ()"
    "static QThread * currentThread ()"
    "static int idealThreadCount ()"
    "static void yieldCurrentThread ()")
@@ -3432,8 +3062,7 @@
    "void setUpdateInterval ( int )"
    "int startFrame () const"
    "State state () const"
-   "int updateInterval () const"
-   "virtual qreal valueForTime ( int ) const")
+   "int updateInterval () const")
   (("QTimer" . "QObject")
    "new QTimer ( QObject * = 0 )"
    "int interval () const"
@@ -3502,14 +3131,11 @@
    "void setMenu ( QMenu * )"
    "void setPopupMode ( ToolButtonPopupMode )"
    "Qt::ToolButtonStyle toolButtonStyle () const"
-   "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "protected void initStyleOption ( QStyleOptionToolButton * ) const")
   (("QTranslator" . "QObject")
    "new QTranslator ( QObject * = 0 )"
-   "virtual bool isEmpty () const"
    "bool load ( const QString & , const QString & = QString(), const QString & = QString(), const QString & = QString() )"
    "bool load ( const uchar * , int )"
-   "virtual QString translate ( const char * , const char * , const char * = 0 ) const"
    "QString translate ( const char * , const char * , const char * , int ) const")
   (("QTreeView" . "QAbstractItemView")
    "new QTreeView ( QWidget * = 0 )"
@@ -3552,16 +3178,9 @@
    "void sortByColumn ( int , Qt::SortOrder )"
    "bool uniformRowHeights () const"
    "bool wordWrap () const"
-   "virtual void dataChanged ( const QModelIndex & , const QModelIndex & )"
-   "virtual QModelIndex indexAt ( const QPoint & ) const"
-   "virtual void keyboardSearch ( const QString & )"
-   "virtual void reset ()"
-   "virtual void scrollTo ( const QModelIndex & , ScrollHint = EnsureVisible )"
-   "virtual void selectAll ()"
-   "virtual void setModel ( QAbstractItemModel * )"
-   "virtual void setRootIndex ( const QModelIndex & )"
-   "virtual void setSelectionModel ( QItemSelectionModel * )"
-   "virtual QRect visualRect ( const QModelIndex & ) const")
+   "protected void drawTree ( QPainter * , const QRegion & ) const"
+   "protected int indexRowSizeHint ( const QModelIndex & ) const"
+   "protected int rowHeight ( const QModelIndex & ) const")
   (("QTreeWidget" . "QTreeView")
    "new QTreeWidget ( QWidget * = 0 )"
    "void addTopLevelItem ( QTreeWidgetItem * )"
@@ -3601,7 +3220,8 @@
    "QTreeWidgetItem * topLevelItem ( int ) const"
    "int topLevelItemCount () const"
    "QRect visualItemRect ( const QTreeWidgetItem * ) const"
-   "virtual void setSelectionModel ( QItemSelectionModel * )")
+   "protected QModelIndex indexFromItem ( QTreeWidgetItem * , int = 0 ) const"
+   "protected QTreeWidgetItem * itemFromIndex ( const QModelIndex & ) const")
   (("QUndoGroup" . "QObject")
    "new QUndoGroup ( QObject * = 0 )"
    "QUndoStack * activeStack () const"
@@ -3650,10 +3270,9 @@
    "new QVBoxLayout ()"
    "new QVBoxLayout ( QWidget * )")
   (("QValidator" . "QObject")
-   "virtual void fixup ( QString & ) const"
+   "new QValidator ( QObject * = 0 )"
    "QLocale locale () const"
-   "void setLocale ( const QLocale & )"
-   "virtual State validate ( QString & , int & ) const = 0")
+   "void setLocale ( const QLocale & )")
   (("QVariantAnimation" . "QAbstractAnimation")
    "new QVariantAnimation ( QObject * = 0 )"
    "QVariant currentValue () const"
@@ -3664,8 +3283,7 @@
    "void setEasingCurve ( const QEasingCurve & )"
    "void setEndValue ( const QVariant & )"
    "void setStartValue ( const QVariant & )"
-   "QVariant startValue () const"
-   "virtual int duration () const")
+   "QVariant startValue () const")
   (("QWidget" . "QObject")
    "new QWidget ( QWidget * = 0, Qt::WindowFlags = 0 )"
    "bool acceptDrops () const"
@@ -3709,10 +3327,8 @@
    "bool hasFocus () const"
    "bool hasMouseTracking () const"
    "int height () const"
-   "virtual int heightForWidth ( int ) const"
    "QInputContext * inputContext ()"
    "Qt::InputMethodHints inputMethodHints () const"
-   "virtual QVariant inputMethodQuery ( Qt::InputMethodQuery ) const"
    "void insertAction ( QAction * , QAction * )"
    "void insertActions ( QAction * , QList<QAction *> )"
    "bool isActiveWindow () const"
@@ -3743,7 +3359,6 @@
    "int maximumWidth () const"
    "int minimumHeight () const"
    "QSize minimumSize () const"
-   "virtual QSize minimumSizeHint () const"
    "int minimumWidth () const"
    "void move ( const QPoint & )"
    "void move ( int , int )"
@@ -3832,7 +3447,6 @@
    "void setWindowRole ( const QString & )"
    "void setWindowState ( Qt::WindowStates )"
    "QSize size () const"
-   "virtual QSize sizeHint () const"
    "QSize sizeIncrement () const"
    "QSizePolicy sizePolicy () const"
    "void stackUnder ( QWidget * )"
@@ -3867,6 +3481,9 @@
    "Qt::WindowType windowType () const"
    "int x () const"
    "int y () const"
+   "protected void destroy ( bool = true, bool = true )"
+   "protected bool focusNextChild ()"
+   "protected bool focusPreviousChild ()"
    "static QWidget * keyboardGrabber ()"
    "static QWidget * mouseGrabber ()"
    "static void setTabOrder ( QWidget * , QWidget * )")
@@ -3875,22 +3492,10 @@
    "QWidget * defaultWidget () const"
    "void releaseWidget ( QWidget * )"
    "QWidget * requestWidget ( QWidget * )"
-   "void setDefaultWidget ( QWidget * )")
+   "void setDefaultWidget ( QWidget * )"
+   "protected QList<QWidget *> createdWidgets () const")
   (("QWindowsStyle" . "QCommonStyle")
-   "new QWindowsStyle ()"
-   "virtual void drawComplexControl ( ComplexControl , const QStyleOptionComplex * , QPainter * , const QWidget * = 0 ) const"
-   "virtual void drawControl ( ControlElement , const QStyleOption * , QPainter * , const QWidget * = 0 ) const"
-   "virtual void drawPrimitive ( PrimitiveElement , const QStyleOption * , QPainter * , const QWidget * = 0 ) const"
-   "virtual int pixelMetric ( PixelMetric , const QStyleOption * = 0, const QWidget * = 0 ) const"
-   "virtual void polish ( QApplication * )"
-   "virtual void polish ( QWidget * )"
-   "virtual void polish ( QPalette & )"
-   "virtual QSize sizeFromContents ( ContentsType , const QStyleOption * , const QSize & , const QWidget * = 0 ) const"
-   "virtual QPixmap standardPixmap ( StandardPixmap , const QStyleOption * , const QWidget * = 0 ) const"
-   "virtual int styleHint ( StyleHint , const QStyleOption * = 0, const QWidget * = 0, QStyleHintReturn * = 0 ) const"
-   "virtual QRect subElementRect ( SubElement , const QStyleOption * , const QWidget * = 0 ) const"
-   "virtual void unpolish ( QApplication * )"
-   "virtual void unpolish ( QWidget * )")
+   "new QWindowsStyle ()")
   (("QWizard" . "QDialog")
    "new QWizard ( QWidget * = 0, Qt::WindowFlags = 0 )"
    "int addPage ( QWizardPage * )"
@@ -3900,7 +3505,6 @@
    "QWizardPage * currentPage () const"
    "QVariant field ( const QString & ) const"
    "bool hasVisitedPage ( int ) const"
-   "virtual int nextId () const"
    "WizardOptions options () const"
    "QWizardPage * page ( int ) const"
    "QList<int> pageIds () const"
@@ -3922,20 +3526,13 @@
    "Qt::TextFormat subTitleFormat () const"
    "bool testOption ( WizardOption ) const"
    "Qt::TextFormat titleFormat () const"
-   "virtual bool validateCurrentPage ()"
    "QList<int> visitedPages () const"
-   "WizardStyle wizardStyle () const"
-   "virtual void setVisible ( bool )"
-   "virtual QSize sizeHint () const")
+   "WizardStyle wizardStyle () const")
   (("QWizardPage" . "QWidget")
    "new QWizardPage ( QWidget * = 0 )"
    "QString buttonText ( QWizard::WizardButton ) const"
-   "virtual void cleanupPage ()"
-   "virtual void initializePage ()"
    "bool isCommitPage () const"
-   "virtual bool isComplete () const"
    "bool isFinalPage () const"
-   "virtual int nextId () const"
    "QPixmap pixmap ( QWizard::WizardPixmap ) const"
    "void setButtonText ( QWizard::WizardButton , const QString & )"
    "void setCommitPage ( bool )"
@@ -3945,7 +3542,10 @@
    "void setTitle ( const QString & )"
    "QString subTitle () const"
    "QString title () const"
-   "virtual bool validatePage ()")
+   "protected QVariant field ( const QString & ) const"
+   "protected void registerField ( const QString & , QWidget * , const char * = 0, const char * = 0 )"
+   "protected void setField ( const QString & , const QVariant & )"
+   "protected QWizard * wizard () const")
   (("QWorkspace" . "QWidget")
    "new QWorkspace ( QWidget * = 0 )"
    "QWidget * activeWindow () const"
@@ -3954,6 +3554,5 @@
    "bool scrollBarsEnabled () const"
    "void setBackground ( const QBrush & )"
    "void setScrollBarsEnabled ( bool )"
-   "QWidgetList windowList ( WindowOrder = CreationOrder ) const"
-   "virtual QSize sizeHint () const")
+   "QWidgetList windowList ( WindowOrder = CreationOrder ) const")
 ))

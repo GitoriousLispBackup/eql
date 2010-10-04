@@ -82,7 +82,8 @@
    "virtual void invalidate ()"
    "virtual QGraphicsLayoutItem * itemAt ( int ) const"
    "virtual void removeAt ( int )"
-   "virtual void setGeometry ( const QRectF & )")
+   "virtual void setGeometry ( const QRectF & )"
+   "virtual QSizeF sizeHint ( Qt::SizeHint , const QSizeF & = QSizeF() ) const")
   (("QGraphicsEllipseItem" . "QAbstractGraphicsShapeItem")
    "virtual QRectF boundingRect () const"
    "virtual bool contains ( const QPointF & ) const"
@@ -109,28 +110,28 @@
    "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * = 0 ) = 0"
    "virtual QPainterPath shape () const"
    "virtual int type () const"
-   "protected virtual void contextMenuEvent ( QGraphicsSceneContextMenuEvent * )"
-   "protected virtual void dragEnterEvent ( QGraphicsSceneDragDropEvent * )"
-   "protected virtual void dragLeaveEvent ( QGraphicsSceneDragDropEvent * )"
-   "protected virtual void dragMoveEvent ( QGraphicsSceneDragDropEvent * )"
-   "protected virtual void dropEvent ( QGraphicsSceneDragDropEvent * )"
-   "protected virtual void focusInEvent ( QFocusEvent * )"
-   "protected virtual void focusOutEvent ( QFocusEvent * )"
-   "protected virtual void hoverEnterEvent ( QGraphicsSceneHoverEvent * )"
-   "protected virtual void hoverLeaveEvent ( QGraphicsSceneHoverEvent * )"
-   "protected virtual void hoverMoveEvent ( QGraphicsSceneHoverEvent * )"
-   "protected virtual void inputMethodEvent ( QInputMethodEvent * )"
-   "protected virtual QVariant inputMethodQuery ( Qt::InputMethodQuery ) const"
-   "protected virtual QVariant itemChange ( GraphicsItemChange , const QVariant & )"
-   "protected virtual void keyPressEvent ( QKeyEvent * )"
-   "protected virtual void keyReleaseEvent ( QKeyEvent * )"
-   "protected virtual void mouseDoubleClickEvent ( QGraphicsSceneMouseEvent * )"
-   "protected virtual void mouseMoveEvent ( QGraphicsSceneMouseEvent * )"
-   "protected virtual void mousePressEvent ( QGraphicsSceneMouseEvent * )"
-   "protected virtual void mouseReleaseEvent ( QGraphicsSceneMouseEvent * )"
-   "protected virtual bool sceneEvent ( QEvent * )"
-   "protected virtual bool sceneEventFilter ( QGraphicsItem * , QEvent * )"
-   "protected virtual void wheelEvent ( QGraphicsSceneWheelEvent * )")
+   "virtual void contextMenuEvent ( QGraphicsSceneContextMenuEvent * )"
+   "virtual void dragEnterEvent ( QGraphicsSceneDragDropEvent * )"
+   "virtual void dragLeaveEvent ( QGraphicsSceneDragDropEvent * )"
+   "virtual void dragMoveEvent ( QGraphicsSceneDragDropEvent * )"
+   "virtual void dropEvent ( QGraphicsSceneDragDropEvent * )"
+   "virtual void focusInEvent ( QFocusEvent * )"
+   "virtual void focusOutEvent ( QFocusEvent * )"
+   "virtual void hoverEnterEvent ( QGraphicsSceneHoverEvent * )"
+   "virtual void hoverLeaveEvent ( QGraphicsSceneHoverEvent * )"
+   "virtual void hoverMoveEvent ( QGraphicsSceneHoverEvent * )"
+   "virtual void inputMethodEvent ( QInputMethodEvent * )"
+   "virtual QVariant inputMethodQuery ( Qt::InputMethodQuery ) const"
+   "virtual QVariant itemChange ( GraphicsItemChange , const QVariant & )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void keyReleaseEvent ( QKeyEvent * )"
+   "virtual void mouseDoubleClickEvent ( QGraphicsSceneMouseEvent * )"
+   "virtual void mouseMoveEvent ( QGraphicsSceneMouseEvent * )"
+   "virtual void mousePressEvent ( QGraphicsSceneMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QGraphicsSceneMouseEvent * )"
+   "virtual bool sceneEvent ( QEvent * )"
+   "virtual bool sceneEventFilter ( QGraphicsItem * , QEvent * )"
+   "virtual void wheelEvent ( QGraphicsSceneWheelEvent * )")
   (("QGraphicsItemGroup" . "QGraphicsItem")
    "virtual QRectF boundingRect () const"
    "virtual bool isObscuredBy ( const QGraphicsItem * ) const"
@@ -147,7 +148,7 @@
   (("QGraphicsLayoutItem" . NIL)
    "virtual void setGeometry ( const QRectF & )"
    "virtual void updateGeometry ()"
-   "protected virtual QSizeF sizeHint ( Qt::SizeHint , const QSizeF & = QSizeF() ) const = 0")
+   "virtual QSizeF sizeHint ( Qt::SizeHint , const QSizeF & = QSizeF() ) const = 0")
   (("QGraphicsLineItem" . "QGraphicsItem")
    "virtual QRectF boundingRect () const"
    "virtual bool contains ( const QPointF & ) const"
@@ -258,7 +259,7 @@
   (("QMutex" . NIL))
   (("QMutexLocker" . NIL))
   (("QPaintDevice" . NIL)
-   "protected virtual int metric ( PaintDeviceMetric ) const")
+   "virtual int metric ( PaintDeviceMetric ) const")
   (("QPaintEvent" . "QEvent"))
   (("QPainter" . NIL))
   (("QPainterPath" . NIL))
@@ -310,14 +311,15 @@
   (("QTabletEvent" . "QInputEvent"))
   (("QTextBlock" . NIL))
   (("QTextBlockFormat" . "QTextFormat"))
+  (("QTextBlockUserData" . NIL))
   (("QTextBoundaryFinder" . NIL))
   (("QTextCharFormat" . "QTextFormat"))
   (("QTextCodec" . NIL)
    "virtual QList<QByteArray> aliases () const"
    "virtual int mibEnum () const = 0"
    "virtual QByteArray name () const = 0"
-   "protected virtual QByteArray convertFromUnicode ( const QChar * , int , ConverterState * ) const = 0"
-   "protected virtual QString convertToUnicode ( const char * , int , ConverterState * ) const = 0")
+   "virtual QByteArray convertFromUnicode ( const QChar * , int , ConverterState * ) const = 0"
+   "virtual QString convertToUnicode ( const char * , int , ConverterState * ) const = 0")
   (("QTextCursor" . NIL))
   (("QTextDecoder" . NIL))
   (("QTextDocumentFragment" . NIL))

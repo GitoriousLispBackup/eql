@@ -1,13 +1,25 @@
 (defparameter *q-override* '(
   (("QAbstractAnimation" . "QObject")
    "virtual int duration () const = 0"
-   "protected virtual void updateCurrentTime ( int ) = 0"
-   "protected virtual void updateDirection ( QAbstractAnimation::Direction )"
-   "protected virtual void updateState ( QAbstractAnimation::State , QAbstractAnimation::State )")
+   "virtual void updateCurrentTime ( int ) = 0"
+   "virtual void updateDirection ( QAbstractAnimation::Direction )"
+   "virtual void updateState ( QAbstractAnimation::State , QAbstractAnimation::State )"
+   "virtual bool event ( QEvent * )")
   (("QAbstractButton" . "QWidget")
-   "protected virtual void checkStateSet ()"
-   "protected virtual bool hitButton ( const QPoint & ) const"
-   "protected virtual void nextCheckState ()")
+   "virtual void checkStateSet ()"
+   "virtual bool hitButton ( const QPoint & ) const"
+   "virtual void nextCheckState ()"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual void focusInEvent ( QFocusEvent * )"
+   "virtual void focusOutEvent ( QFocusEvent * )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void keyReleaseEvent ( QKeyEvent * )"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void paintEvent ( QPaintEvent * ) = 0"
+   "virtual void timerEvent ( QTimerEvent * )")
   (("QAbstractItemDelegate" . "QObject")
    "virtual QWidget * createEditor ( QWidget * , const QStyleOptionViewItem & , const QModelIndex & ) const"
    "virtual bool editorEvent ( QEvent * , QAbstractItemModel * , const QStyleOptionViewItem & , const QModelIndex & )"
@@ -50,18 +62,35 @@
    "virtual int sizeHintForColumn ( int ) const"
    "virtual int sizeHintForRow ( int ) const"
    "virtual QRect visualRect ( const QModelIndex & ) const = 0"
+   "virtual bool edit ( const QModelIndex & , EditTrigger , QEvent * )"
+   "virtual int horizontalOffset () const = 0"
+   "virtual bool isIndexHidden ( const QModelIndex & ) const = 0"
+   "virtual QModelIndex moveCursor ( CursorAction , Qt::KeyboardModifiers ) = 0"
+   "virtual QModelIndexList selectedIndexes () const"
+   "virtual QItemSelectionModel::SelectionFlags selectionCommand ( const QModelIndex & , const QEvent * = 0 ) const"
+   "virtual void setSelection ( const QRect & , QItemSelectionModel::SelectionFlags ) = 0"
+   "virtual void startDrag ( Qt::DropActions )"
+   "virtual int verticalOffset () const = 0"
+   "virtual QStyleOptionViewItem viewOptions () const"
+   "virtual QRegion visualRegionForSelection ( const QItemSelection & ) const = 0"
    "virtual QVariant inputMethodQuery ( Qt::InputMethodQuery ) const"
-   "protected virtual bool edit ( const QModelIndex & , EditTrigger , QEvent * )"
-   "protected virtual int horizontalOffset () const = 0"
-   "protected virtual bool isIndexHidden ( const QModelIndex & ) const = 0"
-   "protected virtual QModelIndex moveCursor ( CursorAction , Qt::KeyboardModifiers ) = 0"
-   "protected virtual QModelIndexList selectedIndexes () const"
-   "protected virtual QItemSelectionModel::SelectionFlags selectionCommand ( const QModelIndex & , const QEvent * = 0 ) const"
-   "protected virtual void setSelection ( const QRect & , QItemSelectionModel::SelectionFlags ) = 0"
-   "protected virtual void startDrag ( Qt::DropActions )"
-   "protected virtual int verticalOffset () const = 0"
-   "protected virtual QStyleOptionViewItem viewOptions () const"
-   "protected virtual QRegion visualRegionForSelection ( const QItemSelection & ) const = 0")
+   "virtual void dragEnterEvent ( QDragEnterEvent * )"
+   "virtual void dragLeaveEvent ( QDragLeaveEvent * )"
+   "virtual void dragMoveEvent ( QDragMoveEvent * )"
+   "virtual void dropEvent ( QDropEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual void focusInEvent ( QFocusEvent * )"
+   "virtual bool focusNextPrevChild ( bool )"
+   "virtual void focusOutEvent ( QFocusEvent * )"
+   "virtual void inputMethodEvent ( QInputMethodEvent * )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void mouseDoubleClickEvent ( QMouseEvent * )"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void timerEvent ( QTimerEvent * )"
+   "virtual bool viewportEvent ( QEvent * )")
   (("QAbstractListModel" . "QAbstractItemModel")
    "virtual bool dropMimeData ( const QMimeData * , Qt::DropAction , int , int , const QModelIndex & )"
    "virtual QModelIndex index ( int , int = 0, const QModelIndex & = QModelIndex() ) const")
@@ -81,24 +110,60 @@
    "virtual bool setHeaderData ( int , Qt::Orientation , const QVariant & , int = Qt::EditRole )"
    "virtual bool submit ()")
   (("QAbstractScrollArea" . "QFrame")
+   "virtual void scrollContentsBy ( int , int )"
+   "virtual bool viewportEvent ( QEvent * )"
    "virtual QSize minimumSizeHint () const"
    "virtual QSize sizeHint () const"
-   "protected virtual void scrollContentsBy ( int , int )"
-   "protected virtual bool viewportEvent ( QEvent * )")
+   "virtual void contextMenuEvent ( QContextMenuEvent * )"
+   "virtual void dragEnterEvent ( QDragEnterEvent * )"
+   "virtual void dragLeaveEvent ( QDragLeaveEvent * )"
+   "virtual void dragMoveEvent ( QDragMoveEvent * )"
+   "virtual void dropEvent ( QDropEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void mouseDoubleClickEvent ( QMouseEvent * )"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void wheelEvent ( QWheelEvent * )")
   (("QAbstractSlider" . "QWidget")
-   "protected virtual void sliderChange ( SliderChange )")
+   "virtual void sliderChange ( SliderChange )"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void timerEvent ( QTimerEvent * )"
+   "virtual void wheelEvent ( QWheelEvent * )")
   (("QAbstractSpinBox" . "QWidget")
    "virtual void fixup ( QString & ) const"
    "virtual void stepBy ( int )"
    "virtual QValidator::State validate ( QString & , int & ) const"
+   "virtual StepEnabled stepEnabled () const"
    "virtual bool event ( QEvent * )"
    "virtual QVariant inputMethodQuery ( Qt::InputMethodQuery ) const"
    "virtual QSize minimumSizeHint () const"
    "virtual QSize sizeHint () const"
-   "protected virtual StepEnabled stepEnabled () const")
+   "virtual void changeEvent ( QEvent * )"
+   "virtual void closeEvent ( QCloseEvent * )"
+   "virtual void contextMenuEvent ( QContextMenuEvent * )"
+   "virtual void focusInEvent ( QFocusEvent * )"
+   "virtual void focusOutEvent ( QFocusEvent * )"
+   "virtual void hideEvent ( QHideEvent * )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void keyReleaseEvent ( QKeyEvent * )"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void showEvent ( QShowEvent * )"
+   "virtual void timerEvent ( QTimerEvent * )"
+   "virtual void wheelEvent ( QWheelEvent * )")
   (("QAbstractState" . "QObject")
-   "protected virtual void onEntry ( QEvent * ) = 0"
-   "protected virtual void onExit ( QEvent * ) = 0")
+   "virtual void onEntry ( QEvent * ) = 0"
+   "virtual void onExit ( QEvent * ) = 0"
+   "virtual bool event ( QEvent * )")
   (("QAbstractTableModel" . "QAbstractItemModel")
    "virtual bool dropMimeData ( const QMimeData * , Qt::DropAction , int , int , const QModelIndex & )"
    "virtual QModelIndex index ( int , int , const QModelIndex & = QModelIndex() ) const")
@@ -109,20 +174,24 @@
    "virtual QRectF frameBoundingRect ( QTextFrame * ) const = 0"
    "virtual int hitTest ( const QPointF & , Qt::HitTestAccuracy ) const = 0"
    "virtual int pageCount () const = 0"
-   "protected virtual void documentChanged ( int , int , int ) = 0"
-   "protected virtual void drawInlineObject ( QPainter * , const QRectF & , QTextInlineObject , int , const QTextFormat & )"
-   "protected virtual void positionInlineObject ( QTextInlineObject , int , const QTextFormat & )"
-   "protected virtual void resizeInlineObject ( QTextInlineObject , int , const QTextFormat & )")
+   "virtual void documentChanged ( int , int , int ) = 0"
+   "virtual void drawInlineObject ( QPainter * , const QRectF & , QTextInlineObject , int , const QTextFormat & )"
+   "virtual void positionInlineObject ( QTextInlineObject , int , const QTextFormat & )"
+   "virtual void resizeInlineObject ( QTextInlineObject , int , const QTextFormat & )")
   (("QAbstractTransition" . "QObject")
-   "protected virtual bool eventTest ( QEvent * ) = 0"
-   "protected virtual void onTransition ( QEvent * ) = 0")
-  (("QAction" . "QObject"))
+   "virtual bool eventTest ( QEvent * ) = 0"
+   "virtual void onTransition ( QEvent * ) = 0"
+   "virtual bool event ( QEvent * )")
+  (("QAction" . "QObject")
+   "virtual bool event ( QEvent * )")
   (("QActionGroup" . "QObject"))
-  (("QAnimationGroup" . "QAbstractAnimation"))
+  (("QAnimationGroup" . "QAbstractAnimation")
+   "virtual bool event ( QEvent * )")
   (("QApplication" . "QCoreApplication")
    "virtual void commitData ( QSessionManager & )"
    "virtual void saveState ( QSessionManager & )"
-   "virtual bool notify ( QObject * , QEvent * )")
+   "virtual bool notify ( QObject * , QEvent * )"
+   "virtual bool event ( QEvent * )")
   (("QBoxLayout" . "QLayout")
    "virtual void addItem ( QLayoutItem * )"
    "virtual int count () const"
@@ -149,11 +218,22 @@
    "virtual int pixelMetric ( PixelMetric , const QStyleOption * = 0, const QWidget * = 0 ) const"
    "virtual QPalette standardPalette () const")
   (("QCalendarWidget" . "QWidget")
+   "virtual void paintCell ( QPainter * , const QRect & , const QDate & ) const"
    "virtual QSize minimumSizeHint () const"
    "virtual QSize sizeHint () const"
-   "protected virtual void paintCell ( QPainter * , const QRect & , const QDate & ) const")
+   "virtual bool event ( QEvent * )"
+   "virtual bool eventFilter ( QObject * , QEvent * )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )")
   (("QCheckBox" . "QAbstractButton")
-   "virtual QSize sizeHint () const")
+   "virtual QSize sizeHint () const"
+   "virtual void checkStateSet ()"
+   "virtual bool event ( QEvent * )"
+   "virtual bool hitButton ( const QPoint & ) const"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void nextCheckState ()"
+   "virtual void paintEvent ( QPaintEvent * )")
   (("QCleanlooksStyle" . "QWindowsStyle")
    "virtual void drawComplexControl ( ComplexControl , const QStyleOptionComplex * , QPainter * , const QWidget * ) const"
    "virtual void drawControl ( ControlElement , const QStyleOption * , QPainter * , const QWidget * ) const"
@@ -175,10 +255,14 @@
    "virtual QRect subElementRect ( SubElement , const QStyleOption * , const QWidget * = 0 ) const"
    "virtual void unpolish ( QWidget * )"
    "virtual void unpolish ( QApplication * )")
-  (("QClipboard" . "QObject"))
+  (("QClipboard" . "QObject")
+   "virtual bool event ( QEvent * )")
   (("QColorDialog" . "QDialog")
-   "virtual void setVisible ( bool )")
+   "virtual void setVisible ( bool )"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual void done ( int )")
   (("QColumnView" . "QAbstractItemView")
+   "virtual QAbstractItemView * createColumn ( const QModelIndex & )"
    "virtual QModelIndex indexAt ( const QPoint & ) const"
    "virtual void scrollTo ( const QModelIndex & , ScrollHint = EnsureVisible )"
    "virtual void selectAll ()"
@@ -187,14 +271,43 @@
    "virtual void setSelectionModel ( QItemSelectionModel * )"
    "virtual QSize sizeHint () const"
    "virtual QRect visualRect ( const QModelIndex & ) const"
-   "protected virtual QAbstractItemView * createColumn ( const QModelIndex & )")
+   "virtual void currentChanged ( const QModelIndex & , const QModelIndex & )"
+   "virtual int horizontalOffset () const"
+   "virtual bool isIndexHidden ( const QModelIndex & ) const"
+   "virtual QModelIndex moveCursor ( CursorAction , Qt::KeyboardModifiers )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void rowsInserted ( const QModelIndex & , int , int )"
+   "virtual void scrollContentsBy ( int , int )"
+   "virtual void setSelection ( const QRect & , QItemSelectionModel::SelectionFlags )"
+   "virtual int verticalOffset () const"
+   "virtual QRegion visualRegionForSelection ( const QItemSelection & ) const")
   (("QComboBox" . "QWidget")
    "virtual void hidePopup ()"
    "virtual void showPopup ()"
    "virtual bool event ( QEvent * )"
    "virtual QSize minimumSizeHint () const"
+   "virtual QSize sizeHint () const"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual void contextMenuEvent ( QContextMenuEvent * )"
+   "virtual void focusInEvent ( QFocusEvent * )"
+   "virtual void focusOutEvent ( QFocusEvent * )"
+   "virtual void hideEvent ( QHideEvent * )"
+   "virtual void inputMethodEvent ( QInputMethodEvent * )"
+   "virtual QVariant inputMethodQuery ( Qt::InputMethodQuery ) const"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void keyReleaseEvent ( QKeyEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void showEvent ( QShowEvent * )"
+   "virtual void wheelEvent ( QWheelEvent * )")
+  (("QCommandLinkButton" . "QPushButton")
+   "virtual bool event ( QEvent * )"
+   "virtual int heightForWidth ( int ) const"
+   "virtual QSize minimumSizeHint () const"
+   "virtual void paintEvent ( QPaintEvent * )"
    "virtual QSize sizeHint () const")
-  (("QCommandLinkButton" . "QPushButton"))
   (("QCommonStyle" . "QStyle")
    "virtual void drawComplexControl ( ComplexControl , const QStyleOptionComplex * , QPainter * , const QWidget * = 0 ) const"
    "virtual void drawControl ( ControlElement , const QStyleOption * , QPainter * , const QWidget * = 0 ) const"
@@ -214,27 +327,56 @@
    "virtual void unpolish ( QApplication * )")
   (("QCompleter" . "QObject")
    "virtual QString pathFromIndex ( const QModelIndex & ) const"
-   "virtual QStringList splitPath ( const QString & ) const")
+   "virtual QStringList splitPath ( const QString & ) const"
+   "virtual bool event ( QEvent * )"
+   "virtual bool eventFilter ( QObject * , QEvent * )")
   (("QCoreApplication" . "QObject")
-   "virtual bool notify ( QObject * , QEvent * )")
+   "virtual bool notify ( QObject * , QEvent * )"
+   "virtual bool event ( QEvent * )")
   (("QDataWidgetMapper" . "QObject"))
   (("QDateEdit" . "QDateTimeEdit"))
   (("QDateTimeEdit" . "QAbstractSpinBox")
+   "virtual QDateTime dateTimeFromText ( const QString & ) const"
+   "virtual QString textFromDateTime ( const QDateTime & ) const"
    "virtual void clear ()"
    "virtual bool event ( QEvent * )"
    "virtual QSize sizeHint () const"
    "virtual void stepBy ( int )"
-   "protected virtual QDateTime dateTimeFromText ( const QString & ) const"
-   "protected virtual QString textFromDateTime ( const QDateTime & ) const")
-  (("QDesktopWidget" . "QWidget"))
+   "virtual void fixup ( QString & ) const"
+   "virtual void focusInEvent ( QFocusEvent * )"
+   "virtual bool focusNextPrevChild ( bool )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual StepEnabled stepEnabled () const"
+   "virtual QValidator::State validate ( QString & , int & ) const"
+   "virtual void wheelEvent ( QWheelEvent * )")
+  (("QDesktopWidget" . "QWidget")
+   "virtual void resizeEvent ( QResizeEvent * )")
   (("QDial" . "QAbstractSlider")
    "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "virtual QSize sizeHint () const"
+   "virtual bool event ( QEvent * )"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void sliderChange ( SliderChange )")
   (("QDialog" . "QWidget")
    "virtual QSize minimumSizeHint () const"
    "virtual void setVisible ( bool )"
-   "virtual QSize sizeHint () const")
-  (("QDialogButtonBox" . "QWidget"))
+   "virtual QSize sizeHint () const"
+   "virtual void closeEvent ( QCloseEvent * )"
+   "virtual void contextMenuEvent ( QContextMenuEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual bool eventFilter ( QObject * , QEvent * )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void showEvent ( QShowEvent * )")
+  (("QDialogButtonBox" . "QWidget")
+   "virtual void changeEvent ( QEvent * )"
+   "virtual bool event ( QEvent * )")
   (("QDirModel" . "QAbstractItemModel")
    "virtual int columnCount ( const QModelIndex & = QModelIndex() ) const"
    "virtual QVariant data ( const QModelIndex & , int = Qt::DisplayRole ) const"
@@ -250,7 +392,11 @@
    "virtual bool setData ( const QModelIndex & , const QVariant & , int = Qt::EditRole )"
    "virtual void sort ( int , Qt::SortOrder = Qt::AscendingOrder )"
    "virtual Qt::DropActions supportedDropActions () const")
-  (("QDockWidget" . "QWidget"))
+  (("QDockWidget" . "QWidget")
+   "virtual void changeEvent ( QEvent * )"
+   "virtual void closeEvent ( QCloseEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )")
   (("QDoubleSpinBox" . "QAbstractSpinBox")
    "virtual QString textFromValue ( double ) const"
    "virtual double valueFromText ( const QString & ) const"
@@ -260,16 +406,24 @@
    "virtual void setRange ( double , double , int = 0 )"
    "virtual QValidator::State validate ( QString & , int & ) const")
   (("QDrag" . "QObject"))
-  (("QErrorMessage" . "QDialog"))
+  (("QErrorMessage" . "QDialog")
+   "virtual void changeEvent ( QEvent * )"
+   "virtual void done ( int )")
   (("QEventLoop" . "QObject"))
-  (("QEventTransition" . "QAbstractTransition"))
+  (("QEventTransition" . "QAbstractTransition")
+   "virtual bool event ( QEvent * )"
+   "virtual bool eventTest ( QEvent * )"
+   "virtual void onTransition ( QEvent * )")
   (("QFile" . "QIODevice")
    "virtual bool atEnd () const"
    "virtual void close ()"
    "virtual bool isSequential () const"
    "virtual bool open ( OpenMode )")
   (("QFileDialog" . "QDialog")
-   "virtual void setVisible ( bool )")
+   "virtual void setVisible ( bool )"
+   "virtual void accept ()"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual void done ( int )")
   (("QFileSystemModel" . "QAbstractItemModel")
    "virtual bool canFetchMore ( const QModelIndex & ) const"
    "virtual int columnCount ( const QModelIndex & = QModelIndex() ) const"
@@ -286,14 +440,25 @@
    "virtual int rowCount ( const QModelIndex & = QModelIndex() ) const"
    "virtual bool setData ( const QModelIndex & , const QVariant & , int = Qt::EditRole )"
    "virtual void sort ( int , Qt::SortOrder = Qt::AscendingOrder )"
-   "virtual Qt::DropActions supportedDropActions () const")
+   "virtual Qt::DropActions supportedDropActions () const"
+   "virtual bool event ( QEvent * )"
+   "virtual void timerEvent ( QTimerEvent * )")
   (("QFileSystemWatcher" . "QObject"))
-  (("QFinalState" . "QAbstractState"))
-  (("QFocusFrame" . "QWidget"))
+  (("QFinalState" . "QAbstractState")
+   "virtual bool event ( QEvent * )"
+   "virtual void onEntry ( QEvent * )"
+   "virtual void onExit ( QEvent * )")
+  (("QFocusFrame" . "QWidget")
+   "virtual bool event ( QEvent * )"
+   "virtual bool eventFilter ( QObject * , QEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )")
   (("QFontComboBox" . "QComboBox")
-   "virtual QSize sizeHint () const")
+   "virtual QSize sizeHint () const"
+   "virtual bool event ( QEvent * )")
   (("QFontDialog" . "QDialog")
-   "virtual void setVisible ( bool )")
+   "virtual void setVisible ( bool )"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual void done ( int )")
   (("QFormLayout" . "QLayout")
    "virtual void addItem ( QLayoutItem * )"
    "virtual int count () const"
@@ -307,48 +472,84 @@
    "virtual QSize sizeHint () const"
    "virtual QLayoutItem * takeAt ( int )")
   (("QFrame" . "QWidget")
-   "virtual QSize sizeHint () const")
+   "virtual QSize sizeHint () const"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )")
   (("QGesture" . "QObject"))
   (("QGraphicsAnchor" . "QObject"))
   (("QGraphicsBlurEffect" . "QGraphicsEffect")
-   "virtual QRectF boundingRectFor ( const QRectF & ) const")
-  (("QGraphicsColorizeEffect" . "QGraphicsEffect"))
+   "virtual QRectF boundingRectFor ( const QRectF & ) const"
+   "virtual void draw ( QPainter * )")
+  (("QGraphicsColorizeEffect" . "QGraphicsEffect")
+   "virtual void draw ( QPainter * )")
   (("QGraphicsDropShadowEffect" . "QGraphicsEffect")
-   "virtual QRectF boundingRectFor ( const QRectF & ) const")
+   "virtual QRectF boundingRectFor ( const QRectF & ) const"
+   "virtual void draw ( QPainter * )")
   (("QGraphicsEffect" . "QObject")
    "virtual QRectF boundingRectFor ( const QRectF & ) const"
-   "protected virtual void draw ( QPainter * ) = 0"
-   "protected virtual void sourceChanged ( ChangeFlags )")
+   "virtual void draw ( QPainter * ) = 0"
+   "virtual void sourceChanged ( ChangeFlags )")
   (("QGraphicsObject" . "QObject"))
-  (("QGraphicsOpacityEffect" . "QGraphicsEffect"))
+  (("QGraphicsOpacityEffect" . "QGraphicsEffect")
+   "virtual void draw ( QPainter * )")
   (("QGraphicsProxyWidget" . "QGraphicsWidget")
    "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * )"
    "virtual void setGeometry ( const QRectF & )"
-   "virtual int type () const")
+   "virtual int type () const"
+   "virtual void contextMenuEvent ( QGraphicsSceneContextMenuEvent * )"
+   "virtual void dragEnterEvent ( QGraphicsSceneDragDropEvent * )"
+   "virtual void dragLeaveEvent ( QGraphicsSceneDragDropEvent * )"
+   "virtual void dragMoveEvent ( QGraphicsSceneDragDropEvent * )"
+   "virtual void dropEvent ( QGraphicsSceneDragDropEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual bool eventFilter ( QObject * , QEvent * )"
+   "virtual void focusInEvent ( QFocusEvent * )"
+   "virtual bool focusNextPrevChild ( bool )"
+   "virtual void focusOutEvent ( QFocusEvent * )"
+   "virtual void grabMouseEvent ( QEvent * )"
+   "virtual void hideEvent ( QHideEvent * )"
+   "virtual void hoverEnterEvent ( QGraphicsSceneHoverEvent * )"
+   "virtual void hoverLeaveEvent ( QGraphicsSceneHoverEvent * )"
+   "virtual void hoverMoveEvent ( QGraphicsSceneHoverEvent * )"
+   "virtual QVariant itemChange ( GraphicsItemChange , const QVariant & )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void keyReleaseEvent ( QKeyEvent * )"
+   "virtual void mouseDoubleClickEvent ( QGraphicsSceneMouseEvent * )"
+   "virtual void mouseMoveEvent ( QGraphicsSceneMouseEvent * )"
+   "virtual void mousePressEvent ( QGraphicsSceneMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QGraphicsSceneMouseEvent * )"
+   "virtual void resizeEvent ( QGraphicsSceneResizeEvent * )"
+   "virtual void showEvent ( QShowEvent * )"
+   "virtual QSizeF sizeHint ( Qt::SizeHint , const QSizeF & = QSizeF() ) const"
+   "virtual void ungrabMouseEvent ( QEvent * )"
+   "virtual void wheelEvent ( QGraphicsSceneWheelEvent * )")
   (("QGraphicsRotation" . "QGraphicsTransform")
    "virtual void applyTo ( QMatrix4x4 * ) const")
   (("QGraphicsScale" . "QGraphicsTransform")
    "virtual void applyTo ( QMatrix4x4 * ) const")
   (("QGraphicsScene" . "QObject")
    "virtual QVariant inputMethodQuery ( Qt::InputMethodQuery ) const"
-   "protected virtual void contextMenuEvent ( QGraphicsSceneContextMenuEvent * )"
-   "protected virtual void dragEnterEvent ( QGraphicsSceneDragDropEvent * )"
-   "protected virtual void dragLeaveEvent ( QGraphicsSceneDragDropEvent * )"
-   "protected virtual void dragMoveEvent ( QGraphicsSceneDragDropEvent * )"
-   "protected virtual void drawBackground ( QPainter * , const QRectF & )"
-   "protected virtual void drawForeground ( QPainter * , const QRectF & )"
-   "protected virtual void dropEvent ( QGraphicsSceneDragDropEvent * )"
-   "protected virtual void focusInEvent ( QFocusEvent * )"
-   "protected virtual void focusOutEvent ( QFocusEvent * )"
-   "protected virtual void helpEvent ( QGraphicsSceneHelpEvent * )"
-   "protected virtual void inputMethodEvent ( QInputMethodEvent * )"
-   "protected virtual void keyPressEvent ( QKeyEvent * )"
-   "protected virtual void keyReleaseEvent ( QKeyEvent * )"
-   "protected virtual void mouseDoubleClickEvent ( QGraphicsSceneMouseEvent * )"
-   "protected virtual void mouseMoveEvent ( QGraphicsSceneMouseEvent * )"
-   "protected virtual void mousePressEvent ( QGraphicsSceneMouseEvent * )"
-   "protected virtual void mouseReleaseEvent ( QGraphicsSceneMouseEvent * )"
-   "protected virtual void wheelEvent ( QGraphicsSceneWheelEvent * )")
+   "virtual void contextMenuEvent ( QGraphicsSceneContextMenuEvent * )"
+   "virtual void dragEnterEvent ( QGraphicsSceneDragDropEvent * )"
+   "virtual void dragLeaveEvent ( QGraphicsSceneDragDropEvent * )"
+   "virtual void dragMoveEvent ( QGraphicsSceneDragDropEvent * )"
+   "virtual void drawBackground ( QPainter * , const QRectF & )"
+   "virtual void drawForeground ( QPainter * , const QRectF & )"
+   "virtual void dropEvent ( QGraphicsSceneDragDropEvent * )"
+   "virtual void focusInEvent ( QFocusEvent * )"
+   "virtual void focusOutEvent ( QFocusEvent * )"
+   "virtual void helpEvent ( QGraphicsSceneHelpEvent * )"
+   "virtual void inputMethodEvent ( QInputMethodEvent * )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void keyReleaseEvent ( QKeyEvent * )"
+   "virtual void mouseDoubleClickEvent ( QGraphicsSceneMouseEvent * )"
+   "virtual void mouseMoveEvent ( QGraphicsSceneMouseEvent * )"
+   "virtual void mousePressEvent ( QGraphicsSceneMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QGraphicsSceneMouseEvent * )"
+   "virtual void wheelEvent ( QGraphicsSceneWheelEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual bool eventFilter ( QObject * , QEvent * )")
   (("QGraphicsTextItem" . "QGraphicsObject")
    "virtual QRectF boundingRect () const"
    "virtual bool contains ( const QPointF & ) const"
@@ -356,36 +557,86 @@
    "virtual QPainterPath opaqueArea () const"
    "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * )"
    "virtual QPainterPath shape () const"
-   "virtual int type () const")
+   "virtual int type () const"
+   "virtual void contextMenuEvent ( QGraphicsSceneContextMenuEvent * )"
+   "virtual void dragEnterEvent ( QGraphicsSceneDragDropEvent * )"
+   "virtual void dragLeaveEvent ( QGraphicsSceneDragDropEvent * )"
+   "virtual void dragMoveEvent ( QGraphicsSceneDragDropEvent * )"
+   "virtual void dropEvent ( QGraphicsSceneDragDropEvent * )"
+   "virtual void focusInEvent ( QFocusEvent * )"
+   "virtual void focusOutEvent ( QFocusEvent * )"
+   "virtual void hoverEnterEvent ( QGraphicsSceneHoverEvent * )"
+   "virtual void hoverLeaveEvent ( QGraphicsSceneHoverEvent * )"
+   "virtual void hoverMoveEvent ( QGraphicsSceneHoverEvent * )"
+   "virtual void inputMethodEvent ( QInputMethodEvent * )"
+   "virtual QVariant inputMethodQuery ( Qt::InputMethodQuery ) const"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void keyReleaseEvent ( QKeyEvent * )"
+   "virtual void mouseDoubleClickEvent ( QGraphicsSceneMouseEvent * )"
+   "virtual void mouseMoveEvent ( QGraphicsSceneMouseEvent * )"
+   "virtual void mousePressEvent ( QGraphicsSceneMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QGraphicsSceneMouseEvent * )"
+   "virtual bool sceneEvent ( QEvent * )")
   (("QGraphicsTransform" . "QObject")
    "virtual void applyTo ( QMatrix4x4 * ) const = 0")
   (("QGraphicsView" . "QAbstractScrollArea")
+   "virtual void drawBackground ( QPainter * , const QRectF & )"
+   "virtual void drawForeground ( QPainter * , const QRectF & )"
    "virtual QVariant inputMethodQuery ( Qt::InputMethodQuery ) const"
    "virtual QSize sizeHint () const"
-   "protected virtual void drawBackground ( QPainter * , const QRectF & )"
-   "protected virtual void drawForeground ( QPainter * , const QRectF & )")
+   "virtual void contextMenuEvent ( QContextMenuEvent * )"
+   "virtual void dragEnterEvent ( QDragEnterEvent * )"
+   "virtual void dragLeaveEvent ( QDragLeaveEvent * )"
+   "virtual void dragMoveEvent ( QDragMoveEvent * )"
+   "virtual void dropEvent ( QDropEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual void focusInEvent ( QFocusEvent * )"
+   "virtual bool focusNextPrevChild ( bool )"
+   "virtual void focusOutEvent ( QFocusEvent * )"
+   "virtual void inputMethodEvent ( QInputMethodEvent * )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void keyReleaseEvent ( QKeyEvent * )"
+   "virtual void mouseDoubleClickEvent ( QMouseEvent * )"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void scrollContentsBy ( int , int )"
+   "virtual void showEvent ( QShowEvent * )"
+   "virtual bool viewportEvent ( QEvent * )"
+   "virtual void wheelEvent ( QWheelEvent * )")
   (("QGraphicsWidget" . "QGraphicsObject")
    "virtual void paintWindowFrame ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * = 0 )"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual void closeEvent ( QCloseEvent * )"
+   "virtual bool focusNextPrevChild ( bool )"
+   "virtual void grabKeyboardEvent ( QEvent * )"
+   "virtual void grabMouseEvent ( QEvent * )"
+   "virtual void hideEvent ( QHideEvent * )"
+   "virtual void initStyleOption ( QStyleOption * ) const"
+   "virtual void moveEvent ( QGraphicsSceneMoveEvent * )"
+   "virtual void polishEvent ()"
+   "virtual void resizeEvent ( QGraphicsSceneResizeEvent * )"
+   "virtual void showEvent ( QShowEvent * )"
+   "virtual void ungrabKeyboardEvent ( QEvent * )"
+   "virtual void ungrabMouseEvent ( QEvent * )"
+   "virtual bool windowFrameEvent ( QEvent * )"
+   "virtual Qt::WindowFrameSection windowFrameSectionAt ( const QPointF & ) const"
    "virtual QRectF boundingRect () const"
    "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * = 0 )"
    "virtual void setGeometry ( const QRectF & )"
    "virtual QPainterPath shape () const"
    "virtual int type () const"
-   "protected virtual void changeEvent ( QEvent * )"
-   "protected virtual void closeEvent ( QCloseEvent * )"
-   "protected virtual bool focusNextPrevChild ( bool )"
-   "protected virtual void grabKeyboardEvent ( QEvent * )"
-   "protected virtual void grabMouseEvent ( QEvent * )"
-   "protected virtual void hideEvent ( QHideEvent * )"
-   "protected virtual void initStyleOption ( QStyleOption * ) const"
-   "protected virtual void moveEvent ( QGraphicsSceneMoveEvent * )"
-   "protected virtual void polishEvent ()"
-   "protected virtual void resizeEvent ( QGraphicsSceneResizeEvent * )"
-   "protected virtual void showEvent ( QShowEvent * )"
-   "protected virtual void ungrabKeyboardEvent ( QEvent * )"
-   "protected virtual void ungrabMouseEvent ( QEvent * )"
-   "protected virtual bool windowFrameEvent ( QEvent * )"
-   "protected virtual Qt::WindowFrameSection windowFrameSectionAt ( const QPointF & ) const")
+   "virtual bool event ( QEvent * )"
+   "virtual void focusInEvent ( QFocusEvent * )"
+   "virtual void focusOutEvent ( QFocusEvent * )"
+   "virtual void hoverLeaveEvent ( QGraphicsSceneHoverEvent * )"
+   "virtual void hoverMoveEvent ( QGraphicsSceneHoverEvent * )"
+   "virtual QVariant itemChange ( GraphicsItemChange , const QVariant & )"
+   "virtual bool sceneEvent ( QEvent * )"
+   "virtual QSizeF sizeHint ( Qt::SizeHint , const QSizeF & = QSizeF() ) const"
+   "virtual void updateGeometry ()")
   (("QGridLayout" . "QLayout")
    "virtual int count () const"
    "virtual Qt::Orientations expandingDirections () const"
@@ -398,17 +649,41 @@
    "virtual QSize minimumSize () const"
    "virtual void setGeometry ( const QRect & )"
    "virtual QSize sizeHint () const"
-   "virtual QLayoutItem * takeAt ( int )")
+   "virtual QLayoutItem * takeAt ( int )"
+   "virtual void addItem ( QLayoutItem * )")
   (("QGroupBox" . "QWidget")
-   "virtual QSize minimumSizeHint () const")
+   "virtual QSize minimumSizeHint () const"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual void childEvent ( QChildEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual void focusInEvent ( QFocusEvent * )"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )")
   (("QHBoxLayout" . "QBoxLayout"))
   (("QHeaderView" . "QAbstractItemView")
+   "virtual void paintSection ( QPainter * , const QRect & , int ) const"
+   "virtual QSize sectionSizeFromContents ( int ) const"
    "virtual void reset ()"
    "virtual void setModel ( QAbstractItemModel * )"
    "virtual QSize sizeHint () const"
-   "protected virtual void paintSection ( QPainter * , const QRect & , int ) const"
-   "protected virtual QSize sectionSizeFromContents ( int ) const")
-  (("QHistoryState" . "QAbstractState"))
+   "virtual void currentChanged ( const QModelIndex & , const QModelIndex & )"
+   "virtual bool event ( QEvent * )"
+   "virtual int horizontalOffset () const"
+   "virtual void mouseDoubleClickEvent ( QMouseEvent * )"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void setSelection ( const QRect & , QItemSelectionModel::SelectionFlags )"
+   "virtual int verticalOffset () const"
+   "virtual bool viewportEvent ( QEvent * )")
+  (("QHistoryState" . "QAbstractState")
+   "virtual bool event ( QEvent * )"
+   "virtual void onEntry ( QEvent * )"
+   "virtual void onExit ( QEvent * )")
   (("QIODevice" . "QObject")
    "virtual bool atEnd () const"
    "virtual bool canReadLine () const"
@@ -438,24 +713,41 @@
    "virtual void setRange ( int , int )"
    "virtual QValidator::State validate ( QString & , int & ) const")
   (("QItemDelegate" . "QAbstractItemDelegate")
+   "virtual void drawCheck ( QPainter * , const QStyleOptionViewItem & , const QRect & , Qt::CheckState ) const"
+   "virtual void drawDecoration ( QPainter * , const QStyleOptionViewItem & , const QRect & , const QPixmap & ) const"
+   "virtual void drawDisplay ( QPainter * , const QStyleOptionViewItem & , const QRect & , const QString & ) const"
+   "virtual void drawFocus ( QPainter * , const QStyleOptionViewItem & , const QRect & ) const"
    "virtual QWidget * createEditor ( QWidget * , const QStyleOptionViewItem & , const QModelIndex & ) const"
    "virtual void paint ( QPainter * , const QStyleOptionViewItem & , const QModelIndex & ) const"
    "virtual void setEditorData ( QWidget * , const QModelIndex & ) const"
    "virtual void setModelData ( QWidget * , QAbstractItemModel * , const QModelIndex & ) const"
    "virtual QSize sizeHint ( const QStyleOptionViewItem & , const QModelIndex & ) const"
    "virtual void updateEditorGeometry ( QWidget * , const QStyleOptionViewItem & , const QModelIndex & ) const"
-   "protected virtual void drawCheck ( QPainter * , const QStyleOptionViewItem & , const QRect & , Qt::CheckState ) const"
-   "protected virtual void drawDecoration ( QPainter * , const QStyleOptionViewItem & , const QRect & , const QPixmap & ) const"
-   "protected virtual void drawDisplay ( QPainter * , const QStyleOptionViewItem & , const QRect & , const QString & ) const"
-   "protected virtual void drawFocus ( QPainter * , const QStyleOptionViewItem & , const QRect & ) const")
+   "virtual bool editorEvent ( QEvent * , QAbstractItemModel * , const QStyleOptionViewItem & , const QModelIndex & )"
+   "virtual bool eventFilter ( QObject * , QEvent * )")
   (("QItemSelectionModel" . "QObject"))
-  (("QKeyEventTransition" . "QEventTransition"))
+  (("QKeyEventTransition" . "QEventTransition")
+   "virtual bool eventTest ( QEvent * )"
+   "virtual void onTransition ( QEvent * )")
   (("QLCDNumber" . "QFrame")
-   "virtual QSize sizeHint () const")
+   "virtual QSize sizeHint () const"
+   "virtual bool event ( QEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )")
   (("QLabel" . "QFrame")
    "virtual int heightForWidth ( int ) const"
    "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "virtual QSize sizeHint () const"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual void contextMenuEvent ( QContextMenuEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual void focusInEvent ( QFocusEvent * )"
+   "virtual bool focusNextPrevChild ( bool )"
+   "virtual void focusOutEvent ( QFocusEvent * )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )")
   (("QLayout" . "QObject")
    "virtual void addItem ( QLayoutItem * ) = 0"
    "virtual int count () const = 0"
@@ -469,43 +761,149 @@
    "virtual QLayout * layout ()"
    "virtual QSize maximumSize () const"
    "virtual QSize minimumSize () const"
-   "virtual void setGeometry ( const QRect & )")
+   "virtual void setGeometry ( const QRect & )"
+   "virtual void childEvent ( QChildEvent * )")
   (("QLibrary" . "QObject"))
   (("QLineEdit" . "QWidget")
    "virtual bool event ( QEvent * )"
    "virtual QVariant inputMethodQuery ( Qt::InputMethodQuery ) const"
    "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "virtual QSize sizeHint () const"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual void contextMenuEvent ( QContextMenuEvent * )"
+   "virtual void dragEnterEvent ( QDragEnterEvent * )"
+   "virtual void dragLeaveEvent ( QDragLeaveEvent * )"
+   "virtual void dragMoveEvent ( QDragMoveEvent * )"
+   "virtual void dropEvent ( QDropEvent * )"
+   "virtual void focusInEvent ( QFocusEvent * )"
+   "virtual void focusOutEvent ( QFocusEvent * )"
+   "virtual void inputMethodEvent ( QInputMethodEvent * )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void mouseDoubleClickEvent ( QMouseEvent * )"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )")
   (("QListView" . "QAbstractItemView")
    "virtual QModelIndex indexAt ( const QPoint & ) const"
    "virtual void scrollTo ( const QModelIndex & , ScrollHint = EnsureVisible )"
-   "virtual QRect visualRect ( const QModelIndex & ) const")
-  (("QListWidget" . "QListView")
+   "virtual QRect visualRect ( const QModelIndex & ) const"
+   "virtual void currentChanged ( const QModelIndex & , const QModelIndex & )"
+   "virtual void dataChanged ( const QModelIndex & , const QModelIndex & )"
+   "virtual void dragLeaveEvent ( QDragLeaveEvent * )"
+   "virtual void dragMoveEvent ( QDragMoveEvent * )"
    "virtual void dropEvent ( QDropEvent * )"
-   "protected virtual bool dropMimeData ( int , const QMimeData * , Qt::DropAction )"
-   "protected virtual QMimeData * mimeData ( const QList<QListWidgetItem *> ) const"
-   "protected virtual QStringList mimeTypes () const"
-   "protected virtual Qt::DropActions supportedDropActions () const")
+   "virtual bool event ( QEvent * )"
+   "virtual int horizontalOffset () const"
+   "virtual bool isIndexHidden ( const QModelIndex & ) const"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual QModelIndex moveCursor ( CursorAction , Qt::KeyboardModifiers )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void rowsAboutToBeRemoved ( const QModelIndex & , int , int )"
+   "virtual void rowsInserted ( const QModelIndex & , int , int )"
+   "virtual QModelIndexList selectedIndexes () const"
+   "virtual void selectionChanged ( const QItemSelection & , const QItemSelection & )"
+   "virtual void setSelection ( const QRect & , QItemSelectionModel::SelectionFlags )"
+   "virtual void startDrag ( Qt::DropActions )"
+   "virtual void timerEvent ( QTimerEvent * )"
+   "virtual void updateGeometries ()"
+   "virtual int verticalOffset () const"
+   "virtual QStyleOptionViewItem viewOptions () const"
+   "virtual QRegion visualRegionForSelection ( const QItemSelection & ) const")
+  (("QListWidget" . "QListView")
+   "virtual bool dropMimeData ( int , const QMimeData * , Qt::DropAction )"
+   "virtual QMimeData * mimeData ( const QList<QListWidgetItem *> ) const"
+   "virtual QStringList mimeTypes () const"
+   "virtual Qt::DropActions supportedDropActions () const"
+   "virtual void dropEvent ( QDropEvent * )"
+   "virtual bool event ( QEvent * )")
   (("QMainWindow" . "QWidget")
-   "virtual QMenu * createPopupMenu ()")
+   "virtual QMenu * createPopupMenu ()"
+   "virtual void contextMenuEvent ( QContextMenuEvent * )"
+   "virtual bool event ( QEvent * )")
   (("QMdiArea" . "QAbstractScrollArea")
    "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "virtual QSize sizeHint () const"
+   "virtual void childEvent ( QChildEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual bool eventFilter ( QObject * , QEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void scrollContentsBy ( int , int )"
+   "virtual void showEvent ( QShowEvent * )"
+   "virtual void timerEvent ( QTimerEvent * )"
+   "virtual bool viewportEvent ( QEvent * )")
   (("QMdiSubWindow" . "QWidget")
    "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "virtual QSize sizeHint () const"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual void childEvent ( QChildEvent * )"
+   "virtual void closeEvent ( QCloseEvent * )"
+   "virtual void contextMenuEvent ( QContextMenuEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual bool eventFilter ( QObject * , QEvent * )"
+   "virtual void focusInEvent ( QFocusEvent * )"
+   "virtual void focusOutEvent ( QFocusEvent * )"
+   "virtual void hideEvent ( QHideEvent * )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void leaveEvent ( QEvent * )"
+   "virtual void mouseDoubleClickEvent ( QMouseEvent * )"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void moveEvent ( QMoveEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void showEvent ( QShowEvent * )"
+   "virtual void timerEvent ( QTimerEvent * )")
   (("QMenu" . "QWidget")
-   "virtual QSize sizeHint () const")
+   "virtual QSize sizeHint () const"
+   "virtual void actionEvent ( QActionEvent * )"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual void enterEvent ( QEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual bool focusNextPrevChild ( bool )"
+   "virtual void hideEvent ( QHideEvent * )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void leaveEvent ( QEvent * )"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void timerEvent ( QTimerEvent * )"
+   "virtual void wheelEvent ( QWheelEvent * )")
   (("QMenuBar" . "QWidget")
    "virtual int heightForWidth ( int ) const"
    "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "virtual QSize sizeHint () const"
+   "virtual void actionEvent ( QActionEvent * )"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual bool eventFilter ( QObject * , QEvent * )"
+   "virtual void focusInEvent ( QFocusEvent * )"
+   "virtual void focusOutEvent ( QFocusEvent * )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void leaveEvent ( QEvent * )"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void timerEvent ( QTimerEvent * )")
   (("QMessageBox" . "QDialog")
-   "virtual void setVisible ( bool )")
+   "virtual void setVisible ( bool )"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual void closeEvent ( QCloseEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void showEvent ( QShowEvent * )")
   (("QMimeData" . "QObject")
    "virtual QStringList formats () const"
    "virtual bool hasFormat ( const QString & ) const"
-   "protected virtual QVariant retrieveData ( const QString & , QVariant::Type ) const")
+   "virtual QVariant retrieveData ( const QString & , QVariant::Type ) const")
   (("QMotifStyle" . "QCommonStyle")
    "virtual void drawComplexControl ( ComplexControl , const QStyleOptionComplex * , QPainter * , const QWidget * = 0 ) const"
    "virtual void drawControl ( ControlElement , const QStyleOption * , QPainter * , const QWidget * = 0 ) const"
@@ -518,25 +916,34 @@
    "virtual QPixmap standardPixmap ( StandardPixmap , const QStyleOption * , const QWidget * = 0 ) const"
    "virtual int styleHint ( StyleHint , const QStyleOption * = 0, const QWidget * = 0, QStyleHintReturn * = 0 ) const"
    "virtual QRect subControlRect ( ComplexControl , const QStyleOptionComplex * , SubControl , const QWidget * = 0 ) const"
-   "virtual QRect subElementRect ( SubElement , const QStyleOption * , const QWidget * = 0 ) const")
-  (("QMouseEventTransition" . "QEventTransition"))
+   "virtual QRect subElementRect ( SubElement , const QStyleOption * , const QWidget * = 0 ) const"
+   "virtual void timerEvent ( QTimerEvent * )")
+  (("QMouseEventTransition" . "QEventTransition")
+   "virtual bool eventTest ( QEvent * )"
+   "virtual void onTransition ( QEvent * )")
   (("QMovie" . "QObject"))
   (("QObject" . NIL)
    "virtual bool event ( QEvent * )"
    "virtual bool eventFilter ( QObject * , QEvent * )"
    "virtual const QMetaObject * metaObject () const"
-   "protected virtual void childEvent ( QChildEvent * )"
-   "protected virtual void connectNotify ( const char * )"
-   "protected virtual void customEvent ( QEvent * )"
-   "protected virtual void disconnectNotify ( const char * )"
-   "protected virtual void timerEvent ( QTimerEvent * )")
+   "virtual void childEvent ( QChildEvent * )"
+   "virtual void connectNotify ( const char * )"
+   "virtual void customEvent ( QEvent * )"
+   "virtual void disconnectNotify ( const char * )"
+   "virtual void timerEvent ( QTimerEvent * )")
   (("QPageSetupDialog" . "QDialog")
    "virtual void setVisible ( bool )")
   (("QPanGesture" . "QGesture"))
   (("QParallelAnimationGroup" . "QAnimationGroup")
-   "virtual int duration () const")
+   "virtual int duration () const"
+   "virtual bool event ( QEvent * )"
+   "virtual void updateCurrentTime ( int )"
+   "virtual void updateDirection ( QAbstractAnimation::Direction )"
+   "virtual void updateState ( QAbstractAnimation::State , QAbstractAnimation::State )")
   (("QPauseAnimation" . "QAbstractAnimation")
-   "virtual int duration () const")
+   "virtual int duration () const"
+   "virtual bool event ( QEvent * )"
+   "virtual void updateCurrentTime ( int )")
   (("QPinchGesture" . "QGesture"))
   (("QPlainTextDocumentLayout" . "QAbstractTextDocumentLayout")
    "virtual QRectF blockBoundingRect ( const QTextBlock & ) const"
@@ -544,12 +951,35 @@
    "virtual void draw ( QPainter *, const PaintContext & )"
    "virtual QRectF frameBoundingRect ( QTextFrame * ) const"
    "virtual int hitTest ( const QPointF &, Qt::HitTestAccuracy ) const"
-   "virtual int pageCount () const")
+   "virtual int pageCount () const"
+   "virtual void documentChanged ( int , int , int )")
   (("QPlainTextEdit" . "QAbstractScrollArea")
    "virtual QVariant loadResource ( int , const QUrl & )"
-   "protected virtual bool canInsertFromMimeData ( const QMimeData * ) const"
-   "protected virtual QMimeData * createMimeDataFromSelection () const"
-   "protected virtual void insertFromMimeData ( const QMimeData * )")
+   "virtual bool canInsertFromMimeData ( const QMimeData * ) const"
+   "virtual QMimeData * createMimeDataFromSelection () const"
+   "virtual void insertFromMimeData ( const QMimeData * )"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual void contextMenuEvent ( QContextMenuEvent * )"
+   "virtual void dragEnterEvent ( QDragEnterEvent * )"
+   "virtual void dragLeaveEvent ( QDragLeaveEvent * )"
+   "virtual void dragMoveEvent ( QDragMoveEvent * )"
+   "virtual void dropEvent ( QDropEvent * )"
+   "virtual void focusInEvent ( QFocusEvent * )"
+   "virtual bool focusNextPrevChild ( bool )"
+   "virtual void focusOutEvent ( QFocusEvent * )"
+   "virtual void inputMethodEvent ( QInputMethodEvent * )"
+   "virtual QVariant inputMethodQuery ( Qt::InputMethodQuery ) const"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void keyReleaseEvent ( QKeyEvent * )"
+   "virtual void mouseDoubleClickEvent ( QMouseEvent * )"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void scrollContentsBy ( int , int )"
+   "virtual void showEvent ( QShowEvent * )"
+   "virtual void wheelEvent ( QWheelEvent * )")
   (("QPlastiqueStyle" . "QWindowsStyle")
    "virtual void drawComplexControl ( ComplexControl , const QStyleOptionComplex * , QPainter * , const QWidget * ) const"
    "virtual void drawControl ( ControlElement , const QStyleOption * , QPainter * , const QWidget * ) const"
@@ -566,7 +996,9 @@
    "virtual QRect subControlRect ( ComplexControl , const QStyleOptionComplex * , SubControl , const QWidget * ) const"
    "virtual QRect subElementRect ( SubElement , const QStyleOption * , const QWidget * ) const"
    "virtual void unpolish ( QWidget * )"
-   "virtual void unpolish ( QApplication * )")
+   "virtual void unpolish ( QApplication * )"
+   "virtual bool eventFilter ( QObject * , QEvent * )"
+   "virtual void timerEvent ( QTimerEvent * )")
   (("QPluginLoader" . "QObject"))
   (("QPrintDialog" . "QAbstractPrintDialog")
    "virtual void done ( int )"
@@ -578,48 +1010,107 @@
   (("QPrintPreviewWidget" . "QWidget")
    "virtual void setVisible ( bool )")
   (("QProcess" . "QIODevice")
+   "virtual void setupChildProcess ()"
    "virtual bool atEnd () const"
    "virtual bool canReadLine () const"
    "virtual void close ()"
    "virtual bool isSequential () const"
    "virtual bool waitForBytesWritten ( int = 30000 )"
-   "virtual bool waitForReadyRead ( int = 30000 )"
-   "protected virtual void setupChildProcess ()")
+   "virtual bool waitForReadyRead ( int = 30000 )")
   (("QProgressBar" . "QWidget")
    "virtual QString text () const"
    "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "virtual QSize sizeHint () const"
+   "virtual bool event ( QEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )")
   (("QProgressDialog" . "QDialog")
-   "virtual QSize sizeHint () const")
-  (("QPropertyAnimation" . "QVariantAnimation"))
+   "virtual QSize sizeHint () const"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual void closeEvent ( QCloseEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void showEvent ( QShowEvent * )")
+  (("QPropertyAnimation" . "QVariantAnimation")
+   "virtual bool event ( QEvent * )"
+   "virtual void updateCurrentValue ( const QVariant & )"
+   "virtual void updateState ( QAbstractAnimation::State , QAbstractAnimation::State )")
   (("QPushButton" . "QAbstractButton")
    "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "virtual QSize sizeHint () const"
+   "virtual bool event ( QEvent * )"
+   "virtual void focusInEvent ( QFocusEvent * )"
+   "virtual void focusOutEvent ( QFocusEvent * )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )")
   (("QRadioButton" . "QAbstractButton")
-   "virtual QSize sizeHint () const")
+   "virtual QSize sizeHint () const"
+   "virtual bool event ( QEvent * )"
+   "virtual bool hitButton ( const QPoint & ) const"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )")
   (("QRegExpValidator" . "QValidator")
    "virtual QValidator::State validate ( QString & , int & ) const")
-  (("QRubberBand" . "QWidget"))
+  (("QRubberBand" . "QWidget")
+   "virtual void changeEvent ( QEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual void moveEvent ( QMoveEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void showEvent ( QShowEvent * )")
   (("QScrollArea" . "QAbstractScrollArea")
    "virtual bool focusNextPrevChild ( bool )"
-   "virtual QSize sizeHint () const")
+   "virtual QSize sizeHint () const"
+   "virtual bool event ( QEvent * )"
+   "virtual bool eventFilter ( QObject * , QEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void scrollContentsBy ( int , int )")
   (("QScrollBar" . "QAbstractSlider")
    "virtual bool event ( QEvent * )"
-   "virtual QSize sizeHint () const")
+   "virtual QSize sizeHint () const"
+   "virtual void contextMenuEvent ( QContextMenuEvent * )"
+   "virtual void hideEvent ( QHideEvent * )"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void sliderChange ( SliderChange )")
   (("QSequentialAnimationGroup" . "QAnimationGroup")
-   "virtual int duration () const")
+   "virtual int duration () const"
+   "virtual bool event ( QEvent * )"
+   "virtual void updateCurrentTime ( int )"
+   "virtual void updateDirection ( QAbstractAnimation::Direction )"
+   "virtual void updateState ( QAbstractAnimation::State , QAbstractAnimation::State )")
   (("QSessionManager" . "QObject"))
-  (("QSettings" . "QObject"))
+  (("QSettings" . "QObject")
+   "virtual bool event ( QEvent * )")
   (("QShortcut" . "QObject"))
-  (("QSignalTransition" . "QAbstractTransition"))
+  (("QSignalTransition" . "QAbstractTransition")
+   "virtual bool event ( QEvent * )"
+   "virtual bool eventTest ( QEvent * )"
+   "virtual void onTransition ( QEvent * )")
   (("QSizeGrip" . "QWidget")
    "virtual void setVisible ( bool )"
-   "virtual QSize sizeHint () const")
+   "virtual QSize sizeHint () const"
+   "virtual bool event ( QEvent * )"
+   "virtual bool eventFilter ( QObject * , QEvent * )"
+   "virtual void hideEvent ( QHideEvent * )"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void moveEvent ( QMoveEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void showEvent ( QShowEvent * )")
   (("QSlider" . "QAbstractSlider")
    "virtual bool event ( QEvent * )"
    "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "virtual QSize sizeHint () const"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )")
   (("QSortFilterProxyModel" . "QAbstractProxyModel")
+   "virtual bool filterAcceptsColumn ( int , const QModelIndex & ) const"
+   "virtual bool filterAcceptsRow ( int , const QModelIndex & ) const"
+   "virtual bool lessThan ( const QModelIndex & , const QModelIndex & ) const"
    "virtual QModelIndex buddy ( const QModelIndex & ) const"
    "virtual bool canFetchMore ( const QModelIndex & ) const"
    "virtual int columnCount ( const QModelIndex & = QModelIndex() ) const"
@@ -648,21 +1139,32 @@
    "virtual void setSourceModel ( QAbstractItemModel * )"
    "virtual void sort ( int , Qt::SortOrder = Qt::AscendingOrder )"
    "virtual QSize span ( const QModelIndex & ) const"
-   "virtual Qt::DropActions supportedDropActions () const"
-   "protected virtual bool filterAcceptsColumn ( int , const QModelIndex & ) const"
-   "protected virtual bool filterAcceptsRow ( int , const QModelIndex & ) const"
-   "protected virtual bool lessThan ( const QModelIndex & , const QModelIndex & ) const")
+   "virtual Qt::DropActions supportedDropActions () const")
   (("QSound" . "QObject"))
   (("QSpinBox" . "QAbstractSpinBox")
-   "protected virtual QString textFromValue ( int ) const"
-   "protected virtual int valueFromText ( const QString & ) const")
+   "virtual QString textFromValue ( int ) const"
+   "virtual int valueFromText ( const QString & ) const"
+   "virtual bool event ( QEvent * )"
+   "virtual void fixup ( QString & ) const"
+   "virtual QValidator::State validate ( QString & , int & ) const")
   (("QSplashScreen" . "QWidget")
-   "protected virtual void drawContents ( QPainter * )")
+   "virtual void drawContents ( QPainter * )"
+   "virtual bool event ( QEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )")
   (("QSplitter" . "QFrame")
    "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "virtual QSize sizeHint () const"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual void childEvent ( QChildEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )")
   (("QSplitterHandle" . "QWidget")
-   "virtual QSize sizeHint () const")
+   "virtual QSize sizeHint () const"
+   "virtual bool event ( QEvent * )"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )")
   (("QStackedLayout" . "QLayout")
    "virtual void addItem ( QLayoutItem * )"
    "virtual int count () const"
@@ -671,7 +1173,8 @@
    "virtual void setGeometry ( const QRect & )"
    "virtual QSize sizeHint () const"
    "virtual QLayoutItem * takeAt ( int )")
-  (("QStackedWidget" . "QFrame"))
+  (("QStackedWidget" . "QFrame")
+   "virtual bool event ( QEvent * )")
   (("QStandardItemModel" . "QAbstractItemModel")
    "virtual int columnCount ( const QModelIndex & = QModelIndex() ) const"
    "virtual QVariant data ( const QModelIndex & , int = Qt::DisplayRole ) const"
@@ -692,10 +1195,20 @@
    "virtual bool setHeaderData ( int , Qt::Orientation , const QVariant & , int = Qt::EditRole )"
    "virtual void sort ( int , Qt::SortOrder = Qt::AscendingOrder )"
    "virtual Qt::DropActions supportedDropActions () const")
-  (("QState" . "QAbstractState"))
+  (("QState" . "QAbstractState")
+   "virtual bool event ( QEvent * )"
+   "virtual void onEntry ( QEvent * )"
+   "virtual void onExit ( QEvent * )")
   (("QStateMachine" . "QState")
-   "virtual bool eventFilter ( QObject * , QEvent * )")
-  (("QStatusBar" . "QWidget"))
+   "virtual bool eventFilter ( QObject * , QEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual void onEntry ( QEvent * )"
+   "virtual void onExit ( QEvent * )")
+  (("QStatusBar" . "QWidget")
+   "virtual bool event ( QEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void showEvent ( QShowEvent * )")
   (("QStringListModel" . "QAbstractListModel")
    "virtual QVariant data ( const QModelIndex & , int ) const"
    "virtual Qt::ItemFlags flags ( const QModelIndex & ) const"
@@ -728,78 +1241,168 @@
    "virtual void unpolish ( QApplication * )")
   (("QStyledItemDelegate" . "QAbstractItemDelegate")
    "virtual QString displayText ( const QVariant & , const QLocale & ) const"
+   "virtual void initStyleOption ( QStyleOptionViewItem * , const QModelIndex & ) const"
    "virtual QWidget * createEditor ( QWidget * , const QStyleOptionViewItem & , const QModelIndex & ) const"
    "virtual void paint ( QPainter * , const QStyleOptionViewItem & , const QModelIndex & ) const"
    "virtual void setEditorData ( QWidget * , const QModelIndex & ) const"
    "virtual void setModelData ( QWidget * , QAbstractItemModel * , const QModelIndex & ) const"
    "virtual QSize sizeHint ( const QStyleOptionViewItem & , const QModelIndex & ) const"
    "virtual void updateEditorGeometry ( QWidget * , const QStyleOptionViewItem & , const QModelIndex & ) const"
-   "protected virtual void initStyleOption ( QStyleOptionViewItem * , const QModelIndex & ) const")
+   "virtual bool editorEvent ( QEvent * , QAbstractItemModel * , const QStyleOptionViewItem & , const QModelIndex & )"
+   "virtual bool eventFilter ( QObject * , QEvent * )")
   (("QSwipeGesture" . "QGesture"))
   (("QSyntaxHighlighter" . "QObject")
-   "protected virtual void highlightBlock ( const QString & ) = 0")
-  (("QSystemTrayIcon" . "QObject"))
+   "virtual void highlightBlock ( const QString & ) = 0")
+  (("QSystemTrayIcon" . "QObject")
+   "virtual bool event ( QEvent * )")
   (("QTabBar" . "QWidget")
+   "virtual void tabInserted ( int )"
+   "virtual void tabLayoutChange ()"
+   "virtual void tabRemoved ( int )"
+   "virtual QSize tabSizeHint ( int ) const"
    "virtual QSize minimumSizeHint () const"
    "virtual QSize sizeHint () const"
-   "protected virtual void tabInserted ( int )"
-   "protected virtual void tabLayoutChange ()"
-   "protected virtual void tabRemoved ( int )"
-   "protected virtual QSize tabSizeHint ( int ) const")
+   "virtual void changeEvent ( QEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual void hideEvent ( QHideEvent * )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void showEvent ( QShowEvent * )"
+   "virtual void wheelEvent ( QWheelEvent * )")
   (("QTabWidget" . "QWidget")
+   "virtual void tabInserted ( int )"
+   "virtual void tabRemoved ( int )"
    "virtual QSize minimumSizeHint () const"
    "virtual QSize sizeHint () const"
-   "protected virtual void tabInserted ( int )"
-   "protected virtual void tabRemoved ( int )")
+   "virtual void changeEvent ( QEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void showEvent ( QShowEvent * )")
   (("QTableView" . "QAbstractItemView")
    "virtual QModelIndex indexAt ( const QPoint & ) const"
    "virtual void setModel ( QAbstractItemModel * )"
    "virtual void setRootIndex ( const QModelIndex & )"
-   "virtual void setSelectionModel ( QItemSelectionModel * )")
+   "virtual void setSelectionModel ( QItemSelectionModel * )"
+   "virtual void currentChanged ( const QModelIndex & , const QModelIndex & )"
+   "virtual int horizontalOffset () const"
+   "virtual bool isIndexHidden ( const QModelIndex & ) const"
+   "virtual QModelIndex moveCursor ( CursorAction , Qt::KeyboardModifiers )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual QModelIndexList selectedIndexes () const"
+   "virtual void selectionChanged ( const QItemSelection & , const QItemSelection & )"
+   "virtual void setSelection ( const QRect & , QItemSelectionModel::SelectionFlags )"
+   "virtual int sizeHintForColumn ( int ) const"
+   "virtual int sizeHintForRow ( int ) const"
+   "virtual void timerEvent ( QTimerEvent * )"
+   "virtual void updateGeometries ()"
+   "virtual int verticalOffset () const"
+   "virtual QStyleOptionViewItem viewOptions () const")
   (("QTableWidget" . "QTableView")
-   "protected virtual bool dropMimeData ( int , int , const QMimeData * , Qt::DropAction )"
-   "protected virtual QMimeData * mimeData ( const QList<QTableWidgetItem *> ) const"
-   "protected virtual QStringList mimeTypes () const"
-   "protected virtual Qt::DropActions supportedDropActions () const")
+   "virtual bool dropMimeData ( int , int , const QMimeData * , Qt::DropAction )"
+   "virtual QMimeData * mimeData ( const QList<QTableWidgetItem *> ) const"
+   "virtual QStringList mimeTypes () const"
+   "virtual Qt::DropActions supportedDropActions () const"
+   "virtual void dropEvent ( QDropEvent * )"
+   "virtual bool event ( QEvent * )")
   (("QTapAndHoldGesture" . "QGesture"))
   (("QTapGesture" . "QGesture"))
   (("QTextBlockGroup" . "QTextObject")
-   "protected virtual void blockFormatChanged ( const QTextBlock & )"
-   "protected virtual void blockInserted ( const QTextBlock & )"
-   "protected virtual void blockRemoved ( const QTextBlock & )")
+   "virtual void blockFormatChanged ( const QTextBlock & )"
+   "virtual void blockInserted ( const QTextBlock & )"
+   "virtual void blockRemoved ( const QTextBlock & )")
   (("QTextBrowser" . "QTextEdit")
-   "virtual QVariant loadResource ( int , const QUrl & )")
+   "virtual QVariant loadResource ( int , const QUrl & )"
+   "virtual bool event ( QEvent * )"
+   "virtual bool focusNextPrevChild ( bool )"
+   "virtual void focusOutEvent ( QFocusEvent * )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )")
   (("QTextDocument" . "QObject")
    "virtual void clear ()"
-   "protected virtual QTextObject * createObject ( const QTextFormat & )"
-   "protected virtual QVariant loadResource ( int , const QUrl & )")
+   "virtual QTextObject * createObject ( const QTextFormat & )"
+   "virtual QVariant loadResource ( int , const QUrl & )")
   (("QTextEdit" . "QAbstractScrollArea")
    "virtual QVariant loadResource ( int , const QUrl & )"
-   "protected virtual bool canInsertFromMimeData ( const QMimeData * ) const"
-   "protected virtual QMimeData * createMimeDataFromSelection () const"
-   "protected virtual void insertFromMimeData ( const QMimeData * )")
+   "virtual bool canInsertFromMimeData ( const QMimeData * ) const"
+   "virtual QMimeData * createMimeDataFromSelection () const"
+   "virtual void insertFromMimeData ( const QMimeData * )"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual void contextMenuEvent ( QContextMenuEvent * )"
+   "virtual void dragEnterEvent ( QDragEnterEvent * )"
+   "virtual void dragLeaveEvent ( QDragLeaveEvent * )"
+   "virtual void dragMoveEvent ( QDragMoveEvent * )"
+   "virtual void dropEvent ( QDropEvent * )"
+   "virtual void focusInEvent ( QFocusEvent * )"
+   "virtual bool focusNextPrevChild ( bool )"
+   "virtual void focusOutEvent ( QFocusEvent * )"
+   "virtual void inputMethodEvent ( QInputMethodEvent * )"
+   "virtual QVariant inputMethodQuery ( Qt::InputMethodQuery ) const"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void keyReleaseEvent ( QKeyEvent * )"
+   "virtual void mouseDoubleClickEvent ( QMouseEvent * )"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void scrollContentsBy ( int , int )"
+   "virtual void showEvent ( QShowEvent * )"
+   "virtual void wheelEvent ( QWheelEvent * )")
   (("QTextFrame" . "QTextObject"))
   (("QTextList" . "QTextBlockGroup"))
   (("QTextObject" . "QObject"))
   (("QTextTable" . "QTextFrame"))
   (("QThread" . "QObject")
-   "protected virtual void run ()")
+   "virtual void run ()")
   (("QThreadPool" . "QObject"))
   (("QTimeEdit" . "QDateTimeEdit"))
   (("QTimeLine" . "QObject")
-   "virtual qreal valueForTime ( int ) const")
-  (("QTimer" . "QObject"))
-  (("QToolBar" . "QWidget"))
+   "virtual qreal valueForTime ( int ) const"
+   "virtual void timerEvent ( QTimerEvent * )")
+  (("QTimer" . "QObject")
+   "virtual void timerEvent ( QTimerEvent * )")
+  (("QToolBar" . "QWidget")
+   "virtual void actionEvent ( QActionEvent * )"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual void childEvent ( QChildEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )")
   (("QToolBox" . "QFrame")
-   "protected virtual void itemInserted ( int )"
-   "protected virtual void itemRemoved ( int )")
+   "virtual void itemInserted ( int )"
+   "virtual void itemRemoved ( int )"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual void showEvent ( QShowEvent * )")
   (("QToolButton" . "QAbstractButton")
    "virtual QSize minimumSizeHint () const"
-   "virtual QSize sizeHint () const")
+   "virtual QSize sizeHint () const"
+   "virtual void actionEvent ( QActionEvent * )"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual void enterEvent ( QEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual bool hitButton ( const QPoint & ) const"
+   "virtual void leaveEvent ( QEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void nextCheckState ()"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void timerEvent ( QTimerEvent * )")
   (("QTranslator" . "QObject")
    "virtual bool isEmpty () const"
    "virtual QString translate ( const char * , const char * , const char * = 0 ) const")
   (("QTreeView" . "QAbstractItemView")
+   "virtual void drawBranches ( QPainter * , const QRect & , const QModelIndex & ) const"
+   "virtual void drawRow ( QPainter * , const QStyleOptionViewItem & , const QModelIndex & ) const"
    "virtual void dataChanged ( const QModelIndex & , const QModelIndex & )"
    "virtual QModelIndex indexAt ( const QPoint & ) const"
    "virtual void keyboardSearch ( const QString & )"
@@ -810,14 +1413,37 @@
    "virtual void setRootIndex ( const QModelIndex & )"
    "virtual void setSelectionModel ( QItemSelectionModel * )"
    "virtual QRect visualRect ( const QModelIndex & ) const"
-   "protected virtual void drawBranches ( QPainter * , const QRect & , const QModelIndex & ) const"
-   "protected virtual void drawRow ( QPainter * , const QStyleOptionViewItem & , const QModelIndex & ) const")
+   "virtual void currentChanged ( const QModelIndex & , const QModelIndex & )"
+   "virtual void dragMoveEvent ( QDragMoveEvent * )"
+   "virtual int horizontalOffset () const"
+   "virtual bool isIndexHidden ( const QModelIndex & ) const"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void mouseDoubleClickEvent ( QMouseEvent * )"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual QModelIndex moveCursor ( CursorAction , Qt::KeyboardModifiers )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void rowsAboutToBeRemoved ( const QModelIndex & , int , int )"
+   "virtual void rowsInserted ( const QModelIndex & , int , int )"
+   "virtual void scrollContentsBy ( int , int )"
+   "virtual QModelIndexList selectedIndexes () const"
+   "virtual void selectionChanged ( const QItemSelection & , const QItemSelection & )"
+   "virtual void setSelection ( const QRect & , QItemSelectionModel::SelectionFlags )"
+   "virtual int sizeHintForColumn ( int ) const"
+   "virtual void timerEvent ( QTimerEvent * )"
+   "virtual void updateGeometries ()"
+   "virtual int verticalOffset () const"
+   "virtual bool viewportEvent ( QEvent * )"
+   "virtual QRegion visualRegionForSelection ( const QItemSelection & ) const")
   (("QTreeWidget" . "QTreeView")
+   "virtual bool dropMimeData ( QTreeWidgetItem * , int , const QMimeData * , Qt::DropAction )"
+   "virtual QMimeData * mimeData ( const QList<QTreeWidgetItem *> ) const"
+   "virtual QStringList mimeTypes () const"
+   "virtual Qt::DropActions supportedDropActions () const"
    "virtual void setSelectionModel ( QItemSelectionModel * )"
-   "protected virtual bool dropMimeData ( QTreeWidgetItem * , int , const QMimeData * , Qt::DropAction )"
-   "protected virtual QMimeData * mimeData ( const QList<QTreeWidgetItem *> ) const"
-   "protected virtual QStringList mimeTypes () const"
-   "protected virtual Qt::DropActions supportedDropActions () const")
+   "virtual void dropEvent ( QDropEvent * )"
+   "virtual bool event ( QEvent * )")
   (("QUndoGroup" . "QObject"))
   (("QUndoStack" . "QObject"))
   (("QUndoView" . "QListView"))
@@ -826,44 +1452,51 @@
    "virtual void fixup ( QString & ) const"
    "virtual State validate ( QString & , int & ) const = 0")
   (("QVariantAnimation" . "QAbstractAnimation")
+   "virtual QVariant interpolated ( const QVariant & , const QVariant & , qreal ) const"
+   "virtual void updateCurrentValue ( const QVariant & ) = 0"
    "virtual int duration () const"
-   "protected virtual QVariant interpolated ( const QVariant & , const QVariant & , qreal ) const"
-   "protected virtual void updateCurrentValue ( const QVariant & ) = 0")
+   "virtual bool event ( QEvent * )"
+   "virtual void updateCurrentTime ( int )"
+   "virtual void updateState ( QAbstractAnimation::State , QAbstractAnimation::State )")
   (("QWidget" . "QObject")
    "virtual int heightForWidth ( int ) const"
    "virtual QVariant inputMethodQuery ( Qt::InputMethodQuery ) const"
    "virtual QSize minimumSizeHint () const"
    "virtual QSize sizeHint () const"
-   "protected virtual void actionEvent ( QActionEvent * )"
-   "protected virtual void changeEvent ( QEvent * )"
-   "protected virtual void closeEvent ( QCloseEvent * )"
-   "protected virtual void contextMenuEvent ( QContextMenuEvent * )"
-   "protected virtual void dragEnterEvent ( QDragEnterEvent * )"
-   "protected virtual void dragLeaveEvent ( QDragLeaveEvent * )"
-   "protected virtual void dragMoveEvent ( QDragMoveEvent * )"
-   "protected virtual void dropEvent ( QDropEvent * )"
-   "protected virtual void enterEvent ( QEvent * )"
-   "protected virtual void focusInEvent ( QFocusEvent * )"
-   "protected virtual bool focusNextPrevChild ( bool )"
-   "protected virtual void focusOutEvent ( QFocusEvent * )"
-   "protected virtual void hideEvent ( QHideEvent * )"
-   "protected virtual void inputMethodEvent ( QInputMethodEvent * )"
-   "protected virtual void keyPressEvent ( QKeyEvent * )"
-   "protected virtual void keyReleaseEvent ( QKeyEvent * )"
-   "protected virtual void leaveEvent ( QEvent * )"
-   "protected virtual void mouseDoubleClickEvent ( QMouseEvent * )"
-   "protected virtual void mouseMoveEvent ( QMouseEvent * )"
-   "protected virtual void mousePressEvent ( QMouseEvent * )"
-   "protected virtual void mouseReleaseEvent ( QMouseEvent * )"
-   "protected virtual void moveEvent ( QMoveEvent * )"
-   "protected virtual void paintEvent ( QPaintEvent * )"
-   "protected virtual void resizeEvent ( QResizeEvent * )"
-   "protected virtual void showEvent ( QShowEvent * )"
-   "protected virtual void tabletEvent ( QTabletEvent * )"
-   "protected virtual void wheelEvent ( QWheelEvent * )")
+   "virtual void actionEvent ( QActionEvent * )"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual void closeEvent ( QCloseEvent * )"
+   "virtual void contextMenuEvent ( QContextMenuEvent * )"
+   "virtual void dragEnterEvent ( QDragEnterEvent * )"
+   "virtual void dragLeaveEvent ( QDragLeaveEvent * )"
+   "virtual void dragMoveEvent ( QDragMoveEvent * )"
+   "virtual void dropEvent ( QDropEvent * )"
+   "virtual void enterEvent ( QEvent * )"
+   "virtual void focusInEvent ( QFocusEvent * )"
+   "virtual bool focusNextPrevChild ( bool )"
+   "virtual void focusOutEvent ( QFocusEvent * )"
+   "virtual void hideEvent ( QHideEvent * )"
+   "virtual void inputMethodEvent ( QInputMethodEvent * )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void keyReleaseEvent ( QKeyEvent * )"
+   "virtual void leaveEvent ( QEvent * )"
+   "virtual void mouseDoubleClickEvent ( QMouseEvent * )"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void moveEvent ( QMoveEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void showEvent ( QShowEvent * )"
+   "virtual void tabletEvent ( QTabletEvent * )"
+   "virtual void wheelEvent ( QWheelEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual int metric ( PaintDeviceMetric ) const")
   (("QWidgetAction" . "QAction")
-   "protected virtual QWidget * createWidget ( QWidget * )"
-   "protected virtual void deleteWidget ( QWidget * )")
+   "virtual QWidget * createWidget ( QWidget * )"
+   "virtual void deleteWidget ( QWidget * )"
+   "virtual bool event ( QEvent * )"
+   "virtual bool eventFilter ( QObject * , QEvent * )")
   (("QWindowsStyle" . "QCommonStyle")
    "virtual void drawComplexControl ( ComplexControl , const QStyleOptionComplex * , QPainter * , const QWidget * = 0 ) const"
    "virtual void drawControl ( ControlElement , const QStyleOption * , QPainter * , const QWidget * = 0 ) const"
@@ -877,14 +1510,20 @@
    "virtual int styleHint ( StyleHint , const QStyleOption * = 0, const QWidget * = 0, QStyleHintReturn * = 0 ) const"
    "virtual QRect subElementRect ( SubElement , const QStyleOption * , const QWidget * = 0 ) const"
    "virtual void unpolish ( QApplication * )"
-   "virtual void unpolish ( QWidget * )")
+   "virtual void unpolish ( QWidget * )"
+   "virtual bool eventFilter ( QObject * , QEvent * )"
+   "virtual void timerEvent ( QTimerEvent * )")
   (("QWizard" . "QDialog")
    "virtual int nextId () const"
    "virtual bool validateCurrentPage ()"
+   "virtual void cleanupPage ( int )"
+   "virtual void initializePage ( int )"
    "virtual void setVisible ( bool )"
    "virtual QSize sizeHint () const"
-   "protected virtual void cleanupPage ( int )"
-   "protected virtual void initializePage ( int )")
+   "virtual void done ( int )"
+   "virtual bool event ( QEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )")
   (("QWizardPage" . "QWidget")
    "virtual void cleanupPage ()"
    "virtual void initializePage ()"
@@ -892,5 +1531,14 @@
    "virtual int nextId () const"
    "virtual bool validatePage ()")
   (("QWorkspace" . "QWidget")
-   "virtual QSize sizeHint () const")
+   "virtual QSize sizeHint () const"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual void childEvent ( QChildEvent * )"
+   "virtual bool event ( QEvent * )"
+   "virtual bool eventFilter ( QObject * , QEvent * )"
+   "virtual void hideEvent ( QHideEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void showEvent ( QShowEvent * )"
+   "virtual void wheelEvent ( QWheelEvent * )")
 ))
