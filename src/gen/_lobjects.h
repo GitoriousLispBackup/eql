@@ -15,6 +15,8 @@ Q_DECLARE_METATYPE(QModelIndexList)
 Q_DECLARE_METATYPE(QPainterPath)
 Q_DECLARE_METATYPE(QStyleOptionViewItem)
 Q_DECLARE_METATYPE(QTableWidgetSelectionRange)
+Q_DECLARE_METATYPE(QTextBlock)
+Q_DECLARE_METATYPE(QTextCharFormat)
 
 class EQL;
 class DynObject;

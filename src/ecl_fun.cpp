@@ -131,6 +131,7 @@ enum UserMetaTypes {
     T_QList_QStandardItem,
     T_QList_QTableWidgetItem,
     T_QList_QTableWidgetSelectionRange,
+    T_QList_QTextBlock,
     T_QList_QTextFrame,
     T_QList_QTreeWidgetItem,
     T_QList_QUndoStack,
@@ -144,6 +145,8 @@ enum UserMetaTypes {
     T_QPolygonF,
     T_QRgb,
     T_QTableWidgetSelectionRange,
+    T_QTextBlock,
+    T_QTextCharFormat,
     T_QGradientStops,
     T_QVector_QLine,
     T_QVector_QLineF,
@@ -189,6 +192,7 @@ void registerMetaTypes() {
     qRegisterMetaType<QList<QStandardItem*> >("QList<QStandardItem*>");
     qRegisterMetaType<QList<QTableWidgetItem*> >("QList<QTableWidgetItem*>");
     qRegisterMetaType<QList<QTableWidgetSelectionRange> >("QList<QTableWidgetSelectionRange>");
+    qRegisterMetaType<QList<QTextBlock> >("QList<QTextBlock>");
     qRegisterMetaType<QList<QTextFrame*> >("QList<QTextFrame*>");
     qRegisterMetaType<QList<QTreeWidgetItem*> >("QList<QTreeWidgetItem*>");
     qRegisterMetaType<QList<QUndoStack*> >("QList<QUndoStack*>");
@@ -202,6 +206,8 @@ void registerMetaTypes() {
     qRegisterMetaType<QPolygonF>("QPolygonF");
     qRegisterMetaType<QRgb>("QRgb");
     qRegisterMetaType<QTableWidgetSelectionRange>("QTableWidgetSelectionRange");
+    qRegisterMetaType<QTextBlock>("QTextBlock");
+    qRegisterMetaType<QTextCharFormat>("QTextCharFormat");
     qRegisterMetaType<QVector<QGradientStop> >("QGradientStops");
     qRegisterMetaType<QVector<QLine> >("QVector<QLine>");
     qRegisterMetaType<QVector<QLineF> >("QVector<QLineF>");
@@ -522,12 +528,15 @@ TO_QT_TYPE_PTR2(QBrush, qbrush)
 TO_QT_TYPE_PTR2(QFileInfo, qfileinfo)
 TO_QT_TYPE_PTR2(QIcon, qicon)
 TO_QT_TYPE_PTR2(QImage, qimage)
+TO_QT_TYPE_PTR2(QLocale, qlocale)
 TO_QT_TYPE_PTR(QModelIndex, qmodelindex)
 TO_QT_TYPE_PTR(QPainterPath, qpainterpath)
 TO_QT_TYPE_PTR2(QPalette, qpalette)
 TO_QT_TYPE_PTR2(QPen, qpen)
 TO_QT_TYPE_PTR2(QPixmap, qpixmap)
 TO_QT_TYPE_PTR2(QTableWidgetSelectionRange, qtablewidgetselectionrange)
+TO_QT_TYPE_PTR2(QTextBlock, qtextblock)
+TO_QT_TYPE_PTR(QTextCharFormat, qtextcharformat)
 TO_QT_TYPE_PTR2(QTextFormat, qtextformat)
 TO_QT_TYPE_PTR2(QTextLength, qtextlength)
 
@@ -563,6 +572,7 @@ TO_QT_LIST_VAL(QKeySequence)
 TO_QT_LIST_VAL(QPolygonF)
 TO_QT_LIST_VAL(QSize)
 TO_QT_LIST_VAL(QTableWidgetSelectionRange)
+TO_QT_LIST_VAL(QTextBlock)
 TO_QT_LIST_VAL(QUrl)
 TO_QT_LIST_VAL2(int, Int)
 TO_QT_LIST_VAL2(qreal, Real)
@@ -599,6 +609,7 @@ static QVariant toQVariant(cl_object l_obj, const char* s_type, QVariant::Type n
         case QVariant::KeySequence: var = toQKeySequence(l_obj); break;
         case QVariant::Line:        var = toQLine(l_obj); break;
         case QVariant::LineF:       var = toQLineF(l_obj); break;
+        case QVariant::Locale:      var = toQLocale(l_obj); break;
         case QVariant::LongLong:    var = toInt<qlonglong>(l_obj); break;
         case QVariant::Palette:     var = toQPalette(l_obj); break;
         case QVariant::Pen:         var = toQPen(l_obj); break;
@@ -749,6 +760,7 @@ TO_CL_LIST_VAL(QKeySequence, qkeysequence)
 TO_CL_LIST_VAL(QPolygonF, qpolygonf)
 TO_CL_LIST_VAL(QSize, qsize)
 TO_CL_LIST_VAL(QTableWidgetSelectionRange, qtablewidgetselectionrange)
+TO_CL_LIST_VAL(QTextBlock, qtextblock)
 TO_CL_LIST_VAL(QUrl, qurl)
 
 TO_CL_VECTOR_VAL(QGradientStop, qgradientstop)
@@ -783,6 +795,7 @@ static cl_object from_qvariant(const QVariant& var) {
         case QVariant::KeySequence: l_obj = from_qkeysequence(qVariantValue<QKeySequence>(var)); break;
         case QVariant::Line:        l_obj = from_qline(var.toLine()); break;
         case QVariant::LineF:       l_obj = from_qlinef(var.toLineF()); break;
+        case QVariant::Locale:      l_obj = from_qlocale(var.toLocale()); break;
         case QVariant::LongLong:    l_obj = MAKE_FIXNUM(var.toLongLong());
         case QVariant::Palette:     l_obj = from_qpalette(qVariantValue<QPalette>(var)); break;
         case QVariant::Pen:         l_obj = from_qpen(qVariantValue<QPen>(var)); break;
@@ -827,6 +840,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case QMetaType::QKeySequence:            p = new QKeySequence(toQKeySequence(l_arg)); break;
         case QMetaType::QLine:                   p = new QLine(toQLine(l_arg)); break;
         case QMetaType::QLineF:                  p = new QLineF(toQLineF(l_arg)); break;
+        case QMetaType::QLocale:                 p = toQLocalePointer(l_arg); break;
         case QMetaType::QPoint:                  p = new QPoint(toQPoint(l_arg)); break;
         case QMetaType::QPointF:                 p = new QPointF(toQPointF(l_arg)); break;
         case QMetaType::QPolygon:                p = new QPolygon(toQPolygon(l_arg)); break;
@@ -871,6 +885,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case T_QList_QStandardItem:              p = new QList<QStandardItem*>(toQStandardItemList(l_arg)); break;
         case T_QList_QTableWidgetItem:           p = new QList<QTableWidgetItem*>(toQTableWidgetItemList(l_arg)); break;
         case T_QList_QTableWidgetSelectionRange: p = new QList<QTableWidgetSelectionRange>(toQTableWidgetSelectionRangeList(l_arg)); break;
+        case T_QList_QTextBlock:                 p = new QList<QTextBlock>(toQTextBlockList(l_arg)); break;
         case T_QList_QTextFrame:                 p = new QList<QTextFrame*>(toQTextFrameList(l_arg)); break;
         case T_QList_QTreeWidgetItem:            p = new QList<QTreeWidgetItem*>(toQTreeWidgetItemList(l_arg)); break;
         case T_QList_QUndoStack:                 p = new QList<QUndoStack*>(toQUndoStackList(l_arg)); break;
@@ -884,6 +899,8 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case T_QPolygonF:                        p = new QPolygonF(toQPolygonF(l_arg)); break;
         case T_QRgb:                             p = new QRgb(toUInt(l_arg)); break;
         case T_QTableWidgetSelectionRange:       p = toQTableWidgetSelectionRangePointer(l_arg); break;
+        case T_QTextBlock:                       p = toQTextBlockPointer(l_arg); break;
+        case T_QTextCharFormat:                  p = toQTextCharFormatPointer(l_arg); break;
         case T_QGradientStops:                   p = new QVector<QGradientStop>(toQGradientStopVector(l_arg)); break;
         case T_QVector_QLine:                    p = new QVector<QLine>(toQLineVector(l_arg)); break;
         case T_QVector_QLineF:                   p = new QVector<QLineF>(toQLineFVector(l_arg)); break;
@@ -962,6 +979,7 @@ static cl_object to_lisp_arg(const MetaArg& arg) {
             case QMetaType::QKeySequence:            l_ret = from_qkeysequence(*(QKeySequence*)p); break;
             case QMetaType::QLine:                   l_ret = from_qline(*(QLine*)p); break;
             case QMetaType::QLineF:                  l_ret = from_qlinef(*(QLineF*)p); break;
+            case QMetaType::QLocale:                 l_ret = from_qlocale(*(QLocale*)p); break;
             case QMetaType::QPalette:                l_ret = from_qpalette(*(QPalette*)p); break;
             case QMetaType::QPen:                    l_ret = from_qpen(*(QPen*)p); break;
             case QMetaType::QPixmap:                 l_ret = from_qpixmap(*(QPixmap*)p); break;
@@ -1003,6 +1021,7 @@ static cl_object to_lisp_arg(const MetaArg& arg) {
             case T_QList_QStandardItem:              l_ret = from_qstandarditemlist(*(QList<QStandardItem*>*)p); break;
             case T_QList_QTableWidgetItem:           l_ret = from_qtablewidgetitemlist(*(QList<QTableWidgetItem*>*)p); break;
             case T_QList_QTableWidgetSelectionRange: l_ret = from_qtablewidgetselectionrangelist(*(QList<QTableWidgetSelectionRange>*)p); break;
+            case T_QList_QTextBlock:                 l_ret = from_qtextblocklist(*(QList<QTextBlock>*)p); break;
             case T_QList_QTextFrame:                 l_ret = from_qtextframelist(*(QList<QTextFrame*>*)p); break;
             case T_QList_QTreeWidgetItem:            l_ret = from_qtreewidgetitemlist(*(QList<QTreeWidgetItem*>*)p); break;
             case T_QList_QUndoStack:                 l_ret = from_qundostacklist(*(QList<QUndoStack*>*)p); break;
@@ -1016,6 +1035,8 @@ static cl_object to_lisp_arg(const MetaArg& arg) {
             case T_QPolygonF:                        l_ret = from_qpolygonf(*(QPolygonF*)p); break;
             case T_QRgb:                             l_ret = ecl_make_unsigned_integer(*(QRgb*)p); break;
             case T_QTableWidgetSelectionRange:       l_ret = from_qtablewidgetselectionrange(*(QTableWidgetSelectionRange*)p); break;
+            case T_QTextBlock:                       l_ret = from_qtextblock(*(QTextBlock*)p); break;
+            case T_QTextCharFormat:                  l_ret = from_qtextcharformat(*(QTextCharFormat*)p); break;
             case T_QGradientStops:                   l_ret = from_qgradientstopvector(*(QVector<QGradientStop>*)p); break;
             case T_QVector_QLine:                    l_ret = from_qlinevector(*(QVector<QLine>*)p); break;
             case T_QVector_QLineF:                   l_ret = from_qlinefvector(*(QVector<QLineF>*)p); break;
@@ -1105,6 +1126,7 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
         case QMetaType::QBrush:
         case QMetaType::QIcon:
         case QMetaType::QImage:
+        case QMetaType::QLocale:
         case QMetaType::QPalette:
         case QMetaType::QPen:
         case QMetaType::QPixmap:
@@ -1114,6 +1136,8 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
         case T_QModelIndex:
         case T_QPainterPath:
         case T_QTableWidgetSelectionRange:
+        case T_QTextBlock:
+        case T_QTextCharFormat:
             if(is_ret) {
                 QMetaType::destroy(n, p); }
             break;
@@ -1725,6 +1749,7 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
                 case QMetaType::QBrush:            ret = qVariantFromValue(*(QBrush*)o.pointer); break;
                 case QMetaType::QIcon:             ret = qVariantFromValue(*(QIcon*)o.pointer); break;
                 case QMetaType::QImage:            ret = qVariantFromValue(*(QImage*)o.pointer); break;
+                case QMetaType::QLocale:           ret = qVariantFromValue(*(QLocale*)o.pointer); break;
                 case QMetaType::QPalette:          ret = qVariantFromValue(*(QPalette*)o.pointer); break;
                 case QMetaType::QPen:              ret = qVariantFromValue(*(QPen*)o.pointer); break;
                 case QMetaType::QPixmap:           ret = qVariantFromValue(*(QPixmap*)o.pointer); break;
@@ -1734,6 +1759,8 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
                 case T_QModelIndex:                ret = qVariantFromValue(*(QModelIndex*)o.pointer); break;
                 case T_QPainterPath:               ret = qVariantFromValue(*(QPainterPath*)o.pointer); break;
                 case T_QTableWidgetSelectionRange: ret = qVariantFromValue(*(QTableWidgetSelectionRange*)o.pointer); break;
+                case T_QTextBlock:                 ret = qVariantFromValue(*(QTextBlock*)o.pointer); break;
+                case T_QTextCharFormat:            ret = qVariantFromValue(*(QTextCharFormat*)o.pointer); break;
                 default:
                     ret = toQVariant(l_ret, ret_type); }}}
     else {

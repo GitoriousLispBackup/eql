@@ -170,7 +170,7 @@
       (format s "~%   \"bool begin ( QWidget * )\"~
                  ~%   \"bool begin ( QPixmap * )\""))
     (let ((static (starts-with "static" type))
-          (protected (starts-with "protected" type))
+          (protected (search "protected" type))
           (p (search* (format nil "<h2>~a</h2>" type) html)))
       (when p
         (let* ((tb1 (search* "<table" html p))
@@ -194,13 +194,14 @@
                            ;; template problem
                            (and (string= "QVariant" class)
                                 (string= "bool canConvert () const" fun)))
-                 (if virtual
-                     (format so "~%   \"~a\"" fun)
-                     (format s "~%   \"~a~a\"" (cond (new "new ") ; constructor
-                                                      (protected "protected ")
-                                                      (static "static ")
-                                                      (t ""))
-                             (subseq fun (if (starts-with "Q_INVOKABLE" fun) 12 0))))))))))))
+                 (when virtual
+                   (format so "~%   \"~a\"" fun))
+                 (unless (and virtual protected)
+                   (format s "~%   \"~a~a\"" (cond (new "new ") ; constructor
+                                                   (protected "protected ")
+                                                   (static "static ")
+                                                   (t ""))
+                           (subseq fun (if (starts-with "Q_INVOKABLE" fun) 12 0))))))))))))
 
 (defun parse-classes (classes s so non)
   (dolist (class classes)

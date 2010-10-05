@@ -1,4 +1,3 @@
-QList<QTextBlock>
 QMatrix3x3
 QStyleHintReturn
 QStyleOption

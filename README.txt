@@ -44,6 +44,7 @@ In Windows you first need to adapt the win32 section of both src/eql_lib.pro and
     make 
 
 This will build both the EQL executable and shared library.
+(Please note that e.g. on a Netbook the eql_lib.pro compile time may exceed half an hour.)
 
 3) cd ..
 
@@ -80,9 +81,14 @@ To quit the tool, do:
 
 
 
-NOTE
+NOTES
 
 For additional information see doc/index.html.
+
+An interesting side note: the EQL library size varies quite a bit on different platforms:
+- Windows MSVC 2008:     ~3 MB
+- Mac OSX 10.4 GCC 4.0:  ~6 MB
+- Linux GCC 4.5:        ~20 MB (and no, UPX doesn't work here)
 
 
 
