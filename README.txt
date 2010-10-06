@@ -29,7 +29,12 @@ If you want to include additional modules:
 
 BUILD / REBUILD (see also: "Windows Easy Guide" in doc/)
 
-In Windows you first need to adapt the win32 section of both src/eql_lib.pro and src/eql_exe.pro.
+[Windows]
+    You first need to adapt the win32 section of both src/eql_lib.pro and src/eql_exe.pro.
+
+[GCC]
+    If you use a recent GCC (e.g. 4.5) you need to uncomment this line in src/eql_lib.pro:
+        QMAKE_CXXFLAGS += -fno-var-tracking-assignments 
 
 1) Switch to the src/ directory, and run:
     ecl -shell make-eql-lib.lisp (build + rebuild)
@@ -44,19 +49,20 @@ In Windows you first need to adapt the win32 section of both src/eql_lib.pro and
     make 
 
 This will build both the EQL executable and shared library.
-(Please note that e.g. on a Netbook the eql_lib.pro compile time may exceed half an hour.)
 
 3) cd ..
 
-[Linux]: you need to create a link to the EQL shared library, something like:
-             cd /usr/lib
-             sudo ln -s ~/eql/libeql.so.1 libeql.so.1
+[Linux]
+    You need to create a link to the EQL shared library, something like:
+        cd /usr/lib
+        sudo ln -s ~/eql/libeql.so.1 libeql.so.1
 
-[OSX]:   you may want to create a convenience link:
-             ln -s eql.app/Contents/MacOS/eql eql
-         you need to create a link to the EQL shared library, something like:
-             cd /usr/lib
-             sudo ln -s ~/eql/libeql.1.dylib libeql.1.dylib
+[OSX]
+    You need to create a link to the EQL shared library, something like:
+        cd /usr/lib
+        sudo ln -s ~/eql/libeql.1.dylib libeql.1.dylib
+    You may want to create a convenience link:
+        ln -s eql.app/Contents/MacOS/eql eql
 
 
 

@@ -3,6 +3,9 @@
 #CONFIG += opengl
 #CONFIG += svg
 
+# uncomment this for recent GCC (e.g. 4.5) because of gen/_lobjects.cpp
+#QMAKE_CXXFLAGS += -fno-var-tracking-assignments
+
 TEMPLATE    = lib
 CONFIG      += dll no_keywords uitools release
 DEFINES     += EQL_LIBRARY
