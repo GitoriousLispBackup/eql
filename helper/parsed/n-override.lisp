@@ -73,6 +73,7 @@
   (("QFileInfo" . NIL))
   (("QFileOpenEvent" . "QEvent"))
   (("QFocusEvent" . "QEvent"))
+  (("QFont" . NIL))
   (("QFontDatabase" . NIL))
   (("QFontMetrics" . NIL))
   (("QGestureEvent" . "QEvent"))

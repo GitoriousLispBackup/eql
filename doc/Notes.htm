@@ -11,6 +11,7 @@
 <p>There is no garbage collection for Qt objects. It's clear that during development there will always be some garbage. The interesting part is final applications. Qt widgets always live inside an object hierarchy (no child will be able to survive its parents...). Additionally, you have the <code>qlet</code> macro, which provides local Qt objects (deleted when leaving the <code>qlet</code> body). Now, after understanding and applying these simple rules, you should never be bitten by memory leakage problems (given you do only UI stuff with Qt).</p>
 <p>There is no CLOS integration planned. (Closures may be good enough sometimes, see <code>mouse</code> in <code>examples/colliding-mice.lisp</code>.)</p>
 <p>Enumerations are currently not fully intuitive. In most cases, you can use their string names. However, some non QObject derived classes ask for their integer values (see <code>qenum</code>). In a few cases you need to define integer constants by yourself (see <code>examples/</code>).</p>
-<p>The necessary parsing for generating the <code>src/gen/*</code> files is done by parsing the Qt Html documentation. See <code>helper/</code>.</p>
+<hr>
+<p>The necessary parsing for generating the <code>src/gen/*</code> files is done by parsing the Qt Html documentation. See <code>helper/</code>
 </body>
 </html>

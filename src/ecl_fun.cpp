@@ -469,13 +469,6 @@ static QStringList toQStringList(cl_object l_lst) {
             l_el = cl_cdr(l_el); }}
     return l; }
 
-static QCursor toQCursor(cl_object l_cur) {
-    if(ECL_STRINGP(l_cur)) {
-        const QMetaObject* mo = staticQtMetaObject;
-        return QCursor((Qt::CursorShape)mo->enumerator(mo->indexOfEnumerator("CursorShape"))
-                       .keyToValue(toCString(l_cur))); }
-    return QCursor(); }
-
 static QPolygon toQPolygon(cl_object l_lst) {
     QPolygon p;
     if(LISTP(l_lst)) {
@@ -494,25 +487,8 @@ static QPolygonF toQPolygonF(cl_object l_lst) {
             l_el = cl_cddr(l_el); }}
     return p; }
 
-static QFont toQFont(cl_object l_f) {
-    QFont f;
-    f.fromString(toQString(l_f));
-    return f; }
-
 static QColor toQColor(cl_object l_c) {
     return QColor(toQString(l_c)); }
-
-static QDate toQDate(cl_object l_d) {
-    return QDate(QDate::fromString(toQString(l_d), Qt::ISODate)); }
-
-static QTime toQTime(cl_object l_d) {
-    return QTime(QTime::fromString(toQString(l_d), Qt::ISODate)); }
-
-static QDateTime toQDateTime(cl_object l_d) {
-    return QDateTime(QDateTime::fromString(toQString(l_d), Qt::ISODate)); }
-
-static QUrl toQUrl(cl_object l_c) {
-    return QUrl(toQString(l_c)); }
 
 static QKeySequence toQKeySequence(cl_object l_c) {
     return QKeySequence(toQString(l_c)); }
@@ -525,7 +501,11 @@ static QGradientStop toQGradientStop(cl_object l_gs) {
 
 // implicit pointer types
 TO_QT_TYPE_PTR2(QBrush, qbrush)
+TO_QT_TYPE_PTR2(QCursor, qcursor)
+TO_QT_TYPE_PTR2(QDate, qdate)
+TO_QT_TYPE_PTR2(QDateTime, qdatetime)
 TO_QT_TYPE_PTR2(QFileInfo, qfileinfo)
+TO_QT_TYPE_PTR2(QFont, qfont)
 TO_QT_TYPE_PTR2(QIcon, qicon)
 TO_QT_TYPE_PTR2(QImage, qimage)
 TO_QT_TYPE_PTR2(QLocale, qlocale)
@@ -539,6 +519,8 @@ TO_QT_TYPE_PTR2(QTextBlock, qtextblock)
 TO_QT_TYPE_PTR(QTextCharFormat, qtextcharformat)
 TO_QT_TYPE_PTR2(QTextFormat, qtextformat)
 TO_QT_TYPE_PTR2(QTextLength, qtextlength)
+TO_QT_TYPE_PTR2(QTime, qtime)
+TO_QT_TYPE_PTR2(QUrl, qurl)
 
 TO_QT_TYPEF(QPoint)
 TO_QT_TYPEF(QSize)
@@ -659,9 +641,6 @@ static cl_object from_qstring(const QString& s) {
 static cl_object from_qkeysequence(const QKeySequence& k) {
     return from_qstring(k.toString()); }
 
-static cl_object from_qurl(const QUrl& u) {
-    return from_qstring(u.toString()); }
-
 static cl_object from_qstringlist(const QStringList& l) {
     cl_object l_lst = Cnil;
     Q_FOREACH(QString s, l) {
@@ -680,25 +659,8 @@ static cl_object from_qreallist(const QList<qreal>& l) {
         l_lst = CONS(ecl_make_doublefloat(r), l_lst); }
     return cl_nreverse(l_lst); }
 
-static cl_object from_qcursor(const QCursor& cr) {
-    return make_base_string_copy(staticQtMetaObject
-                                 ->enumerator(staticQtMetaObject
-                                              ->indexOfEnumerator("CursorShape")).valueToKey(cr.shape())); }
-
-static cl_object from_qfont(const QFont& f) {
-    return from_qstring(f.toString()); }
-
 static cl_object from_qcolor(const QColor& c) {
     return from_qstring(c.name()); }
-
-static cl_object from_qdate(const QDate& d) {
-    return from_qstring(d.toString(Qt::ISODate)); }
-
-static cl_object from_qtime(const QTime& t) {
-    return from_qstring(t.toString(Qt::ISODate)); }
-
-static cl_object from_qdatetime(const QDateTime& dt) {
-    return from_qstring(dt.toString(Qt::ISODate)); }
 
 static cl_object from_qpolygon(const QPolygon& p) {
     cl_object l_lst = Cnil;
@@ -788,7 +750,7 @@ static cl_object from_qvariant(const QVariant& var) {
         case QVariant::Date:        l_obj = from_qdate(var.toDate()); break;
         case QVariant::DateTime:    l_obj = from_qdatetime(var.toDateTime()); break;
         case QVariant::Double:      l_obj = ecl_make_doublefloat(var.toDouble()); break;
-        case QVariant::Font:        l_obj = from_qstring(var.toString()); break;
+        case QVariant::Font:        l_obj = from_qfont(qVariantValue<QFont>(var)); break;
         case QVariant::Icon:        l_obj = from_qicon(qVariantValue<QIcon>(var)); break;
         case QVariant::Int:         l_obj = MAKE_FIXNUM(var.toInt()); break;
         case QVariant::Image:       l_obj = from_qimage(qVariantValue<QImage>(var)); break;
@@ -834,9 +796,9 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case QMetaType::QChar:                   p = new QChar(toQChar(l_arg)); break;
         case QMetaType::QColor:                  p = new QColor(toQColor(l_arg)); break;
         case QMetaType::QCursor:                 p = new QCursor(toQCursor(l_arg)); break;
-        case QMetaType::QDate:                   p = new QDate(toQDate(l_arg)); break;
-        case QMetaType::QDateTime:               p = new QDateTime(toQDateTime(l_arg)); break;
-        case QMetaType::QFont:                   p = new QFont(toQFont(l_arg)); break;
+        case QMetaType::QDate:                   p = toQDatePointer(l_arg); break;
+        case QMetaType::QDateTime:               p = toQDateTimePointer(l_arg); break;
+        case QMetaType::QFont:                   p = toQFontPointer(l_arg); break;
         case QMetaType::QKeySequence:            p = new QKeySequence(toQKeySequence(l_arg)); break;
         case QMetaType::QLine:                   p = new QLine(toQLine(l_arg)); break;
         case QMetaType::QLineF:                  p = new QLineF(toQLineF(l_arg)); break;
@@ -850,8 +812,8 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case QMetaType::QSizeF:                  p = new QSizeF(toQSizeF(l_arg)); break;
         case QMetaType::QString:                 p = new QString(toQString(l_arg)); break;
         case QMetaType::QStringList:             p = new QStringList(toQStringList(l_arg)); break;
-        case QMetaType::QTime:                   p = new QTime(toQTime(l_arg)); break;
-        case QMetaType::QUrl:                    p = new QUrl(toQUrl(l_arg)); break;
+        case QMetaType::QTime:                   p = toQTimePointer(l_arg); break;
+        case QMetaType::QUrl:                    p = toQUrlPointer(l_arg); break;
         case QMetaType::QBrush:                  p = toQBrushPointer(l_arg); break;
         case QMetaType::QIcon:                   p = toQIconPointer(l_arg); break;
         case QMetaType::QImage:                  p = toQImagePointer(l_arg); break;
@@ -1096,10 +1058,6 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
         case QMetaType::QByteArray:
         case QMetaType::QChar:
         case QMetaType::QColor:
-        case QMetaType::QCursor:
-        case QMetaType::QDate:
-        case QMetaType::QDateTime:
-        case QMetaType::QFont:
         case QMetaType::QKeySequence:
         case QMetaType::QLine:
         case QMetaType::QLineF:
@@ -1112,8 +1070,6 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
         case QMetaType::QSizeF:
         case QMetaType::QString:
         case QMetaType::QStringList:
-        case QMetaType::QTime:
-        case QMetaType::QUrl:
         case T_QPolygonF:
 #ifdef MODULE_OPENGL
         case T_GLfloat:
@@ -1124,6 +1080,10 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
             break;
         // implicit pointer types
         case QMetaType::QBrush:
+        case QMetaType::QCursor:
+        case QMetaType::QDate:
+        case QMetaType::QDateTime:
+        case QMetaType::QFont:
         case QMetaType::QIcon:
         case QMetaType::QImage:
         case QMetaType::QLocale:
@@ -1132,6 +1092,8 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
         case QMetaType::QPixmap:
         case QMetaType::QTextFormat:
         case QMetaType::QTextLength:
+        case QMetaType::QTime:
+        case QMetaType::QUrl:
         case T_QFileInfo:
         case T_QModelIndex:
         case T_QPainterPath:
@@ -1747,6 +1709,10 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
             switch(type) {
                 // implicit pointer types
                 case QMetaType::QBrush:            ret = qVariantFromValue(*(QBrush*)o.pointer); break;
+                case QMetaType::QCursor:           ret = qVariantFromValue(*(QCursor*)o.pointer); break;
+                case QMetaType::QDate:             ret = qVariantFromValue(*(QDate*)o.pointer); break;
+                case QMetaType::QDateTime:         ret = qVariantFromValue(*(QDateTime*)o.pointer); break;
+                case QMetaType::QFont:             ret = qVariantFromValue(*(QFont*)o.pointer); break;
                 case QMetaType::QIcon:             ret = qVariantFromValue(*(QIcon*)o.pointer); break;
                 case QMetaType::QImage:            ret = qVariantFromValue(*(QImage*)o.pointer); break;
                 case QMetaType::QLocale:           ret = qVariantFromValue(*(QLocale*)o.pointer); break;
@@ -1755,6 +1721,8 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
                 case QMetaType::QPixmap:           ret = qVariantFromValue(*(QPixmap*)o.pointer); break;
                 case QMetaType::QTextFormat:       ret = qVariantFromValue(*(QTextFormat*)o.pointer); break;
                 case QMetaType::QTextLength:       ret = qVariantFromValue(*(QTextLength*)o.pointer); break;
+                case QMetaType::QTime:             ret = qVariantFromValue(*(QTime*)o.pointer); break;
+                case QMetaType::QUrl:              ret = qVariantFromValue(*(QUrl*)o.pointer); break;
                 case T_QFileInfo:                  ret = qVariantFromValue(*(QFileInfo*)o.pointer); break;
                 case T_QModelIndex:                ret = qVariantFromValue(*(QModelIndex*)o.pointer); break;
                 case T_QPainterPath:               ret = qVariantFromValue(*(QPainterPath*)o.pointer); break;

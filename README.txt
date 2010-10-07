@@ -100,5 +100,9 @@ An interesting side note: the EQL library size varies quite a bit on different p
 
 LICENSE
 
-LGPL
+LGPL (same as ECL and Qt themselves)
+
+
+
+THANKS to all users of the eql-user mailing list for their contributions!
 

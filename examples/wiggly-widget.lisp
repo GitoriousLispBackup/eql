@@ -19,13 +19,11 @@
 (defparameter *edit*   (qnew "QLineEdit" "alignment" "AlignCenter"))
 (defparameter *timer*  (qnew "QBasicTimer"))
 
-(defun font-add-size (font add)
-  (let ((f (split font #\,)))
-    (setf (second f) (+ add (parse-integer (second f) :junk-allowed t)))
-    (join f #\,)))
-
 (defun start ()
-  (qset *wiggly* "font" (font-add-size (qget *wiggly* "font") 20))
+  (qset *wiggly* "font" (let ((font (qnew "QFont(QFont)" (qget *wiggly* "font"))))
+                          (qfun font "setPointSize"
+                                (+ 20 (qfun font "pointSize")))
+                          font))
   (qfun *wiggly* "setBackgroundRole" +light+)
   (let ((dlg (qnew "QDialog" "size" (list 600 200)))
         (vbox (qnew "QVBoxLayout")))

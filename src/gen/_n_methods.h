@@ -84,76 +84,6 @@ public:
 class N14 : public QObject { // QColor
     Q_OBJECT
 public:
-    Q_INVOKABLE void* C(uint u) { return new LColor(u); }
-    Q_INVOKABLE void* C(uint u, int x1, int x2, int x3, int x4 = 255) { return new LColor(u, x1, x2, x3, x4); }
-    Q_INVOKABLE void* C(uint u, QRgb x1) { return new LColor(u, x1); }
-    Q_INVOKABLE void* C(uint u, const QString& x1) { return new LColor(u, x1); }
-    Q_INVOKABLE void* C(uint u, const char* x1) { return new LColor(u, x1); }
-    Q_INVOKABLE void* C(uint u, const QColor& x1) { return new LColor(u, x1); }
-    Q_INVOKABLE void* C(uint u, Qt::GlobalColor x1) { return new LColor(u, x1); }
-    Q_INVOKABLE int Malpha(QColor* o) const { return o->alpha(); }
-    Q_INVOKABLE qreal MalphaF(QColor* o) const { return o->alphaF(); }
-    Q_INVOKABLE int Mblack(QColor* o) const { return o->black(); }
-    Q_INVOKABLE qreal MblackF(QColor* o) const { return o->blackF(); }
-    Q_INVOKABLE int Mblue(QColor* o) const { return o->blue(); }
-    Q_INVOKABLE qreal MblueF(QColor* o) const { return o->blueF(); }
-    Q_INVOKABLE QColor MconvertTo(QColor* o, QColor::Spec x1) const { return o->convertTo(x1); }
-    Q_INVOKABLE int Mcyan(QColor* o) const { return o->cyan(); }
-    Q_INVOKABLE qreal McyanF(QColor* o) const { return o->cyanF(); }
-    Q_INVOKABLE QColor Mdarker(QColor* o, int x1 = 200) const { return o->darker(x1); }
-    Q_INVOKABLE int Mgreen(QColor* o) const { return o->green(); }
-    Q_INVOKABLE qreal MgreenF(QColor* o) const { return o->greenF(); }
-    Q_INVOKABLE int MhslHue(QColor* o) const { return o->hslHue(); }
-    Q_INVOKABLE qreal MhslHueF(QColor* o) const { return o->hslHueF(); }
-    Q_INVOKABLE int MhslSaturation(QColor* o) const { return o->hslSaturation(); }
-    Q_INVOKABLE qreal MhslSaturationF(QColor* o) const { return o->hslSaturationF(); }
-    Q_INVOKABLE int MhsvHue(QColor* o) const { return o->hsvHue(); }
-    Q_INVOKABLE qreal MhsvHueF(QColor* o) const { return o->hsvHueF(); }
-    Q_INVOKABLE int MhsvSaturation(QColor* o) const { return o->hsvSaturation(); }
-    Q_INVOKABLE qreal MhsvSaturationF(QColor* o) const { return o->hsvSaturationF(); }
-    Q_INVOKABLE int Mhue(QColor* o) const { return o->hue(); }
-    Q_INVOKABLE qreal MhueF(QColor* o) const { return o->hueF(); }
-    Q_INVOKABLE bool MisValid(QColor* o) const { return o->isValid(); }
-    Q_INVOKABLE QColor Mlighter(QColor* o, int x1 = 150) const { return o->lighter(x1); }
-    Q_INVOKABLE int Mlightness(QColor* o) const { return o->lightness(); }
-    Q_INVOKABLE qreal MlightnessF(QColor* o) const { return o->lightnessF(); }
-    Q_INVOKABLE int Mmagenta(QColor* o) const { return o->magenta(); }
-    Q_INVOKABLE qreal MmagentaF(QColor* o) const { return o->magentaF(); }
-    Q_INVOKABLE QString Mname(QColor* o) const { return o->name(); }
-    Q_INVOKABLE int Mred(QColor* o) const { return o->red(); }
-    Q_INVOKABLE qreal MredF(QColor* o) const { return o->redF(); }
-    Q_INVOKABLE QRgb Mrgb(QColor* o) const { return o->rgb(); }
-    Q_INVOKABLE QRgb Mrgba(QColor* o) const { return o->rgba(); }
-    Q_INVOKABLE int Msaturation(QColor* o) const { return o->saturation(); }
-    Q_INVOKABLE qreal MsaturationF(QColor* o) const { return o->saturationF(); }
-    Q_INVOKABLE void MsetAlpha(QColor* o, int x1) { o->setAlpha(x1); }
-    Q_INVOKABLE void MsetAlphaF(QColor* o, qreal x1) { o->setAlphaF(x1); }
-    Q_INVOKABLE void MsetBlue(QColor* o, int x1) { o->setBlue(x1); }
-    Q_INVOKABLE void MsetBlueF(QColor* o, qreal x1) { o->setBlueF(x1); }
-    Q_INVOKABLE void MsetCmyk(QColor* o, int x1, int x2, int x3, int x4, int x5 = 255) { o->setCmyk(x1, x2, x3, x4, x5); }
-    Q_INVOKABLE void MsetCmykF(QColor* o, qreal x1, qreal x2, qreal x3, qreal x4, qreal x5 = 1.0) { o->setCmykF(x1, x2, x3, x4, x5); }
-    Q_INVOKABLE void MsetGreen(QColor* o, int x1) { o->setGreen(x1); }
-    Q_INVOKABLE void MsetGreenF(QColor* o, qreal x1) { o->setGreenF(x1); }
-    Q_INVOKABLE void MsetHsl(QColor* o, int x1, int x2, int x3, int x4 = 255) { o->setHsl(x1, x2, x3, x4); }
-    Q_INVOKABLE void MsetHslF(QColor* o, qreal x1, qreal x2, qreal x3, qreal x4 = 1.0) { o->setHslF(x1, x2, x3, x4); }
-    Q_INVOKABLE void MsetHsv(QColor* o, int x1, int x2, int x3, int x4 = 255) { o->setHsv(x1, x2, x3, x4); }
-    Q_INVOKABLE void MsetHsvF(QColor* o, qreal x1, qreal x2, qreal x3, qreal x4 = 1.0) { o->setHsvF(x1, x2, x3, x4); }
-    Q_INVOKABLE void MsetNamedColor(QColor* o, const QString& x1) { o->setNamedColor(x1); }
-    Q_INVOKABLE void MsetRed(QColor* o, int x1) { o->setRed(x1); }
-    Q_INVOKABLE void MsetRedF(QColor* o, qreal x1) { o->setRedF(x1); }
-    Q_INVOKABLE void MsetRgb(QColor* o, int x1, int x2, int x3, int x4 = 255) { o->setRgb(x1, x2, x3, x4); }
-    Q_INVOKABLE void MsetRgb(QColor* o, QRgb x1) { o->setRgb(x1); }
-    Q_INVOKABLE void MsetRgbF(QColor* o, qreal x1, qreal x2, qreal x3, qreal x4 = 1.0) { o->setRgbF(x1, x2, x3, x4); }
-    Q_INVOKABLE void MsetRgba(QColor* o, QRgb x1) { o->setRgba(x1); }
-    Q_INVOKABLE int Mspec(QColor* o) const { return o->spec(); }
-    Q_INVOKABLE QColor MtoCmyk(QColor* o) const { return o->toCmyk(); }
-    Q_INVOKABLE QColor MtoHsl(QColor* o) const { return o->toHsl(); }
-    Q_INVOKABLE QColor MtoHsv(QColor* o) const { return o->toHsv(); }
-    Q_INVOKABLE QColor MtoRgb(QColor* o) const { return o->toRgb(); }
-    Q_INVOKABLE int Mvalue(QColor* o) const { return o->value(); }
-    Q_INVOKABLE qreal MvalueF(QColor* o) const { return o->valueF(); }
-    Q_INVOKABLE int Myellow(QColor* o) const { return o->yellow(); }
-    Q_INVOKABLE qreal MyellowF(QColor* o) const { return o->yellowF(); }
     Q_INVOKABLE QStringList ScolorNames() { return QColor::colorNames(); }
     Q_INVOKABLE QColor SfromCmyk(int x1, int x2, int x3, int x4, int x5 = 255) { return QColor::fromCmyk(x1, x2, x3, x4, x5); }
     Q_INVOKABLE QColor SfromCmykF(qreal x1, qreal x2, qreal x3, qreal x4, qreal x5 = 1.0) { return QColor::fromCmykF(x1, x2, x3, x4, x5); }
@@ -445,7 +375,75 @@ public:
     Q_INVOKABLE QString MsymLinkTarget(QFileInfo* o) const { return o->symLinkTarget(); }
 };
 
-class N35 : public QObject { // QFontDatabase
+class N35 : public QObject { // QFont
+    Q_OBJECT
+public:
+    Q_INVOKABLE void* C(uint u) { return new LFont(u); }
+    Q_INVOKABLE void* C(uint u, const QString& x1, int x2 = -1, int x3 = -1, bool x4 = false) { return new LFont(u, x1, x2, x3, x4); }
+    Q_INVOKABLE void* C(uint u, const QFont& x1, QPaintDevice* x2) { return new LFont(u, x1, x2); }
+    Q_INVOKABLE void* C(uint u, const QFont& x1) { return new LFont(u, x1); }
+    Q_INVOKABLE bool Mbold(QFont* o) const { return o->bold(); }
+    Q_INVOKABLE int Mcapitalization(QFont* o) const { return o->capitalization(); }
+    Q_INVOKABLE QString MdefaultFamily(QFont* o) const { return o->defaultFamily(); }
+    Q_INVOKABLE bool MexactMatch(QFont* o) const { return o->exactMatch(); }
+    Q_INVOKABLE QString Mfamily(QFont* o) const { return o->family(); }
+    Q_INVOKABLE bool MfixedPitch(QFont* o) const { return o->fixedPitch(); }
+    Q_INVOKABLE FT_Face MfreetypeFace(QFont* o) const { return o->freetypeFace(); }
+    Q_INVOKABLE bool MfromString(QFont* o, const QString& x1) { return o->fromString(x1); }
+    Q_INVOKABLE bool MisCopyOf(QFont* o, const QFont& x1) const { return o->isCopyOf(x1); }
+    Q_INVOKABLE bool Mitalic(QFont* o) const { return o->italic(); }
+    Q_INVOKABLE bool Mkerning(QFont* o) const { return o->kerning(); }
+    Q_INVOKABLE QString Mkey(QFont* o) const { return o->key(); }
+    Q_INVOKABLE QString MlastResortFamily(QFont* o) const { return o->lastResortFamily(); }
+    Q_INVOKABLE QString MlastResortFont(QFont* o) const { return o->lastResortFont(); }
+    Q_INVOKABLE qreal MletterSpacing(QFont* o) const { return o->letterSpacing(); }
+    Q_INVOKABLE int MletterSpacingType(QFont* o) const { return o->letterSpacingType(); }
+    Q_INVOKABLE bool Moverline(QFont* o) const { return o->overline(); }
+    Q_INVOKABLE int MpixelSize(QFont* o) const { return o->pixelSize(); }
+    Q_INVOKABLE int MpointSize(QFont* o) const { return o->pointSize(); }
+    Q_INVOKABLE qreal MpointSizeF(QFont* o) const { return o->pointSizeF(); }
+    Q_INVOKABLE bool MrawMode(QFont* o) const { return o->rawMode(); }
+    Q_INVOKABLE QString MrawName(QFont* o) const { return o->rawName(); }
+    Q_INVOKABLE QFont Mresolve(QFont* o, const QFont& x1) const { return o->resolve(x1); }
+    Q_INVOKABLE void MsetBold(QFont* o, bool x1) { o->setBold(x1); }
+    Q_INVOKABLE void MsetCapitalization(QFont* o, QFont::Capitalization x1) { o->setCapitalization(x1); }
+    Q_INVOKABLE void MsetFamily(QFont* o, const QString& x1) { o->setFamily(x1); }
+    Q_INVOKABLE void MsetFixedPitch(QFont* o, bool x1) { o->setFixedPitch(x1); }
+    Q_INVOKABLE void MsetItalic(QFont* o, bool x1) { o->setItalic(x1); }
+    Q_INVOKABLE void MsetKerning(QFont* o, bool x1) { o->setKerning(x1); }
+    Q_INVOKABLE void MsetLetterSpacing(QFont* o, QFont::SpacingType x1, qreal x2) { o->setLetterSpacing(x1, x2); }
+    Q_INVOKABLE void MsetOverline(QFont* o, bool x1) { o->setOverline(x1); }
+    Q_INVOKABLE void MsetPixelSize(QFont* o, int x1) { o->setPixelSize(x1); }
+    Q_INVOKABLE void MsetPointSize(QFont* o, int x1) { o->setPointSize(x1); }
+    Q_INVOKABLE void MsetPointSizeF(QFont* o, qreal x1) { o->setPointSizeF(x1); }
+    Q_INVOKABLE void MsetRawMode(QFont* o, bool x1) { o->setRawMode(x1); }
+    Q_INVOKABLE void MsetRawName(QFont* o, const QString& x1) { o->setRawName(x1); }
+    Q_INVOKABLE void MsetStretch(QFont* o, int x1) { o->setStretch(x1); }
+    Q_INVOKABLE void MsetStrikeOut(QFont* o, bool x1) { o->setStrikeOut(x1); }
+    Q_INVOKABLE void MsetStyle(QFont* o, QFont::Style x1) { o->setStyle(x1); }
+    Q_INVOKABLE void MsetStyleHint(QFont* o, QFont::StyleHint x1, QFont::StyleStrategy x2 = QFont::PreferDefault) { o->setStyleHint(x1, x2); }
+    Q_INVOKABLE void MsetStyleStrategy(QFont* o, QFont::StyleStrategy x1) { o->setStyleStrategy(x1); }
+    Q_INVOKABLE void MsetUnderline(QFont* o, bool x1) { o->setUnderline(x1); }
+    Q_INVOKABLE void MsetWeight(QFont* o, int x1) { o->setWeight(x1); }
+    Q_INVOKABLE void MsetWordSpacing(QFont* o, qreal x1) { o->setWordSpacing(x1); }
+    Q_INVOKABLE int Mstretch(QFont* o) const { return o->stretch(); }
+    Q_INVOKABLE bool MstrikeOut(QFont* o) const { return o->strikeOut(); }
+    Q_INVOKABLE int Mstyle(QFont* o) const { return o->style(); }
+    Q_INVOKABLE int MstyleHint(QFont* o) const { return o->styleHint(); }
+    Q_INVOKABLE int MstyleStrategy(QFont* o) const { return o->styleStrategy(); }
+    Q_INVOKABLE QString MtoString(QFont* o) const { return o->toString(); }
+    Q_INVOKABLE bool Munderline(QFont* o) const { return o->underline(); }
+    Q_INVOKABLE int Mweight(QFont* o) const { return o->weight(); }
+    Q_INVOKABLE qreal MwordSpacing(QFont* o) const { return o->wordSpacing(); }
+    Q_INVOKABLE void SinsertSubstitution(const QString& x1, const QString& x2) { QFont::insertSubstitution(x1, x2); }
+    Q_INVOKABLE void SinsertSubstitutions(const QString& x1, const QStringList& x2) { QFont::insertSubstitutions(x1, x2); }
+    Q_INVOKABLE void SremoveSubstitution(const QString& x1) { QFont::removeSubstitution(x1); }
+    Q_INVOKABLE QString Ssubstitute(const QString& x1) { return QFont::substitute(x1); }
+    Q_INVOKABLE QStringList Ssubstitutes(const QString& x1) { return QFont::substitutes(x1); }
+    Q_INVOKABLE QStringList Ssubstitutions() { return QFont::substitutions(); }
+};
+
+class N36 : public QObject { // QFontDatabase
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LFontDatabase(u); }
@@ -473,7 +471,7 @@ public:
     Q_INVOKABLE QString SwritingSystemSample(QFontDatabase::WritingSystem x1) { return QFontDatabase::writingSystemSample(x1); }
 };
 
-class N36 : public QObject { // QFontMetrics
+class N37 : public QObject { // QFontMetrics
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QFont& x1) { return new LFontMetrics(u, x1); }
@@ -504,7 +502,7 @@ public:
     Q_INVOKABLE int MxHeight(QFontMetrics* o) const { return o->xHeight(); }
 };
 
-class N38 : public QObject { // QGradient
+class N39 : public QObject { // QGradient
     Q_OBJECT
 public:
     Q_INVOKABLE int McoordinateMode(QGradient* o) const { return o->coordinateMode(); }
@@ -517,7 +515,7 @@ public:
     Q_INVOKABLE int Mtype(QGradient* o) const { return o->type(); }
 };
 
-class N42 : public QObject { // QGraphicsItem
+class N43 : public QObject { // QGraphicsItem
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QGraphicsItem* x1 = 0) { return new LGraphicsItem(u, x1); }
@@ -702,7 +700,7 @@ public:
     Q_INVOKABLE int SUserType() { return QGraphicsItem::UserType; }
 };
 
-class N45 : public QObject { // QGraphicsLayoutItem
+class N46 : public QObject { // QGraphicsLayoutItem
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QGraphicsLayoutItem* x1 = 0, bool x2 = false) { return new LGraphicsLayoutItem(u, x1, x2); }
@@ -744,7 +742,7 @@ public:
     Q_INVOKABLE void MsetOwnedByLayout(QGraphicsLayoutItem* o, bool x1) { ((LGraphicsLayoutItem*)o)->setOwnedByLayout(x1); }
 };
 
-class N65 : public QObject { // QIcon
+class N66 : public QObject { // QIcon
     Q_OBJECT
 public:
     Q_INVOKABLE void* CC(uint u, LIcon* o) { LIcon* copy = new LIcon(u); *copy = *o; return copy; }
@@ -770,7 +768,7 @@ public:
     Q_INVOKABLE QStringList SthemeSearchPaths() { return QIcon::themeSearchPaths(); }
 };
 
-class N70 : public QObject { // QItemEditorFactory
+class N71 : public QObject { // QItemEditorFactory
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LItemEditorFactory(u); }
@@ -781,7 +779,7 @@ public:
     Q_INVOKABLE void SsetDefaultFactory(QItemEditorFactory* x1) { QItemEditorFactory::setDefaultFactory(x1); }
 };
 
-class N71 : public QObject { // QItemSelection
+class N72 : public QObject { // QItemSelection
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LItemSelection(u); }
@@ -793,7 +791,7 @@ public:
     Q_INVOKABLE void Ssplit(const QItemSelectionRange& x1, const QItemSelectionRange& x2, QItemSelection* x3) { QItemSelection::split(x1, x2, x3); }
 };
 
-class N72 : public QObject { // QItemSelectionRange
+class N73 : public QObject { // QItemSelectionRange
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LItemSelectionRange(u); }
@@ -818,7 +816,7 @@ public:
     Q_INVOKABLE int Mwidth(QItemSelectionRange* o) const { return o->width(); }
 };
 
-class N74 : public QObject { // QLayoutItem
+class N75 : public QObject { // QLayoutItem
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, Qt::Alignment x1 = 0) { return new LLayoutItem(u, x1); }
@@ -841,7 +839,7 @@ public:
     Q_INVOKABLE QWidget* Mwidget(QLayoutItem* o) { return o->widget(); }
 };
 
-class N75 : public QObject { // QLibraryInfo
+class N76 : public QObject { // QLibraryInfo
     Q_OBJECT
 public:
     Q_INVOKABLE QDate SbuildDate() { return QLibraryInfo::buildDate(); }
@@ -851,7 +849,7 @@ public:
     Q_INVOKABLE QString Slocation(QLibraryInfo::LibraryLocation x1) { return QLibraryInfo::location(x1); }
 };
 
-class N77 : public QObject { // QListWidgetItem
+class N78 : public QObject { // QListWidgetItem
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QListWidget* x1 = 0, int x2 = QListWidgetItem::Type) { return new LListWidgetItem(u, x1, x2); }
@@ -893,7 +891,7 @@ public:
     Q_INVOKABLE QString MwhatsThis(QListWidgetItem* o) const { return o->whatsThis(); }
 };
 
-class N78 : public QObject { // QLocale
+class N79 : public QObject { // QLocale
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LLocale(u); }
@@ -957,7 +955,7 @@ public:
     Q_INVOKABLE QLocale Ssystem() { return QLocale::system(); }
 };
 
-class N79 : public QObject { // QMargins
+class N80 : public QObject { // QMargins
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LMargins(u); }
@@ -973,7 +971,7 @@ public:
     Q_INVOKABLE int Mtop(QMargins* o) const { return o->top(); }
 };
 
-class N80 : public QObject { // QMatrix
+class N81 : public QObject { // QMatrix
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LMatrix(u); }
@@ -1008,7 +1006,7 @@ public:
     Q_INVOKABLE QMatrix Mtranslate(QMatrix* o, qreal x1, qreal x2) { return o->translate(x1, x2); }
 };
 
-class N81 : public QObject { // QMatrix4x4
+class N82 : public QObject { // QMatrix4x4
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LMatrix4x4(u); }
@@ -1056,7 +1054,7 @@ public:
     Q_INVOKABLE QMatrix4x4 Mtransposed(QMatrix4x4* o) const { return o->transposed(); }
 };
 
-class N82 : public QObject { // QMetaObject
+class N83 : public QObject { // QMetaObject
     Q_OBJECT
 public:
     Q_INVOKABLE int MclassInfoCount(QMetaObject* o) const { return o->classInfoCount(); }
@@ -1083,7 +1081,7 @@ public:
     Q_INVOKABLE QByteArray SnormalizedType(const char* x1) { return QMetaObject::normalizedType(x1); }
 };
 
-class N83 : public QObject { // QModelIndex
+class N84 : public QObject { // QModelIndex
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LModelIndex(u); }
@@ -1099,7 +1097,7 @@ public:
     Q_INVOKABLE QModelIndex Msibling(QModelIndex* o, int x1, int x2) const { return o->sibling(x1, x2); }
 };
 
-class N86 : public QObject { // QMutex
+class N87 : public QObject { // QMutex
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QMutex::RecursionMode x1 = QMutex::NonRecursive) { return new LMutex(u, x1); }
@@ -1109,7 +1107,7 @@ public:
     Q_INVOKABLE void Munlock(QMutex* o) { o->unlock(); }
 };
 
-class N87 : public QObject { // QMutexLocker
+class N88 : public QObject { // QMutexLocker
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QMutex* x1) { return new LMutexLocker(u, x1); }
@@ -1118,7 +1116,7 @@ public:
     Q_INVOKABLE void Munlock(QMutexLocker* o) { o->unlock(); }
 };
 
-class N88 : public QObject { // QPaintDevice
+class N89 : public QObject { // QPaintDevice
     Q_OBJECT
 public:
     Q_INVOKABLE int McolorCount(QPaintDevice* o) const { return o->colorCount(); }
@@ -1134,7 +1132,7 @@ public:
     Q_INVOKABLE int MwidthMM(QPaintDevice* o) const { return o->widthMM(); }
 };
 
-class N90 : public QObject { // QPainter
+class N91 : public QObject { // QPainter
     Q_OBJECT
 public:
     Q_INVOKABLE bool Mbegin(QPainter* o, QWidget* x1) { return o->begin(x1); }
@@ -1318,7 +1316,7 @@ public:
     Q_INVOKABLE QTransform MworldTransform(QPainter* o) const { return o->worldTransform(); }
 };
 
-class N91 : public QObject { // QPainterPath
+class N92 : public QObject { // QPainterPath
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LPainterPath(u); }
@@ -1385,7 +1383,7 @@ public:
     Q_INVOKABLE QPainterPath Munited(QPainterPath* o, const QPainterPath& x1) const { return o->united(x1); }
 };
 
-class N92 : public QObject { // QPainterPathStroker
+class N93 : public QObject { // QPainterPathStroker
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LPainterPathStroker(u); }
@@ -1407,7 +1405,7 @@ public:
     Q_INVOKABLE qreal Mwidth(QPainterPathStroker* o) const { return o->width(); }
 };
 
-class N93 : public QObject { // QPalette
+class N94 : public QObject { // QPalette
     Q_OBJECT
 public:
     Q_INVOKABLE void* CC(uint u, LPalette* o) { LPalette* copy = new LPalette(u); *copy = *o; return copy; }
@@ -1453,7 +1451,7 @@ public:
     Q_INVOKABLE QBrush MwindowText(QPalette* o) const { return o->windowText(); }
 };
 
-class N94 : public QObject { // QPen
+class N95 : public QObject { // QPen
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LPen(u); }
@@ -1486,7 +1484,7 @@ public:
     Q_INVOKABLE qreal MwidthF(QPen* o) const { return o->widthF(); }
 };
 
-class N95 : public QObject { // QPersistentModelIndex
+class N96 : public QObject { // QPersistentModelIndex
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QModelIndex& x1) { return new LPersistentModelIndex(u, x1); }
@@ -1502,7 +1500,7 @@ public:
     Q_INVOKABLE QModelIndex Msibling(QPersistentModelIndex* o, int x1, int x2) const { return o->sibling(x1, x2); }
 };
 
-class N98 : public QObject { // QPixmapCache
+class N99 : public QObject { // QPixmapCache
     Q_OBJECT
 public:
     Q_INVOKABLE int ScacheLimit() { return QPixmapCache::cacheLimit(); }
@@ -1513,7 +1511,7 @@ public:
     Q_INVOKABLE void SsetCacheLimit(int x1) { QPixmapCache::setCacheLimit(x1); }
 };
 
-class N100 : public QObject { // QPrinterInfo
+class N101 : public QObject { // QPrinterInfo
     Q_OBJECT
 public:
     Q_INVOKABLE bool MisDefault(QPrinterInfo* o) const { return o->isDefault(); }
@@ -1522,7 +1520,7 @@ public:
     Q_INVOKABLE QList<QPrinter::PaperSize> MsupportedPaperSizes(QPrinterInfo* o) const { return o->supportedPaperSizes(); }
 };
 
-class N101 : public QObject { // QProcessEnvironment
+class N102 : public QObject { // QProcessEnvironment
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LProcessEnvironment(u); }
@@ -1537,7 +1535,7 @@ public:
     Q_INVOKABLE QProcessEnvironment SsystemEnvironment() { return QProcessEnvironment::systemEnvironment(); }
 };
 
-class N102 : public QObject { // QQuaternion
+class N103 : public QObject { // QQuaternion
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LQuaternion(u); }
@@ -1570,7 +1568,7 @@ public:
     Q_INVOKABLE QQuaternion Sslerp(const QQuaternion& x1, const QQuaternion& x2, qreal x3) { return QQuaternion::slerp(x1, x2, x3); }
 };
 
-class N104 : public QObject { // QReadLocker
+class N105 : public QObject { // QReadLocker
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QReadWriteLock* x1) { return new LReadLocker(u, x1); }
@@ -1579,7 +1577,7 @@ public:
     Q_INVOKABLE void Munlock(QReadLocker* o) { o->unlock(); }
 };
 
-class N105 : public QObject { // QReadWriteLock
+class N106 : public QObject { // QReadWriteLock
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LReadWriteLock(u); }
@@ -1593,7 +1591,7 @@ public:
     Q_INVOKABLE void Munlock(QReadWriteLock* o) { o->unlock(); }
 };
 
-class N106 : public QObject { // QRegExp
+class N107 : public QObject { // QRegExp
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LRegExp(u); }
@@ -1621,7 +1619,7 @@ public:
     Q_INVOKABLE QString Sescape(const QString& x1) { return QRegExp::escape(x1); }
 };
 
-class N107 : public QObject { // QRegion
+class N108 : public QObject { // QRegion
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LRegion(u); }
@@ -1651,7 +1649,7 @@ public:
     Q_INVOKABLE QRegion Mxored(QRegion* o, const QRegion& x1) const { return o->xored(x1); }
 };
 
-class N109 : public QObject { // QRunnable
+class N110 : public QObject { // QRunnable
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LRunnable(u); }
@@ -1660,7 +1658,7 @@ public:
     Q_INVOKABLE void MsetAutoDelete(QRunnable* o, bool x1) { o->setAutoDelete(x1); }
 };
 
-class N110 : public QObject { // QSemaphore
+class N111 : public QObject { // QSemaphore
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, int x1 = 0) { return new LSemaphore(u, x1); }
@@ -1671,7 +1669,7 @@ public:
     Q_INVOKABLE bool MtryAcquire(QSemaphore* o, int x1, int x2) { return o->tryAcquire(x1, x2); }
 };
 
-class N113 : public QObject { // QSizePolicy
+class N114 : public QObject { // QSizePolicy
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LSizePolicy(u); }
@@ -1693,7 +1691,7 @@ public:
     Q_INVOKABLE int MverticalStretch(QSizePolicy* o) const { return o->verticalStretch(); }
 };
 
-class N115 : public QObject { // QStandardItem
+class N116 : public QObject { // QStandardItem
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LStandardItem(u); }
@@ -1781,7 +1779,7 @@ public:
     Q_INVOKABLE void MemitDataChanged(QStandardItem* o) { ((LStandardItem*)o)->emitDataChanged(); }
 };
 
-class N117 : public QObject { // QSystemSemaphore
+class N118 : public QObject { // QSystemSemaphore
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QString& x1, int x2 = 0, QSystemSemaphore::AccessMode x3 = QSystemSemaphore::Open) { return new LSystemSemaphore(u, x1, x2, x3); }
@@ -1793,7 +1791,7 @@ public:
     Q_INVOKABLE void MsetKey(QSystemSemaphore* o, const QString& x1, int x2 = 0, QSystemSemaphore::AccessMode x3 = QSystemSemaphore::Open) { o->setKey(x1, x2, x3); }
 };
 
-class N118 : public QObject { // QTableWidgetItem
+class N119 : public QObject { // QTableWidgetItem
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, int x1 = QTableWidgetItem::Type) { return new LTableWidgetItem(u, x1); }
@@ -1835,7 +1833,7 @@ public:
     Q_INVOKABLE QString MwhatsThis(QTableWidgetItem* o) const { return o->whatsThis(); }
 };
 
-class N119 : public QObject { // QTableWidgetSelectionRange
+class N120 : public QObject { // QTableWidgetSelectionRange
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LTableWidgetSelectionRange(u); }
@@ -1849,7 +1847,7 @@ public:
     Q_INVOKABLE int MtopRow(QTableWidgetSelectionRange* o) const { return o->topRow(); }
 };
 
-class N121 : public QObject { // QTextBlock
+class N122 : public QObject { // QTextBlock
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QTextBlock& x1) { return new LTextBlock(u, x1); }
@@ -1881,12 +1879,12 @@ public:
     Q_INVOKABLE int MuserState(QTextBlock* o) const { return o->userState(); }
 };
 
-class N123 : public QObject { // QTextBlockUserData
+class N124 : public QObject { // QTextBlockUserData
     Q_OBJECT
 public:
 };
 
-class N124 : public QObject { // QTextBoundaryFinder
+class N125 : public QObject { // QTextBoundaryFinder
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LTextBoundaryFinder(u); }
@@ -1906,7 +1904,7 @@ public:
     Q_INVOKABLE int Mtype(QTextBoundaryFinder* o) const { return o->type(); }
 };
 
-class N126 : public QObject { // QTextCodec
+class N127 : public QObject { // QTextCodec
     Q_OBJECT
 public:
     Q_INVOKABLE QList<QByteArray> Maliases(QTextCodec* o) const { return o->aliases(); }
@@ -1939,7 +1937,7 @@ public:
     Q_INVOKABLE void SsetCodecForTr(QTextCodec* x1) { QTextCodec::setCodecForTr(x1); }
 };
 
-class N127 : public QObject { // QTextCursor
+class N128 : public QObject { // QTextCursor
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LTextCursor(u); }
@@ -2009,7 +2007,7 @@ public:
     Q_INVOKABLE bool MvisualNavigation(QTextCursor* o) const { return o->visualNavigation(); }
 };
 
-class N128 : public QObject { // QTextDecoder
+class N129 : public QObject { // QTextDecoder
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QTextCodec* x1) { return new LTextDecoder(u, x1); }
@@ -2018,7 +2016,7 @@ public:
     Q_INVOKABLE QString MtoUnicode(QTextDecoder* o, const QByteArray& x1) { return o->toUnicode(x1); }
 };
 
-class N129 : public QObject { // QTextDocumentFragment
+class N130 : public QObject { // QTextDocumentFragment
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LTextDocumentFragment(u); }
@@ -2034,7 +2032,7 @@ public:
     Q_INVOKABLE QTextDocumentFragment SfromPlainText(const QString& x1) { return QTextDocumentFragment::fromPlainText(x1); }
 };
 
-class N130 : public QObject { // QTextDocumentWriter
+class N131 : public QObject { // QTextDocumentWriter
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LTextDocumentWriter(u); }
@@ -2050,7 +2048,7 @@ public:
     Q_INVOKABLE QList<QByteArray> SsupportedDocumentFormats() { return QTextDocumentWriter::supportedDocumentFormats(); }
 };
 
-class N131 : public QObject { // QTextEncoder
+class N132 : public QObject { // QTextEncoder
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QTextCodec* x1) { return new LTextEncoder(u, x1); }
@@ -2058,7 +2056,7 @@ public:
     Q_INVOKABLE QByteArray MfromUnicode(QTextEncoder* o, const QChar* x1, int x2) { return o->fromUnicode(x1, x2); }
 };
 
-class N132 : public QObject { // QTextFormat
+class N133 : public QObject { // QTextFormat
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LTextFormat(u); }
@@ -2110,7 +2108,7 @@ public:
     Q_INVOKABLE int Mtype(QTextFormat* o) const { return o->type(); }
 };
 
-class N133 : public QObject { // QTextFragment
+class N134 : public QObject { // QTextFragment
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LTextFragment(u); }
@@ -2124,7 +2122,7 @@ public:
     Q_INVOKABLE QString Mtext(QTextFragment* o) const { return o->text(); }
 };
 
-class N136 : public QObject { // QTextLayout
+class N137 : public QObject { // QTextLayout
     Q_OBJECT
 public:
     Q_INVOKABLE void MbeginLayout(QTextLayout* o) { o->beginLayout(); }
@@ -2158,7 +2156,7 @@ public:
     Q_INVOKABLE QTextOption MtextOption(QTextLayout* o) const { return o->textOption(); }
 };
 
-class N137 : public QObject { // QTextLength
+class N138 : public QObject { // QTextLength
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LTextLength(u); }
@@ -2168,7 +2166,7 @@ public:
     Q_INVOKABLE qreal Mvalue(QTextLength* o, qreal x1) const { return o->value(x1); }
 };
 
-class N138 : public QObject { // QTextLine
+class N139 : public QObject { // QTextLine
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LTextLine(u); }
@@ -2197,7 +2195,7 @@ public:
     Q_INVOKABLE qreal My(QTextLine* o) const { return o->y(); }
 };
 
-class N140 : public QObject { // QTextOption
+class N141 : public QObject { // QTextOption
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LTextOption(u); }
@@ -2219,7 +2217,7 @@ public:
     Q_INVOKABLE int MwrapMode(QTextOption* o) const { return o->wrapMode(); }
 };
 
-class N141 : public QObject { // QTextTableCell
+class N142 : public QObject { // QTextTableCell
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LTextTableCell(u); }
@@ -2236,7 +2234,7 @@ public:
     Q_INVOKABLE int MtableCellFormatIndex(QTextTableCell* o) const { return o->tableCellFormatIndex(); }
 };
 
-class N144 : public QObject { // QTime
+class N145 : public QObject { // QTime
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LTime(u); }
@@ -2263,7 +2261,7 @@ public:
     Q_INVOKABLE bool SisValid(int x1, int x2, int x3, int x4 = 0) { return QTime::isValid(x1, x2, x3, x4); }
 };
 
-class N146 : public QObject { // QToolTip
+class N147 : public QObject { // QToolTip
     Q_OBJECT
 public:
     Q_INVOKABLE QFont Sfont() { return QToolTip::font(); }
@@ -2277,7 +2275,7 @@ public:
     Q_INVOKABLE QString Stext() { return QToolTip::text(); }
 };
 
-class N148 : public QObject { // QTransform
+class N149 : public QObject { // QTransform
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LTransform(u); }
@@ -2332,7 +2330,7 @@ public:
     Q_INVOKABLE bool SsquareToQuad(const QPolygonF& x1, QTransform& x2) { return QTransform::squareToQuad(x1, x2); }
 };
 
-class N149 : public QObject { // QTreeWidgetItem
+class N150 : public QObject { // QTreeWidgetItem
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, int x1 = QTreeWidgetItem::Type) { return new LTreeWidgetItem(u, x1); }
@@ -2401,7 +2399,7 @@ public:
     Q_INVOKABLE void MemitDataChanged(QTreeWidgetItem* o) { ((LTreeWidgetItem*)o)->emitDataChanged(); }
 };
 
-class N150 : public QObject { // QUndoCommand
+class N151 : public QObject { // QUndoCommand
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QUndoCommand* x1 = 0) { return new LUndoCommand(u, x1); }
@@ -2416,7 +2414,7 @@ public:
     Q_INVOKABLE void Mundo(QUndoCommand* o) { o->undo(); }
 };
 
-class N151 : public QObject { // QUrl
+class N152 : public QObject { // QUrl
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LUrl(u); }
@@ -2497,7 +2495,7 @@ public:
     Q_INVOKABLE QByteArray StoPercentEncoding(const QString& x1, const QByteArray& x2 = QByteArray(), const QByteArray& x3 = QByteArray()) { return QUrl::toPercentEncoding(x1, x2, x3); }
 };
 
-class N152 : public QObject { // QVariant
+class N153 : public QObject { // QVariant
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LVariant(u); }
@@ -2566,7 +2564,7 @@ public:
     Q_INVOKABLE int SnameToType(const char* x1) { return QVariant::nameToType(x1); }
 };
 
-class N153 : public QObject { // QVector2D
+class N154 : public QObject { // QVector2D
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LVector2D(u); }
@@ -2591,7 +2589,7 @@ public:
     Q_INVOKABLE qreal SdotProduct(const QVector2D& x1, const QVector2D& x2) { return QVector2D::dotProduct(x1, x2); }
 };
 
-class N154 : public QObject { // QVector3D
+class N155 : public QObject { // QVector3D
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LVector3D(u); }
@@ -2625,7 +2623,7 @@ public:
     Q_INVOKABLE QVector3D Snormal(const QVector3D& x1, const QVector3D& x2, const QVector3D& x3) { return QVector3D::normal(x1, x2, x3); }
 };
 
-class N155 : public QObject { // QVector4D
+class N156 : public QObject { // QVector4D
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LVector4D(u); }
@@ -2658,7 +2656,7 @@ public:
     Q_INVOKABLE qreal SdotProduct(const QVector4D& x1, const QVector4D& x2) { return QVector4D::dotProduct(x1, x2); }
 };
 
-class N156 : public QObject { // QWaitCondition
+class N157 : public QObject { // QWaitCondition
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LWaitCondition(u); }
@@ -2668,7 +2666,7 @@ public:
     Q_INVOKABLE void MwakeOne(QWaitCondition* o) { o->wakeOne(); }
 };
 
-class N157 : public QObject { // QWhatsThis
+class N158 : public QObject { // QWhatsThis
     Q_OBJECT
 public:
     Q_INVOKABLE QAction* ScreateAction(QObject* x1 = 0) { return QWhatsThis::createAction(x1); }
@@ -2679,7 +2677,7 @@ public:
     Q_INVOKABLE void SshowText(const QPoint& x1, const QString& x2, QWidget* x3 = 0) { QWhatsThis::showText(x1, x2, x3); }
 };
 
-class N162 : public QObject { // QWriteLocker
+class N163 : public QObject { // QWriteLocker
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QReadWriteLock* x1) { return new LWriteLocker(u, x1); }
@@ -2688,7 +2686,7 @@ public:
     Q_INVOKABLE void Munlock(QWriteLocker* o) { o->unlock(); }
 };
 
-class N1 : public N42 { // QAbstractGraphicsShapeItem
+class N1 : public N43 { // QAbstractGraphicsShapeItem
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QGraphicsItem* x1 = 0) { return new LAbstractGraphicsShapeItem(u, x1); }
@@ -2789,7 +2787,7 @@ public:
     Q_INVOKABLE void* C(uint u) { return new LCloseEvent(u); }
 };
 
-class N15 : public N38 { // QConicalGradient
+class N15 : public N39 { // QConicalGradient
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LConicalGradient(u); }
@@ -2850,7 +2848,7 @@ public:
     Q_INVOKABLE int Mreason(QFocusEvent* o) const { return o->reason(); }
 };
 
-class N37 : public N30 { // QGestureEvent
+class N38 : public N30 { // QGestureEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QList<QGesture*>& x1) { return new LGestureEvent(u, x1); }
@@ -2874,7 +2872,7 @@ public:
     Q_INVOKABLE QWidget* Mwidget(QGestureEvent* o) const { return o->widget(); }
 };
 
-class N40 : public N1 { // QGraphicsEllipseItem
+class N41 : public N1 { // QGraphicsEllipseItem
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QGraphicsItem* x1 = 0) { return new LGraphicsEllipseItem(u, x1); }
@@ -2896,7 +2894,7 @@ public:
     Q_INVOKABLE int Mtype(QGraphicsEllipseItem* o) const { return o->type(); }
 };
 
-class N43 : public N42 { // QGraphicsItemGroup
+class N44 : public N43 { // QGraphicsItemGroup
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QGraphicsItem* x1 = 0) { return new LGraphicsItemGroup(u, x1); }
@@ -2909,7 +2907,7 @@ public:
     Q_INVOKABLE int Mtype(QGraphicsItemGroup* o) const { return o->type(); }
 };
 
-class N44 : public N45 { // QGraphicsLayout
+class N45 : public N46 { // QGraphicsLayout
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QGraphicsLayoutItem* x1 = 0) { return new LGraphicsLayout(u, x1); }
@@ -2925,7 +2923,7 @@ public:
     Q_INVOKABLE void MupdateGeometry(QGraphicsLayout* o) { o->updateGeometry(); }
 };
 
-class N46 : public N42 { // QGraphicsLineItem
+class N47 : public N43 { // QGraphicsLineItem
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QGraphicsItem* x1 = 0) { return new LGraphicsLineItem(u, x1); }
@@ -2945,7 +2943,7 @@ public:
     Q_INVOKABLE int Mtype(QGraphicsLineItem* o) const { return o->type(); }
 };
 
-class N47 : public N44 { // QGraphicsLinearLayout
+class N48 : public N45 { // QGraphicsLinearLayout
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QGraphicsLayoutItem* x1 = 0) { return new LGraphicsLinearLayout(u, x1); }
@@ -2973,7 +2971,7 @@ public:
     Q_INVOKABLE QSizeF MsizeHint(QGraphicsLinearLayout* o, Qt::SizeHint x1, const QSizeF& x2 = QSizeF()) const { return o->sizeHint(x1, x2); }
 };
 
-class N48 : public N1 { // QGraphicsPathItem
+class N49 : public N1 { // QGraphicsPathItem
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QGraphicsItem* x1 = 0) { return new LGraphicsPathItem(u, x1); }
@@ -2989,7 +2987,7 @@ public:
     Q_INVOKABLE int Mtype(QGraphicsPathItem* o) const { return o->type(); }
 };
 
-class N49 : public N42 { // QGraphicsPixmapItem
+class N50 : public N43 { // QGraphicsPixmapItem
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QGraphicsItem* x1 = 0) { return new LGraphicsPixmapItem(u, x1); }
@@ -3012,7 +3010,7 @@ public:
     Q_INVOKABLE int Mtype(QGraphicsPixmapItem* o) const { return o->type(); }
 };
 
-class N50 : public N1 { // QGraphicsPolygonItem
+class N51 : public N1 { // QGraphicsPolygonItem
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QGraphicsItem* x1 = 0) { return new LGraphicsPolygonItem(u, x1); }
@@ -3030,7 +3028,7 @@ public:
     Q_INVOKABLE int Mtype(QGraphicsPolygonItem* o) const { return o->type(); }
 };
 
-class N51 : public N1 { // QGraphicsRectItem
+class N52 : public N1 { // QGraphicsRectItem
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QGraphicsItem* x1 = 0) { return new LGraphicsRectItem(u, x1); }
@@ -3048,20 +3046,20 @@ public:
     Q_INVOKABLE int Mtype(QGraphicsRectItem* o) const { return o->type(); }
 };
 
-class N54 : public N30 { // QGraphicsSceneEvent
+class N55 : public N30 { // QGraphicsSceneEvent
     Q_OBJECT
 public:
     Q_INVOKABLE QWidget* Mwidget(QGraphicsSceneEvent* o) const { return o->widget(); }
 };
 
-class N55 : public N54 { // QGraphicsSceneHelpEvent
+class N56 : public N55 { // QGraphicsSceneHelpEvent
     Q_OBJECT
 public:
     Q_INVOKABLE QPointF MscenePos(QGraphicsSceneHelpEvent* o) const { return o->scenePos(); }
     Q_INVOKABLE QPoint MscreenPos(QGraphicsSceneHelpEvent* o) const { return o->screenPos(); }
 };
 
-class N56 : public N54 { // QGraphicsSceneHoverEvent
+class N57 : public N55 { // QGraphicsSceneHoverEvent
     Q_OBJECT
 public:
     Q_INVOKABLE QPointF MlastPos(QGraphicsSceneHoverEvent* o) const { return o->lastPos(); }
@@ -3073,7 +3071,7 @@ public:
     Q_INVOKABLE QPoint MscreenPos(QGraphicsSceneHoverEvent* o) const { return o->screenPos(); }
 };
 
-class N57 : public N54 { // QGraphicsSceneMouseEvent
+class N58 : public N55 { // QGraphicsSceneMouseEvent
     Q_OBJECT
 public:
     Q_INVOKABLE int Mbutton(QGraphicsSceneMouseEvent* o) const { return o->button(); }
@@ -3090,7 +3088,7 @@ public:
     Q_INVOKABLE QPoint MscreenPos(QGraphicsSceneMouseEvent* o) const { return o->screenPos(); }
 };
 
-class N58 : public N54 { // QGraphicsSceneMoveEvent
+class N59 : public N55 { // QGraphicsSceneMoveEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LGraphicsSceneMoveEvent(u); }
@@ -3098,7 +3096,7 @@ public:
     Q_INVOKABLE QPointF MoldPos(QGraphicsSceneMoveEvent* o) const { return o->oldPos(); }
 };
 
-class N59 : public N54 { // QGraphicsSceneResizeEvent
+class N60 : public N55 { // QGraphicsSceneResizeEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LGraphicsSceneResizeEvent(u); }
@@ -3106,7 +3104,7 @@ public:
     Q_INVOKABLE QSizeF MoldSize(QGraphicsSceneResizeEvent* o) const { return o->oldSize(); }
 };
 
-class N60 : public N54 { // QGraphicsSceneWheelEvent
+class N61 : public N55 { // QGraphicsSceneWheelEvent
     Q_OBJECT
 public:
     Q_INVOKABLE int Mbuttons(QGraphicsSceneWheelEvent* o) const { return o->buttons(); }
@@ -3118,7 +3116,7 @@ public:
     Q_INVOKABLE QPoint MscreenPos(QGraphicsSceneWheelEvent* o) const { return o->screenPos(); }
 };
 
-class N61 : public N1 { // QGraphicsSimpleTextItem
+class N62 : public N1 { // QGraphicsSimpleTextItem
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QGraphicsItem* x1 = 0) { return new LGraphicsSimpleTextItem(u, x1); }
@@ -3136,7 +3134,7 @@ public:
     Q_INVOKABLE int Mtype(QGraphicsSimpleTextItem* o) const { return o->type(); }
 };
 
-class N62 : public N30 { // QHelpEvent
+class N63 : public N30 { // QHelpEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QHelpEvent::Type x1, const QPoint& x2, const QPoint& x3) { return new LHelpEvent(u, x1, x2, x3); }
@@ -3148,13 +3146,13 @@ public:
     Q_INVOKABLE int My(QHelpEvent* o) const { return o->y(); }
 };
 
-class N63 : public N30 { // QHideEvent
+class N64 : public N30 { // QHideEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LHideEvent(u); }
 };
 
-class N64 : public N30 { // QHoverEvent
+class N65 : public N30 { // QHoverEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QHoverEvent::Type x1, const QPoint& x2, const QPoint& x3) { return new LHoverEvent(u, x1, x2, x3); }
@@ -3162,13 +3160,13 @@ public:
     Q_INVOKABLE QPoint Mpos(QHoverEvent* o) const { return o->pos(); }
 };
 
-class N66 : public N30 { // QIconDragEvent
+class N67 : public N30 { // QIconDragEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LIconDragEvent(u); }
 };
 
-class N67 : public N88 { // QImage
+class N68 : public N89 { // QImage
     Q_OBJECT
 public:
     Q_INVOKABLE void* CC(uint u, LImage* o) { LImage* copy = new LImage(u); *copy = *o; return copy; }
@@ -3248,13 +3246,13 @@ public:
     Q_INVOKABLE QTransform StrueMatrix(const QTransform& x1, int x2, int x3) { return QImage::trueMatrix(x1, x2, x3); }
 };
 
-class N68 : public N30 { // QInputEvent
+class N69 : public N30 { // QInputEvent
     Q_OBJECT
 public:
     Q_INVOKABLE int Mmodifiers(QInputEvent* o) const { return o->modifiers(); }
 };
 
-class N69 : public N30 { // QInputMethodEvent
+class N70 : public N30 { // QInputMethodEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LInputMethodEvent(u); }
@@ -3266,7 +3264,7 @@ public:
     Q_INVOKABLE void MsetCommitString(QInputMethodEvent* o, const QString& x1, int x2 = 0, int x3 = 0) { o->setCommitString(x1, x2, x3); }
 };
 
-class N73 : public N68 { // QKeyEvent
+class N74 : public N69 { // QKeyEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QKeyEvent::Type x1, int x2, Qt::KeyboardModifiers x3, const QString& x4 = QString(), bool x5 = false, ushort x6 = 1) { return new LKeyEvent(u, x1, x2, x3, x4, x5, x6); }
@@ -3278,7 +3276,7 @@ public:
     Q_INVOKABLE QString Mtext(QKeyEvent* o) const { return o->text(); }
 };
 
-class N76 : public N38 { // QLinearGradient
+class N77 : public N39 { // QLinearGradient
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LLinearGradient(u); }
@@ -3292,7 +3290,7 @@ public:
     Q_INVOKABLE QPointF Mstart(QLinearGradient* o) const { return o->start(); }
 };
 
-class N84 : public N68 { // QMouseEvent
+class N85 : public N69 { // QMouseEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QMouseEvent::Type x1, const QPoint& x2, Qt::MouseButton x3, Qt::MouseButtons x4, Qt::KeyboardModifiers x5) { return new LMouseEvent(u, x1, x2, x3, x4, x5); }
@@ -3308,7 +3306,7 @@ public:
     Q_INVOKABLE int My(QMouseEvent* o) const { return o->y(); }
 };
 
-class N85 : public N30 { // QMoveEvent
+class N86 : public N30 { // QMoveEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QPoint& x1, const QPoint& x2) { return new LMoveEvent(u, x1, x2); }
@@ -3316,7 +3314,7 @@ public:
     Q_INVOKABLE QPoint Mpos(QMoveEvent* o) const { return o->pos(); }
 };
 
-class N89 : public N30 { // QPaintEvent
+class N90 : public N30 { // QPaintEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QRegion& x1) { return new LPaintEvent(u, x1); }
@@ -3325,7 +3323,7 @@ public:
     Q_INVOKABLE QRegion Mregion(QPaintEvent* o) const { return o->region(); }
 };
 
-class N96 : public N88 { // QPicture
+class N97 : public N89 { // QPicture
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, int x1 = -1) { return new LPicture(u, x1); }
@@ -3341,7 +3339,7 @@ public:
     Q_INVOKABLE uint Msize(QPicture* o) const { return o->size(); }
 };
 
-class N97 : public N88 { // QPixmap
+class N98 : public N89 { // QPixmap
     Q_OBJECT
 public:
     Q_INVOKABLE void* CC(uint u, LPixmap* o) { LPixmap* copy = new LPixmap(u); *copy = *o; return copy; }
@@ -3391,7 +3389,7 @@ public:
     Q_INVOKABLE QMatrix StrueMatrix(const QMatrix& x1, int x2, int x3) { return QPixmap::trueMatrix(x1, x2, x3); }
 };
 
-class N99 : public N88 { // QPrinter
+class N100 : public N89 { // QPrinter
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QPrinter::PrinterMode x1 = QPrinter::ScreenResolution) { return new LPrinter(u, x1); }
@@ -3451,7 +3449,7 @@ public:
     Q_INVOKABLE int MtoPage(QPrinter* o) const { return o->toPage(); }
 };
 
-class N103 : public N38 { // QRadialGradient
+class N104 : public N39 { // QRadialGradient
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LRadialGradient(u); }
@@ -3469,7 +3467,7 @@ public:
     Q_INVOKABLE void MsetRadius(QRadialGradient* o, qreal x1) { o->setRadius(x1); }
 };
 
-class N108 : public N30 { // QResizeEvent
+class N109 : public N30 { // QResizeEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QSize& x1, const QSize& x2) { return new LResizeEvent(u, x1, x2); }
@@ -3477,7 +3475,7 @@ public:
     Q_INVOKABLE QSize Msize(QResizeEvent* o) const { return o->size(); }
 };
 
-class N111 : public N30 { // QShortcutEvent
+class N112 : public N30 { // QShortcutEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QKeySequence& x1, int x2, bool x3 = false) { return new LShortcutEvent(u, x1, x2, x3); }
@@ -3486,13 +3484,13 @@ public:
     Q_INVOKABLE int MshortcutId(QShortcutEvent* o) const { return o->shortcutId(); }
 };
 
-class N112 : public N30 { // QShowEvent
+class N113 : public N30 { // QShowEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LShowEvent(u); }
 };
 
-class N114 : public N74 { // QSpacerItem
+class N115 : public N75 { // QSpacerItem
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, int x1, int x2, QSizePolicy::Policy x3 = QSizePolicy::Minimum, QSizePolicy::Policy x4 = QSizePolicy::Minimum) { return new LSpacerItem(u, x1, x2, x3, x4); }
@@ -3507,14 +3505,14 @@ public:
     Q_INVOKABLE QSpacerItem* MspacerItem(QSpacerItem* o) { return o->spacerItem(); }
 };
 
-class N116 : public N30 { // QStatusTipEvent
+class N117 : public N30 { // QStatusTipEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QString& x1) { return new LStatusTipEvent(u, x1); }
     Q_INVOKABLE QString Mtip(QStatusTipEvent* o) const { return o->tip(); }
 };
 
-class N120 : public N68 { // QTabletEvent
+class N121 : public N69 { // QTabletEvent
     Q_OBJECT
 public:
     Q_INVOKABLE int Mdevice(QTabletEvent* o) const { return o->device(); }
@@ -3536,7 +3534,7 @@ public:
     Q_INVOKABLE int Mz(QTabletEvent* o) const { return o->z(); }
 };
 
-class N122 : public N132 { // QTextBlockFormat
+class N123 : public N133 { // QTextBlockFormat
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LTextBlockFormat(u); }
@@ -3563,7 +3561,7 @@ public:
     Q_INVOKABLE qreal MtopMargin(QTextBlockFormat* o) const { return o->topMargin(); }
 };
 
-class N125 : public N132 { // QTextCharFormat
+class N126 : public N133 { // QTextCharFormat
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LTextCharFormat(u); }
@@ -3616,7 +3614,7 @@ public:
     Q_INVOKABLE int MverticalAlignment(QTextCharFormat* o) const { return o->verticalAlignment(); }
 };
 
-class N134 : public N132 { // QTextFrameFormat
+class N135 : public N133 { // QTextFrameFormat
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LTextFrameFormat(u); }
@@ -3651,7 +3649,7 @@ public:
     Q_INVOKABLE QTextLength Mwidth(QTextFrameFormat* o) const { return o->width(); }
 };
 
-class N135 : public N125 { // QTextImageFormat
+class N136 : public N126 { // QTextImageFormat
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LTextImageFormat(u); }
@@ -3664,7 +3662,7 @@ public:
     Q_INVOKABLE qreal Mwidth(QTextImageFormat* o) const { return o->width(); }
 };
 
-class N139 : public N132 { // QTextListFormat
+class N140 : public N133 { // QTextListFormat
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LTextListFormat(u); }
@@ -3675,7 +3673,7 @@ public:
     Q_INVOKABLE int Mstyle(QTextListFormat* o) const { return o->style(); }
 };
 
-class N142 : public N125 { // QTextTableCellFormat
+class N143 : public N126 { // QTextTableCellFormat
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LTextTableCellFormat(u); }
@@ -3691,7 +3689,7 @@ public:
     Q_INVOKABLE qreal MtopPadding(QTextTableCellFormat* o) const { return o->topPadding(); }
 };
 
-class N143 : public N134 { // QTextTableFormat
+class N144 : public N135 { // QTextTableFormat
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LTextTableFormat(u); }
@@ -3710,14 +3708,14 @@ public:
     Q_INVOKABLE void MsetHeaderRowCount(QTextTableFormat* o, int x1) { o->setHeaderRowCount(x1); }
 };
 
-class N145 : public N30 { // QTimerEvent
+class N146 : public N30 { // QTimerEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, int x1) { return new LTimerEvent(u, x1); }
     Q_INVOKABLE int MtimerId(QTimerEvent* o) const { return o->timerId(); }
 };
 
-class N147 : public N68 { // QTouchEvent
+class N148 : public N69 { // QTouchEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QEvent::Type x1, QTouchEvent::DeviceType x2 = QTouchEvent::TouchScreen, Qt::KeyboardModifiers x3 = Qt::NoModifier, Qt::TouchPointStates x4 = 0, const QList<QTouchEvent::TouchPoint>& x5 = QList<QTouchEvent::TouchPoint>()) { return new LTouchEvent(u, x1, x2, x3, x4, x5); }
@@ -3727,14 +3725,14 @@ public:
     Q_INVOKABLE QWidget* Mwidget(QTouchEvent* o) const { return o->widget(); }
 };
 
-class N158 : public N30 { // QWhatsThisClickedEvent
+class N159 : public N30 { // QWhatsThisClickedEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QString& x1) { return new LWhatsThisClickedEvent(u, x1); }
     Q_INVOKABLE QString Mhref(QWhatsThisClickedEvent* o) const { return o->href(); }
 };
 
-class N159 : public N68 { // QWheelEvent
+class N160 : public N69 { // QWheelEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QPoint& x1, int x2, Qt::MouseButtons x3, Qt::KeyboardModifiers x4, Qt::Orientation x5 = Qt::Vertical) { return new LWheelEvent(u, x1, x2, x3, x4, x5); }
@@ -3750,7 +3748,7 @@ public:
     Q_INVOKABLE int My(QWheelEvent* o) const { return o->y(); }
 };
 
-class N160 : public N74 { // QWidgetItem
+class N161 : public N75 { // QWidgetItem
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QWidget* x1) { return new LWidgetItem(u, x1); }
@@ -3766,13 +3764,13 @@ public:
     Q_INVOKABLE QWidget* Mwidget(QWidgetItem* o) { return o->widget(); }
 };
 
-class N161 : public N30 { // QWindowStateChangeEvent
+class N162 : public N30 { // QWindowStateChangeEvent
     Q_OBJECT
 public:
     Q_INVOKABLE int MoldState(QWindowStateChangeEvent* o) const { return o->oldState(); }
 };
 
-class N10 : public N97 { // QBitmap
+class N10 : public N98 { // QBitmap
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LBitmap(u); }
@@ -3786,7 +3784,7 @@ public:
     Q_INVOKABLE QBitmap SfromImage(const QImage& x1, Qt::ImageConversionFlags x2 = Qt::AutoColor) { return QBitmap::fromImage(x1, x2); }
 };
 
-class N16 : public N68 { // QContextMenuEvent
+class N16 : public N69 { // QContextMenuEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QContextMenuEvent::Reason x1, const QPoint& x2, const QPoint& x3, Qt::KeyboardModifiers x4) { return new LContextMenuEvent(u, x1, x2, x3, x4); }
@@ -3812,7 +3810,7 @@ public:
     Q_INVOKABLE void Mignore(QDragMoveEvent* o) { o->ignore(); }
 };
 
-class N39 : public N44 { // QGraphicsAnchorLayout
+class N40 : public N45 { // QGraphicsAnchorLayout
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QGraphicsLayoutItem* x1 = 0) { return new LGraphicsAnchorLayout(u, x1); }
@@ -3832,7 +3830,7 @@ public:
     Q_INVOKABLE void MsetGeometry(QGraphicsAnchorLayout* o, const QRectF& x1) { o->setGeometry(x1); }
 };
 
-class N41 : public N44 { // QGraphicsGridLayout
+class N42 : public N45 { // QGraphicsGridLayout
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QGraphicsLayoutItem* x1 = 0) { return new LGraphicsGridLayout(u, x1); }
@@ -3882,7 +3880,7 @@ public:
     Q_INVOKABLE QSizeF MsizeHint(QGraphicsGridLayout* o, Qt::SizeHint x1, const QSizeF& x2 = QSizeF()) const { return o->sizeHint(x1, x2); }
 };
 
-class N52 : public N54 { // QGraphicsSceneContextMenuEvent
+class N53 : public N55 { // QGraphicsSceneContextMenuEvent
     Q_OBJECT
 public:
     Q_INVOKABLE int Mmodifiers(QGraphicsSceneContextMenuEvent* o) const { return o->modifiers(); }
@@ -3892,7 +3890,7 @@ public:
     Q_INVOKABLE QPoint MscreenPos(QGraphicsSceneContextMenuEvent* o) const { return o->screenPos(); }
 };
 
-class N53 : public N54 { // QGraphicsSceneDragDropEvent
+class N54 : public N55 { // QGraphicsSceneDragDropEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void MacceptProposedAction(QGraphicsSceneDragDropEvent* o) { o->acceptProposedAction(); }

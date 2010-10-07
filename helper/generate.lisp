@@ -9,8 +9,8 @@
 
 (flet ((load-module (name)
          (dolist (q-n (list #\q #\n))
-           (load (format nil "my-class-lists/~a/~c-names" name q-n)))))
-  (dolist (m (cons "gui" *qt-modules*))
+           (load (format nil "my-class-lists/~(~a~)/~c-names" name q-n)))))
+  (dolist (m (cons :gui *qt-modules*))
     (load-module m)))
 
 (use-package :util)
@@ -21,6 +21,8 @@
 (defconstant +special-typedefs-and-classes+ (list "QAbstractTextDocumentLayout::PaintContext"
                                                   "QCoreApplication::EventFilter"
                                                   "QEasingCurve::EasingFunction"
+                                                  "QNetworkCacheMetaData::AttributesMap"
+                                                  "QNetworkCacheMetaData::RawHeaderList"
                                                   "QPainterPath::Element"
                                                   "QPixmapCache::Key"))
 
@@ -360,10 +362,10 @@
 
 (defun add-module-includes (s)
   (mapc (lambda (name include)
-          (when (find* name *qt-modules*)
+          (when (find name *qt-modules*)
             (format s "#include <~a>~%" include)))
-        (list "help" "opengl" "svg")
-        (list "QtHelp" "QtOpenGL" "QtSvg")))
+        (list :help :network :opengl :svg)
+        (list "QtHelp" "QtNetwork" "QtOpenGL" "QtSvg")))
 
 (defun classes.h (type)
   (format t "~&-> ~(~a~)_classes.h~%" type)

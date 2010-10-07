@@ -193,7 +193,10 @@
                                (return t)))
                            ;; template problem
                            (and (string= "QVariant" class)
-                                (string= "bool canConvert () const" fun)))
+                                (string= "bool canConvert () const" fun))
+                           ;; primitives
+                           (and (string= "QColor" class)
+                                (not static)))
                  (when virtual
                    (format so "~%   \"~a\"" fun))
                  (unless (and virtual protected)
@@ -232,8 +235,8 @@
 (defun start ()
   (flet ((load-module (name)
            (dolist (qn (list #\q #\n))
-             (load (format nil "my-class-lists/~a/~c-names" name qn)))))
-    (dolist (m (cons "gui" *qt-modules*))
+             (load (format nil "my-class-lists/~(~a~)/~c-names" name qn)))))
+    (dolist (m (cons :gui *qt-modules*))
       (load-module m)))
   (setf *q-names* (sort-names *q-names*)
         *n-names* (sort-names *n-names*))

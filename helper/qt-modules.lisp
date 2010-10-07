@@ -1,1 +1,2 @@
-(defparameter *qt-modules* nil) ; (list "help" "opengl" "svg"))
+(defparameter *qt-modules* nil
+  "Currently available modules are: :help :opengl :svg")
