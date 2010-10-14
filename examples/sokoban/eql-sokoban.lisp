@@ -116,7 +116,7 @@
 (let (pixmaps)
   (defun create-item (type)
     (let* ((char (type-char type))
-           (file (in-home (format nil "examples/sokoban/pics/~(~a~).png" type)))
+           (file (in-home (format nil "examples/sokoban/pics/~(~A~).png" type)))
            (pixmap (assoc file pixmaps :test 'string=))
            (item (if (or pixmap
                          (probe-file file))
@@ -127,7 +127,7 @@
                                                  pixmaps)))))
                      (let ((item (qnew "QGraphicsTextItem"))) ; simple text item dummies (when pics are missing)
                        (qfun item "setHtml"
-                             (format nil "<span style='font-family:monospace; font-size:12pt; font-weight:bold; color:~a;'>~c"
+                             (format nil "<span style='font-family:monospace; font-size:12pt; font-weight:bold; color:~A;'>~C"
                                      (case type
                                        (:wall    "blue")
                                        (:object  "orange")

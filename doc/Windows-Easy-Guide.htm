@@ -3,7 +3,7 @@
 <head>
 <style>
 body, table { font-family: sans-serif; font-size: 10pt; }
-a:link, a:hover, a:visited, a:visited:hover { text-decoration: underline; font-weight: bold; color: chocolate; }
+a:link, a:hover, a:visited, a:visited:hover { text-decoration: underline; font-weight: bold; color: blue; }
 td { border: 1px solid gray; }
 table { border-collapse: collapse; }
 code, pre { color: mediumblue; }
@@ -47,7 +47,7 @@ Make sure all of the following are in your <code>Path</code> environment variabl
 <p>Now you're ready to build EQL.
 <ul>
 <li>Open the <b>Qt command prompt</b> from the Windows main menu, and switch to the EQL source directory <code>C:\eql\src</code>.
-<li>If your ECL install path differs from the example path (see above), you need to adjust the <code>win32</code> section of both <code>eql_lib.pro</code> and <code>eql_exe.pro</code>.
+<li>If your ECL install path differs from the example path (see above), you need to adjust the file <code>windows.pri</code>.
 <li>Run the command <code>ecl -shell make-eql-lib.lisp</code>.
 <li>Run <code>qmake eql_lib.pro</code> followed by <code>nmake</code>.
 <li>Run <code>qmake eql_exe.pro</code> followed by <code>nmake</code>.

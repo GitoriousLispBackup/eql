@@ -3,6 +3,7 @@
 #ifndef ECL_FUN_H
 #define ECL_FUN_H
 
+#include "eql_global.h"
 #include <ecl/ecl.h>
 #include <QList>
 #include <QUiLoader>
@@ -203,6 +204,7 @@ cl_object qoverride            (cl_object, cl_object, cl_object);
 cl_object qprocess_events      ();
 cl_object qproperty            (cl_object, cl_object);
 cl_object qquit                ();
+cl_object qrequire             (cl_object);
 cl_object qsender              ();
 cl_object qset_property        (cl_object, cl_object, cl_object);
 cl_object qsingle_shot         (cl_object, cl_object);
@@ -211,15 +213,30 @@ cl_object qtranslate           (cl_object, cl_object, cl_object);
 cl_object qt_object_name       (cl_object);
 cl_object qutf8                (cl_object);
 
-void iniCLFunctions();
-void registerMetaTypes();
-void callConnectFun(void*, const QList<QByteArray>&, void**);
-QVariant callOverrideFun(void*, int, const void**);
-bool callEventFun(void*, QObject*, QEvent*);
+struct EQL_EXPORT QtObject {
+    QtObject() : pointer(0), unique(0), id(0) {}
+
+    void* pointer;
+    uint unique;
+    int id;
+
+    bool isQObject() const { return (id > 0); }
+    bool isStatic() const { return !pointer; }
+    QByteArray className() const;
+};
 
 struct QtMetaObject : private QObject {
     // commonly used trick to access staticQtMetaObject
     static const QMetaObject* get() { return &static_cast<QtMetaObject*>(0)->staticQtMetaObject; }
 };
+
+void iniCLFunctions();
+void registerMetaTypes();
+void callConnectFun(void*, const QList<QByteArray>&, void**);
+bool callEventFun(void*, QObject*, QEvent*);
+
+EQL_EXPORT QVariant callOverrideFun(void*, int, const void**);
+EQL_EXPORT QtObject toQtObject(cl_object, cl_object = Cnil, bool* = 0);
+EQL_EXPORT cl_object qt_object_from_name(const QByteArray&, void*, uint = 0);
 
 #endif

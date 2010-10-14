@@ -4,10 +4,7 @@
 #include "eql.h"
 #include "dyn_object.h"
 #include "gen/_lobjects.h"
-
-#ifdef EQL_OPENGL
-#include <QtOpenGL>
-#endif
+#include <QLibrary>
 
 typedef QPair<QByteArray, void*> MetaArg;
 typedef QList<MetaArg>           MetaArgList;
@@ -20,20 +17,10 @@ static bool _ok_ = false;
 static int _n_cstr_ = -1;
 static const QMetaObject* staticQtMetaObject = QtMetaObject::get();
 
-struct QtObject {
-    QtObject() : pointer(0), unique(0), id(0) {}
-
-    void* pointer;
-    uint unique;
-    int id;
-
-    bool isQObject() const { return (id > 0); }
-    bool isStatic() const { return !pointer; }
-    QByteArray className() const {
-        return id
-                ? ((id > 0) ? LObjects::qNames.at(id - 1) : LObjects::nNames.at(-id - 1))
-                : QByteArray(); }
-};
+QByteArray QtObject::className() const {
+    return id
+            ? ((id > 0) ? LObjects::qNames.at(id - 1) : LObjects::nNames.at(-id - 1))
+            : QByteArray(); }
 
 class LUiLoader : public QUiLoader {
 public:
@@ -90,6 +77,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object("qprocess-events"),      (cl_objectfn_fixed)qprocess_events,          0);
     cl_def_c_function(c_string_to_object("qproperty"),            (cl_objectfn_fixed)qproperty,                2);
     cl_def_c_function(c_string_to_object("qquit"),                (cl_objectfn_fixed)qquit,                    0);
+    cl_def_c_function(c_string_to_object("qrequire"),             (cl_objectfn_fixed)qrequire,                 1);
     cl_def_c_function(c_string_to_object("qsender"),              (cl_objectfn_fixed)qsender,                  0);
     cl_def_c_function(c_string_to_object("qset-property"),        (cl_objectfn_fixed)qset_property,            3);
     cl_def_c_function(c_string_to_object("qsingle-shot"),         (cl_objectfn_fixed)qsingle_shot,             2);
@@ -101,11 +89,6 @@ void iniCLFunctions() {
 enum UserMetaTypes {
     // must correspond exactly to "void registerMetaTypes()"
     Start = QMetaType::User,
-#ifdef EQL_OPENGL
-    T_GLfloat,
-    T_GLint,
-    T_GLuint,
-#endif
     T_bool_ok_pointer,
     T_QFileInfo,
     T_QFileInfoList,
@@ -162,11 +145,6 @@ enum UserMetaTypes {
 
 void registerMetaTypes() {
     // must correspond exactly to "enum UserMetaTypes()"
-#ifdef EQL_OPENGL
-    qRegisterMetaType<GLfloat>("GLfloat");
-    qRegisterMetaType<GLint>("GLint");
-    qRegisterMetaType<GLuint>("GLuint");
-#endif
     qRegisterMetaType<bool*>("bool*");
     qRegisterMetaType<QFileInfo>("QFileInfo");
     qRegisterMetaType<QFileInfoList>("QFileInfoList");
@@ -243,10 +221,13 @@ static const QMetaObject* methodMetaObject(QtObject o) {
     return (o.isQObject() ? LObjects::Q[o.id - 1] : LObjects::N[-o.id - 1])->metaObject(); }
 
 static const QMetaObject* methodMetaObjectFromName(const QByteArray& name, bool qobject) {
-    return (qobject
-            ? LObjects::Q[LObjects::q_names.value(name) - 1]
-            : LObjects::N[LObjects::n_names.value(name) - 1])
-            ->metaObject(); }
+    const QMetaObject* mo = 0;
+    int n = qobject ? LObjects::q_names.value(name, 0) : LObjects::n_names.value(name, 0);
+    if(n) {
+        QObject* o = qobject ? LObjects::Q[n - 1] : LObjects::N[n - 1];
+        if(o) {
+            mo = o->metaObject(); }}
+    return mo; }
 
 static QByteArray prettyFunName(const QByteArray& name, bool this_arg) {
     QByteArray pretty(name.mid(QChar(name.at(0)).isUpper() ? 1 : 0));
@@ -421,7 +402,7 @@ static int classId(cl_object l_class) {
         id = -LObjects::n_names.value(name, 0); }
     return id; }
 
-static QtObject toQtObject(cl_object l_obj, cl_object l_cast = Cnil, bool* qobject_align = 0) {
+QtObject toQtObject(cl_object l_obj, cl_object l_cast, bool* qobject_align) {
     STATIC_SYMBOL_PKG(s_qt_object_p,       "QT-OBJECT-P",       "EQL")
     STATIC_SYMBOL_PKG(s_qt_object_pointer, "QT-OBJECT-POINTER", "EQL")
     STATIC_SYMBOL_PKG(s_qt_object_unique,  "QT-OBJECT-UNIQUE",  "EQL")
@@ -447,7 +428,7 @@ static cl_object qt_object(void* pointer, uint unique, int id) {
                       ecl_make_unsigned_integer((cl_index)unique),
                       MAKE_FIXNUM(id)); }
 
-static cl_object qt_object_from_name(const QByteArray& name, void* pointer, uint unique = 0) {
+cl_object qt_object_from_name(const QByteArray& name, void* pointer, uint unique) {
     QByteArray name2(name);
     if(name2.endsWith('*')) {
         name2.truncate(name2.length() - 1); }
@@ -459,6 +440,12 @@ static cl_object qt_object_from_name(const QByteArray& name, void* pointer, uint
     if(!id) {
         id = -LObjects::n_names.value(name2, 0); }
     return qt_object(pointer, unique, id); }
+
+static QString symbolName(cl_object l_symbol) {
+    QString name;
+    if((cl_symbolp(l_symbol) == Ct)) {
+        name = toQString(cl_symbol_name(l_symbol)); }
+    return name; }
 
 static QStringList toQStringList(cl_object l_lst) {
     QStringList l;
@@ -874,11 +861,6 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case T_QVector_QTextFormat:              p = new QVector<QTextFormat>(toQTextFormatVector(l_arg)); break;
         case T_QVector_QTextLength:              p = new QVector<QTextLength>(toQTextLengthVector(l_arg)); break;
         case T_QVector_qreal:                    p = new QVector<qreal>(toqrealVector(l_arg)); break;
-#ifdef MODULE_OPENGL
-        case T_GLfloat:                          p = new GLfloat(toFloat<GLfloat>(l_arg)); break;
-        case T_GLint:                            p = new GLint(toInt<GLint>(l_arg)); break;
-        case T_GLuint:                           p = new GLuint(toFloat<GLuint>(l_arg)); break;
-#endif
         default:
             if(sType.endsWith('*')) {
                 if(sType.startsWith('Q') || sType.startsWith("const Q")) {
@@ -892,6 +874,14 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
                 else if("const char*" == sType) {
                     if(ECL_STRINGP(l_arg)) {
                         p = to_cstring(l_arg); }}}
+            // module types
+            else if(LObjects::T_QNetworkRequest == n) {
+                if(LObjects::toMetaArg_network) {
+                    p = LObjects::toMetaArg_network(n, l_arg); }}
+            else if((n >= LObjects::T_GLfloat) &&
+                    (n <= LObjects::T_GLuint)) {
+                if(LObjects::toMetaArg_opengl) {
+                    p = LObjects::toMetaArg_opengl(n, l_arg); }}
             else {
                 int i_enum = sType.indexOf("::");
                 if(i_enum != -1) {
@@ -1010,11 +1000,6 @@ static cl_object to_lisp_arg(const MetaArg& arg) {
             case T_QVector_QTextFormat:              l_ret = from_qtextformatvector(*(QVector<QTextFormat>*)p); break;
             case T_QVector_QTextLength:              l_ret = from_qtextlengthvector(*(QVector<QTextLength>*)p); break;
             case T_QVector_qreal:                    l_ret = from_qrealvector(*(QVector<qreal>*)p); break;
-#ifdef MODULE_OPENGL
-            case T_GLfloat:                          l_ret = ecl_make_doublefloat(*(GLfloat*)p); break;
-            case T_GLint:                            l_ret = MAKE_FIXNUM(*(GLint*)p); break;
-            case T_GLuint:                           l_ret = MAKE_FIXNUM(*(GLuint*)p); break;
-#endif
             default:
                 if(sType.endsWith('*')) {
                     if(sType.startsWith('Q') || sType.startsWith("const Q")) {
@@ -1023,6 +1008,14 @@ static cl_object to_lisp_arg(const MetaArg& arg) {
                         l_ret = make_base_string_copy(*(char**)p); }
                     else {
                         l_ret = ecl_make_unsigned_integer((cl_index)*(void**)p); }}
+                // module types
+                else if(LObjects::T_QNetworkRequest == n) {
+                    if(LObjects::to_lisp_arg_network) {
+                        l_ret = LObjects::to_lisp_arg_network(n, p); }}
+                else if((n >= LObjects::T_GLfloat) &&
+                   (n <= LObjects::T_GLuint)) {
+                    if(LObjects::to_lisp_arg_opengl) {
+                        l_ret = LObjects::to_lisp_arg_opengl(n, p); }}
                 else {
                     int i_enum = sType.indexOf("::");
                     if(i_enum != -1) {
@@ -1071,11 +1064,6 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
         case QMetaType::QString:
         case QMetaType::QStringList:
         case T_QPolygonF:
-#ifdef MODULE_OPENGL
-        case T_GLfloat:
-        case T_GLint:
-        case T_GLuint:
-#endif
             QMetaType::destroy(n, p);
             break;
         // implicit pointer types
@@ -1107,7 +1095,15 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
             delete (void**)p;
 	    break;
         default:
-            if(n > QMetaType::User) {
+            // implicit module pointer types
+            if(LObjects::T_QNetworkRequest == n) {
+                if(is_ret) {
+                    QMetaType::destroy(n, p); }}
+            // implicitly included module types:
+            // LObjects::T_GLfloat
+            // LObjects::T_GLint
+            // LObjects::T_GLuint
+            else if(n > QMetaType::User) {
                 QMetaType::destroy(n, p); }
             else {
                 if(sType.endsWith('*')) {
@@ -1153,37 +1149,38 @@ static StrList metaInfo(const QByteArray& type, const QByteArray& qclass, const 
     StrList info;
     if("methods" == type) {
         const QMetaObject* mo = methodMetaObjectFromName(qclass, !non);
-        for(int i = mo->methodOffset(); i < mo->methodCount(); ++i) {
-            QMetaMethod mm(mo->method(i));
-            if(mm.methodType() == QMetaMethod::Method) {
-                QString sig(mm.signature());
-                if(sig.startsWith("CC")) { // copy constructor
-                    continue; }
-                bool constructor = sig.startsWith('C');
-                QString ret;
-                if(constructor) {
-                    sig = qclass + "(" + sig.mid(sig.contains(',') ? 7 : 6);
-                    ret = "constructor"; }
-                else {
-                    ret = mm.typeName();
-                    if(ret.isEmpty()) {
-                        ret = "void"; }}
-                ret.append(" ");
-                if(!sig.startsWith("_q_")) {
-                    bool _static = false;
-                    if(sig.startsWith('M')) {
-                        sig = sig.mid(1); }
-                    else if(sig.startsWith('S')) {
-                        _static = true;
-                        sig = sig.mid(1); }
-                    QString name(ret + sig + (_static ? " static" : ""));
-                    if(!_static && !constructor) {
-                        QByteArray rm('(' + qclass + '*');
-                        if(mm.parameterNames().size() > 1) {
-                            rm.append(','); }
-                        name.replace(rm, "("); }
-                    if(name.contains(search, Qt::CaseInsensitive)) {
-                        info << name.toAscii(); }}}}}
+        if(mo) {
+            for(int i = mo->methodOffset(); i < mo->methodCount(); ++i) {
+                QMetaMethod mm(mo->method(i));
+                if(mm.methodType() == QMetaMethod::Method) {
+                    QString sig(mm.signature());
+                    if(sig.startsWith("CC")) { // copy constructor
+                        continue; }
+                    bool constructor = sig.startsWith('C');
+                    QString ret;
+                    if(constructor) {
+                        sig = qclass + "(" + sig.mid(sig.contains(',') ? 7 : 6);
+                        ret = "constructor"; }
+                    else {
+                        ret = mm.typeName();
+                        if(ret.isEmpty()) {
+                            ret = "void"; }}
+                    ret.append(" ");
+                    if(!sig.startsWith("_q_")) {
+                        bool _static = false;
+                        if(sig.startsWith('M')) {
+                            sig = sig.mid(1); }
+                        else if(sig.startsWith('S')) {
+                            _static = true;
+                            sig = sig.mid(1); }
+                        QString name(ret + sig + (_static ? " static" : ""));
+                        if(!_static && !constructor) {
+                            QByteArray rm('(' + qclass + '*');
+                            if(mm.parameterNames().size() > 1) {
+                                rm.append(','); }
+                            name.replace(rm, "("); }
+                        if(name.contains(search, Qt::CaseInsensitive)) {
+                            info << name.toAscii(); }}}}}}
     else if("override" == type) {
         Q_FOREACH(QByteArray name, LObjects::override(qclass)) {
             if(QString(name).contains(search, Qt::CaseInsensitive)) {
@@ -1231,7 +1228,7 @@ cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
     ///     (qapropos "html" "QTextEdit")
     ///     (qapropos nil "QWidget")
     ///     (qapropos)
-    ecl_process_env()->nvalues = 1;
+    ecl_process_env()->nvalues = 1;    
     QByteArray search;
     if(ECL_STRINGP(l_search)) {
         search = toCString(l_search); }
@@ -1257,7 +1254,7 @@ cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
             cl_object l_doc_sig = Cnil;
             cl_object l_doc_han = Cnil;
             if(!non) {
-                l_doc_pro = collect_info("properties", cl, search, non,& found); }
+                l_doc_pro = collect_info("properties", cl, search, non, &found); }
             cl_object l_doc_met = collect_info("methods", cl, search, non, &found);
             if(!non) {
                 l_doc_slo = collect_info("slots", cl, search, non, &found);
@@ -1306,41 +1303,42 @@ cl_object qnew_instance2(cl_object l_name, cl_object l_args) {
             id = -LObjects::n_names.value(nameOnly, 0); }
         if(id) {
             QObject* caller = (id > 0) ? LObjects::Q[id - 1] : LObjects::N[-id - 1];
-            const QMetaObject* mo = caller->metaObject();
-            int n = i_constructor.value(name, -1);
-            if(n == -1) {
-                n = findMethodIndex(Method, QByteArray("C(uint") + ((p == -1) ? ")" : ("," + name.mid(p + 1))), mo, LEN(l_args));
+            if(caller) {
+                const QMetaObject* mo = caller->metaObject();
+                int n = i_constructor.value(name, -1);
+                if(n == -1) {
+                    n = findMethodIndex(Method, QByteArray("C(uint") + ((p == -1) ? ")" : ("," + name.mid(p + 1))), mo, LEN(l_args));
+                    if(n != -1) {
+                        i_constructor[name] = n; }}
                 if(n != -1) {
-                    i_constructor[name] = n; }}
-            if(n != -1) {
-                // qt_metacall to given constructor "C(uint...)"
-                QMetaMethod mm(mo->method(n));
-                StrList types(mm.parameterTypes());
-                const int MAX_ARGS = 16;
-                //               r = return, u = unique
-                //               r  u  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16
-                void* args[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-                void* pointer = 0;
-                args[0] = &pointer; // return value
-                uint unique = LObjects::unique();
-                args[1] = &unique;
-                MetaArgList mArgs;
-                cl_object l_do_args = l_args;
-                if(p != -1) {
-                    for(int i = 0; (i < (types.length() - 1)) && (i < MAX_ARGS) && (l_do_args != Cnil); ++i) {
-                        MetaArg m_arg(toMetaArg(types.at(i + 1), cl_car(l_do_args)));
-                        args[i + 2] = m_arg.second;
-                        mArgs << m_arg;
-                        l_do_args = cl_cdr(l_do_args); }}
-                caller->qt_metacall(QMetaObject::InvokeMetaMethod, n, args);
-                clearMetaArgList(mArgs);
-                if(pointer) {
-                    cl_object l_ret = qt_object(pointer, unique, id);
-                    if(id > 0) { // QObject derived
-                        while(l_do_args != Cnil) {
-                            qset_property(l_ret, cl_first(l_do_args), cl_second(l_do_args));
-                            l_do_args = cl_cddr(l_do_args); }}
-                    return l_ret; }}}}
+                    // qt_metacall to given constructor "C(uint...)"
+                    QMetaMethod mm(mo->method(n));
+                    StrList types(mm.parameterTypes());
+                    const int MAX_ARGS = 16;
+                    //               r = return, u = unique
+                    //               r  u  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16
+                    void* args[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                    void* pointer = 0;
+                    args[0] = &pointer; // return value
+                    uint unique = LObjects::unique();
+                    args[1] = &unique;
+                    MetaArgList mArgs;
+                    cl_object l_do_args = l_args;
+                    if(p != -1) {
+                        for(int i = 0; (i < (types.length() - 1)) && (i < MAX_ARGS) && (l_do_args != Cnil); ++i) {
+                            MetaArg m_arg(toMetaArg(types.at(i + 1), cl_car(l_do_args)));
+                            args[i + 2] = m_arg.second;
+                            mArgs << m_arg;
+                            l_do_args = cl_cdr(l_do_args); }}
+                    caller->qt_metacall(QMetaObject::InvokeMetaMethod, n, args);
+                    clearMetaArgList(mArgs);
+                    if(pointer) {
+                        cl_object l_ret = qt_object(pointer, unique, id);
+                        if(id > 0) { // QObject derived
+                            while(l_do_args != Cnil) {
+                                qset_property(l_ret, cl_first(l_do_args), cl_second(l_do_args));
+                                l_do_args = cl_cddr(l_do_args); }}
+                        return l_ret; }}}}}
     error("QNEW-INSTANCE", LIST2(l_name, l_args));
     return Cnil; }
 
@@ -1769,6 +1767,52 @@ cl_object qclear_event_filters() {
     LObjects::dynObject->clearEventFilters();
     return Ct; }
 
+cl_object qrequire(cl_object l_name) {
+    /// args: (module)
+    /// Loads an EQL module, corresponding to a Qt module. Returns the module name if both loading and initializing were successful.
+    ///     (qrequire :network)
+    ecl_process_env()->nvalues = 1;
+    QString name = symbolName(l_name).toLower();
+    QString prefix, postfix;
+#ifdef Q_OS_LINUX
+    prefix = "lib"; postfix = ".so.1";
+#endif
+#ifdef Q_OS_DARWIN
+    prefix = "lib"; postfix = ".1.dylib";
+#endif
+    QLibrary lib(prefix + "eql_" + name + postfix);
+    typedef void (*Ini)();
+    Ini ini = (Ini)lib.resolve("ini");
+    if(ini) {
+        ini();
+        StaticMetaObject m = (StaticMetaObject)lib.resolve("staticMetaObject");
+        DeleteNObject d = (DeleteNObject)lib.resolve("deleteNObject");
+        Override o = (Override)lib.resolve("override");
+        if(m && d && o) {
+            if("help" == name) {
+                LObjects::staticMetaObject_help = m;
+                LObjects::deleteNObject_help = d;
+                LObjects::override_help = o; }
+            else if("network" == name) {
+                LObjects::staticMetaObject_network = m;
+                LObjects::deleteNObject_network = d;
+                LObjects::override_network = o;
+                LObjects::toMetaArg_network = (ToMetaArg)lib.resolve("toMetaArg");
+                LObjects::to_lisp_arg_network = (To_lisp_arg)lib.resolve("to_lisp_arg"); }
+            else if("opengl" == name) {
+                LObjects::staticMetaObject_opengl = m;
+                LObjects::deleteNObject_opengl = d;
+                LObjects::override_opengl = o;
+                LObjects::toMetaArg_opengl = (ToMetaArg)lib.resolve("toMetaArg");
+                LObjects::to_lisp_arg_opengl = (To_lisp_arg)lib.resolve("to_lisp_arg"); }
+            else if("svg" == name) {
+                LObjects::staticMetaObject_svg = m;
+                LObjects::deleteNObject_svg = d;
+                LObjects::override_svg = o; }
+            return l_name; }}
+    error("QREQUIRE", LIST1(l_name));
+    return Cnil; }
+
 
 
 // *** convenience functions ***
@@ -1872,7 +1916,7 @@ cl_object qstatic_meta_object(cl_object l_class) {
     if(ECL_STRINGP(l_class)) {
         const QMetaObject* m = LObjects::staticMetaObject(toCString(l_class));
         if(m) {
-            cl_object l_ret = qt_object((void*)m, 0, -LObjects::n_names.value("QMetaObject"));
+            cl_object l_ret = qt_object_from_name("QMetaObject", (void*)m);
             return l_ret; }}
     error("QSTATIC-META-OBJECT", LIST1(l_class));
     return Cnil; }

@@ -45,7 +45,7 @@
 
 (defmethod print-object ((obj qt-object) s)
   (print-unreadable-object (obj s :type nil :identity nil)
-    (format s "~a 0x~x"
+    (format s "~A 0x~X"
             (qt-object-name obj)
             (qt-object-pointer obj))))
 
@@ -100,11 +100,11 @@
 (defun qapropos (&optional name class type)
   (let ((main (qapropos2 name class type)))
     (dolist (sub1 main)
-      (format t "~%~%~a~%" (first sub1))
+      (format t "~%~%~A~%" (first sub1))
       (dolist (sub2 (rest sub1))
-        (format t "~%  ~a~%~%" (first sub2))
+        (format t "~%  ~A~%~%" (first sub2))
         (dolist (sub3 (rest sub2))
-          (format t "    ~a~%" sub3))))
+          (format t "    ~A~%" sub3))))
     (terpri)))
 
 (defun qapropos* (&optional name class type)

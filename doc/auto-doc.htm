@@ -180,6 +180,13 @@
 <p>Quits both Qt and ECL.</p>
 </p><br>
 <p>
+<b>QREQUIRE (module)</b>
+<p>Loads an EQL module, corresponding to a Qt module. Returns the module name if both loading and initializing were successful.</p>
+<pre>
+  (qrequire :network)
+</pre>
+</p><br>
+<p>
 <b>QSENDER ()</b>
 <p>Corresponding to <code>QObject::sender()</code>. To use inside a Lisp function connected to a Qt signal.</p>
 </p><br>

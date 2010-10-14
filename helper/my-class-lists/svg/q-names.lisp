@@ -1,9 +1,8 @@
 ;;; To avoid creation of instances, prepend "//" to the object name
-;;;     "//QAbstractButton"
+;;;     "//QClipboard"
 
-(setf *q-names*
-      (nconc *q-names*
-             (list "QGraphicsSvgItem"
-                   "QSvgRenderer"
-                   "QSvgWidget"
-                   )))
+(defparameter *svg-q-names*
+  (list "QGraphicsSvgItem"
+        "QSvgRenderer"
+        "QSvgWidget"
+        ))

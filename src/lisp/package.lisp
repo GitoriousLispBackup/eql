@@ -36,6 +36,7 @@
    #:qprocess-events
    #:qproperty
    #:qquit
+   #:qrequire
    #:qsender
    #:qset-ini
    #:qset-null

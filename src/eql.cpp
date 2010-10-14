@@ -41,31 +41,30 @@ void EQL::singleShot() {
         fun = 0; }}
 
 void EQL::exec(const QStringList& args) {
+    QStringList arguments(args);
     si_select_package(make_simple_base_string((char*)"EQL"));
     eval(QString("(SET-HOME \"%1\")").arg(home()).toAscii().constData());
-    bool qgui = false;
-    int count = args.count();
-    if(count > 1) {
-        if(args.at(1) == "-qgui") {
-            qgui = true;
-            eval("(QGUI)"); }}
-    bool quit = false;
-    const char* lisp_code = 0;
-    QString load;
-    if(count == 1) {
-        quit = true;
-        lisp_code = "(SI:TOP-LEVEL)"; }
-    else if(args.contains("-qtpl")) {
-        quit = true;
-        lisp_code = "(SI::QTOP-LEVEL)"; } // see src/lisp/ini.lisp
-    else if(count >= 2) {
-        if(!(qgui && (count == 2))) {
-            load = QString("(LOAD \"%1\")")
-                   .arg(args.at(((count > 2) && qgui) ? 2 : 1));
-            lisp_code = load.toAscii().constData(); }}
-    if(lisp_code) {
-        eval(lisp_code); }
-    if(quit) {
+    bool tpl = false;
+    QStringList forms;
+    if(arguments.count() == 1) {
+        tpl = true;
+        forms << "(SI:TOP-LEVEL)"; }
+    if(arguments.contains("-qgui")) {
+        arguments.removeAll("-qgui");
+        forms << "(QGUI)"; }
+    if(arguments.contains("-qtpl")) {
+        arguments.removeAll("-qtpl");
+        tpl = true;
+        forms << "(SI::QTOP-LEVEL)"; }
+    if(arguments.count() > 1) {
+        forms.prepend(QString("(LOAD \"%1\")").arg(arguments.at(1))); }
+    QString code;
+    if(forms.length() == 1) {
+        code = forms.first(); }
+    else {
+        code = "(PROGN " + forms.join(" ") + ")"; }
+    eval(code.toAscii().constData());
+    if(tpl) {
         qquit(); }}
 
 void EQL::exec(lisp_ini ini, const QByteArray& command, const QByteArray& package) {

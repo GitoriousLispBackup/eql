@@ -210,7 +210,9 @@
               ("setText" 0 (subseq curr 0 sp))
               ("setText" 1 (subseq curr (1+ sp))))
             (qfun override "addTopLevelItem" item)))
-        (qfun override "sortByColumn" 1 "AscendingOrder")))))
+        (qfun override "sortByColumn" 1 "AscendingOrder")))
+    (when (null info)
+      (qmsg "<html>Class currently not available (see EQL modules and <b><code>qrequire</code></b>)."))))
 
 (defun populate-primitives ()
   (dolist (type (list (cons "QByteArray"    "(vector -50 0 50)")
@@ -238,18 +240,19 @@
 (defun show-super-classes (type)
   (if (eql :q type)
       (let ((mo (qstatic-meta-object (qget *q-names* "currentText"))))
-        (qset *q-super-classes* "text"
-              (with-output-to-string (s)
-                (loop
-                   (let ((name (qfun mo "className")))
-                     (format s "<a href='~a'>~a</a>&nbsp;&nbsp;" name name) 
-                     (when (qnull-object (setf mo (qfun mo "superClass")))
-                       (return)))))))
+        (when mo
+          (qset *q-super-classes* "text"
+                (with-output-to-string (s)
+                  (loop
+                     (let ((name (qfun mo "className")))
+                       (format s "<a href='~A'>~A</a>&nbsp;&nbsp;" name name) 
+                       (when (qnull-object (setf mo (qfun mo "superClass")))
+                         (return))))))))
       (qset *n-super-classes* "text"
             (let ((name (qget *n-names* "currentText")))
               (with-output-to-string (s)
                 (loop
-                   (format s "<a href='~a'>~a</a>&nbsp;&nbsp;" name name) 
+                   (format s "<a href='~A'>~A</a>&nbsp;&nbsp;" name name) 
                    (unless (setf name (qnobject-super-class name))
                      (return))))))))
 
@@ -269,11 +272,11 @@
 
 (defun display (x &optional color)
   (when color
-    (qfun *display* "insertHtml" (format nil "<font color=~a>&nbsp;" color)))
+    (qfun *display* "insertHtml" (format nil "<font color=~A>&nbsp;" color)))
   (let ((1st t))
     (dolist (val (ensure-list x))
       (qfun *display* "insertPlainText"
-            (format nil "~a~a~%" (if 1st (progn (setf 1st nil) "") " ") val))))
+            (format nil "~A~A~%" (if 1st (progn (setf 1st nil) "") " ") val))))
   (when color
     (qfun *display* "insertHtml" "<br></font>"))
   (let ((vs (qfun *display* "verticalScrollBar")))
@@ -291,7 +294,7 @@
 (defun all-symbols ()
   (let (all)
     (do-symbols (s)
-      (let ((sym (format nil "~a~(~a~)" (if (or (ignore-errors (symbol-function s))
+      (let ((sym (format nil "~A~(~A~)" (if (or (ignore-errors (symbol-function s))
                                                 (macro-function s)) "(" "")
                          s)))
         (unless (and (starts-with "(q" sym)
@@ -304,7 +307,7 @@
     (unless pkg
       (in-package :gui))
     (let ((name (package-name *package*)))
-      (qset *package-name* "text" (format nil "~a>" name))
+      (qset *package-name* "text" (format nil "~A>" name))
       (when (string/= name pkg)
         (setf pkg name)
         (qfun *completer-list* "setStringList" (all-symbols))))))
@@ -314,7 +317,7 @@
     (handler-case
         (let ((txt (string-trim " " (qget *edit* "text"))))
           (unless (empty-string txt)
-            (display (format nil "~a> ~a" (package-name *package*) txt))
+            (display (format nil "~A> ~A" (package-name *package*) txt))
             (let ((exp (read-from-string txt)))
               (setf color "red")
               (let ((vals (multiple-value-list (eval exp))))

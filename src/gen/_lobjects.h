@@ -1,7 +1,9 @@
 #ifndef LOBJECTS_H
 #define LOBJECTS_H
 
+#include "../eql_global.h"
 #include <QtGui>
+#include <ecl/ecl.h>
 
 typedef QList<int>        NumList;
 typedef QList<QByteArray> StrList;
@@ -21,8 +23,20 @@ Q_DECLARE_METATYPE(QTextCharFormat)
 class EQL;
 class DynObject;
 
-class LObjects {
+// functions from EQL modules
+typedef const QMetaObject* (*StaticMetaObject)(int);
+typedef void (*DeleteNObject)(int, void*);
+typedef NumList* (*Override)(const QByteArray&);
+typedef void* (*ToMetaArg)(int, cl_object);
+typedef cl_object (*To_lisp_arg)(int, void*);
+
+class EQL_EXPORT LObjects {
 public:
+    static int T_QNetworkRequest;
+    static int T_GLfloat;
+    static int T_GLint;
+    static int T_GLuint;
+
     static QObject** Q;
     static QObject** N;
     static uint i_unique;
@@ -45,6 +59,23 @@ public:
     static StrList override(const QByteArray&);
     static void* overrideFun(uint, int);
     static void setOverrideFun(uint, int, void*);
+
+    static StaticMetaObject staticMetaObject_help;
+    static StaticMetaObject staticMetaObject_network;
+    static StaticMetaObject staticMetaObject_opengl;
+    static StaticMetaObject staticMetaObject_svg;
+    static DeleteNObject deleteNObject_help;
+    static DeleteNObject deleteNObject_network;
+    static DeleteNObject deleteNObject_opengl;
+    static DeleteNObject deleteNObject_svg;
+    static Override override_help;
+    static Override override_network;
+    static Override override_opengl;
+    static Override override_svg;
+    static ToMetaArg toMetaArg_network;
+    static To_lisp_arg to_lisp_arg_network;
+    static ToMetaArg toMetaArg_opengl;
+    static To_lisp_arg to_lisp_arg_opengl;
 };
 
 #endif

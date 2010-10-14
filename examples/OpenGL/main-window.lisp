@@ -2,7 +2,7 @@
 ;;;
 ;;; This is a port of the Qt OpenGL Example "Grabber"
 
-(require :gl-widget "gl-widget")
+(require :gl-widget (eql:in-home "examples/OpenGL/gl-widget"))
 
 (defpackage :main-window
   (:use :common-lisp :util :eql :gl-widget)
@@ -129,7 +129,7 @@
                     (tr "Grabber")
                     (tr "Enter pixmap size:")
                     "Normal"
-                    (format nil "~{~d~^ x ~}" (qget *gl-widget* "size"))
+                    (format nil "~{~D~^ x ~}" (qget *gl-widget* "size"))
                     nil))) ; ok
     (if (qok)
         (progn

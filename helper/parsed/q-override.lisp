@@ -94,6 +94,10 @@
   (("QAbstractListModel" . "QAbstractItemModel")
    "virtual bool dropMimeData ( const QMimeData * , Qt::DropAction , int , int , const QModelIndex & )"
    "virtual QModelIndex index ( int , int = 0, const QModelIndex & = QModelIndex() ) const")
+  (("QAbstractNetworkCache" . "QObject")
+   "virtual QNetworkCacheMetaData metaData ( const QUrl & ) = 0"
+   "virtual bool remove ( const QUrl & ) = 0"
+   "virtual void updateMetaData ( const QNetworkCacheMetaData & ) = 0")
   (("QAbstractPrintDialog" . "QDialog")
    "virtual int exec () = 0")
   (("QAbstractProxyModel" . "QAbstractItemModel")
@@ -135,6 +139,13 @@
    "virtual void keyPressEvent ( QKeyEvent * )"
    "virtual void timerEvent ( QTimerEvent * )"
    "virtual void wheelEvent ( QWheelEvent * )")
+  (("QAbstractSocket" . "QIODevice")
+   "virtual bool atEnd () const"
+   "virtual bool canReadLine () const"
+   "virtual void close ()"
+   "virtual bool isSequential () const"
+   "virtual bool waitForBytesWritten ( int = 30000 )"
+   "virtual bool waitForReadyRead ( int = 30000 )")
   (("QAbstractSpinBox" . "QWidget")
    "virtual void fixup ( QString & ) const"
    "virtual void stepBy ( int )"
@@ -476,6 +487,22 @@
    "virtual void changeEvent ( QEvent * )"
    "virtual bool event ( QEvent * )"
    "virtual void paintEvent ( QPaintEvent * )")
+  (("QFtp" . "QObject"))
+  (("QGLShader" . "QObject"))
+  (("QGLShaderProgram" . "QObject")
+   "virtual bool link ()")
+  (("QGLWidget" . "QWidget")
+   "virtual void glDraw ()"
+   "virtual void glInit ()"
+   "virtual void initializeGL ()"
+   "virtual void initializeOverlayGL ()"
+   "virtual void paintGL ()"
+   "virtual void paintOverlayGL ()"
+   "virtual void resizeGL ( int , int )"
+   "virtual void resizeOverlayGL ( int , int )"
+   "virtual bool event ( QEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )")
   (("QGesture" . "QObject"))
   (("QGraphicsAnchor" . "QObject"))
   (("QGraphicsBlurEffect" . "QGraphicsEffect")
@@ -550,6 +577,10 @@
    "virtual void wheelEvent ( QGraphicsSceneWheelEvent * )"
    "virtual bool event ( QEvent * )"
    "virtual bool eventFilter ( QObject * , QEvent * )")
+  (("QGraphicsSvgItem" . "QGraphicsObject")
+   "virtual QRectF boundingRect () const"
+   "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * = 0 )"
+   "virtual int type () const")
   (("QGraphicsTextItem" . "QGraphicsObject")
    "virtual QRectF boundingRect () const"
    "virtual bool contains ( const QPointF & ) const"
@@ -680,6 +711,19 @@
    "virtual void setSelection ( const QRect & , QItemSelectionModel::SelectionFlags )"
    "virtual int verticalOffset () const"
    "virtual bool viewportEvent ( QEvent * )")
+  (("QHelpContentModel" . "QAbstractItemModel")
+   "virtual int columnCount ( const QModelIndex & = QModelIndex() ) const"
+   "virtual QVariant data ( const QModelIndex & , int ) const"
+   "virtual QModelIndex index ( int , int , const QModelIndex & = QModelIndex() ) const"
+   "virtual QModelIndex parent ( const QModelIndex & ) const"
+   "virtual int rowCount ( const QModelIndex & = QModelIndex() ) const")
+  (("QHelpContentWidget" . "QTreeView"))
+  (("QHelpEngineCore" . "QObject"))
+  (("QHelpIndexModel" . "QStringListModel"))
+  (("QHelpIndexWidget" . "QListView"))
+  (("QHelpSearchEngine" . "QObject"))
+  (("QHelpSearchQueryWidget" . "QWidget"))
+  (("QHelpSearchResultWidget" . "QWidget"))
   (("QHistoryState" . "QAbstractState")
    "virtual bool event ( QEvent * )"
    "virtual void onEntry ( QEvent * )"
@@ -819,6 +863,16 @@
    "virtual Qt::DropActions supportedDropActions () const"
    "virtual void dropEvent ( QDropEvent * )"
    "virtual bool event ( QEvent * )")
+  (("QLocalServer" . "QObject")
+   "virtual bool hasPendingConnections () const"
+   "virtual QLocalSocket * nextPendingConnection ()"
+   "virtual void incomingConnection ( quintptr )")
+  (("QLocalSocket" . "QIODevice")
+   "virtual bool canReadLine () const"
+   "virtual void close ()"
+   "virtual bool isSequential () const"
+   "virtual bool waitForBytesWritten ( int = 30000 )"
+   "virtual bool waitForReadyRead ( int = 30000 )")
   (("QMainWindow" . "QWidget")
    "virtual QMenu * createPopupMenu ()"
    "virtual void contextMenuEvent ( QContextMenuEvent * )"
@@ -922,6 +976,17 @@
    "virtual bool eventTest ( QEvent * )"
    "virtual void onTransition ( QEvent * )")
   (("QMovie" . "QObject"))
+  (("QNetworkAccessManager" . "QObject"))
+  (("QNetworkCookieJar" . "QObject")
+   "virtual QList<QNetworkCookie> cookiesForUrl ( const QUrl & ) const"
+   "virtual bool setCookiesFromUrl ( const QList<QNetworkCookie> & , const QUrl & )")
+  (("QNetworkDiskCache" . "QAbstractNetworkCache")
+   "virtual QNetworkCacheMetaData metaData ( const QUrl & )"
+   "virtual bool remove ( const QUrl & )"
+   "virtual void updateMetaData ( const QNetworkCacheMetaData & )")
+  (("QNetworkReply" . "QIODevice")
+   "virtual void abort () = 0"
+   "virtual void close ()")
   (("QObject" . NIL)
    "virtual bool event ( QEvent * )"
    "virtual bool eventFilter ( QObject * , QEvent * )"
@@ -1250,6 +1315,10 @@
    "virtual void updateEditorGeometry ( QWidget * , const QStyleOptionViewItem & , const QModelIndex & ) const"
    "virtual bool editorEvent ( QEvent * , QAbstractItemModel * , const QStyleOptionViewItem & , const QModelIndex & )"
    "virtual bool eventFilter ( QObject * , QEvent * )")
+  (("QSvgRenderer" . "QObject"))
+  (("QSvgWidget" . "QWidget")
+   "virtual QSize sizeHint () const"
+   "virtual void paintEvent ( QPaintEvent * )")
   (("QSwipeGesture" . "QGesture"))
   (("QSyntaxHighlighter" . "QObject")
    "virtual void highlightBlock ( const QString & ) = 0")
@@ -1312,6 +1381,11 @@
    "virtual bool event ( QEvent * )")
   (("QTapAndHoldGesture" . "QGesture"))
   (("QTapGesture" . "QGesture"))
+  (("QTcpServer" . "QObject")
+   "virtual bool hasPendingConnections () const"
+   "virtual QTcpSocket * nextPendingConnection ()"
+   "virtual void incomingConnection ( int )")
+  (("QTcpSocket" . "QAbstractSocket"))
   (("QTextBlockGroup" . "QTextObject")
    "virtual void blockFormatChanged ( const QTextBlock & )"
    "virtual void blockInserted ( const QTextBlock & )"
@@ -1444,6 +1518,7 @@
    "virtual void setSelectionModel ( QItemSelectionModel * )"
    "virtual void dropEvent ( QDropEvent * )"
    "virtual bool event ( QEvent * )")
+  (("QUdpSocket" . "QAbstractSocket"))
   (("QUndoGroup" . "QObject"))
   (("QUndoStack" . "QObject"))
   (("QUndoView" . "QListView"))

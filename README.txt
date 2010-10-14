@@ -18,19 +18,10 @@ REQUIREMENTS
 
 
 
-PREPARE BUILD (optional; new users: skip this)
-
-If you want to include additional modules:
-- uncomment the modules in helper/qt-modules.lisp
-- follow the helper/README (parse & generate)
-- uncomment the modules in src/eql_lib.pro (section: optional modules)
-
-
-
 BUILD / REBUILD (see also: "Windows Easy Guide" in doc/)
 
 [Windows]
-    You first need to adapt the win32 section of both src/eql_lib.pro and src/eql_exe.pro.
+    You first need to adapt the file src/windows.pri (include & library paths).
 
 [GCC]
     If you use a recent GCC (e.g. 4.5) you need to uncomment this line in src/eql_lib.pro:
@@ -62,6 +53,7 @@ This will build both the EQL executable and shared library.
         cd /usr/lib
         sudo ln -s ~/eql/libeql.1.dylib libeql.1.dylib
     You may want to create a convenience link:
+        cd ~/eql (your EQL directory)
         ln -s eql.app/Contents/MacOS/eql eql
 
 
@@ -78,12 +70,28 @@ In order to run a top-level processing Qt events, do:
 To run a Lisp file without top-level, do:
     ./eql examples/clock (MSVC: eql examples/clock)
 
-If you start the eql executable without arguments, it will
-start the usual ECL top-level (without processing Qt events).
+If you start the EQL executable without arguments, it will start the usual ECL top-level
+(without processing Qt events).
 
 To quit the tool, do:
     (eql:qquit) or
     (eql:qq)
+
+
+
+QT MODULES
+
+To build an EQL module (corresponding to a Qt module), do the following in src/:
+(MSVC: nmake instead of make)
+    qmake module_<name>.pro (e.g. qmake module_network.pro)
+    make clean (rebuild only)
+    make
+
+[Linux,OSX]
+    You need to create links to the modules, see EQL library above.
+
+In Lisp, use the function QREQUIRE to load a module:
+    (qrequire :network)
 
 
 
@@ -92,9 +100,9 @@ NOTES
 For additional information see doc/index.html.
 
 An interesting side note: the EQL library size varies quite a bit on different platforms:
-- Windows MSVC 2008:     ~3 MB
-- Mac OSX 10.4 GCC 4.0:  ~6 MB
-- Linux GCC 4.5:        ~20 MB (and no, UPX doesn't work here)
+- Windows MSVC 2008:     ~4   MB
+- Mac OSX 10.4 GCC 4.0:  ~6.5 MB
+- Linux GCC 4.5:        ~20   MB (and no, UPX doesn't work here)
 
 
 

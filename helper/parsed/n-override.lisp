@@ -40,6 +40,7 @@
    "virtual QString text ( Text , int ) const"
    "virtual int userActionCount ( int ) const")
   (("QActionEvent" . "QEvent"))
+  (("QAuthenticator" . NIL))
   (("QBasicTimer" . NIL))
   (("QBitArray" . NIL))
   (("QBitmap" . "QPixmap"))
@@ -76,6 +77,19 @@
   (("QFont" . NIL))
   (("QFontDatabase" . NIL))
   (("QFontMetrics" . NIL))
+  (("QGLColormap" . NIL))
+  (("QGLContext" . NIL)
+   "virtual bool create ( const QGLContext * = 0 )"
+   "virtual void doneCurrent ()"
+   "virtual void makeCurrent ()"
+   "virtual void swapBuffers () const"
+   "virtual bool chooseContext ( const QGLContext * = 0 )")
+  (("QGLFormat" . NIL))
+  (("QGLFramebufferObject" . "QPaintDevice")
+   "virtual int metric ( PaintDeviceMetric ) const")
+  (("QGLFramebufferObjectFormat" . NIL))
+  (("QGLPixelBuffer" . "QPaintDevice")
+   "virtual int metric ( PaintDeviceMetric ) const")
   (("QGestureEvent" . "QEvent"))
   (("QGradient" . NIL))
   (("QGraphicsAnchorLayout" . "QGraphicsLayout")
@@ -214,8 +228,12 @@
    "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * )"
    "virtual QPainterPath shape () const"
    "virtual int type () const")
+  (("QHelpContentItem" . NIL))
   (("QHelpEvent" . "QEvent"))
+  (("QHelpSearchQuery" . NIL))
   (("QHideEvent" . "QEvent"))
+  (("QHostAddress" . NIL))
+  (("QHostInfo" . NIL))
   (("QHoverEvent" . "QEvent"))
   (("QIcon" . NIL))
   (("QIconDragEvent" . "QEvent"))
@@ -259,6 +277,15 @@
   (("QMoveEvent" . "QEvent"))
   (("QMutex" . NIL))
   (("QMutexLocker" . NIL))
+  (("QNetworkAddressEntry" . NIL))
+  (("QNetworkCacheMetaData" . NIL))
+  (("QNetworkCookie" . NIL))
+  (("QNetworkInterface" . NIL))
+  (("QNetworkProxy" . NIL))
+  (("QNetworkProxyFactory" . NIL)
+   "virtual QList<QNetworkProxy> queryProxy ( const QNetworkProxyQuery & = QNetworkProxyQuery() ) = 0")
+  (("QNetworkProxyQuery" . NIL))
+  (("QNetworkRequest" . NIL))
   (("QPaintDevice" . NIL)
    "virtual int metric ( PaintDeviceMetric ) const")
   (("QPaintEvent" . "QEvent"))
@@ -297,12 +324,19 @@
    "virtual void setGeometry ( const QRect & )"
    "virtual QSize sizeHint () const"
    "virtual QSpacerItem * spacerItem ()")
+  (("QSslCertificate" . NIL))
+  (("QSslCipher" . NIL))
+  (("QSslConfiguration" . NIL))
+  (("QSslError" . NIL))
+  (("QSslKey" . NIL))
   (("QStandardItem" . NIL)
    "virtual QStandardItem * clone () const"
    "virtual QVariant data ( int = Qt::UserRole + 1 ) const"
    "virtual void setData ( const QVariant & , int = Qt::UserRole + 1 )"
    "virtual int type () const")
   (("QStatusTipEvent" . "QEvent"))
+  (("QSvgGenerator" . "QPaintDevice")
+   "virtual int metric ( QPaintDevice::PaintDeviceMetric ) const")
   (("QSystemSemaphore" . NIL))
   (("QTableWidgetItem" . NIL)
    "virtual QTableWidgetItem * clone () const"
@@ -353,6 +387,17 @@
    "virtual void redo ()"
    "virtual void undo ()")
   (("QUrl" . NIL))
+  (("QUrlInfo" . NIL)
+   "virtual void setDir ( bool )"
+   "virtual void setFile ( bool )"
+   "virtual void setGroup ( const QString & )"
+   "virtual void setLastModified ( const QDateTime & )"
+   "virtual void setName ( const QString & )"
+   "virtual void setOwner ( const QString & )"
+   "virtual void setPermissions ( int )"
+   "virtual void setReadable ( bool )"
+   "virtual void setSymLink ( bool )"
+   "virtual void setWritable ( bool )")
   (("QVariant" . NIL))
   (("QVector2D" . NIL))
   (("QVector3D" . NIL))

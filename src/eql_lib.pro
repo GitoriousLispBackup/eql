@@ -1,9 +1,4 @@
-# optional modules (see also: helper/missing-types.txt)
-#CONFIG += help
-#CONFIG += opengl
-#CONFIG += svg
-
-# uncomment this for recent GCC (e.g. 4.5) because of gen/_lobjects.cpp
+# (!) uncomment this for recent GCC (e.g. 4.5) because of gen/_lobjects.cpp
 #QMAKE_CXXFLAGS += -fno-var-tracking-assignments
 
 TEMPLATE    = lib
@@ -15,25 +10,13 @@ DESTDIR     = ../
 OBJECTS_DIR = ./tmp/
 MOC_DIR     = ./tmp/
 
-win32 {
-    INCLUDEPATH += c:/ecl/msvc/package
-    LIBS        += -Lc:/ecl/msvc/package
-}
-
-opengl {
-    QT      += opengl
-    DEFINES += EQL_OPENGL
-}
-
-svg {
-    QT += svg
-}
+include(windows.pri)
 
 HEADERS += gen/_lobjects.h \
-           gen/_q_classes.h \
-           gen/_n_classes.h \
-           gen/_q_methods.h \
-           gen/_n_methods.h \
+           gen/_main_q_classes.h \
+           gen/_main_n_classes.h \
+           gen/_main_q_methods.h \
+           gen/_main_n_methods.h \
            dyn_object.h \
            eql_global.h \
            ecl_fun.h \

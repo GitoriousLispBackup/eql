@@ -1,6 +1,6 @@
 ;;; copyright (c) 2010 power4projects software
 
-(load "qt-modules")
+(load "load-modules")
 (load "../src/lisp/util")
 
 (use-package :util)
@@ -45,6 +45,7 @@
         "EditFocus"
         "Engine"
         "FILE"
+        "FT_Face"
         "Handle"
         "HANDLE"
         "HBITMAP"
@@ -58,6 +59,7 @@
         "PlaceholderText"
         "RenderFlags"
         "RSgImage"
+        "SearchHit"
         "T "
         "Q_PID"
         "QDataStream"
@@ -97,7 +99,7 @@
 (defparameter *not-found* 0)
 
 (defun html-file (class)
-  (format nil "~a~(~a~).html" *qt-html-documentation-path* class))
+  (format nil "~A~(~A~).html" *qt-html-documentation-path* class))
 
 (unless (probe-file (html-file "QWidget"))
   (error "Please set the *qt-html-documentation-path* first")
@@ -139,7 +141,7 @@
                                               ((string= "lt" buf*) #\<)
                                               ((string= "gt" buf*) #\>)
                                               ((string= "nbsp" buf*) #\Space)
-                                              (t (error (format nil "Parse error at: &~a;" buf*))))))))
+                                              (t (error (format nil "Parse error at: &~A;" buf*))))))))
                   (t (if enc
                          (buf-add ch)
                          (write-char* ch)))))))))))
@@ -156,7 +158,7 @@
             (read-sequence html s))
           (progn
             (incf *not-found*)
-            (warn (format nil "Html file not found: ~s" path))))))
+            (warn (format nil "Html file not found: ~S" path))))))
   (defun super-class ()
     (let ((p (search "<p>Inherits" html)))
       (when p
@@ -171,7 +173,7 @@
                  ~%   \"bool begin ( QPixmap * )\""))
     (let ((static (starts-with "static" type))
           (protected (search "protected" type))
-          (p (search* (format nil "<h2>~a</h2>" type) html)))
+          (p (search* (format nil "<h2>~A</h2>" type) html)))
       (when p
         (let* ((tb1 (search* "<table" html p))
                (tb2 (search* "</table>" html tb1))
@@ -183,8 +185,8 @@
                (return))
              (setf tr2 (search* "</tr>" funs tr1))
              (let* ((fun (string-trim " " (text (subseq funs tr1 tr2))))
-                    (new (or (starts-with (format nil "Q_INVOKABLE ~a (" class) fun)
-                             (starts-with (format nil "~a (" class) fun)))
+                    (new (or (starts-with (format nil "Q_INVOKABLE ~A (" class) fun)
+                             (starts-with (format nil "~A (" class) fun)))
                     (virtual (starts-with "virtual" fun)))
                (unless (or (and new no-new)
                            (find #\~ fun) ; destructor
@@ -198,9 +200,9 @@
                            (and (string= "QColor" class)
                                 (not static)))
                  (when virtual
-                   (format so "~%   \"~a\"" fun))
+                   (format so "~%   \"~A\"" fun))
                  (unless (and virtual protected)
-                   (format s "~%   \"~a~a\"" (cond (new "new ") ; constructor
+                   (format s "~%   \"~A~A\"" (cond (new "new ") ; constructor
                                                    (protected "protected ")
                                                    (static "static ")
                                                    (t ""))
@@ -211,10 +213,10 @@
     (let ((no-new (starts-with "//" class))
           (class* (string-left-trim "/" class)))
       (read-html class*)
-      (format t "~%parsing ~a" class*)
+      (format t "~%parsing ~A" class*)
       (let ((super (super-class)))
-        (format s "  ((~s . ~s)" class* super)
-        (format so "  ((~s . ~s)" class* super))
+        (format s "  ((~S . ~S)" class* super)
+        (format so "  ((~S . ~S)" class* super))
       (dolist (type (list "public functions"
                           "protected functions"
                           "reimplemented public functions"
@@ -233,19 +235,12 @@
         :key (lambda (str) (string-trim "=/" str))))
 
 (defun start ()
-  (flet ((load-module (name)
-           (dolist (qn (list #\q #\n))
-             (load (format nil "my-class-lists/~(~a~)/~c-names" name qn)))))
-    (dolist (m (cons :gui *qt-modules*))
-      (load-module m)))
-  (setf *q-names* (sort-names *q-names*)
-        *n-names* (sort-names *n-names*))
   (mapc (lambda (names non)
           (let ((pre (if non #\n #\q)))
-            (with-open-file (s (format nil "parsed/~c-methods.lisp" pre) :direction :output :if-exists :supersede)
-              (with-open-file (so (format nil "parsed/~c-override.lisp" pre) :direction :output :if-exists :supersede)
-                (format so "(defparameter *~c-override* '(~%" pre)
-                (format s "(defparameter *~c-methods* '(~%" pre)
+            (with-open-file (s (format nil "parsed/~C-methods.lisp" pre) :direction :output :if-exists :supersede)
+              (with-open-file (so (format nil "parsed/~C-override.lisp" pre) :direction :output :if-exists :supersede)
+                (format so "(defparameter *~C-override* '(~%" pre)
+                (format s "(defparameter *~C-methods* '(~%" pre)
                 (parse-classes (mapcar (lambda (name)
                                          (string-trim "= " (if-it (position #\( name)
                                                                   (subseq name 0 it)
@@ -256,6 +251,6 @@
         (list nil :non))
   (if (zerop *not-found*)
       (format t "~%OK~%~%")
-      (warn (format nil "Html files not found: ~d" *not-found*))))
+      (warn (format nil "Html files not found: ~D" *not-found*))))
 
 (start)

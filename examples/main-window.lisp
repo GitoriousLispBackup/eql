@@ -26,7 +26,7 @@
 
 (defun set-icon (action name)
   (qset action "icon" (qnew "QIcon(QString)"
-                            (in-home (format nil "examples/icons/~a.png" name)))))
+                            (in-home (format nil "examples/icons/~A.png" name)))))
 
 (defun start ()
   (do- (qset *main*)

@@ -1,14 +1,13 @@
 ;;; To avoid creation of instances, prepend "//" to the object name
-;;;     "//QAbstractButton"
+;;;     "//QClipboard"
 
-(setf *q-names*
-      (nconc *q-names*
-             (list "QHelpContentModel"
-                   "QHelpContentWidget"
-                   "QHelpEngineCore"
-                   "//QHelpIndexModel"
-                   "QHelpIndexWidget"
-                   "QHelpSearchEngine"
-                   "QHelpSearchQueryWidget"
-                   "QHelpSearchResultWidget"
-                   )))
+(defparameter *help-q-names*
+  (list "QHelpContentModel"
+        "QHelpContentWidget"
+        "QHelpEngineCore"
+        "//QHelpIndexModel"
+        "QHelpIndexWidget"
+        "QHelpSearchEngine"
+        "QHelpSearchQueryWidget"
+        "QHelpSearchResultWidget"
+        ))

@@ -103,4 +103,4 @@
       (nreverse lst))))
 
 (defun join (lst &optional (sep #\Space))
-  (format nil (format nil "~~{~~a~~^~a~~}" sep) lst))
+  (format nil (format nil "~~{~~A~~^~A~~}" sep) lst))
