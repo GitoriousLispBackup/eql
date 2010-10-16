@@ -5,7 +5,8 @@
 
 (load "tr")
 
-(make-package :c)
+(unless (find-package :c)
+  (make-package :c))
 
 (defparameter *lisp-files*
   (list "my")

@@ -3,7 +3,8 @@
 
 (setf *break-on-signals* 'error)
 
-(make-package :c)
+(unless (find-package :c)
+  (make-package :c))
 
 (defparameter *lisp-files* (list #-win32 "serve-event" "util" "package" "ini"))
 

@@ -88,6 +88,7 @@ void iniCLFunctions() {
 
 enum UserMetaTypes {
     Ini =
+    // if you get an error here, you simply forgot to build & run "first_metatype_id"
 #include "first_metatype_id.h"
     // must correspond exactly to "void registerMetaTypes()"
     T_bool_ok_pointer,

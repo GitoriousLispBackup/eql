@@ -29,6 +29,11 @@ BUILD / REBUILD (see also: "Windows Easy Guide" in doc/)
     If you use a recent GCC (e.g. 4.5) you need to uncomment this line in src/eql_lib.pro:
         QMAKE_CXXFLAGS += -fno-var-tracking-assignments 
 
+[OSX]
+    To force creation of a Makefile (instead of an XCode project), use this flag:
+        qmake -spec macx-g++
+
+
 0) Prepare build (important: you need to repeat this every time you change your Qt version!)
    in src/ run: (MSVC: nmake instead of make)
  
