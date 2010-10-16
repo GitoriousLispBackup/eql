@@ -15,10 +15,10 @@ int main(int argc, char** argv) {
     QApplication qapp(argc, argv);
     QStringList args(QCoreApplication::arguments());
     if(args.contains("-h") || (args.contains("--help"))) {
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
         std::cout << "Usage: eql [-qgui] [file]" << std::endl;
 #else
-        std::cout << "Usage: eql [-qgui | -qtpl] [file]" << std::endl;
+        std::cout << "Usage: eql [-qgui] [-qtpl] [file]" << std::endl;
 #endif
         exit(0); }
 
@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
     QTextCodec::setCodecForCStrings(utf8);
     QTextCodec::setCodecForTr(utf8);
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
     // necessary when using SLIME
     { QWidget ini; ini.setGeometry(0, 0, 0, 0); ini.show(); ini.close(); }
 #endif

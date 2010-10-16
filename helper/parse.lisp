@@ -9,7 +9,10 @@
   ;; tested with Qt 4.6.x and 4.7.0 (4.5 will not work!)
   #+darwin "/Developer/Documentation/Qt/html/"
   #+win32  "C:/qt/4.6.2/doc/html/"
-  #+linux  "/usr/share/doc/packages/libqt4/html/")
+  #+linux 
+  "/usr/share/doc/packages/libqt4/html/" ; Qt 4.6
+  ;;"~/qtsdk-2010.05/qt/doc/html/" ; Qt 4.7
+  )
 
 (defconstant +skip+
   (list "( Type )"
@@ -46,6 +49,8 @@
         "Engine"
         "FILE"
         "FT_Face"
+        "GLfloat *"
+        "GLfloat["
         "Handle"
         "HANDLE"
         "HBITMAP"
@@ -57,6 +62,7 @@
         "MSG"
         "PaperSources"
         "PlaceholderText"
+        "RawHeaderPair"
         "RenderFlags"
         "RSgImage"
         "SearchHit"
@@ -94,6 +100,8 @@
         "**"
         "QFont getFont ( bool * , QWidget * , const char * )"                 ; "const char *" is ignored
         "QFont getFont ( bool * , const QFont & , QWidget * , const char * )" ; "const char *" is ignored
+        "QString nativeArguments () const"
+        "void setNativeArguments ( const QString & )"
         ))
 
 (defparameter *not-found* 0)

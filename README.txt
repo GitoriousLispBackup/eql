@@ -5,7 +5,9 @@
 TESTED WITH: (patches for other configurations welcome!)
 
 - ECL 10.4.1 unicode
-- Qt 4.6.x (OSX: Carbon)
+- Qt:
+    4.6.x (OSX: tested with Carbon)
+    4.7.0 (tested in Linux only)
 - Linux, OSX 10.4, Windows XP & 7 (Visual Studio Express 2008)
 
 
@@ -13,7 +15,7 @@ TESTED WITH: (patches for other configurations welcome!)
 REQUIREMENTS
 
 - ECL >= 10.4 official releases only (not CVS HEAD), enabling unicode
-- Qt  >= 4.6 (4.5 will not work) http://qt.nokia.com/
+- Qt  >= 4.6 (4.5 will not work, would need different parser) http://qt.nokia.com/
 - SLIME from CVS (e.g. 2010-06-01)
 
 
@@ -27,10 +29,20 @@ BUILD / REBUILD (see also: "Windows Easy Guide" in doc/)
     If you use a recent GCC (e.g. 4.5) you need to uncomment this line in src/eql_lib.pro:
         QMAKE_CXXFLAGS += -fno-var-tracking-assignments 
 
-1) Switch to the src/ directory, and run:
+0) Prepare build (important: you need to repeat this every time you change your Qt version!)
+   in src/ run: (MSVC: nmake instead of make)
+ 
+    qmake first_metatype_id.pro
+    make
+    ./first_metatype_id (MSVC: first_metatype_id.exe)
+
+   This will create the file first_metatype_id.h (which differs for me in Qt4.6 and Qt4.7)
+
+1) In src/ run:
     ecl -shell make-eql-lib.lisp (build + rebuild)
 
 2) Run: (MSVC: nmake instead of make)
+
     qmake eql_lib.pro
     make clean (rebuild only)
     make 
@@ -39,7 +51,7 @@ BUILD / REBUILD (see also: "Windows Easy Guide" in doc/)
     make clean (rebuild only)
     make 
 
-This will build both the EQL executable and shared library.
+   This will build both the EQL executable and shared library.
 
 3) cd ..
 
@@ -98,11 +110,6 @@ In Lisp, use the function QREQUIRE to load a module:
 NOTES
 
 For additional information see doc/index.html.
-
-An interesting side note: the EQL library size varies quite a bit on different platforms:
-- Windows MSVC 2008:     ~4   MB
-- Mac OSX 10.4 GCC 4.0:  ~6.5 MB
-- Linux GCC 4.5:        ~20   MB (and no, UPX doesn't work here)
 
 
 

@@ -7,9 +7,6 @@ DESTDIR      = ./
 OBJECTS_DIR  = ./tmp/
 MOC_DIR      = ./tmp/
 
-win32 {
-    INCLUDEPATH += c:/ecl/msvc/package
-    LIBS        += -Lc:/ecl/msvc/package
-}
+include(../src/windows.pri)
 
 SOURCES += main.cpp

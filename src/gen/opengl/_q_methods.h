@@ -52,11 +52,9 @@ public:
     Q_INVOKABLE void Mrelease(QGLShaderProgram* o) { o->release(); }
     Q_INVOKABLE void MremoveAllShaders(QGLShaderProgram* o) { o->removeAllShaders(); }
     Q_INVOKABLE void MremoveShader(QGLShaderProgram* o, QGLShader* x1) { o->removeShader(x1); }
-    Q_INVOKABLE void MsetAttributeArray(QGLShaderProgram* o, int x1, const GLfloat* x2, int x3, int x4 = 0) { o->setAttributeArray(x1, x2, x3, x4); }
     Q_INVOKABLE void MsetAttributeArray(QGLShaderProgram* o, int x1, const QVector2D* x2, int x3 = 0) { o->setAttributeArray(x1, x2, x3); }
     Q_INVOKABLE void MsetAttributeArray(QGLShaderProgram* o, int x1, const QVector3D* x2, int x3 = 0) { o->setAttributeArray(x1, x2, x3); }
     Q_INVOKABLE void MsetAttributeArray(QGLShaderProgram* o, int x1, const QVector4D* x2, int x3 = 0) { o->setAttributeArray(x1, x2, x3); }
-    Q_INVOKABLE void MsetAttributeArray(QGLShaderProgram* o, const char* x1, const GLfloat* x2, int x3, int x4 = 0) { o->setAttributeArray(x1, x2, x3, x4); }
     Q_INVOKABLE void MsetAttributeArray(QGLShaderProgram* o, const char* x1, const QVector2D* x2, int x3 = 0) { o->setAttributeArray(x1, x2, x3); }
     Q_INVOKABLE void MsetAttributeArray(QGLShaderProgram* o, const char* x1, const QVector3D* x2, int x3 = 0) { o->setAttributeArray(x1, x2, x3); }
     Q_INVOKABLE void MsetAttributeArray(QGLShaderProgram* o, const char* x1, const QVector4D* x2, int x3 = 0) { o->setAttributeArray(x1, x2, x3); }
@@ -68,7 +66,6 @@ public:
     Q_INVOKABLE void MsetAttributeValue(QGLShaderProgram* o, int x1, const QVector3D& x2) { o->setAttributeValue(x1, x2); }
     Q_INVOKABLE void MsetAttributeValue(QGLShaderProgram* o, int x1, const QVector4D& x2) { o->setAttributeValue(x1, x2); }
     Q_INVOKABLE void MsetAttributeValue(QGLShaderProgram* o, int x1, const QColor& x2) { o->setAttributeValue(x1, x2); }
-    Q_INVOKABLE void MsetAttributeValue(QGLShaderProgram* o, int x1, const GLfloat* x2, int x3, int x4) { o->setAttributeValue(x1, x2, x3, x4); }
     Q_INVOKABLE void MsetAttributeValue(QGLShaderProgram* o, const char* x1, GLfloat x2) { o->setAttributeValue(x1, x2); }
     Q_INVOKABLE void MsetAttributeValue(QGLShaderProgram* o, const char* x1, GLfloat x2, GLfloat x3) { o->setAttributeValue(x1, x2, x3); }
     Q_INVOKABLE void MsetAttributeValue(QGLShaderProgram* o, const char* x1, GLfloat x2, GLfloat x3, GLfloat x4) { o->setAttributeValue(x1, x2, x3, x4); }
@@ -77,7 +74,6 @@ public:
     Q_INVOKABLE void MsetAttributeValue(QGLShaderProgram* o, const char* x1, const QVector3D& x2) { o->setAttributeValue(x1, x2); }
     Q_INVOKABLE void MsetAttributeValue(QGLShaderProgram* o, const char* x1, const QVector4D& x2) { o->setAttributeValue(x1, x2); }
     Q_INVOKABLE void MsetAttributeValue(QGLShaderProgram* o, const char* x1, const QColor& x2) { o->setAttributeValue(x1, x2); }
-    Q_INVOKABLE void MsetAttributeValue(QGLShaderProgram* o, const char* x1, const GLfloat* x2, int x3, int x4) { o->setAttributeValue(x1, x2, x3, x4); }
     Q_INVOKABLE void MsetUniformValue(QGLShaderProgram* o, int x1, GLfloat x2) { o->setUniformValue(x1, x2); }
     Q_INVOKABLE void MsetUniformValue(QGLShaderProgram* o, const char* x1, const QPointF& x2) { o->setUniformValue(x1, x2); }
     Q_INVOKABLE void MsetUniformValue(QGLShaderProgram* o, const char* x1, const QSize& x2) { o->setUniformValue(x1, x2); }
@@ -126,7 +122,6 @@ public:
     Q_INVOKABLE void MsetUniformValue(QGLShaderProgram* o, const char* x1, const QVector4D& x2) { o->setUniformValue(x1, x2); }
     Q_INVOKABLE void MsetUniformValue(QGLShaderProgram* o, const char* x1, const QColor& x2) { o->setUniformValue(x1, x2); }
     Q_INVOKABLE void MsetUniformValue(QGLShaderProgram* o, const char* x1, const QPoint& x2) { o->setUniformValue(x1, x2); }
-    Q_INVOKABLE void MsetUniformValueArray(QGLShaderProgram* o, int x1, const GLfloat* x2, int x3, int x4) { o->setUniformValueArray(x1, x2, x3, x4); }
     Q_INVOKABLE void MsetUniformValueArray(QGLShaderProgram* o, int x1, const QVector2D* x2, int x3) { o->setUniformValueArray(x1, x2, x3); }
     Q_INVOKABLE void MsetUniformValueArray(QGLShaderProgram* o, int x1, const QVector3D* x2, int x3) { o->setUniformValueArray(x1, x2, x3); }
     Q_INVOKABLE void MsetUniformValueArray(QGLShaderProgram* o, int x1, const QVector4D* x2, int x3) { o->setUniformValueArray(x1, x2, x3); }
@@ -139,7 +134,6 @@ public:
     Q_INVOKABLE void MsetUniformValueArray(QGLShaderProgram* o, int x1, const QMatrix4x2* x2, int x3) { o->setUniformValueArray(x1, x2, x3); }
     Q_INVOKABLE void MsetUniformValueArray(QGLShaderProgram* o, int x1, const QMatrix4x3* x2, int x3) { o->setUniformValueArray(x1, x2, x3); }
     Q_INVOKABLE void MsetUniformValueArray(QGLShaderProgram* o, int x1, const QMatrix4x4* x2, int x3) { o->setUniformValueArray(x1, x2, x3); }
-    Q_INVOKABLE void MsetUniformValueArray(QGLShaderProgram* o, const char* x1, const GLfloat* x2, int x3, int x4) { o->setUniformValueArray(x1, x2, x3, x4); }
     Q_INVOKABLE void MsetUniformValueArray(QGLShaderProgram* o, const char* x1, const QVector2D* x2, int x3) { o->setUniformValueArray(x1, x2, x3); }
     Q_INVOKABLE void MsetUniformValueArray(QGLShaderProgram* o, const char* x1, const QVector3D* x2, int x3) { o->setUniformValueArray(x1, x2, x3); }
     Q_INVOKABLE void MsetUniformValueArray(QGLShaderProgram* o, const char* x1, const QVector4D* x2, int x3) { o->setUniformValueArray(x1, x2, x3); }

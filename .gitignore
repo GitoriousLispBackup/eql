@@ -28,3 +28,5 @@ r
 src/*.user
 src/ECL*
 src/tmp
+src/first_metatype_id
+src/first_metatype_id.h

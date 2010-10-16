@@ -87,8 +87,9 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object("qutf8"),                (cl_objectfn_fixed)qutf8,                    1); }
 
 enum UserMetaTypes {
+    Ini =
+#include "first_metatype_id.h"
     // must correspond exactly to "void registerMetaTypes()"
-    Start = QMetaType::User,
     T_bool_ok_pointer,
     T_QFileInfo,
     T_QFileInfoList,
@@ -1999,6 +2000,7 @@ cl_object qok() {
 
 cl_object qquit() {
     /// args: ()
+    /// alias: qq
     /// Quits both Qt and ECL.
     cl_shutdown();
     qApp->quit();

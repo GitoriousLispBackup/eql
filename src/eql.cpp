@@ -52,10 +52,12 @@ void EQL::exec(const QStringList& args) {
     if(arguments.contains("-qgui")) {
         arguments.removeAll("-qgui");
         forms << "(QGUI)"; }
+#ifndef Q_OS_WIN
     if(arguments.contains("-qtpl")) {
         arguments.removeAll("-qtpl");
         tpl = true;
         forms << "(SI::QTOP-LEVEL)"; }
+#endif
     if(arguments.count() > 1) {
         forms.prepend(QString("(LOAD \"%1\")").arg(arguments.at(1))); }
     QString code;

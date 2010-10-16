@@ -217,7 +217,7 @@
 (defun populate-primitives ()
   (dolist (type (list (cons "QByteArray"    "(vector -50 0 50)")
                       (cons "QChar"         "#\\a")
-                      (cons "QColor"        "\"#ff0000\" or \"red\"")
+                      (cons "QColor"        "\"#FF0000\" or \"red\"")
                       (cons "QGradientStop" "(cons 0 \"orange\")")
                       (cons "QKeySequence"  "\"Alt+A\"")
                       (cons "QLine"         "(list x1 y1 x2 y2)")
