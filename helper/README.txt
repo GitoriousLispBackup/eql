@@ -1,4 +1,6 @@
 HOWTO
+=====
+
 
 If you miss a Qt class, add it in ./my-class-lists/<module>/:
     q-names.lisp: QObject derived classes

@@ -21,6 +21,9 @@ int main(int argc, char** argv) {
         std::cout << "Usage: eql [-qgui] [-qtpl] [file]" << std::endl;
 #endif
         exit(0); }
+    if(args.contains("--version")) {
+        std::cout << "EQL " << EQL::version << std::endl;
+        exit(0); }
 
     QTextCodec* utf8 = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForCStrings(utf8);

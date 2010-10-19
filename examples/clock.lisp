@@ -1,5 +1,3 @@
-;;; copyright (c) 2010 power4projects software
-;;;
 ;;; This is (kind of) a port of the Qt Script Example "Clock"
 
 (defpackage :clock

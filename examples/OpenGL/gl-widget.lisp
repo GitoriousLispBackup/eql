@@ -1,5 +1,3 @@
-;;; copyright (c) 2010 power4projects software
-;;;
 ;;; This is a port of the Qt OpenGL Example "Grabber"
 
 (defpackage :gl-widget

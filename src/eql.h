@@ -20,6 +20,7 @@ public:
     ~EQL();
 
     static bool ini;
+    static const char version[];
     static QString home();
 
     void* fun;

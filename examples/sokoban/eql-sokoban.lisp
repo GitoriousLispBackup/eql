@@ -1,5 +1,3 @@
-;;; copyright (c) 2010 power4projects software
-;;;
 ;;; This is a simple GUI for CL-Sokoban, see http://www.cliki.net/CL-Sokoban 
 
 (load (eql:in-home "examples/sokoban/3rd-party/sokoban"))

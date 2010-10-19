@@ -212,6 +212,7 @@ cl_object qstatic_meta_object  (cl_object);
 cl_object qtranslate           (cl_object, cl_object, cl_object);
 cl_object qt_object_name       (cl_object);
 cl_object qutf8                (cl_object);
+cl_object qversion             ();
 
 struct EQL_EXPORT QtObject {
     QtObject() : pointer(0), unique(0), id(0) {}

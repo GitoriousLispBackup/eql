@@ -7,14 +7,15 @@
 #include <QTimer>
 #include <QStringList>
 
-extern "C" void ini_EQL(cl_object);
-
+const char EQL::version[] = "10.10.1"; // 2010-10-19
 bool EQL::ini = false;
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
         si_safe_eval(2, ecl_read_from_cstring(lisp_code), Cnil); }
     CL_CATCH_ALL_END; }
+
+extern "C" void ini_EQL(cl_object);
 
 EQL::EQL() : QObject(), fun(0) {
     iniCLFunctions();

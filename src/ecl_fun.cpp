@@ -84,7 +84,8 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object("qstatic-meta-object"),  (cl_objectfn_fixed)qstatic_meta_object,      1);
     cl_def_c_function(c_string_to_object("qtranslate"),           (cl_objectfn_fixed)qtranslate,               3);
     cl_def_c_function(c_string_to_object("qt-object-name"),       (cl_objectfn_fixed)qt_object_name,           1);
-    cl_def_c_function(c_string_to_object("qutf8"),                (cl_objectfn_fixed)qutf8,                    1); }
+    cl_def_c_function(c_string_to_object("qutf8"),                (cl_objectfn_fixed)qutf8,                    1);
+    cl_def_c_function(c_string_to_object("qversion"),             (cl_objectfn_fixed)qversion,                 0); }
 
 enum UserMetaTypes {
     Ini =
@@ -510,6 +511,7 @@ TO_QT_TYPE_PTR2(QTextFormat, qtextformat)
 TO_QT_TYPE_PTR2(QTextLength, qtextlength)
 TO_QT_TYPE_PTR2(QTime, qtime)
 TO_QT_TYPE_PTR2(QUrl, qurl)
+TO_QT_TYPE_PTR(QVariant, qvariant)
 
 TO_QT_TYPEF(QPoint)
 TO_QT_TYPEF(QSize)
@@ -726,7 +728,7 @@ TO_CL_VECTOR_VAL(QTextLength, qtextlength)
 TO_CL_VECTOR_VAL2(QRgb, qrgb, ecl_make_unsigned_integer)
 TO_CL_VECTOR_VAL2(qreal, qreal, ecl_make_doublefloat)
 
-static cl_object from_qvariant(const QVariant& var) {
+static cl_object from_qvariant_value(const QVariant& var) {
     cl_object l_obj = Cnil;
     int t = var.type();
     switch(t) {
@@ -801,8 +803,6 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case QMetaType::QSizeF:                  p = new QSizeF(toQSizeF(l_arg)); break;
         case QMetaType::QString:                 p = new QString(toQString(l_arg)); break;
         case QMetaType::QStringList:             p = new QStringList(toQStringList(l_arg)); break;
-        case QMetaType::QTime:                   p = toQTimePointer(l_arg); break;
-        case QMetaType::QUrl:                    p = toQUrlPointer(l_arg); break;
         case QMetaType::QBrush:                  p = toQBrushPointer(l_arg); break;
         case QMetaType::QIcon:                   p = toQIconPointer(l_arg); break;
         case QMetaType::QImage:                  p = toQImagePointer(l_arg); break;
@@ -811,6 +811,9 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case QMetaType::QPixmap:                 p = toQPixmapPointer(l_arg); break;
         case QMetaType::QTextFormat:             p = toQTextFormatPointer(l_arg); break;
         case QMetaType::QTextLength:             p = toQTextLengthPointer(l_arg); break;
+        case QMetaType::QTime:                   p = toQTimePointer(l_arg); break;
+        case QMetaType::QUrl:                    p = toQUrlPointer(l_arg); break;
+        case QMetaType::QVariant:                p = toQVariantPointer(l_arg); break;
         case T_bool_ok_pointer:                  p = new void*(&_ok_); break;
         case T_QFileInfo:                        p = new QFileInfo(toQFileInfo(l_arg)); break;
         case T_QFileInfoList:                    p = new QFileInfoList(toQFileInfoList(l_arg)); break;
@@ -950,6 +953,7 @@ static cl_object to_lisp_arg(const MetaArg& arg) {
             case QMetaType::QTextLength:             l_ret = from_qtextlength(*(QTextLength*)p); break;
             case QMetaType::QTime:                   l_ret = from_qtime(*(QTime*)p); break;
             case QMetaType::QUrl:                    l_ret = from_qurl(*(QUrl*)p); break;
+            case QMetaType::QVariant:                l_ret = from_qvariant(*(QVariant*)p); break;
             case T_bool_ok_pointer:                  l_ret = _ok_ ? Ct : Cnil; break;
             case T_QFileInfo:                        l_ret = from_qfileinfo(*(QFileInfo*)p); break;
             case T_QFileInfoList:                    l_ret = from_qfileinfolist(*(QFileInfoList*)p); break;
@@ -1084,6 +1088,7 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
         case QMetaType::QTextLength:
         case QMetaType::QTime:
         case QMetaType::QUrl:
+        case QMetaType::QVariant:
         case T_QFileInfo:
         case T_QModelIndex:
         case T_QPainterPath:
@@ -1414,7 +1419,7 @@ cl_object qproperty(cl_object l_obj, cl_object l_name) {
                               : QString(me.valueToKey(var.toInt())); }
                     const cl_env_ptr l_env = ecl_process_env();
                     l_env->nvalues = 2;
-                    l_env->values[0] = from_qvariant(var);
+                    l_env->values[0] = from_qvariant_value(var);
                     l_env->values[1] = Ct;
                     return l_env->values[0]; }}}}
     ecl_process_env()->nvalues = 1;
@@ -1723,6 +1728,7 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
                 case QMetaType::QTextLength:       ret = qVariantFromValue(*(QTextLength*)o.pointer); break;
                 case QMetaType::QTime:             ret = qVariantFromValue(*(QTime*)o.pointer); break;
                 case QMetaType::QUrl:              ret = qVariantFromValue(*(QUrl*)o.pointer); break;
+                case QMetaType::QVariant:          ret = qVariantFromValue(*(QVariant*)o.pointer); break;
                 case T_QFileInfo:                  ret = qVariantFromValue(*(QFileInfo*)o.pointer); break;
                 case T_QModelIndex:                ret = qVariantFromValue(*(QModelIndex*)o.pointer); break;
                 case T_QPainterPath:               ret = qVariantFromValue(*(QPainterPath*)o.pointer); break;
@@ -1868,7 +1874,7 @@ cl_object qobject_names2(cl_object l_type) {
     QStringList lst;
     Q_FOREACH(QByteArray name, names) {
         lst << QString(name); }
-    cl_object l_ret = from_qvariant(lst);
+    cl_object l_ret = from_qstringlist(lst);
     return l_ret; }
 
 cl_object qenum2(cl_object l_name, cl_object l_key) {
@@ -1998,6 +2004,12 @@ cl_object qok() {
     ///    (qfun "QFontDialog" "getFont(bool*)" nil)
     ecl_process_env()->nvalues = 1;
     return _ok_ ? Ct : Cnil; }
+
+cl_object qversion () {
+    /// args: ()
+    /// Returns the EQL version number (year.month.counter), analogous to the ECL version number.
+    ecl_process_env()->nvalues = 1;
+    return from_cstring(EQL::version); }
 
 cl_object qquit() {
     /// args: ()

@@ -1,5 +1,3 @@
-;;; copyright (c) 2010 power4projects software
-
 (defpackage :main-window
   (:use :common-lisp :util :eql)
   (:export

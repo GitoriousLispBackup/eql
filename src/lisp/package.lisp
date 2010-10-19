@@ -59,6 +59,7 @@
    #:qt-object-pointer
    #:qt-object-unique
    #:qutf8
+   #:qversion
    #:tr))
 
 #-win32

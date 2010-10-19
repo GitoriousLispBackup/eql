@@ -1,5 +1,3 @@
-;;; copyright (c) 2010 power4projects software
-;;;
 ;;; This is a port of the Qt Example "Colliding Mice"
 ;;;
 ;;; Note: seldom crashes (OSX 10.4, Qt 4.6.2) are not related to this tool, as they happen even in the original Qt example.

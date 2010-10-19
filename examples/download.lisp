@@ -1,5 +1,3 @@
-;;; copyright (c) 2010 power4projects software
-
 (unless (eql:qrequire :network)
   (error "EQL module :network could not be found/loaded")
   (eql:qq))
