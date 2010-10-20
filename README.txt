@@ -43,6 +43,7 @@ BUILD / REBUILD (see also: "Windows Easy Guide" in doc/)
    in src/ run:
  
     qmake first_metatype_id.pro
+    make clean (rebuild only)
     make
     ./first_metatype_id (MSVC: first_metatype_id.exe)
 

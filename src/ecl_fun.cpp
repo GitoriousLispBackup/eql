@@ -133,7 +133,10 @@ enum UserMetaTypes {
     T_QTableWidgetSelectionRange,
     T_QTextBlock,
     T_QTextCharFormat,
-    T_QGradientStops,
+#if QT_VERSION < 0x40700
+    T_QVariant,
+#endif
+    T_QVector_QGradientstop,
     T_QVector_QLine,
     T_QVector_QLineF,
     T_QVector_QPoint,
@@ -189,6 +192,9 @@ void registerMetaTypes() {
     qRegisterMetaType<QTableWidgetSelectionRange>("QTableWidgetSelectionRange");
     qRegisterMetaType<QTextBlock>("QTextBlock");
     qRegisterMetaType<QTextCharFormat>("QTextCharFormat");
+#if QT_VERSION < 0x40700
+    qRegisterMetaType<QVariant>("QVariant");
+#endif
     qRegisterMetaType<QVector<QGradientStop> >("QGradientStops");
     qRegisterMetaType<QVector<QLine> >("QVector<QLine>");
     qRegisterMetaType<QVector<QLineF> >("QVector<QLineF>");
@@ -813,7 +819,6 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case QMetaType::QTextLength:             p = toQTextLengthPointer(l_arg); break;
         case QMetaType::QTime:                   p = toQTimePointer(l_arg); break;
         case QMetaType::QUrl:                    p = toQUrlPointer(l_arg); break;
-        case QMetaType::QVariant:                p = toQVariantPointer(l_arg); break;
         case T_bool_ok_pointer:                  p = new void*(&_ok_); break;
         case T_QFileInfo:                        p = new QFileInfo(toQFileInfo(l_arg)); break;
         case T_QFileInfoList:                    p = new QFileInfoList(toQFileInfoList(l_arg)); break;
@@ -855,7 +860,13 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case T_QTableWidgetSelectionRange:       p = toQTableWidgetSelectionRangePointer(l_arg); break;
         case T_QTextBlock:                       p = toQTextBlockPointer(l_arg); break;
         case T_QTextCharFormat:                  p = toQTextCharFormatPointer(l_arg); break;
-        case T_QGradientStops:                   p = new QVector<QGradientStop>(toQGradientStopVector(l_arg)); break;
+#if QT_VERSION < 0x40700
+        case T_QVariant:
+#else
+        case QMetaType::QVariant:
+#endif
+                                                 p = toQVariantPointer(l_arg); break;
+        case T_QVector_QGradientstop:            p = new QVector<QGradientStop>(toQGradientStopVector(l_arg)); break;
         case T_QVector_QLine:                    p = new QVector<QLine>(toQLineVector(l_arg)); break;
         case T_QVector_QLineF:                   p = new QVector<QLineF>(toQLineFVector(l_arg)); break;
         case T_QVector_QPoint:                   p = new QVector<QPoint>(toQPointVector(l_arg)); break;
@@ -953,7 +964,6 @@ static cl_object to_lisp_arg(const MetaArg& arg) {
             case QMetaType::QTextLength:             l_ret = from_qtextlength(*(QTextLength*)p); break;
             case QMetaType::QTime:                   l_ret = from_qtime(*(QTime*)p); break;
             case QMetaType::QUrl:                    l_ret = from_qurl(*(QUrl*)p); break;
-            case QMetaType::QVariant:                l_ret = from_qvariant(*(QVariant*)p); break;
             case T_bool_ok_pointer:                  l_ret = _ok_ ? Ct : Cnil; break;
             case T_QFileInfo:                        l_ret = from_qfileinfo(*(QFileInfo*)p); break;
             case T_QFileInfoList:                    l_ret = from_qfileinfolist(*(QFileInfoList*)p); break;
@@ -995,7 +1005,13 @@ static cl_object to_lisp_arg(const MetaArg& arg) {
             case T_QTableWidgetSelectionRange:       l_ret = from_qtablewidgetselectionrange(*(QTableWidgetSelectionRange*)p); break;
             case T_QTextBlock:                       l_ret = from_qtextblock(*(QTextBlock*)p); break;
             case T_QTextCharFormat:                  l_ret = from_qtextcharformat(*(QTextCharFormat*)p); break;
-            case T_QGradientStops:                   l_ret = from_qgradientstopvector(*(QVector<QGradientStop>*)p); break;
+#if QT_VERSION < 0x40700
+        case T_QVariant:
+#else
+        case QMetaType::QVariant:
+#endif
+                                                     l_ret = from_qvariant(*(QVariant*)p); break;
+            case T_QVector_QGradientstop:            l_ret = from_qgradientstopvector(*(QVector<QGradientStop>*)p); break;
             case T_QVector_QLine:                    l_ret = from_qlinevector(*(QVector<QLine>*)p); break;
             case T_QVector_QLineF:                   l_ret = from_qlinefvector(*(QVector<QLineF>*)p); break;
             case T_QVector_QPoint:                   l_ret = from_qpointvector(*(QVector<QPoint>*)p); break;
@@ -1088,13 +1104,17 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
         case QMetaType::QTextLength:
         case QMetaType::QTime:
         case QMetaType::QUrl:
-        case QMetaType::QVariant:
         case T_QFileInfo:
         case T_QModelIndex:
         case T_QPainterPath:
         case T_QTableWidgetSelectionRange:
         case T_QTextBlock:
         case T_QTextCharFormat:
+#if QT_VERSION < 0x40700
+        case T_QVariant:
+#else
+        case QMetaType::QVariant:
+#endif
             if(is_ret) {
                 QMetaType::destroy(n, p); }
             break;
@@ -1728,13 +1748,18 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
                 case QMetaType::QTextLength:       ret = qVariantFromValue(*(QTextLength*)o.pointer); break;
                 case QMetaType::QTime:             ret = qVariantFromValue(*(QTime*)o.pointer); break;
                 case QMetaType::QUrl:              ret = qVariantFromValue(*(QUrl*)o.pointer); break;
-                case QMetaType::QVariant:          ret = qVariantFromValue(*(QVariant*)o.pointer); break;
                 case T_QFileInfo:                  ret = qVariantFromValue(*(QFileInfo*)o.pointer); break;
                 case T_QModelIndex:                ret = qVariantFromValue(*(QModelIndex*)o.pointer); break;
                 case T_QPainterPath:               ret = qVariantFromValue(*(QPainterPath*)o.pointer); break;
                 case T_QTableWidgetSelectionRange: ret = qVariantFromValue(*(QTableWidgetSelectionRange*)o.pointer); break;
                 case T_QTextBlock:                 ret = qVariantFromValue(*(QTextBlock*)o.pointer); break;
                 case T_QTextCharFormat:            ret = qVariantFromValue(*(QTextCharFormat*)o.pointer); break;
+#if QT_VERSION < 0x40700
+                case T_QVariant:
+#else
+                case QMetaType::QVariant:
+#endif
+                                                   ret = qVariantFromValue(*(QVariant*)o.pointer); break;
                 default:
                     ret = toQVariant(l_ret, ret_type); }}}
     else {
