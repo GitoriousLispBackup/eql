@@ -19,6 +19,7 @@ Q_DECLARE_METATYPE(QStyleOptionViewItem)
 Q_DECLARE_METATYPE(QTableWidgetSelectionRange)
 Q_DECLARE_METATYPE(QTextBlock)
 Q_DECLARE_METATYPE(QTextCharFormat)
+Q_DECLARE_METATYPE(QTextCursor)
 
 class EQL;
 class DynObject;

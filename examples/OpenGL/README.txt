@@ -1,4 +1,5 @@
 PREREQUISITES
+=============
 
 You need the following ASDF packages:
 
@@ -10,11 +11,12 @@ You need the following ASDF packages:
    
 [Windows]
     - ASDF: you may need to set the environment variable XDG_CACHE_HOME to a path with no spaces
-    - MSVC compiler: an adapted version of cl-opengl (including all dependencies + other packages) can be found here:
+    - MSVC: an adapted version of cl-opengl (including all dependencies + other packages) can be found here:
       http://createuniverses.googlecode.com/files/packages.zip
 
 
 
 RUN
+===
 
 ../../eql run.lisp

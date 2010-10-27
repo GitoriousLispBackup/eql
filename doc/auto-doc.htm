@@ -99,9 +99,10 @@
 </p><br>
 <p>
 <b>QLET (((var exp) ...) ...)</b>
-<p>Similar to <code>let*</code>. Creates temporary Qt objects, deleting them at the end of the <code>qlet</code> body. If <code>exp</code> is a string, it will be substituted with <code>(qnew exp)</code>.</p>
+<p>Similar to <code>let*</code>. Creates temporary Qt objects, deleting them at the end of the <code>qlet</code> body. If <code>exp</code> is a string, it will be substituted with <code>(qnew exp)</code>, optionally including constructor arguments.</p>
 <pre>
-  (qlet ((p "QPainter")) ...)
+  (qlet ((painter "QPainter")) ...)
+  (qlet ((reg-exp "QRegExp(QString)" "^\\S+$")) ...)
 </pre>
 </p><br>
 <p>
@@ -110,7 +111,7 @@
 </p><br>
 <p>
 <b>QLOCAL8BIT (string)</b>
-<p>Returns the string converted using <code>QString::toLocal8Bit()</code> (see <code>QLocale</code> settings). Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.</p>
+<p>Returns the string converted using <code>QString::toLocal8Bit()</code> (see <code>QLocale</code> settings).<br>Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.</p>
 </p><br>
 <p>
 <b>QMESSAGE-BOX (message)</b>
@@ -131,13 +132,6 @@
   (qnew "QPixmap(int,int)" 50 50)
   (qnew "QLabel" "text" "I love me.")
   (qnew "QMatrix4x4(qreal...)" 1 2 3 4 1 2 3 4 1 2 3 4 1 2 3 4)
-</pre>
-</p><br>
-<p>
-<b>QNOBJECT-SUPER-CLASS (name)</b>
-<p>Returns the super class of non QObjects (lacking QMetaObject).</p>
-<pre>
-  (qnobject-super-class "QGraphicsLineItem")
 </pre>
 </p><br>
 <p>
@@ -220,16 +214,23 @@
 </pre>
 </p><br>
 <p>
+<b>QSUPER-CLASS-NAME (name)</b>
+<p>Returns the super class of an object name, or <code>NIL</code> if the class doesn't inherit another Qt class.<br>Returns <code>T</code> as second return value for successful calls.</p>
+<pre>
+  (qsuper-class-name "QGraphicsLineItem")
+</pre>
+</p><br>
+<p>
 <b>QT-OBJECT-NAME (object)</b>
 <p>Returns the Qt class name.</p>
 </p><br>
 <p>
 <b>QUTF8 (string)</b>
-<p>Returns the string converted using <code>QString::toUtf8()</code>. Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.</p>
+<p>Returns the string converted using <code>QString::toUtf8()</code>.<br>Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.</p>
 </p><br>
 <p>
 <b>QVERSION  ()</b>
-<p>Returns the EQL version number (year.month.counter), analogous to the ECL version number.</p>
+<p>Returns the EQL version number as "&lt;year&gt;.&lt;month&gt;.&lt;counter&gt;", analogous to the ECL version number.</p>
 </p><br>
 <p>
 <b>TR (source &optional context n)</b>

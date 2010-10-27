@@ -28,7 +28,6 @@
    #:qlocal8bit
    #:qmessage-box
    #:qnew-instance
-   #:qnobject-super-class
    #:qnull-object
    #:qobject-names
    #:qok
@@ -43,6 +42,7 @@
    #:qset-property
    #:qsingle-shot
    #:qstatic-meta-object
+   #:qsuper-class-name
    #:qnew
    #:qdel
    #:qget

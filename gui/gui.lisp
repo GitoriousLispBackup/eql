@@ -115,11 +115,11 @@
     (let ((key (qfun ev "key")))
       (when-it (cond ((= (qenum "Qt::Key" "Key_Up") key)
                       (when-it (pop up)
-                               (push it down)))
+                        (push it down)))
                      ((= (qenum "Qt::Key" "Key_Down") key)
                       (when-it (pop down)
-                               (push it up))))
-               (qset *edit* "text" (first it))))
+                        (push it up))))
+        (qset *edit* "text" (first it))))
     nil) ; overridden
   (defun history-add (cmd)
     (when (or (not up)
@@ -185,7 +185,7 @@
                        (item (qnew "QTreeWidgetItem"))
                        (sp1 (position #\Space curr*))
                        (sp2 (when sp1 (position #\Space curr* :start (1+ sp1)))))
-                  (qfun item "setTextAlignment" 0 (qenum "Qt::Alignment" "AlignRight|AlignVCenter"))
+                  (qfun item "setTextAlignment" 0 (qenum "Qt::Alignment" "AlignRight | AlignVCenter"))
                   (when sp1
                       (qfun item "setText" 0 (subseq curr 0 sp1)))
                   (qfun item "setText" 1 (if sp1 (subseq curr (1+ sp1) sp2) curr))
@@ -206,7 +206,7 @@
           (let ((item  (qnew "QTreeWidgetItem"))
                 (sp (position #\Space curr :start (if (starts-with "const" curr) 6 0))))
             (do- (qfun item)
-              ("setTextAlignment" 0 (qenum "Qt::Alignment" "AlignRight|AlignVCenter"))
+              ("setTextAlignment" 0 (qenum "Qt::Alignment" "AlignRight | AlignVCenter"))
               ("setText" 0 (subseq curr 0 sp))
               ("setText" 1 (subseq curr (1+ sp))))
             (qfun override "addTopLevelItem" item)))
@@ -238,23 +238,12 @@
     ("sortByColumn" 0 "AscendingOrder")))
 
 (defun show-super-classes (type)
-  (if (eql :q type)
-      (let ((mo (qstatic-meta-object (qget *q-names* "currentText"))))
-        (when mo
-          (qset *q-super-classes* "text"
-                (with-output-to-string (s)
-                  (loop
-                     (let ((name (qfun mo "className")))
-                       (format s "<a href='~A'>~A</a>&nbsp;&nbsp;" name name) 
-                       (when (qnull-object (setf mo (qfun mo "superClass")))
-                         (return))))))))
-      (qset *n-super-classes* "text"
-            (let ((name (qget *n-names* "currentText")))
-              (with-output-to-string (s)
-                (loop
-                   (format s "<a href='~A'>~A</a>&nbsp;&nbsp;" name name) 
-                   (unless (setf name (qnobject-super-class name))
-                     (return))))))))
+  (qset (if (eql :q type) *q-super-classes* *n-super-classes*) "text"
+        (with-output-to-string (s)
+          (do ((super (qget (if (eql :q type) *q-names* *n-names*) "currentText")
+                      (qsuper-class-name super)))
+              ((null super))
+            (format s "<a href='~A'>~A</a>&nbsp;&nbsp;" super super)))))
 
 (defun resize-tree (tree)
   (dotimes (i (qget tree "columnCount"))
@@ -365,7 +354,7 @@
       ("move" (list 0 0)))
     (qlet ((pix (qfun "QPixmap" "grabWidget" par))
            (dark (to-dark pix)))
-          (qfun indi "setPixmap" (set-highlight indi pix dark child)))
+      (qfun indi "setPixmap" (set-highlight indi pix dark child)))
     (qfun indi "show")
     (qsingle-shot 500 (lambda () (qdel indi)))))
 
@@ -373,13 +362,13 @@
   (let ((dark (qcopy pix)))
     (qlet ((brush "QBrush")
            (pnt "QPainter"))
-          (do- (qfun brush)
-            ("setColor(QColor)" "black")
-            ("setStyle" "SolidPattern"))
-          (do- (qfun pnt)
-            ("begin(QPixmap*)" dark)
-            ("setOpacity" 0.6)
-            ("fillRect(QRect,QBrush)" (qfun dark "rect") brush)))
+      (do- (qfun brush)
+        ("setColor(QColor)" "black")
+        ("setStyle" "SolidPattern"))
+      (do- (qfun pnt)
+        ("begin(QPixmap*)" dark)
+        ("setOpacity" 0.6)
+        ("fillRect(QRect,QBrush)" (qfun dark "rect") brush)))
     dark))
 
 (defun highlight (indi child)
@@ -399,9 +388,9 @@
 
 (defun set-highlight (indi pix dark child)
   (qlet ((p "QPainter"))
-        (qfun p "begin(QPixmap*)" dark)
-        (let ((r (highlight indi child)))
-          (qfun p "drawPixmap(QRect,QPixmap,QRect)" r pix r)))
+    (qfun p "begin(QPixmap*)" dark)
+    (let ((r (highlight indi child)))
+      (qfun p "drawPixmap(QRect,QPixmap,QRect)" r pix r)))
   dark)
 
 (gui)

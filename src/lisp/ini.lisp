@@ -7,14 +7,15 @@
 
 (defmacro qlet ((&rest pairs) &body body)
   "args: (((var exp) ...) ...)
-   Similar to <code>let*</code>. Creates temporary Qt objects, deleting them at the end of the <code>qlet</code> body. If <code>exp</code> is a string, it will be substituted with <code>(qnew exp)</code>.
-       (qlet ((p \"QPainter\")) ...)"
+   Similar to <code>let*</code>. Creates temporary Qt objects, deleting them at the end of the <code>qlet</code> body. If <code>exp</code> is a string, it will be substituted with <code>(qnew exp)</code>, optionally including constructor arguments.
+       (qlet ((painter \"QPainter\")) ...)
+       (qlet ((reg-exp \"QRegExp(QString)\" \"^\\\\S+$\")) ...)"
   (let ((vars (mapcar 'first pairs))
         (exps (mapcar (lambda (x)
-                        (let ((exp (second x)))
-                          (if (stringp exp)
-                              (list 'qnew exp)
-                              exp)))
+                        (let ((exp (rest x)))
+                          (if (stringp (first exp))
+                              (apply 'list 'qnew exp)
+                              (first exp))))
                       pairs)))
     `(let* ,(mapcar 'list vars exps)
        ,@body

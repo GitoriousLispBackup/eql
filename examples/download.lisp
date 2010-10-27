@@ -17,11 +17,11 @@
   (qconnect *manager* "finished(QNetworkReply*)" 'download-finished))
 
 (defun download (name)
-  (qlet ((url (qnew "QUrl(QString)" name)))
-        (qfun *manager* "get" (qnew "QNetworkRequest(QUrl)" url))))
+  (qlet ((url "QUrl(QString)" name))
+    (qfun *manager* "get" (qnew "QNetworkRequest(QUrl)" url))))
 
 (defun download-finished (reply)
-  (qfun reply "deleteLater") ; delete manually, because result is passed asynchronously
+  (qfun reply "deleteLater") ; QNetworkReply*: heap result, delete manually
   (let ((data (qfun reply "readAll")))
     (save-data data)
     (format t "~%Downloaded ~D bytes, see \"download.data\".~%~%" (length data))

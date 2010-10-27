@@ -70,7 +70,6 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object("qload-ui"),             (cl_objectfn_fixed)qload_ui,                 1);
     cl_def_c_function(c_string_to_object("qlocal8bit"),           (cl_objectfn_fixed)qlocal8bit,               1);
     cl_def_c_function(c_string_to_object("qnew-instance2"),       (cl_objectfn_fixed)qnew_instance2,           2);
-    cl_def_c_function(c_string_to_object("qnobject-super-class"), (cl_objectfn_fixed)qnobject_super_class,     1);
     cl_def_c_function(c_string_to_object("qobject-names2"),       (cl_objectfn_fixed)qobject_names2,           1);
     cl_def_c_function(c_string_to_object("qok"),                  (cl_objectfn_fixed)qok,                      0);
     cl_def_c_function(c_string_to_object("qoverride"),            (cl_objectfn_fixed)qoverride,                3);
@@ -82,6 +81,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object("qset-property"),        (cl_objectfn_fixed)qset_property,            3);
     cl_def_c_function(c_string_to_object("qsingle-shot"),         (cl_objectfn_fixed)qsingle_shot,             2);
     cl_def_c_function(c_string_to_object("qstatic-meta-object"),  (cl_objectfn_fixed)qstatic_meta_object,      1);
+    cl_def_c_function(c_string_to_object("qsuper-class-name"),    (cl_objectfn_fixed)qsuper_class_name,        1);
     cl_def_c_function(c_string_to_object("qtranslate"),           (cl_objectfn_fixed)qtranslate,               3);
     cl_def_c_function(c_string_to_object("qt-object-name"),       (cl_objectfn_fixed)qt_object_name,           1);
     cl_def_c_function(c_string_to_object("qutf8"),                (cl_objectfn_fixed)qutf8,                    1);
@@ -133,6 +133,7 @@ enum UserMetaTypes {
     T_QTableWidgetSelectionRange,
     T_QTextBlock,
     T_QTextCharFormat,
+    T_QTextCursor,
 #if QT_VERSION < 0x40700
     T_QVariant,
 #endif
@@ -192,6 +193,7 @@ void registerMetaTypes() {
     qRegisterMetaType<QTableWidgetSelectionRange>("QTableWidgetSelectionRange");
     qRegisterMetaType<QTextBlock>("QTextBlock");
     qRegisterMetaType<QTextCharFormat>("QTextCharFormat");
+    qRegisterMetaType<QTextCursor>("QTextCursor");
 #if QT_VERSION < 0x40700
     qRegisterMetaType<QVariant>("QVariant");
 #endif
@@ -513,6 +515,7 @@ TO_QT_TYPE_PTR2(QPixmap, qpixmap)
 TO_QT_TYPE_PTR2(QTableWidgetSelectionRange, qtablewidgetselectionrange)
 TO_QT_TYPE_PTR2(QTextBlock, qtextblock)
 TO_QT_TYPE_PTR(QTextCharFormat, qtextcharformat)
+TO_QT_TYPE_PTR(QTextCursor, qtextcursor)
 TO_QT_TYPE_PTR2(QTextFormat, qtextformat)
 TO_QT_TYPE_PTR2(QTextLength, qtextlength)
 TO_QT_TYPE_PTR2(QTime, qtime)
@@ -860,6 +863,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case T_QTableWidgetSelectionRange:       p = toQTableWidgetSelectionRangePointer(l_arg); break;
         case T_QTextBlock:                       p = toQTextBlockPointer(l_arg); break;
         case T_QTextCharFormat:                  p = toQTextCharFormatPointer(l_arg); break;
+        case T_QTextCursor:                      p = toQTextCursorPointer(l_arg); break;
 #if QT_VERSION < 0x40700
         case T_QVariant:
 #else
@@ -1005,6 +1009,7 @@ static cl_object to_lisp_arg(const MetaArg& arg) {
             case T_QTableWidgetSelectionRange:       l_ret = from_qtablewidgetselectionrange(*(QTableWidgetSelectionRange*)p); break;
             case T_QTextBlock:                       l_ret = from_qtextblock(*(QTextBlock*)p); break;
             case T_QTextCharFormat:                  l_ret = from_qtextcharformat(*(QTextCharFormat*)p); break;
+            case T_QTextCursor:                      l_ret = from_qtextcursor(*(QTextCursor*)p); break;
 #if QT_VERSION < 0x40700
         case T_QVariant:
 #else
@@ -1110,6 +1115,7 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
         case T_QTableWidgetSelectionRange:
         case T_QTextBlock:
         case T_QTextCharFormat:
+        case T_QTextCursor:
 #if QT_VERSION < 0x40700
         case T_QVariant:
 #else
@@ -1483,9 +1489,9 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
     ///     (qfun slider "valueChanged" 10) ; emit signal
     static QHash<QByteArray, int> i_slot;
     static QHash<QByteArray, int> i_method;
-    bool qobject_align = false;
-    QtObject o = toQtObject(l_obj, l_cast, &qobject_align);
-    if(ECL_STRINGP(l_name)) {
+    if((l_obj != Cnil) && ECL_STRINGP(l_name)) {
+        bool qobject_align = false;
+        QtObject o = toQtObject(l_obj, l_cast, &qobject_align);
         QByteArray castClass;
         if(ECL_STRINGP(l_cast)) {
             castClass = toCString(l_cast); }
@@ -1585,8 +1591,8 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
                     caller = o.isQObject() ? LObjects::Q[o.id - 1] : LObjects::N[-o.id - 1]; }
                 else {
                     caller = o.isQObject() ? (QObject*)o.pointer : 0; }
-                if(caller) {               
-                    caller->qt_metacall(QMetaObject::InvokeMetaMethod, n, args);                    
+                if(caller) {
+                    caller->qt_metacall(QMetaObject::InvokeMetaMethod, n, args);
                     clearMetaArgList(mArgs);
                     cl_object l_ret = to_lisp_arg(ret);
                     clearMetaArg(ret, true);
@@ -1754,6 +1760,7 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
                 case T_QTableWidgetSelectionRange: ret = qVariantFromValue(*(QTableWidgetSelectionRange*)o.pointer); break;
                 case T_QTextBlock:                 ret = qVariantFromValue(*(QTextBlock*)o.pointer); break;
                 case T_QTextCharFormat:            ret = qVariantFromValue(*(QTextCharFormat*)o.pointer); break;
+                case T_QTextCursor:                ret = qVariantFromValue(*(QTextCursor*)o.pointer); break;
 #if QT_VERSION < 0x40700
                 case T_QVariant:
 #else
@@ -1864,14 +1871,14 @@ cl_object qtranslate(cl_object l_con, cl_object l_src, cl_object l_n) {
 
 cl_object qlocal8bit(cl_object l_str) {
     /// args: (string)
-    /// Returns the string converted using <code>QString::toLocal8Bit()</code> (see <code>QLocale</code> settings). Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.
+    /// Returns the string converted using <code>QString::toLocal8Bit()</code> (see <code>QLocale</code> settings).<br>Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.
     ecl_process_env()->nvalues = 1;
     cl_object l_ret = from_cstring(toQString(l_str).toLocal8Bit());
     return l_ret; }
 
 cl_object qutf8(cl_object l_str) {
     /// args: (string)
-    /// Returns the string converted using <code>QString::toUtf8()</code>. Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.
+    /// Returns the string converted using <code>QString::toUtf8()</code>.<br>Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.
     ecl_process_env()->nvalues = 1;
     cl_object l_ret = from_cstring(toQString(l_str).toUtf8());
     return l_ret; }
@@ -1987,31 +1994,30 @@ cl_object qfind_child(cl_object l_obj, cl_object l_name) {
     error("QFIND-CHILD", LIST2(l_obj, l_name));
     return Cnil; }
 
-cl_object qid(cl_object l_class) {
+cl_object qsuper_class_name(cl_object l_name) {
     /// args: (name)
-    /// Returns the internally used ID of the object name. Non QObject classes have negative ids.
-    ///     (qid "QWidget")
+    /// Returns the super class of an object name, or <code>NIL</code> if the class doesn't inherit another Qt class.<br>Returns <code>T</code> as second return value for successful calls.
+    ///     (qsuper-class-name "QGraphicsLineItem")
+    if(ECL_STRINGP(l_name)) {
+        QByteArray name(toCString(l_name));
+        QByteArray super;
+        bool found = false;
+        if(LObjects::q_names.value(name, 0)) {
+            found = true;
+            const QMetaObject* mo = LObjects::staticMetaObject(name)->superClass();
+            if(mo) {
+                super = mo->className(); }}
+        else if(LObjects::n_names.value(name, 0)) {
+            found = true;
+            super = LObjects::nObjectSuperClass(name); }
+        if(found) {
+            const cl_env_ptr l_env = ecl_process_env();
+            l_env->nvalues = 2;
+            l_env->values[0] = super.isEmpty() ? Cnil : from_cstring(super);
+            l_env->values[1] = Ct;
+            return l_env->values[0]; }}
     ecl_process_env()->nvalues = 1;
-    if(ECL_STRINGP(l_class)) {
-        int id = classId(l_class);
-        if(id) {
-            cl_object l_ret = MAKE_FIXNUM(id);
-            return l_ret; }}
-    error("QID", LIST1(l_class));
-    return Cnil; }
-
-cl_object qnobject_super_class(cl_object l_class) {
-    /// args: (name)
-    /// Returns the super class of non QObjects (lacking QMetaObject).
-    ///     (qnobject-super-class "QGraphicsLineItem")
-    ecl_process_env()->nvalues = 1;
-    if(ECL_STRINGP(l_class)) {
-        const char* name = LObjects::nObjectSuperClass(toCString(l_class));
-        if(name) {
-            cl_object l_ret = make_constant_base_string(name);
-            return l_ret; }
-        return Cnil; }
-    error("QNOBJECT-SUPER-CLASS", LIST1(l_class));
+    error("QSUPER-CLASS-NAME", LIST1(l_name));
     return Cnil; }
 
 cl_object qsingle_shot(cl_object l_msec, cl_object l_fun) {
@@ -2030,9 +2036,21 @@ cl_object qok() {
     ecl_process_env()->nvalues = 1;
     return _ok_ ? Ct : Cnil; }
 
+cl_object qid(cl_object l_class) {
+    /// args: (name)
+    /// Returns the internally used ID of the object name. Non QObject classes have negative ids.
+    ///     (qid "QWidget")
+    ecl_process_env()->nvalues = 1;
+    if(ECL_STRINGP(l_class)) {
+        int id = classId(l_class);
+        if(id) {
+            cl_object l_ret = MAKE_FIXNUM(id);
+            return l_ret; }}
+    return Cnil; }
+
 cl_object qversion () {
     /// args: ()
-    /// Returns the EQL version number (year.month.counter), analogous to the ECL version number.
+    /// Returns the EQL version number as "&lt;year&gt;.&lt;month&gt;.&lt;counter&gt;", analogous to the ECL version number.
     ecl_process_env()->nvalues = 1;
     return from_cstring(EQL::version); }
 
