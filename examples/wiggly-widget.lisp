@@ -7,15 +7,15 @@
 
 (in-package :wiggly-widget)
 
-(defconstant +light+ 2 "color role")
-
 (defconstant +sinus+ #(0 38 71 92 100 92 71 38 0 -38 -71 -92 -100 -92 -71 -38))
-
-(defparameter *step* 0)
 
 (defparameter *wiggly* (qnew "QWidget" "autoFillBackground" t))
 (defparameter *edit*   (qnew "QLineEdit" "alignment" "AlignCenter"))
 (defparameter *timer*  (qnew "QBasicTimer"))
+
+(defconstant +light+ 2 "color role")
+
+(defparameter *step* 0)
 
 (defun start ()
   (qset *wiggly* "font" (let ((font (qnew "QFont(QFont)" (qget *wiggly* "font"))))

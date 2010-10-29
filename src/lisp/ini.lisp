@@ -260,6 +260,21 @@ under certain conditions; see file 'Copyright' for details.")
                  nil)
              (setf quiet nil))))))
 
+;;; [EQL] Need to insert the macro WITH-FD-HANDLER from serve-event.lisp here, otherwise QTPL-READ will not compile
+#-win32
+(defmacro serve-event:with-fd-handler ((fd direction function) &rest body)
+  "Establish a handler with SYSTEM:ADD-FD-HANDLER for the duration of BODY.
+   DIRECTION should be either :INPUT or :OUTPUT, FD is the file descriptor to
+   use, and FUNCTION is the function to call whenever FD is usable."
+  (let ((handler (gensym)))
+    `(let (,handler)
+       (unwind-protect
+            (progn
+              (setf ,handler (add-fd-handler ,fd ,direction ,function))
+              ,@body)
+         (when ,handler
+           (remove-fd-handler ,handler))))))
+
 (defun qtpl-read (&aux (*read-suppress* nil))
   (finish-output)
   #-win32
@@ -276,25 +291,25 @@ under certain conditions; see file 'Copyright' for details.")
                      (read-char)
                      ;; avoid repeating prompt on successive empty lines:
                        (let ((command (tpl-make-command :newline "")))
-                         (when command (return-from qtpl-read command))))
+                         (when command (return-from qtpl-read command))))                   ; [EQL]
                     (:EOF
                      (terpri)
-                     (return-from qtpl-read (tpl-make-command :EOF "")))
+                     (return-from qtpl-read (tpl-make-command :EOF "")))                    ; [EQL]
                     (#\:
-                     (return-from qtpl-read (tpl-make-command (read-preserving-whitespace)
+                     (return-from qtpl-read (tpl-make-command (read-preserving-whitespace)  ; [EQL]
                                                               (read-line))))
                     (#\?
                      (read-char)
                      (case (peek-char nil *standard-input* nil :EOF)
                        ((#\space #\tab #\newline #\return :EOF)
-                        (return-from qtpl-read (tpl-make-command :HELP (read-line))))
+                        (return-from qtpl-read (tpl-make-command :HELP (read-line))))       ; [EQL]
                        (t
                         (unread-char #\?)
-                        (return-from qtpl-read (read-preserving-whitespace)))))
+                        (return-from qtpl-read (read-preserving-whitespace)))))             ; [EQL]
                     ;; We use READ-PRESERVING-WHITESPACE because with READ, if an
                     ;; error happens within the reader, and we perform a ":C" or
                     ;; (CONTINUE), the reader will wait for an inexistent #\Newline.
                     (t
-                     (return-from qtpl-read (read))))))
+                     (return-from qtpl-read (read))))))                                     ; [EQL]
     (loop               ; [EQL]
        (eql:qevents)))) ; [EQL]

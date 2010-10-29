@@ -13,13 +13,13 @@
   "All Lisp files of the application.")
 
 (dolist (f *lisp-files*)
-  (let ((file (format nil "lisp/~a" f)))
+  (let ((file (format nil "lisp/~A" f)))
     (load file)
     (compile-file file :system-p t)))
 
 (c:build-static-library "my_lib"
                         :lisp-files (mapcar (lambda (file)
-                                              (format nil "lisp/~a.~a" file #+msvc "obj" #-msvc "o"))
+                                              (format nil "lisp/~A.~A" file #+msvc "obj" #-msvc "o"))
                                             *lisp-files*)
                         :init-name "ini_app")
 

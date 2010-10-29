@@ -19,7 +19,6 @@ public:
     EQL();
     ~EQL();
 
-    static bool ini;
     static const char version[];
     static QString home();
 

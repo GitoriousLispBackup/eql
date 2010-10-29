@@ -6,7 +6,7 @@
 TESTED WITH
 ===========
 
-* ECL 10.4.1 unicode
+* ECL from CVS (2010-10-29) unicode
 * Qt4.6.x, Qt4.7.0
 * Linux, OSX 10.4, Windows XP & 7 (MSVC)
 
@@ -15,7 +15,7 @@ TESTED WITH
 REQUIREMENTS
 ============
 
-* ECL >= 10.4 official releases only (not CVS HEAD), enabling unicode
+* ECL >= 10.4, enabling unicode
 * Qt  >= 4.6 http://qt.nokia.com/
 * SLIME from CVS (e.g. 2010-06-01)
 
@@ -31,7 +31,7 @@ BUILD / REBUILD (see also: "Windows Easy Guide" in doc/)
     substitute make with nmake
 
   [GCC]
-    If you use a recent GCC (e.g. 4.5) you need to uncomment this line in src/eql_lib.pro:
+    If you experience long compile times (file src/gen/_lobject.cpp), uncomment this line in src/eql_lib.pro:
         QMAKE_CXXFLAGS += -fno-var-tracking-assignments 
 
   [OSX]

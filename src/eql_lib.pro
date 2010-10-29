@@ -1,4 +1,4 @@
-# (!) uncomment this for recent GCC (e.g. 4.5) because of gen/_lobjects.cpp
+# GCC: if you experience a very long compile time for file gen/_lobjects.cpp, try to uncomment this:
 #QMAKE_CXXFLAGS += -fno-var-tracking-assignments
 
 TEMPLATE    = lib

@@ -8,11 +8,14 @@
 
 (defparameter *lisp-files* (list #-win32 "serve-event" "util" "package" "ini"))
 
-(dolist (file *lisp-files*)
-  (compile-file (format nil "lisp/~a" file) :system-p t))
+(dolist (f *lisp-files*)
+  (let ((file (format nil "lisp/~A" f)))
+    (when (probe-file file)
+      (delete-file (format nil "~A.~A" file #+msvc "obj" #-msvc "o")))
+    (compile-file file :system-p t)))
 
 (c:build-static-library "ini"
                         :lisp-files (mapcar (lambda (file)
-                                              (format nil "lisp/~a.~a" file #+msvc "obj" #-msvc "o"))
+                                              (format nil "lisp/~A.~A" file #+msvc "obj" #-msvc "o"))
                                             *lisp-files*)
                         :init-name "ini_EQL")
