@@ -270,10 +270,10 @@ under certain conditions; see file 'Copyright' for details.")
     `(let (,handler)
        (unwind-protect
             (progn
-              (setf ,handler (add-fd-handler ,fd ,direction ,function))
+              (setf ,handler (serve-event:add-fd-handler ,fd ,direction ,function))
               ,@body)
          (when ,handler
-           (remove-fd-handler ,handler))))))
+           (serve-event:remove-fd-handler ,handler))))))
 
 (defun qtpl-read (&aux (*read-suppress* nil))
   (finish-output)
