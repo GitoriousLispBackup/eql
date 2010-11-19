@@ -3,7 +3,7 @@
 ;;; Note: seldom crashes (OSX 10.4, Qt 4.6.2) are not related to this tool, as they happen even in the original Qt example.
 
 (defpackage :colliding-mice
-  (:use :common-lisp :util :eql)
+  (:use :common-lisp :eql)
   (:export
    #:start))
 
@@ -53,7 +53,7 @@
       (red   (brush "red"))
       (no-brush (brush nil "NoBrush"))
       (tail (let ((p (qnew "QPainterPath")))
-              (do- (qfun p)
+              (x:do-with (qfun p)
                 ("moveTo" '(0 20))
                 ("cubicTo" '(-5 22) '(-5 22) '(0 25))
                 ("cubicTo" '(5  27) '(5  32) '(0 30))
@@ -90,9 +90,9 @@
   (unless (zerop step)
     (let ((me (mouse-item mouse)))
       (labels ((normalize-angle (a)
-                 (while (< a 0)
+                 (x:while (< a 0)
                    (incf a +2pi+))
-                 (while (> a +2pi+)
+                 (x:while (> a +2pi+)
                    (decf a +2pi+))
                  a)
                (dx (line)
@@ -179,12 +179,12 @@
                     "size" (list 400 300)))
         (timer (qnew "QTimer")))
     (qfun scene "setItemIndexMethod" +no-index+)
-    (do- (qfun view)
+    (x:do-with (qfun view)
       ("setScene" scene)
       ("setRenderHint" +antialiasing+)
       ("setBackgroundBrush" (qnew "QBrush(QPixmap)"
                                   (qnew "QPixmap(QString)"
-                                        (in-home "examples/icons/cheese.jpg"))))
+                                        (in-home "examples/data/icons/cheese.jpg"))))
       ("setCacheMode" "CacheBackground")
       ("setViewportUpdateMode" "BoundingRectViewportUpdate")
       ("setDragMode" "ScrollHandDrag"))

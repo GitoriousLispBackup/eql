@@ -8,10 +8,14 @@
 
 static GLfloat toFloat(cl_object l_num) {
     GLfloat f = 0;
-    if(ECL_DOUBLE_FLOAT_P(l_num)) {
-        f = df(l_num); }
-    else if(ECL_SINGLE_FLOAT_P(l_num)) {
+    if(ECL_SINGLE_FLOAT_P(l_num)) {
         f = sf(l_num); }
+    else if(ECL_DOUBLE_FLOAT_P(l_num)) {
+        f = df(l_num); }
+#ifdef ECL_LONG_FLOAT
+    else if(ECL_LONG_FLOAT_P(l_num)) {
+        f = ecl_long_float(l_num); }
+#endif
     else if(FIXNUMP(l_num)) {
         f = fixint(l_num); }
     else {

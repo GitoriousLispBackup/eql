@@ -3,7 +3,7 @@
 (require :gl-widget (eql:in-home "examples/OpenGL/gl-widget"))
 
 (defpackage :main-window
-  (:use :common-lisp :util :eql :gl-widget)
+  (:use :common-lisp :eql :gl-widget)
   (:export
    #:start))
 
@@ -11,17 +11,14 @@
 
 (defconstant +ignored+ (logior 1 4 8) "policy")
 
-(defparameter *me*                nil)
-(defparameter *pixmap-label*      nil)
-(defparameter *pixmap-label-area* nil)
-
-(defun create-main-window ()
-  (create-gl-widget)
-  (setf *me*                (qnew "QMainWindow")
-        *pixmap-label*      (qnew "QLabel")
-        *pixmap-label-area* (qnew "QScrollArea"
+(defvar *me*                (qnew "QMainWindow"))
+(defvar *pixmap-label*      (qnew "QLabel"))
+(defvar *pixmap-label-area* (qnew "QScrollArea"
                                   "sizePolicy" +ignored+
                                   "minimumSize" (list 50 50)))
+
+(defun ini ()
+  (ini-gl-widget)
   (let ((widget-area    (qnew "QScrollArea"
                               "widgetResizable" t
                               "horizontalScrollBarPolicy" "ScrollBarAlwaysOff"
@@ -37,7 +34,7 @@
     (qfun widget-area         "setWidget" *gl-widget*)
     (qfun *pixmap-label-area* "setWidget" *pixmap-label*)
     (create-menus (create-actions))
-    (do- (qfun central-layout "addWidget")
+    (x:do-with (qfun central-layout "addWidget")
       (widget-area         0 0)
       (*pixmap-label-area* 0 1)
       (x-slider            1 0 1 2)
@@ -47,7 +44,7 @@
     (qset x-slider "value" (* 15  16))
     (qset y-slider "value" (* 345 16))
     (qset z-slider "value" 0)
-    (do- (qset *me*)
+    (x:do-with (qset *me*)
       ("windowTitle" (tr "Grabber"))
       ("size" (list 400 300)))))
 
@@ -91,13 +88,13 @@
     (let* ((menu-bar (qfun *me* "menuBar"))
            (file-menu (qfun menu-bar "addMenu(QString)" (tr "&File")))
            (help-menu (qfun menu-bar "addMenu(QString)" (tr "&Help"))))
-      (do- (qfun file-menu)
+      (x:do-with (qfun file-menu)
         ("addAction(QAction*)" (action :render-into-pixmap))
         ("addAction(QAction*)" (action :grab-frame-buffer))
         ("addAction(QAction*)" (action :clear-pixmap))
         "addSeparator"
         ("addAction(QAction*)" (action :exit)))
-      (do- (qfun help-menu)
+      (x:do-with (qfun help-menu)
         ("addAction(QAction*)" (action :about))
         ("addAction(QAction*)" (action :about-qt))))))
 
@@ -144,5 +141,5 @@
         (list 0 0))))
 
 (defun start ()
-  (create-main-window)
+  (ini)
   (qfun *me* "show"))

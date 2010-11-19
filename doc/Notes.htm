@@ -4,12 +4,12 @@
 </head>
 <body>
 <h2>Notes</h2>
-<p>To run a Lisp file directly, do e.g. <code>./eql examples/colliding-mice.lisp</code>.</p>
+<p>To run a Lisp file directly, do e.g. <code>./eql examples/5-colliding-mice.lisp</code>.</p>
 <p>See the EQL UI (command <code>./eql -qgui</code>) for a complete list of all supported classes and functions.</p>
 <p>In the above mentioned UI you find a "<b>Select</b>" button, allowing you to select any Qt widget (even in other main widgets), if previously loaded from the UI command line. After selecting a widget, the parameter <code>gui:*q*</code> will be set to it.</p>
 <p>If you want to use temporary Qt objects, you can use the <code>qlet</code> convenience macro (see the function list). It's a <code>let*</code> variant for Qt objects, deleting them  when leaving its body.</p>
 <p>There is no garbage collection for Qt objects. It's clear that during development there will always be some garbage. The interesting part is final applications. Qt widgets always live inside an object hierarchy (no child will be able to survive its parents...). Additionally, you have the <code>qlet</code> macro, which provides local Qt objects (deleted when leaving the <code>qlet</code> body). Now, after understanding and applying these simple rules, you should never be bitten by memory leakage problems (given you do only UI stuff with Qt).</p>
-<p>There is no CLOS integration planned. (Closures may be good enough sometimes, see <code>mouse</code> in <code>examples/colliding-mice.lisp</code>.)</p>
+<p>There is no CLOS integration planned. (Closures may be good enough sometimes, see <code>mouse</code> in <code>examples/5-colliding-mice.lisp</code>.)</p>
 <p>Enumerations are currently not fully intuitive. In most cases, you can use their string names. However, some non QObject derived classes ask for their integer values (see <code>qenum</code>). In a few cases you need to define integer constants by yourself (see <code>examples/</code>).</p>
 <hr>
 <p>The necessary parsing for generating the <code>src/gen/*</code> files is done by parsing the Qt Html documentation. See <code>helper/</code>

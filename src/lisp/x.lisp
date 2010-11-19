@@ -1,10 +1,11 @@
 ;;; copyright (c) 2010 power4projects software
 
-(defpackage :util
+(defpackage :x
   (:use :common-lisp)
   (:export
-   #:do-
+   #:d
    #:do-string
+   #:do-with
    #:empty-string
    #:ensure-list
    #:ends-with
@@ -21,9 +22,9 @@
    #:while
    #:with-gensyms))
 
-(provide :util)
+(provide :x)
 
-(in-package :util)
+(in-package :x)
 
 (defmacro if-it (exp then &optional else)
   `(let ((it ,exp))
@@ -57,14 +58,18 @@
               ,@body)
         ,str))
 
-(defmacro do- (to &body body)
+(defmacro do-with (with &body body)
   `(progn
      ,@(mapcar (lambda (line)
-                 (append to (if (or (atom line)
-                                    (eql 'quote (first line)))
-                                (list line)
-                                line)))
+                 (append with (if (or (atom line)
+                                      (eql 'quote (first line)))
+                                  (list line)
+                                  line)))
                body)))
+
+(defun d (&rest args)
+  "A simple debug print."
+  (print (cons "[debug]" args)))
 
 (defun empty-string (s)
   (zerop (length s)))

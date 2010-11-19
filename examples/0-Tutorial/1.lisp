@@ -1,4 +1,4 @@
-;;; Widgets Tutorial - Creating a Window
+;;; Ported Qt Widgets Tutorial - Creating a Window
 
 (in-package :eql)
 

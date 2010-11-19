@@ -1,10 +1,10 @@
 ;;; This is a simple GUI for CL-Sokoban, see http://www.cliki.net/CL-Sokoban 
 
-(load (eql:in-home "examples/sokoban/3rd-party/sokoban"))
-(load (eql:in-home "examples/sokoban/3rd-party/levels"))
+(load (eql:in-home "examples/7-Sokoban/3rd-party/sokoban"))
+(load (eql:in-home "examples/7-Sokoban/3rd-party/levels"))
 
 (defpackage :eql-sokoban
-  (:use :common-lisp :util :eql :cl-sokoban)
+  (:use :common-lisp :eql :cl-sokoban)
   (:export
    #:start))
 
@@ -22,13 +22,21 @@
 
 (defparameter *items*           nil)
 (defparameter *item-size*       nil)
-(defparameter *level*           nil)
 (defparameter *maze*            nil)
 (defparameter *my-mazes*        (mapcar 'copy-maze *mazes*))
-(defparameter *scene*           nil)
-(defparameter *view*            nil)
 (defparameter *scene-size*      (list 600 500))
 (defparameter *print-text-maze* nil "additionally print maze to terminal")
+
+(defvar *scene* (qnew "QGraphicsScene"
+                      "sceneRect" (append (list 0 0) *scene-size*)
+                      "backgroundBrush" (qnew "QBrush(QColor)" "slategray")))
+(defvar *view*  (qnew "QGraphicsView"
+                      "windowTitle" "Sokoban"
+                      "size" (list 650 550)))
+(defvar *level* (qnew "QSlider(Qt::Orientation)" "Vertical"
+                      "tickInterval" 5
+                      "tickPosition" "TicksRight"
+                      "maximum" (1- (length *my-mazes*))))
 
 (defmacro key (name)
   `(qenum "Qt::Key" ,(format nil "Key_~a" name)))
@@ -42,18 +50,8 @@
 (defun type-char (type)
   (car (find type +item-types+ :key 'cdr)))
 
-(defun create-view ()
-  (setf *scene* (qnew "QGraphicsScene"
-                      "sceneRect" (append (list 0 0) *scene-size*)
-                      "backgroundBrush" (qnew "QBrush(QColor)" "slategray"))
-        *view*  (qnew "QGraphicsView"
-                      "windowTitle" "Sokoban"
-                      "size" (list 650 550))
-        *level* (qnew "QSlider(Qt::Orientation)" "Vertical"
-                      "tickInterval" 5
-                      "tickPosition" "TicksRight"
-                      "maximum" (1- (length *my-mazes*))))
-  (do- (qfun *view*)
+(defun ini ()
+  (x:do-with (qfun *view*)
     ("setScene" *scene*)
     ("setRenderHint" +antialiasing+)
     ("setCacheMode" "CacheBackground")
@@ -96,12 +94,12 @@
 (defun create-items ()
   (clear-items)
   (flet ((add (types)
-           (dolist (type (ensure-list types))
+           (dolist (type (x:ensure-list types))
              (let ((item (create-item type)))
                (push item (cdr (assoc type *items*)))
                (qfun *scene* "addItem" item)))))
     (dolist (row (maze-text *maze*))
-      (do-string (char row)
+      (x:do-string (char row)
         (unless (char= #\Space char)
           (let ((type (char-type char)))
             (cond ((find type '(:player :player2))
@@ -114,7 +112,7 @@
 (let (pixmaps)
   (defun create-item (type)
     (let* ((char (type-char type))
-           (file (in-home (format nil "examples/sokoban/pics/~(~A~).png" type)))
+           (file (in-home (format nil "examples/7-Sokoban/pics/~(~A~).png" type)))
            (pixmap (assoc file pixmaps :test 'string=))
            (item (if (or pixmap
                          (probe-file file))
@@ -173,9 +171,9 @@
         (qfun* item "QGraphicsItem" "setVisible" nil)))
     (dolist (row (maze-text *maze*))
       (let ((x 0))
-        (do-string (curr-char row)
+        (x:do-string (curr-char row)
           (when (char= char curr-char)
-            (do- (qfun* (first items) "QGraphicsItem")
+            (x:do-with (qfun* (first items) "QGraphicsItem")
               ("setPos" (list x y))
               ("setVisible" t))
             (setf items (rest items)))
@@ -193,7 +191,7 @@
     (qfun *view* "scale" f f)))
 
 (defun start ()
-  (create-view)
+  (ini)
   (set-maze)
   (draw)
   (zoom :out))

@@ -1,9 +1,9 @@
 ;;; copyright (c) 2010 power4projects software
 
 (load "load-modules")
-(load "../src/lisp/util")
+(load "../src/lisp/x")
 
-(use-package :util)
+(use-package :x)
 
 (defparameter *qt-html-documentation-path*
   ;; tested with Qt 4.6.x and 4.7.0 (4.5 will not work!)
@@ -19,7 +19,6 @@
         "(preliminary)"
         "(deprecated)"
         "<Attribute>"
-        "<ExtraSelection>"
         "<FormatRange>"
         "<WizardButton>"
         "<WritingSystem>"

@@ -1,9 +1,7 @@
 ;;; copyright (c) 2010 power4projects software
 
-(require :util)
-
 (defpackage :eql
-  (:use :common-lisp :util)
+  (:use :common-lisp)
   (:export
    #:in-home
    #:qadd-event-filter
@@ -16,6 +14,7 @@
    #:qenum
    #:qeql
    #:qevents
+   #:qexec
    #:qdelete
    #:qdisconnect
    #:qfind-child
@@ -58,6 +57,8 @@
    #:qt-object-p
    #:qt-object-pointer
    #:qt-object-unique
+   #:qui-class
+   #:qui-names
    #:qutf8
    #:qversion
    #:tr))

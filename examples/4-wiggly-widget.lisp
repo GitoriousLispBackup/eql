@@ -1,7 +1,7 @@
 ;;; This is a port of the Qt Example "Wiggly Widget"
 
 (defpackage :wiggly-widget
-  (:use :common-lisp :util :eql)
+  (:use :common-lisp :eql)
   (:export
    #:start))
 
@@ -9,9 +9,9 @@
 
 (defconstant +sinus+ #(0 38 71 92 100 92 71 38 0 -38 -71 -92 -100 -92 -71 -38))
 
-(defparameter *wiggly* (qnew "QWidget" "autoFillBackground" t))
-(defparameter *edit*   (qnew "QLineEdit" "alignment" "AlignCenter"))
-(defparameter *timer*  (qnew "QBasicTimer"))
+(defvar *wiggly* (qnew "QWidget" "autoFillBackground" t))
+(defvar *edit*   (qnew "QLineEdit" "alignment" "AlignCenter"))
+(defvar *timer*  (qnew "QBasicTimer"))
 
 (defconstant +light+ 2 "color role")
 
@@ -29,7 +29,7 @@
     (dolist (w (list *wiggly* *edit*))
       (qfun vbox "addWidget" w))
     (qfun *timer* "start" 60 *wiggly*)
-    (do- (qoverride *wiggly*)
+    (x:do-with (qoverride *wiggly*)
       ("paintEvent(QPaintEvent*)" 'paint)
       ("timerEvent(QTimerEvent*)" 'timeout))
     (qset *edit* "text" "EQL - Embedded Qt Lisp")
@@ -52,7 +52,7 @@
           (let ((ix (mod (+ i *step*) 16))
                 (ch (char txt i)))
             (qfun pen "setColor" (qfun "QColor" "fromHsv" (* 16 (- 15 ix)) 255 191))
-            (do- (qfun painter)
+            (x:do-with (qfun painter)
               ("setPen(QPen)" pen)
               ("drawText(QPoint,QString)" (list (floor x)
                                                 (floor (- y (/ (* h (svref +sinus+ ix)) 400))))

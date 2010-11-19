@@ -3,17 +3,16 @@
   (eql:qq))
 
 (defpackage :download
-  (:use :common-lisp :util :eql)
+  (:use :common-lisp :eql)
   (:export
    #:ini
    #:download))
 
 (in-package :download)
 
-(defparameter *manager* nil)
+(defvar *manager* (qnew "QNetworkAccessManager"))
 
 (defun ini ()
-  (setf *manager* (qnew "QNetworkAccessManager"))
   (qconnect *manager* "finished(QNetworkReply*)" 'download-finished))
 
 (defun download (name)

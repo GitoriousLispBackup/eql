@@ -4353,6 +4353,7 @@ public:
     Q_INVOKABLE QTextDocument* Mdocument(QTextEdit* o) const { return o->document(); }
     Q_INVOKABLE QString MdocumentTitle(QTextEdit* o) const { return o->documentTitle(); }
     Q_INVOKABLE void MensureCursorVisible(QTextEdit* o) { o->ensureCursorVisible(); }
+    Q_INVOKABLE QList<QTextEdit::ExtraSelection> MextraSelections(QTextEdit* o) const { return o->extraSelections(); }
     Q_INVOKABLE bool Mfind(QTextEdit* o, const QString& x1, QTextDocument::FindFlags x2 = 0) { return o->find(x1, x2); }
     Q_INVOKABLE QString MfontFamily(QTextEdit* o) const { return o->fontFamily(); }
     Q_INVOKABLE bool MfontItalic(QTextEdit* o) const { return o->fontItalic(); }
@@ -4374,6 +4375,7 @@ public:
     Q_INVOKABLE void MsetCursorWidth(QTextEdit* o, int x1) { o->setCursorWidth(x1); }
     Q_INVOKABLE void MsetDocument(QTextEdit* o, QTextDocument* x1) { o->setDocument(x1); }
     Q_INVOKABLE void MsetDocumentTitle(QTextEdit* o, const QString& x1) { o->setDocumentTitle(x1); }
+    Q_INVOKABLE void MsetExtraSelections(QTextEdit* o, const QList<QTextEdit::ExtraSelection>& x1) { o->setExtraSelections(x1); }
     Q_INVOKABLE void MsetLineWrapColumnOrWidth(QTextEdit* o, int x1) { o->setLineWrapColumnOrWidth(x1); }
     Q_INVOKABLE void MsetLineWrapMode(QTextEdit* o, QTextEdit::LineWrapMode x1) { o->setLineWrapMode(x1); }
     Q_INVOKABLE void MsetOverwriteMode(QTextEdit* o, bool x1) { o->setOverwriteMode(x1); }

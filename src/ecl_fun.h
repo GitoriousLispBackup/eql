@@ -191,6 +191,7 @@ cl_object qconnect2            (cl_object, cl_object, cl_object, cl_object, cl_o
 cl_object qcopy                (cl_object);
 cl_object qdelete              (cl_object);
 cl_object qenum2               (cl_object, cl_object);
+cl_object qexec                ();
 cl_object qfind_child          (cl_object, cl_object);
 cl_object qid                  (cl_object);
 cl_object qinvoke_method2      (cl_object, cl_object, cl_object, cl_object);
@@ -211,6 +212,8 @@ cl_object qstatic_meta_object  (cl_object);
 cl_object qsuper_class_name    (cl_object);
 cl_object qtranslate           (cl_object, cl_object, cl_object);
 cl_object qt_object_name       (cl_object);
+cl_object qui_class2           (cl_object, cl_object);
+cl_object qui_names            (cl_object);
 cl_object qutf8                (cl_object);
 cl_object qversion             ();
 

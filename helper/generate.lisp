@@ -1,13 +1,13 @@
 ;;; copyright (c) 2010 power4projects software
 
-(load "../src/lisp/util")
+(load "../src/lisp/x")
 (load "load-modules")
 (load "parsed/q-methods")
 (load "parsed/n-methods")
 (load "parsed/q-override")
 (load "parsed/n-override")
 
-(use-package :util)
+(use-package :x)
 
 (defconstant +message-generated+            "// THIS FILE IS GENERATED (see helper/)")
 (defconstant +max-arguments+                50)
@@ -250,7 +250,7 @@
   (string= "void" (first arg)))
 
 (defun arg-to-c (arg &optional enum-class return)
-  (let* ((type (add-enum-class (first arg) enum-class))
+  (let* ((type (add-namespace (first arg) enum-class))
          (enum-as-int (and return
                            (find #\: type)
                            (not (find #\< type)))))
@@ -298,10 +298,10 @@
 
 (defun default-to-c (arg &optional enum-class)
   (if-it (default-value arg)
-         (format nil " = ~A" (add-enum-class it enum-class))
+         (format nil " = ~A" (add-namespace it enum-class))
          ""))
 
-(defun add-enum-class (name class)
+(defun add-namespace (name class)
   (unless (empty-string name)
     (if (and class
              (string/= "Handle" name)
@@ -309,16 +309,18 @@
         (let ((1st (char name 0))
               (templ (position #\< name)))
           (when templ
-            (setf 1st (char name (1+ templ))))
-          (if (and (not (qt-class-p name))
+            (setf 1st (char name (incf templ))))
+          (if (and (not (qt-class-p (if templ
+                                        (subseq name templ (1- (length name)))
+                                        name)))
                    (not (find #\: name))
                    (not (find #\_ name))
                    (upper-case-p 1st))
               (if templ
                   (format nil "~A~A::~A"
-                          (subseq name 0 (1+ templ))
+                          (subseq name 0 templ)
                           class
-                          (subseq name (1+ templ)))
+                          (subseq name templ))
                   (if-it (position #\( name)
                          (let* ((names (split (subseq name (1+ it) (1- (length name)))
                                               #\|)))

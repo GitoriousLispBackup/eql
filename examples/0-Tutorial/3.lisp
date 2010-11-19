@@ -1,4 +1,4 @@
-;;; Widgets Tutorial - Using Layouts
+;;; Ported Qt Widgets Tutorial - Using Layouts
 
 (in-package :eql)
 

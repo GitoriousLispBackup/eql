@@ -1,14 +1,14 @@
 ;;; This is a port of the Qt OpenGL Example "Grabber"
 
 (defpackage :gl-widget
-  (:use :common-lisp :util :eql)
+  (:use :common-lisp :eql)
   (:export
    #:*gl-widget*
    #:*timer*
    #:*x-rotation-changed*
    #:*y-rotation-changed*
    #:*z-rotation-changed*
-   #:create-gl-widget
+   #:ini-gl-widget
    #:set-x-rotation
    #:set-y-rotation
    #:set-z-rotation))
@@ -17,8 +17,8 @@
 
 (defconstant +360+ (* 360 16))
 
-(defparameter *gl-widget* nil)
-(defparameter *timer*     nil)
+(defvar *gl-widget* (qnew "QGLWidget"))
+(defvar *timer*     (qnew "QTimer"))
 
 (defparameter *gear1*     0)
 (defparameter *gear2*     0)
@@ -33,10 +33,8 @@
 (defparameter *y-rotation-changed* nil)
 (defparameter *z-rotation-changed* nil)
 
-(defun create-gl-widget ()
-  (setf *gl-widget* (qnew "QGLWidget")
-        *timer*     (qnew "QTimer"))
-  (do- (qoverride *gl-widget*)
+(defun ini-gl-widget ()
+  (x:do-with (qoverride *gl-widget*)
     ("initializeGL()"                'initialize-gl)
     ("paintGL()"                     'paint-gl)
     ("resizeGL(int,int)"             'resize-gl)
@@ -194,8 +192,8 @@
   (gl:pop-matrix))
 
 (defun normalize-angle (angle)
-  (while (< angle 0)
+  (x:while (< angle 0)
     (incf angle +360+))
-  (while (> angle +360+)
+  (x:while (> angle +360+)
     (decf angle +360+))
   angle)

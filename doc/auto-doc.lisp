@@ -1,8 +1,6 @@
 ;;; copyright (c) 2010 power4projects software
 
-(require :util)
-
-(use-package :util)
+(require :x)
 
 (defparameter *help* nil)
 
@@ -20,8 +18,8 @@
              (when (eql :eof line)
                (return))
              (setf line (string-trim " " line))
-             (when (starts-with "///" line)
-               (when (starts-with "cl_object " ex)
+             (when (x:starts-with "///" line)
+               (when (x:starts-with "cl_object " ex)
                  (add-curr)
                  (let ((fun (trim (subseq ex 10))))
                    (push (substitute #\- #\_ (string-trim "2" (subseq fun 0 (position #\( fun))))
@@ -35,11 +33,11 @@
     (let ((name (symbol-name sym)))
       (when (or (char= #\Q (char name 0))
                 (string= "TR" name))
-        (when-it (documentation sym 'function)
-                 (let ((fun  (string-downcase (symbol-name sym)))
-                       (docu (mapcar #'(lambda (s) (string-trim " " s)) (split it #\Newline))))
-                   (unless (string= fun (subseq (second docu) 7))
-                     (push (cons fun docu) *help*))))))))
+        (x:when-it (documentation sym 'function)
+          (let ((fun  (string-downcase (symbol-name sym)))
+                (docu (mapcar #'(lambda (s) (string-trim " " s)) (x:split x:it #\Newline))))
+            (unless (string= fun (subseq (second docu) 7))
+              (push (cons fun docu) *help*))))))))
 
 (defun help ()
   (setf *help* nil)
@@ -58,7 +56,7 @@
         (! "<p>")
         (! (el "b" (format nil "~a ~a" (string-upcase (first curr)) (subseq (second curr) 6))))
         (let ((n 2))
-          (when (starts-with "alias:" (third curr))
+          (when (x:starts-with "alias:" (third curr))
             (incf n)
             (! "<br>")
             (! (el "b" (string-upcase (subseq (third curr) 7)))))
@@ -76,4 +74,3 @@
 (progn
   (help)
   (eql:qq))
-

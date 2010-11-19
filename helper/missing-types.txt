@@ -1,4 +1,5 @@
 GLenum
+QList<ExtraSelection>
 QList<QGLShader*>
 QList<QHelpSearchQuery>
 QList<QHostAddress>

@@ -64,6 +64,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object("qcopy"),                (cl_objectfn_fixed)qcopy,                    1);
     cl_def_c_function(c_string_to_object("qdelete"),              (cl_objectfn_fixed)qdelete,                  1);
     cl_def_c_function(c_string_to_object("qenum2"),               (cl_objectfn_fixed)qenum2,                   2);
+    cl_def_c_function(c_string_to_object("qexec"),                (cl_objectfn_fixed)qexec,                    0);
     cl_def_c_function(c_string_to_object("qfind-child"),          (cl_objectfn_fixed)qfind_child,              2);
     cl_def_c_function(c_string_to_object("qid"),                  (cl_objectfn_fixed)qid,                      1);
     cl_def_c_function(c_string_to_object("qinvoke-method2"),      (cl_objectfn_fixed)qinvoke_method2,          4);
@@ -84,6 +85,8 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object("qsuper-class-name"),    (cl_objectfn_fixed)qsuper_class_name,        1);
     cl_def_c_function(c_string_to_object("qtranslate"),           (cl_objectfn_fixed)qtranslate,               3);
     cl_def_c_function(c_string_to_object("qt-object-name"),       (cl_objectfn_fixed)qt_object_name,           1);
+    cl_def_c_function(c_string_to_object("qui-class2"),           (cl_objectfn_fixed)qui_class2,               2);
+    cl_def_c_function(c_string_to_object("qui-names"),            (cl_objectfn_fixed)qui_names,                1);
     cl_def_c_function(c_string_to_object("qutf8"),                (cl_objectfn_fixed)qutf8,                    1);
     cl_def_c_function(c_string_to_object("qversion"),             (cl_objectfn_fixed)qversion,                 0); }
 
@@ -118,6 +121,7 @@ enum UserMetaTypes {
     T_QList_QTableWidgetItem,
     T_QList_QTableWidgetSelectionRange,
     T_QList_QTextBlock,
+    T_QList_QTextEdit_ExtraSelection,
     T_QList_QTextFrame,
     T_QList_QTreeWidgetItem,
     T_QList_QUndoStack,
@@ -178,6 +182,7 @@ void registerMetaTypes() {
     qRegisterMetaType<QList<QTableWidgetItem*> >("QList<QTableWidgetItem*>");
     qRegisterMetaType<QList<QTableWidgetSelectionRange> >("QList<QTableWidgetSelectionRange>");
     qRegisterMetaType<QList<QTextBlock> >("QList<QTextBlock>");
+    qRegisterMetaType<QList<QTextEdit::ExtraSelection> >("QList<QTextEdit::ExtraSelection>");
     qRegisterMetaType<QList<QTextFrame*> >("QList<QTextFrame*>");
     qRegisterMetaType<QList<QTreeWidgetItem*> >("QList<QTreeWidgetItem*>");
     qRegisterMetaType<QList<QUndoStack*> >("QList<QUndoStack*>");
@@ -338,10 +343,14 @@ static int toUInt(cl_object l_num) {
 template<typename T>
 static T toFloat(cl_object l_num) {
     T f = 0;
-    if(ECL_DOUBLE_FLOAT_P(l_num)) {
-        f = df(l_num); }
-    else if(ECL_SINGLE_FLOAT_P(l_num)) {
+    if(ECL_SINGLE_FLOAT_P(l_num)) {
         f = sf(l_num); }
+    else if(ECL_DOUBLE_FLOAT_P(l_num)) {
+        f = df(l_num); }
+#ifdef ECL_LONG_FLOAT
+    else if(ECL_LONG_FLOAT_P(l_num)) {
+        f = ecl_long_float(l_num); }
+#endif
     else if(FIXNUMP(l_num)) {
         f = fixint(l_num); }
     else {
@@ -496,6 +505,23 @@ static QGradientStop toQGradientStop(cl_object l_gs) {
     if(cl_consp(l_gs)) {
         gs = qMakePair(toReal(cl_car(l_gs)), toQColor(cl_cdr(l_gs))); }
     return gs; }
+
+static QList<QTextEdit::ExtraSelection> toQTextEditExtraSelectionList(cl_object l_lst) {
+    QList<QTextEdit::ExtraSelection> l;
+    if(LISTP(l_lst)) {
+        cl_object l_el = l_lst;
+        while(l_el != Cnil) {
+            cl_object l_curr = cl_first(l_el);
+            QtObject q_cursor = toQtObject(cl_first(l_curr));
+            QtObject q_format = toQtObject(cl_second(l_curr));
+            if(("QTextCursor" == q_cursor.className()) &&
+               ("QTextCharFormat" == q_format.className())) {
+                QTextEdit::ExtraSelection sel;
+                sel.cursor = QTextCursor(*(QTextCursor*)q_cursor.pointer);
+                sel.format = QTextCharFormat(*(QTextCharFormat*)q_format.pointer);
+                l << sel; }
+            l_el = cl_rest(l_el); }}
+    return l; }
 
 // implicit pointer types
 TO_QT_TYPE_PTR2(QBrush, qbrush)
@@ -692,6 +718,14 @@ static cl_object from_qobjectlist(const QObjectList& ol) {
         l_lst = CONS(qt_object_from_name(o->metaObject()->className(), o), l_lst); }
     return cl_nreverse(l_lst); }
 
+static cl_object from_qtexteditextraselectionlist(const QList<QTextEdit::ExtraSelection>& l) {
+    cl_object l_lst = Cnil;
+    Q_FOREACH(QTextEdit::ExtraSelection sel, l) {
+        l_lst = CONS(LIST2(qt_object_from_name("QTextCursor", new QTextCursor(sel.cursor)),
+                           qt_object_from_name("QTextCharFormat", new QTextCharFormat(sel.format))),
+                     l_lst); }
+    return cl_nreverse(l_lst); }
+
 TO_CL_TYPEF(QPoint, qpoint, x, y)
 TO_CL_TYPEF(QSize, qsize, width, height)
 
@@ -848,6 +882,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case T_QList_QTableWidgetItem:           p = new QList<QTableWidgetItem*>(toQTableWidgetItemList(l_arg)); break;
         case T_QList_QTableWidgetSelectionRange: p = new QList<QTableWidgetSelectionRange>(toQTableWidgetSelectionRangeList(l_arg)); break;
         case T_QList_QTextBlock:                 p = new QList<QTextBlock>(toQTextBlockList(l_arg)); break;
+        case T_QList_QTextEdit_ExtraSelection:   p = new QList<QTextEdit::ExtraSelection>(toQTextEditExtraSelectionList(l_arg)); break;
         case T_QList_QTextFrame:                 p = new QList<QTextFrame*>(toQTextFrameList(l_arg)); break;
         case T_QList_QTreeWidgetItem:            p = new QList<QTreeWidgetItem*>(toQTreeWidgetItemList(l_arg)); break;
         case T_QList_QUndoStack:                 p = new QList<QUndoStack*>(toQUndoStackList(l_arg)); break;
@@ -994,6 +1029,7 @@ static cl_object to_lisp_arg(const MetaArg& arg) {
             case T_QList_QTableWidgetItem:           l_ret = from_qtablewidgetitemlist(*(QList<QTableWidgetItem*>*)p); break;
             case T_QList_QTableWidgetSelectionRange: l_ret = from_qtablewidgetselectionrangelist(*(QList<QTableWidgetSelectionRange>*)p); break;
             case T_QList_QTextBlock:                 l_ret = from_qtextblocklist(*(QList<QTextBlock>*)p); break;
+            case T_QList_QTextEdit_ExtraSelection:   l_ret = from_qtexteditextraselectionlist(*(QList<QTextEdit::ExtraSelection>*)p); break;
             case T_QList_QTextFrame:                 l_ret = from_qtextframelist(*(QList<QTextFrame*>*)p); break;
             case T_QList_QTreeWidgetItem:            l_ret = from_qtreewidgetitemlist(*(QList<QTreeWidgetItem*>*)p); break;
             case T_QList_QUndoStack:                 l_ret = from_qundostacklist(*(QList<QUndoStack*>*)p); break;
@@ -1809,7 +1845,7 @@ cl_object qclear_event_filters() {
 
 cl_object qrequire(cl_object l_name) {
     /// args: (module)
-    /// Loads an EQL module, corresponding to a Qt module. Returns the module name if both loading and initializing were successful.
+    /// Loads an EQL module, corresponding to a Qt module. Returns the module name if both loading and initializing have been successful.
     ///     (qrequire :network)
     ecl_process_env()->nvalues = 1;
     QString name = symbolName(l_name).toLower();
@@ -1825,30 +1861,34 @@ cl_object qrequire(cl_object l_name) {
     Ini ini = (Ini)lib.resolve("ini");
     if(ini) {
         ini();
-        StaticMetaObject m = (StaticMetaObject)lib.resolve("staticMetaObject");
-        DeleteNObject d = (DeleteNObject)lib.resolve("deleteNObject");
-        Override o = (Override)lib.resolve("override");
-        if(m && d && o) {
+        StaticMetaObject meta = (StaticMetaObject)lib.resolve("staticMetaObject");
+        DeleteNObject del = (DeleteNObject)lib.resolve("deleteNObject");
+        Override over = (Override)lib.resolve("override");
+        if(meta && del && over) {
             if("help" == name) {
-                LObjects::staticMetaObject_help = m;
-                LObjects::deleteNObject_help = d;
-                LObjects::override_help = o; }
-            else if("network" == name) {
-                LObjects::staticMetaObject_network = m;
-                LObjects::deleteNObject_network = d;
-                LObjects::override_network = o;
-                LObjects::toMetaArg_network = (ToMetaArg)lib.resolve("toMetaArg");
-                LObjects::to_lisp_arg_network = (To_lisp_arg)lib.resolve("to_lisp_arg"); }
-            else if("opengl" == name) {
-                LObjects::staticMetaObject_opengl = m;
-                LObjects::deleteNObject_opengl = d;
-                LObjects::override_opengl = o;
-                LObjects::toMetaArg_opengl = (ToMetaArg)lib.resolve("toMetaArg");
-                LObjects::to_lisp_arg_opengl = (To_lisp_arg)lib.resolve("to_lisp_arg"); }
+                LObjects::staticMetaObject_help = meta;
+                LObjects::deleteNObject_help = del;
+                LObjects::override_help = over; }
             else if("svg" == name) {
-                LObjects::staticMetaObject_svg = m;
-                LObjects::deleteNObject_svg = d;
-                LObjects::override_svg = o; }
+                LObjects::staticMetaObject_svg = meta;
+                LObjects::deleteNObject_svg = del;
+                LObjects::override_svg = over; }
+            else {
+                ToMetaArg metaArg = (ToMetaArg)lib.resolve("toMetaArg");
+                To_lisp_arg lispArg = (To_lisp_arg)lib.resolve("to_lisp_arg");
+                if(metaArg && lispArg) {
+                    if("network" == name) {
+                        LObjects::staticMetaObject_network = meta;
+                        LObjects::deleteNObject_network = del;
+                        LObjects::override_network = over;
+                        LObjects::toMetaArg_network = metaArg;
+                        LObjects::to_lisp_arg_network = lispArg; }
+                    else if("opengl" == name) {
+                        LObjects::staticMetaObject_opengl = meta;
+                        LObjects::deleteNObject_opengl = del;
+                        LObjects::override_opengl = over;
+                        LObjects::toMetaArg_opengl = metaArg;
+                        LObjects::to_lisp_arg_opengl = lispArg; }}}
             return l_name; }}
     error("QREQUIRE", LIST1(l_name));
     return Cnil; }
@@ -1943,9 +1983,16 @@ cl_object qapp() {
 
 cl_object qprocess_events() {
     /// args: ()
-    /// Convenience function to call <code>qApp->processEvents()</code>.
+    /// Convenience function to call <code>QApplication::processEvents()</code>.
     ecl_process_env()->nvalues = 1;
-    qApp->processEvents();
+    QApplication::processEvents();
+    return Ct; }
+
+cl_object qexec() {
+    /// args: ()
+    /// Convenience function to call <code>QApplication::exec()</code>.
+    ecl_process_env()->nvalues = 1;
+    QApplication::exec();
     return Ct; }
 
 cl_object qstatic_meta_object(cl_object l_class) {
@@ -1961,30 +2008,33 @@ cl_object qstatic_meta_object(cl_object l_class) {
     error("QSTATIC-META-OBJECT", LIST1(l_class));
     return Cnil; }
 
-cl_object qload_ui(cl_object l_file) {
+cl_object qload_ui(cl_object l_ui) {
     /// args: (file)
     /// Calls a custom <code>QUiLoader::load()</code> function, loading a UI file created by Qt Designer. Returns the top level widget of the UI. Use <code>qfind-child</code> to retrieve the child widgets.
     ecl_process_env()->nvalues = 1;
-    if(ECL_STRINGP(l_file)) {
-        LUiLoader ui;
-        QFile f(toQString(l_file));
-        if(f.open(QFile::ReadOnly)) {
-            QWidget* w = ui.load(&f);
-            f.close();
+    QString ui(toQString(l_ui));
+    if(!ui.isEmpty()) {
+        if(!ui.endsWith(".ui")) {
+            ui.append(".ui"); }
+        LUiLoader loader;
+        QFile file(ui);
+        if(file.open(QFile::ReadOnly)) {
+            QWidget* w = loader.load(&file);
+            file.close();
             if(w) {
                 cl_object l_ret = qt_object_from_name(w->metaObject()->className(), w);
                 return  l_ret; }}}
-    error("QLOAD-UI", LIST1(l_file));
+    error("QLOAD-UI", LIST1(l_ui));
     return Cnil; }
 
 cl_object qfind_child(cl_object l_obj, cl_object l_name) {
     /// args: (object name)
     /// Calls <code>qFindChild&lt;QObject*&gt;()</code>. Can be used to get the single widgets of a UI (see <code>qload-ui</code>), identified by <code>objectName</code>.
     ecl_process_env()->nvalues = 1;
-    if(ECL_STRINGP(l_name)) {
+    QString name(toQString(l_name));
+    if(!name.isEmpty()) {
         QtObject o = toQtObject(l_obj);
         if(o.isQObject()) {
-            QString name(toQString(l_name));
             QObject* obj = qFindChild<QObject*>((QObject*)o.pointer, name);
             if(obj) {
                 cl_object l_ret = qt_object_from_name(obj->metaObject()->className(),
@@ -1992,6 +2042,80 @@ cl_object qfind_child(cl_object l_obj, cl_object l_name) {
                                                       LObjects::ui_unique.value(name, 0));
                 return l_ret; }}}
     error("QFIND-CHILD", LIST2(l_obj, l_name));
+    return Cnil; }
+
+cl_object qui_class2(cl_object l_ui, cl_object l_name) {
+    /// args: (file &optional name)
+    /// Finds the class name for the given user-defined object name in the given UI file.<br>Omitting the object name will return the top level class name of the UI.
+    ///     (qui-class "examples/data/main-window.ui" "edit") ; returns "QTextEdit"
+    ecl_process_env()->nvalues = 1;
+    QString ui(toQString(l_ui));
+    QString name(toQString(l_name));
+    if(!ui.isEmpty()) {
+        if(!ui.endsWith(".ui")) {
+            ui.append(".ui"); }
+        bool main = name.isEmpty();
+        QFile file(ui);
+        QString className;
+        if(file.open(QIODevice::ReadOnly)) {
+            QXmlStreamReader reader(&file);
+            while(!reader.atEnd()) {
+                reader.readNext();
+                if(reader.isStartElement()) {
+                    QStringRef el(reader.name());
+                    if("widget" == el) {
+                        if(main) {
+                            className = reader.attributes().value("class").toString();
+                            break; }
+                        else if(name == reader.attributes().value("name")) {
+                            className = reader.attributes().value("class").toString();
+                            break; }
+                        main = false; }
+                    else if("action" == el) {
+                        if(name == reader.attributes().value("name")) {
+                            className = "QAction";
+                            break; }}
+                    else if("actiongroup" == el) {
+                        if(name == reader.attributes().value("name")) {
+                            className = "QActionGroup";
+                            break; }}
+                    else if("layout" == el) {
+                        if(name == reader.attributes().value("name")) {
+                            className = reader.attributes().value("class").toString();
+                            break; }}}}
+            if(!className.isEmpty()) {
+                cl_object l_ret = from_qstring(className);
+                return l_ret; }}}
+    error("QUI-CLASS", LIST2(l_ui, l_name));
+    return Cnil; }
+
+cl_object qui_names(cl_object l_ui) {
+    /// args: (file)
+    /// Finds all user-defined object names in the given UI file.
+    ///     (qui-names "examples/data/main-window.ui")
+    ecl_process_env()->nvalues = 1;
+    QString ui(toQString(l_ui));
+    if(!ui.isEmpty()) {
+        if(!ui.endsWith(".ui")) {
+            ui.append(".ui"); }
+        QFile file(ui);
+        if(file.open(QIODevice::ReadOnly)) {
+            QStringList names;
+            QXmlStreamReader reader(&file);
+            while(!reader.atEnd()) {
+                reader.readNext();
+                if(reader.isStartElement()) {
+                    QStringRef el(reader.name());
+                    if(("widget"      == el) ||
+                       ("action"      == el) ||
+                       ("actiongroup" == el) ||
+                       ("layout"      == el)) {
+                        QString name(reader.attributes().value("name").toString());
+                        if(!name.isEmpty()) {
+                            names << name; }}}}
+            cl_object l_ret = from_qstringlist(names);
+            return l_ret; }}
+    error("QUI-NAMES", LIST1(l_ui));
     return Cnil; }
 
 cl_object qsuper_class_name(cl_object l_name) {
@@ -2050,9 +2174,12 @@ cl_object qid(cl_object l_class) {
 
 cl_object qversion () {
     /// args: ()
-    /// Returns the EQL version number as "&lt;year&gt;.&lt;month&gt;.&lt;counter&gt;", analogous to the ECL version number.
-    ecl_process_env()->nvalues = 1;
-    return from_cstring(EQL::version); }
+    /// Returns the EQL version number as "&lt;year&gt;.&lt;month&gt;.&lt;counter&gt;", analogous to the ECL version number.<br>The second return value is the Qt version as returned by <code>qVersion()</code>.
+    const cl_env_ptr l_env = ecl_process_env();
+    l_env->nvalues = 2;
+    l_env->values[0] = from_cstring(EQL::version);
+    l_env->values[1] = from_cstring(qVersion());
+    return l_env->values[0]; }
 
 cl_object qquit() {
     /// args: ()

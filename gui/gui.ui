@@ -28,7 +28,7 @@
         <widget class="QTextEdit" name="display"/>
        </item>
        <item>
-        <layout class="QHBoxLayout">
+        <layout class="QHBoxLayout" name="_3">
          <item>
           <widget class="QLabel" name="package_name">
            <property name="text">
@@ -49,7 +49,7 @@
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout">
+        <layout class="QHBoxLayout" name="_2">
          <item>
           <widget class="QLineEdit" name="edit"/>
          </item>

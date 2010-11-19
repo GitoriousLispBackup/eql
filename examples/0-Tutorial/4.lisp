@@ -1,4 +1,4 @@
-;;; Widgets Tutorial - Nested Layouts
+;;; Ported Qt Widgets Tutorial - Nested Layouts
 
 (in-package :eql)
 

@@ -6,7 +6,7 @@
 TESTED WITH
 ===========
 
-* ECL from CVS (2010-10-29) unicode
+* ECL from CVS (2010-10-29)
 * Qt4.6.x, Qt4.7.0
 * Linux, OSX 10.4, Windows XP & 7 (MSVC)
 
@@ -15,7 +15,7 @@ TESTED WITH
 REQUIREMENTS
 ============
 
-* ECL >= 10.4, enabling unicode
+* ECL >= 10.4 Unicode (./configure --enable-unicode)
 * Qt  >= 4.6 http://qt.nokia.com/
 * SLIME from CVS (e.g. 2010-06-01)
 
@@ -88,7 +88,7 @@ You can run a simple interactive REPL UI doing:
     ./eql -qgui (MSVC: eql -qgui)
 
 To run a Lisp file without top-level, do:
-    ./eql examples/clock (MSVC: eql examples/clock)
+    ./eql examples/2-clock (MSVC: eql examples/2-clock)
 
 If you start the EQL executable without arguments, it will start the usual ECL top-level
 (without processing Qt events).

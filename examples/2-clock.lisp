@@ -1,7 +1,7 @@
 ;;; This is (kind of) a port of the Qt Script Example "Clock"
 
 (defpackage :clock
-  (:use :common-lisp :util :eql)
+  (:use :common-lisp :eql)
   (:export
    #:*clock*
    #:start))
@@ -10,9 +10,9 @@
 
 (defconstant +antialiasing+ 1 "render hint")
 
-(defparameter *clock* (qnew "QWidget(QWidget*,Qt::WindowFlags)" nil "WindowStaysOnTopHint"
-                            "size" (list 170 170)
-                            "pos" (list 50 50)))
+(defvar *clock* (qnew "QWidget(QWidget*,Qt::WindowFlags)" nil "WindowStaysOnTopHint"
+                      "size" (list 170 170)
+                      "pos" (list 50 50)))
 
 (defun start ()
   (let ((timer (qnew "QTimer")))
@@ -23,7 +23,7 @@
 
 (defun pen (width &optional (color "black"))
   (let ((pen (qnew "QPen")))
-    (do- (qfun pen)
+    (x:do-with (qfun pen)
       ("setCapStyle" "RoundCap")
       ("setWidth" width)
       ("setColor" color))
@@ -31,7 +31,7 @@
 
 (defun brush (color)
   (let ((brush (qnew "QBrush")))
-    (do- (qfun brush)
+    (x:do-with (qfun brush)
       ("setStyle" "SolidPattern")
       ("setColor(QColor)" color))
     brush))

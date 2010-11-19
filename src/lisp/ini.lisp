@@ -18,11 +18,13 @@
                               (first exp))))
                       pairs)))
     `(let* ,(mapcar 'list vars exps)
-       ,@body
-       ,(if (second vars)
-            `(dolist (x (list ,@(nreverse vars)))
-               (qdel x))
-            `(qdel ,(first vars))))))
+       (prog1
+           (progn
+             ,@body)
+         ,(if (second vars)
+              `(dolist (x (list ,@(nreverse vars)))
+                 (qdel x))
+              `(qdel ,(first vars)))))))
 
 (defmacro qenum (name key) ; simpler than #.
   (qenum2 name key))
@@ -136,6 +138,9 @@
 (defun qobject-names (&optional type)
   (qobject-names2 type))
 
+(defun qui-class (file &optional var)
+  (qui-class2 file var))
+
 (defun qmessage-box (msg)
   "args: (message)
    alias: qmsg
@@ -164,6 +169,7 @@
 
 (in-package :si)
 
+#-win32
 (defun qtop-level ()
   "Args: ()
 ECL specific.
@@ -193,6 +199,7 @@ under certain conditions; see file 'Copyright' for details.")
         (qtpl)) ; [EQL]
       0)))
 
+#-win32
 (defun qtpl (&key ((:commands *tpl-commands*) tpl-commands)
                  ((:prompt-hook *tpl-prompt-hook*) *tpl-prompt-hook*)
                  (broken-at nil)
@@ -260,7 +267,7 @@ under certain conditions; see file 'Copyright' for details.")
                  nil)
              (setf quiet nil))))))
 
-;;; [EQL] Need to insert the macro WITH-FD-HANDLER from serve-event.lisp here, otherwise QTPL-READ will not compile
+;; taken from "<ecl-dir>/contrib/serve-event/serve-event.lisp"
 #-win32
 (defmacro serve-event:with-fd-handler ((fd direction function) &rest body)
   "Establish a handler with SYSTEM:ADD-FD-HANDLER for the duration of BODY.
@@ -275,9 +282,9 @@ under certain conditions; see file 'Copyright' for details.")
          (when ,handler
            (serve-event:remove-fd-handler ,handler))))))
 
+#-win32
 (defun qtpl-read (&aux (*read-suppress* nil))
   (finish-output)
-  #-win32
   (serve-event:with-fd-handler ; [EQL]
       (0 :input (lambda (fd)   ; [EQL]
                   ;; (loop       [EQL]
