@@ -16,14 +16,15 @@
                           (if (stringp (first exp))
                               (apply 'list 'qnew exp)
                               (first exp))))
-                      pairs)))
+                      pairs))
+        (x (gensym)))
     `(let* ,(mapcar 'list vars exps)
-       (prog1
-           (progn
-             ,@body)
+       (unwind-protect
+            (progn
+              ,@body)
          ,(if (second vars)
-              `(dolist (x (list ,@(nreverse vars)))
-                 (qdel x))
+              `(dolist (,x (list ,@(nreverse vars)))
+                 (qdel ,x))
               `(qdel ,(first vars)))))))
 
 (defmacro qenum (name key) ; simpler than #.

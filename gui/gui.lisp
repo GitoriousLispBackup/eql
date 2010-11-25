@@ -289,7 +289,7 @@
         (unless (and (x:starts-with "(q" sym)
                      (x:ends-with "2" sym))
           (push sym all))))
-    all))
+    (sort all 'string<)))
 
 (let (pkg)
   (defun show-package-name ()

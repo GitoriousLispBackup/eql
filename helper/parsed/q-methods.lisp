@@ -3956,7 +3956,11 @@
    "protected int exec ()"
    "static QThread * currentThread ()"
    "static int idealThreadCount ()"
-   "static void yieldCurrentThread ()")
+   "static void yieldCurrentThread ()"
+   "protected void msleep ( unsigned long )"
+   "protected void setTerminationEnabled ( bool = true )"
+   "protected void sleep ( unsigned long )"
+   "protected void usleep ( unsigned long )")
   (("QThreadPool" . "QObject")
    "new QThreadPool ( QObject * = 0 )"
    "int activeThreadCount () const"

@@ -823,8 +823,10 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case QMetaType::Double:                  p = new double(toFloat<double>(l_arg)); break;
         case QMetaType::Float:                   p = new float(toFloat<float>(l_arg)); break;
         case QMetaType::Int:                     p = new int(toInt(l_arg)); break;
+        case QMetaType::Long:                    p = new int(toInt<long>(l_arg)); break;
         case QMetaType::LongLong:                p = new qlonglong(toInt<qlonglong>(l_arg)); break;
         case QMetaType::UInt:                    p = new uint(toUInt(l_arg)); break;
+        case QMetaType::ULong:                   p = new ulong(toUInt<ulong>(l_arg)); break;
         case QMetaType::ULongLong:               p = new qulonglong(toUInt<qulonglong>(l_arg)); break;
         case QMetaType::QByteArray:              p = new QByteArray(toQByteArray(l_arg)); break;
         case QMetaType::QChar:                   p = new QChar(toQChar(l_arg)); break;
@@ -971,8 +973,10 @@ static cl_object to_lisp_arg(const MetaArg& arg) {
             case QMetaType::Double:                  l_ret = ecl_make_doublefloat(*(double*)p); break;
             case QMetaType::Float:                   l_ret = ecl_make_singlefloat(*(float*)p); break;
             case QMetaType::Int:                     l_ret = MAKE_FIXNUM(*(int*)p); break;
+            case QMetaType::Long:                    l_ret = MAKE_FIXNUM(*(long*)p); break;
             case QMetaType::LongLong:                l_ret = MAKE_FIXNUM(*(qulonglong*)p); break;
             case QMetaType::UInt:                    l_ret = MAKE_FIXNUM(*(uint*)p); break;
+            case QMetaType::ULong:                   l_ret = MAKE_FIXNUM(*(ulong*)p); break;
             case QMetaType::ULongLong:               l_ret = MAKE_FIXNUM(*(qulonglong*)p); break;
             case QMetaType::QBrush:                  l_ret = from_qbrush(*(QBrush*)p); break;
             case QMetaType::QByteArray:              l_ret = from_qbytearray(*(QByteArray*)p); break;
@@ -1108,8 +1112,10 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
         case QMetaType::Char:
         case QMetaType::Float:
         case QMetaType::Int:
+        case QMetaType::Long:
         case QMetaType::LongLong:
         case QMetaType::UInt:
+        case QMetaType::ULong:
         case QMetaType::ULongLong:
         case QMetaType::QByteArray:
         case QMetaType::QChar:

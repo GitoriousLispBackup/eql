@@ -1697,6 +1697,10 @@ public:
     Q_INVOKABLE QThread* ScurrentThread() { return QThread::currentThread(); }
     Q_INVOKABLE int SidealThreadCount() { return QThread::idealThreadCount(); }
     Q_INVOKABLE void SyieldCurrentThread() { QThread::yieldCurrentThread(); }
+    Q_INVOKABLE void Mmsleep(QThread* o, ulong x1) { ((LThread*)o)->msleep(x1); }
+    Q_INVOKABLE void MsetTerminationEnabled(QThread* o, bool x1 = true) { ((LThread*)o)->setTerminationEnabled(x1); }
+    Q_INVOKABLE void Msleep(QThread* o, ulong x1) { ((LThread*)o)->sleep(x1); }
+    Q_INVOKABLE void Musleep(QThread* o, ulong x1) { ((LThread*)o)->usleep(x1); }
 };
 
 class EQL_EXPORT Q193 : public Q126 { // QThreadPool

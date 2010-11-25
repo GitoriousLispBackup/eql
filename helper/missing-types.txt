@@ -47,5 +47,4 @@ quintptr
 short
 sockaddr
 uchar
-ulong
 ushort

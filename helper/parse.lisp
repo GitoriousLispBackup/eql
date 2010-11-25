@@ -228,7 +228,8 @@
                           "protected functions"
                           "reimplemented public functions"
                           "reimplemented protected functions"
-                          "static public members"))
+                          "static public members"
+                          "static protected members"))
         (parse type class* s so no-new)
         (write-char #\.))
       (format s ")~%")
