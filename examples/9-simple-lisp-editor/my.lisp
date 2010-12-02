@@ -1,0 +1,12 @@
+(in-package :eql)
+
+(let ((window (qnew "QWidget"))
+      (label (qnew "QLabel"))
+      (line-edit (qnew "QLineEdit"))
+      (layout (qnew "QHBoxLayout")))
+  (qset window "windowTitle" "My Window")
+  (qset label "text" "Text:")
+  (dolist (w (list label line-edit))
+    (qfun layout "addWidget" w))
+  (qfun window "setLayout" layout)
+  (qfun window "show"))

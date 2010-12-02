@@ -6,7 +6,7 @@
 (in-package :main-window)
 
 (defvar *main*        (qload-ui (in-home "examples/data/main-window.ui")))
-(defvar *edit*        (qfind-child *main* "edit"))
+(defvar *editor*      (qfind-child *main* "editor"))
 (defvar *action-open* (qfind-child *main* "action_open"))
 (defvar *action-save* (qfind-child *main* "action_save"))
 
@@ -34,18 +34,18 @@
   (set-icon *action-save* "save")
   (qconnect *action-open* "triggered()" 'file-open)
   (qconnect *action-save* "triggered()" 'file-save)
-  (qset *edit* "html" (read-file (in-home "examples/data/utf8.htm")))
+  (qset *editor* "html" (read-file (in-home "examples/data/utf8.htm")))
   (qfun *main* "show"))
 
 (defun file-open ()
   (let ((file (qfun "QFileDialog" "getOpenFileName")))
     (unless (x:empty-string file)
-      (qset *edit* "html" (read-file file)))))
+      (qset *editor* "html" (read-file file)))))
 
 (defun file-save ()
   (let ((file (qfun "QFileDialog" "getSaveFileName")))
     (unless (x:empty-string file)
       (with-open-file (s (os-pathname file) :direction :output :if-exists :supersede)
-        (write-string (qget *edit* "html") s)))))
+        (write-string (qget *editor* "html") s)))))
 
 (start)

@@ -1,6 +1,6 @@
 ;;; This is a port of the Qt OpenGL Example "Grabber"
 
-(require :gl-widget (eql:in-home "examples/OpenGL/gl-widget"))
+(require :gl-widget (eql:in-home "examples/8-OpenGL/gl-widget"))
 
 (defpackage :main-window
   (:use :common-lisp :eql :gl-widget)

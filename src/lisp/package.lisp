@@ -26,6 +26,7 @@
    #:qload-ui
    #:qlocal8bit
    #:qmessage-box
+   #:qmeta-enums
    #:qnew-instance
    #:qnull-object
    #:qobject-names

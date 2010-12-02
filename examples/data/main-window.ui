@@ -15,7 +15,7 @@
   <widget class="QWidget" name="centralwidget" >
    <layout class="QVBoxLayout" >
     <item>
-     <widget class="QTextEdit" name="edit" />
+     <widget class="QTextEdit" name="editor" />
     </item>
    </layout>
   </widget>

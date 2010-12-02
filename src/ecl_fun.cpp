@@ -70,6 +70,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object("qinvoke-method2"),      (cl_objectfn_fixed)qinvoke_method2,          4);
     cl_def_c_function(c_string_to_object("qload-ui"),             (cl_objectfn_fixed)qload_ui,                 1);
     cl_def_c_function(c_string_to_object("qlocal8bit"),           (cl_objectfn_fixed)qlocal8bit,               1);
+    cl_def_c_function(c_string_to_object("qmeta-enums"),          (cl_objectfn_fixed)qmeta_enums,              0);
     cl_def_c_function(c_string_to_object("qnew-instance2"),       (cl_objectfn_fixed)qnew_instance2,           2);
     cl_def_c_function(c_string_to_object("qobject-names2"),       (cl_objectfn_fixed)qobject_names2,           1);
     cl_def_c_function(c_string_to_object("qok"),                  (cl_objectfn_fixed)qok,                      0);
@@ -138,6 +139,7 @@ enum UserMetaTypes {
     T_QTextBlock,
     T_QTextCharFormat,
     T_QTextCursor,
+    T_QTextDocumentFragment,
 #if QT_VERSION < 0x40700
     T_QVariant,
 #endif
@@ -199,6 +201,7 @@ void registerMetaTypes() {
     qRegisterMetaType<QTextBlock>("QTextBlock");
     qRegisterMetaType<QTextCharFormat>("QTextCharFormat");
     qRegisterMetaType<QTextCursor>("QTextCursor");
+    qRegisterMetaType<QTextDocumentFragment>("QTextDocumentFragment");
 #if QT_VERSION < 0x40700
     qRegisterMetaType<QVariant>("QVariant");
 #endif
@@ -542,6 +545,7 @@ TO_QT_TYPE_PTR2(QTableWidgetSelectionRange, qtablewidgetselectionrange)
 TO_QT_TYPE_PTR2(QTextBlock, qtextblock)
 TO_QT_TYPE_PTR(QTextCharFormat, qtextcharformat)
 TO_QT_TYPE_PTR(QTextCursor, qtextcursor)
+TO_QT_TYPE_PTR(QTextDocumentFragment, qtextdocumentfragment)
 TO_QT_TYPE_PTR2(QTextFormat, qtextformat)
 TO_QT_TYPE_PTR2(QTextLength, qtextlength)
 TO_QT_TYPE_PTR2(QTime, qtime)
@@ -901,6 +905,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case T_QTextBlock:                       p = toQTextBlockPointer(l_arg); break;
         case T_QTextCharFormat:                  p = toQTextCharFormatPointer(l_arg); break;
         case T_QTextCursor:                      p = toQTextCursorPointer(l_arg); break;
+        case T_QTextDocumentFragment:            p = toQTextDocumentFragmentPointer(l_arg); break;
 #if QT_VERSION < 0x40700
         case T_QVariant:
 #else
@@ -1050,6 +1055,7 @@ static cl_object to_lisp_arg(const MetaArg& arg) {
             case T_QTextBlock:                       l_ret = from_qtextblock(*(QTextBlock*)p); break;
             case T_QTextCharFormat:                  l_ret = from_qtextcharformat(*(QTextCharFormat*)p); break;
             case T_QTextCursor:                      l_ret = from_qtextcursor(*(QTextCursor*)p); break;
+            case T_QTextDocumentFragment:            l_ret = from_qtextdocumentfragment(*(QTextDocumentFragment*)p); break;
 #if QT_VERSION < 0x40700
         case T_QVariant:
 #else
@@ -1158,6 +1164,7 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
         case T_QTextBlock:
         case T_QTextCharFormat:
         case T_QTextCursor:
+        case T_QTextDocumentFragment:
 #if QT_VERSION < 0x40700
         case T_QVariant:
 #else
@@ -1803,6 +1810,7 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
                 case T_QTextBlock:                 ret = qVariantFromValue(*(QTextBlock*)o.pointer); break;
                 case T_QTextCharFormat:            ret = qVariantFromValue(*(QTextCharFormat*)o.pointer); break;
                 case T_QTextCursor:                ret = qVariantFromValue(*(QTextCursor*)o.pointer); break;
+                case T_QTextDocumentFragment:      ret = qVariantFromValue(*(QTextDocumentFragment*)o.pointer); break;
 #if QT_VERSION < 0x40700
                 case T_QVariant:
 #else
@@ -1979,6 +1987,32 @@ cl_object qenum2(cl_object l_name, cl_object l_key) {
                     return l_ret; }}}}
     error("QENUM", LIST2(l_name, l_key));
     return Cnil; }
+
+static cl_object enums(const QMetaObject* mo) {
+    cl_object l_enums = Cnil;
+    if(mo) {
+        for(int i = mo->enumeratorOffset(); i < mo->enumeratorCount(); ++i) {
+            QMetaEnum me(mo->enumerator(i));
+            if(Cnil == l_enums) {
+                l_enums = LIST1(from_cstring(me.scope())); }
+            cl_object l_keys = LIST1(from_cstring(me.name()));
+            for(int j = 0; j < me.keyCount(); ++j) {
+                l_keys = CONS(from_cstring(me.key(j)), l_keys); }
+            l_enums = CONS(cl_nreverse(l_keys), l_enums); }}
+    return cl_nreverse(l_enums); }
+
+cl_object qmeta_enums() {
+    /// args: ()
+    /// Returns all QMetaEnum values of all (QObject derived) classes, including the <code>Qt::</code> namespace.
+    ecl_process_env()->nvalues = 1;
+    cl_object l_all_enums = Cnil;
+    Q_FOREACH(QByteArray name, LObjects::qNames) {
+        cl_object l_enums = enums(LObjects::staticMetaObject(name));
+        if(l_enums != Cnil) {
+            l_all_enums = CONS(l_enums, l_all_enums); }}
+    l_all_enums = CONS(enums(staticQtMetaObject), l_all_enums);
+    l_all_enums = cl_nreverse(l_all_enums);
+    return l_all_enums; }
 
 cl_object qapp() {
     /// args: ()

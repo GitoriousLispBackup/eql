@@ -12,6 +12,7 @@
 *.qm
 *.ts
 *.~
+.*.lisp
 *~
 t.lisp
 Makefile
