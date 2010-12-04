@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "10.12.1"; // 2010-12-02
+const char EQL::version[] = "10.12.2"; // 2010-12-04
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
@@ -43,34 +43,40 @@ void EQL::singleShot() {
 void EQL::exec(const QStringList& args) {
     QStringList arguments(args);
     si_select_package(make_simple_base_string((char*)"EQL"));
-    eval(QString("(SET-HOME \"%1\")").arg(home()).toAscii().constData());
+    eval(QString("(set-home \"%1\")").arg(home()).toAscii().constData());
     bool tpl = false;
     QStringList forms;
     if(arguments.count() == 1) {
         tpl = true;
-        forms << "(SI:TOP-LEVEL)"; }
+        forms << "(si:top-level)"; }
     if(arguments.contains("-qgui")) {
         arguments.removeAll("-qgui");
-        forms << "(QGUI)"; }
+        forms << "(qgui)"; }
 #ifndef Q_OS_WIN
     if(arguments.contains("-qtpl")) {
         arguments.removeAll("-qtpl");
         tpl = true;
-        forms << "(SI::QTOP-LEVEL)"; }
+        forms << "(si::qtop-level)"; }
 #endif
     if(arguments.count() > 1) {
-        forms.prepend(QString("(LOAD \"%1\")").arg(arguments.at(1))); }
+        forms.prepend(
+                // to get debug info on errors
+                QString(
+                "(progn"
+                "  (setf si::*tpl-level* 0)"
+                "  (load \"%1\"))"
+                ).arg(arguments.at(1))); }
     QString code;
     if(forms.length() == 1) {
         code = forms.first(); }
     else {
-        code = "(PROGN " + forms.join(" ") + ")"; }
+        code = "(progn " + forms.join(" ") + ")"; }
     eval(code.toAscii().constData());
     if(tpl) {
         qquit(); }}
 
 void EQL::exec(lisp_ini ini, const QByteArray& command, const QByteArray& package) {
-    eval(QString("(EQL::SET-HOME \"%1\")").arg(home()).toAscii().constData());
+    eval(QString("(eql::set-home \"%1\")").arg(home()).toAscii().constData());
     read_VV(OBJNULL, ini);
     si_select_package(make_simple_base_string((char*)package.constData()));
     eval(command.constData()); }

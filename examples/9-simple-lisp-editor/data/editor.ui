@@ -44,6 +44,8 @@
    <addaction name="action_open"/>
    <addaction name="action_save"/>
    <addaction name="action_save_as"/>
+   <addaction name="separator"/>
+   <addaction name="action_save_and_run"/>
   </widget>
   <action name="action_open">
    <property name="text">
@@ -58,6 +60,11 @@
   <action name="action_save_as">
    <property name="text">
     <string>Save As</string>
+   </property>
+  </action>
+  <action name="action_save_and_run">
+   <property name="text">
+    <string>Save and Run</string>
    </property>
   </action>
  </widget>

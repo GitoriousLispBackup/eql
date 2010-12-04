@@ -41,6 +41,7 @@
   "qget"
   "qset"
   "qfun"
+  "qfun*"
   "qmsg"
   "qq"
   "qtranslate"

@@ -46,11 +46,12 @@
 
 ;;; Qt
 
-(defvar *main*           (qload-ui (in-home "examples/9-simple-lisp-editor/data/editor.ui")))
-(defvar *editor*         (qfind-child *main* "editor"))
-(defvar *action-open*    (qfind-child *main* "action_open"))
-(defvar *action-save*    (qfind-child *main* "action_save"))
-(defvar *action-save-as* (qfind-child *main* "action_save_as"))
+(defvar *main*                (qload-ui (in-home "examples/9-simple-lisp-editor/data/editor.ui")))
+(defvar *editor*              (qfind-child *main* "editor"))
+(defvar *action-open*         (qfind-child *main* "action_open"))
+(defvar *action-save*         (qfind-child *main* "action_save"))
+(defvar *action-save-as*      (qfind-child *main* "action_save_as"))
+(defvar *action-save-and-run* (qfind-child *main* "action_save_and_run"))
 
 (defparameter *document*             nil)
 (defparameter *font*                 nil)
@@ -101,16 +102,24 @@
                                     "resizeMode" "Adjust"
                                     "horizontalScrollBarPolicy" "AlwaysOff"
                                     "verticalScrollBarPolicy" "AlwaysOff")
-        *font*                (qnew "QFont(QString,int)" "Courier" #+darwin 12 #-darwin 10))
+        *font*                (qnew "QFont(QString,int)" 
+                                    #+linux "Courier"
+                                    #-linux "Courier New"
+                                    #+darwin 13
+                                    #-darwin 10))
   (qset *editor* "font" *font*)
+  (qset *action-save* "shortcut" "Ctrl+S")
+  (x:do-with (qset *action-save-and-run*)
+    ("shortcut" "Ctrl+R")
+    ("statusTip" (tr "On errors, (eql:qq) will exit the independent test application process.")))
   (x:do-with (qset *completer*)
     ("font" *font*)
     ("frameShape" "Box")
     ("frameShadow" "Plain")
     ("lineWidth" 1))
   (x:do-with (qset *main*)
-    ("pos" (list 60 40))
-    ("size" (list 750 500))
+    ("pos" (list 40 40))
+    ("size" (list 800 500))
     ("windowTitle" "Simple Lisp Editor"))
   (qfun *completer* "setWindowFlags" "Popup")
   (qconnect *editor* "cursorPositionChanged()" 'cursor-position-changed)
@@ -118,6 +127,7 @@
   (qconnect *action-open* "triggered()" 'file-open)
   (qconnect *action-save* "triggered()" 'file-save)
   (qconnect *action-save-as* "triggered()" 'file-save-as)
+  (qconnect *action-save-and-run* "triggered()" 'save-and-run)
   (qconnect (qapp) "aboutToQuit()" 'file-save)
   (qoverride *editor* "keyPressEvent(QKeyEvent*)" 'auto-indent)
   (qoverride *completer* "keyPressEvent(QKeyEvent*)" 'completer-key-pressed)
@@ -133,7 +143,16 @@
   (x:do-with (qfun *lisp-keyword-format*)
     ("setForeground" (qnew "QBrush(QColor)" "#E04040"))
     ("setFontWeight" +bold+))
-  (setf *lisp-match-rule* (qnew "QRegExp(QString)" "\\([^( )]+[ )]")))
+  (setf *lisp-match-rule* (qnew "QRegExp(QString)" "\\([^ )]+[ )]")))
+
+(defun save-and-run ()
+  (file-save)
+  (qfun *main* "showMinimized")
+  (qprocess-events)
+  ;; use (eql:qq) to exit your application process on errors
+  (ext:run-program (in-home "eql") (list *file-name*)
+                   :output t :error :output :input t)
+  (qfun *main* "showNormal"))
 
 (defun read* (str &optional (start 0))
   (setf *try-read-error* nil)

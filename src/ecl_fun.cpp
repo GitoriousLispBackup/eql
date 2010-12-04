@@ -1643,8 +1643,10 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
                 if(caller) {
                     caller->qt_metacall(QMetaObject::InvokeMetaMethod, n, args);
                     clearMetaArgList(mArgs);
-                    cl_object l_ret = to_lisp_arg(ret);
-                    clearMetaArg(ret, true);
+                    cl_object l_ret = Cnil;
+                    if(ret.second) {
+                        l_ret = to_lisp_arg(ret);
+                        clearMetaArg(ret, true); }
                     const cl_env_ptr l_env = ecl_process_env();
                     l_env->nvalues = 2;
                     l_env->values[0] = l_ret;
