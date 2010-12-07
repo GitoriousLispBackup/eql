@@ -1,0 +1,3 @@
+(load "editor")
+
+(editor:start)

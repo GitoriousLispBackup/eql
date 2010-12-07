@@ -372,6 +372,7 @@ public:
     Q_INVOKABLE QString SapplicationDirPath() { return QCoreApplication::applicationDirPath(); }
     Q_INVOKABLE QString SapplicationFilePath() { return QCoreApplication::applicationFilePath(); }
     Q_INVOKABLE QString SapplicationName() { return QCoreApplication::applicationName(); }
+    Q_INVOKABLE qlonglong SapplicationPid() { return QCoreApplication::applicationPid(); }
     Q_INVOKABLE QString SapplicationVersion() { return QCoreApplication::applicationVersion(); }
     Q_INVOKABLE QStringList Sarguments() { return QCoreApplication::arguments(); }
     Q_INVOKABLE bool SclosingDown() { return QCoreApplication::closingDown(); }
@@ -546,6 +547,7 @@ public:
     Q_INVOKABLE void MsetReadOnly(QFileSystemModel* o, bool x1) { o->setReadOnly(x1); }
     Q_INVOKABLE void MsetResolveSymlinks(QFileSystemModel* o, bool x1) { o->setResolveSymlinks(x1); }
     Q_INVOKABLE QModelIndex MsetRootPath(QFileSystemModel* o, const QString& x1) { return o->setRootPath(x1); }
+    Q_INVOKABLE qlonglong Msize(QFileSystemModel* o, const QModelIndex& x1) const { return o->size(x1); }
     Q_INVOKABLE QString Mtype(QFileSystemModel* o, const QModelIndex& x1) const { return o->type(x1); }
     Q_INVOKABLE bool McanFetchMore(QFileSystemModel* o, const QModelIndex& x1) const { return o->canFetchMore(x1); }
     Q_INVOKABLE int McolumnCount(QFileSystemModel* o, const QModelIndex& x1 = QModelIndex()) const { return o->columnCount(x1); }
@@ -828,6 +830,8 @@ class EQL_EXPORT Q96 : public Q126 { // QIODevice
     Q_OBJECT
 public:
     Q_INVOKABLE bool MatEnd(QIODevice* o) const { return o->atEnd(); }
+    Q_INVOKABLE qlonglong MbytesAvailable(QIODevice* o) const { return o->bytesAvailable(); }
+    Q_INVOKABLE qlonglong MbytesToWrite(QIODevice* o) const { return o->bytesToWrite(); }
     Q_INVOKABLE bool McanReadLine(QIODevice* o) const { return o->canReadLine(); }
     Q_INVOKABLE void Mclose(QIODevice* o) { o->close(); }
     Q_INVOKABLE QString MerrorString(QIODevice* o) const { return o->errorString(); }
@@ -839,13 +843,25 @@ public:
     Q_INVOKABLE bool MisWritable(QIODevice* o) const { return o->isWritable(); }
     Q_INVOKABLE bool Mopen(QIODevice* o, QIODevice::OpenMode x1) { return o->open(x1); }
     Q_INVOKABLE int MopenMode(QIODevice* o) const { return o->openMode(); }
+    Q_INVOKABLE qlonglong Mpeek(QIODevice* o, char* x1, qint64 x2) { return o->peek(x1, x2); }
+    Q_INVOKABLE QByteArray Mpeek(QIODevice* o, qint64 x1) { return o->peek(x1); }
+    Q_INVOKABLE qlonglong Mpos(QIODevice* o) const { return o->pos(); }
     Q_INVOKABLE bool MputChar(QIODevice* o, char x1) { return o->putChar(x1); }
+    Q_INVOKABLE qlonglong Mread(QIODevice* o, char* x1, qint64 x2) { return o->read(x1, x2); }
+    Q_INVOKABLE QByteArray Mread(QIODevice* o, qint64 x1) { return o->read(x1); }
     Q_INVOKABLE QByteArray MreadAll(QIODevice* o) { return o->readAll(); }
+    Q_INVOKABLE qlonglong MreadLine(QIODevice* o, char* x1, qint64 x2) { return o->readLine(x1, x2); }
+    Q_INVOKABLE QByteArray MreadLine(QIODevice* o, qint64 x1 = 0) { return o->readLine(x1); }
     Q_INVOKABLE bool Mreset(QIODevice* o) { return o->reset(); }
+    Q_INVOKABLE bool Mseek(QIODevice* o, qint64 x1) { return o->seek(x1); }
     Q_INVOKABLE void MsetTextModeEnabled(QIODevice* o, bool x1) { o->setTextModeEnabled(x1); }
+    Q_INVOKABLE qlonglong Msize(QIODevice* o) const { return o->size(); }
     Q_INVOKABLE void MungetChar(QIODevice* o, char x1) { o->ungetChar(x1); }
     Q_INVOKABLE bool MwaitForBytesWritten(QIODevice* o, int x1) { return o->waitForBytesWritten(x1); }
     Q_INVOKABLE bool MwaitForReadyRead(QIODevice* o, int x1) { return o->waitForReadyRead(x1); }
+    Q_INVOKABLE qlonglong Mwrite(QIODevice* o, const char* x1, qint64 x2) { return o->write(x1, x2); }
+    Q_INVOKABLE qlonglong Mwrite(QIODevice* o, const char* x1) { return o->write(x1); }
+    Q_INVOKABLE qlonglong Mwrite(QIODevice* o, const QByteArray& x1) { return o->write(x1); }
     Q_INVOKABLE void MsetErrorString(QIODevice* o, const QString& x1) { ((LIODevice*)o)->setErrorString(x1); }
     Q_INVOKABLE void MsetOpenMode(QIODevice* o, QIODevice::OpenMode x1) { ((LIODevice*)o)->setOpenMode(x1); }
 };
@@ -1164,6 +1180,8 @@ public:
     Q_INVOKABLE QString MworkingDirectory(QProcess* o) const { return o->workingDirectory(); }
     Q_INVOKABLE void MsetProcessState(QProcess* o, QProcess::ProcessState x1) { ((LProcess*)o)->setProcessState(x1); }
     Q_INVOKABLE bool MatEnd(QProcess* o) const { return o->atEnd(); }
+    Q_INVOKABLE qlonglong MbytesAvailable(QProcess* o) const { return o->bytesAvailable(); }
+    Q_INVOKABLE qlonglong MbytesToWrite(QProcess* o) const { return o->bytesToWrite(); }
     Q_INVOKABLE bool McanReadLine(QProcess* o) const { return o->canReadLine(); }
     Q_INVOKABLE void Mclose(QProcess* o) { o->close(); }
     Q_INVOKABLE bool MisSequential(QProcess* o) const { return o->isSequential(); }
@@ -1171,6 +1189,7 @@ public:
     Q_INVOKABLE bool MwaitForReadyRead(QProcess* o, int x1 = 30000) { return o->waitForReadyRead(x1); }
     Q_INVOKABLE int Sexecute(const QString& x1, const QStringList& x2) { return QProcess::execute(x1, x2); }
     Q_INVOKABLE int Sexecute(const QString& x1) { return QProcess::execute(x1); }
+    Q_INVOKABLE bool SstartDetached(const QString& x1, const QStringList& x2, const QString& x3, qint64* x4 = 0) { return QProcess::startDetached(x1, x2, x3, x4); }
     Q_INVOKABLE bool SstartDetached(const QString& x1, const QStringList& x2) { return QProcess::startDetached(x1, x2); }
     Q_INVOKABLE bool SstartDetached(const QString& x1) { return QProcess::startDetached(x1); }
     Q_INVOKABLE QStringList SsystemEnvironment() { return QProcess::systemEnvironment(); }
@@ -2332,6 +2351,9 @@ public:
     Q_INVOKABLE bool McanReadLine(QBuffer* o) const { return o->canReadLine(); }
     Q_INVOKABLE void Mclose(QBuffer* o) { o->close(); }
     Q_INVOKABLE bool Mopen(QBuffer* o, QBuffer::OpenMode x1) { return o->open(x1); }
+    Q_INVOKABLE qlonglong Mpos(QBuffer* o) const { return o->pos(); }
+    Q_INVOKABLE bool Mseek(QBuffer* o, qint64 x1) { return o->seek(x1); }
+    Q_INVOKABLE qlonglong Msize(QBuffer* o) const { return o->size(); }
 };
 
 class EQL_EXPORT Q26 : public Q210 { // QCalendarWidget
@@ -2675,10 +2697,12 @@ public:
     Q_INVOKABLE bool Mflush(QFile* o) { return o->flush(); }
     Q_INVOKABLE int Mhandle(QFile* o) const { return o->handle(); }
     Q_INVOKABLE bool Mlink(QFile* o, const QString& x1) { return o->link(x1); }
+    Q_INVOKABLE uchar* Mmap(QFile* o, qint64 x1, qint64 x2, QFile::MemoryMapFlags x3 = QFile::NoOptions) { return o->map(x1, x2, x3); }
     Q_INVOKABLE bool Mopen(QFile* o, int x1, QFile::OpenMode x2) { return o->open(x1, x2); }
     Q_INVOKABLE int Mpermissions(QFile* o) const { return o->permissions(); }
     Q_INVOKABLE bool Mremove(QFile* o) { return o->remove(); }
     Q_INVOKABLE bool Mrename(QFile* o, const QString& x1) { return o->rename(x1); }
+    Q_INVOKABLE bool Mresize(QFile* o, qint64 x1) { return o->resize(x1); }
     Q_INVOKABLE void MsetFileName(QFile* o, const QString& x1) { o->setFileName(x1); }
     Q_INVOKABLE bool MsetPermissions(QFile* o, QFile::Permissions x1) { return o->setPermissions(x1); }
     Q_INVOKABLE QString MsymLinkTarget(QFile* o) const { return o->symLinkTarget(); }
@@ -2688,6 +2712,9 @@ public:
     Q_INVOKABLE void Mclose(QFile* o) { o->close(); }
     Q_INVOKABLE bool MisSequential(QFile* o) const { return o->isSequential(); }
     Q_INVOKABLE bool Mopen(QFile* o, QFile::OpenMode x1) { return o->open(x1); }
+    Q_INVOKABLE qlonglong Mpos(QFile* o) const { return o->pos(); }
+    Q_INVOKABLE bool Mseek(QFile* o, qint64 x1) { return o->seek(x1); }
+    Q_INVOKABLE qlonglong Msize(QFile* o) const { return o->size(); }
     Q_INVOKABLE bool Scopy(const QString& x1, const QString& x2) { return QFile::copy(x1, x2); }
     Q_INVOKABLE QString SdecodeName(const QByteArray& x1) { return QFile::decodeName(x1); }
     Q_INVOKABLE QString SdecodeName(const char* x1) { return QFile::decodeName(x1); }
@@ -2697,6 +2724,7 @@ public:
     Q_INVOKABLE int Spermissions(const QString& x1) { return QFile::permissions(x1); }
     Q_INVOKABLE bool Sremove(const QString& x1) { return QFile::remove(x1); }
     Q_INVOKABLE bool Srename(const QString& x1, const QString& x2) { return QFile::rename(x1, x2); }
+    Q_INVOKABLE bool Sresize(const QString& x1, qint64 x2) { return QFile::resize(x1, x2); }
     Q_INVOKABLE void SsetDecodingFunction(QFile::DecoderFn x1) { QFile::setDecodingFunction(x1); }
     Q_INVOKABLE void SsetEncodingFunction(QFile::EncoderFn x1) { QFile::setEncodingFunction(x1); }
     Q_INVOKABLE bool SsetPermissions(const QString& x1, QFile::Permissions x2) { return QFile::setPermissions(x1, x2); }

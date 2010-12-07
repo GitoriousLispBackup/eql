@@ -396,6 +396,7 @@
    "virtual void setOwner ( const QString & )"
    "virtual void setPermissions ( int )"
    "virtual void setReadable ( bool )"
+   "virtual void setSize ( qint64 )"
    "virtual void setSymLink ( bool )"
    "virtual void setWritable ( bool )")
   (("QVariant" . NIL))

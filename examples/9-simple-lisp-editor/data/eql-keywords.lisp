@@ -7,6 +7,7 @@
   "qcopy"
   "qenum"
   "qeql"
+  "qescape"
   "qevents"
   "qexec"
   "qdelete"

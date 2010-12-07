@@ -1,8 +1,12 @@
 NOTES
 =====
 
-The main motivation behind this editor is the need for a popup completor
-for the (huge) Qt library.
+Run the editor:
+  
+  eql run.lisp (assuming the EQL exe in your path)
+
+The main motivation behind this (experimental!) editor is the need for a
+popup completor for the (huge) Qt library.
 
 So, this editor is not meant to substitute your standard Lisp environment.
 Instead, if one needs to write a GUI using EQL, this could be a convenient
@@ -30,15 +34,26 @@ It tries to be intelligent, for example:
 USAGE NOTES
 ===========
 
-The "Save and Run" action (Ctrl+R) will start an independent EQL process
-running your code.
+(The below is currently *very* *experimental*.)
 
-During execution the editor window will be shown minimized.
-After closing your application window, the editor will be shown again.
+The "Save and Run" action (Ctrl+R) will run your code in an independent
+EQL Lisp process.
 
-On errors, the usual ECL debugger will be entered, from which you exit with:
+On errors, instead of entering the ECL debugger, the offending region will
+be marked red (that is, in cases where ECL gives us this hint), and a
+simple error message will be shown in the status-bar.
+Additionally, some debug output will be displayed in the console window.
 
-  (eql:qq)
+A simple "Eval Region" is implemented too, see status-bar note on startup.
 
-The above command will act only to the process running your code, and not
-to the process running the editor.
+
+
+BUILD NOTES
+===========
+
+If you really want to make an executable of this experimental(!) editor:
+
+eql make-editor-lib.lisp
+qmake
+make (MSVC: nmake)
+

@@ -1,6 +1,6 @@
 ;;; copyright (c) 2010 power4projects software
 ;;;
-;;; A very basic Lisp editor, featuring:
+;;; A very basic and experimental(!) Lisp editor, featuring:
 ;;;
 ;;;   - a popup completer (for EQL functions only)
 ;;;   - paren highlighting
@@ -9,7 +9,8 @@
 
 (defpackage :editor
   (:use :common-lisp :eql)
-  (:export))
+  (:export
+   #:start))
 
 (in-package :editor)
 
@@ -27,7 +28,7 @@
       str)))
 
 (defun from-file (name)
-  (eval (read-from-string (read-file (in-home (format nil "examples/9-simple-lisp-editor/~A" name))))))
+  (eval (read-from-string (read-file name))))
 
 (defparameter *auto-indent*   (from-file "data/auto-indent.lisp"))
 (defparameter *eql-keywords*  (from-file "data/eql-keywords.lisp"))
@@ -38,7 +39,10 @@
 (defparameter *current-keyword-indent* 0)
 (defparameter *cursor-code-depth*      0)
 (defparameter *extra-selections*       nil)
+(defparameter *keep-extra-selections*  nil)
+(defparameter *error-region*           nil)
 (defparameter *try-read-error*         nil)
+(defparameter *lisp-output*            nil)
 
 (defconstant +max-shown-completions+ 10)
 (defconstant +hidden-position+       (quote #.(make-list 2 :initial-element (- (1- (expt 8 5))))))
@@ -46,12 +50,13 @@
 
 ;;; Qt
 
-(defvar *main*                (qload-ui (in-home "examples/9-simple-lisp-editor/data/editor.ui")))
-(defvar *editor*              (qfind-child *main* "editor"))
-(defvar *action-open*         (qfind-child *main* "action_open"))
-(defvar *action-save*         (qfind-child *main* "action_save"))
-(defvar *action-save-as*      (qfind-child *main* "action_save_as"))
-(defvar *action-save-and-run* (qfind-child *main* "action_save_and_run"))
+(defvar *main*                    (qload-ui "data/editor.ui"))
+(defvar *editor*                  (qfind-child *main* "editor"))
+(defvar *action-open*             (qfind-child *main* "action_open"))
+(defvar *action-save*             (qfind-child *main* "action_save"))
+(defvar *action-save-as*          (qfind-child *main* "action_save_as"))
+(defvar *action-save-and-run*     (qfind-child *main* "action_save_and_run"))
+(defvar *action-restart-toplevel* (qfind-child *main* "action_restart_toplevel"))
 
 (defparameter *document*             nil)
 (defparameter *font*                 nil)
@@ -60,9 +65,11 @@
 (defparameter *eql-keyword-format*   nil)
 (defparameter *lisp-keyword-format*  nil)
 (defparameter *completer*            nil)
+(defparameter *lisp-process*         nil)
 
 (defconstant +bold+               75 "font weight")
 (defconstant +key-press+          6  "event type")
+(defconstant +start+              1  "move operation")
 (defconstant +start-of-line+      3  "move operation")
 (defconstant +previous-block+     6  "move operation")
 (defconstant +move-left+          9  "move operation")
@@ -109,9 +116,7 @@
                                     #-darwin 10))
   (qset *editor* "font" *font*)
   (qset *action-save* "shortcut" "Ctrl+S")
-  (x:do-with (qset *action-save-and-run*)
-    ("shortcut" "Ctrl+R")
-    ("statusTip" (tr "On errors, (eql:qq) will exit the independent test application process.")))
+  (qset *action-save-and-run* "shortcut" "Ctrl+R")
   (x:do-with (qset *completer*)
     ("font" *font*)
     ("frameShape" "Box")
@@ -128,13 +133,30 @@
   (qconnect *action-save* "triggered()" 'file-save)
   (qconnect *action-save-as* "triggered()" 'file-save-as)
   (qconnect *action-save-and-run* "triggered()" 'save-and-run)
-  (qconnect (qapp) "aboutToQuit()" 'file-save)
-  (qoverride *editor* "keyPressEvent(QKeyEvent*)" 'auto-indent)
+  (qconnect *action-restart-toplevel* "triggered()" (lambda () (lisp-in ":r1"))) ; restart toplevel
+  (qconnect (qapp) "aboutToQuit()" 'clean-up)
+  (qoverride *editor* "keyPressEvent(QKeyEvent*)" 'editor-key-pressed)
   (qoverride *completer* "keyPressEvent(QKeyEvent*)" 'completer-key-pressed)
   (qoverride *completer* "focusOutEvent(QFocusEvent*)" 'close-completer)
   (qoverride *highlighter* "highlightBlock(QString)" 'highlight-block)
   (ini-highlight-rules)
+  (ini-lisp-process)
+  (show-status-message (tr "<h3 style='color: #4040E0'>Eval Region:</h3><ul><li>move cursor to paren (either opening or closing)<li>hit <b>Ctrl+Return</b><br>") :html)
   (qfun *main* "show"))
+
+(defun clean-up ()
+  (file-save)
+  (stop-lisp-process))
+
+(let (label)
+  (defun show-status-message (msg &optional html)
+    (flet ((bar ()
+             (qfun *main* "statusBar")))
+      (when (and html (not label))
+        (qfun (bar) "addWidget" (setf label (qnew "QLabel")) 1))
+      (if html
+          (qset label "text" msg)
+          (qfun (bar) "showMessage" msg)))))
 
 (defun ini-highlight-rules ()
   (x:do-with (qfun *eql-keyword-format*)
@@ -143,27 +165,22 @@
   (x:do-with (qfun *lisp-keyword-format*)
     ("setForeground" (qnew "QBrush(QColor)" "#E04040"))
     ("setFontWeight" +bold+))
-  (setf *lisp-match-rule* (qnew "QRegExp(QString)" "\\([^ )]+[ )]")))
+  (setf *lisp-match-rule* (qnew "QRegExp(QString)" "[('][^ )]+[ )]")))
 
-(defun save-and-run ()
-  (file-save)
-  (qfun *main* "showMinimized")
-  (qprocess-events)
-  ;; use (eql:qq) to exit your application process on errors
-  (ext:run-program (in-home "eql") (list *file-name*)
-                   :output t :error :output :input t)
-  (qfun *main* "showNormal"))
-
-(defun read* (str &optional (start 0))
-  (setf *try-read-error* nil)
-  (multiple-value-bind (exp x)
-      (ignore-errors (read-from-string (nsubstitute +package-char-dummy+ #\: str)
-                                       nil nil :start start :preserve-whitespace t))
-    (unless exp
-      (setf *try-read-error* (typecase x
-                               (end-of-file :end-of-file)
-                               (t t))))
-    (values exp x)))
+(let (latest)
+  (defun read* (str &optional (start 0))
+    (setf *try-read-error* nil)
+    (multiple-value-bind (exp x)
+        (ignore-errors (read-from-string (nsubstitute +package-char-dummy+ #\: str)
+                                         nil nil :start start :preserve-whitespace t))
+      (unless exp
+        (setf *try-read-error* (typecase x
+                                 (end-of-file :end-of-file)
+                                 (t t))))
+      (setf latest exp)
+      (values exp x)))
+  (defun latest-read-expression ()
+    latest))
 
 (defun text-until-cursor (text-cursor text-block)
   (subseq (qfun text-block "text") 0 (- (qfun text-cursor "position")
@@ -280,8 +297,10 @@
         (setf cache-matches nil)))
     (defun cursor-position-changed ()
       (setf cache-matches t)
-      (when *extra-selections*
-        (setf *extra-selections* nil)
+      (when (and *extra-selections*
+                 (not *keep-extra-selections*))
+        (setf *extra-selections* nil
+              *error-region* nil)
         (qfun *editor* "setExtraSelections" nil))
       (setf *current-depth* 0
             *current-keyword-indent* 0)
@@ -635,7 +654,7 @@
         (rest (find* name*
                      (rest (find* scope enums))))))))
 
-;;; auto indent
+;;; auto indent, eval region
 
 (defun auto-indent-spaces (kw)
   (when (symbolp kw)
@@ -644,14 +663,21 @@
         (setf name (subseq name (1+ x:it))))
       (cdr (find name *auto-indent* :test 'string= :key 'car)))))
 
-(defun auto-indent (key-event)
+(defun editor-key-pressed (key-event)
   (flet ((insert (text)
            (qlet ((cursor (qfun *editor* "textCursor")))
              (qfun cursor "insertText" text))
            (qfun *editor* "ensureCursorVisible")
-           (return-from auto-indent t)))
+           (return-from editor-key-pressed t)))
     (case (qfun key-event "key")
       ((#.(key "Return") #.(key "Enter"))
+         (let ((mod (qfun key-event "modifiers")))
+           ;; eval region
+           (unless (zerop mod)
+	     (ini-run-lisp-process)
+             (lisp-in (nsubstitute #\: +package-char-dummy+ (prin1-to-string (latest-read-expression))))
+	     (qprocess-events)
+             (return-from editor-key-pressed t)))
          (let ((spaces (+ *current-depth* *current-keyword-indent*)))
            (unless (zerop spaces)
              (insert (format nil "~%~A" (make-string spaces :initial-element #\Space))))))
@@ -740,7 +766,8 @@
             ((minusp n))
           (try-read (qfun text-block "text")))))))
 
-(let ((color (qnew "QBrush(QColor)" "#FFFF40")))
+(let ((color (qnew "QBrush(QColor)" "#FFFF40"))
+      (color-region (qnew "QBrush(QColor)" "#FFD0D0")))
   (defun show-matching-parenthesis (text-cursor line type &optional pos)
     (multiple-value-bind (move-lines move-characters)
         (if (eql :left type)
@@ -750,29 +777,124 @@
         (qlet ((format "QTextCharFormat")
                (cursor1 (qfun *editor* "textCursor"))
                (cursor2 (qfun *editor* "textCursor")))
-          (qfun format "setBackground" color)
+          (qfun format "setBackground" (if *error-region* color-region color))
           (qfun cursor1 "movePosition" (if (eql :left type)
                                            +next-character+
                                            +previous-character+)
                 +keep-anchor+)
           (if (zerop move-lines)
-              (qfun cursor2 "movePosition" +start-of-line+ +move-anchor+)
-              (qfun cursor2 "movePosition" (if (eql :left type)
-                                               +next-block+
-                                               +previous-block+)
-                    +move-anchor+ move-lines))
+              (qfun cursor2 "movePosition"
+                    +start-of-line+
+                    (if *error-region* +keep-anchor+ +move-anchor+))
+              (qfun cursor2 "movePosition"
+                    (if (eql :left type) +next-block+ +previous-block+)
+                    (if *error-region* +keep-anchor+ +move-anchor+)
+                    move-lines))
           (unless (zerop move-characters)
-            (qfun cursor2 "movePosition" +next-character+ +move-anchor+ move-characters))
-          (qfun cursor2 "movePosition" +next-character+ +keep-anchor+)
+            (qfun cursor2 "movePosition"
+                  +next-character+
+                  (if *error-region* +keep-anchor+ +move-anchor+)
+                  move-characters))
+          (unless *error-region*
+            (qfun cursor2 "movePosition" +next-character+ +keep-anchor+))
           (qfun *editor* "setExtraSelections" (list (list cursor1 format)
                                                     (list cursor2 format)))
           (setf *extra-selections* t))))))
 
-;;; profile: after breaking with e.g. Ctrl+C, do (profile:report)
+;;; lisp process
 
+(defun save-and-run ()
+  (file-save)
+  (qprocess-events)
+  (run-lisp-process))
+
+(defun bytes-to-string (b)
+  (map 'string 'code-char b))
+
+(defun string-to-bytes (s)
+  (map 'vector 'char-code s))
+
+(defun ini-lisp-process ()
+  (setf *lisp-process* (qnew "QProcess"))
+  (x:do-with (qconnect *lisp-process*)
+    ("readyReadStandardOutput()" 'lisp-out)
+    ("readyReadStandardError()" 'lisp-out))
+  (qfun *lisp-process* "start" "eql")
+  (lisp-in "(progn (setf ext:*tpl-prompt-hook* \"\") (use-package :eql))")
+  (let ((timer (qnew "QTimer")))
+    (qconnect timer "timeout()" 'process-events)
+    (qfun timer "start(int)" 10)))
+
+(defun process-events ()
+  (lisp-in "(progn (eql:qprocess-events) (values))"))
+
+(defun lisp-in (exp)
+  (qfun *lisp-process* "write(QByteArray)" (string-to-bytes (format nil "~A~%" exp))))
+
+(defun stop-lisp-process ()
+  (lisp-in "(eql:qq)"))
+
+(let ((async-read t))
+  (defun ini-run-lisp-process ()
+    (setf async-read t)    
+    (setf *lisp-output* nil))
+  (defun run-lisp-process ()
+    (ini-run-lisp-process)
+    (show-status-message "" :html)
+    (lisp-in (format nil "(load ~S)" *file-name*)))
+  (defun lisp-out ()
+    (when async-read
+      (let ((out (bytes-to-string (qfun *lisp-process* "readAll"))))
+        (princ out)
+        (force-output)
+        (push out *lisp-output*)
+        (let* ((err (with-output-to-string (s)
+                      (dolist (el (reverse *lisp-output*))
+                        (princ el s))))
+               (broken (search "Broken at " err))
+               (file (search "File: #" err))
+               (pos (when file (search "(Position #" err :start2 file)))
+               (mark (and broken file pos)))
+          (when mark
+            (mark-error-region (read-from-string (subseq err (+ pos 11)))))
+          (when (or mark
+                    (and broken (x:ends-with ">> " err)))
+            (setf async-read nil)
+            (qsingle-shot 0 'debug-commands))))))
+  (defun debug-commands ()
+    (let ((msg (debug-command ":m"))) ; (1) show error message
+      (show-status-message (format nil "<b style='color:red'>Error:</b> ~A"
+                                   (qescape (string-trim '(#\Space #\Newline #\# #\a #\< #\>) msg)))
+                           :html)
+      (princ msg))
+    (princ (debug-command ":le"))     ; (2) lambda-expression
+    (princ (debug-command ":b"))      ; (3) backtrace
+    (lisp-in ":r1")                   ; restart toplevel
+    (setf async-read t))
+  (defun debug-command (cmd)
+    (qprocess-events)
+    (lisp-in cmd)
+    (qfun *lisp-process* "waitForBytesWritten()")
+    (qfun *lisp-process* "waitForReadyRead()")
+    (bytes-to-string (qfun *lisp-process* "readAll"))))
+
+(defun mark-error-region (pos)
+  (let* ((text (qget *editor* "plainText"))
+         (end (nth-value 1 (read* text pos)))
+         (*keep-extra-selections* t))
+    (qlet ((text-cursor (qfun *editor* "textCursor")))
+      (qfun *editor* "moveCursor" +start+)
+      (setf *error-region* t)
+      (qfun text-cursor "setPosition" end)
+      (x:do-with (qfun *editor*)
+        ("setTextCursor" text-cursor)
+        ("ensureCursorVisible")))))
+
+;;; profile
+
+#|
 (require :profile)
 
-#-nil
 (progn
   (use-package :profile)
   (profile:profile
@@ -780,10 +902,11 @@
    left-paren
    right-paren
    read*))
+|#
 
 ;;; ini
 
-(progn
+(defun start ()
   (ini)
   (qfun *editor* "setPlainText"
-        (read-file (in-home "examples/9-simple-lisp-editor/my.lisp"))))
+        (read-file "my.lisp")))

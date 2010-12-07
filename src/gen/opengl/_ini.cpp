@@ -5,10 +5,10 @@
 #include "_ini2.h"
 
 NumList LGLShader::overrideIds = NumList();
-NumList LGLShaderProgram::overrideIds = NumList() << 190;
-NumList LGLWidget::overrideIds = NumList() << 191 << 192 << 193 << 194 << 195 << 196 << 197 << 198 << 21 << 40;
+NumList LGLShaderProgram::overrideIds = NumList() << 198;
+NumList LGLWidget::overrideIds = NumList() << 199 << 200 << 201 << 202 << 203 << 204 << 205 << 206 << 21 << 40;
 NumList LGLColormap::overrideIds = NumList();
-NumList LGLContext::overrideIds = NumList() << 346 << 347 << 348 << 349 << 350;
+NumList LGLContext::overrideIds = NumList() << 356 << 357 << 358 << 359 << 360;
 NumList LGLFormat::overrideIds = NumList();
 NumList LGLFramebufferObject::overrideIds = NumList() << 44;
 NumList LGLFramebufferObjectFormat::overrideIds = NumList();

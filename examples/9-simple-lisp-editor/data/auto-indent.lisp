@@ -29,6 +29,7 @@
           progn
           qlet
           unless
+          when
           with-open-file
           with-output-to-string
           ;; package :x

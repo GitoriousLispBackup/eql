@@ -20,9 +20,9 @@ public:
     static NumList overrideIds;
     uint unique;
 
-    QRectF boundingRect() const { void* fun = LObjects::overrideFun(unique, 231); if(fun) { return qVariantValue<QRectF>(callOverrideFun(fun, 231, 0)); } return QGraphicsSvgItem::boundingRect(); }
-    void paint(QPainter* x1, const QStyleOptionGraphicsItem* x2, QWidget* x3 = 0) { void* fun = LObjects::overrideFun(unique, 202); if(fun) { const void* args[] = { &x1, &x2, &x3 }; if(callOverrideFun(fun, 202, args).toBool()) return; } QGraphicsSvgItem::paint(x1, x2, x3); }
-    int type() const { void* fun = LObjects::overrideFun(unique, 204); if(fun) { return callOverrideFun(fun, 204, 0).toInt(); } return QGraphicsSvgItem::type(); }
+    QRectF boundingRect() const { void* fun = LObjects::overrideFun(unique, 239); if(fun) { return qVariantValue<QRectF>(callOverrideFun(fun, 239, 0)); } return QGraphicsSvgItem::boundingRect(); }
+    void paint(QPainter* x1, const QStyleOptionGraphicsItem* x2, QWidget* x3 = 0) { void* fun = LObjects::overrideFun(unique, 210); if(fun) { const void* args[] = { &x1, &x2, &x3 }; if(callOverrideFun(fun, 210, args).toBool()) return; } QGraphicsSvgItem::paint(x1, x2, x3); }
+    int type() const { void* fun = LObjects::overrideFun(unique, 212); if(fun) { return callOverrideFun(fun, 212, 0).toInt(); } return QGraphicsSvgItem::type(); }
     void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 5, args).toBool()) return; } QGraphicsSvgItem::childEvent(x1); }
     void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 6, args).toBool()) return; } QGraphicsSvgItem::connectNotify(x1); }
     void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 7, args).toBool()) return; } QGraphicsSvgItem::customEvent(x1); }

@@ -4,14 +4,14 @@
 #include "_n_methods.h"
 #include "_ini2.h"
 
-NumList LAbstractSocket::overrideIds = NumList() << 107 << 108 << 109 << 110 << 111 << 112;
+NumList LAbstractSocket::overrideIds = NumList() << 107 << 108 << 109 << 110 << 111 << 112 << 113 << 114 << 115 << 116 << 117;
 NumList LFtp::overrideIds = NumList();
-NumList LLocalServer::overrideIds = NumList() << 266 << 267 << 268;
-NumList LLocalSocket::overrideIds = NumList() << 108 << 109 << 110 << 111 << 112;
+NumList LLocalServer::overrideIds = NumList() << 274 << 275 << 276;
+NumList LLocalSocket::overrideIds = NumList() << 108 << 109 << 110 << 111 << 112 << 113 << 114 << 115 << 117;
 NumList LNetworkAccessManager::overrideIds = NumList();
-NumList LNetworkCookieJar::overrideIds = NumList() << 273 << 274;
-NumList LNetworkDiskCache::overrideIds = NumList() << 275 << 276 << 277;
-NumList LTcpServer::overrideIds = NumList() << 266 << 267 << 300;
+NumList LNetworkCookieJar::overrideIds = NumList() << 281 << 282;
+NumList LNetworkDiskCache::overrideIds = NumList() << 283 << 284 << 285 << 286 << 287;
+NumList LTcpServer::overrideIds = NumList() << 274 << 275 << 310;
 NumList LTcpSocket::overrideIds = NumList();
 NumList LUdpSocket::overrideIds = NumList();
 NumList LAuthenticator::overrideIds = NumList();
@@ -22,7 +22,7 @@ NumList LNetworkCacheMetaData::overrideIds = NumList();
 NumList LNetworkCookie::overrideIds = NumList();
 NumList LNetworkInterface::overrideIds = NumList();
 NumList LNetworkProxy::overrideIds = NumList();
-NumList LNetworkProxyFactory::overrideIds = NumList() << 360;
+NumList LNetworkProxyFactory::overrideIds = NumList() << 370;
 NumList LNetworkProxyQuery::overrideIds = NumList();
 NumList LNetworkRequest::overrideIds = NumList();
 NumList LSslCertificate::overrideIds = NumList();
@@ -30,7 +30,7 @@ NumList LSslCipher::overrideIds = NumList();
 NumList LSslConfiguration::overrideIds = NumList();
 NumList LSslError::overrideIds = NumList();
 NumList LSslKey::overrideIds = NumList();
-NumList LUrlInfo::overrideIds = NumList() << 375 << 376 << 377 << 378 << 379 << 380 << 381 << 382 << 383 << 384;
+NumList LUrlInfo::overrideIds = NumList() << 385 << 386 << 387 << 388 << 389 << 390 << 391 << 392 << 393 << 394 << 395;
 
 void ini() {
     static bool _ = false; if(_) return; _ = true;

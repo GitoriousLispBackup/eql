@@ -174,6 +174,7 @@ public:
     Q_INVOKABLE void* C(uint u, const QDate& x1, const QTime& x2, Qt::TimeSpec x3 = Qt::LocalTime) { return new LDateTime(u, x1, x2, x3); }
     Q_INVOKABLE void* C(uint u, const QDateTime& x1) { return new LDateTime(u, x1); }
     Q_INVOKABLE QDateTime MaddDays(QDateTime* o, int x1) const { return o->addDays(x1); }
+    Q_INVOKABLE QDateTime MaddMSecs(QDateTime* o, qint64 x1) const { return o->addMSecs(x1); }
     Q_INVOKABLE QDateTime MaddMonths(QDateTime* o, int x1) const { return o->addMonths(x1); }
     Q_INVOKABLE QDateTime MaddSecs(QDateTime* o, int x1) const { return o->addSecs(x1); }
     Q_INVOKABLE QDateTime MaddYears(QDateTime* o, int x1) const { return o->addYears(x1); }
@@ -372,6 +373,7 @@ public:
     Q_INVOKABLE void MsetFile(QFileInfo* o, const QString& x1) { o->setFile(x1); }
     Q_INVOKABLE void MsetFile(QFileInfo* o, const QFile& x1) { o->setFile(x1); }
     Q_INVOKABLE void MsetFile(QFileInfo* o, const QDir& x1, const QString& x2) { o->setFile(x1, x2); }
+    Q_INVOKABLE qlonglong Msize(QFileInfo* o) const { return o->size(); }
     Q_INVOKABLE QString Msuffix(QFileInfo* o) const { return o->suffix(); }
     Q_INVOKABLE QString MsymLinkTarget(QFileInfo* o) const { return o->symLinkTarget(); }
 };
@@ -754,6 +756,7 @@ public:
     Q_INVOKABLE void MaddFile(QIcon* o, const QString& x1, const QSize& x2 = QSize(), QIcon::Mode x3 = QIcon::Normal, QIcon::State x4 = QIcon::Off) { o->addFile(x1, x2, x3, x4); }
     Q_INVOKABLE void MaddPixmap(QIcon* o, const QPixmap& x1, QIcon::Mode x2 = QIcon::Normal, QIcon::State x3 = QIcon::Off) { o->addPixmap(x1, x2, x3); }
     Q_INVOKABLE QList<QSize> MavailableSizes(QIcon* o, QIcon::Mode x1 = QIcon::Normal, QIcon::State x2 = QIcon::Off) const { return o->availableSizes(x1, x2); }
+    Q_INVOKABLE qlonglong McacheKey(QIcon* o) const { return o->cacheKey(); }
     Q_INVOKABLE bool MisNull(QIcon* o) const { return o->isNull(); }
     Q_INVOKABLE void Mpaint(QIcon* o, QPainter* x1, const QRect& x2, Qt::Alignment x3 = Qt::AlignCenter, QIcon::Mode x4 = QIcon::Normal, QIcon::State x5 = QIcon::Off) const { o->paint(x1, x2, x3, x4, x5); }
     Q_INVOKABLE void Mpaint(QIcon* o, QPainter* x1, int x2, int x3, int x4, int x5, Qt::Alignment x6 = Qt::AlignCenter, QIcon::Mode x7 = QIcon::Normal, QIcon::State x8 = QIcon::Off) const { o->paint(x1, x2, x3, x4, x5, x6, x7, x8); }
@@ -1090,6 +1093,7 @@ public:
     Q_INVOKABLE int Mcolumn(QModelIndex* o) const { return o->column(); }
     Q_INVOKABLE QVariant Mdata(QModelIndex* o, int x1 = Qt::DisplayRole) const { return o->data(x1); }
     Q_INVOKABLE int Mflags(QModelIndex* o) const { return o->flags(); }
+    Q_INVOKABLE qlonglong MinternalId(QModelIndex* o) const { return o->internalId(); }
     Q_INVOKABLE bool MisValid(QModelIndex* o) const { return o->isValid(); }
     Q_INVOKABLE const QAbstractItemModel* Mmodel(QModelIndex* o) const { return o->model(); }
     Q_INVOKABLE QModelIndex Mparent(QModelIndex* o) const { return o->parent(); }
@@ -1422,6 +1426,7 @@ public:
     Q_INVOKABLE QBrush Mbrush(QPalette* o, QPalette::ColorRole x1) const { return o->brush(x1); }
     Q_INVOKABLE QBrush Mbutton(QPalette* o) const { return o->button(); }
     Q_INVOKABLE QBrush MbuttonText(QPalette* o) const { return o->buttonText(); }
+    Q_INVOKABLE qlonglong McacheKey(QPalette* o) const { return o->cacheKey(); }
     Q_INVOKABLE QColor Mcolor(QPalette* o, QPalette::ColorGroup x1, QPalette::ColorRole x2) const { return o->color(x1, x2); }
     Q_INVOKABLE QColor Mcolor(QPalette* o, QPalette::ColorRole x1) const { return o->color(x1); }
     Q_INVOKABLE int McurrentColorGroup(QPalette* o) const { return o->currentColorGroup(); }
@@ -3185,6 +3190,7 @@ public:
     Q_INVOKABLE const uchar* Mbits(QImage* o) const { return o->bits(); }
     Q_INVOKABLE int MbyteCount(QImage* o) const { return o->byteCount(); }
     Q_INVOKABLE int MbytesPerLine(QImage* o) const { return o->bytesPerLine(); }
+    Q_INVOKABLE qlonglong McacheKey(QImage* o) const { return o->cacheKey(); }
     Q_INVOKABLE QRgb Mcolor(QImage* o, int x1) const { return o->color(x1); }
     Q_INVOKABLE int McolorCount(QImage* o) const { return o->colorCount(); }
     Q_INVOKABLE QVector<QRgb> McolorTable(QImage* o) const { return o->colorTable(); }
@@ -3348,6 +3354,7 @@ public:
     Q_INVOKABLE void* C(uint u, const QString& x1, const char* x2 = 0, Qt::ImageConversionFlags x3 = Qt::AutoColor) { return new LPixmap(u, x1, x2, x3); }
     Q_INVOKABLE void* C(uint u, const QPixmap& x1) { return new LPixmap(u, x1); }
     Q_INVOKABLE void* C(uint u, const QSize& x1) { return new LPixmap(u, x1); }
+    Q_INVOKABLE qlonglong McacheKey(QPixmap* o) const { return o->cacheKey(); }
     Q_INVOKABLE QPixmap Mcopy(QPixmap* o, const QRect& x1 = QRect()) const { return o->copy(x1); }
     Q_INVOKABLE QPixmap Mcopy(QPixmap* o, int x1, int x2, int x3, int x4) const { return o->copy(x1, x2, x3, x4); }
     Q_INVOKABLE QBitmap McreateHeuristicMask(QPixmap* o, bool x1 = true) const { return o->createHeuristicMask(x1); }
@@ -3515,6 +3522,7 @@ public:
 class EQL_EXPORT N146 : public N80 { // QTabletEvent
     Q_OBJECT
 public:
+    Q_INVOKABLE void* C(uint u, QTabletEvent::Type x1, const QPoint& x2, const QPoint& x3, const QPointF& x4, int x5, int x6, qreal x7, int x8, int x9, qreal x10, qreal x11, int x12, Qt::KeyboardModifiers x13, qint64 x14) { return new LTabletEvent(u, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14); }
     Q_INVOKABLE int Mdevice(QTabletEvent* o) const { return o->device(); }
     Q_INVOKABLE QPoint MglobalPos(QTabletEvent* o) const { return o->globalPos(); }
     Q_INVOKABLE int MglobalX(QTabletEvent* o) const { return o->globalX(); }
@@ -3527,6 +3535,7 @@ public:
     Q_INVOKABLE qreal Mpressure(QTabletEvent* o) const { return o->pressure(); }
     Q_INVOKABLE qreal Mrotation(QTabletEvent* o) const { return o->rotation(); }
     Q_INVOKABLE qreal MtangentialPressure(QTabletEvent* o) const { return o->tangentialPressure(); }
+    Q_INVOKABLE qlonglong MuniqueId(QTabletEvent* o) const { return o->uniqueId(); }
     Q_INVOKABLE int Mx(QTabletEvent* o) const { return o->x(); }
     Q_INVOKABLE int MxTilt(QTabletEvent* o) const { return o->xTilt(); }
     Q_INVOKABLE int My(QTabletEvent* o) const { return o->y(); }

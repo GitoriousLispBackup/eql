@@ -35,7 +35,7 @@ public:
     static NumList overrideIds;
     uint unique;
 
-    bool link() { void* fun = LObjects::overrideFun(unique, 190); if(fun) { return callOverrideFun(fun, 190, 0).toBool(); } return QGLShaderProgram::link(); }
+    bool link() { void* fun = LObjects::overrideFun(unique, 198); if(fun) { return callOverrideFun(fun, 198, 0).toBool(); } return QGLShaderProgram::link(); }
     void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 5, args).toBool()) return; } QGLShaderProgram::childEvent(x1); }
     void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 6, args).toBool()) return; } QGLShaderProgram::connectNotify(x1); }
     void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 7, args).toBool()) return; } QGLShaderProgram::customEvent(x1); }
@@ -54,14 +54,14 @@ public:
     static NumList overrideIds;
     uint unique;
 
-    void glDraw() { void* fun = LObjects::overrideFun(unique, 191); if(fun) { if(callOverrideFun(fun, 191, 0).toBool()) return; } QGLWidget::glDraw(); }
-    void glInit() { void* fun = LObjects::overrideFun(unique, 192); if(fun) { if(callOverrideFun(fun, 192, 0).toBool()) return; } QGLWidget::glInit(); }
-    void initializeGL() { void* fun = LObjects::overrideFun(unique, 193); if(fun) { if(callOverrideFun(fun, 193, 0).toBool()) return; } QGLWidget::initializeGL(); }
-    void initializeOverlayGL() { void* fun = LObjects::overrideFun(unique, 194); if(fun) { if(callOverrideFun(fun, 194, 0).toBool()) return; } QGLWidget::initializeOverlayGL(); }
-    void paintGL() { void* fun = LObjects::overrideFun(unique, 195); if(fun) { if(callOverrideFun(fun, 195, 0).toBool()) return; } QGLWidget::paintGL(); }
-    void paintOverlayGL() { void* fun = LObjects::overrideFun(unique, 196); if(fun) { if(callOverrideFun(fun, 196, 0).toBool()) return; } QGLWidget::paintOverlayGL(); }
-    void resizeGL(int x1, int x2) { void* fun = LObjects::overrideFun(unique, 197); if(fun) { const void* args[] = { &x1, &x2 }; if(callOverrideFun(fun, 197, args).toBool()) return; } QGLWidget::resizeGL(x1, x2); }
-    void resizeOverlayGL(int x1, int x2) { void* fun = LObjects::overrideFun(unique, 198); if(fun) { const void* args[] = { &x1, &x2 }; if(callOverrideFun(fun, 198, args).toBool()) return; } QGLWidget::resizeOverlayGL(x1, x2); }
+    void glDraw() { void* fun = LObjects::overrideFun(unique, 199); if(fun) { if(callOverrideFun(fun, 199, 0).toBool()) return; } QGLWidget::glDraw(); }
+    void glInit() { void* fun = LObjects::overrideFun(unique, 200); if(fun) { if(callOverrideFun(fun, 200, 0).toBool()) return; } QGLWidget::glInit(); }
+    void initializeGL() { void* fun = LObjects::overrideFun(unique, 201); if(fun) { if(callOverrideFun(fun, 201, 0).toBool()) return; } QGLWidget::initializeGL(); }
+    void initializeOverlayGL() { void* fun = LObjects::overrideFun(unique, 202); if(fun) { if(callOverrideFun(fun, 202, 0).toBool()) return; } QGLWidget::initializeOverlayGL(); }
+    void paintGL() { void* fun = LObjects::overrideFun(unique, 203); if(fun) { if(callOverrideFun(fun, 203, 0).toBool()) return; } QGLWidget::paintGL(); }
+    void paintOverlayGL() { void* fun = LObjects::overrideFun(unique, 204); if(fun) { if(callOverrideFun(fun, 204, 0).toBool()) return; } QGLWidget::paintOverlayGL(); }
+    void resizeGL(int x1, int x2) { void* fun = LObjects::overrideFun(unique, 205); if(fun) { const void* args[] = { &x1, &x2 }; if(callOverrideFun(fun, 205, args).toBool()) return; } QGLWidget::resizeGL(x1, x2); }
+    void resizeOverlayGL(int x1, int x2) { void* fun = LObjects::overrideFun(unique, 206); if(fun) { const void* args[] = { &x1, &x2 }; if(callOverrideFun(fun, 206, args).toBool()) return; } QGLWidget::resizeOverlayGL(x1, x2); }
     void paintEvent(QPaintEvent* x1) { void* fun = LObjects::overrideFun(unique, 21); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 21, args).toBool()) return; } QGLWidget::paintEvent(x1); }
     void resizeEvent(QResizeEvent* x1) { void* fun = LObjects::overrideFun(unique, 40); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 40, args).toBool()) return; } QGLWidget::resizeEvent(x1); }
     int heightForWidth(int x1) const { void* fun = LObjects::overrideFun(unique, 22); if(fun) { const void* args[] = { &x1 }; return callOverrideFun(fun, 22, args).toInt(); } return QGLWidget::heightForWidth(x1); }

@@ -11,6 +11,7 @@
 class Q7 : public Q126 { // QAbstractNetworkCache
     Q_OBJECT
 public:
+    Q_INVOKABLE qlonglong McacheSize(QAbstractNetworkCache* o) const { return o->cacheSize(); }
     Q_INVOKABLE QNetworkCacheMetaData MmetaData(QAbstractNetworkCache* o, const QUrl& x1) { return o->metaData(x1); }
     Q_INVOKABLE bool Mremove(QAbstractNetworkCache* o, const QUrl& x1) { return o->remove(x1); }
     Q_INVOKABLE void MupdateMetaData(QAbstractNetworkCache* o, const QNetworkCacheMetaData& x1) { o->updateMetaData(x1); }
@@ -20,6 +21,7 @@ class Q62 : public Q126 { // QFtp
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QObject* x1 = 0) { return new LFtp(u, x1); }
+    Q_INVOKABLE qlonglong MbytesAvailable(QFtp* o) const { return o->bytesAvailable(); }
     Q_INVOKABLE int Mcd(QFtp* o, const QString& x1) { return o->cd(x1); }
     Q_INVOKABLE void MclearPendingCommands(QFtp* o) { o->clearPendingCommands(); }
     Q_INVOKABLE int Mclose(QFtp* o) { return o->close(); }
@@ -34,6 +36,7 @@ public:
     Q_INVOKABLE int Mmkdir(QFtp* o, const QString& x1) { return o->mkdir(x1); }
     Q_INVOKABLE int Mput(QFtp* o, const QByteArray& x1, const QString& x2, QFtp::TransferType x3 = QFtp::Binary) { return o->put(x1, x2, x3); }
     Q_INVOKABLE int MrawCommand(QFtp* o, const QString& x1) { return o->rawCommand(x1); }
+    Q_INVOKABLE qlonglong Mread(QFtp* o, char* x1, qint64 x2) { return o->read(x1, x2); }
     Q_INVOKABLE QByteArray MreadAll(QFtp* o) { return o->readAll(); }
     Q_INVOKABLE int Mremove(QFtp* o, const QString& x1) { return o->remove(x1); }
     Q_INVOKABLE int Mrename(QFtp* o, const QString& x1, const QString& x2) { return o->rename(x1, x2); }
@@ -73,12 +76,16 @@ public:
     Q_INVOKABLE bool Mflush(QLocalSocket* o) { return o->flush(); }
     Q_INVOKABLE QString MfullServerName(QLocalSocket* o) const { return o->fullServerName(); }
     Q_INVOKABLE bool MisValid(QLocalSocket* o) const { return o->isValid(); }
+    Q_INVOKABLE qlonglong MreadBufferSize(QLocalSocket* o) const { return o->readBufferSize(); }
     Q_INVOKABLE QString MserverName(QLocalSocket* o) const { return o->serverName(); }
+    Q_INVOKABLE void MsetReadBufferSize(QLocalSocket* o, qint64 x1) { o->setReadBufferSize(x1); }
     Q_INVOKABLE bool MsetSocketDescriptor(QLocalSocket* o, quintptr x1, QLocalSocket::LocalSocketState x2 = QLocalSocket::ConnectedState, QLocalSocket::OpenMode x3 = QLocalSocket::ReadWrite) { return o->setSocketDescriptor(x1, x2, x3); }
     Q_INVOKABLE quintptr MsocketDescriptor(QLocalSocket* o) const { return o->socketDescriptor(); }
     Q_INVOKABLE int Mstate(QLocalSocket* o) const { return o->state(); }
     Q_INVOKABLE bool MwaitForConnected(QLocalSocket* o, int x1 = 30000) { return o->waitForConnected(x1); }
     Q_INVOKABLE bool MwaitForDisconnected(QLocalSocket* o, int x1 = 30000) { return o->waitForDisconnected(x1); }
+    Q_INVOKABLE qlonglong MbytesAvailable(QLocalSocket* o) const { return o->bytesAvailable(); }
+    Q_INVOKABLE qlonglong MbytesToWrite(QLocalSocket* o) const { return o->bytesToWrite(); }
     Q_INVOKABLE bool McanReadLine(QLocalSocket* o) const { return o->canReadLine(); }
     Q_INVOKABLE void Mclose(QLocalSocket* o) { o->close(); }
     Q_INVOKABLE bool MisSequential(QLocalSocket* o) const { return o->isSequential(); }
@@ -121,7 +128,10 @@ public:
     Q_INVOKABLE void* C(uint u, QObject* x1 = 0) { return new LNetworkDiskCache(u, x1); }
     Q_INVOKABLE QString McacheDirectory(QNetworkDiskCache* o) const { return o->cacheDirectory(); }
     Q_INVOKABLE QNetworkCacheMetaData MfileMetaData(QNetworkDiskCache* o, const QString& x1) const { return o->fileMetaData(x1); }
+    Q_INVOKABLE qlonglong MmaximumCacheSize(QNetworkDiskCache* o) const { return o->maximumCacheSize(); }
     Q_INVOKABLE void MsetCacheDirectory(QNetworkDiskCache* o, const QString& x1) { o->setCacheDirectory(x1); }
+    Q_INVOKABLE void MsetMaximumCacheSize(QNetworkDiskCache* o, qint64 x1) { o->setMaximumCacheSize(x1); }
+    Q_INVOKABLE qlonglong McacheSize(QNetworkDiskCache* o) const { return o->cacheSize(); }
     Q_INVOKABLE QNetworkCacheMetaData MmetaData(QNetworkDiskCache* o, const QUrl& x1) { return o->metaData(x1); }
     Q_INVOKABLE bool Mremove(QNetworkDiskCache* o, const QUrl& x1) { return o->remove(x1); }
     Q_INVOKABLE void MupdateMetaData(QNetworkDiskCache* o, const QNetworkCacheMetaData& x1) { o->updateMetaData(x1); }
@@ -142,7 +152,9 @@ public:
     Q_INVOKABLE int Moperation(QNetworkReply* o) const { return o->operation(); }
     Q_INVOKABLE QByteArray MrawHeader(QNetworkReply* o, const QByteArray& x1) const { return o->rawHeader(x1); }
     Q_INVOKABLE QList<QByteArray> MrawHeaderList(QNetworkReply* o) const { return o->rawHeaderList(); }
+    Q_INVOKABLE qlonglong MreadBufferSize(QNetworkReply* o) const { return o->readBufferSize(); }
     Q_INVOKABLE QNetworkRequest Mrequest(QNetworkReply* o) const { return o->request(); }
+    Q_INVOKABLE void MsetReadBufferSize(QNetworkReply* o, qint64 x1) { o->setReadBufferSize(x1); }
     Q_INVOKABLE void MsetSslConfiguration(QNetworkReply* o, const QSslConfiguration& x1) { o->setSslConfiguration(x1); }
     Q_INVOKABLE QSslConfiguration MsslConfiguration(QNetworkReply* o) const { return o->sslConfiguration(); }
     Q_INVOKABLE QUrl Murl(QNetworkReply* o) const { return o->url(); }
@@ -188,7 +200,9 @@ public:
     Q_INVOKABLE QString MpeerName(QAbstractSocket* o) const { return o->peerName(); }
     Q_INVOKABLE quint16 MpeerPort(QAbstractSocket* o) const { return o->peerPort(); }
     Q_INVOKABLE QNetworkProxy Mproxy(QAbstractSocket* o) const { return o->proxy(); }
+    Q_INVOKABLE qlonglong MreadBufferSize(QAbstractSocket* o) const { return o->readBufferSize(); }
     Q_INVOKABLE void MsetProxy(QAbstractSocket* o, const QNetworkProxy& x1) { o->setProxy(x1); }
+    Q_INVOKABLE void MsetReadBufferSize(QAbstractSocket* o, qint64 x1) { o->setReadBufferSize(x1); }
     Q_INVOKABLE bool MsetSocketDescriptor(QAbstractSocket* o, int x1, QAbstractSocket::SocketState x2 = QAbstractSocket::ConnectedState, QAbstractSocket::OpenMode x3 = QAbstractSocket::ReadWrite) { return o->setSocketDescriptor(x1, x2, x3); }
     Q_INVOKABLE void MsetSocketOption(QAbstractSocket* o, QAbstractSocket::SocketOption x1, const QVariant& x2) { o->setSocketOption(x1, x2); }
     Q_INVOKABLE int MsocketDescriptor(QAbstractSocket* o) const { return o->socketDescriptor(); }
@@ -205,6 +219,8 @@ public:
     Q_INVOKABLE void MsetSocketError(QAbstractSocket* o, QAbstractSocket::SocketError x1) { ((LAbstractSocket*)o)->setSocketError(x1); }
     Q_INVOKABLE void MsetSocketState(QAbstractSocket* o, QAbstractSocket::SocketState x1) { ((LAbstractSocket*)o)->setSocketState(x1); }
     Q_INVOKABLE bool MatEnd(QAbstractSocket* o) const { return o->atEnd(); }
+    Q_INVOKABLE qlonglong MbytesAvailable(QAbstractSocket* o) const { return o->bytesAvailable(); }
+    Q_INVOKABLE qlonglong MbytesToWrite(QAbstractSocket* o) const { return o->bytesToWrite(); }
     Q_INVOKABLE bool McanReadLine(QAbstractSocket* o) const { return o->canReadLine(); }
     Q_INVOKABLE void Mclose(QAbstractSocket* o) { o->close(); }
     Q_INVOKABLE bool MisSequential(QAbstractSocket* o) const { return o->isSequential(); }
@@ -227,6 +243,10 @@ public:
     Q_INVOKABLE bool Mbind(QUdpSocket* o, quint16 x1 = 0) { return o->bind(x1); }
     Q_INVOKABLE bool Mbind(QUdpSocket* o, quint16 x1, QUdpSocket::BindMode x2) { return o->bind(x1, x2); }
     Q_INVOKABLE bool MhasPendingDatagrams(QUdpSocket* o) const { return o->hasPendingDatagrams(); }
+    Q_INVOKABLE qlonglong MpendingDatagramSize(QUdpSocket* o) const { return o->pendingDatagramSize(); }
+    Q_INVOKABLE qlonglong MreadDatagram(QUdpSocket* o, char* x1, qint64 x2, QHostAddress* x3 = 0, quint16* x4 = 0) { return o->readDatagram(x1, x2, x3, x4); }
+    Q_INVOKABLE qlonglong MwriteDatagram(QUdpSocket* o, const char* x1, qint64 x2, const QHostAddress& x3, quint16 x4) { return o->writeDatagram(x1, x2, x3, x4); }
+    Q_INVOKABLE qlonglong MwriteDatagram(QUdpSocket* o, const QByteArray& x1, const QHostAddress& x2, quint16 x3) { return o->writeDatagram(x1, x2, x3); }
 };
 
 #endif

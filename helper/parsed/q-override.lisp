@@ -95,6 +95,7 @@
    "virtual bool dropMimeData ( const QMimeData * , Qt::DropAction , int , int , const QModelIndex & )"
    "virtual QModelIndex index ( int , int = 0, const QModelIndex & = QModelIndex() ) const")
   (("QAbstractNetworkCache" . "QObject")
+   "virtual qint64 cacheSize () const = 0"
    "virtual QNetworkCacheMetaData metaData ( const QUrl & ) = 0"
    "virtual bool remove ( const QUrl & ) = 0"
    "virtual void updateMetaData ( const QNetworkCacheMetaData & ) = 0")
@@ -141,11 +142,16 @@
    "virtual void wheelEvent ( QWheelEvent * )")
   (("QAbstractSocket" . "QIODevice")
    "virtual bool atEnd () const"
+   "virtual qint64 bytesAvailable () const"
+   "virtual qint64 bytesToWrite () const"
    "virtual bool canReadLine () const"
    "virtual void close ()"
    "virtual bool isSequential () const"
    "virtual bool waitForBytesWritten ( int = 30000 )"
-   "virtual bool waitForReadyRead ( int = 30000 )")
+   "virtual bool waitForReadyRead ( int = 30000 )"
+   "virtual qint64 readData ( char * , qint64 )"
+   "virtual qint64 readLineData ( char * , qint64 )"
+   "virtual qint64 writeData ( const char * , qint64 )")
   (("QAbstractSpinBox" . "QWidget")
    "virtual void fixup ( QString & ) const"
    "virtual void stepBy ( int )"
@@ -221,7 +227,12 @@
    "virtual bool atEnd () const"
    "virtual bool canReadLine () const"
    "virtual void close ()"
-   "virtual bool open ( OpenMode )")
+   "virtual bool open ( OpenMode )"
+   "virtual qint64 pos () const"
+   "virtual bool seek ( qint64 )"
+   "virtual qint64 size () const"
+   "virtual qint64 readData ( char * , qint64 )"
+   "virtual qint64 writeData ( const char * , qint64 )")
   (("QButtonGroup" . "QObject"))
   (("QCDEStyle" . "QMotifStyle")
    "virtual void drawControl ( ControlElement , const QStyleOption * , QPainter * , const QWidget * = 0 ) const"
@@ -429,7 +440,13 @@
    "virtual bool atEnd () const"
    "virtual void close ()"
    "virtual bool isSequential () const"
-   "virtual bool open ( OpenMode )")
+   "virtual bool open ( OpenMode )"
+   "virtual qint64 pos () const"
+   "virtual bool seek ( qint64 )"
+   "virtual qint64 size () const"
+   "virtual qint64 readData ( char * , qint64 )"
+   "virtual qint64 readLineData ( char * , qint64 )"
+   "virtual qint64 writeData ( const char * , qint64 )")
   (("QFileDialog" . "QDialog")
    "virtual void setVisible ( bool )"
    "virtual void accept ()"
@@ -730,13 +747,21 @@
    "virtual void onExit ( QEvent * )")
   (("QIODevice" . "QObject")
    "virtual bool atEnd () const"
+   "virtual qint64 bytesAvailable () const"
+   "virtual qint64 bytesToWrite () const"
    "virtual bool canReadLine () const"
    "virtual void close ()"
    "virtual bool isSequential () const"
    "virtual bool open ( OpenMode )"
+   "virtual qint64 pos () const"
    "virtual bool reset ()"
+   "virtual bool seek ( qint64 )"
+   "virtual qint64 size () const"
    "virtual bool waitForBytesWritten ( int )"
-   "virtual bool waitForReadyRead ( int )")
+   "virtual bool waitForReadyRead ( int )"
+   "virtual qint64 readData ( char * , qint64 ) = 0"
+   "virtual qint64 readLineData ( char * , qint64 )"
+   "virtual qint64 writeData ( const char * , qint64 ) = 0")
   (("QInputContext" . "QObject")
    "virtual QList<QAction *> actions ()"
    "virtual bool filterEvent ( const QEvent * )"
@@ -868,11 +893,15 @@
    "virtual QLocalSocket * nextPendingConnection ()"
    "virtual void incomingConnection ( quintptr )")
   (("QLocalSocket" . "QIODevice")
+   "virtual qint64 bytesAvailable () const"
+   "virtual qint64 bytesToWrite () const"
    "virtual bool canReadLine () const"
    "virtual void close ()"
    "virtual bool isSequential () const"
    "virtual bool waitForBytesWritten ( int = 30000 )"
-   "virtual bool waitForReadyRead ( int = 30000 )")
+   "virtual bool waitForReadyRead ( int = 30000 )"
+   "virtual qint64 readData ( char * , qint64 )"
+   "virtual qint64 writeData ( const char * , qint64 )")
   (("QMainWindow" . "QWidget")
    "virtual QMenu * createPopupMenu ()"
    "virtual void contextMenuEvent ( QContextMenuEvent * )"
@@ -981,11 +1010,14 @@
    "virtual QList<QNetworkCookie> cookiesForUrl ( const QUrl & ) const"
    "virtual bool setCookiesFromUrl ( const QList<QNetworkCookie> & , const QUrl & )")
   (("QNetworkDiskCache" . "QAbstractNetworkCache")
+   "virtual qint64 expire ()"
+   "virtual qint64 cacheSize () const"
    "virtual QNetworkCacheMetaData metaData ( const QUrl & )"
    "virtual bool remove ( const QUrl & )"
    "virtual void updateMetaData ( const QNetworkCacheMetaData & )")
   (("QNetworkReply" . "QIODevice")
    "virtual void abort () = 0"
+   "virtual void setReadBufferSize ( qint64 )"
    "virtual void close ()")
   (("QObject" . NIL)
    "virtual bool event ( QEvent * )"
@@ -1077,11 +1109,15 @@
   (("QProcess" . "QIODevice")
    "virtual void setupChildProcess ()"
    "virtual bool atEnd () const"
+   "virtual qint64 bytesAvailable () const"
+   "virtual qint64 bytesToWrite () const"
    "virtual bool canReadLine () const"
    "virtual void close ()"
    "virtual bool isSequential () const"
    "virtual bool waitForBytesWritten ( int = 30000 )"
-   "virtual bool waitForReadyRead ( int = 30000 )")
+   "virtual bool waitForReadyRead ( int = 30000 )"
+   "virtual qint64 readData ( char * , qint64 )"
+   "virtual qint64 writeData ( const char * , qint64 )")
   (("QProgressBar" . "QWidget")
    "virtual QString text () const"
    "virtual QSize minimumSizeHint () const"

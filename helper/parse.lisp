@@ -35,7 +35,6 @@
         "setPrinterSelectionOption"
         "setupUi"
         "singleShot"
-        "qint64"
         "quint32"
         "qwsSet"
         "void *"

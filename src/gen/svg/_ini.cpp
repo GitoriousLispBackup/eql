@@ -4,10 +4,10 @@
 #include "_n_methods.h"
 #include "_ini2.h"
 
-NumList LGraphicsSvgItem::overrideIds = NumList() << 231 << 202 << 204;
+NumList LGraphicsSvgItem::overrideIds = NumList() << 239 << 210 << 212;
 NumList LSvgRenderer::overrideIds = NumList();
 NumList LSvgWidget::overrideIds = NumList() << 25 << 21;
-NumList LSvgGenerator::overrideIds = NumList() << 363;
+NumList LSvgGenerator::overrideIds = NumList() << 373;
 
 void ini() {
     static bool _ = false; if(_) return; _ = true;

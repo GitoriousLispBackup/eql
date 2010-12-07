@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "10.12.2"; // 2010-12-04
+const char EQL::version[] = "10.12.3"; // 2010-12-07
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
@@ -60,10 +60,8 @@ void EQL::exec(const QStringList& args) {
 #endif
     if(arguments.count() > 1) {
         forms.prepend(
-                // to get debug info on errors
                 QString(
-                "(progn"
-                "  (setf si::*tpl-level* 0)"
+                "(let ((si::*tpl-level* 0))" // micro ini
                 "  (load \"%1\"))"
                 ).arg(arguments.at(1))); }
     QString code;

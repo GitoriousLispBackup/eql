@@ -67,17 +67,22 @@ BUILD / REBUILD (see also: "Windows Easy Guide" in doc/)
 3) cd ..
 
   [Linux]
-    You need to create a link to the EQL shared library, something like:
+    You need to create links to EQL, something like:
         cd /usr/lib
         sudo ln -s ~/eql/libeql.so.1 libeql.so.1
+        cd /usr/bin
+        sudo ln -s ~/eql/eql eql
 
   [OSX]
-    You need to create a link to the EQL shared library, something like:
+    You need to create links to EQL, something like:
         cd /usr/lib
         sudo ln -s ~/eql/libeql.1.dylib libeql.1.dylib
-    You may want to create a convenience link:
-        cd ~/eql (your EQL directory)
-        ln -s eql.app/Contents/MacOS/eql eql
+        cd /usr/bin
+        sudo ln -s ~/eql/eql.app/Contents/MacOS/eql eql
+        
+  [Windows]
+    Add your EQL directory to the Path environment variable, see:
+    <Control Panel:System:Advanced:Environment Variables>
 
 
 
@@ -85,10 +90,10 @@ RUN
 ===
 
 You can run a simple interactive REPL UI doing:
-    ./eql -qgui (MSVC: eql -qgui)
+    eql -qgui
 
 To run a Lisp file without top-level, do:
-    ./eql examples/2-clock (MSVC: eql examples/2-clock)
+    eql examples/2-clock
 
 If you start the EQL executable without arguments, it will start the usual ECL top-level
 (without processing Qt events).
@@ -99,7 +104,7 @@ To quit the tool, do:
 
 [Linux,OSX]
   In order to run a top-level processing Qt events, do:
-    ./eql -qtpl
+    eql -qtpl
 
 
 QT MODULES

@@ -191,6 +191,7 @@ cl_object qconnect2            (cl_object, cl_object, cl_object, cl_object, cl_o
 cl_object qcopy                (cl_object);
 cl_object qdelete              (cl_object);
 cl_object qenum2               (cl_object, cl_object);
+cl_object qescape              (cl_object);
 cl_object qexec                ();
 cl_object qfind_child          (cl_object, cl_object);
 cl_object qid                  (cl_object);

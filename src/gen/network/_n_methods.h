@@ -321,6 +321,8 @@ class N178 : public QObject { // QUrlInfo
 public:
     Q_INVOKABLE void* C(uint u) { return new LUrlInfo(u); }
     Q_INVOKABLE void* C(uint u, const QUrlInfo& x1) { return new LUrlInfo(u, x1); }
+    Q_INVOKABLE void* C(uint u, const QString& x1, int x2, const QString& x3, const QString& x4, qint64 x5, const QDateTime& x6, const QDateTime& x7, bool x8, bool x9, bool x10, bool x11, bool x12, bool x13) { return new LUrlInfo(u, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13); }
+    Q_INVOKABLE void* C(uint u, const QUrl& x1, int x2, const QString& x3, const QString& x4, qint64 x5, const QDateTime& x6, const QDateTime& x7, bool x8, bool x9, bool x10, bool x11, bool x12, bool x13) { return new LUrlInfo(u, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13); }
     Q_INVOKABLE QString Mgroup(QUrlInfo* o) const { return o->group(); }
     Q_INVOKABLE bool MisDir(QUrlInfo* o) const { return o->isDir(); }
     Q_INVOKABLE bool MisExecutable(QUrlInfo* o) const { return o->isExecutable(); }
@@ -343,8 +345,10 @@ public:
     Q_INVOKABLE void MsetOwner(QUrlInfo* o, const QString& x1) { o->setOwner(x1); }
     Q_INVOKABLE void MsetPermissions(QUrlInfo* o, int x1) { o->setPermissions(x1); }
     Q_INVOKABLE void MsetReadable(QUrlInfo* o, bool x1) { o->setReadable(x1); }
+    Q_INVOKABLE void MsetSize(QUrlInfo* o, qint64 x1) { o->setSize(x1); }
     Q_INVOKABLE void MsetSymLink(QUrlInfo* o, bool x1) { o->setSymLink(x1); }
     Q_INVOKABLE void MsetWritable(QUrlInfo* o, bool x1) { o->setWritable(x1); }
+    Q_INVOKABLE qlonglong Msize(QUrlInfo* o) const { return o->size(); }
     Q_INVOKABLE bool Sequal(const QUrlInfo& x1, const QUrlInfo& x2, int x3) { return QUrlInfo::equal(x1, x2, x3); }
     Q_INVOKABLE bool SgreaterThan(const QUrlInfo& x1, const QUrlInfo& x2, int x3) { return QUrlInfo::greaterThan(x1, x2, x3); }
     Q_INVOKABLE bool SlessThan(const QUrlInfo& x1, const QUrlInfo& x2, int x3) { return QUrlInfo::lessThan(x1, x2, x3); }

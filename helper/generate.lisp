@@ -229,7 +229,9 @@
   (first arg))
 
 (defun return-arg (fun)
-  (first fun))
+  (if (string= "qint64" (first (first fun)))
+      '("qlonglong")
+      (first fun)))
 
 (defun function-name (fun)
   (second fun))
@@ -277,7 +279,7 @@
           ((string= "bool" type)
            "false")
           ((or (pointer-p arg)
-               (string= "int" type))
+               (find* type '("int" "qlonglong")))
            "0")
           ((qt-class-p type)
            (format nil "~A()" type))
@@ -699,7 +701,12 @@
           (q
            (format nil "qVariantValue<~A~A>(~A)" type (if (ends-with ">" type) " " "") x))
           (t
-           (format nil "~A.to~A()" x (string-capitalize (if (string= "qreal" type) "real" type)))))))
+           (format nil "~A.to~A()" x (cond ((string= "qreal" type)
+                                            "Real")
+                                           ((string= "qlonglong" type)
+                                            "LongLong")
+                                           (t
+                                            (string-capitalize type))))))))
 
 (defun lobjects.cpp ()
   (format t "-> lobjects.cpp~%")
@@ -980,6 +987,7 @@
                     "float"
                     "int"
                     "long"
+                    "qint64"
                     "qlonglong"
                     "qreal"
                     "qulonglong"
