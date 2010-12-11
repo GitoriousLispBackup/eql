@@ -1,3 +1,5 @@
+(in-package :eql)
+
 (defvar *window*    (qnew "QDialog"))
 (defvar *label*     (qnew "QLabel"))
 (defvar *line-edit* (qnew "QLineEdit"))

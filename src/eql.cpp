@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "10.12.3"; // 2010-12-07
+const char EQL::version[] = "10.12.4"; // 2010-12-11
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
@@ -59,10 +59,10 @@ void EQL::exec(const QStringList& args) {
         forms << "(si::qtop-level)"; }
 #endif
     if(arguments.count() > 1) {
-        forms.prepend(
-                QString(
-                "(let ((si::*tpl-level* 0))" // micro ini
-                "  (load \"%1\"))"
+        forms.prepend(QString(
+                "(with-input-from-string (s \"(load \\\"%1\\\")\")"
+                "  (let ((*standard-input* s))"
+                "    (si:top-level)))"
                 ).arg(arguments.at(1))); }
     QString code;
     if(forms.length() == 1) {

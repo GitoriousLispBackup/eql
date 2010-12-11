@@ -3,14 +3,16 @@ NOTES
 
 Run the editor:
   
-  eql run.lisp (assuming the EQL exe in your path)
+  0) You'll need the :network module (see QREQUIRE).
+
+  1) Run the independent local Lisp server:
+      eql local-server
+
+  2) Run the editor:
+      eql editor
 
 The main motivation behind this (experimental!) editor is the need for a
 popup completor for the (huge) Qt library.
-
-So, this editor is not meant to substitute your standard Lisp environment.
-Instead, if one needs to write a GUI using EQL, this could be a convenient
-alternative to edit the GUI related stuff.
 
 The completor currently works for:
 
@@ -34,26 +36,8 @@ It tries to be intelligent, for example:
 USAGE NOTES
 ===========
 
-(The below is currently *very* *experimental*.)
+This is currently only an experimental snapshot of a simple "scratch buffer"
+like editor.
 
-The "Save and Run" action (Ctrl+R) will run your code in an independent
-EQL Lisp process.
-
-On errors, instead of entering the ECL debugger, the offending region will
-be marked red (that is, in cases where ECL gives us this hint), and a
-simple error message will be shown in the status-bar.
-Additionally, some debug output will be displayed in the console window.
-
-A simple "Eval Region" is implemented too, see status-bar note on startup.
-
-
-
-BUILD NOTES
-===========
-
-If you really want to make an executable of this experimental(!) editor:
-
-eql make-editor-lib.lisp
-qmake
-make (MSVC: nmake)
-
+"Eval Region" note: (see initial status-bar message)
+Remember to change to the desired package prior to eval anything.

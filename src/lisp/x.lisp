@@ -3,6 +3,7 @@
 (defpackage :x
   (:use :common-lisp)
   (:export
+   #:bytes-to-string
    #:d
    #:do-string
    #:do-with
@@ -17,6 +18,7 @@
    #:split
    #:starts-with
    #:string-substitute
+   #:string-to-bytes
    #:when-it
    #:when-it*
    #:while
@@ -109,3 +111,9 @@
 
 (defun join (lst &optional (sep #\Space))
   (format nil (format nil "~~{~~A~~^~A~~}" sep) lst))
+
+(defun bytes-to-string (b)
+  (map 'string 'code-char b))
+
+(defun string-to-bytes (s)
+  (map 'vector 'char-code s))

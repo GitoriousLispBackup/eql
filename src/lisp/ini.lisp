@@ -164,11 +164,11 @@
 (alias qmsg  qmessage-box)
 (alias qq    qquit)
 
+(in-package :si)
+
 ;;; The following is taken from "src/lsp/top.lsp" version 10.4.1
 ;;; added SERVE-EVENT to TPL-READ, in order to process Qt events
 ;;; (every modification is annotated with "[EQL]")
-
-(in-package :si)
 
 #-win32
 (defun qtop-level ()

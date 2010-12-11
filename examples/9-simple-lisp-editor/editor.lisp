@@ -7,6 +7,8 @@
 ;;;   - rudimentary syntax highlighter
 ;;;   - rudimentary auto indent
 
+(require :local-client "local-client")
+
 (defpackage :editor
   (:use :common-lisp :eql)
   (:export
@@ -42,7 +44,6 @@
 (defparameter *keep-extra-selections*  nil)
 (defparameter *error-region*           nil)
 (defparameter *try-read-error*         nil)
-(defparameter *lisp-output*            nil)
 
 (defconstant +max-shown-completions+ 10)
 (defconstant +hidden-position+       (quote #.(make-list 2 :initial-element (- (1- (expt 8 5))))))
@@ -56,7 +57,6 @@
 (defvar *action-save*             (qfind-child *main* "action_save"))
 (defvar *action-save-as*          (qfind-child *main* "action_save_as"))
 (defvar *action-save-and-run*     (qfind-child *main* "action_save_and_run"))
-(defvar *action-restart-toplevel* (qfind-child *main* "action_restart_toplevel"))
 
 (defparameter *document*             nil)
 (defparameter *font*                 nil)
@@ -65,7 +65,6 @@
 (defparameter *eql-keyword-format*   nil)
 (defparameter *lisp-keyword-format*  nil)
 (defparameter *completer*            nil)
-(defparameter *lisp-process*         nil)
 
 (defconstant +bold+               75 "font weight")
 (defconstant +key-press+          6  "event type")
@@ -133,20 +132,18 @@
   (qconnect *action-save* "triggered()" 'file-save)
   (qconnect *action-save-as* "triggered()" 'file-save-as)
   (qconnect *action-save-and-run* "triggered()" 'save-and-run)
-  (qconnect *action-restart-toplevel* "triggered()" (lambda () (lisp-in ":r1"))) ; restart toplevel
   (qconnect (qapp) "aboutToQuit()" 'clean-up)
   (qoverride *editor* "keyPressEvent(QKeyEvent*)" 'editor-key-pressed)
   (qoverride *completer* "keyPressEvent(QKeyEvent*)" 'completer-key-pressed)
   (qoverride *completer* "focusOutEvent(QFocusEvent*)" 'close-completer)
   (qoverride *highlighter* "highlightBlock(QString)" 'highlight-block)
   (ini-highlight-rules)
-  (ini-lisp-process)
-  (show-status-message (tr "<h3 style='color: #4040E0'>Eval Region:</h3><ul><li>move cursor to paren (either opening or closing)<li>hit <b>Ctrl+Return</b><br>") :html)
+  (show-status-message (tr "<b style='color:#4040E0'>Eval Region:</b> move to paren <b>(</b> or <b>)</b>, hit <b>Ctrl</b>+<b>Return</b>")
+                       :html)
   (qfun *main* "show"))
 
 (defun clean-up ()
-  (file-save)
-  (stop-lisp-process))
+  (file-save))
 
 (let (label)
   (defun show-status-message (msg &optional html)
@@ -171,15 +168,15 @@
   (defun read* (str &optional (start 0))
     (setf *try-read-error* nil)
     (multiple-value-bind (exp x)
-        (ignore-errors (read-from-string (nsubstitute +package-char-dummy+ #\: str)
+        (ignore-errors (read-from-string (substitute +package-char-dummy+ #\: str)
                                          nil nil :start start :preserve-whitespace t))
-      (unless exp
-        (setf *try-read-error* (typecase x
-                                 (end-of-file :end-of-file)
-                                 (t t))))
-      (setf latest exp)
+      (if exp
+          (setf latest (subseq str 0 x))
+          (setf *try-read-error* (typecase x
+                                   (end-of-file :end-of-file)
+                                   (t t))))
       (values exp x)))
-  (defun latest-read-expression ()
+  (defun latest-read-string ()
     latest))
 
 (defun text-until-cursor (text-cursor text-block)
@@ -674,9 +671,7 @@
          (let ((mod (qfun key-event "modifiers")))
            ;; eval region
            (unless (zerop mod)
-	     (ini-run-lisp-process)
-             (lisp-in (nsubstitute #\: +package-char-dummy+ (prin1-to-string (latest-read-expression))))
-	     (qprocess-events)
+             (run-on-server (latest-read-string))
              (return-from editor-key-pressed t)))
          (let ((spaces (+ *current-depth* *current-keyword-indent*)))
            (unless (zerop spaces)
@@ -801,84 +796,21 @@
                                                     (list cursor2 format)))
           (setf *extra-selections* t))))))
 
-;;; lisp process
+;;; server lisp process
 
 (defun save-and-run ()
   (file-save)
+  (load-lisp-file))
+
+(defun run-on-server (str)
+  (show-status-message "")
   (qprocess-events)
-  (run-lisp-process))
+  (local-client:string-request str))
 
-(defun bytes-to-string (b)
-  (map 'string 'code-char b))
+(defun load-lisp-file ()
+  (run-on-server (format nil "(load ~S)" *file-name*)))
 
-(defun string-to-bytes (s)
-  (map 'vector 'char-code s))
-
-(defun ini-lisp-process ()
-  (setf *lisp-process* (qnew "QProcess"))
-  (x:do-with (qconnect *lisp-process*)
-    ("readyReadStandardOutput()" 'lisp-out)
-    ("readyReadStandardError()" 'lisp-out))
-  (qfun *lisp-process* "start" "eql")
-  (lisp-in "(progn (setf ext:*tpl-prompt-hook* \"\") (use-package :eql))")
-  (let ((timer (qnew "QTimer")))
-    (qconnect timer "timeout()" 'process-events)
-    (qfun timer "start(int)" 10)))
-
-(defun process-events ()
-  (lisp-in "(progn (eql:qprocess-events) (values))"))
-
-(defun lisp-in (exp)
-  (qfun *lisp-process* "write(QByteArray)" (string-to-bytes (format nil "~A~%" exp))))
-
-(defun stop-lisp-process ()
-  (lisp-in "(eql:qq)"))
-
-(let ((async-read t))
-  (defun ini-run-lisp-process ()
-    (setf async-read t)    
-    (setf *lisp-output* nil))
-  (defun run-lisp-process ()
-    (ini-run-lisp-process)
-    (show-status-message "" :html)
-    (lisp-in (format nil "(load ~S)" *file-name*)))
-  (defun lisp-out ()
-    (when async-read
-      (let ((out (bytes-to-string (qfun *lisp-process* "readAll"))))
-        (princ out)
-        (force-output)
-        (push out *lisp-output*)
-        (let* ((err (with-output-to-string (s)
-                      (dolist (el (reverse *lisp-output*))
-                        (princ el s))))
-               (broken (search "Broken at " err))
-               (file (search "File: #" err))
-               (pos (when file (search "(Position #" err :start2 file)))
-               (mark (and broken file pos)))
-          (when mark
-            (mark-error-region (read-from-string (subseq err (+ pos 11)))))
-          (when (or mark
-                    (and broken (x:ends-with ">> " err)))
-            (setf async-read nil)
-            (qsingle-shot 0 'debug-commands))))))
-  (defun debug-commands ()
-    (let ((msg (debug-command ":m"))) ; (1) show error message
-      (show-status-message (format nil "<b style='color:red'>Error:</b> ~A"
-                                   (qescape (string-trim '(#\Space #\Newline #\# #\a #\< #\>) msg)))
-                           :html)
-      (princ msg))
-    (princ (debug-command ":le"))     ; (2) lambda-expression
-    (princ (debug-command ":b"))      ; (3) backtrace
-    (lisp-in ":r1")                   ; restart toplevel
-    (setf async-read t))
-  (defun debug-command (cmd)
-    (qprocess-events)
-    (lisp-in cmd)
-    (qfun *lisp-process* "waitForBytesWritten()")
-    (qfun *lisp-process* "waitForReadyRead()")
-    (bytes-to-string (qfun *lisp-process* "readAll"))))
-
-(defun mark-error-region (pos)
+(defun mark-error-region (pos) ; TODO currently not working
   (let* ((text (qget *editor* "plainText"))
          (end (nth-value 1 (read* text pos)))
          (*keep-extra-selections* t))
@@ -910,3 +842,5 @@
   (ini)
   (qfun *editor* "setPlainText"
         (read-file "my.lisp")))
+
+(start)
