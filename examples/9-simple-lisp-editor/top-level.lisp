@@ -4,15 +4,34 @@
 
 (in-package :si)
 
+(defvar *tpl-print-current-hook* nil)
+
 (defparameter *read-string* nil)
+
+(defun tpl-print-current ()
+  (let ((name (ihs-fname *ihs-current*)))
+    (format t "~&Broken at ~:@(~S~)." name)
+    (when (eq name 'si::bytecodes)
+      (format t " [Evaluation of: ~S]"
+              (function-lambda-expression (ihs-fun *ihs-current*)))))
+  #-threads (terpri)
+  #+threads (format t " In: ~A.~%" mp:*current-process*)
+  (let ((fun (ihs-fun *ihs-current*)))
+    (when (and (symbolp fun) (fboundp fun))
+      (setf fun (fdefinition fun)))
+    (multiple-value-bind (file position)
+        (ext:compiled-function-file fun)
+      (when file
+        (format t " File: ~S (Position #~D)~%" file position)
+        (when *tpl-print-current-hook*
+          (funcall *tpl-print-current-hook* file position)))))
+  (values))
 
 (defun %top-level ()
   (catch *quit-tag*
     (let* ((*debugger-hook* nil)
            + ++ +++ - * ** *** / // ///)
-      (unless *lisp-initialized*
-        (format t "EQL local-server")
-        (setq *lisp-initialized* t))
+      (setq *lisp-initialized* t)
       (let ((*break-enable* t)
             (*tpl-level* -1))
         (%tpl))

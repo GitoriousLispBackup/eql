@@ -137,13 +137,17 @@
   (qoverride *completer* "keyPressEvent(QKeyEvent*)" 'completer-key-pressed)
   (qoverride *completer* "focusOutEvent(QFocusEvent*)" 'close-completer)
   (qoverride *highlighter* "highlightBlock(QString)" 'highlight-block)
-  (ini-highlight-rules)
   (show-status-message (tr "<b style='color:#4040E0'>Eval Region:</b> move to paren <b>(</b> or <b>)</b>, hit <b>Ctrl</b>+<b>Return</b>")
                        :html)
+  (ini-highlight-rules)
+  (local-client:ini (lambda (data) (mark-error-region (bytes-to-int data))))
   (qfun *main* "show"))
 
 (defun clean-up ()
   (file-save))
+
+(defun bytes-to-int (data)
+  (parse-integer (x:bytes-to-string data)))
 
 (let (label)
   (defun show-status-message (msg &optional html)
@@ -810,7 +814,7 @@
 (defun load-lisp-file ()
   (run-on-server (format nil "(load ~S)" *file-name*)))
 
-(defun mark-error-region (pos) ; TODO currently not working
+(defun mark-error-region (pos)
   (let* ((text (qget *editor* "plainText"))
          (end (nth-value 1 (read* text pos)))
          (*keep-extra-selections* t))
