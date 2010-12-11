@@ -27,6 +27,13 @@
       (progn
         (qset (qapp) "quitOnLastWindowClosed" nil)
         (qconnect *server* "newConnection()" 'send)
+        (multiple-value-bind (eql-version qt-version)
+            (qversion)
+          (setf si:*tpl-prompt-hook*
+                (format nil "~%EQL local-server (ECL ~A, EQL ~A, Qt ~A)~@
+                             Use local-client to send input.~@
+                             Keyboard input only possible in the debugger."
+                        (si::lisp-implementation-version) eql-version qt-version)))
         t)
       (progn
         (qfun "QMessageBox" "critical" nil (tr "EQL local-server")
@@ -44,7 +51,9 @@
         "disconnectFromServer"))))
 
 (defun send-to-top-level (data)
-  (setf si::*read-string* (x:bytes-to-string data))
+  (let ((str (x:bytes-to-string data)))
+    (setf si::*read-string* str)
+    (princ str))
   (si::%top-level))
 
 (ini)

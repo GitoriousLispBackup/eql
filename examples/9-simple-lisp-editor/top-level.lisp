@@ -11,7 +11,7 @@
     (let* ((*debugger-hook* nil)
            + ++ +++ - * ** *** / // ///)
       (unless *lisp-initialized*
-        (in-package :cl-user)
+        (format t "EQL local-server")
         (setq *lisp-initialized* t))
       (let ((*break-enable* t)
             (*tpl-level* -1))
@@ -21,7 +21,7 @@
 (defun %tpl (&key ((:commands *tpl-commands*) tpl-commands)
                  ((:prompt-hook *tpl-prompt-hook*) *tpl-prompt-hook*)
                  (broken-at nil)
-                 (quiet nil))
+                 (quiet t))
   (declare (c::policy-debug-ihs-frame))
   (let* ((*ihs-base* *ihs-top*)
          (*ihs-top* (if broken-at (ihs-search t broken-at) (ihs-top)))

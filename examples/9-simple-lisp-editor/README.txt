@@ -1,6 +1,9 @@
 NOTES
 =====
 
+This is currently only an experimental snapshot of a simple "scratch buffer"
+like editor.
+
 Run the editor:
   
   0) You'll need the :network module (see QREQUIRE).
@@ -36,8 +39,15 @@ It tries to be intelligent, for example:
 USAGE NOTES
 ===========
 
-This is currently only an experimental snapshot of a simple "scratch buffer"
-like editor.
-
 "Eval Region" note: (see initial status-bar message)
 Remember to change to the desired package prior to eval anything.
+
+The "Save and Run" action (Ctrl+R) will load the current code in the local
+Lisp server process.
+
+Qt events are processed natively (no performance loss!), while keeping
+your program interactive (you can send any command using "Eval Region").
+
+The local Lisp server accepts keyboard input only when breaking into the
+debugger. But you obviously can stop the server (Ctrl+C) and continue
+(:c at the command prompt) at any time.
