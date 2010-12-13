@@ -177,7 +177,7 @@
   (setf *try-read-error* nil)
   (let ((*package* (find-package :eql)))
     (multiple-value-bind (exp x)
-        (ignore-errors (read-from-string (substitute +package-char-dummy+ #\: str)
+        (ignore-errors (read-from-string (nsubstitute +package-char-dummy+ #\: str)
                                          nil nil :start start :preserve-whitespace t))
       (unless exp
         (setf *try-read-error* (typecase x

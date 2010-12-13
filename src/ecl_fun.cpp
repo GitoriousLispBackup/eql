@@ -1941,11 +1941,11 @@ cl_object qutf8(cl_object l_str) {
     cl_object l_ret = from_cstring(toQString(l_str).toUtf8());
     return l_ret; }
 
-cl_object qfrom_utf8(cl_object l_str) {
-    /// args: (string)
-    /// Returns the string converted using <code>QString::fromUtf8()</code>.
+cl_object qfrom_utf8(cl_object l_ba) {
+    /// args: (byte-array)
+    /// Returns the byte array (vector of octets) converted using <code>QString::fromUtf8()</code>.
     ecl_process_env()->nvalues = 1;
-    cl_object l_ret = from_qstring(QString::fromUtf8(toQByteArray(l_str)));
+    cl_object l_ret = from_qstring(QString::fromUtf8(toQByteArray(l_ba)));
     return l_ret; }
 
 cl_object qescape(cl_object l_str) {
