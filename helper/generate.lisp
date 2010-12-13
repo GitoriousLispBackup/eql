@@ -852,7 +852,7 @@
           (incf i)
           (when (eql module (class-module (trim* name)))
             (format s "~%        case ~D:" i)))
-        (when (> i 0)
+        (when (plusp i)
           (format s "~%            if(staticMetaObject_~(~A~)) {~
                      ~%                m = staticMetaObject_~(~A~)(n); }~
                      ~%            break;"
@@ -883,7 +883,7 @@
           (incf i)
           (when (eql module (class-module (trim* name)))
             (format s "~%        case ~D:" i)))
-        (when (> i 0)
+        (when (plusp i)
           (format s "~%            if(deleteNObject_~(~A~)) {~
                      ~%                deleteNObject_~(~A~)(n, p); }~
                      ~%            break;"
@@ -933,7 +933,7 @@
           (incf i)
           (when (eql module (class-module (trim* name)))
             (format s "~%            case ~D:" i)))
-        (when (> i 0)
+        (when (plusp i)
           (format s "~%                if(override_~(~A~)) {~
                      ~%                    ids = *override_~(~A~)(name); }~
                      ~%                break;"
@@ -964,7 +964,7 @@
           (incf i)
           (when (eql module (class-module (trim* name)))
             (format s "~%            case ~D:" i)))
-        (when (> i 0)
+        (when (plusp i)
           (format s "~%                if(override_~(~A~)) {~
                      ~%                    ids = *override_~(~A~)(name); }~
                      ~%                break;"

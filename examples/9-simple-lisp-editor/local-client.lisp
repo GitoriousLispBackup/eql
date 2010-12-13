@@ -33,4 +33,4 @@
     ("write(QByteArray)" data)))
 
 (defun string-request (str)
-  (request (x:string-to-bytes str)))
+  (request (x:string-to-bytes (qutf8 str))))

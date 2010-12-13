@@ -32,7 +32,7 @@
           (setf si:*tpl-prompt-hook*
                 (format nil "~%EQL local-server (ECL ~A, EQL ~A, Qt ~A)~@
                              Use local-client to send input.~@
-                             Keyboard input only possible in the debugger."
+                             Keyboard input possible only in the debugger.~%"
                         (si::lisp-implementation-version) eql-version qt-version)))
         t)
       (progn
@@ -46,15 +46,16 @@
   (qfun *client* "waitForReadyRead")
   (funcall *function* (qfun *client* "readAll")))
 
-(defun send-to-top-level (data)
-  (let ((str (x:bytes-to-string data)))
-    (setf si::*read-string* str)
-    (princ str))
-  (si::%top-level))
+(let ((n 0))
+  (defun send-to-top-level (data)
+    (let ((str (qfrom-utf8 data)))
+      (setf si::*read-string* str)
+      (format t "~A[~D] ------------------------------~%~A"
+              (if (zerop n) "> " "") (incf n) str))
+    (si::%top-level)))
 
 (defun send-file-position (file pos)
-  (when (and (not (qnull-object *client*))
-             (qfun *client* "isValid"))
+  (when (qfun *client* "isValid")
     (x:do-with (qfun *client*)
       ("write(QByteArray)" (x:string-to-bytes (princ-to-string pos)))
       "flush")))

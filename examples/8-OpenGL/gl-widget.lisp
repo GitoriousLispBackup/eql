@@ -103,7 +103,7 @@
         (dy (- (qfun event "y") (second *last-pos*)))
         (buttons (qfun event "buttons")))
     (flet ((button (enum)
-             (not (zerop (logand enum buttons)))))
+             (plusp (logand enum buttons))))
       (cond ((button (qenum "Qt::MouseButtons" "LeftButton"))
              (set-x-rotation (+ *x-rot* (* 8 dy)))
              (set-y-rotation (+ *y-rot* (* 8 dx))))
@@ -192,7 +192,7 @@
   (gl:pop-matrix))
 
 (defun normalize-angle (angle)
-  (x:while (< angle 0)
+  (x:while (minusp angle)
     (incf angle +360+))
   (x:while (> angle +360+)
     (decf angle +360+))

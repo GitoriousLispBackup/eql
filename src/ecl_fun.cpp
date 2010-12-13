@@ -67,6 +67,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object("qescape"),              (cl_objectfn_fixed)qescape,                  1);
     cl_def_c_function(c_string_to_object("qexec"),                (cl_objectfn_fixed)qexec,                    0);
     cl_def_c_function(c_string_to_object("qfind-child"),          (cl_objectfn_fixed)qfind_child,              2);
+    cl_def_c_function(c_string_to_object("qfrom-utf8"),           (cl_objectfn_fixed)qfrom_utf8,               1);
     cl_def_c_function(c_string_to_object("qid"),                  (cl_objectfn_fixed)qid,                      1);
     cl_def_c_function(c_string_to_object("qinvoke-method2"),      (cl_objectfn_fixed)qinvoke_method2,          4);
     cl_def_c_function(c_string_to_object("qload-ui"),             (cl_objectfn_fixed)qload_ui,                 1);
@@ -1938,6 +1939,13 @@ cl_object qutf8(cl_object l_str) {
     /// Returns the string converted using <code>QString::toUtf8()</code>.<br>Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.
     ecl_process_env()->nvalues = 1;
     cl_object l_ret = from_cstring(toQString(l_str).toUtf8());
+    return l_ret; }
+
+cl_object qfrom_utf8(cl_object l_str) {
+    /// args: (string)
+    /// Returns the string converted using <code>QString::fromUtf8()</code>.
+    ecl_process_env()->nvalues = 1;
+    cl_object l_ret = from_qstring(QString::fromUtf8(toQByteArray(l_str)));
     return l_ret; }
 
 cl_object qescape(cl_object l_str) {

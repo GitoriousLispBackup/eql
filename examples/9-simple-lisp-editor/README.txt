@@ -14,8 +14,8 @@ Run the editor:
   2) Run the editor:
       eql editor
 
-The main motivation behind this (experimental!) editor is the need for a
-popup completor for the (huge) Qt library.
+The main motivation behind this editor is the need for a popup completor
+for the (huge) Qt library.
 
 The completor currently works for:
 

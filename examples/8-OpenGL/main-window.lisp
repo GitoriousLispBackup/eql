@@ -50,8 +50,7 @@
 
 (defun render-into-pixmap ()
   (let ((size (get-size)))
-    (when (every (lambda (x) (> x 0))
-                 size)
+    (when (every 'plusp size)
       (set-pixmap (apply 'qfun *gl-widget* "renderPixmap" size)))))
 
 (defun grab-frame-buffer ()

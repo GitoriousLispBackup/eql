@@ -111,5 +111,7 @@
          (tpl-make-command :eof ""))
         (*read-string*
          (prog1
-             (read-from-string *read-string*)
+             (multiple-value-bind (exp err)
+                 (ignore-errors (read-from-string *read-string*))
+               (or exp err))
            (setf *read-string* :eof)))))

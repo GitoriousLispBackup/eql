@@ -4,8 +4,13 @@
 ;;;
 ;;;   - a popup completer (for EQL functions only)
 ;;;   - paren highlighting
+;;;
 ;;;   - rudimentary syntax highlighter
 ;;;   - rudimentary auto indent
+;;;
+;;;   - an independent local Lisp server process for evaluation
+;;;   - native Qt event processing through QApplication::exec()
+;;;   - eval region
 
 (require :local-client "local-client")
 
@@ -51,12 +56,12 @@
 
 ;;; Qt
 
-(defvar *main*                    (qload-ui "data/editor.ui"))
-(defvar *editor*                  (qfind-child *main* "editor"))
-(defvar *action-open*             (qfind-child *main* "action_open"))
-(defvar *action-save*             (qfind-child *main* "action_save"))
-(defvar *action-save-as*          (qfind-child *main* "action_save_as"))
-(defvar *action-save-and-run*     (qfind-child *main* "action_save_and_run"))
+(defvar *main*                (qload-ui "data/editor.ui"))
+(defvar *editor*              (qfind-child *main* "editor"))
+(defvar *action-open*         (qfind-child *main* "action_open"))
+(defvar *action-save*         (qfind-child *main* "action_save"))
+(defvar *action-save-as*      (qfind-child *main* "action_save_as"))
+(defvar *action-save-and-run* (qfind-child *main* "action_save_and_run"))
 
 (defparameter *document*             nil)
 (defparameter *font*                 nil)
@@ -168,20 +173,17 @@
     ("setFontWeight" +bold+))
   (setf *lisp-match-rule* (qnew "QRegExp(QString)" "[('][^ )]+[ )]")))
 
-(let (latest)
-  (defun read* (str &optional (start 0))
-    (setf *try-read-error* nil)
+(defun read* (str &optional (start 0))
+  (setf *try-read-error* nil)
+  (let ((*package* (find-package :eql)))
     (multiple-value-bind (exp x)
         (ignore-errors (read-from-string (substitute +package-char-dummy+ #\: str)
                                          nil nil :start start :preserve-whitespace t))
-      (if exp
-          (setf latest (subseq str 0 x))
-          (setf *try-read-error* (typecase x
-                                   (end-of-file :end-of-file)
-                                   (t t))))
-      (values exp x)))
-  (defun latest-read-string ()
-    latest))
+      (unless exp
+        (setf *try-read-error* (typecase x
+                                 (end-of-file :end-of-file)
+                                 (t t))))
+      (values exp x))))
 
 (defun text-until-cursor (text-cursor text-block)
   (subseq (qfun text-block "text") 0 (- (qfun text-cursor "position")
@@ -309,9 +311,11 @@
              (text-block (qfun text-cursor "block")))
         (let* ((line (qfun text-block "text"))
                (pos (qfun text-cursor "columnNumber")))
-          (when (and (not (zerop (length line)))
+          (when (and (plusp (length line))
                      (< pos (length line))
-                     (char= #\( (char line pos)))
+                     (char= #\( (char line pos))
+                     (or (zerop pos)
+                         (char/= #\\ (char line (1- pos)))))
             (show-matching-parenthesis text-cursor (subseq line pos) :left pos))
           (unless (zerop pos)
             (let ((pos-char (char line (1- pos))))
@@ -495,9 +499,7 @@
           t)))))
 
 (defun current-completer-option ()
-  (let ((item (first (qfun *completer* "selectedItems"))))
-    (unless (qnull-object item)
-      (qfun item "text"))))
+  (qfun (first (qfun *completer* "selectedItems")) "text"))
 
 (let (cursor-pos height)
   (defun completer (options name)
@@ -531,9 +533,9 @@
                   (third desktop)))
            (dy (- (+ (second pos) (second size))
                   (fourth desktop))))
-      (when (> dx 0)
+      (when (plusp dx)
         (decf (first pos) dx))
-      (when (> dy 0)
+      (when (plusp dy)
         (decf (second pos) (+ (fourth cursor) (second size))))
       (qset *completer* "pos" pos)))
   (defun set-current-item (item &optional begin)
@@ -673,9 +675,9 @@
     (case (qfun key-event "key")
       ((#.(key "Return") #.(key "Enter"))
          (let ((mod (qfun key-event "modifiers")))
-           ;; eval region
            (unless (zerop mod)
-             (run-on-server (latest-read-string))
+             ;; eval region
+             (run-on-server (highlighted-parenthesis-text))
              (return-from editor-key-pressed t)))
          (let ((spaces (+ *current-depth* *current-keyword-indent*)))
            (unless (zerop spaces)
@@ -732,41 +734,44 @@
                (when (eql :end-of-file *try-read-error*) 
                  (do ((start (position #\( code :end (length curr-line*) :from-end t) (position #\( code :end start :from-end t)))
                      ((null start))
-                   (let ((code* (subseq code start)))
-                     (multiple-value-bind (exp end)
-                         (if (x:starts-with "()" code*)
-                             (values '(nil) 2)
-                             (read* code*))
-                       (cond ((and (consp exp)
-                                   end
-                                   (= end (1- (length code*))))
-                              (setf *current-depth* start)
-                              (x:when-it (position #\( code :end start :from-end t)
-                                (let* ((kw (read* (subseq code (1+ x:it))))
+                   (unless (and (plusp start)
+                                (char= #\\ (char code (1- start))))
+                     (let ((code* (subseq code start)))
+                       (multiple-value-bind (exp end)
+                           (if (x:starts-with "()" code*)
+                               (values '(nil) 2)
+                               (read* code*))
+                         (cond ((and (consp exp)
+                                     end
+                                     (= end (1- (length code*))))
+                                (setf *current-depth* start)
+                                (x:when-it (position #\( code :end start :from-end t)
+                                  (let* ((kw (read* (subseq code (1+ x:it))))
+                                         (spc (auto-indent-spaces kw)))
+                                    (when spc
+                                      (setf *current-depth* x:it
+                                            *current-keyword-indent* spc))))
+                                (return-from right-paren (values (1- (length lines)) ; lines up
+                                                                 start)))            ; characters right
+                               ((null exp)
+                                (let* ((kw (read* (subseq code 1)))
                                        (spc (auto-indent-spaces kw)))
                                   (when spc
-                                    (setf *current-depth* x:it
-                                          *current-keyword-indent* spc))))
-                              (return-from right-paren (values (1- (length lines)) ; lines up
-                                                               start)))            ; characters right
-                             ((null exp)
-                              (let* ((kw (read* (subseq code 1)))
-                                     (spc (auto-indent-spaces kw)))
-                                (when spc
-                                  (setf *current-depth* 0
-                                        *current-keyword-indent* spc)
-                                  (return-from right-paren))))))))))
+                                    (setf *current-depth* 0
+                                          *current-keyword-indent* spc)
+                                    (return-from right-paren)))))))))))
              (when (x:starts-with "(" curr-line*)
                (return-from right-paren))))
       (try-read curr-line t)
-      (when (> curr-n 0)
+      (when (plusp curr-n)
         (do ((n (1- curr-n) (1- n))
              (text-block (qfun (qfun text-cursor "block") "previous") (qfun text-block "previous")))
             ((minusp n))
           (try-read (qfun text-block "text")))))))
 
 (let ((color (qnew "QBrush(QColor)" "#FFFF40"))
-      (color-region (qnew "QBrush(QColor)" "#FFD0D0")))
+      (color-region (qnew "QBrush(QColor)" "#FFD0D0"))
+      pos-open pos-close)
   (defun show-matching-parenthesis (text-cursor line type &optional pos)
     (multiple-value-bind (move-lines move-characters)
         (if (eql :left type)
@@ -798,21 +803,15 @@
             (qfun cursor2 "movePosition" +next-character+ +keep-anchor+))
           (qfun *editor* "setExtraSelections" (list (list cursor1 format)
                                                     (list cursor2 format)))
-          (setf *extra-selections* t))))))
-
-;;; server lisp process
-
-(defun save-and-run ()
-  (file-save)
-  (load-lisp-file))
-
-(defun run-on-server (str)
-  (show-status-message "")
-  (qprocess-events)
-  (local-client:string-request str))
-
-(defun load-lisp-file ()
-  (run-on-server (format nil "(load ~S)" *file-name*)))
+          (let ((p1 (qfun cursor1 "position"))
+                (p2 (qfun cursor2 "position")))
+            (setf pos-open (1- (min p1 p2))
+                  pos-close (max p1 p2))
+            (when (= p1 pos-close)
+              (incf pos-close)))
+          (setf *extra-selections* t)))))
+  (defun highlighted-parenthesis-text ()
+    (subseq (qget *editor* "plainText") pos-open pos-close)))
 
 (defun mark-error-region (pos)
   (let* ((text (qget *editor* "plainText"))
@@ -824,7 +823,17 @@
       (qfun text-cursor "setPosition" end)
       (x:do-with (qfun *editor*)
         ("setTextCursor" text-cursor)
-        ("ensureCursorVisible")))))
+        "ensureCursorVisible"))))
+
+;;; external lisp process
+
+(defun run-on-server (str)
+  (qprocess-events)
+  (local-client:string-request str))
+
+(defun save-and-run ()
+  (file-save)
+  (run-on-server (format nil "(load ~S)" *file-name*)))
 
 ;;; profile
 
@@ -844,7 +853,6 @@
 
 (defun start ()
   (ini)
-  (qfun *editor* "setPlainText"
-        (read-file "my.lisp")))
+  (qfun *editor* "setPlainText" (read-file "my.lisp")))
 
 (start)

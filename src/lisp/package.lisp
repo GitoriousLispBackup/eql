@@ -19,6 +19,7 @@
    #:qdelete
    #:qdisconnect
    #:qfind-child
+   #:qfrom-utf8
    #:qgui
    #:qid
    #:qinvoke-method
