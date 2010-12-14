@@ -49,6 +49,7 @@
 (defparameter *keep-extra-selections*  nil)
 (defparameter *error-region*           nil)
 (defparameter *try-read-error*         nil)
+(defparameter *latest-eval-position*   nil)
 
 (defconstant +max-shown-completions+ 10)
 (defconstant +hidden-position+       (quote #.(make-list 2 :initial-element (- (1- (expt 8 5))))))
@@ -62,6 +63,8 @@
 (defvar *action-save*         (qfind-child *main* "action_save"))
 (defvar *action-save-as*      (qfind-child *main* "action_save_as"))
 (defvar *action-save-and-run* (qfind-child *main* "action_save_and_run"))
+(defvar *action-eval-region*  (qfind-child *main* "action_eval_region"))
+(defvar *action-repeat-eval*  (qfind-child *main* "action_repeat_eval"))
 
 (defparameter *document*             nil)
 (defparameter *font*                 nil)
@@ -105,48 +108,55 @@
   `(qenum "Qt::Key" ,(format nil "Key_~A" name)))
 
 (defun ini ()
-  (setf *document*            (qfun *editor* "document")
-        *highlighter*         (qnew "QSyntaxHighlighter(QTextDocument*)" *document*)
-        *eql-keyword-format*  (qnew "QTextCharFormat")
-        *lisp-keyword-format* (qnew "QTextCharFormat")
-        *completer*           (qnew "QListWidget"
-                                    "resizeMode" "Adjust"
-                                    "horizontalScrollBarPolicy" "AlwaysOff"
-                                    "verticalScrollBarPolicy" "AlwaysOff")
-        *font*                (qnew "QFont(QString,int)" 
-                                    #+linux "Courier"
-                                    #-linux "Courier New"
-                                    #+darwin 13
-                                    #-darwin 10))
-  (qset *editor* "font" *font*)
-  (qset *action-save* "shortcut" "Ctrl+S")
-  (qset *action-save-and-run* "shortcut" "Ctrl+R")
-  (x:do-with (qset *completer*)
-    ("font" *font*)
-    ("frameShape" "Box")
-    ("frameShadow" "Plain")
-    ("lineWidth" 1))
-  (x:do-with (qset *main*)
-    ("pos" (list 40 40))
-    ("size" (list 800 500))
-    ("windowTitle" "Simple Lisp Editor"))
-  (qfun *completer* "setWindowFlags" "Popup")
-  (qconnect *editor* "cursorPositionChanged()" 'cursor-position-changed)
-  (qconnect *completer* "itemDoubleClicked(QListWidgetItem*)" 'insert-completer-option-text)
-  (qconnect *action-open* "triggered()" 'file-open)
-  (qconnect *action-save* "triggered()" 'file-save)
-  (qconnect *action-save-as* "triggered()" 'file-save-as)
-  (qconnect *action-save-and-run* "triggered()" 'save-and-run)
-  (qconnect (qapp) "aboutToQuit()" 'clean-up)
-  (qoverride *editor* "keyPressEvent(QKeyEvent*)" 'editor-key-pressed)
-  (qoverride *completer* "keyPressEvent(QKeyEvent*)" 'completer-key-pressed)
-  (qoverride *completer* "focusOutEvent(QFocusEvent*)" 'close-completer)
-  (qoverride *highlighter* "highlightBlock(QString)" 'highlight-block)
-  (show-status-message (tr "<b style='color:#4040E0'>Eval Region:</b> move to paren <b>(</b> or <b>)</b>, hit <b>Ctrl</b>+<b>Return</b>")
-                       :html)
-  (ini-highlight-rules)
-  (local-client:ini (lambda (data) (mark-error-region (bytes-to-int data))))
-  (qfun *main* "show"))
+  (flet ((keys (str)
+           (qnew "QKeySequence(QString)" str)))
+    (setf *document*            (qfun *editor* "document")
+          *highlighter*         (qnew "QSyntaxHighlighter(QTextDocument*)" *document*)
+          *eql-keyword-format*  (qnew "QTextCharFormat")
+          *lisp-keyword-format* (qnew "QTextCharFormat")
+          *completer*           (qnew "QListWidget"
+                                      "resizeMode" "Adjust"
+                                      "horizontalScrollBarPolicy" "AlwaysOff"
+                                      "verticalScrollBarPolicy" "AlwaysOff")
+          *font*                (qnew "QFont(QString,int)" 
+                                      #+linux "Courier"
+                                      #-linux "Courier New"
+                                      #+darwin 13
+                                      #-darwin 10))
+    (qset *editor* "font" *font*)
+    (qset *action-save*         "shortcut" (keys "Ctrl+S"))
+    (qset *action-save-and-run* "shortcut" (keys "Ctrl+R"))
+    (qset *action-eval-region*  "shortcut" (keys "Ctrl+Return"))
+    (qset *action-repeat-eval*  "shortcut" (keys "Ctrl+E"))
+    (x:do-with (qset *completer*)
+      ("font" *font*)
+      ("frameShape" "Box")
+      ("frameShadow" "Plain")
+      ("lineWidth" 1))
+    (x:do-with (qset *main*)
+      ("pos" (list 40 40))
+      ("size" (list 800 500))
+      ("windowTitle" "Simple Lisp Editor"))
+    (qfun *completer* "setWindowFlags" "Popup")
+    (qconnect *editor* "cursorPositionChanged()" 'cursor-position-changed)
+    (qconnect *completer* "itemDoubleClicked(QListWidgetItem*)" 'insert-completer-option-text)
+    (qconnect *action-open* "triggered()" 'file-open)
+    (qconnect *action-save* "triggered()" 'file-save)
+    (qconnect *action-save-as* "triggered()" 'file-save-as)
+    (qconnect *action-save-and-run* "triggered()" 'save-and-run)
+    (qconnect *action-eval-region* "triggered()" 'eval-region)
+    (qconnect *action-repeat-eval* "triggered()" 'repeat-eval)
+    (qconnect (qapp) "aboutToQuit()" 'clean-up)
+    (qoverride *editor* "keyPressEvent(QKeyEvent*)" 'editor-key-pressed)
+    (qoverride *completer* "keyPressEvent(QKeyEvent*)" 'completer-key-pressed)
+    (qoverride *completer* "focusOutEvent(QFocusEvent*)" 'close-completer)
+    (qoverride *highlighter* "highlightBlock(QString)" 'highlight-block)
+    (show-status-message (format nil (tr "<b style='color:#4040E0'>Eval Region:</b> move to paren <b>(</b> or <b>)</b>, hit <b>~A</b>")
+                                 (qfun (qget *action-eval-region* "shortcut") "toString"))
+                         :html)
+    (ini-highlight-rules)
+    (local-client:ini (lambda (file-pos) (mark-error-region file-pos)))
+    (qfun *main* "show")))
 
 (defun clean-up ()
   (file-save))
@@ -177,7 +187,7 @@
   (setf *try-read-error* nil)
   (let ((*package* (find-package :eql)))
     (multiple-value-bind (exp x)
-        (ignore-errors (read-from-string (nsubstitute +package-char-dummy+ #\: str)
+        (ignore-errors (read-from-string (substitute +package-char-dummy+ #\: str)
                                          nil nil :start start :preserve-whitespace t))
       (unless exp
         (setf *try-read-error* (typecase x
@@ -657,7 +667,7 @@
         (rest (find* name*
                      (rest (find* scope enums))))))))
 
-;;; auto indent, eval region
+;;; auto indent
 
 (defun auto-indent-spaces (kw)
   (when (symbolp kw)
@@ -674,11 +684,6 @@
            (return-from editor-key-pressed t)))
     (case (qfun key-event "key")
       ((#.(key "Return") #.(key "Enter"))
-         (let ((mod (qfun key-event "modifiers")))
-           (unless (zerop mod)
-             ;; eval region
-             (run-on-server (highlighted-parenthesis-text))
-             (return-from editor-key-pressed t)))
          (let ((spaces (+ *current-depth* *current-keyword-indent*)))
            (unless (zerop spaces)
              (insert (format nil "~%~A" (make-string spaces :initial-element #\Space))))))
@@ -811,19 +816,21 @@
               (incf pos-close)))
           (setf *extra-selections* t)))))
   (defun highlighted-parenthesis-text ()
+    (setf *latest-eval-position* pos-open)
     (subseq (qget *editor* "plainText") pos-open pos-close)))
 
-(defun mark-error-region (pos)
-  (let* ((text (qget *editor* "plainText"))
-         (end (nth-value 1 (read* text pos)))
-         (*keep-extra-selections* t))
-    (qlet ((text-cursor (qfun *editor* "textCursor")))
-      (qfun *editor* "moveCursor" +start+)
-      (setf *error-region* t)
-      (qfun text-cursor "setPosition" end)
-      (x:do-with (qfun *editor*)
-        ("setTextCursor" text-cursor)
-        "ensureCursorVisible"))))
+(defun mark-error-region (file-pos)
+  (when (string= *file-name* (file-namestring (car file-pos)))
+    (let* ((text (qget *editor* "plainText"))
+           (end (nth-value 1 (read* text (cdr file-pos))))
+           (*keep-extra-selections* t))
+      (qlet ((text-cursor (qfun *editor* "textCursor")))
+        (qfun *editor* "moveCursor" +start+)
+        (setf *error-region* t)
+        (qfun text-cursor "setPosition" end)
+        (x:do-with (qfun *editor*)
+          ("setTextCursor" text-cursor)
+          "ensureCursorVisible")))))
 
 ;;; external lisp process
 
@@ -834,6 +841,21 @@
 (defun save-and-run ()
   (file-save)
   (run-on-server (format nil "(load ~S)" *file-name*)))
+
+(defun eval-region ()
+  (run-on-server (highlighted-parenthesis-text)))
+
+(defun repeat-eval ()
+  (when *latest-eval-position*
+    (let ((text (qget *editor* "plainText")))
+      (when (< *latest-eval-position* (length text))
+        (let ((text* (subseq text *latest-eval-position*)))
+          (multiple-value-bind (exp end)
+              (read* text*)
+            (when (numberp end)
+              (run-on-server (subseq text* 0 end))
+              (return-from repeat-eval)))))))
+  (qmsg (tr "No valid latest region found.")))
 
 ;;; profile
 

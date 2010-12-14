@@ -502,9 +502,6 @@ static QPolygonF toQPolygonF(cl_object l_lst) {
 static QColor toQColor(cl_object l_c) {
     return QColor(toQString(l_c)); }
 
-static QKeySequence toQKeySequence(cl_object l_c) {
-    return QKeySequence(toQString(l_c)); }
-
 static QGradientStop toQGradientStop(cl_object l_gs) {
     QGradientStop gs;
     if(cl_consp(l_gs)) {
@@ -537,6 +534,7 @@ TO_QT_TYPE_PTR2(QFileInfo, qfileinfo)
 TO_QT_TYPE_PTR2(QFont, qfont)
 TO_QT_TYPE_PTR2(QIcon, qicon)
 TO_QT_TYPE_PTR2(QImage, qimage)
+TO_QT_TYPE_PTR2(QKeySequence, qkeysequence)
 TO_QT_TYPE_PTR2(QLocale, qlocale)
 TO_QT_TYPE_PTR(QModelIndex, qmodelindex)
 TO_QT_TYPE_PTR(QPainterPath, qpainterpath)
@@ -669,9 +667,6 @@ static cl_object from_qstring(const QString& s) {
     for(int i = 0; i < s.length(); ++i) {
         l_p[i] = s.at(i).unicode(); }
     return l_s; }
-
-static cl_object from_qkeysequence(const QKeySequence& k) {
-    return from_qstring(k.toString()); }
 
 static cl_object from_qstringlist(const QStringList& l) {
     cl_object l_lst = Cnil;
@@ -841,7 +836,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case QMetaType::QDate:                   p = toQDatePointer(l_arg); break;
         case QMetaType::QDateTime:               p = toQDateTimePointer(l_arg); break;
         case QMetaType::QFont:                   p = toQFontPointer(l_arg); break;
-        case QMetaType::QKeySequence:            p = new QKeySequence(toQKeySequence(l_arg)); break;
+        case QMetaType::QKeySequence:            p = toQKeySequencePointer(l_arg); break;
         case QMetaType::QLine:                   p = new QLine(toQLine(l_arg)); break;
         case QMetaType::QLineF:                  p = new QLineF(toQLineF(l_arg)); break;
         case QMetaType::QLocale:                 p = toQLocalePointer(l_arg); break;
@@ -1128,7 +1123,6 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
         case QMetaType::QByteArray:
         case QMetaType::QChar:
         case QMetaType::QColor:
-        case QMetaType::QKeySequence:
         case QMetaType::QLine:
         case QMetaType::QLineF:
         case QMetaType::QPoint:
@@ -1151,6 +1145,7 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
         case QMetaType::QFont:
         case QMetaType::QIcon:
         case QMetaType::QImage:
+        case QMetaType::QKeySequence:
         case QMetaType::QLocale:
         case QMetaType::QPalette:
         case QMetaType::QPen:
@@ -1799,6 +1794,7 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
                 case QMetaType::QFont:             ret = qVariantFromValue(*(QFont*)o.pointer); break;
                 case QMetaType::QIcon:             ret = qVariantFromValue(*(QIcon*)o.pointer); break;
                 case QMetaType::QImage:            ret = qVariantFromValue(*(QImage*)o.pointer); break;
+                case QMetaType::QKeySequence:      ret = qVariantFromValue(*(QKeySequence*)o.pointer); break;
                 case QMetaType::QLocale:           ret = qVariantFromValue(*(QLocale*)o.pointer); break;
                 case QMetaType::QPalette:          ret = qVariantFromValue(*(QPalette*)o.pointer); break;
                 case QMetaType::QPen:              ret = qVariantFromValue(*(QPen*)o.pointer); break;

@@ -11,7 +11,7 @@
 typedef QList<int> NumList;
 
 class LSvgGenerator : public QSvgGenerator {
-    friend class N142;
+    friend class N143;
 public:
     LSvgGenerator(uint u) : unique(u) {}
 

@@ -79,6 +79,7 @@
         "QItemSelection"
         "QItemSelectionRange"
         "QKeyEvent"
+        "QKeySequence"
         "QLayoutItem"
         "QLibraryInfo"
         "QLinearGradient"

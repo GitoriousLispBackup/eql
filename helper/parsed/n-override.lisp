@@ -246,6 +246,7 @@
   (("QItemSelection" . NIL))
   (("QItemSelectionRange" . NIL))
   (("QKeyEvent" . "QInputEvent"))
+  (("QKeySequence" . NIL))
   (("QLayoutItem" . NIL)
    "virtual Qt::Orientations expandingDirections () const = 0"
    "virtual QRect geometry () const = 0"

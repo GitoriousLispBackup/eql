@@ -70,7 +70,7 @@
              (let ((action (qnew "QAction(QObject*)" *me*
                                  "text" text)))
                (when shortcut
-                 (qset action "shortcut" shortcut))
+                 (qset action "shortcut" (qnew "QKeySequence(QString)" shortcut)))
                (qconnect action "triggered()" slot)
                (push (cons name action) actions))))
       (action :render-into-pixmap (tr "&Render into Pixmap...") "Ctrl+R" 'render-into-pixmap)

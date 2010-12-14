@@ -57,7 +57,7 @@
 (defun send-file-position (file pos)
   (when (qfun *client* "isValid")
     (x:do-with (qfun *client*)
-      ("write(QByteArray)" (x:string-to-bytes (princ-to-string pos)))
+      ("write(QByteArray)" (x:string-to-bytes (qutf8 (format nil "(~S . ~D)" file pos))))
       "flush")))
 
 (ini)

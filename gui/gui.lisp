@@ -219,7 +219,6 @@
                       (cons "QChar"         "#\\a")
                       (cons "QColor"        "\"#FF0000\" or \"red\"")
                       (cons "QGradientStop" "(cons 0 \"orange\")")
-                      (cons "QKeySequence"  "\"Alt+A\"")
                       (cons "QLine"         "(list x1 y1 x2 y2)")
                       (cons "QPoint"        "(list x y)")
                       (cons "QPolygon"      "(list x1 y1 x2 y2 x3 y3 ...)")

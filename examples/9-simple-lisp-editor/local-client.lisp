@@ -7,6 +7,7 @@
 (defpackage :local-client
   (:use :common-lisp :eql)
   (:export
+   #:*function*
    #:*server-name*
    #:ini
    #:request
@@ -22,9 +23,11 @@
 
 (defun ini (&optional fun)
   (setf *function* fun)
-  (qconnect *socket* "readyRead()" (lambda ()
-                                     (when *function*
-                                       (funcall *function* (qfun *socket* "readAll"))))))
+  (qconnect *socket* "readyRead()" 'read-all))
+
+(defun read-all ()
+  (when *function*
+    (funcall *function* (read-from-string (qfrom-utf8 (qfun *socket* "readAll"))))))
 
 (defun request (data)
   (x:do-with (qfun *socket*)

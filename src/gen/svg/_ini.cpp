@@ -15,7 +15,7 @@ void ini() {
     LObjects::Q[77] = new Q78;
     LObjects::Q[170] = new Q171;
     LObjects::Q[171] = new Q172;
-    LObjects::N[141] = new N142; }
+    LObjects::N[142] = new N143; }
 
 const QMetaObject* staticMetaObject(int n) {
     const QMetaObject* m = 0;
@@ -27,7 +27,7 @@ const QMetaObject* staticMetaObject(int n) {
 
 void deleteNObject(int n, void* p) {
     switch(n) {
-        case 142: delete (LSvgGenerator*)p; break; }}
+        case 143: delete (LSvgGenerator*)p; break; }}
 
 NumList* override(const QByteArray& name) {
     NumList* ids = 0;
@@ -40,5 +40,5 @@ NumList* override(const QByteArray& name) {
     else {
         n = LObjects::n_names.value(name);
         switch(n) {
-            case 142: ids = &LSvgGenerator::overrideIds; break; }}
+            case 143: ids = &LSvgGenerator::overrideIds; break; }}
     return ids; }

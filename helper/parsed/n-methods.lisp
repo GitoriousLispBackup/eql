@@ -1457,6 +1457,19 @@
    "bool matches ( QKeySequence::StandardKey ) const"
    "Qt::KeyboardModifiers modifiers () const"
    "QString text () const")
+  (("QKeySequence" . NIL)
+   "new QKeySequence ()"
+   "new QKeySequence ( const QString & )"
+   "new QKeySequence ( int , int = 0, int = 0, int = 0 )"
+   "new QKeySequence ( const QKeySequence & )"
+   "new QKeySequence ( StandardKey )"
+   "uint count () const"
+   "bool isEmpty () const"
+   "SequenceMatch matches ( const QKeySequence & ) const"
+   "QString toString ( SequenceFormat = PortableText ) const"
+   "static QKeySequence fromString ( const QString & , SequenceFormat = PortableText )"
+   "static QList<QKeySequence> keyBindings ( StandardKey )"
+   "static QKeySequence mnemonic ( const QString & )")
   (("QLayoutItem" . NIL)
    "new QLayoutItem ( Qt::Alignment = 0 )"
    "Qt::Alignment alignment () const"
