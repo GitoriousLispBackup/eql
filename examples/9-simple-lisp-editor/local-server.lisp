@@ -16,7 +16,7 @@
 
 (in-package :local-server)
 
-(defvar *function* 'send-to-top-level)
+(defvar *function* 'feed-top-level)
 (defvar *server*   (qnew "QLocalServer"))
 (defvar *client*   nil)
 
@@ -47,11 +47,19 @@
   (funcall *function* (qfun *client* "readAll")))
 
 (let ((n 0))
-  (defun send-to-top-level (data)
-    (let ((str (qfrom-utf8 data)))
-      (setf si::*read-string* str)
-      (format t "~A[~D] ------------------------------~%~A"
-              (if (zerop n) "> " "") (incf n) str))
+  (defun feed-top-level (data)
+    (let ((str (qfrom-utf8 data))
+          (pkg (package-name *package*))
+          (counter (princ-to-string (incf n))))
+      (format t "~A[~A] ~A~%~A"
+              (if (= 1 n) "> " "")
+              counter
+              (make-string (- 50
+                              (length counter)
+                              (if (string= "COMMON-LISP-USER" pkg) 0 (length pkg)))
+                           :initial-element #\-)
+              str)
+      (setf si::*read-string* str))
     (si::%top-level)))
 
 (defun send-file-position (file pos)

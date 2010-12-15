@@ -12,9 +12,10 @@ HOWTO
 
 2) Adapt the my_app/main.cpp (translations, initial Lisp form to evaluate, package name).
 
-  in my_app/ do: (MSVC: nmake instead of make)
-    qmake
-    make clean
-    make
+3) In my_app/ do:
+  
+  remove the directory tmp/ (if present)
+  qmake
+  make (MSVC: nmake)
 
 Now you should find a my_app executable, which depends on the EQL shared library.

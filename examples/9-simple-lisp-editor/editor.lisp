@@ -86,6 +86,7 @@
 (defconstant +move-anchor+        0  "move mode")
 (defconstant +keep-anchor+        1  "move mode")
 (defconstant +word-under-cursor+  0  "selection type")
+(defconstant +native-text+        0  "sequence format")
 
 (defun file-open ()
   (let ((name (qfun "QFileDialog" "getOpenFileName" nil "" "" "Lisp files (*.lisp)")))
@@ -152,7 +153,7 @@
     (qoverride *completer* "focusOutEvent(QFocusEvent*)" 'close-completer)
     (qoverride *highlighter* "highlightBlock(QString)" 'highlight-block)
     (show-status-message (format nil (tr "<b style='color:#4040E0'>Eval Region:</b> move to paren <b>(</b> or <b>)</b>, hit <b>~A</b>")
-                                 (qfun (qget *action-eval-region* "shortcut") "toString"))
+                                 (qfun (qget *action-eval-region* "shortcut") "toString" +native-text+))
                          :html)
     (ini-highlight-rules)
     (local-client:ini (lambda (file-pos) (mark-error-region file-pos)))

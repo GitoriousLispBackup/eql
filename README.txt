@@ -21,8 +21,10 @@ REQUIREMENTS
 
 
 
-BUILD / REBUILD (see also: "Windows Easy Guide" in doc/)
-===============
+BUILD (see also: "Windows Easy Guide" in doc/)
+=====
+
+(N.B. for rebuilding, please see the README-REBUILD.txt)
 
   [Windows]
     You first need to adapt the file src/windows.pri (include & library paths).
@@ -43,23 +45,20 @@ BUILD / REBUILD (see also: "Windows Easy Guide" in doc/)
    in src/ run:
  
     qmake first_metatype_id.pro
-    make clean (rebuild only)
     make
     ./first_metatype_id (MSVC: first_metatype_id.exe)
 
    This will create the file first_metatype_id.h (which differs in Qt4.6 and Qt4.7)
 
 1) In src/ run:
-    ecl -shell make-eql-lib.lisp (build + rebuild)
+    ecl -shell make-eql-lib.lisp
 
 2) Run:
 
     qmake eql_lib.pro
-    make clean (rebuild only)
     make 
 
     qmake eql_exe.pro
-    make clean (rebuild only)
     make 
 
    This will build both the EQL executable and shared library.
@@ -113,7 +112,6 @@ QT MODULES
 To build an EQL module (corresponding to a Qt module), do the following in src/:
 
     qmake module_<name>.pro (e.g. qmake module_network.pro)
-    make clean (rebuild only)
     make
 
   [Linux,OSX]
