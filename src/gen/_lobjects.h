@@ -30,7 +30,8 @@ typedef const QMetaObject* (*StaticMetaObject)(int);
 typedef void (*DeleteNObject)(int, void*);
 typedef NumList* (*Override)(const QByteArray&);
 typedef void* (*ToMetaArg)(int, cl_object);
-typedef cl_object (*To_lisp_arg)(int, void*);
+typedef void (*ClearMetaArg)(int, void*, bool);
+typedef cl_object (*To_lisp_arg)(int, const void*);
 
 class EQL_EXPORT LObjects {
 public:
@@ -75,8 +76,10 @@ public:
     static Override override_opengl;
     static Override override_svg;
     static ToMetaArg toMetaArg_network;
+    static ClearMetaArg clearMetaArg_network;
     static To_lisp_arg to_lisp_arg_network;
     static ToMetaArg toMetaArg_opengl;
+    static ClearMetaArg clearMetaArg_opengl;
     static To_lisp_arg to_lisp_arg_opengl;
 };
 

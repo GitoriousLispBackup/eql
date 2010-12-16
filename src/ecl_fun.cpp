@@ -1134,7 +1134,6 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
         case QMetaType::QSizeF:
         case QMetaType::QString:
         case QMetaType::QStringList:
-        case T_QPolygonF:
             QMetaType::destroy(n, p);
             break;
         // implicit pointer types
@@ -1154,36 +1153,36 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
         case QMetaType::QTextLength:
         case QMetaType::QTime:
         case QMetaType::QUrl:
-        case T_QFileInfo:
-        case T_QModelIndex:
-        case T_QPainterPath:
-        case T_QTableWidgetSelectionRange:
-        case T_QTextBlock:
-        case T_QTextCharFormat:
-        case T_QTextCursor:
-        case T_QTextDocumentFragment:
-#if QT_VERSION < 0x40700
-        case T_QVariant:
-#else
+#if QT_VERSION >= 0x40700
         case QMetaType::QVariant:
 #endif
             if(is_ret) {
                 QMetaType::destroy(n, p); }
             break;
-        case T_bool_ok_pointer:
-            delete (void**)p;
-	    break;
+        case T_QFileInfo:                  if(is_ret) { delete (QFileInfo*)p; } break;
+        case T_QModelIndex:                if(is_ret) { delete (QModelIndex*)p; } break;
+        case T_QPainterPath:               if(is_ret) { delete (QPainterPath*)p; } break;
+        case T_QTableWidgetSelectionRange: if(is_ret) { delete (QTableWidgetSelectionRange*)p; } break;
+        case T_QTextBlock:                 if(is_ret) { delete (QTextBlock*)p; } break;
+        case T_QTextCharFormat:            if(is_ret) { delete (QTextCharFormat*)p; } break;
+        case T_QTextCursor:                if(is_ret) { delete (QTextCursor*)p; } break;
+        case T_QTextDocumentFragment:      if(is_ret) { delete (QTextDocumentFragment*)p; } break;
+#if QT_VERSION < 0x40700
+        case T_QVariant:                   if(is_ret) { delete (QVariant*)p; } break;
+#endif
+        case T_QPolygonF:       delete (QPolygonF*)p; break;
+        case T_bool_ok_pointer: delete (void**)p; break;
         default:
-            // implicit module pointer types
+            // module network
             if(LObjects::T_QNetworkRequest == n) {
-                if(is_ret) {
-                    QMetaType::destroy(n, p); }}
-            // implicitly included module types:
-            // LObjects::T_GLfloat
-            // LObjects::T_GLint
-            // LObjects::T_GLuint
-            else if(n > QMetaType::User) {
-                QMetaType::destroy(n, p); }
+                if(LObjects::clearMetaArg_network) {
+                    LObjects::clearMetaArg_network(n, p, is_ret); }}
+            // module opengl
+            else if((LObjects::T_GLfloat == n) ||
+                    (LObjects::T_GLint == n) ||
+                    (LObjects::T_GLuint == n)) {
+                if(LObjects::clearMetaArg_opengl) {
+                    LObjects::clearMetaArg_opengl(n, p, is_ret); }}
             else {
                 if(sType.endsWith('*')) {
                     if("const char*" == sType) {
@@ -1889,19 +1888,22 @@ cl_object qrequire(cl_object l_name) {
                 LObjects::override_svg = over; }
             else {
                 ToMetaArg metaArg = (ToMetaArg)lib.resolve("toMetaArg");
+                ClearMetaArg clearArg = (ClearMetaArg)lib.resolve("clearMetaArg");
                 To_lisp_arg lispArg = (To_lisp_arg)lib.resolve("to_lisp_arg");
-                if(metaArg && lispArg) {
+                if(metaArg && clearArg && lispArg) {
                     if("network" == name) {
                         LObjects::staticMetaObject_network = meta;
                         LObjects::deleteNObject_network = del;
                         LObjects::override_network = over;
                         LObjects::toMetaArg_network = metaArg;
+                        LObjects::clearMetaArg_network = clearArg;
                         LObjects::to_lisp_arg_network = lispArg; }
                     else if("opengl" == name) {
                         LObjects::staticMetaObject_opengl = meta;
                         LObjects::deleteNObject_opengl = del;
                         LObjects::override_opengl = over;
                         LObjects::toMetaArg_opengl = metaArg;
+                        LObjects::clearMetaArg_opengl = clearArg;
                         LObjects::to_lisp_arg_opengl = lispArg; }}}
             return l_name; }}
     error("QREQUIRE", LIST1(l_name));

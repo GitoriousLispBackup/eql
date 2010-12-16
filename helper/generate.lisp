@@ -752,8 +752,9 @@
       (format s "~%Override LObjects::override_~(~A~) = 0;" module))
     (dolist (module (list :network :opengl))
       (format s "~%ToMetaArg LObjects::toMetaArg_~(~A~) = 0;~
+                 ~%ClearMetaArg LObjects::clearMetaArg_~(~A~) = 0;~
                  ~%To_lisp_arg LObjects::to_lisp_arg_~(~A~) = 0;"
-              module module))
+              module module module))
     (format s "~%~%")
     (dolist (ids *override-signature-ids*)
       (let* ((class (first ids))

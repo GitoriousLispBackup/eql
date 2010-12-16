@@ -1,3 +1,6 @@
+;;; Note: the long startup time of this example is caused
+;;; by all the different font encodings envolved.
+
 (defpackage :main-window
   (:use :common-lisp :eql)
   (:export

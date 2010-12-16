@@ -50,6 +50,11 @@ void* toMetaArg(int n, cl_object l_arg) {
     else if(LObjects::T_GLuint == n) { p = new GLuint(toUInt(l_arg)); }
     return p; }
 
+void clearMetaArg(int n, void* p, bool /* is_ret */) {
+    if(LObjects::T_GLfloat == n)     { delete (GLfloat*)p; }
+    else if(LObjects::T_GLint == n)  { delete (GLint*)p; }
+    else if(LObjects::T_GLuint == n) { delete (GLuint*)p; }}
+
 cl_object to_lisp_arg(int n, void* p) {
     cl_object l_ret = Cnil;
     if(LObjects::T_GLfloat == n)     { l_ret = ecl_make_doublefloat(*(GLfloat*)p); }
