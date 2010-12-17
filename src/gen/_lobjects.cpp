@@ -40,10 +40,8 @@ Override LObjects::override_network = 0;
 Override LObjects::override_opengl = 0;
 Override LObjects::override_svg = 0;
 ToMetaArg LObjects::toMetaArg_network = 0;
-ClearMetaArg LObjects::clearMetaArg_network = 0;
 To_lisp_arg LObjects::to_lisp_arg_network = 0;
 ToMetaArg LObjects::toMetaArg_opengl = 0;
-ClearMetaArg LObjects::clearMetaArg_opengl = 0;
 To_lisp_arg LObjects::to_lisp_arg_opengl = 0;
 
 NumList LAbstractAnimation::overrideIds = NumList() << 1 << 2 << 3 << 4;

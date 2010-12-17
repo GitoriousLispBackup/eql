@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "10.12.7"; // 2010-12-16
+const char EQL::version[] = "10.12.8"; // 2010-12-17
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
@@ -18,7 +18,6 @@ extern "C" void ini_EQL(cl_object);
 
 EQL::EQL() : QObject(), fun(0) {
     iniCLFunctions();
-    registerMetaTypes();
     LObjects::ini(this);
     read_VV(OBJNULL, ini_EQL); } // see src/make-eql-lib.lisp
 

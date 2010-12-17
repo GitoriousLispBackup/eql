@@ -17,6 +17,66 @@ static bool _ok_ = false;
 static int _n_cstr_ = -1;
 static const QMetaObject* staticQtMetaObject = QtMetaObject::get();
 
+// meta types
+static const int T_bool_ok_pointer =                  qRegisterMetaType<bool*>("bool*");
+static const int T_QFileInfo =                        qRegisterMetaType<QFileInfo>("QFileInfo");
+static const int T_QFileInfoList =                    qRegisterMetaType<QFileInfoList>("QFileInfoList");
+static const int T_QGradientStop =                    qRegisterMetaType<QGradientStop>("QGradientStop");
+static const int T_QList_QAbstractAnimation =         qRegisterMetaType<QList<QAbstractAnimation*> >("QList<QAbstractAnimation*>");
+static const int T_QList_QAbstractButton =            qRegisterMetaType<QList<QAbstractButton*> >("QList<QAbstractButton*>");
+static const int T_QList_QAbstractState =             qRegisterMetaType<QList<QAbstractState*> >("QList<QAbstractState*>");
+static const int T_QList_QAction =                    qRegisterMetaType<QList<QAction*> >("QList<QAction*>");
+static const int T_QList_QByteArray =                 qRegisterMetaType<QList<QByteArray> >("QList<QByteArray>");
+static const int T_QList_QDockWidget =                qRegisterMetaType<QList<QDockWidget*> >("QList<QDockWidget*>");
+static const int T_QList_QGesture =                   qRegisterMetaType<QList<QGesture*> >("QList<QGesture*>");
+static const int T_QList_QGraphicsItem =              qRegisterMetaType<QList<QGraphicsItem*> >("QList<QGraphicsItem*>");
+static const int T_QList_QGraphicsTransform =         qRegisterMetaType<QList<QGraphicsTransform*> >("QList<QGraphicsTransform*>");
+static const int T_QList_QGraphicsView =              qRegisterMetaType<QList<QGraphicsView*> >("QList<QGraphicsView*>");
+static const int T_QList_QGraphicsWidget =            qRegisterMetaType<QList<QGraphicsWidget*> >("QList<QGraphicsWidget*>");
+static const int T_QList_QKeySequence =               qRegisterMetaType<QList<QKeySequence> >("QList<QKeySequence>");
+static const int T_QList_QListWidgetItem =            qRegisterMetaType<QList<QListWidgetItem*> >("QList<QListWidgetItem*>");
+static const int T_QList_QMdiSubWindow =              qRegisterMetaType<QList<QMdiSubWindow*> >("QList<QMdiSubWindow*>");
+static const int T_QList_QObject =                    qRegisterMetaType<QList<QObject*> >("QList<QObject*>");
+static const int T_QObjectList =                      qRegisterMetaType<QList<QObject*> >("QObjectList");
+static const int T_QList_QPolygonF =                  qRegisterMetaType<QList<QPolygonF> >("QList<QPolygonF>");
+static const int T_QList_QSize =                      qRegisterMetaType<QList<QSize> >("QList<QSize>");
+static const int T_QList_QStandardItem =              qRegisterMetaType<QList<QStandardItem*> >("QList<QStandardItem*>");
+static const int T_QList_QTableWidgetItem =           qRegisterMetaType<QList<QTableWidgetItem*> >("QList<QTableWidgetItem*>");
+static const int T_QList_QTableWidgetSelectionRange = qRegisterMetaType<QList<QTableWidgetSelectionRange> >("QList<QTableWidgetSelectionRange>");
+static const int T_QList_QTextBlock =                 qRegisterMetaType<QList<QTextBlock> >("QList<QTextBlock>");
+static const int T_QList_QTextEdit_ExtraSelection =   qRegisterMetaType<QList<QTextEdit::ExtraSelection> >("QList<QTextEdit::ExtraSelection>");
+static const int T_QList_QTextFrame =                 qRegisterMetaType<QList<QTextFrame*> >("QList<QTextFrame*>");
+static const int T_QList_QTreeWidgetItem =            qRegisterMetaType<QList<QTreeWidgetItem*> >("QList<QTreeWidgetItem*>");
+static const int T_QList_QUndoStack =                 qRegisterMetaType<QList<QUndoStack*> >("QList<QUndoStack*>");
+static const int T_QList_QUrl =                       qRegisterMetaType<QList<QUrl> >("QList<QUrl>");
+static const int T_QList_QWidget =                    qRegisterMetaType<QList<QWidget*> >("QList<QWidget*>");
+static const int T_QWidgetList =                      qRegisterMetaType<QList<QWidget*> >("QWidgetList");
+static const int T_QList_int =                        qRegisterMetaType<QList<int> >("QList<int>");
+static const int T_QList_qreal =                      qRegisterMetaType<QList<qreal> >("QList<qreal>");
+static const int T_QModelIndex =                      qRegisterMetaType<QModelIndex>("QModelIndex");
+static const int T_QPainterPath =                     qRegisterMetaType<QPainterPath>("QPainterPath");
+static const int T_QPolygonF =                        qRegisterMetaType<QPolygonF>("QPolygonF");
+static const int T_QRgb =                             qRegisterMetaType<QRgb>("QRgb");
+static const int T_QTableWidgetSelectionRange =       qRegisterMetaType<QTableWidgetSelectionRange>("QTableWidgetSelectionRange");
+static const int T_QTextBlock =                       qRegisterMetaType<QTextBlock>("QTextBlock");
+static const int T_QTextCharFormat =                  qRegisterMetaType<QTextCharFormat>("QTextCharFormat");
+static const int T_QTextCursor =                      qRegisterMetaType<QTextCursor>("QTextCursor");
+static const int T_QTextDocumentFragment =            qRegisterMetaType<QTextDocumentFragment>("QTextDocumentFragment");
+#if QT_VERSION < 0x40700
+static const int T_QVariant =                         qRegisterMetaType<QVariant>("QVariant");
+#endif
+static const int T_QVector_QGradientstop =            qRegisterMetaType<QVector<QGradientStop> >("QGradientStops");
+static const int T_QVector_QLine =                    qRegisterMetaType<QVector<QLine> >("QVector<QLine>");
+static const int T_QVector_QLineF =                   qRegisterMetaType<QVector<QLineF> >("QVector<QLineF>");
+static const int T_QVector_QPoint =                   qRegisterMetaType<QVector<QPoint> >("QVector<QPoint>");
+static const int T_QVector_QPointF =                  qRegisterMetaType<QVector<QPointF> >("QVector<QPointF>");
+static const int T_QVector_QRect =                    qRegisterMetaType<QVector<QRect> >("QVector<QRect>");
+static const int T_QVector_QRectF =                   qRegisterMetaType<QVector<QRectF> >("QVector<QRectF>");
+static const int T_QVector_QRgb =                     qRegisterMetaType<QVector<QRgb> >("QVector<QRgb>");
+static const int T_QVector_QTextFormat =              qRegisterMetaType<QVector<QTextFormat> >("QVector<QTextFormat>");
+static const int T_QVector_QTextLength =              qRegisterMetaType<QVector<QTextLength> >("QVector<QTextLength>");
+static const int T_QVector_qreal =                    qRegisterMetaType<QVector<qreal> >("QVector<qreal>");
+
 QByteArray QtObject::className() const {
     return id
             ? ((id > 0) ? LObjects::qNames.at(id - 1) : LObjects::nNames.at(-id - 1))
@@ -92,132 +152,6 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object("qui-names"),            (cl_objectfn_fixed)qui_names,                1);
     cl_def_c_function(c_string_to_object("qutf8"),                (cl_objectfn_fixed)qutf8,                    1);
     cl_def_c_function(c_string_to_object("qversion"),             (cl_objectfn_fixed)qversion,                 0); }
-
-enum UserMetaTypes {
-    Ini =
-    // if you get an error here, you simply forgot to build & run "first_metatype_id"
-#include "first_metatype_id.h"
-    // must correspond exactly to "void registerMetaTypes()"
-    T_bool_ok_pointer,
-    T_QFileInfo,
-    T_QFileInfoList,
-    T_QGradientStop,
-    T_QList_QAbstractAnimation,
-    T_QList_QAbstractButton,
-    T_QList_QAbstractState,
-    T_QList_QAction,
-    T_QList_QByteArray,
-    T_QList_QDockWidget,
-    T_QList_QGesture,
-    T_QList_QGraphicsItem,
-    T_QList_QGraphicsTransform,
-    T_QList_QGraphicsView,
-    T_QList_QGraphicsWidget,
-    T_QList_QKeySequence,
-    T_QList_QListWidgetItem,
-    T_QList_QMdiSubWindow,
-    T_QList_QObject,
-    T_QObjectList,
-    T_QList_QPolygonF,
-    T_QList_QSize,
-    T_QList_QStandardItem,
-    T_QList_QTableWidgetItem,
-    T_QList_QTableWidgetSelectionRange,
-    T_QList_QTextBlock,
-    T_QList_QTextEdit_ExtraSelection,
-    T_QList_QTextFrame,
-    T_QList_QTreeWidgetItem,
-    T_QList_QUndoStack,
-    T_QList_QUrl,
-    T_QList_QWidget,
-    T_QWidgetList,
-    T_QList_int,
-    T_QList_qreal,
-    T_QModelIndex,
-    T_QPainterPath,
-    T_QPolygonF,
-    T_QRgb,
-    T_QTableWidgetSelectionRange,
-    T_QTextBlock,
-    T_QTextCharFormat,
-    T_QTextCursor,
-    T_QTextDocumentFragment,
-#if QT_VERSION < 0x40700
-    T_QVariant,
-#endif
-    T_QVector_QGradientstop,
-    T_QVector_QLine,
-    T_QVector_QLineF,
-    T_QVector_QPoint,
-    T_QVector_QPointF,
-    T_QVector_QRect,
-    T_QVector_QRectF,
-    T_QVector_QRgb,
-    T_QVector_QTextFormat,
-    T_QVector_QTextLength,
-    T_QVector_qreal
-};
-
-void registerMetaTypes() {
-    // must correspond exactly to "enum UserMetaTypes()"
-    qRegisterMetaType<bool*>("bool*");
-    qRegisterMetaType<QFileInfo>("QFileInfo");
-    qRegisterMetaType<QFileInfoList>("QFileInfoList");
-    qRegisterMetaType<QGradientStop>("QGradientStop");
-    qRegisterMetaType<QList<QAbstractAnimation*> >("QList<QAbstractAnimation*>");
-    qRegisterMetaType<QList<QAbstractButton*> >("QList<QAbstractButton*>");
-    qRegisterMetaType<QList<QAbstractState*> >("QList<QAbstractState*>");
-    qRegisterMetaType<QList<QAction*> >("QList<QAction*>");
-    qRegisterMetaType<QList<QByteArray> >("QList<QByteArray>");
-    qRegisterMetaType<QList<QDockWidget*> >("QList<QDockWidget*>");
-    qRegisterMetaType<QList<QGesture*> >("QList<QGesture*>");
-    qRegisterMetaType<QList<QGraphicsItem*> >("QList<QGraphicsItem*>");
-    qRegisterMetaType<QList<QGraphicsTransform*> >("QList<QGraphicsTransform*>");
-    qRegisterMetaType<QList<QGraphicsView*> >("QList<QGraphicsView*>");
-    qRegisterMetaType<QList<QGraphicsWidget*> >("QList<QGraphicsWidget*>");
-    qRegisterMetaType<QList<QKeySequence> >("QList<QKeySequence>");
-    qRegisterMetaType<QList<QListWidgetItem*> >("QList<QListWidgetItem*>");
-    qRegisterMetaType<QList<QMdiSubWindow*> >("QList<QMdiSubWindow*>");
-    qRegisterMetaType<QList<QObject*> >("QList<QObject*>");
-    qRegisterMetaType<QList<QObject*> >("QObjectList");
-    qRegisterMetaType<QList<QPolygonF> >("QList<QPolygonF>");
-    qRegisterMetaType<QList<QSize> >("QList<QSize>");
-    qRegisterMetaType<QList<QStandardItem*> >("QList<QStandardItem*>");
-    qRegisterMetaType<QList<QTableWidgetItem*> >("QList<QTableWidgetItem*>");
-    qRegisterMetaType<QList<QTableWidgetSelectionRange> >("QList<QTableWidgetSelectionRange>");
-    qRegisterMetaType<QList<QTextBlock> >("QList<QTextBlock>");
-    qRegisterMetaType<QList<QTextEdit::ExtraSelection> >("QList<QTextEdit::ExtraSelection>");
-    qRegisterMetaType<QList<QTextFrame*> >("QList<QTextFrame*>");
-    qRegisterMetaType<QList<QTreeWidgetItem*> >("QList<QTreeWidgetItem*>");
-    qRegisterMetaType<QList<QUndoStack*> >("QList<QUndoStack*>");
-    qRegisterMetaType<QList<QUrl> >("QList<QUrl>");
-    qRegisterMetaType<QList<QWidget*> >("QList<QWidget*>");
-    qRegisterMetaType<QList<QWidget*> >("QWidgetList");
-    qRegisterMetaType<QList<int> >("QList<int>");
-    qRegisterMetaType<QList<qreal> >("QList<qreal>");
-    qRegisterMetaType<QModelIndex>("QModelIndex");
-    qRegisterMetaType<QPainterPath>("QPainterPath");
-    qRegisterMetaType<QPolygonF>("QPolygonF");
-    qRegisterMetaType<QRgb>("QRgb");
-    qRegisterMetaType<QTableWidgetSelectionRange>("QTableWidgetSelectionRange");
-    qRegisterMetaType<QTextBlock>("QTextBlock");
-    qRegisterMetaType<QTextCharFormat>("QTextCharFormat");
-    qRegisterMetaType<QTextCursor>("QTextCursor");
-    qRegisterMetaType<QTextDocumentFragment>("QTextDocumentFragment");
-#if QT_VERSION < 0x40700
-    qRegisterMetaType<QVariant>("QVariant");
-#endif
-    qRegisterMetaType<QVector<QGradientStop> >("QGradientStops");
-    qRegisterMetaType<QVector<QLine> >("QVector<QLine>");
-    qRegisterMetaType<QVector<QLineF> >("QVector<QLineF>");
-    qRegisterMetaType<QVector<QPoint> >("QVector<QPoint>");
-    qRegisterMetaType<QVector<QPointF> >("QVector<QPointF>");
-    qRegisterMetaType<QVector<QRect> >("QVector<QRect>");
-    qRegisterMetaType<QVector<QRectF> >("QVector<QRectF>");
-    qRegisterMetaType<QVector<QRgb> >("QVector<QRgb>");
-    qRegisterMetaType<QVector<QTextFormat> >("QVector<QTextFormat>");
-    qRegisterMetaType<QVector<QTextLength> >("QVector<QTextLength>");
-    qRegisterMetaType<QVector<qreal> >("QVector<qreal>"); }
 
 
 
@@ -859,108 +793,111 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case QMetaType::QTextLength:             p = toQTextLengthPointer(l_arg); break;
         case QMetaType::QTime:                   p = toQTimePointer(l_arg); break;
         case QMetaType::QUrl:                    p = toQUrlPointer(l_arg); break;
-        case T_bool_ok_pointer:                  p = new void*(&_ok_); break;
-        case T_QFileInfo:                        p = new QFileInfo(toQFileInfo(l_arg)); break;
-        case T_QFileInfoList:                    p = new QFileInfoList(toQFileInfoList(l_arg)); break;
-        case T_QGradientStop:                    p = new QGradientStop(toQGradientStop(l_arg)); break;
-        case T_QList_QAbstractAnimation:         p = new QList<QAbstractAnimation*>(toQAbstractAnimationList(l_arg)); break;
-        case T_QList_QAbstractButton:            p = new QList<QAbstractButton*>(toQAbstractButtonList(l_arg)); break;
-        case T_QList_QAbstractState:             p = new QList<QAbstractState*>(toQAbstractStateList(l_arg)); break;
-        case T_QList_QAction:                    p = new QList<QAction*>(toQActionList(l_arg)); break;
-        case T_QList_QByteArray:                 p = new QList<QByteArray>(toQByteArrayList(l_arg)); break;
-        case T_QList_QDockWidget:                p = new QList<QDockWidget*>(toQDockWidgetList(l_arg)); break;
-        case T_QList_QGesture:                   p = new QList<QGesture*>(toQGestureList(l_arg)); break;
-        case T_QList_QGraphicsItem:              p = new QList<QGraphicsItem*>(toQGraphicsItemList(l_arg)); break;
-        case T_QList_QGraphicsTransform:         p = new QList<QGraphicsTransform*>(toQGraphicsTransformList(l_arg)); break;
-        case T_QList_QGraphicsView:              p = new QList<QGraphicsView*>(toQGraphicsViewList(l_arg)); break;
-        case T_QList_QGraphicsWidget:            p = new QList<QGraphicsWidget*>(toQGraphicsWidgetList(l_arg)); break;
-        case T_QList_QKeySequence:               p = new QList<QKeySequence>(toQKeySequenceList(l_arg)); break;
-        case T_QList_QListWidgetItem:            p = new QList<QListWidgetItem*>(toQListWidgetItemList(l_arg)); break;
-        case T_QList_QMdiSubWindow:              p = new QList<QMdiSubWindow*>(toQMdiSubWindowList(l_arg)); break;
-        case T_QObjectList:                      // empty
-        case T_QList_QObject:                    p = new QList<QObject*>(toQObjectList(l_arg)); break;
-        case T_QList_QPolygonF:                  p = new QList<QPolygonF>(toQPolygonFList(l_arg)); break;
-        case T_QList_QSize:                      p = new QList<QSize>(toQSizeList(l_arg)); break;
-        case T_QList_QStandardItem:              p = new QList<QStandardItem*>(toQStandardItemList(l_arg)); break;
-        case T_QList_QTableWidgetItem:           p = new QList<QTableWidgetItem*>(toQTableWidgetItemList(l_arg)); break;
-        case T_QList_QTableWidgetSelectionRange: p = new QList<QTableWidgetSelectionRange>(toQTableWidgetSelectionRangeList(l_arg)); break;
-        case T_QList_QTextBlock:                 p = new QList<QTextBlock>(toQTextBlockList(l_arg)); break;
-        case T_QList_QTextEdit_ExtraSelection:   p = new QList<QTextEdit::ExtraSelection>(toQTextEditExtraSelectionList(l_arg)); break;
-        case T_QList_QTextFrame:                 p = new QList<QTextFrame*>(toQTextFrameList(l_arg)); break;
-        case T_QList_QTreeWidgetItem:            p = new QList<QTreeWidgetItem*>(toQTreeWidgetItemList(l_arg)); break;
-        case T_QList_QUndoStack:                 p = new QList<QUndoStack*>(toQUndoStackList(l_arg)); break;
-        case T_QList_QUrl:                       p = new QList<QUrl>(toQUrlList(l_arg)); break;
-        case T_QWidgetList:                      // empty
-        case T_QList_QWidget:                    p = new QList<QWidget*>(toQWidgetList(l_arg)); break;
-        case T_QList_int:                        p = new QList<int>(toIntList(l_arg)); break;
-        case T_QList_qreal:                      p = new QList<qreal>(toRealList(l_arg)); break;
-        case T_QModelIndex:                      p = toQModelIndexPointer(l_arg); break;
-        case T_QPainterPath:                     p = toQPainterPathPointer(l_arg); break;
-        case T_QPolygonF:                        p = new QPolygonF(toQPolygonF(l_arg)); break;
-        case T_QRgb:                             p = new QRgb(toUInt(l_arg)); break;
-        case T_QTableWidgetSelectionRange:       p = toQTableWidgetSelectionRangePointer(l_arg); break;
-        case T_QTextBlock:                       p = toQTextBlockPointer(l_arg); break;
-        case T_QTextCharFormat:                  p = toQTextCharFormatPointer(l_arg); break;
-        case T_QTextCursor:                      p = toQTextCursorPointer(l_arg); break;
-        case T_QTextDocumentFragment:            p = toQTextDocumentFragmentPointer(l_arg); break;
-#if QT_VERSION < 0x40700
-        case T_QVariant:
-#else
-        case QMetaType::QVariant:
+#if QT_VERSION >= 0x40700
+        case QMetaType::QVariant:                p = toQVariantPointer(l_arg); break;
 #endif
-                                                 p = toQVariantPointer(l_arg); break;
-        case T_QVector_QGradientstop:            p = new QVector<QGradientStop>(toQGradientStopVector(l_arg)); break;
-        case T_QVector_QLine:                    p = new QVector<QLine>(toQLineVector(l_arg)); break;
-        case T_QVector_QLineF:                   p = new QVector<QLineF>(toQLineFVector(l_arg)); break;
-        case T_QVector_QPoint:                   p = new QVector<QPoint>(toQPointVector(l_arg)); break;
-        case T_QVector_QPointF:                  p = new QVector<QPointF>(toQPointFVector(l_arg)); break;
-        case T_QVector_QRect:                    p = new QVector<QRect>(toQRectVector(l_arg)); break;
-        case T_QVector_QRectF:                   p = new QVector<QRectF>(toQRectFVector(l_arg)); break;
-        case T_QVector_QRgb:                     p = new QVector<QRgb>(toQRgbVector(l_arg)); break;
-        case T_QVector_QTextFormat:              p = new QVector<QTextFormat>(toQTextFormatVector(l_arg)); break;
-        case T_QVector_QTextLength:              p = new QVector<QTextLength>(toQTextLengthVector(l_arg)); break;
-        case T_QVector_qreal:                    p = new QVector<qreal>(toqrealVector(l_arg)); break;
-        default:
-            if(sType.endsWith('*')) {
-                if(sType.startsWith('Q') || sType.startsWith("const Q")) {
-                    QtObject o = toQtObject(l_arg);
-                    ulong l = (ulong)o.pointer;
-                    // cast from QObject to non QObject + multiple inheritance problem
-                    if((o.id > 0) && LObjects::n_names.contains(sType.left(sType.length() - 1))) {
-                        l += sizeof(QObject); }
-                    void** v = new void*((void*)l);
-                    p = v; }
-                else if("const char*" == sType) {
-                    if(ECL_STRINGP(l_arg)) {
-                        p = to_cstring(l_arg); }}}
-            // module types
-            else if(LObjects::T_QNetworkRequest == n) {
-                if(LObjects::toMetaArg_network) {
-                    p = LObjects::toMetaArg_network(n, l_arg); }}
-            else if((n >= LObjects::T_GLfloat) &&
-                    (n <= LObjects::T_GLuint)) {
-                if(LObjects::toMetaArg_opengl) {
-                    p = LObjects::toMetaArg_opengl(n, l_arg); }}
-            else {
-                int i_enum = sType.indexOf("::");
-                if(i_enum != -1) {
-                    const QMetaObject* mo = 0;
-                    if(sType.startsWith("Qt")) {
-                        mo = staticQtMetaObject; }
-                    else {
-                        mo = LObjects::staticMetaObject(sType.left(i_enum)); }
-                    int n = -1;
-                    if(mo) {
-                        n = mo->indexOfEnumerator(sType.mid(i_enum + 2));
-                        if(n != -1) {
-                            QMetaEnum me = mo->enumerator(n);
-                            int* i = new int(me.isFlag()
-                                             ? me.keysToValue(toCString(l_arg))
-                                             : me.keyToValue(toCString(l_arg)));
-                            p = i; }}
-                    if(-1 == n) {
-                        int* i = new int(fixint(l_arg));
-                        p = i; }}}}
+    default:
+        if(T_bool_ok_pointer == n) {
+            p = new void*(&_ok_); }
+        else if(sType.endsWith('*')) {
+            if(sType.startsWith('Q') || sType.startsWith("const Q")) {
+                QtObject o = toQtObject(l_arg);
+                ulong l = (ulong)o.pointer;
+                // cast from QObject to non QObject + multiple inheritance problem
+                if((o.id > 0) && LObjects::n_names.contains(sType.left(sType.length() - 1))) {
+                    l += sizeof(QObject); }
+                void** v = new void*((void*)l);
+                p = v; }
+            else if("const char*" == sType) {
+                if(ECL_STRINGP(l_arg)) {
+                    p = to_cstring(l_arg); }}}
+        else if(T_QFileInfo == n)                        p = new QFileInfo(toQFileInfo(l_arg));
+        else if(T_QFileInfoList == n)                    p = new QFileInfoList(toQFileInfoList(l_arg));
+        else if(T_QGradientStop == n)                    p = new QGradientStop(toQGradientStop(l_arg));
+        else if(T_QList_QAbstractAnimation == n)         p = new QList<QAbstractAnimation*>(toQAbstractAnimationList(l_arg));
+        else if(T_QList_QAbstractButton == n)            p = new QList<QAbstractButton*>(toQAbstractButtonList(l_arg));
+        else if(T_QList_QAbstractState == n)             p = new QList<QAbstractState*>(toQAbstractStateList(l_arg));
+        else if(T_QList_QAction == n)                    p = new QList<QAction*>(toQActionList(l_arg));
+        else if(T_QList_QByteArray == n)                 p = new QList<QByteArray>(toQByteArrayList(l_arg));
+        else if(T_QList_QDockWidget == n)                p = new QList<QDockWidget*>(toQDockWidgetList(l_arg));
+        else if(T_QList_QGesture == n)                   p = new QList<QGesture*>(toQGestureList(l_arg));
+        else if(T_QList_QGraphicsItem == n)              p = new QList<QGraphicsItem*>(toQGraphicsItemList(l_arg));
+        else if(T_QList_QGraphicsTransform == n)         p = new QList<QGraphicsTransform*>(toQGraphicsTransformList(l_arg));
+        else if(T_QList_QGraphicsView == n)              p = new QList<QGraphicsView*>(toQGraphicsViewList(l_arg));
+        else if(T_QList_QGraphicsWidget == n)            p = new QList<QGraphicsWidget*>(toQGraphicsWidgetList(l_arg));
+        else if(T_QList_QKeySequence == n)               p = new QList<QKeySequence>(toQKeySequenceList(l_arg));
+        else if(T_QList_QListWidgetItem == n)            p = new QList<QListWidgetItem*>(toQListWidgetItemList(l_arg));
+        else if(T_QList_QMdiSubWindow == n)              p = new QList<QMdiSubWindow*>(toQMdiSubWindowList(l_arg));
+        else if((T_QObjectList == n) || (T_QList_QObject == n))
+            p = new QList<QObject*>(toQObjectList(l_arg));
+        else if(T_QList_QPolygonF == n)                  p = new QList<QPolygonF>(toQPolygonFList(l_arg));
+        else if(T_QList_QSize == n)                      p = new QList<QSize>(toQSizeList(l_arg));
+        else if(T_QList_QStandardItem == n)              p = new QList<QStandardItem*>(toQStandardItemList(l_arg));
+        else if(T_QList_QTableWidgetItem == n)           p = new QList<QTableWidgetItem*>(toQTableWidgetItemList(l_arg));
+        else if(T_QList_QTableWidgetSelectionRange == n) p = new QList<QTableWidgetSelectionRange>(toQTableWidgetSelectionRangeList(l_arg));
+        else if(T_QList_QTextBlock == n)                 p = new QList<QTextBlock>(toQTextBlockList(l_arg));
+        else if(T_QList_QTextEdit_ExtraSelection == n)   p = new QList<QTextEdit::ExtraSelection>(toQTextEditExtraSelectionList(l_arg));
+        else if(T_QList_QTextFrame == n)                 p = new QList<QTextFrame*>(toQTextFrameList(l_arg));
+        else if(T_QList_QTreeWidgetItem == n)            p = new QList<QTreeWidgetItem*>(toQTreeWidgetItemList(l_arg));
+        else if(T_QList_QUndoStack == n)                 p = new QList<QUndoStack*>(toQUndoStackList(l_arg));
+        else if(T_QList_QUrl == n)                       p = new QList<QUrl>(toQUrlList(l_arg));
+        else if((T_QWidgetList == n) || (T_QList_QWidget == n))
+            p = new QList<QWidget*>(toQWidgetList(l_arg));
+        else if(T_QList_int == n)                        p = new QList<int>(toIntList(l_arg));
+        else if(T_QList_qreal == n)                      p = new QList<qreal>(toRealList(l_arg));
+        else if(T_QModelIndex == n)                      p = toQModelIndexPointer(l_arg);
+        else if(T_QPainterPath == n)                     p = toQPainterPathPointer(l_arg);
+        else if(T_QPolygonF == n)                        p = new QPolygonF(toQPolygonF(l_arg));
+        else if(T_QRgb == n)                             p = new QRgb(toUInt(l_arg));
+        else if(T_QTableWidgetSelectionRange == n)       p = toQTableWidgetSelectionRangePointer(l_arg);
+        else if(T_QTextBlock == n)                       p = toQTextBlockPointer(l_arg);
+        else if(T_QTextCharFormat == n)                  p = toQTextCharFormatPointer(l_arg);
+        else if(T_QTextCursor == n)                      p = toQTextCursorPointer(l_arg);
+        else if(T_QTextDocumentFragment == n)            p = toQTextDocumentFragmentPointer(l_arg);
+#if QT_VERSION < 0x40700
+        else if(T_QVariant == n)                         p = toQVariantPointer(l_arg);
+#endif
+        else if(T_QVector_QGradientstop == n)            p = new QVector<QGradientStop>(toQGradientStopVector(l_arg));
+        else if(T_QVector_QLine == n)                    p = new QVector<QLine>(toQLineVector(l_arg));
+        else if(T_QVector_QLineF == n)                   p = new QVector<QLineF>(toQLineFVector(l_arg));
+        else if(T_QVector_QPoint == n)                   p = new QVector<QPoint>(toQPointVector(l_arg));
+        else if(T_QVector_QPointF == n)                  p = new QVector<QPointF>(toQPointFVector(l_arg));
+        else if(T_QVector_QRect == n)                    p = new QVector<QRect>(toQRectVector(l_arg));
+        else if(T_QVector_QRectF == n)                   p = new QVector<QRectF>(toQRectFVector(l_arg));
+        else if(T_QVector_QRgb == n)                     p = new QVector<QRgb>(toQRgbVector(l_arg));
+        else if(T_QVector_QTextFormat == n)              p = new QVector<QTextFormat>(toQTextFormatVector(l_arg));
+        else if(T_QVector_QTextLength == n)              p = new QVector<QTextLength>(toQTextLengthVector(l_arg));
+        else if(T_QVector_qreal == n)                    p = new QVector<qreal>(toqrealVector(l_arg));
+        // module types
+        else if(LObjects::T_QNetworkRequest == n) {
+            if(LObjects::toMetaArg_network) {
+                p = LObjects::toMetaArg_network(n, l_arg); }}
+        else if((n >= LObjects::T_GLfloat) &&
+                (n <= LObjects::T_GLuint)) {
+            if(LObjects::toMetaArg_opengl) {
+                p = LObjects::toMetaArg_opengl(n, l_arg); }}
+        else {
+            int i_enum = -1;
+            if(!sType.endsWith('>')) {
+                i_enum = sType.indexOf("::"); }
+            if(i_enum != -1) {
+                const QMetaObject* mo = 0;
+                if(sType.startsWith("Qt")) {
+                    mo = staticQtMetaObject; }
+                else {
+                    mo = LObjects::staticMetaObject(sType.left(i_enum)); }
+                int n = -1;
+                if(mo) {
+                    n = mo->indexOfEnumerator(sType.mid(i_enum + 2));
+                    if(n != -1) {
+                        QMetaEnum me = mo->enumerator(n);
+                        int* i = new int(me.isFlag()
+                                         ? me.keysToValue(toCString(l_arg))
+                                         : me.keyToValue(toCString(l_arg)));
+                        p = i; }}
+                if(-1 == n) {
+                    int* i = new int(fixint(l_arg));
+                    p = i; }}}}
     return MetaArg(sType, p); }
 
 static cl_object to_lisp_arg(const MetaArg& arg) {
@@ -1009,101 +946,102 @@ static cl_object to_lisp_arg(const MetaArg& arg) {
             case QMetaType::QTextLength:             l_ret = from_qtextlength(*(QTextLength*)p); break;
             case QMetaType::QTime:                   l_ret = from_qtime(*(QTime*)p); break;
             case QMetaType::QUrl:                    l_ret = from_qurl(*(QUrl*)p); break;
-            case T_bool_ok_pointer:                  l_ret = _ok_ ? Ct : Cnil; break;
-            case T_QFileInfo:                        l_ret = from_qfileinfo(*(QFileInfo*)p); break;
-            case T_QFileInfoList:                    l_ret = from_qfileinfolist(*(QFileInfoList*)p); break;
-            case T_QGradientStop:                    l_ret = from_qgradientstop(*(QGradientStop*)p); break;
-            case T_QList_QAbstractAnimation:         l_ret = from_qabstractanimationlist(*(QList<QAbstractAnimation*>*)p); break;
-            case T_QList_QAbstractButton:            l_ret = from_qabstractbuttonlist(*(QList<QAbstractButton*>*)p); break;
-            case T_QList_QAbstractState:             l_ret = from_qabstractstatelist(*(QList<QAbstractState*>*)p); break;
-            case T_QList_QAction:                    l_ret = from_qactionlist(*(QList<QAction*>*)p); break;
-            case T_QList_QByteArray:                 l_ret = from_qbytearraylist(*(QList<QByteArray>*)p); break;
-            case T_QList_QDockWidget:                l_ret = from_qdockwidgetlist(*(QList<QDockWidget*>*)p); break;
-            case T_QList_QGesture:                   l_ret = from_qgesturelist(*(QList<QGesture*>*)p); break;
-            case T_QList_QGraphicsItem:              l_ret = from_qgraphicsitemlist(*(QList<QGraphicsItem*>*)p); break;
-            case T_QList_QGraphicsTransform:         l_ret = from_qgraphicstransformlist(*(QList<QGraphicsTransform*>*)p); break;
-            case T_QList_QGraphicsView:              l_ret = from_qgraphicsviewlist(*(QList<QGraphicsView*>*)p); break;
-            case T_QList_QGraphicsWidget:            l_ret = from_qgraphicswidgetlist(*(QList<QGraphicsWidget*>*)p); break;
-            case T_QList_QKeySequence:               l_ret = from_qkeysequencelist(*(QList<QKeySequence>*)p); break;
-            case T_QList_QListWidgetItem:            l_ret = from_qlistwidgetitemlist(*(QList<QListWidgetItem*>*)p); break;
-            case T_QList_QMdiSubWindow:              l_ret = from_qmdisubwindowlist(*(QList<QMdiSubWindow*>*)p); break;
-            case T_QObjectList:                      // empty
-            case T_QList_QObject:                    l_ret = from_qobjectlist(*(QList<QObject*>*)p); break;
-            case T_QList_QPolygonF:                  l_ret = from_qpolygonflist(*(QList<QPolygonF>*)p); break;
-            case T_QList_QSize:                      l_ret = from_qsizelist(*(QList<QSize>*)p); break;
-            case T_QList_QStandardItem:              l_ret = from_qstandarditemlist(*(QList<QStandardItem*>*)p); break;
-            case T_QList_QTableWidgetItem:           l_ret = from_qtablewidgetitemlist(*(QList<QTableWidgetItem*>*)p); break;
-            case T_QList_QTableWidgetSelectionRange: l_ret = from_qtablewidgetselectionrangelist(*(QList<QTableWidgetSelectionRange>*)p); break;
-            case T_QList_QTextBlock:                 l_ret = from_qtextblocklist(*(QList<QTextBlock>*)p); break;
-            case T_QList_QTextEdit_ExtraSelection:   l_ret = from_qtexteditextraselectionlist(*(QList<QTextEdit::ExtraSelection>*)p); break;
-            case T_QList_QTextFrame:                 l_ret = from_qtextframelist(*(QList<QTextFrame*>*)p); break;
-            case T_QList_QTreeWidgetItem:            l_ret = from_qtreewidgetitemlist(*(QList<QTreeWidgetItem*>*)p); break;
-            case T_QList_QUndoStack:                 l_ret = from_qundostacklist(*(QList<QUndoStack*>*)p); break;
-            case T_QList_QUrl:                       l_ret = from_qurllist(*(QList<QUrl>*)p); break;
-            case T_QWidgetList:                      // empty
-            case T_QList_QWidget:                    l_ret = from_qwidgetlist(*(QList<QWidget*>*)p); break;
-            case T_QList_int:                        l_ret = from_intlist(*(QList<int>*)p); break;
-            case T_QList_qreal:                      l_ret = from_qreallist(*(QList<qreal>*)p); break;
-            case T_QModelIndex:                      l_ret = from_qmodelindex(*(QModelIndex*)p); break;
-            case T_QPainterPath:                     l_ret = from_qpainterpath(*(QPainterPath*)p); break;
-            case T_QPolygonF:                        l_ret = from_qpolygonf(*(QPolygonF*)p); break;
-            case T_QRgb:                             l_ret = ecl_make_unsigned_integer(*(QRgb*)p); break;
-            case T_QTableWidgetSelectionRange:       l_ret = from_qtablewidgetselectionrange(*(QTableWidgetSelectionRange*)p); break;
-            case T_QTextBlock:                       l_ret = from_qtextblock(*(QTextBlock*)p); break;
-            case T_QTextCharFormat:                  l_ret = from_qtextcharformat(*(QTextCharFormat*)p); break;
-            case T_QTextCursor:                      l_ret = from_qtextcursor(*(QTextCursor*)p); break;
-            case T_QTextDocumentFragment:            l_ret = from_qtextdocumentfragment(*(QTextDocumentFragment*)p); break;
-#if QT_VERSION < 0x40700
-        case T_QVariant:
-#else
-        case QMetaType::QVariant:
+#if QT_VERSION >= 0x40700
+            case QMetaType::QVariant:                l_ret = from_qvariant(*(QVariant*)p); break;
 #endif
-                                                     l_ret = from_qvariant(*(QVariant*)p); break;
-            case T_QVector_QGradientstop:            l_ret = from_qgradientstopvector(*(QVector<QGradientStop>*)p); break;
-            case T_QVector_QLine:                    l_ret = from_qlinevector(*(QVector<QLine>*)p); break;
-            case T_QVector_QLineF:                   l_ret = from_qlinefvector(*(QVector<QLineF>*)p); break;
-            case T_QVector_QPoint:                   l_ret = from_qpointvector(*(QVector<QPoint>*)p); break;
-            case T_QVector_QPointF:                  l_ret = from_qpointfvector(*(QVector<QPointF>*)p); break;
-            case T_QVector_QRect:                    l_ret = from_qrectvector(*(QVector<QRect>*)p); break;
-            case T_QVector_QRectF:                   l_ret = from_qrectfvector(*(QVector<QRectF>*)p); break;
-            case T_QVector_QRgb:                     l_ret = from_qrgbvector(*(QVector<QRgb>*)p); break;
-            case T_QVector_QTextFormat:              l_ret = from_qtextformatvector(*(QVector<QTextFormat>*)p); break;
-            case T_QVector_QTextLength:              l_ret = from_qtextlengthvector(*(QVector<QTextLength>*)p); break;
-            case T_QVector_qreal:                    l_ret = from_qrealvector(*(QVector<qreal>*)p); break;
-            default:
-                if(sType.endsWith('*')) {
-                    if(sType.startsWith('Q') || sType.startsWith("const Q")) {
-                        l_ret = qt_object_from_name(sType, *(void**)p); }
-                    else if("const char*" == sType) {
-                        l_ret = make_base_string_copy(*(char**)p); }
-                    else {
-                        l_ret = ecl_make_unsigned_integer((cl_index)*(void**)p); }}
-                // module types
-                else if(LObjects::T_QNetworkRequest == n) {
-                    if(LObjects::to_lisp_arg_network) {
-                        l_ret = LObjects::to_lisp_arg_network(n, p); }}
-                else if((n >= LObjects::T_GLfloat) &&
-                   (n <= LObjects::T_GLuint)) {
-                    if(LObjects::to_lisp_arg_opengl) {
-                        l_ret = LObjects::to_lisp_arg_opengl(n, p); }}
+        default:
+            if(T_bool_ok_pointer == n) {
+                l_ret = _ok_ ? Ct : Cnil; }
+            else if(sType.endsWith('*')) {
+                if(sType.startsWith('Q') || sType.startsWith("const Q")) {
+                    l_ret = qt_object_from_name(sType, *(void**)p); }
+                else if("const char*" == sType) {
+                    l_ret = make_base_string_copy(*(char**)p); }
                 else {
-                    int i_enum = sType.indexOf("::");
-                    if(i_enum != -1) {
-                        int* i = (int*)p;
-                        const QMetaObject* mo = 0;
-                        if(sType.startsWith("Qt")) {
-                            mo = staticQtMetaObject; }
-                        else {
-                            mo = LObjects::staticMetaObject(sType.left(i_enum)); }
-                        int n = -1;
-                        if(mo) {
-                            n = mo->indexOfEnumerator(sType.mid(i_enum + 2));
-                            if(n != -1) {
-                                QMetaEnum me = mo->enumerator(n);
-                                QByteArray ba = (me.isFlag() ? me.valueToKeys(*i) : QByteArray(me.valueToKey(*i)));
-                                l_ret = make_base_string_copy(ba.constData()); }}
-                        if(-1 == n) {
-                            l_ret = MAKE_FIXNUM(*i); }}}}}
+                    l_ret = ecl_make_unsigned_integer((cl_index)*(void**)p); }}
+            else if(T_QFileInfo == n)                        l_ret = from_qfileinfo(*(QFileInfo*)p);
+            else if(T_QFileInfoList == n)                    l_ret = from_qfileinfolist(*(QFileInfoList*)p);
+            else if(T_QGradientStop == n)                    l_ret = from_qgradientstop(*(QGradientStop*)p);
+            else if(T_QList_QAbstractAnimation == n)         l_ret = from_qabstractanimationlist(*(QList<QAbstractAnimation*>*)p);
+            else if(T_QList_QAbstractButton == n)            l_ret = from_qabstractbuttonlist(*(QList<QAbstractButton*>*)p);
+            else if(T_QList_QAbstractState == n)             l_ret = from_qabstractstatelist(*(QList<QAbstractState*>*)p);
+            else if(T_QList_QAction == n)                    l_ret = from_qactionlist(*(QList<QAction*>*)p);
+            else if(T_QList_QByteArray == n)                 l_ret = from_qbytearraylist(*(QList<QByteArray>*)p);
+            else if(T_QList_QDockWidget == n)                l_ret = from_qdockwidgetlist(*(QList<QDockWidget*>*)p);
+            else if(T_QList_QGesture == n)                   l_ret = from_qgesturelist(*(QList<QGesture*>*)p);
+            else if(T_QList_QGraphicsItem == n)              l_ret = from_qgraphicsitemlist(*(QList<QGraphicsItem*>*)p);
+            else if(T_QList_QGraphicsTransform == n)         l_ret = from_qgraphicstransformlist(*(QList<QGraphicsTransform*>*)p);
+            else if(T_QList_QGraphicsView == n)              l_ret = from_qgraphicsviewlist(*(QList<QGraphicsView*>*)p);
+            else if(T_QList_QGraphicsWidget == n)            l_ret = from_qgraphicswidgetlist(*(QList<QGraphicsWidget*>*)p);
+            else if(T_QList_QKeySequence == n)               l_ret = from_qkeysequencelist(*(QList<QKeySequence>*)p);
+            else if(T_QList_QListWidgetItem == n)            l_ret = from_qlistwidgetitemlist(*(QList<QListWidgetItem*>*)p);
+            else if(T_QList_QMdiSubWindow == n)              l_ret = from_qmdisubwindowlist(*(QList<QMdiSubWindow*>*)p);
+            else if((T_QObjectList == n) || (T_QList_QObject == n))
+                l_ret = from_qobjectlist(*(QList<QObject*>*)p);
+            else if(T_QList_QPolygonF == n)                  l_ret = from_qpolygonflist(*(QList<QPolygonF>*)p);
+            else if(T_QList_QSize == n)                      l_ret = from_qsizelist(*(QList<QSize>*)p);
+            else if(T_QList_QStandardItem == n)              l_ret = from_qstandarditemlist(*(QList<QStandardItem*>*)p);
+            else if(T_QList_QTableWidgetItem == n)           l_ret = from_qtablewidgetitemlist(*(QList<QTableWidgetItem*>*)p);
+            else if(T_QList_QTableWidgetSelectionRange == n) l_ret = from_qtablewidgetselectionrangelist(*(QList<QTableWidgetSelectionRange>*)p);
+            else if(T_QList_QTextBlock == n)                 l_ret = from_qtextblocklist(*(QList<QTextBlock>*)p);
+            else if(T_QList_QTextEdit_ExtraSelection == n)   l_ret = from_qtexteditextraselectionlist(*(QList<QTextEdit::ExtraSelection>*)p);
+            else if(T_QList_QTextFrame == n)                 l_ret = from_qtextframelist(*(QList<QTextFrame*>*)p);
+            else if(T_QList_QTreeWidgetItem == n)            l_ret = from_qtreewidgetitemlist(*(QList<QTreeWidgetItem*>*)p);
+            else if(T_QList_QUndoStack == n)                 l_ret = from_qundostacklist(*(QList<QUndoStack*>*)p);
+            else if(T_QList_QUrl == n)                       l_ret = from_qurllist(*(QList<QUrl>*)p);
+            else if((T_QWidgetList == n) || (T_QList_QWidget == n))
+                l_ret = from_qwidgetlist(*(QList<QWidget*>*)p);
+            else if(T_QList_int == n)                        l_ret = from_intlist(*(QList<int>*)p);
+            else if(T_QList_qreal == n)                      l_ret = from_qreallist(*(QList<qreal>*)p);
+            else if(T_QModelIndex == n)                      l_ret = from_qmodelindex(*(QModelIndex*)p);
+            else if(T_QPainterPath == n)                     l_ret = from_qpainterpath(*(QPainterPath*)p);
+            else if(T_QPolygonF == n)                        l_ret = from_qpolygonf(*(QPolygonF*)p);
+            else if(T_QRgb == n)                             l_ret = ecl_make_unsigned_integer(*(QRgb*)p);
+            else if(T_QTableWidgetSelectionRange == n)       l_ret = from_qtablewidgetselectionrange(*(QTableWidgetSelectionRange*)p);
+            else if(T_QTextBlock == n)                       l_ret = from_qtextblock(*(QTextBlock*)p);
+            else if(T_QTextCharFormat == n)                  l_ret = from_qtextcharformat(*(QTextCharFormat*)p);
+            else if(T_QTextCursor == n)                      l_ret = from_qtextcursor(*(QTextCursor*)p);
+            else if(T_QTextDocumentFragment == n)            l_ret = from_qtextdocumentfragment(*(QTextDocumentFragment*)p);
+#if QT_VERSION < 0x40700
+            else if(T_QVariant)                              l_ret = from_qvariant(*(QVariant*)p);
+#endif
+            else if(T_QVector_QGradientstop == n)            l_ret = from_qgradientstopvector(*(QVector<QGradientStop>*)p);
+            else if(T_QVector_QLine == n)                    l_ret = from_qlinevector(*(QVector<QLine>*)p);
+            else if(T_QVector_QLineF == n)                   l_ret = from_qlinefvector(*(QVector<QLineF>*)p);
+            else if(T_QVector_QPoint == n)                   l_ret = from_qpointvector(*(QVector<QPoint>*)p);
+            else if(T_QVector_QPointF == n)                  l_ret = from_qpointfvector(*(QVector<QPointF>*)p);
+            else if(T_QVector_QRect == n)                    l_ret = from_qrectvector(*(QVector<QRect>*)p);
+            else if(T_QVector_QRectF == n)                   l_ret = from_qrectfvector(*(QVector<QRectF>*)p);
+            else if(T_QVector_QRgb == n)                     l_ret = from_qrgbvector(*(QVector<QRgb>*)p);
+            else if(T_QVector_QTextFormat == n)              l_ret = from_qtextformatvector(*(QVector<QTextFormat>*)p);
+            else if(T_QVector_QTextLength == n)              l_ret = from_qtextlengthvector(*(QVector<QTextLength>*)p);
+            else if(T_QVector_qreal == n)                    l_ret = from_qrealvector(*(QVector<qreal>*)p);
+            // module types
+            else if(LObjects::T_QNetworkRequest == n) {
+                if(LObjects::to_lisp_arg_network) {
+                    l_ret = LObjects::to_lisp_arg_network(n, p); }}
+            else if((n >= LObjects::T_GLfloat) &&
+               (n <= LObjects::T_GLuint)) {
+                if(LObjects::to_lisp_arg_opengl) {
+                    l_ret = LObjects::to_lisp_arg_opengl(n, p); }}
+            else {
+                int i_enum = sType.indexOf("::");
+                if(i_enum != -1) {
+                    int* i = (int*)p;
+                    const QMetaObject* mo = 0;
+                    if(sType.startsWith("Qt")) {
+                        mo = staticQtMetaObject; }
+                    else {
+                        mo = LObjects::staticMetaObject(sType.left(i_enum)); }
+                    int n = -1;
+                    if(mo) {
+                        n = mo->indexOfEnumerator(sType.mid(i_enum + 2));
+                        if(n != -1) {
+                            QMetaEnum me = mo->enumerator(n);
+                            QByteArray ba = (me.isFlag() ? me.valueToKeys(*i) : QByteArray(me.valueToKey(*i)));
+                            l_ret = make_base_string_copy(ba.constData()); }}
+                    if(-1 == n) {
+                        l_ret = MAKE_FIXNUM(*i); }}}}}
     return l_ret; }
 
 static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
@@ -1159,46 +1097,49 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
             if(is_ret) {
                 QMetaType::destroy(n, p); }
             break;
-        case T_QFileInfo:                  if(is_ret) { delete (QFileInfo*)p; } break;
-        case T_QModelIndex:                if(is_ret) { delete (QModelIndex*)p; } break;
-        case T_QPainterPath:               if(is_ret) { delete (QPainterPath*)p; } break;
-        case T_QTableWidgetSelectionRange: if(is_ret) { delete (QTableWidgetSelectionRange*)p; } break;
-        case T_QTextBlock:                 if(is_ret) { delete (QTextBlock*)p; } break;
-        case T_QTextCharFormat:            if(is_ret) { delete (QTextCharFormat*)p; } break;
-        case T_QTextCursor:                if(is_ret) { delete (QTextCursor*)p; } break;
-        case T_QTextDocumentFragment:      if(is_ret) { delete (QTextDocumentFragment*)p; } break;
-#if QT_VERSION < 0x40700
-        case T_QVariant:                   if(is_ret) { delete (QVariant*)p; } break;
-#endif
-        case T_QPolygonF:       delete (QPolygonF*)p; break;
-        case T_bool_ok_pointer: delete (void**)p; break;
-        default:
-            // module network
-            if(LObjects::T_QNetworkRequest == n) {
-                if(LObjects::clearMetaArg_network) {
-                    LObjects::clearMetaArg_network(n, p, is_ret); }}
-            // module opengl
-            else if((LObjects::T_GLfloat == n) ||
-                    (LObjects::T_GLint == n) ||
-                    (LObjects::T_GLuint == n)) {
-                if(LObjects::clearMetaArg_opengl) {
-                    LObjects::clearMetaArg_opengl(n, p, is_ret); }}
-            else {
-                if(sType.endsWith('*')) {
-                    if("const char*" == sType) {
-                        char** s = (char**)p;
-                        if(is_ret) {
-                            delete s; }
-                        else {
-                            if((_n_cstr_ >= 0) && (_n_cstr_ <= 9)) {
-                                delete[] *s;
-                                --_n_cstr_; }}}
-                    else {
-                        delete (void**)p; }}
+    default:
+        if(T_bool_ok_pointer == n) {
+            delete (void**)p; }
+        else if(sType.endsWith('*')) {
+            if("const char*" == sType) {
+                char** s = (char**)p;
+                if(is_ret) {
+                    delete s; }
                 else {
-                    int i_enum = sType.indexOf("::");
-                    if(i_enum != -1) {
-                        delete (int*)p; }}}}}
+                    if((_n_cstr_ >= 0) && (_n_cstr_ <= 9)) {
+                        delete[] *s;
+                        --_n_cstr_; }}}
+            else {
+                delete (void**)p; }}
+        else if(T_QPolygonF == n) {
+            QMetaType::destroy(n, p); }
+        // implicit pointer types
+        else if((T_QFileInfo == n) ||
+                (T_QModelIndex == n) ||
+                (T_QPainterPath == n) ||
+                (T_QTableWidgetSelectionRange == n) ||
+                (T_QTextBlock == n) ||
+                (T_QTextCharFormat == n) ||
+                (T_QTextCursor == n) ||
+                (T_QTextDocumentFragment == n)) {
+            if(is_ret) {
+                QMetaType::destroy(n, p); }}
+#if QT_VERSION < 0x40700
+        else if(T_QVariant == n) {
+            if(is_ret) {
+                QMetaType::destroy(n, p); }}
+#endif
+        // implicit module pointer types
+        else if(LObjects::T_QNetworkRequest == n) {
+            if(is_ret) {
+                QMetaType::destroy(n, p); }}
+        // module types
+        else if((n >= LObjects::T_GLfloat) && (n <= LObjects::T_GLuint)) {
+            QMetaType::destroy(n, p); }
+        else if(!sType.endsWith('>')) {
+            int i_enum = sType.indexOf("::");
+            if(i_enum != -1) {
+                delete (int*)p; }}}}
 
 static void clearMetaArgList(const MetaArgList& args) {
     MetaArgIterator it(args);
@@ -1786,38 +1727,38 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
             const int type = QMetaType::type(ret_type);
             switch(type) {
                 // implicit pointer types
-                case QMetaType::QBrush:            ret = qVariantFromValue(*(QBrush*)o.pointer); break;
-                case QMetaType::QCursor:           ret = qVariantFromValue(*(QCursor*)o.pointer); break;
-                case QMetaType::QDate:             ret = qVariantFromValue(*(QDate*)o.pointer); break;
-                case QMetaType::QDateTime:         ret = qVariantFromValue(*(QDateTime*)o.pointer); break;
-                case QMetaType::QFont:             ret = qVariantFromValue(*(QFont*)o.pointer); break;
-                case QMetaType::QIcon:             ret = qVariantFromValue(*(QIcon*)o.pointer); break;
-                case QMetaType::QImage:            ret = qVariantFromValue(*(QImage*)o.pointer); break;
-                case QMetaType::QKeySequence:      ret = qVariantFromValue(*(QKeySequence*)o.pointer); break;
-                case QMetaType::QLocale:           ret = qVariantFromValue(*(QLocale*)o.pointer); break;
-                case QMetaType::QPalette:          ret = qVariantFromValue(*(QPalette*)o.pointer); break;
-                case QMetaType::QPen:              ret = qVariantFromValue(*(QPen*)o.pointer); break;
-                case QMetaType::QPixmap:           ret = qVariantFromValue(*(QPixmap*)o.pointer); break;
-                case QMetaType::QTextFormat:       ret = qVariantFromValue(*(QTextFormat*)o.pointer); break;
-                case QMetaType::QTextLength:       ret = qVariantFromValue(*(QTextLength*)o.pointer); break;
-                case QMetaType::QTime:             ret = qVariantFromValue(*(QTime*)o.pointer); break;
-                case QMetaType::QUrl:              ret = qVariantFromValue(*(QUrl*)o.pointer); break;
-                case T_QFileInfo:                  ret = qVariantFromValue(*(QFileInfo*)o.pointer); break;
-                case T_QModelIndex:                ret = qVariantFromValue(*(QModelIndex*)o.pointer); break;
-                case T_QPainterPath:               ret = qVariantFromValue(*(QPainterPath*)o.pointer); break;
-                case T_QTableWidgetSelectionRange: ret = qVariantFromValue(*(QTableWidgetSelectionRange*)o.pointer); break;
-                case T_QTextBlock:                 ret = qVariantFromValue(*(QTextBlock*)o.pointer); break;
-                case T_QTextCharFormat:            ret = qVariantFromValue(*(QTextCharFormat*)o.pointer); break;
-                case T_QTextCursor:                ret = qVariantFromValue(*(QTextCursor*)o.pointer); break;
-                case T_QTextDocumentFragment:      ret = qVariantFromValue(*(QTextDocumentFragment*)o.pointer); break;
-#if QT_VERSION < 0x40700
-                case T_QVariant:
-#else
-                case QMetaType::QVariant:
+                case QMetaType::QBrush:       ret = qVariantFromValue(*(QBrush*)o.pointer); break;
+                case QMetaType::QCursor:      ret = qVariantFromValue(*(QCursor*)o.pointer); break;
+                case QMetaType::QDate:        ret = qVariantFromValue(*(QDate*)o.pointer); break;
+                case QMetaType::QDateTime:    ret = qVariantFromValue(*(QDateTime*)o.pointer); break;
+                case QMetaType::QFont:        ret = qVariantFromValue(*(QFont*)o.pointer); break;
+                case QMetaType::QIcon:        ret = qVariantFromValue(*(QIcon*)o.pointer); break;
+                case QMetaType::QImage:       ret = qVariantFromValue(*(QImage*)o.pointer); break;
+                case QMetaType::QKeySequence: ret = qVariantFromValue(*(QKeySequence*)o.pointer); break;
+                case QMetaType::QLocale:      ret = qVariantFromValue(*(QLocale*)o.pointer); break;
+                case QMetaType::QPalette:     ret = qVariantFromValue(*(QPalette*)o.pointer); break;
+                case QMetaType::QPen:         ret = qVariantFromValue(*(QPen*)o.pointer); break;
+                case QMetaType::QPixmap:      ret = qVariantFromValue(*(QPixmap*)o.pointer); break;
+                case QMetaType::QTextFormat:  ret = qVariantFromValue(*(QTextFormat*)o.pointer); break;
+                case QMetaType::QTextLength:  ret = qVariantFromValue(*(QTextLength*)o.pointer); break;
+                case QMetaType::QTime:        ret = qVariantFromValue(*(QTime*)o.pointer); break;
+                case QMetaType::QUrl:         ret = qVariantFromValue(*(QUrl*)o.pointer); break;
+#if QT_VERSION >= 0x40700
+                case QMetaType::QVariant:     ret = qVariantFromValue(*(QVariant*)o.pointer); break;
 #endif
-                                                   ret = qVariantFromValue(*(QVariant*)o.pointer); break;
-                default:
-                    ret = toQVariant(l_ret, ret_type); }}}
+            default:
+                if(type == T_QFileInfo)                       ret = qVariantFromValue(*(QFileInfo*)o.pointer);
+                else if(type == T_QModelIndex)                ret = qVariantFromValue(*(QModelIndex*)o.pointer);
+                else if(type == T_QPainterPath)               ret = qVariantFromValue(*(QPainterPath*)o.pointer);
+                else if(type == T_QTableWidgetSelectionRange) ret = qVariantFromValue(*(QTableWidgetSelectionRange*)o.pointer);
+                else if(type == T_QTextBlock)                 ret = qVariantFromValue(*(QTextBlock*)o.pointer);
+                else if(type == T_QTextCharFormat)            ret = qVariantFromValue(*(QTextCharFormat*)o.pointer);
+                else if(type == T_QTextCursor)                ret = qVariantFromValue(*(QTextCursor*)o.pointer);
+                else if(type == T_QTextDocumentFragment)      ret = qVariantFromValue(*(QTextDocumentFragment*)o.pointer);
+#if QT_VERSION < 0x40700
+                else if(type == T_QVariant)                   ret = qVariantFromValue(*(QVariant*)o.pointer);
+#endif
+                else                                          ret = toQVariant(l_ret, ret_type); }}}
     else {
         ret = (Ct == l_ret); }
     return ret; }
@@ -1888,22 +1829,19 @@ cl_object qrequire(cl_object l_name) {
                 LObjects::override_svg = over; }
             else {
                 ToMetaArg metaArg = (ToMetaArg)lib.resolve("toMetaArg");
-                ClearMetaArg clearArg = (ClearMetaArg)lib.resolve("clearMetaArg");
                 To_lisp_arg lispArg = (To_lisp_arg)lib.resolve("to_lisp_arg");
-                if(metaArg && clearArg && lispArg) {
+                if(metaArg && lispArg) {
                     if("network" == name) {
                         LObjects::staticMetaObject_network = meta;
                         LObjects::deleteNObject_network = del;
                         LObjects::override_network = over;
                         LObjects::toMetaArg_network = metaArg;
-                        LObjects::clearMetaArg_network = clearArg;
                         LObjects::to_lisp_arg_network = lispArg; }
                     else if("opengl" == name) {
                         LObjects::staticMetaObject_opengl = meta;
                         LObjects::deleteNObject_opengl = del;
                         LObjects::override_opengl = over;
                         LObjects::toMetaArg_opengl = metaArg;
-                        LObjects::clearMetaArg_opengl = clearArg;
                         LObjects::to_lisp_arg_opengl = lispArg; }}}
             return l_name; }}
     error("QREQUIRE", LIST1(l_name));

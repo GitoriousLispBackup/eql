@@ -43,7 +43,8 @@ USAGE NOTES
 Remember to change to the desired package prior to eval anything.
 
 The "Save and Run" action (Ctrl+R) will load the current code in the local
-Lisp server process.
+Lisp server process (if you don't see the application window, it might be
+in the background. Use your taskbar to show it).
 
 Qt events are processed natively (no performance loss!), while keeping
 your program interactive (you can send any command using "Eval Region").

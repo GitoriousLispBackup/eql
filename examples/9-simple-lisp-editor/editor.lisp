@@ -162,9 +162,6 @@
 (defun clean-up ()
   (file-save))
 
-(defun bytes-to-int (data)
-  (parse-integer (x:bytes-to-string data)))
-
 (let (label)
   (defun show-status-message (msg &optional html)
     (flet ((bar ()

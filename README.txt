@@ -40,20 +40,10 @@ BUILD (see also: "Windows Easy Guide" in doc/)
     To force creation of a Makefile (instead of an Xcode project), use this flag:
         qmake -spec macx-g++
 
-
-0) Prepare build (note: you need to repeat this every time you change your Qt version)
-   in src/ run:
- 
-    qmake first_metatype_id.pro
-    make
-    ./first_metatype_id (MSVC: first_metatype_id.exe)
-
-   This will create the file first_metatype_id.h (which differs in Qt4.6 and Qt4.7)
-
 1) In src/ run:
     ecl -shell make-eql-lib.lisp
 
-2) Run:
+2) Do:
 
     qmake eql_lib.pro
     make 
@@ -93,6 +83,9 @@ You can run a simple interactive REPL UI doing:
 
 To run a Lisp file without top-level, do:
     eql examples/2-clock
+
+(If you don't see the application window, it might be in the background.
+Use your taskbar to show it.)
 
 If you start the EQL executable without arguments, it will start the usual ECL top-level
 (without processing Qt events).
