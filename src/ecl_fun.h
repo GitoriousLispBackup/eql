@@ -230,6 +230,8 @@ struct EQL_EXPORT QtObject {
     bool isQObject() const { return (id > 0); }
     bool isStatic() const { return !pointer; }
     QByteArray className() const;
+
+    static QByteArray idToClassName(int);
 };
 
 struct QtMetaObject : private QObject {

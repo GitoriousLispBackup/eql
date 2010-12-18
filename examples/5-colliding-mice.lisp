@@ -198,4 +198,14 @@
     (qfun timer "start" 30)
     (qfun view "show")))
 
+#|
+(require :profile)
+
+(progn
+  (use-package :profile)
+  (profile:profile
+   paint
+   advance))
+|#
+
 (start)

@@ -11,6 +11,9 @@ typedef QList<MetaArg>           MetaArgList;
 typedef QListIterator<MetaArg>   MetaArgIterator;
 typedef QList<QByteArray>        StrList;
 
+// switches
+static bool _check_argument_types_ = true;
+
 static const char SIG = '2';
 static const char SLO = '1';
 static bool _ok_ = false;
@@ -77,41 +80,6 @@ static const int T_QVector_QTextFormat =              qRegisterMetaType<QVector<
 static const int T_QVector_QTextLength =              qRegisterMetaType<QVector<QTextLength> >("QVector<QTextLength>");
 static const int T_QVector_qreal =                    qRegisterMetaType<QVector<qreal> >("QVector<qreal>");
 
-QByteArray QtObject::className() const {
-    return id
-            ? ((id > 0) ? LObjects::qNames.at(id - 1) : LObjects::nNames.at(-id - 1))
-            : QByteArray(); }
-
-class LUiLoader : public QUiLoader {
-public:
-    QWidget* createWidget(const QString& name, QWidget* par, const QString& objName) {
-        QWidget* w = 0;
-        int id = LObjects::q_names.value(name.toAscii(), -1);
-        if(id != -1) {
-            // qt_metacall to base constructor "C(uint)"
-            QObject* caller = LObjects::Q[id - 1];
-            const QMetaObject* mo = caller->metaObject();
-            int n = mo->indexOfMethod("C(uint)");
-            if(n != -1) {
-                QMetaMethod mm(mo->method(n));
-                void* args[] = { 0, 0 };
-                void* pointer = 0;
-                args[0] = &pointer; // return value
-                uint unique = LObjects::unique();
-                args[1] = &unique;
-                caller->qt_metacall(QMetaObject::InvokeMetaMethod, n, args);
-                if(pointer) {
-                    w = (QWidget*)pointer;
-                    if(par) {
-                        w->setParent(par); }
-                    LObjects::ui_unique[objName] = unique;
-                    w->setObjectName(objName); }}
-            else {
-                // fallback
-                w = QUiLoader::createWidget(name, par, objName); }}
-        return w; }
-};
-
 void iniCLFunctions() {
     cl_object eql(make_simple_base_string((char*)"EQL"));
     cl_make_package(1, eql);
@@ -155,6 +123,46 @@ void iniCLFunctions() {
 
 
 
+// QtObject, QUiLoader methods
+
+QByteArray QtObject::idToClassName(int id) {
+    return (id > 0) ? LObjects::qNames.at(id - 1) : LObjects::nNames.at(-id - 1); }
+
+QByteArray QtObject::className() const {
+    return id ? idToClassName(id) : QByteArray(); }
+
+class LUiLoader : public QUiLoader {
+public:
+    QWidget* createWidget(const QString& name, QWidget* par, const QString& objName) {
+        QWidget* w = 0;
+        int id = LObjects::q_names.value(name.toAscii(), -1);
+        if(id != -1) {
+            // qt_metacall to base constructor "C(uint)"
+            QObject* caller = LObjects::Q[id - 1];
+            const QMetaObject* mo = caller->metaObject();
+            int n = mo->indexOfMethod("C(uint)");
+            if(n != -1) {
+                QMetaMethod mm(mo->method(n));
+                void* args[] = { 0, 0 };
+                void* pointer = 0;
+                args[0] = &pointer; // return value
+                uint unique = LObjects::unique();
+                args[1] = &unique;
+                caller->qt_metacall(QMetaObject::InvokeMetaMethod, n, args);
+                if(pointer) {
+                    w = (QWidget*)pointer;
+                    if(par) {
+                        w->setParent(par); }
+                    LObjects::ui_unique[objName] = unique;
+                    w->setObjectName(objName); }}
+            else {
+                // fallback
+                w = QUiLoader::createWidget(name, par, objName); }}
+        return w; }
+};
+
+
+
 // *** utilities ***
 
 static char** to_cstring(cl_object l_str) {
@@ -183,6 +191,32 @@ static const QMetaObject* methodMetaObjectFromName(const QByteArray& name, bool 
         if(o) {
             mo = o->metaObject(); }}
     return mo; }
+
+static QByteArray superClassName(const QByteArray& name, bool* found = 0) {
+    QByteArray super;
+    if(LObjects::q_names.value(name, 0)) {
+        if(found) {
+            *found = true; }
+        const QMetaObject* mo = LObjects::staticMetaObject(name)->superClass();
+        if(mo) {
+            super = mo->className(); }}
+    else if(LObjects::n_names.value(name, 0)) {
+        if(found) {
+            *found = true; }
+        super = LObjects::nObjectSuperClass(name); }
+    return super; }
+
+static bool inherits(const QByteArray& sub, const QByteArray& super) {
+    if(sub == super) {
+        return true; }
+    QByteArray upper(sub);
+    while(!(upper = superClassName(upper)).isEmpty()) {
+        // multiple inheritance exceptions (see helper/multiple-inheritance.txt)
+        if("QGraphicsObject" == upper) {
+            upper = "QGraphicsItem"; }
+        if(upper == super) {
+            return true; }}
+    return false; }
 
 static QByteArray prettyFunName(const QByteArray& name, bool this_arg) {
     QByteArray pretty(name.mid(QChar(name.at(0)).isUpper() ? 1 : 0));
@@ -360,6 +394,13 @@ static int classId(cl_object l_class) {
     if(!id) {
         id = -LObjects::n_names.value(name, 0); }
     return id; }
+
+static QByteArray qtObjectName(cl_object l_obj) {
+    STATIC_SYMBOL_PKG(s_qt_object_p,  "QT-OBJECT-P",  "EQL")
+    STATIC_SYMBOL_PKG(s_qt_object_id, "QT-OBJECT-ID", "EQL")
+    if(cl_funcall(2, s_qt_object_p, l_obj) == Ct) {
+        return QtObject::idToClassName(toInt(cl_funcall(2, s_qt_object_id, l_obj))); }
+    return QByteArray(); }
 
 QtObject toQtObject(cl_object l_obj, cl_object l_cast, bool* qobject_align) {
     STATIC_SYMBOL_PKG(s_qt_object_p,       "QT-OBJECT-P",       "EQL")
@@ -1048,32 +1089,8 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
     void* p = arg.second;
     QByteArray sType(arg.first);
     const int n = QMetaType::type(sType);
+    // catch all exceptions first
     switch(n) {
-        case QMetaType::Double:
-        case QMetaType::Char:
-        case QMetaType::Float:
-        case QMetaType::Int:
-        case QMetaType::Long:
-        case QMetaType::LongLong:
-        case QMetaType::UInt:
-        case QMetaType::ULong:
-        case QMetaType::ULongLong:
-        case QMetaType::QByteArray:
-        case QMetaType::QChar:
-        case QMetaType::QColor:
-        case QMetaType::QLine:
-        case QMetaType::QLineF:
-        case QMetaType::QPoint:
-        case QMetaType::QPointF:
-        case QMetaType::QPolygon:
-        case QMetaType::QRect:
-        case QMetaType::QRectF:
-        case QMetaType::QSize:
-        case QMetaType::QSizeF:
-        case QMetaType::QString:
-        case QMetaType::QStringList:
-            QMetaType::destroy(n, p);
-            break;
         // implicit pointer types
         case QMetaType::QBrush:
         case QMetaType::QCursor:
@@ -1111,8 +1128,6 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
                         --_n_cstr_; }}}
             else {
                 delete (void**)p; }}
-        else if(T_QPolygonF == n) {
-            QMetaType::destroy(n, p); }
         // implicit pointer types
         else if((T_QFileInfo == n) ||
                 (T_QModelIndex == n) ||
@@ -1125,6 +1140,7 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
             if(is_ret) {
                 QMetaType::destroy(n, p); }}
 #if QT_VERSION < 0x40700
+        // implicit pointer type
         else if(T_QVariant == n) {
             if(is_ret) {
                 QMetaType::destroy(n, p); }}
@@ -1133,13 +1149,12 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
         else if(LObjects::T_QNetworkRequest == n) {
             if(is_ret) {
                 QMetaType::destroy(n, p); }}
-        // module types
-        else if((n >= LObjects::T_GLfloat) && (n <= LObjects::T_GLuint)) {
-            QMetaType::destroy(n, p); }
-        else if(!sType.endsWith('>')) {
-            int i_enum = sType.indexOf("::");
-            if(i_enum != -1) {
-                delete (int*)p; }}}}
+        // enums
+        else if(!sType.endsWith('>') && sType.contains(':')) {
+            delete (int*)p; }
+        // default
+        else {
+            QMetaType::destroy(n, p); }}}
 
 static void clearMetaArgList(const MetaArgList& args) {
     MetaArgIterator it(args);
@@ -1566,31 +1581,51 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
                         l += sizeof(QObject); }
                     _this = (void*)l;
                     args[++i + 1] = &_this; }
+                bool types_ok = true;
                 while((l_do_args != Cnil) && (i < MAX_ARGS)) {
                     ++i;
-                    MetaArg m_arg(toMetaArg(types.at(i), cl_car(l_do_args)));
+                    cl_object l_arg = cl_car(l_do_args);
+                    // type check
+                    if(_check_argument_types_) {
+                        if((types.at(i).startsWith('Q')) &&
+                           !types.at(i).contains(':') &&
+                           !types.at(i).endsWith('>')) {
+                            if(!strstr("QByteArray QChar QColor QGradientStop QLineF QPointF QPolygonF QRectF QRgb QSizeF QString QStringList", // primitives
+                                       types.at(i))) {
+                                QByteArray name1(types.at(i));
+                                if(name1.endsWith('*')) {
+                                    name1.truncate(name1.length() - 1); }
+                                QByteArray name2(qtObjectName(l_arg));
+                                if(!inherits(name2, name1)) {
+                                    qDebug() <<
+                                            "[EQL:types] wanted" << name1 <<
+                                            "got" << (name2.isEmpty() ? "no Qt type" : name2);
+                                    types_ok = false;
+                                    break; }}}}
+                    MetaArg m_arg(toMetaArg(types.at(i), l_arg));
                     args[i + 1] = m_arg.second;
                     mArgs << m_arg;
                     l_do_args = cl_cdr(l_do_args); }
-                QObject* caller = 0;
-                if(method) {
-                    caller = o.isQObject() ? LObjects::Q[o.id - 1] : LObjects::N[-o.id - 1]; }
-                else {
-                    caller = o.isQObject() ? (QObject*)o.pointer : 0; }
-                if(caller) {
-                    caller->qt_metacall(QMetaObject::InvokeMetaMethod, n, args);
-                    clearMetaArgList(mArgs);
-                    cl_object l_ret = Cnil;
-                    if(ret.second) {
-                        l_ret = to_lisp_arg(ret);
-                        clearMetaArg(ret, true); }
-                    const cl_env_ptr l_env = ecl_process_env();
-                    l_env->nvalues = 2;
-                    l_env->values[0] = l_ret;
-                    l_env->values[1] = Ct;
-                    return l_env->values[0]; }
-                else {
-                    clearMetaArgList(mArgs); }}}}
+                if(types_ok) {
+                    QObject* caller = 0;
+                    if(method) {
+                        caller = o.isQObject() ? LObjects::Q[o.id - 1] : LObjects::N[-o.id - 1]; }
+                    else {
+                        caller = o.isQObject() ? (QObject*)o.pointer : 0; }
+                    if(caller) {
+                        caller->qt_metacall(QMetaObject::InvokeMetaMethod, n, args);
+                        clearMetaArgList(mArgs);
+                        cl_object l_ret = Cnil;
+                        if(ret.second) {
+                            l_ret = to_lisp_arg(ret);
+                            clearMetaArg(ret, true); }
+                        const cl_env_ptr l_env = ecl_process_env();
+                        l_env->nvalues = 2;
+                        l_env->values[0] = l_ret;
+                        l_env->values[1] = Ct;
+                        return l_env->values[0]; }
+                    else {
+                        clearMetaArgList(mArgs); }}}}}
     ecl_process_env()->nvalues = 1;
     error("QINVOKE-METHOD", LIST4(l_obj, l_cast, l_name, l_args));
     return Cnil; }
@@ -2117,19 +2152,10 @@ cl_object qsuper_class_name(cl_object l_name) {
     /// Returns the super class of an object name, or <code>NIL</code> if the class doesn't inherit another Qt class.<br>Returns <code>T</code> as second return value for successful calls.
     ///     (qsuper-class-name "QGraphicsLineItem")
     if(ECL_STRINGP(l_name)) {
-        QByteArray name(toCString(l_name));
-        QByteArray super;
         bool found = false;
-        if(LObjects::q_names.value(name, 0)) {
-            found = true;
-            const QMetaObject* mo = LObjects::staticMetaObject(name)->superClass();
-            if(mo) {
-                super = mo->className(); }}
-        else if(LObjects::n_names.value(name, 0)) {
-            found = true;
-            super = LObjects::nObjectSuperClass(name); }
+        QByteArray super = superClassName(toCString(l_name), &found);
+        const cl_env_ptr l_env = ecl_process_env();
         if(found) {
-            const cl_env_ptr l_env = ecl_process_env();
             l_env->nvalues = 2;
             l_env->values[0] = super.isEmpty() ? Cnil : from_cstring(super);
             l_env->values[1] = Ct;

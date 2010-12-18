@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "10.12.8"; // 2010-12-17
+const char EQL::version[] = "10.12.9"; // 2010-12-18
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {

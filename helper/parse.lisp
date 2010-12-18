@@ -103,6 +103,7 @@
         ))
 
 (defparameter *not-found* 0)
+(defparameter *check*     nil)
 
 (defun html-file (class)
   (format nil "~A~(~A~).html" *qt-html-documentation-path* class))
@@ -165,11 +166,19 @@
           (progn
             (incf *not-found*)
             (warn (format nil "Html file not found: ~S" path))))))
-  (defun super-class ()
-    (let ((p (search "<p>Inherits" html)))
-      (when p
-        (let ((super (text (subseq html (search* "<" html (1+ p)) (search* "</" html p)))))
+  (defun super-class (class)
+    (let ((a (search "<p>Inherits" html)))
+      (when a
+        (let* ((b (search* "<" html (1+ a)))
+               (c (search* "</" html (1+ b)))
+               (d (search* "<" html (1+ c)))
+               (super (text (subseq html b c))))
           (unless (find #\< super) ; template
+            (when (search* "and" (subseq html c d))
+              (format *check* "~A: ~A and ~A~%"
+                      class
+                      super
+                      (text (subseq html d (search* "</" html (1+ d))))))
             super)))))
   (defun parse (type class s so no-new)
     ;; "bool QPainter::begin ( QPaintDevice * )": multiple inheritance problem
@@ -220,7 +229,7 @@
           (class* (string-left-trim "/" class)))
       (read-html class*)
       (format t "~%parsing ~A" class*)
-      (let ((super (super-class)))
+      (let ((super (super-class class)))
         (format s "  ((~S . ~S)" class* super)
         (format so "  ((~S . ~S)" class* super))
       (dolist (type (list "public functions"
@@ -242,20 +251,21 @@
         :key (lambda (str) (string-trim "=/" str))))
 
 (defun start ()
-  (mapc (lambda (names non)
-          (let ((pre (if non #\n #\q)))
-            (with-open-file (s (format nil "parsed/~C-methods.lisp" pre) :direction :output :if-exists :supersede)
-              (with-open-file (so (format nil "parsed/~C-override.lisp" pre) :direction :output :if-exists :supersede)
-                (format so "(defparameter *~C-override* '(~%" pre)
-                (format s "(defparameter *~C-methods* '(~%" pre)
-                (parse-classes (mapcar (lambda (name)
-                                         (string-trim "= " (if-it (position #\( name)
-                                                               (subseq name 0 it)
-                                                               name)))
-                                       names)
-                               s so non)))))
-        (list *q-names* *n-names*)
-        (list nil :non))
+  (with-open-file (*check* "multiple-inheritance.txt" :direction :output :if-exists :supersede)
+    (mapc (lambda (names non)
+            (let ((pre (if non #\n #\q)))
+              (with-open-file (s (format nil "parsed/~C-methods.lisp" pre) :direction :output :if-exists :supersede)
+                (with-open-file (so (format nil "parsed/~C-override.lisp" pre) :direction :output :if-exists :supersede)
+                  (format so "(defparameter *~C-override* '(~%" pre)
+                  (format s "(defparameter *~C-methods* '(~%" pre)
+                  (parse-classes (mapcar (lambda (name)
+                                           (string-trim "= " (if-it (position #\( name)
+                                                                 (subseq name 0 it)
+                                                                 name)))
+                                         names)
+                                 s so non)))))
+          (list *q-names* *n-names*)
+          (list nil :non)))
   (if (zerop *not-found*)
       (format t "~%OK~%~%")
       (warn (format nil "Html files not found: ~D" *not-found*))))
