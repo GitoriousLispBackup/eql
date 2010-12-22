@@ -52,13 +52,18 @@
 (defparameter *latest-eval-position*   nil)
 
 (defconstant +max-shown-completions+ 10)
+(defconstant +max-history+           50)
 (defconstant +hidden-position+       (quote #.(make-list 2 :initial-element (- (1- (expt 8 5))))))
 (defconstant +package-char-dummy+    #\$)
+(defconstant +history-file+          ".command-history")
 
 ;;; Qt
 
 (defvar *main*                (qload-ui "data/editor.ui"))
 (defvar *editor*              (qfind-child *main* "editor"))
+(defvar *output*              (qfind-child *main* "output"))
+(defvar *command*             (qfind-child *main* "command"))
+(defvar *splitter*            (qfind-child *main* "splitter"))
 (defvar *action-open*         (qfind-child *main* "action_open"))
 (defvar *action-save*         (qfind-child *main* "action_save"))
 (defvar *action-save-as*      (qfind-child *main* "action_save_as"))
@@ -87,6 +92,7 @@
 (defconstant +keep-anchor+        1  "move mode")
 (defconstant +word-under-cursor+  0  "selection type")
 (defconstant +native-text+        0  "sequence format")
+(defconstant +base+               9  "color role")
 
 (defun file-open ()
   (let ((name (qfun "QFileDialog" "getOpenFileName" nil "" "" "Lisp files (*.lisp)")))
@@ -124,7 +130,9 @@
                                       #-linux "Courier New"
                                       #+darwin 13
                                       #-darwin 10))
-    (qset *editor* "font" *font*)
+    (dolist (w (list *editor* *output* *command*))
+      (qset w "font" *font*))
+    (qset *output* "readOnly" t)
     (qset *action-save*         "shortcut" (keys "Ctrl+S"))
     (qset *action-save-and-run* "shortcut" (keys "Ctrl+R"))
     (qset *action-eval-region*  "shortcut" (keys "Ctrl+Return"))
@@ -138,9 +146,14 @@
       ("pos" (list 40 40))
       ("size" (list 800 500))
       ("windowTitle" "Simple Lisp Editor"))
+    (x:do-with (qfun *splitter*)
+      ("setStretchFactor" 0 2)
+      ("setStretchFactor" 1 1))
+    (set-color *output* +base+ "lavender")
     (qfun *completer* "setWindowFlags" "Popup")
     (qconnect *editor* "cursorPositionChanged()" 'cursor-position-changed)
     (qconnect *completer* "itemDoubleClicked(QListWidgetItem*)" 'insert-completer-option-text)
+    (qconnect *command* "returnPressed()" 'command)
     (qconnect *action-open* "triggered()" 'file-open)
     (qconnect *action-save* "triggered()" 'file-save)
     (qconnect *action-save-as* "triggered()" 'file-save-as)
@@ -152,15 +165,21 @@
     (qoverride *completer* "keyPressEvent(QKeyEvent*)" 'completer-key-pressed)
     (qoverride *completer* "focusOutEvent(QFocusEvent*)" 'close-completer)
     (qoverride *highlighter* "highlightBlock(QString)" 'highlight-block)
+    (qoverride *command* "keyPressEvent(QKeyEvent*)" 'history-move)
     (show-status-message (format nil (tr "<b style='color:#4040E0'>Eval Region:</b> move to paren <b>(</b> or <b>)</b>, hit <b>~A</b>")
                                  (qfun (qget *action-eval-region* "shortcut") "toString" +native-text+))
                          :html)
     (ini-highlight-rules)
-    (local-client:ini (lambda (file-pos) (mark-error-region file-pos)))
+    (local-client:ini 'data-from-server)
     (qfun *main* "show")))
 
 (defun clean-up ()
   (file-save))
+
+(defun set-color (widget role color)
+  (let ((pal (qget widget "palette")))
+    (qfun pal "setColor(QPalette::ColorRole,QColor)" role color)
+    (qset widget "palette" pal)))
 
 (let (label)
   (defun show-status-message (msg &optional html)
@@ -854,6 +873,81 @@
               (run-on-server (subseq text* 0 end))
               (return-from repeat-eval)))))))
   (qmsg (tr "No valid latest region found.")))
+
+(defun html-escape (txt)
+  (let ((html (qescape txt)))
+    (mapc (lambda (new old)
+            (setf html (x:string-substitute new old html)))
+          (list "&nbsp;" "<br>")
+          (list " " (string #\Newline)))
+    html))
+
+(defun data-from-server (type str)
+  (case type
+    (:file-position
+       (mark-error-region (read-from-string str)))
+    ((:expression :result :error)
+       (qfun *output* "appendHtml" (format nil "<span style='color:~A'>~A</span>"
+                                           (case type
+                                             (:expression
+                                                "black")
+                                             (:result
+                                                "blue")
+                                             (:error
+                                                "red"))
+                                           (html-escape str)))
+       (let ((vs (qfun *output* "verticalScrollBar")))
+         (qset vs "value" (qget vs "maximum"))))))
+
+;;; command line
+
+(defun command ()
+  (let ((text (qget *command* "text")))
+    (run-on-server text)
+    (history-add text)
+    (qfun *command* "clear")))
+
+(defun saved-history ()
+  (let ((ex "")
+        history)
+    (when (probe-file +history-file+)
+      (with-open-file (s +history-file+ :direction :input)
+        (loop
+           (let ((cmd (read-line s nil :eof)))
+             (when (eql :eof cmd)
+               (return))
+             (unless (string= ex cmd)
+               (push (setf ex cmd) history)))))
+      (setf history (nthcdr (max 0 (- (length history) +max-history+)) (reverse history)))
+      (delete-file +history-file+)
+      (with-open-file (s +history-file+ :direction :output :if-does-not-exist :create)
+        (dolist (cmd history)
+          (write-line cmd s)))
+      (reverse history))))
+
+(let ((up (saved-history))
+      (out (open +history-file+ :direction :output :if-exists :append :if-does-not-exist :create))
+      down)
+  (defun history-move (ev)
+    (let ((key (qfun ev "key")))
+      (x:when-it (cond ((= (key "Up") key)
+                        (x:when-it (pop up)
+                          (push x:it down)))
+                       ((= (key "Down") key)
+                        (x:when-it (pop down)
+                          (push x:it up))))
+        (qset *command* "text" (first x:it))))
+    nil) ; overridden
+  (defun history-add (cmd)
+    (when (or (not up)
+              (and up (string/= cmd (first up))))
+      (push cmd up)
+      (princ cmd out)
+      (terpri out)
+      (when (and down (string= cmd (first down)))
+        (pop down))))
+  (defun history ()
+    (append (reverse up) down)))
 
 ;;; profile
 

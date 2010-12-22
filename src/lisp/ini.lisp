@@ -143,11 +143,11 @@
   (qui-class2 file var))
 
 (defun qmessage-box (msg)
-  "args: (message)
+  "args: (x)
    alias: qmsg
-   Convenience function, calling:
-       (qfun \"QMessageBox\" \"information\" nil \"EQL\" message))"
-  (qfun "QMessageBox" "information" nil "EQL" msg))
+   Convenience function, calling: (converting x to a string if necessary)
+       (qfun \"QMessageBox\" \"information\" nil \"EQL\" x))"
+  (qfun "QMessageBox" "information" nil "EQL" (if (stringp msg) msg (prin1-to-string msg))))
 
 (defun qevents ()
   (eql:qprocess-events)

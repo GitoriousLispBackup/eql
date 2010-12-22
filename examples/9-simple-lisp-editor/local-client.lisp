@@ -27,12 +27,16 @@
 
 (defun read-all ()
   (when *function*
-    (funcall *function* (read-from-string (qfrom-utf8 (qfun *socket* "readAll"))))))
+    (let ((all (qfrom-utf8 (qfun *socket* "readAll"))))
+      (multiple-value-bind (type end)
+          (read-from-string all)
+        (funcall *function* type (subseq all end))))))
 
 (defun request (data)
   (x:do-with (qfun *socket*)
     "abort"
     ("connectToServer" *server-name*)
+    ("waitForConnected" 1000)
     ("write(QByteArray)" data)))
 
 (defun string-request (str)

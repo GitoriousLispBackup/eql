@@ -39,6 +39,16 @@ It tries to be intelligent, for example:
 USAGE NOTES
 ===========
 
+Qt events are processed natively through QApplication::exec(), while keeping
+your program interactive.
+
+The local Lisp server accepts keyboard input only when breaking into the
+debugger. But you obviously can stop the server (Ctrl+C) and continue
+(:c at the command prompt) at any time.
+
+Remember to always exit the debugger (e.g. ECL debugger command :q) before
+sending another command from the editor.
+
 "Eval Region" note: (see initial status-bar message)
 Remember to change to the desired package prior to eval anything.
 
@@ -46,16 +56,7 @@ The "Save and Run" action (Ctrl+R) will load the current code in the local
 Lisp server process (if you don't see the application window, it might be
 in the background. Use your taskbar to show it).
 
-Qt events are processed natively (no performance loss!), while keeping
-your program interactive (you can send any command using "Eval Region").
-
-The local Lisp server accepts keyboard input only when breaking into the
-debugger. But you obviously can stop the server (Ctrl+C) and continue
-(:c at the command prompt) at any time.
-
 When using "Save and Run", on errors, after the local-server entered the
 debugger, you can enter the ECL debugger command :f, which will send the
 position of the offending region to the editor, and it will be marked red.
 
-Remember to always exit the debugger (e.g. ECL debugger command :q) before
-sending another "Eval Region" or "Save and Run".

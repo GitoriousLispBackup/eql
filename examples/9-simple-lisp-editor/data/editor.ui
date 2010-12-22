@@ -6,17 +6,32 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>528</width>
-    <height>478</height>
+    <width>447</width>
+    <height>417</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <widget class="QTextEdit" name="editor"/>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <widget class="QWidget" name="">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QTextEdit" name="editor"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="command"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QPlainTextEdit" name="output"/>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -25,7 +40,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>528</width>
+     <width>447</width>
      <height>19</height>
     </rect>
    </property>

@@ -126,12 +126,12 @@
 <p>Returns the string converted using <code>QString::toLocal8Bit()</code> (see <code>QLocale</code> settings).<br>Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.</p>
 </p><br>
 <p>
-<b>QMESSAGE-BOX (message)</b>
+<b>QMESSAGE-BOX (x)</b>
 <br>
 <b>QMSG</b>
-<p>Convenience function, calling:</p>
+<p>Convenience function, calling: (converting x to a string if necessary)</p>
 <pre>
-  (qfun "QMessageBox" "information" nil "EQL" message))
+  (qfun "QMessageBox" "information" nil "EQL" x))
 </pre>
 </p><br>
 <p>

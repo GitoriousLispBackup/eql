@@ -3,7 +3,7 @@
 *.dylib
 *.exe
 *.fas
-*.gdb_history
+*.*history
 *.lib
 *.o
 *.obj
