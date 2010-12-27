@@ -53,7 +53,6 @@
 
 (defconstant +max-shown-completions+ 10)
 (defconstant +max-history+           50)
-(defconstant +hidden-position+       (quote #.(make-list 2 :initial-element (- (1- (expt 8 5))))))
 (defconstant +package-char-dummy+    #\$)
 (defconstant +history-file+          ".command-history")
 
@@ -491,7 +490,7 @@
                                           (return-from cursor-position-changed))))))))))))))))))
 
 (defun insert-completer-option-text (&optional item)
-  (qfun *completer* "move" +hidden-position+)
+  (qfun *completer* "resize" '(0 0))
   (flet ((add-quote (x)
            (format nil "~A\"" x)))
     (x:when-it (current-completer-option)
@@ -535,7 +534,7 @@
       (x:do-with (qfun *completer*)
         "clear"
         ("addItems" options)
-        ("move" +hidden-position+)
+        ("resize" '(0 0))
         "adjustSize"
         "show"
         "setFocus")

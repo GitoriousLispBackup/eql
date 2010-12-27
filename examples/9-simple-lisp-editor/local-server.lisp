@@ -75,17 +75,14 @@
       (format t "~%~A [~A] ~A~%~A"
               pkg
               counter
-              (make-string (- 50
-                              (length counter)
-                              (if (string= "COMMON-LISP-USER" pkg) 0 (length pkg)))
-                           :initial-element #\-)
+              (make-string (- 50 (length counter) (length pkg)) :initial-element #\-)
               str)
       (setf si::*read-string* str))
     (next-single-shot :start-top-level)))
 
 (defun next-single-shot (curr)
   (setf *current-single-shot* curr)
-  (qfun *timer* "start" 0))
+  (qfun *timer* "start" 50))
 
 (defun call-delayed ()
   (case *current-single-shot*

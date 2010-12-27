@@ -5,7 +5,6 @@
 #include "dyn_object.h"
 #include "gen/_lobjects.h"
 #include <QLibrary>
-#include <iostream>
 
 typedef QPair<QByteArray, void*> MetaArg;
 typedef QList<MetaArg>           MetaArgList;
@@ -226,9 +225,11 @@ static QByteArray superClassName(const QByteArray& name, bool* found = 0) {
     if(LObjects::q_names.value(name, 0)) {
         if(found) {
             *found = true; }
-        const QMetaObject* mo = LObjects::staticMetaObject(name)->superClass();
-        if(mo) {
-            super = mo->className(); }}
+        const QMetaObject* moStatic = LObjects::staticMetaObject(name);
+        if(moStatic) {
+            const QMetaObject* mo = moStatic->superClass();
+            if(mo) {
+                super = mo->className(); }}}
     else if(LObjects::n_names.value(name, 0)) {
         if(found) {
             *found = true; }

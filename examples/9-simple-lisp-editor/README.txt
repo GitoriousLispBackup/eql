@@ -14,10 +14,10 @@ Run the editor:
   2) Run the editor:
       eql editor
 
-The main motivation behind this editor is the need for a popup completor
+The main motivation behind this editor is the need for a popup completer
 for the (huge) Qt library.
 
-The completor currently works for:
+The completer currently works for:
 
   qnew
   qlet
@@ -59,4 +59,3 @@ in the background. Use your taskbar to show it).
 When using "Save and Run", on errors, after the local-server entered the
 debugger, you can enter the ECL debugger command :f, which will send the
 position of the offending region to the editor, and it will be marked red.
-

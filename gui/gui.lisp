@@ -393,3 +393,16 @@
   dark)
 
 (gui)
+
+;;; profile
+
+#|
+(require :profile)
+
+(progn
+  (use-package :profile)
+  (profile:profile
+   qfun
+   qset
+   qget))
+#|
