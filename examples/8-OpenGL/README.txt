@@ -19,4 +19,4 @@ You need the following ASDF packages:
 RUN
 ===
 
-../../eql run.lisp
+eql run.lisp

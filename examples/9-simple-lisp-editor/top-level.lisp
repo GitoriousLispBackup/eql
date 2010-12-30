@@ -6,7 +6,8 @@
 
 (defvar *tpl-print-current-hook* nil)
 
-(defparameter *read-string* nil)
+(defparameter *read-string*  nil)
+(defparameter *latest-value* nil)
 
 (defun tpl-print-current ()
   (let ((name (ihs-fname *ihs-current*)))
@@ -30,7 +31,7 @@
 (defun %top-level ()
   (catch *quit-tag*
     (let* ((*debugger-hook* nil)
-           + ++ +++ - * ** *** / // ///)
+           + ++ +++ - / // ///)
       (setq *lisp-initialized* t)
       (let ((*break-enable* t)
             (*tpl-level* -1))
@@ -38,9 +39,9 @@
       0)))
 
 (defun %tpl (&key ((:commands *tpl-commands*) tpl-commands)
-                 ((:prompt-hook *tpl-prompt-hook*) *tpl-prompt-hook*)
-                 (broken-at nil)
-                 (quiet t))
+             ((:prompt-hook *tpl-prompt-hook*) *tpl-prompt-hook*)
+             (broken-at nil)
+             (quiet t))
   (declare (c::policy-debug-ihs-frame))
   (let* ((*ihs-base* *ihs-top*)
          (*ihs-top* (if broken-at (ihs-search t broken-at) (ihs-top)))
@@ -87,22 +88,23 @@
                            (tpl-prompt)
                            (%tpl-read)) ; [EQL]
                        values (multiple-value-list
-                               (eval-with-env - *break-env*))
-                       /// // // / / values *** ** ** * * (car /))
+                                  (eval-with-env - *break-env*))
+                       /// // // / / values)
+                 (setf *latest-value* (car /)) ; [EQL]
                  (tpl-print values)))))
-          (loop
-           (setq +++ ++ ++ + + -)
-           (when
-               (catch *quit-tag*
-                 (if (zerop break-level)
-                   (with-simple-restart 
-                    (restart-toplevel "Go back to Top-Level REPL.")
+      (loop
+        (setq +++ ++ ++ + + -)
+        (when
+            (catch *quit-tag*
+              (if (zerop break-level)
+                  (with-simple-restart 
+                      (restart-toplevel "Go back to Top-Level REPL.")
                     (rep))
-                   (with-simple-restart
-                    (restart-debugger "Go back to debugger level ~D." break-level)
+                  (with-simple-restart
+                      (restart-debugger "Go back to debugger level ~D." break-level)
                     (rep)))
-                 nil)
-             (setf quiet nil))))))
+              nil)
+          (setf quiet nil))))))
 
 (defun %tpl-read (&aux (*read-suppress* nil))
   (eql:qprocess-events)
@@ -113,5 +115,9 @@
          (prog1
              (multiple-value-bind (exp err)
                  (ignore-errors (read-from-string *read-string*))
-               (or exp err))
+               (if exp
+                   (progn
+                     (setf *** ** ** * * *latest-value*)
+                     exp)
+                   err))
            (setf *read-string* :eof)))))

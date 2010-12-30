@@ -182,13 +182,12 @@
 
 (let (label)
   (defun show-status-message (msg &optional html)
-    (flet ((bar ()
-             (qfun *main* "statusBar")))
+    (let ((bar (qfun *main* "statusBar")))
       (when (and html (not label))
-        (qfun (bar) "addWidget" (setf label (qnew "QLabel")) 1))
+        (qfun bar "addWidget" (setf label (qnew "QLabel")) 1))
       (if html
           (qset label "text" msg)
-          (qfun (bar) "showMessage" msg)))))
+          (qfun bar "showMessage" msg)))))
 
 (defun ini-highlight-rules ()
   (x:do-with (qfun *eql-keyword-format*)
@@ -342,7 +341,11 @@
                      (char= #\( (char line pos))
                      (or (zerop pos)
                          (char/= #\\ (char line (1- pos)))))
-            (show-matching-parenthesis text-cursor (subseq line pos) :left pos))
+            (let ((pos* pos))
+              (when (and (plusp pos)
+                         (char= #\` (char line (1- pos)))) ; backquote
+                (decf pos*))
+              (show-matching-parenthesis text-cursor (subseq line pos*) :left pos*)))
           (unless (zerop pos)
             (let ((pos-char (char line (1- pos))))
               (if *current-completer*
@@ -757,7 +760,10 @@
                      ((null start))
                    (unless (and (plusp start)
                                 (char= #\\ (char code (1- start))))
-                     (let ((code* (subseq code start)))
+                     (let ((code* (subseq code (if (and (plusp start)
+                                                        (char= #\` (char code (1- start)))) ; backquote
+                                                   (1- start)
+                                                   start))))
                        (multiple-value-bind (exp end)
                            (if (x:starts-with "()" code*)
                                (values '(nil) 2)

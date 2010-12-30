@@ -9,6 +9,9 @@
 (defpackage :local-server
   (:use :common-lisp :eql)
   (:export
+   #:*
+   #:**
+   #:***
    #:*function*
    #:ini))
 
@@ -24,6 +27,9 @@
 (defvar *error-output-buffer*    (make-string-output-stream))
 (defvar *terminal-out-buffer*    (make-string-output-stream))
 
+(defparameter *                     nil)
+(defparameter **                    nil)
+(defparameter ***                   nil)
 (defparameter *current-single-shot* nil)
 
 (defun ini (&optional (name "EQL:simple-lisp-editor"))
