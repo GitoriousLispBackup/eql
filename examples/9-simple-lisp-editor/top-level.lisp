@@ -84,13 +84,13 @@
                    (unless quiet
                      (break-where)
                      (setf quiet t))
-                 (setq - (locally (declare (notinline %tpl-read)) ; [EQL]
+                 (setq - (locally (declare (notinline %tpl-read))
                            (tpl-prompt)
-                           (%tpl-read)) ; [EQL]
+                           (%tpl-read))
                        values (multiple-value-list
                                   (eval-with-env - *break-env*))
                        /// // // / / values)
-                 (setf *latest-value* (car /)) ; [EQL]
+                 (setf *latest-value* (car /))
                  (tpl-print values)))))
       (loop
         (setq +++ ++ ++ + + -)

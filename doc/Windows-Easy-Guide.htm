@@ -50,8 +50,6 @@ Make sure all of the following are in your <code>Path</code> environment variabl
 <li>Open the <b>Qt command prompt</b> from the Windows main menu, and switch to the EQL source directory <code>C:\eql\src</code>.
 <li>If your ECL install path differs from the example path (see above), you need to adjust the file <code>windows.pri</code>.
 <li>Run the command <code>ecl -shell make-eql-lib.lisp</code>.
-<li>Run <code>qmake first_metatype_id.pro</code> followed by <code>nmake</code>.
-<li>Run the resulting <code>first_metatype_id.exe</code> (which will create the file <code>first_metatype_id.h</code>).
 <li>Run <code>qmake eql_lib.pro</code> followed by <code>nmake</code>.
 <li>Run <code>qmake eql_exe.pro</code> followed by <code>nmake</code>.
 <li>Go back one directory <code>cd..</code>, and you should be able to start the EQL GUI: <code>eql -qgui</code>.
@@ -89,7 +87,7 @@ The last step is your <code>.emacs</code> file.
   (slime-setup '(slime-fancy))
 </pre>
 After firing up Emacs, and hitting <code>Meta-X slime</code>, your SLIME should compile and run.
-<br>As a final test, try this: <code>(eql:qgui)</code>.
+<br>As a final test, try this: <code>(in-package :eql)</code>.
 <br><br>
 </body>
 </html>
