@@ -42,15 +42,15 @@ USAGE NOTES
 Qt events are processed natively through QApplication::exec(), while keeping
 your program interactive.
 
-The local Lisp server accepts keyboard input only when breaking into the
-debugger. But you obviously can stop the server (Ctrl+C) and continue
-(:c at the command prompt) at any time.
-
-Remember to always exit the debugger (e.g. ECL debugger command :q) before
-sending another command from the editor.
-
 "Eval Region" note: (see initial status-bar message)
 Remember to change to the desired package prior to eval anything.
+
+On errors, the local Lisp server will pop up an input dialog, asking for a
+debug command (if you don't see the input dialog, it might be in the
+background. Use your taskbar to show it).
+
+If you want to pause/continue the local-server process, use the usual Ctrl+C
+(terminal command) and :c (ECL command).
 
 The "Save and Run" action (Ctrl+R) will load the current code in the local
 Lisp server process (if you don't see the application window, it might be

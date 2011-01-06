@@ -101,7 +101,8 @@
 (defun save-file (name)
   (when (and (stringp name)
              (not (x:empty-string name)))
-    (with-open-file (s (os-pathname name) :direction :output :if-exists :supersede)
+    (with-open-file (s (os-pathname name) :direction :output
+                       :if-exists :supersede)
       (write-string (qget *editor* "plainText") s))))
 
 (defun file-save ()
@@ -129,13 +130,16 @@
                                       #-linux "Courier New"
                                       #+darwin 13
                                       #-darwin 10))
-    (dolist (w (list *editor* *output* *command*))
-      (qset w "font" *font*))
-    (qset *output* "readOnly" t)
     (qset *action-save*         "shortcut" (keys "Ctrl+S"))
     (qset *action-save-and-run* "shortcut" (keys "Ctrl+R"))
     (qset *action-eval-region*  "shortcut" (keys "Ctrl+Return"))
     (qset *action-repeat-eval*  "shortcut" (keys "Ctrl+E"))
+    (dolist (w (list *editor* *output* *command*))
+      (qset w "font" *font*))
+    (x:do-with (qset *output*)
+      ("readOnly" t)
+      ("tabStopWidth" (qlet ((fm "QFontMetrics(QFont)" *font*))
+                        (* 8 (qfun fm "width(QString)" " ")))))
     (x:do-with (qset *completer*)
       ("font" *font*)
       ("frameShape" "Box")
@@ -145,9 +149,9 @@
       ("pos" (list 40 40))
       ("size" (list 800 500))
       ("windowTitle" "Simple Lisp Editor"))
-    (x:do-with (qfun *splitter*)
-      ("setStretchFactor" 0 2)
-      ("setStretchFactor" 1 1))
+    (x:do-with (qfun *splitter* "setStretchFactor")
+      (0 2)
+      (1 1))
     (set-color *output* +base+ "lavender")
     (qfun *completer* "setWindowFlags" "Popup")
     (qconnect *editor* "cursorPositionChanged()" 'cursor-position-changed)
@@ -879,30 +883,24 @@
               (return-from repeat-eval)))))))
   (qmsg (tr "No valid latest region found.")))
 
-(defun html-escape (txt)
-  (let ((html (qescape txt)))
-    (mapc (lambda (new old)
-            (setf html (x:string-substitute new old html)))
-          (list "&nbsp;" "<br>")
-          (list " " (string #\Newline)))
-    html))
-
 (defun data-from-server (type str)
+  (qlet ((cursor (qfun *output* "textCursor"))
+         (brush "QBrush(QColor)" (case type
+                                   (:expression "black")
+                                   (:result     "blue")
+                                   (:terminal   "darkred")
+                                   (:error      "red")))
+         (format "QTextCharFormat"))
+    (qfun format "setForeground" brush)
+    (qfun cursor "setCharFormat" format)
+    (qfun *output* "setTextCursor" cursor))
   (case type
     (:file-position
        (mark-error-region (read-from-string str)))
-    ((:expression :result :error)
-       (qfun *output* "appendHtml" (format nil "<span style='color:~A'>~A</span>"
-                                           (case type
-                                             (:expression
-                                                "black")
-                                             (:result
-                                                "blue")
-                                             (:error
-                                                "red"))
-                                           (html-escape str)))
-       (let ((vs (qfun *output* "verticalScrollBar")))
-         (qset vs "value" (qget vs "maximum"))))))
+    ((:expression :result :terminal :error)
+       (qfun *output* "appendPlainText" str)))
+  (let ((vs (qfun *output* "verticalScrollBar")))
+    (qset vs "value" (qget vs "maximum"))))
 
 ;;; command line
 
@@ -925,13 +923,15 @@
                (push (setf ex cmd) history)))))
       (setf history (nthcdr (max 0 (- (length history) +max-history+)) (reverse history)))
       (delete-file +history-file+)
-      (with-open-file (s +history-file+ :direction :output :if-does-not-exist :create)
+      (with-open-file (s +history-file+ :direction :output
+                         :if-does-not-exist :create)
         (dolist (cmd history)
           (write-line cmd s)))
       (reverse history))))
 
 (let ((up (saved-history))
-      (out (open +history-file+ :direction :output :if-exists :append :if-does-not-exist :create))
+      (out (open +history-file+ :direction :output
+                 :if-exists :append :if-does-not-exist :create))
       down)
   (defun history-move (ev)
     (let ((key (qfun ev "key")))

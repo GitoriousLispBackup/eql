@@ -4,14 +4,22 @@
   (error "[EQL] module :network required")
   (eql:qq))
 
-(require :top-level "top-level")
+(require :input-hook "input-hook")
+(require :top-level  "top-level")
 
 (defpackage :local-server
   (:use :common-lisp :eql)
   (:export
+   #:+
+   #:++
+   #:+++
    #:*
    #:**
    #:***
+   #:/
+   #://
+   #:///
+   #:*debug-readline*
    #:*function*
    #:ini))
 
@@ -21,21 +29,27 @@
 
 (defvar *function*               'feed-top-level)
 (defvar *server*                 (qnew "QLocalServer"))
-(defvar *timer*                  (qnew "QTimer" "singleShot" t))
 (defvar *client*                 nil)
 (defvar *standard-output-buffer* (make-string-output-stream))
 (defvar *error-output-buffer*    (make-string-output-stream))
 (defvar *terminal-out-buffer*    (make-string-output-stream))
 
-(defparameter *                     nil)
-(defparameter **                    nil)
-(defparameter ***                   nil)
-(defparameter *current-single-shot* nil)
+;; REPL variables
+(defvar +   nil)
+(defvar ++  nil)
+(defvar +++ nil)
+(defvar *   nil)
+(defvar **  nil)
+(defvar *** nil)
+(defvar /   nil)
+(defvar //  nil)
+(defvar /// nil)
 
 (defun ini (&optional (name "EQL:simple-lisp-editor"))
   (qfun "QLocalServer" "removeServer" name)
   (if (qfun *server* "listen" name)
       (progn
+        (setf input-hook:*function* 'handle-debug-io)
         (setf *standard-output* (make-broadcast-stream *standard-output*
                                                        *standard-output-buffer*)
               *error-output*    (make-broadcast-stream *error-output*
@@ -46,13 +60,11 @@
         (setf si::*tpl-print-current-hook* 'send-file-position)
         (qset (qapp) "quitOnLastWindowClosed" nil)
         (qconnect *server* "newConnection()" 'read-from-client)
-        (qconnect *timer* "timeout()" 'call-delayed)
         (multiple-value-bind (eql-version qt-version)
             (qversion)
           (setf si:*tpl-prompt-hook*
                 (format nil "~%EQL local-server (ECL ~A, EQL ~A, Qt ~A)~@
-                             Use local-client to send input.~@
-                             Keyboard input possible only in the debugger."
+                             Use local-client to send input."
                         (si::lisp-implementation-version) eql-version qt-version)))
         t)
       (progn
@@ -64,7 +76,7 @@
   (setf *client* (qfun *server* "nextPendingConnection"))
   (qconnect *client* "disconnected()" *client* "deleteLater()")
   (qfun *client* "waitForReadyRead")
-  (funcall *function* (qfun *client* "readAll"))
+  (funcall *function* (qfrom-utf8 (qfun *client* "readAll")))
   (send-to-client :expression (get-output-stream-string *standard-output-buffer*)))
 
 (defun current-package-name ()
@@ -74,9 +86,8 @@
                  (lambda (x y) (< (length x) (length y)))))))
 
 (let ((n 0))
-  (defun feed-top-level (data)
-    (let ((str (qfrom-utf8 data))
-          (pkg (current-package-name))
+  (defun feed-top-level (str)
+    (let ((pkg (current-package-name))
           (counter (princ-to-string (incf n))))
       (format t "~%~A [~A] ~A~%~A"
               pkg
@@ -84,27 +95,23 @@
               (make-string (- 50 (length counter) (length pkg)) :initial-element #\-)
               str)
       (setf si::*read-string* str))
-    (next-single-shot :start-top-level)))
+    (qsingle-shot 50 'start-top-level)))
 
-(defun next-single-shot (curr)
-  (setf *current-single-shot* curr)
-  (qfun *timer* "start" 50))
+(defun send-output (type var)
+  (let ((str (get-output-stream-string var)))
+    (unless (x:empty-string str)
+      (sleep 0.05)
+      (send-to-client type str))))
 
-(defun call-delayed ()
-  (case *current-single-shot*
-    (:start-top-level
-       (si::%top-level)
-       (let ((output (get-output-stream-string *standard-output-buffer*)))
-         (send-to-client :result
-                         ;; cut both prompts
-                         (subseq output
-                                 (1+ (position #\> output))
-                                 (position #\Newline output :from-end t))))
-       (next-single-shot :send-error))
-    (:send-error
-       (let ((err (get-output-stream-string *error-output-buffer*)))
-         (unless (x:empty-string err)
-           (send-to-client :error err))))))
+(defun start-top-level ()
+  (si::%top-level)
+  (let ((output (get-output-stream-string *standard-output-buffer*)))
+    (send-to-client :result
+                    ;; cut both prompts
+                    (subseq output
+                            (1+ (position #\> output))
+                            (position #\Newline output :from-end t))))
+  (send-output :error *error-output-buffer*))
 
 (defun send-file-position (file pos)
   (send-to-client :file-position (format nil "(~S . ~D)" file pos)))
@@ -114,5 +121,12 @@
     (x:do-with (qfun *client*)
       ("write(QByteArray)" (x:string-to-bytes (format nil "~S ~A" type (qutf8 str))))
       "flush")))
+
+(defun handle-debug-io ()
+  (send-output :error *error-output-buffer*)
+  (send-output :terminal *terminal-out-buffer*)
+  (let ((cmd (qfun "QInputDialog" "getText" nil "EQL"
+                   "Enter debug command: (:h for help)")))
+    (format nil "~A~%" (if (x:empty-string cmd) ":q" cmd))))
 
 (ini)

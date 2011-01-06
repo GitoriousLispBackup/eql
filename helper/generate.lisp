@@ -936,7 +936,7 @@
         (when (plusp i)
           (format s "~%                if(override_~(~A~)) {~
                      ~%                    NumList* _ids = override_~(~A~)(name);~
-                     ~%                    if(_ids) {
+                     ~%                    if(_ids) {~
                      ~%                        ids = *_ids; }}~
                      ~%                break;"
                   module module))))

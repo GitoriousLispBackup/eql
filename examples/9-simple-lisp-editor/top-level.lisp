@@ -1,13 +1,14 @@
 (provide :top-level)
 
-;;; The following are modified/simplified functions taken from "src/lsp/top.lsp" version 10.4.1
+;;; The following are modified/simplified functions taken from "src/lsp/top.lsp" (ECL 10.4.1)
 
 (in-package :si)
 
 (defvar *tpl-print-current-hook* nil)
 
-(defparameter *read-string*  nil)
-(defparameter *latest-value* nil)
+(defparameter *read-string*   nil)
+(defparameter *latest-form*   nil)
+(defparameter *latest-values* nil)
 
 (defun tpl-print-current ()
   (let ((name (ihs-fname *ihs-current*)))
@@ -30,11 +31,14 @@
 
 (defun %top-level ()
   (catch *quit-tag*
-    (let* ((*debugger-hook* nil)
-           + ++ +++ - / // ///)
+    (let ((*debugger-hook* nil)
+          -)
       (setq *lisp-initialized* t)
       (let ((*break-enable* t)
-            (*tpl-level* -1))
+            (*tpl-level* -1)
+            (*debug-io* (make-two-way-stream (make-instance 'gray::input-hook-stream)
+                                             (two-way-stream-output-stream *terminal-io*))))
+
         (%tpl))
       0)))
 
@@ -88,12 +92,11 @@
                            (tpl-prompt)
                            (%tpl-read))
                        values (multiple-value-list
-                                  (eval-with-env - *break-env*))
-                       /// // // / / values)
-                 (setf *latest-value* (car /))
+                                  (eval-with-env - *break-env*)))
+                 (setf *latest-form*   -
+                       *latest-values* values)
                  (tpl-print values)))))
       (loop
-        (setq +++ ++ ++ + + -)
         (when
             (catch *quit-tag*
               (if (zerop break-level)
@@ -117,7 +120,9 @@
                  (ignore-errors (read-from-string *read-string*))
                (if exp
                    (progn
-                     (setf *** ** ** * * *latest-value*)
+                     (setf +++ ++ ++ + + *latest-form*
+                           *** ** ** * * (first *latest-values*)
+                           /// // // / / *latest-values*)
                      exp)
                    err))
            (setf *read-string* :eof)))))

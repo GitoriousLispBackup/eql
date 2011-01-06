@@ -2673,7 +2673,6 @@ StrList LObjects::override(const QByteArray& name) {
                 if(override_help) {
                     NumList* _ids = override_help(name);
                     if(_ids) {
-                     
                         ids = *_ids; }}
                 break;
             case 7:
@@ -2691,7 +2690,6 @@ StrList LObjects::override(const QByteArray& name) {
                 if(override_network) {
                     NumList* _ids = override_network(name);
                     if(_ids) {
-                     
                         ids = *_ids; }}
                 break;
             case 63:
@@ -2700,7 +2698,6 @@ StrList LObjects::override(const QByteArray& name) {
                 if(override_opengl) {
                     NumList* _ids = override_opengl(name);
                     if(_ids) {
-                     
                         ids = *_ids; }}
                 break;
             case 78:
@@ -2709,7 +2706,6 @@ StrList LObjects::override(const QByteArray& name) {
                 if(override_svg) {
                     NumList* _ids = override_svg(name);
                     if(_ids) {
-                     
                         ids = *_ids; }}
                 break; }}
     else {
