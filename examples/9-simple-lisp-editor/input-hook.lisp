@@ -28,8 +28,8 @@
 
 (defmethod stream-unread-char ((stream input-hook-stream) character)
   (with-slots (in-index) stream
-    (if (> in-index 0)
-        (decf in-index))))
+    (when (> in-index 0)
+      (decf in-index))))
 
 (defmethod stream-listen ((stream input-hook-stream))
   nil)
@@ -48,7 +48,7 @@
 
 (defun ensure-stream-data (stream)
   (with-slots (in-buffer in-index) stream
-    (if (= in-index (length in-buffer))
-        (setf in-buffer (funcall input-hook:*function*)
-              in-index 0))
+    (when (= in-index (length in-buffer))
+      (setf in-buffer (funcall input-hook:*function*)
+            in-index 0))
     in-buffer))

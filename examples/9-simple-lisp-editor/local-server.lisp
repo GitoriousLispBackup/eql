@@ -4,8 +4,9 @@
   (error "[EQL] module :network required")
   (eql:qq))
 
-(require :input-hook "input-hook")
-(require :top-level  "top-level")
+(require :input-hook   "input-hook")
+(require :top-level    "top-level")
+(require :debug-dialog "debug-dialog")
 
 (defpackage :local-server
   (:use :common-lisp :eql)
@@ -33,6 +34,9 @@
 (defvar *standard-output-buffer* (make-string-output-stream))
 (defvar *error-output-buffer*    (make-string-output-stream))
 (defvar *terminal-out-buffer*    (make-string-output-stream))
+
+;; Qt
+(defvar *font* (qnew "QFont(QString,int)" #+linux "Courier" #-linux "Courier New" #+darwin 13 #-darwin 10))
 
 ;; REPL variables
 (defvar +   nil)
@@ -123,10 +127,9 @@
       "flush")))
 
 (defun handle-debug-io ()
-  (send-output :error *error-output-buffer*)
-  (send-output :terminal *terminal-out-buffer*)
-  (let ((cmd (qfun "QInputDialog" "getText" nil "EQL"
-                   "Enter debug command: (:h for help)")))
+  (let ((cmd (debug-dialog:command (list (cons (get-output-stream-string *error-output-buffer*) "red")
+                                         (cons (get-output-stream-string *terminal-out-buffer*) "darkred"))
+                                   *font*)))
     (format nil "~A~%" (if (x:empty-string cmd) ":q" cmd))))
 
 (ini)

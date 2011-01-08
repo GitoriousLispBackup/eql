@@ -45,9 +45,8 @@ your program interactive.
 "Eval Region" note: (see initial status-bar message)
 Remember to change to the desired package prior to eval anything.
 
-On errors, the local Lisp server will pop up an input dialog, asking for a
-debug command (if you don't see the input dialog, it might be in the
-background. Use your taskbar to show it).
+On errors, the local Lisp server will pop up a debug dialog, asking for an
+ECL debug command.
 
 If you want to pause/continue the local-server process, use the usual Ctrl+C
 (terminal command) and :c (ECL command).

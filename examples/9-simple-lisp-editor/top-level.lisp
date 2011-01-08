@@ -38,7 +38,6 @@
             (*tpl-level* -1)
             (*debug-io* (make-two-way-stream (make-instance 'gray::input-hook-stream)
                                              (two-way-stream-output-stream *terminal-io*))))
-
         (%tpl))
       0)))
 

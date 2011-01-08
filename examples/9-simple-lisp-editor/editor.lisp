@@ -884,23 +884,21 @@
   (qmsg (tr "No valid latest region found.")))
 
 (defun data-from-server (type str)
-  (qlet ((cursor (qfun *output* "textCursor"))
-         (brush "QBrush(QColor)" (case type
-                                   (:expression "black")
-                                   (:result     "blue")
-                                   (:terminal   "darkred")
-                                   (:error      "red")))
-         (format "QTextCharFormat"))
-    (qfun format "setForeground" brush)
-    (qfun cursor "setCharFormat" format)
-    (qfun *output* "setTextCursor" cursor))
   (case type
     (:file-position
        (mark-error-region (read-from-string str)))
     ((:expression :result :terminal :error)
-       (qfun *output* "appendPlainText" str)))
-  (let ((vs (qfun *output* "verticalScrollBar")))
-    (qset vs "value" (qget vs "maximum"))))
+       (qlet ((cursor (qfun *output* "textCursor"))
+              (brush "QBrush(QColor)" (case type
+                                        (:expression "black")
+                                        (:result     "blue")))
+              (format "QTextCharFormat"))
+         (qfun format "setForeground" brush)
+         (qfun cursor "setCharFormat" format)
+         (qfun *output* "setTextCursor" cursor))
+       (qfun *output* "appendPlainText" str)
+       (let ((vs (qfun *output* "verticalScrollBar")))
+         (qset vs "value" (qget vs "maximum"))))))
 
 ;;; command line
 
