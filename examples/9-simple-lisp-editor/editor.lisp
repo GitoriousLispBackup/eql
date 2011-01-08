@@ -891,7 +891,8 @@
        (qlet ((cursor (qfun *output* "textCursor"))
               (brush "QBrush(QColor)" (case type
                                         (:expression "black")
-                                        (:result     "blue")))
+                                        (:result     "blue")
+                                        (:error      "red")))
               (format "QTextCharFormat"))
          (qfun format "setForeground" brush)
          (qfun cursor "setCharFormat" format)
