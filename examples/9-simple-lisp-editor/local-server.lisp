@@ -6,6 +6,7 @@
 
 (require :input-hook   "input-hook")
 (require :top-level    "top-level")
+(require :query-dialog "query-dialog")
 (require :debug-dialog "debug-dialog")
 
 (defpackage :local-server
@@ -22,6 +23,7 @@
    #:///
    #:*debug-readline*
    #:*function*
+   #:*top-level-debug-io*
    #:ini))
 
 (provide :local-server)
@@ -55,7 +57,6 @@
   (if (qfun *server* "listen" name)
       (progn
         (ini-streams)
-        (setf input-hook:*function* 'handle-debug-io) ; see *debug-io* in top-level::%top-level
         (setf si::*tpl-print-current-hook* 'send-file-position)
         (qset (qapp) "quitOnLastWindowClosed" nil)
         (qconnect *server* "newConnection()" 'read-from-client)
@@ -77,11 +78,14 @@
         *trace-output*    (make-broadcast-stream *trace-output*
                                                  *trace-output-buffer*)
         *error-output*    (make-broadcast-stream *error-output*
-                                                 *error-output-buffer*)
-        *terminal-io*     (make-two-way-stream   (two-way-stream-input-stream *terminal-io*)
-                                                 (make-broadcast-stream (two-way-stream-output-stream *terminal-io*)
-                                                                        *terminal-out-buffer*)))
-  (setf *query-io* (make-synonym-stream '*terminal-io*)))
+                                                 *error-output-buffer*))
+  (setf *terminal-io*      (make-two-way-stream (two-way-stream-input-stream *terminal-io*)
+                                                (make-broadcast-stream (two-way-stream-output-stream *terminal-io*)
+                                                                       *terminal-out-buffer*))
+        *query-io*         (make-two-way-stream (input-hook:new 'handle-query-io)
+                                                (two-way-stream-output-stream *terminal-io*))
+        si::*tpl-debug-io* (make-two-way-stream (input-hook:new 'handle-debug-io)
+                                                (two-way-stream-output-stream *terminal-io*))))
 
 (defun read-from-client ()
   (setf *client* (qfun *server* "nextPendingConnection"))
@@ -135,6 +139,11 @@
     (x:do-with (qfun *client*)
       ("write(QByteArray)" (x:string-to-bytes (format nil "~S ~A" type (qutf8 str))))
       "flush")))
+
+(defun handle-query-io ()
+  (let ((txt (query-dialog:get-text (get-output-stream-string *terminal-out-buffer*))))
+    (send-to-client :activate-editor)
+    (format nil "~A~%" txt)))
 
 (defun handle-debug-io ()
   (let ((cmd (debug-dialog:command (list (cons (get-output-stream-string *error-output-buffer*) "red")

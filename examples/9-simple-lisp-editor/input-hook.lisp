@@ -3,13 +3,18 @@
 (defpackage input-hook
     (:use :common-lisp)
   (:export
-   #:*function*))
+   #:new))
 
 (provide :input-hook)
 
 (in-package :input-hook)
 
-(defvar *function* nil)
+(defvar *functions* nil)
+
+(defun new (function)
+  (let ((stream (make-instance 'gray::input-hook-stream)))
+    (push (cons stream function) *functions*)
+    stream))
 
 (in-package :gray)
 
@@ -49,6 +54,6 @@
 (defun ensure-stream-data (stream)
   (with-slots (in-buffer in-index) stream
     (when (= in-index (length in-buffer))
-      (setf in-buffer (funcall input-hook:*function*)
+      (setf in-buffer (funcall (cdr (assoc stream input-hook::*functions*)))
             in-index 0))
     in-buffer))

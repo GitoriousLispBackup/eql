@@ -886,17 +886,13 @@
 (defun data-from-server (type str)
   (case type
     ((:expression :result :trace :error)
-       (qlet ((cursor (qfun *output* "textCursor"))
-              (brush "QBrush(QColor)" (case type
-                                        (:result "blue")
-                                        (:trace  "darkmagenta")
-                                        (:error  "red")
-                                        (t       "black")))
-              (format "QTextCharFormat"))
-         (qfun format "setForeground" brush)
-         (qfun cursor "setCharFormat" format)
-         (qfun *output* "setTextCursor" cursor))
-       (qfun *output* "appendPlainText" str)
+       (x:do-with (qfun *output*)
+         ("setColor" (case type
+                       (:result "blue")
+                       (:trace  "darkmagenta")
+                       (:error  "red")
+                       (t       "black")))
+         ("insertPlainText" str))
        (let ((vs (qfun *output* "verticalScrollBar")))
          (qset vs "value" (qget vs "maximum"))))
     (:file-position

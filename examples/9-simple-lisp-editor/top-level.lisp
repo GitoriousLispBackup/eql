@@ -4,6 +4,7 @@
 
 (in-package :si)
 
+(defvar *tpl-debug-io*           nil)
 (defvar *tpl-print-current-hook* nil)
 
 (defparameter *read-string*   nil)
@@ -36,8 +37,7 @@
       (setq *lisp-initialized* t)
       (let ((*break-enable* t)
             (*tpl-level* -1)
-            (*debug-io* (make-two-way-stream (make-instance 'gray::input-hook-stream)
-                                             (two-way-stream-output-stream *terminal-io*))))
+            (*debug-io* *tpl-debug-io*))
         (%tpl))
       0)))
 

@@ -30,7 +30,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QPlainTextEdit" name="output"/>
+      <widget class="QTextEdit" name="output"/>
      </widget>
     </item>
    </layout>
