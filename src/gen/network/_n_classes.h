@@ -102,7 +102,7 @@ public:
     static NumList overrideIds;
     uint unique;
 
-    QList<QNetworkProxy> queryProxy(const QNetworkProxyQuery& x1 = QNetworkProxyQuery()) { void* fun = LObjects::overrideFun(unique, 370); if(fun) { const void* args[] = { &x1 }; return qVariantValue<QList<QNetworkProxy> >(callOverrideFun(fun, 370, args)); } return QList<QNetworkProxy>(); }
+    QList<QNetworkProxy> queryProxy(const QNetworkProxyQuery& x1 = QNetworkProxyQuery()) { void* fun = LObjects::overrideFun(unique, 385); if(fun) { const void* args[] = { &x1 }; return qVariantValue<QList<QNetworkProxy> >(callOverrideFun(fun, 385, args)); } return QList<QNetworkProxy>(); }
 };
 
 class LNetworkProxyQuery : public QNetworkProxyQuery {
@@ -193,17 +193,17 @@ public:
     static NumList overrideIds;
     uint unique;
 
-    void setDir(bool x1) { void* fun = LObjects::overrideFun(unique, 385); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 385, args).toBool()) return; } QUrlInfo::setDir(x1); }
-    void setFile(bool x1) { void* fun = LObjects::overrideFun(unique, 386); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 386, args).toBool()) return; } QUrlInfo::setFile(x1); }
-    void setGroup(const QString& x1) { void* fun = LObjects::overrideFun(unique, 387); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 387, args).toBool()) return; } QUrlInfo::setGroup(x1); }
-    void setLastModified(const QDateTime& x1) { void* fun = LObjects::overrideFun(unique, 388); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 388, args).toBool()) return; } QUrlInfo::setLastModified(x1); }
-    void setName(const QString& x1) { void* fun = LObjects::overrideFun(unique, 389); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 389, args).toBool()) return; } QUrlInfo::setName(x1); }
-    void setOwner(const QString& x1) { void* fun = LObjects::overrideFun(unique, 390); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 390, args).toBool()) return; } QUrlInfo::setOwner(x1); }
-    void setPermissions(int x1) { void* fun = LObjects::overrideFun(unique, 391); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 391, args).toBool()) return; } QUrlInfo::setPermissions(x1); }
-    void setReadable(bool x1) { void* fun = LObjects::overrideFun(unique, 392); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 392, args).toBool()) return; } QUrlInfo::setReadable(x1); }
-    void setSize(qint64 x1) { void* fun = LObjects::overrideFun(unique, 393); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 393, args).toBool()) return; } QUrlInfo::setSize(x1); }
-    void setSymLink(bool x1) { void* fun = LObjects::overrideFun(unique, 394); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 394, args).toBool()) return; } QUrlInfo::setSymLink(x1); }
-    void setWritable(bool x1) { void* fun = LObjects::overrideFun(unique, 395); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 395, args).toBool()) return; } QUrlInfo::setWritable(x1); }
+    void setDir(bool x1) { void* fun = LObjects::overrideFun(unique, 400); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 400, args).toBool()) return; } QUrlInfo::setDir(x1); }
+    void setFile(bool x1) { void* fun = LObjects::overrideFun(unique, 401); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 401, args).toBool()) return; } QUrlInfo::setFile(x1); }
+    void setGroup(const QString& x1) { void* fun = LObjects::overrideFun(unique, 402); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 402, args).toBool()) return; } QUrlInfo::setGroup(x1); }
+    void setLastModified(const QDateTime& x1) { void* fun = LObjects::overrideFun(unique, 403); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 403, args).toBool()) return; } QUrlInfo::setLastModified(x1); }
+    void setName(const QString& x1) { void* fun = LObjects::overrideFun(unique, 404); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 404, args).toBool()) return; } QUrlInfo::setName(x1); }
+    void setOwner(const QString& x1) { void* fun = LObjects::overrideFun(unique, 405); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 405, args).toBool()) return; } QUrlInfo::setOwner(x1); }
+    void setPermissions(int x1) { void* fun = LObjects::overrideFun(unique, 406); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 406, args).toBool()) return; } QUrlInfo::setPermissions(x1); }
+    void setReadable(bool x1) { void* fun = LObjects::overrideFun(unique, 407); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 407, args).toBool()) return; } QUrlInfo::setReadable(x1); }
+    void setSize(qint64 x1) { void* fun = LObjects::overrideFun(unique, 408); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 408, args).toBool()) return; } QUrlInfo::setSize(x1); }
+    void setSymLink(bool x1) { void* fun = LObjects::overrideFun(unique, 409); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 409, args).toBool()) return; } QUrlInfo::setSymLink(x1); }
+    void setWritable(bool x1) { void* fun = LObjects::overrideFun(unique, 410); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 410, args).toBool()) return; } QUrlInfo::setWritable(x1); }
 };
 
 #endif

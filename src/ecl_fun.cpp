@@ -827,13 +827,13 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case QMetaType::QChar:                   p = new QChar(toQChar(l_arg)); break;
         case QMetaType::QColor:                  p = new QColor(toQColor(l_arg)); break;
         case QMetaType::QCursor:                 p = new QCursor(toQCursor(l_arg)); break;
-        case QMetaType::QDate:                   p = toQDatePointer(l_arg); break;
-        case QMetaType::QDateTime:               p = toQDateTimePointer(l_arg); break;
-        case QMetaType::QFont:                   p = toQFontPointer(l_arg); break;
-        case QMetaType::QKeySequence:            p = toQKeySequencePointer(l_arg); break;
+        case QMetaType::QDate:                   p = new QDate(*toQDatePointer(l_arg)); break;
+        case QMetaType::QDateTime:               p = new QDateTime(*toQDateTimePointer(l_arg)); break;
+        case QMetaType::QFont:                   p = new QFont(*toQFontPointer(l_arg)); break;
+        case QMetaType::QKeySequence:            p = new QKeySequence(*toQKeySequencePointer(l_arg)); break;
         case QMetaType::QLine:                   p = new QLine(toQLine(l_arg)); break;
         case QMetaType::QLineF:                  p = new QLineF(toQLineF(l_arg)); break;
-        case QMetaType::QLocale:                 p = toQLocalePointer(l_arg); break;
+        case QMetaType::QLocale:                 p = new QLocale(*toQLocalePointer(l_arg)); break;
         case QMetaType::QPoint:                  p = new QPoint(toQPoint(l_arg)); break;
         case QMetaType::QPointF:                 p = new QPointF(toQPointF(l_arg)); break;
         case QMetaType::QPolygon:                p = new QPolygon(toQPolygon(l_arg)); break;
@@ -843,18 +843,18 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case QMetaType::QSizeF:                  p = new QSizeF(toQSizeF(l_arg)); break;
         case QMetaType::QString:                 p = new QString(toQString(l_arg)); break;
         case QMetaType::QStringList:             p = new QStringList(toQStringList(l_arg)); break;
-        case QMetaType::QBrush:                  p = toQBrushPointer(l_arg); break;
-        case QMetaType::QIcon:                   p = toQIconPointer(l_arg); break;
-        case QMetaType::QImage:                  p = toQImagePointer(l_arg); break;
-        case QMetaType::QPalette:                p = toQPalettePointer(l_arg); break;
-        case QMetaType::QPen:                    p = toQPenPointer(l_arg); break;
-        case QMetaType::QPixmap:                 p = toQPixmapPointer(l_arg); break;
-        case QMetaType::QTextFormat:             p = toQTextFormatPointer(l_arg); break;
-        case QMetaType::QTextLength:             p = toQTextLengthPointer(l_arg); break;
-        case QMetaType::QTime:                   p = toQTimePointer(l_arg); break;
-        case QMetaType::QUrl:                    p = toQUrlPointer(l_arg); break;
+        case QMetaType::QBrush:                  p = new QBrush(*toQBrushPointer(l_arg)); break;
+        case QMetaType::QIcon:                   p = new QIcon(*toQIconPointer(l_arg)); break;
+        case QMetaType::QImage:                  p = new QImage(*toQImagePointer(l_arg)); break;
+        case QMetaType::QPalette:                p = new QPalette(*toQPalettePointer(l_arg)); break;
+        case QMetaType::QPen:                    p = new QPen(*toQPenPointer(l_arg)); break;
+        case QMetaType::QPixmap:                 p = new QPixmap(*toQPixmapPointer(l_arg)); break;
+        case QMetaType::QTextFormat:             p = new QTextFormat(*toQTextFormatPointer(l_arg)); break;
+        case QMetaType::QTextLength:             p = new QTextLength(*toQTextLengthPointer(l_arg)); break;
+        case QMetaType::QTime:                   p = new QTime(*toQTimePointer(l_arg)); break;
+        case QMetaType::QUrl:                    p = new QUrl(*toQUrlPointer(l_arg)); break;
 #if QT_VERSION >= 0x40700
-        case QMetaType::QVariant:                p = toQVariantPointer(l_arg); break;
+        case QMetaType::QVariant:                p = new QVariant(*toQVariantPointer(l_arg)); break;
 #endif
     default:
         if(T_bool_ok_pointer == n) {
@@ -905,17 +905,17 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
             p = new QList<QWidget*>(toQWidgetList(l_arg));
         else if(T_QList_int == n)                        p = new QList<int>(toIntList(l_arg));
         else if(T_QList_qreal == n)                      p = new QList<qreal>(toRealList(l_arg));
-        else if(T_QModelIndex == n)                      p = toQModelIndexPointer(l_arg);
-        else if(T_QPainterPath == n)                     p = toQPainterPathPointer(l_arg);
+        else if(T_QModelIndex == n)                      p = new QModelIndex(*toQModelIndexPointer(l_arg));
+        else if(T_QPainterPath == n)                     p = new QPainterPath(*toQPainterPathPointer(l_arg));
         else if(T_QPolygonF == n)                        p = new QPolygonF(toQPolygonF(l_arg));
         else if(T_QRgb == n)                             p = new QRgb(toUInt(l_arg));
-        else if(T_QTableWidgetSelectionRange == n)       p = toQTableWidgetSelectionRangePointer(l_arg);
-        else if(T_QTextBlock == n)                       p = toQTextBlockPointer(l_arg);
-        else if(T_QTextCharFormat == n)                  p = toQTextCharFormatPointer(l_arg);
-        else if(T_QTextCursor == n)                      p = toQTextCursorPointer(l_arg);
-        else if(T_QTextDocumentFragment == n)            p = toQTextDocumentFragmentPointer(l_arg);
+        else if(T_QTableWidgetSelectionRange == n)       p = new QTableWidgetSelectionRange(*toQTableWidgetSelectionRangePointer(l_arg));
+        else if(T_QTextBlock == n)                       p = new QTextBlock(*toQTextBlockPointer(l_arg));
+        else if(T_QTextCharFormat == n)                  p = new QTextCharFormat(*toQTextCharFormatPointer(l_arg));
+        else if(T_QTextCursor == n)                      p = new QTextCursor(*toQTextCursorPointer(l_arg));
+        else if(T_QTextDocumentFragment == n)            p = new QTextDocumentFragment(*toQTextDocumentFragmentPointer(l_arg));
 #if QT_VERSION < 0x40700
-        else if(T_QVariant == n)                         p = toQVariantPointer(l_arg);
+        else if(T_QVariant == n)                         p = new QVariant(*toQVariantPointer(l_arg));
 #endif
         else if(T_QVector_QGradientstop == n)            p = new QVector<QGradientStop>(toQGradientStopVector(l_arg));
         else if(T_QVector_QLine == n)                    p = new QVector<QLine>(toQLineVector(l_arg));
@@ -1109,71 +1109,25 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
     QByteArray sType(arg.first);
     const int n = QMetaType::type(sType);
     // catch all exceptions first
-    switch(n) {
-        // implicit pointer types
-        case QMetaType::QBrush:
-        case QMetaType::QCursor:
-        case QMetaType::QDate:
-        case QMetaType::QDateTime:
-        case QMetaType::QFont:
-        case QMetaType::QIcon:
-        case QMetaType::QImage:
-        case QMetaType::QKeySequence:
-        case QMetaType::QLocale:
-        case QMetaType::QPalette:
-        case QMetaType::QPen:
-        case QMetaType::QPixmap:
-        case QMetaType::QTextFormat:
-        case QMetaType::QTextLength:
-        case QMetaType::QTime:
-        case QMetaType::QUrl:
-#if QT_VERSION >= 0x40700
-        case QMetaType::QVariant:
-#endif
+    if(T_bool_ok_pointer == n) {
+        delete (void**)p; }
+    else if(sType.endsWith('*')) {
+        if("const char*" == sType) {
+            char** s = (char**)p;
             if(is_ret) {
-                QMetaType::destroy(n, p); }
-            break;
-    default:
-        if(T_bool_ok_pointer == n) {
-            delete (void**)p; }
-        else if(sType.endsWith('*')) {
-            if("const char*" == sType) {
-                char** s = (char**)p;
-                if(is_ret) {
-                    delete s; }
-                else {
-                    if((_n_cstr_ >= 0) && (_n_cstr_ <= 9)) {
-                        delete[] *s;
-                        --_n_cstr_; }}}
+                delete s; }
             else {
-                delete (void**)p; }}
-        // implicit pointer types
-        else if((T_QFileInfo == n) ||
-                (T_QModelIndex == n) ||
-                (T_QPainterPath == n) ||
-                (T_QTableWidgetSelectionRange == n) ||
-                (T_QTextBlock == n) ||
-                (T_QTextCharFormat == n) ||
-                (T_QTextCursor == n) ||
-                (T_QTextDocumentFragment == n)) {
-            if(is_ret) {
-                QMetaType::destroy(n, p); }}
-#if QT_VERSION < 0x40700
-        // implicit pointer type
-        else if(T_QVariant == n) {
-            if(is_ret) {
-                QMetaType::destroy(n, p); }}
-#endif
-        // implicit module pointer types
-        else if(LObjects::T_QNetworkRequest == n) {
-            if(is_ret) {
-                QMetaType::destroy(n, p); }}
-        // enums
-        else if(!sType.endsWith('>') && sType.contains(':')) {
-            delete (int*)p; }
-        // default
+                if((_n_cstr_ >= 0) && (_n_cstr_ <= 9)) {
+                    delete[] *s;
+                    --_n_cstr_; }}}
         else {
-            QMetaType::destroy(n, p); }}}
+            delete (void**)p; }}
+    // enums
+    else if(!sType.endsWith('>') && sType.contains(':')) {
+        delete (int*)p; }
+    // default
+    else {
+        QMetaType::destroy(n, p); }}
 
 static void clearMetaArgList(const MetaArgList& args) {
     MetaArgIterator it(args);
@@ -1895,7 +1849,13 @@ cl_object qrequire(cl_object l_name) {
                         LObjects::deleteNObject_opengl = del;
                         LObjects::override_opengl = over;
                         LObjects::toMetaArg_opengl = metaArg;
-                        LObjects::to_lisp_arg_opengl = lispArg; }}}
+                        LObjects::to_lisp_arg_opengl = lispArg; }
+                    else if("webkit" == name) {
+                        LObjects::staticMetaObject_webkit = meta;
+                        LObjects::deleteNObject_webkit = del;
+                        LObjects::override_webkit = over;
+                        LObjects::toMetaArg_webkit = metaArg;
+                        LObjects::to_lisp_arg_webkit = lispArg; }}}
             return l_name; }}
     error_msg("QREQUIRE", LIST1(l_name));
     return Cnil; }

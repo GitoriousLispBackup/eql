@@ -10,7 +10,7 @@
 
 class LHelpContentModel : public QHelpContentModel {
     Q_OBJECT
-    friend class Q87;
+    friend class Q88;
 public:
 
     static NumList overrideIds;
@@ -49,7 +49,7 @@ public:
 
 class LHelpContentWidget : public QHelpContentWidget {
     Q_OBJECT
-    friend class Q88;
+    friend class Q89;
 public:
 
     static NumList overrideIds;
@@ -128,7 +128,7 @@ public:
 
 class LHelpEngineCore : public QHelpEngineCore {
     Q_OBJECT
-    friend class Q89;
+    friend class Q90;
 public:
 
     static NumList overrideIds;
@@ -143,7 +143,7 @@ public:
 
 class LHelpIndexWidget : public QHelpIndexWidget {
     Q_OBJECT
-    friend class Q91;
+    friend class Q92;
 public:
 
     static NumList overrideIds;
@@ -217,7 +217,7 @@ public:
 
 class LHelpSearchEngine : public QHelpSearchEngine {
     Q_OBJECT
-    friend class Q92;
+    friend class Q93;
 public:
 
     static NumList overrideIds;
@@ -232,7 +232,7 @@ public:
 
 class LHelpSearchQueryWidget : public QHelpSearchQueryWidget {
     Q_OBJECT
-    friend class Q93;
+    friend class Q94;
 public:
     LHelpSearchQueryWidget(uint u, QWidget* x1 = 0) : QHelpSearchQueryWidget(x1), unique(u) {}
 
@@ -278,7 +278,7 @@ public:
 
 class LHelpSearchResultWidget : public QHelpSearchResultWidget {
     Q_OBJECT
-    friend class Q94;
+    friend class Q95;
 public:
 
     static NumList overrideIds;

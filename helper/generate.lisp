@@ -415,9 +415,10 @@
 
 (defun module-include (module)
   (format nil "#include <Qt~A>"
-          (if (eql :opengl module)
-              "OpenGL"
-              (string-capitalize (string module)))))
+          (case module
+	    (:opengl "OpenGL")
+	    (:webkit "WebKit")
+	    (t (string-capitalize (string module))))))
 
 (defmacro change-file-stream (module file &optional type)
   `(setf s (module-stream ,module ,file ,type)))
@@ -725,6 +726,9 @@
                ~%int LObjects::T_GLfloat = -1;~
                ~%int LObjects::T_GLint = -1;~
                ~%int LObjects::T_GLuint = -1;~
+               ~%int LObjects::T_QWebElement = -1;~
+               ~%int LObjects::T_QWebElementCollection = -1;~
+               ~%int LObjects::T_QWebHitTestResult = -1;~
                ~%~
                ~%EQL* LObjects::eql = 0;~
                ~%DynObject* LObjects::dynObject = 0;~
@@ -750,7 +754,7 @@
       (format s "~%DeleteNObject LObjects::deleteNObject_~(~A~) = 0;" module))
     (dolist (module *modules*)
       (format s "~%Override LObjects::override_~(~A~) = 0;" module))
-    (dolist (module (list :network :opengl))
+    (dolist (module (list :network :opengl :webkit))
       (format s "~%ToMetaArg LObjects::toMetaArg_~(~A~) = 0;~
                  ~%To_lisp_arg LObjects::to_lisp_arg_~(~A~) = 0;"
               module module))

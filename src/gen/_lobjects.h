@@ -38,6 +38,9 @@ public:
     static int T_GLfloat;
     static int T_GLint;
     static int T_GLuint;
+    static int T_QWebElement;
+    static int T_QWebElementCollection;
+    static int T_QWebHitTestResult;
 
     static QObject** Q;
     static QObject** N;
@@ -66,18 +69,23 @@ public:
     static StaticMetaObject staticMetaObject_network;
     static StaticMetaObject staticMetaObject_opengl;
     static StaticMetaObject staticMetaObject_svg;
+    static StaticMetaObject staticMetaObject_webkit;
     static DeleteNObject deleteNObject_help;
     static DeleteNObject deleteNObject_network;
     static DeleteNObject deleteNObject_opengl;
     static DeleteNObject deleteNObject_svg;
+    static DeleteNObject deleteNObject_webkit;
     static Override override_help;
     static Override override_network;
     static Override override_opengl;
     static Override override_svg;
+    static Override override_webkit;
     static ToMetaArg toMetaArg_network;
     static To_lisp_arg to_lisp_arg_network;
     static ToMetaArg toMetaArg_opengl;
     static To_lisp_arg to_lisp_arg_opengl;
+    static ToMetaArg toMetaArg_webkit;
+    static To_lisp_arg to_lisp_arg_webkit;
 };
 
 #endif

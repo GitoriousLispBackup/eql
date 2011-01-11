@@ -2,7 +2,6 @@
 #define INI2_H
 
 #include "_ini.h"
-#include "../../ecl_fun.h"
 #include "../_lobjects.h"
 #include <QtGui>
 
@@ -40,8 +39,8 @@ static GLuint toUInt(cl_object l_num) {
 
 void ini2() {
     LObjects::T_GLfloat = qRegisterMetaType<GLfloat>("GLfloat");
-    LObjects::T_GLint = qRegisterMetaType<GLint>("GLint");
-    LObjects::T_GLuint = qRegisterMetaType<GLuint>("GLuint"); }
+    LObjects::T_GLint =   qRegisterMetaType<GLint>("GLint");
+    LObjects::T_GLuint =  qRegisterMetaType<GLuint>("GLuint"); }
 
 void* toMetaArg(int n, cl_object l_arg) {
     void* p = 0;

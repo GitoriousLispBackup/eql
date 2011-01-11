@@ -654,6 +654,33 @@
    "virtual void showEvent ( QShowEvent * )"
    "virtual bool viewportEvent ( QEvent * )"
    "virtual void wheelEvent ( QWheelEvent * )")
+  (("QGraphicsWebView" . "QGraphicsWidget")
+   "virtual bool event ( QEvent * )"
+   "virtual QVariant inputMethodQuery ( Qt::InputMethodQuery ) const"
+   "virtual QVariant itemChange ( GraphicsItemChange , const QVariant & )"
+   "virtual void paint ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * = 0 )"
+   "virtual void setGeometry ( const QRectF & )"
+   "virtual QSizeF sizeHint ( Qt::SizeHint , const QSizeF & ) const"
+   "virtual void updateGeometry ()"
+   "virtual void contextMenuEvent ( QGraphicsSceneContextMenuEvent * )"
+   "virtual void dragEnterEvent ( QGraphicsSceneDragDropEvent * )"
+   "virtual void dragLeaveEvent ( QGraphicsSceneDragDropEvent * )"
+   "virtual void dragMoveEvent ( QGraphicsSceneDragDropEvent * )"
+   "virtual void dropEvent ( QGraphicsSceneDragDropEvent * )"
+   "virtual void focusInEvent ( QFocusEvent * )"
+   "virtual bool focusNextPrevChild ( bool )"
+   "virtual void focusOutEvent ( QFocusEvent * )"
+   "virtual void hoverLeaveEvent ( QGraphicsSceneHoverEvent * )"
+   "virtual void hoverMoveEvent ( QGraphicsSceneHoverEvent * )"
+   "virtual void inputMethodEvent ( QInputMethodEvent * )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void keyReleaseEvent ( QKeyEvent * )"
+   "virtual void mouseDoubleClickEvent ( QGraphicsSceneMouseEvent * )"
+   "virtual void mouseMoveEvent ( QGraphicsSceneMouseEvent * )"
+   "virtual void mousePressEvent ( QGraphicsSceneMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QGraphicsSceneMouseEvent * )"
+   "virtual bool sceneEvent ( QEvent * )"
+   "virtual void wheelEvent ( QGraphicsSceneWheelEvent * )")
   (("QGraphicsWidget" . "QGraphicsObject")
    "virtual void paintWindowFrame ( QPainter * , const QStyleOptionGraphicsItem * , QWidget * = 0 )"
    "virtual void changeEvent ( QEvent * )"
@@ -1569,6 +1596,55 @@
    "virtual bool event ( QEvent * )"
    "virtual void updateCurrentTime ( int )"
    "virtual void updateState ( QAbstractAnimation::State , QAbstractAnimation::State )")
+  (("QWebFrame" . "QObject")
+   "virtual bool event ( QEvent * )")
+  (("QWebHistoryInterface" . "QObject")
+   "virtual void addHistoryEntry ( const QString & ) = 0"
+   "virtual bool historyContains ( const QString & ) const = 0")
+  (("QWebInspector" . "QWidget")
+   "virtual bool event ( QEvent * )"
+   "virtual QSize sizeHint () const"
+   "virtual void hideEvent ( QHideEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void showEvent ( QShowEvent * )")
+  (("QWebPage" . "QObject")
+   "virtual bool extension ( Extension , const ExtensionOption * = 0, ExtensionReturn * = 0 )"
+   "virtual bool supportsExtension ( Extension ) const"
+   "virtual void triggerAction ( WebAction , bool = false )"
+   "virtual bool acceptNavigationRequest ( QWebFrame * , const QNetworkRequest & , NavigationType )"
+   "virtual QString chooseFile ( QWebFrame * , const QString & )"
+   "virtual QObject * createPlugin ( const QString & , const QUrl & , const QStringList & , const QStringList & )"
+   "virtual QWebPage * createWindow ( WebWindowType )"
+   "virtual void javaScriptAlert ( QWebFrame * , const QString & )"
+   "virtual bool javaScriptConfirm ( QWebFrame * , const QString & )"
+   "virtual void javaScriptConsoleMessage ( const QString & , int , const QString & )"
+   "virtual bool javaScriptPrompt ( QWebFrame * , const QString & , const QString & , QString * )"
+   "virtual QString userAgentForUrl ( const QUrl & ) const"
+   "virtual bool event ( QEvent * )")
+  (("QWebView" . "QWidget")
+   "virtual QWebView * createWindow ( QWebPage::WebWindowType )"
+   "virtual bool event ( QEvent * )"
+   "virtual QVariant inputMethodQuery ( Qt::InputMethodQuery ) const"
+   "virtual QSize sizeHint () const"
+   "virtual void changeEvent ( QEvent * )"
+   "virtual void contextMenuEvent ( QContextMenuEvent * )"
+   "virtual void dragEnterEvent ( QDragEnterEvent * )"
+   "virtual void dragLeaveEvent ( QDragLeaveEvent * )"
+   "virtual void dragMoveEvent ( QDragMoveEvent * )"
+   "virtual void dropEvent ( QDropEvent * )"
+   "virtual void focusInEvent ( QFocusEvent * )"
+   "virtual bool focusNextPrevChild ( bool )"
+   "virtual void focusOutEvent ( QFocusEvent * )"
+   "virtual void inputMethodEvent ( QInputMethodEvent * )"
+   "virtual void keyPressEvent ( QKeyEvent * )"
+   "virtual void keyReleaseEvent ( QKeyEvent * )"
+   "virtual void mouseDoubleClickEvent ( QMouseEvent * )"
+   "virtual void mouseMoveEvent ( QMouseEvent * )"
+   "virtual void mousePressEvent ( QMouseEvent * )"
+   "virtual void mouseReleaseEvent ( QMouseEvent * )"
+   "virtual void paintEvent ( QPaintEvent * )"
+   "virtual void resizeEvent ( QResizeEvent * )"
+   "virtual void wheelEvent ( QWheelEvent * )")
   (("QWidget" . "QObject")
    "virtual int heightForWidth ( int ) const"
    "virtual QVariant inputMethodQuery ( Qt::InputMethodQuery ) const"

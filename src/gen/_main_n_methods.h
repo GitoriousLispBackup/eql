@@ -2688,7 +2688,7 @@ public:
     Q_INVOKABLE void MwakeOne(QWaitCondition* o) { o->wakeOne(); }
 };
 
-class EQL_EXPORT N185 : public QObject { // QWhatsThis
+class EQL_EXPORT N193 : public QObject { // QWhatsThis
     Q_OBJECT
 public:
     Q_INVOKABLE QAction* ScreateAction(QObject* x1 = 0) { return QWhatsThis::createAction(x1); }
@@ -2699,7 +2699,7 @@ public:
     Q_INVOKABLE void SshowText(const QPoint& x1, const QString& x2, QWidget* x3 = 0) { QWhatsThis::showText(x1, x2, x3); }
 };
 
-class EQL_EXPORT N190 : public QObject { // QWriteLocker
+class EQL_EXPORT N198 : public QObject { // QWriteLocker
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QReadWriteLock* x1) { return new LWriteLocker(u, x1); }
@@ -3751,14 +3751,14 @@ public:
     Q_INVOKABLE QWidget* Mwidget(QTouchEvent* o) const { return o->widget(); }
 };
 
-class EQL_EXPORT N186 : public N31 { // QWhatsThisClickedEvent
+class EQL_EXPORT N194 : public N31 { // QWhatsThisClickedEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QString& x1) { return new LWhatsThisClickedEvent(u, x1); }
     Q_INVOKABLE QString Mhref(QWhatsThisClickedEvent* o) const { return o->href(); }
 };
 
-class EQL_EXPORT N187 : public N80 { // QWheelEvent
+class EQL_EXPORT N195 : public N80 { // QWheelEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QPoint& x1, int x2, Qt::MouseButtons x3, Qt::KeyboardModifiers x4, Qt::Orientation x5 = Qt::Vertical) { return new LWheelEvent(u, x1, x2, x3, x4, x5); }
@@ -3774,7 +3774,7 @@ public:
     Q_INVOKABLE int My(QWheelEvent* o) const { return o->y(); }
 };
 
-class EQL_EXPORT N188 : public N87 { // QWidgetItem
+class EQL_EXPORT N196 : public N87 { // QWidgetItem
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QWidget* x1) { return new LWidgetItem(u, x1); }
@@ -3790,7 +3790,7 @@ public:
     Q_INVOKABLE QWidget* Mwidget(QWidgetItem* o) { return o->widget(); }
 };
 
-class EQL_EXPORT N189 : public N31 { // QWindowStateChangeEvent
+class EQL_EXPORT N197 : public N31 { // QWindowStateChangeEvent
     Q_OBJECT
 public:
     Q_INVOKABLE int MoldState(QWindowStateChangeEvent* o) const { return o->oldState(); }

@@ -2,7 +2,6 @@
 #define INI2_H
 
 #include "_ini.h"
-#include "../../ecl_fun.h"
 #include "../_lobjects.h"
 #include <QtGui>
 
@@ -13,7 +12,7 @@ void ini2() {
 
 void* toMetaArg(int n, cl_object l_arg) {
     void* p = 0;
-    if(LObjects::T_QNetworkRequest == n) { p = toQNetworkRequestPointer(l_arg); }
+    if(LObjects::T_QNetworkRequest == n) { p = new QNetworkRequest(*toQNetworkRequestPointer(l_arg)); }
     return p; }
 
 cl_object to_lisp_arg(int n, void* p) {

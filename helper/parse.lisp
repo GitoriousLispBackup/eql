@@ -89,6 +89,7 @@
         "QSymbianEvent"
         "QTextLayout"
         "QTextObjectInterface"
+	"QWebNetworkRequest"
         "QWSEvent"
         "QXmlStreamReader"
         "WinPage"

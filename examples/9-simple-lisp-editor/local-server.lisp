@@ -32,6 +32,7 @@
 (defvar *server*                 (qnew "QLocalServer"))
 (defvar *client*                 nil)
 (defvar *standard-output-buffer* (make-string-output-stream))
+(defvar *trace-output-buffer*    (make-string-output-stream))
 (defvar *error-output-buffer*    (make-string-output-stream))
 (defvar *terminal-out-buffer*    (make-string-output-stream))
 
@@ -53,15 +54,9 @@
   (qfun "QLocalServer" "removeServer" name)
   (if (qfun *server* "listen" name)
       (progn
-        (setf input-hook:*function* 'handle-debug-io)
-        (setf *standard-output* (make-broadcast-stream *standard-output*
-                                                       *standard-output-buffer*)
-              *error-output*    (make-broadcast-stream *error-output*
-                                                       *error-output-buffer*)
-              *terminal-io*     (make-two-way-stream   (two-way-stream-input-stream *terminal-io*)
-                                                       (make-broadcast-stream (two-way-stream-output-stream *terminal-io*)
-                                                                              *terminal-out-buffer*)))
-        (setf si::*tpl-print-current-hook* 'send-file-position)
+	(ini-streams)
+	(setf input-hook:*function* 'handle-debug-io) ; see *debug-io* in top-level::%top-level
+	(setf si::*tpl-print-current-hook* 'send-file-position)
         (qset (qapp) "quitOnLastWindowClosed" nil)
         (qconnect *server* "newConnection()" 'read-from-client)
         (multiple-value-bind (eql-version qt-version)
@@ -76,12 +71,24 @@
               (format nil (tr "Unable to start the server: ~A.") (qfun *server* "errorString")))
         nil)))
 
+(defun ini-streams ()
+  (setf *standard-output* (make-broadcast-stream *standard-output*
+						 *standard-output-buffer*)
+	*trace-output*    (make-broadcast-stream *trace-output*
+						 *trace-output-buffer*)
+	*error-output*    (make-broadcast-stream *error-output*
+						 *error-output-buffer*)
+	*terminal-io*     (make-two-way-stream   (two-way-stream-input-stream *terminal-io*)
+						 (make-broadcast-stream (two-way-stream-output-stream *terminal-io*)
+									*terminal-out-buffer*)))
+  (setf *query-io* (make-synonym-stream '*terminal-io*)))
+
 (defun read-from-client ()
   (setf *client* (qfun *server* "nextPendingConnection"))
   (qconnect *client* "disconnected()" *client* "deleteLater()")
   (qfun *client* "waitForReadyRead")
   (funcall *function* (qfrom-utf8 (qfun *client* "readAll")))
-  (send-to-client :expression (get-output-stream-string *standard-output-buffer*)))
+  (send-output :expression *standard-output-buffer*))
 
 (defun current-package-name ()
   (if (eql (find-package :cl-user) *package*)
@@ -104,23 +111,26 @@
 (defun send-output (type var)
   (let ((str (get-output-stream-string var)))
     (unless (x:empty-string str)
+      (when (eql :result type)
+	;; cut prompts
+	(let ((p1 (1+ (position #\> str)))
+	      (p2 (position #\Newline str :from-end t)))
+	  (setf str (subseq str p1 (max p1 p2)))
+	  (unless (x:empty-string str)
+	    (setf str (string-left-trim " " str)))))
       (sleep 0.05)
       (send-to-client type str))))
 
 (defun start-top-level ()
   (si::%top-level)
-  (let ((output (get-output-stream-string *standard-output-buffer*)))
-    (send-to-client :result
-                    ;; cut both prompts
-                    (subseq output
-                            (1+ (position #\> output))
-                            (position #\Newline output :from-end t))))
-  (send-output :error *error-output-buffer*))
+  (send-output :error  *error-output-buffer*)
+  (send-output :trace  *trace-output-buffer*)
+  (send-output :result *standard-output-buffer*))
 
 (defun send-file-position (file pos)
   (send-to-client :file-position (format nil "(~S . ~D)" file pos)))
 
-(defun send-to-client (type str)
+(defun send-to-client (type &optional (str ""))
   (when (qfun *client* "isValid")
     (x:do-with (qfun *client*)
       ("write(QByteArray)" (x:string-to-bytes (format nil "~S ~A" type (qutf8 str))))
@@ -128,8 +138,9 @@
 
 (defun handle-debug-io ()
   (let ((cmd (debug-dialog:command (list (cons (get-output-stream-string *error-output-buffer*) "red")
-                                         (cons (get-output-stream-string *terminal-out-buffer*) "darkred"))
+                                         (cons (get-output-stream-string *terminal-out-buffer*) "black"))
                                    *font*)))
+    (send-to-client :activate-editor)
     (format nil "~A~%" (if (x:empty-string cmd) ":q" cmd))))
 
 (ini)

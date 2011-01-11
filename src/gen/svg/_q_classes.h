@@ -8,8 +8,6 @@
 #include "../_lobjects.h"
 #include <QtGui>
 
-typedef QList<int> NumList;
-
 class LGraphicsSvgItem : public QGraphicsSvgItem {
     Q_OBJECT
     friend class Q78;
@@ -32,7 +30,7 @@ public:
 
 class LSvgRenderer : public QSvgRenderer {
     Q_OBJECT
-    friend class Q171;
+    friend class Q172;
 public:
     LSvgRenderer(uint u, QObject* x1 = 0) : QSvgRenderer(x1), unique(u) {}
     LSvgRenderer(uint u, const QString& x1, QObject* x2 = 0) : QSvgRenderer(x1, x2), unique(u) {}
@@ -50,7 +48,7 @@ public:
 
 class LSvgWidget : public QSvgWidget {
     Q_OBJECT
-    friend class Q172;
+    friend class Q173;
 public:
     LSvgWidget(uint u, QWidget* x1 = 0) : QSvgWidget(x1), unique(u) {}
     LSvgWidget(uint u, const QString& x1, QWidget* x2 = 0) : QSvgWidget(x1, x2), unique(u) {}
