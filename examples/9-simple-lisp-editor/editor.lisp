@@ -891,7 +891,7 @@
                                         (:result "blue")
                                         (:trace  "darkmagenta")
                                         (:error  "red")
-					(t       "black")))
+                                        (t       "black")))
               (format "QTextCharFormat"))
          (qfun format "setForeground" brush)
          (qfun cursor "setCharFormat" format)
@@ -903,8 +903,8 @@
        (mark-error-region (read-from-string str)))
     (:activate-editor
        (x:do-with (qfun *main*)
-	 "activateWindow"
-	 "raise"))))
+         "activateWindow"
+         "raise"))))
 
 ;;; command line
 

@@ -416,9 +416,9 @@
 (defun module-include (module)
   (format nil "#include <Qt~A>"
           (case module
-	    (:opengl "OpenGL")
-	    (:webkit "WebKit")
-	    (t (string-capitalize (string module))))))
+            (:opengl "OpenGL")
+            (:webkit "WebKit")
+            (t (string-capitalize (string module))))))
 
 (defmacro change-file-stream (module file &optional type)
   `(setf s (module-stream ,module ,file ,type)))

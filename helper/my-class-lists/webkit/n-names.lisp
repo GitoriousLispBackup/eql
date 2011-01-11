@@ -6,11 +6,11 @@
 
 (defparameter *webkit-n-names*
   (list "QWebDatabase"
-	"QWebElement"
-	"QWebElementCollection"
-	"//QWebHistory"
-	"QWebHistoryItem"
-	"QWebHitTestResult"
-	"QWebSecurityOrigin"
-	"//QWebSettings"
+        "QWebElement"
+        "QWebElementCollection"
+        "//QWebHistory"
+        "QWebHistoryItem"
+        "QWebHitTestResult"
+        "QWebSecurityOrigin"
+        "//QWebSettings"
         ))
