@@ -21,9 +21,7 @@
    #:/
    #://
    #:///
-   #:*debug-readline*
    #:*function*
-   #:*top-level-debug-io*
    #:ini))
 
 (provide :local-server)

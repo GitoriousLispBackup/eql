@@ -84,6 +84,7 @@
 (defconstant +start-of-line+      3  "move operation")
 (defconstant +previous-block+     6  "move operation")
 (defconstant +move-left+          9  "move operation")
+(defconstant +end+                11 "move operation")
 (defconstant +next-block+         16 "move operation")
 (defconstant +previous-character+ 7  "move operation")
 (defconstant +next-character+     17 "move operation")
@@ -96,20 +97,26 @@
 (defun file-open ()
   (let ((name (qfun "QFileDialog" "getOpenFileName" nil "" "" "Lisp files (*.lisp)")))
     (unless (x:empty-string name)
-      (qset *editor* "plainText" (read-file name)))))
+      (qset *editor* "plainText" (read-file name))
+      (show-file-name))))
 
 (defun save-file (name)
   (when (and (stringp name)
              (not (x:empty-string name)))
     (with-open-file (s (os-pathname name) :direction :output
                        :if-exists :supersede)
-      (write-string (qget *editor* "plainText") s))))
+      (write-string (qget *editor* "plainText") s)
+      (setf *file-name* name)
+      (show-file-name))))
 
 (defun file-save ()
   (save-file *file-name*))
 
 (defun file-save-as ()
   (save-file (qfun "QFileDialog" "getSaveFileName" nil "" "" "Lisp files (*.lisp)")))
+
+(defun show-file-name ()
+  (show-status-message (file-namestring *file-name*)))
 
 (defmacro key (name)
   `(qenum "Qt::Key" ,(format nil "Key_~A" name)))
@@ -887,6 +894,7 @@
   (case type
     ((:expression :result :trace :error)
        (x:do-with (qfun *output*)
+         ("moveCursor" +end+)
          ("setColor" (case type
                        (:result "blue")
                        (:trace  "darkmagenta")

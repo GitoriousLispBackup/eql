@@ -936,6 +936,10 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
                 (n <= LObjects::T_GLuint)) {
             if(LObjects::toMetaArg_opengl) {
                 p = LObjects::toMetaArg_opengl(n, l_arg); }}
+        else if((n >= LObjects::T_QWebElement) &&
+                (n <= LObjects::T_QWebHitTestResult)) {
+            if(LObjects::toMetaArg_webkit) {
+                p = LObjects::toMetaArg_webkit(n, l_arg); }}
         else {
             int i_enum = -1;
             if(!sType.endsWith('>')) {
@@ -1081,9 +1085,13 @@ static cl_object to_lisp_arg(const MetaArg& arg) {
                 if(LObjects::to_lisp_arg_network) {
                     l_ret = LObjects::to_lisp_arg_network(n, p); }}
             else if((n >= LObjects::T_GLfloat) &&
-               (n <= LObjects::T_GLuint)) {
+                    (n <= LObjects::T_GLuint)) {
                 if(LObjects::to_lisp_arg_opengl) {
                     l_ret = LObjects::to_lisp_arg_opengl(n, p); }}
+            else if((n >= LObjects::T_QWebElement) &&
+                    (n <= LObjects::T_QWebHitTestResult)) {
+                if(LObjects::toMetaArg_webkit) {
+                    l_ret = LObjects::to_lisp_arg_webkit(n, p); }}
             else {
                 int i_enum = sType.indexOf("::");
                 if(i_enum != -1) {
