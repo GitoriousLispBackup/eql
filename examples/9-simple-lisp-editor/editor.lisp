@@ -219,7 +219,7 @@
   (x:do-with (qfun *lisp-keyword-format*)
     ("setForeground" (qnew "QBrush(QColor)" "#E04040"))
     ("setFontWeight" +bold+))
-  (setf *lisp-match-rule* (qnew "QRegExp(QString)" "[('][^ )]+[ )]")))
+  (setf *lisp-match-rule* (qnew "QRegExp(QString)" "[('][^ )]+")))
 
 (defun read* (str &optional (start 0))
   (setf *try-read-error* nil)
@@ -324,7 +324,7 @@
 
 (let (qt-matches cache-matches)
   (flet ((qt-fun (pos)
-           (cdr (assoc (1- pos) qt-matches)))
+           (cdr (assoc (- pos 2) qt-matches)))
          (qt-pos (fun)
            (car (find fun qt-matches :key 'cdr))))
     (defun highlight-block (highlighter text)
@@ -334,9 +334,9 @@
         (let ((i (qfun *lisp-match-rule* "indexIn" text)))
           (x:while (>= i 0)
             (let* ((len (qfun *lisp-match-rule* "matchedLength"))
-                   (kw (subseq text (1+ i) (1- (+ i len)))))
+                   (kw (subseq text (1+ i) (+ i len))))
               (flet ((set-format (frm)
-                       (qfun highlighter "setFormat(int,int,QTextCharFormat)" (1+ i) (- len 2) frm)))
+                       (qfun highlighter "setFormat(int,int,QTextCharFormat)" (1+ i) (1- len) frm)))
                 (cond ((find kw *eql-keywords* :test 'string=)
                        (when cache-matches
                          (push (cons (+ i len) (intern (string-upcase kw) :keyword))
@@ -926,8 +926,7 @@
 ;;; command line
 
 (defun command ()
-  (let ((text (qget *command* "plainText")))
-    (x:d :text text)
+  (let ((text (string-trim '(#\Newline) (qget *command* "plainText"))))
     (run-on-server text)
     (history-add text)
     (qfun *command* "clear")))

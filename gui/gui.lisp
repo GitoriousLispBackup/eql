@@ -153,7 +153,7 @@
 (defun change-class-q-object (s &optional super)
   (let ((i (qfun *q-names* "findText" s)))
     (if (= -1 i)
-        (qmessage-box (tr "Sorry, class not found."))
+        (qmsg (tr "Sorry, class not found."))
         (progn
           (qfun *q-names* "setCurrentIndex" i)
           (change-q-object nil super)))))

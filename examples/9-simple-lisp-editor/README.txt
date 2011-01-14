@@ -40,7 +40,7 @@ USAGE NOTES
 ===========
 
 Qt events are processed natively through QApplication::exec(), while keeping
-your program interactive.
+your program interactive (no performance loss).
 
 "Eval Region" note: (see initial status-bar message)
 Remember to change to the desired package prior to eval anything.
@@ -58,3 +58,7 @@ in the background. Use your taskbar to show it).
 When using "Save and Run", on errors, after the local-server entered the
 debugger, you can enter the ECL debugger command :f, which will send the
 position of the offending region to the editor, and it will be marked red.
+
+Closing & re-opening the editor does not affect the local-server process.
+You may even open multiple editor instances, which will all connect to the
+same local-server.

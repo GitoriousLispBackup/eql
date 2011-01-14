@@ -22,7 +22,9 @@
    #://
    #:///
    #:*function*
-   #:ini))
+   #:ini
+   #:clear
+   #:output))
 
 (provide :local-server)
 
@@ -128,6 +130,14 @@
   (send-output :error  *error-output-buffer*)
   (send-output :trace  *trace-output-buffer*)
   (send-output :result *standard-output-buffer*))
+
+(defun clear ()
+  "To use from a client to clear the output buffer. See also function OUTPUT."
+  (get-output-stream-string *standard-output-buffer*))
+
+(defun output ()
+  "Tu use from a client to get the current buffer string immediately (e.g. inside a loop). See also function CLEAR."
+  (send-to-client :result (get-output-stream-string *standard-output-buffer*)))
 
 (defun send-file-position (file pos)
   (send-to-client :file-position (format nil "(~S . ~D)" file pos)))
