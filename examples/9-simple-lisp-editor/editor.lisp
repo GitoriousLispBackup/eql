@@ -365,7 +365,7 @@
           (let ((ex #\Space))
             (dotimes (i (length text))
               (let ((ch (char text i)))
-                (unless (char= #\\ ch)
+                (unless (char= #\\ ex)
                   (case ch
                     ((#\( #\))
                        (set-color i 1 *parenthesis-color*))
