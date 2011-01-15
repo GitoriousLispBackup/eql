@@ -7,11 +7,11 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "11.1.3"; // 2011-01-12
+const char EQL::version[] = "11.1.4"; // 2011-01-15
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
-        si_safe_eval(2, ecl_read_from_cstring(lisp_code), Cnil); }
+        si_safe_eval(2, ecl_read_from_cstring((char*)lisp_code), Cnil); }
     CL_CATCH_ALL_END; }
 
 extern "C" void ini_EQL(cl_object);

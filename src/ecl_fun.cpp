@@ -84,42 +84,42 @@ void iniCLFunctions() {
     cl_object eql(make_simple_base_string((char*)"EQL"));
     cl_make_package(1, eql);
     si_select_package(eql);
-    cl_def_c_function(c_string_to_object("qadd-event-filter"),    (cl_objectfn_fixed)qadd_event_filter,        3);
-    cl_def_c_function(c_string_to_object("qapropos2"),            (cl_objectfn_fixed)qapropos2,                3);
-    cl_def_c_function(c_string_to_object("qapp"),                 (cl_objectfn_fixed)qapp,                     0);
-    cl_def_c_function(c_string_to_object("qclear-event-filters"), (cl_objectfn_fixed)qclear_event_filters,     0);
-    cl_def_c_function(c_string_to_object("qconnect2"),            (cl_objectfn_fixed)qconnect2,                5);
-    cl_def_c_function(c_string_to_object("qcopy"),                (cl_objectfn_fixed)qcopy,                    1);
-    cl_def_c_function(c_string_to_object("qdelete"),              (cl_objectfn_fixed)qdelete,                  1);
-    cl_def_c_function(c_string_to_object("qenum2"),               (cl_objectfn_fixed)qenum2,                   2);
-    cl_def_c_function(c_string_to_object("qescape"),              (cl_objectfn_fixed)qescape,                  1);
-    cl_def_c_function(c_string_to_object("qexec"),                (cl_objectfn_fixed)qexec,                    0);
-    cl_def_c_function(c_string_to_object("qfind-child"),          (cl_objectfn_fixed)qfind_child,              2);
-    cl_def_c_function(c_string_to_object("qfrom-utf8"),           (cl_objectfn_fixed)qfrom_utf8,               1);
-    cl_def_c_function(c_string_to_object("qid"),                  (cl_objectfn_fixed)qid,                      1);
-    cl_def_c_function(c_string_to_object("qinvoke-method2"),      (cl_objectfn_fixed)qinvoke_method2,          4);
-    cl_def_c_function(c_string_to_object("qload-ui"),             (cl_objectfn_fixed)qload_ui,                 1);
-    cl_def_c_function(c_string_to_object("qlocal8bit"),           (cl_objectfn_fixed)qlocal8bit,               1);
-    cl_def_c_function(c_string_to_object("qmeta-enums"),          (cl_objectfn_fixed)qmeta_enums,              0);
-    cl_def_c_function(c_string_to_object("qnew-instance2"),       (cl_objectfn_fixed)qnew_instance2,           2);
-    cl_def_c_function(c_string_to_object("qobject-names2"),       (cl_objectfn_fixed)qobject_names2,           1);
-    cl_def_c_function(c_string_to_object("qok"),                  (cl_objectfn_fixed)qok,                      0);
-    cl_def_c_function(c_string_to_object("qoverride"),            (cl_objectfn_fixed)qoverride,                3);
-    cl_def_c_function(c_string_to_object("qprocess-events"),      (cl_objectfn_fixed)qprocess_events,          0);
-    cl_def_c_function(c_string_to_object("qproperty"),            (cl_objectfn_fixed)qproperty,                2);
-    cl_def_c_function(c_string_to_object("qquit"),                (cl_objectfn_fixed)qquit,                    0);
-    cl_def_c_function(c_string_to_object("qrequire"),             (cl_objectfn_fixed)qrequire,                 1);
-    cl_def_c_function(c_string_to_object("qsender"),              (cl_objectfn_fixed)qsender,                  0);
-    cl_def_c_function(c_string_to_object("qset-property"),        (cl_objectfn_fixed)qset_property,            3);
-    cl_def_c_function(c_string_to_object("qsingle-shot"),         (cl_objectfn_fixed)qsingle_shot,             2);
-    cl_def_c_function(c_string_to_object("qstatic-meta-object"),  (cl_objectfn_fixed)qstatic_meta_object,      1);
-    cl_def_c_function(c_string_to_object("qsuper-class-name"),    (cl_objectfn_fixed)qsuper_class_name,        1);
-    cl_def_c_function(c_string_to_object("qtranslate"),           (cl_objectfn_fixed)qtranslate,               3);
-    cl_def_c_function(c_string_to_object("qt-object-name"),       (cl_objectfn_fixed)qt_object_name,           1);
-    cl_def_c_function(c_string_to_object("qui-class2"),           (cl_objectfn_fixed)qui_class2,               2);
-    cl_def_c_function(c_string_to_object("qui-names"),            (cl_objectfn_fixed)qui_names,                1);
-    cl_def_c_function(c_string_to_object("qutf8"),                (cl_objectfn_fixed)qutf8,                    1);
-    cl_def_c_function(c_string_to_object("qversion"),             (cl_objectfn_fixed)qversion,                 0); }
+    cl_def_c_function(c_string_to_object((char*)"qadd-event-filter"),    (cl_objectfn_fixed)qadd_event_filter,        3);
+    cl_def_c_function(c_string_to_object((char*)"qapropos2"),            (cl_objectfn_fixed)qapropos2,                3);
+    cl_def_c_function(c_string_to_object((char*)"qapp"),                 (cl_objectfn_fixed)qapp,                     0);
+    cl_def_c_function(c_string_to_object((char*)"qclear-event-filters"), (cl_objectfn_fixed)qclear_event_filters,     0);
+    cl_def_c_function(c_string_to_object((char*)"qconnect2"),            (cl_objectfn_fixed)qconnect2,                5);
+    cl_def_c_function(c_string_to_object((char*)"qcopy"),                (cl_objectfn_fixed)qcopy,                    1);
+    cl_def_c_function(c_string_to_object((char*)"qdelete"),              (cl_objectfn_fixed)qdelete,                  1);
+    cl_def_c_function(c_string_to_object((char*)"qenum2"),               (cl_objectfn_fixed)qenum2,                   2);
+    cl_def_c_function(c_string_to_object((char*)"qescape"),              (cl_objectfn_fixed)qescape,                  1);
+    cl_def_c_function(c_string_to_object((char*)"qexec"),                (cl_objectfn_fixed)qexec,                    0);
+    cl_def_c_function(c_string_to_object((char*)"qfind-child"),          (cl_objectfn_fixed)qfind_child,              2);
+    cl_def_c_function(c_string_to_object((char*)"qfrom-utf8"),           (cl_objectfn_fixed)qfrom_utf8,               1);
+    cl_def_c_function(c_string_to_object((char*)"qid"),                  (cl_objectfn_fixed)qid,                      1);
+    cl_def_c_function(c_string_to_object((char*)"qinvoke-method2"),      (cl_objectfn_fixed)qinvoke_method2,          4);
+    cl_def_c_function(c_string_to_object((char*)"qload-ui"),             (cl_objectfn_fixed)qload_ui,                 1);
+    cl_def_c_function(c_string_to_object((char*)"qlocal8bit"),           (cl_objectfn_fixed)qlocal8bit,               1);
+    cl_def_c_function(c_string_to_object((char*)"qmeta-enums"),          (cl_objectfn_fixed)qmeta_enums,              0);
+    cl_def_c_function(c_string_to_object((char*)"qnew-instance2"),       (cl_objectfn_fixed)qnew_instance2,           2);
+    cl_def_c_function(c_string_to_object((char*)"qobject-names2"),       (cl_objectfn_fixed)qobject_names2,           1);
+    cl_def_c_function(c_string_to_object((char*)"qok"),                  (cl_objectfn_fixed)qok,                      0);
+    cl_def_c_function(c_string_to_object((char*)"qoverride"),            (cl_objectfn_fixed)qoverride,                3);
+    cl_def_c_function(c_string_to_object((char*)"qprocess-events"),      (cl_objectfn_fixed)qprocess_events,          0);
+    cl_def_c_function(c_string_to_object((char*)"qproperty"),            (cl_objectfn_fixed)qproperty,                2);
+    cl_def_c_function(c_string_to_object((char*)"qquit"),                (cl_objectfn_fixed)qquit,                    0);
+    cl_def_c_function(c_string_to_object((char*)"qrequire"),             (cl_objectfn_fixed)qrequire,                 1);
+    cl_def_c_function(c_string_to_object((char*)"qsender"),              (cl_objectfn_fixed)qsender,                  0);
+    cl_def_c_function(c_string_to_object((char*)"qset-property"),        (cl_objectfn_fixed)qset_property,            3);
+    cl_def_c_function(c_string_to_object((char*)"qsingle-shot"),         (cl_objectfn_fixed)qsingle_shot,             2);
+    cl_def_c_function(c_string_to_object((char*)"qstatic-meta-object"),  (cl_objectfn_fixed)qstatic_meta_object,      1);
+    cl_def_c_function(c_string_to_object((char*)"qsuper-class-name"),    (cl_objectfn_fixed)qsuper_class_name,        1);
+    cl_def_c_function(c_string_to_object((char*)"qtranslate"),           (cl_objectfn_fixed)qtranslate,               3);
+    cl_def_c_function(c_string_to_object((char*)"qt-object-name"),       (cl_objectfn_fixed)qt_object_name,           1);
+    cl_def_c_function(c_string_to_object((char*)"qui-class2"),           (cl_objectfn_fixed)qui_class2,               2);
+    cl_def_c_function(c_string_to_object((char*)"qui-names"),            (cl_objectfn_fixed)qui_names,                1);
+    cl_def_c_function(c_string_to_object((char*)"qutf8"),                (cl_objectfn_fixed)qutf8,                    1);
+    cl_def_c_function(c_string_to_object((char*)"qversion"),             (cl_objectfn_fixed)qversion,                 0); }
 
 
 
@@ -171,26 +171,26 @@ static cl_object from_cstring(const QByteArray& s) {
     return l_s; }
 
 static void arguments_msg(cl_object l_lst) {
-    STATIC_SYMBOL(s_error_output, "*ERROR-OUTPUT*")
+    STATIC_SYMBOL(s_error_output, (char*)"*ERROR-OUTPUT*")
     cl_format(3,
               cl_symbol_value(s_error_output),
-              make_constant_base_string("~{~%~A~}"),
+              make_constant_base_string((char*)"~{~%~A~}"),
               l_lst); }
 
 static void type_msg(const QByteArray& wanted, const QByteArray& got) {
-    STATIC_SYMBOL(s_error_output, "*ERROR-OUTPUT*")
+    STATIC_SYMBOL(s_error_output, (char*)"*ERROR-OUTPUT*")
     cl_format(4,
               cl_symbol_value(s_error_output),
-              make_constant_base_string("~%[EQL:typ] wanted <~A> got <~A>"),
+              make_constant_base_string((char*)"~%[EQL:typ] wanted <~A> got <~A>"),
               from_cstring(wanted),
               from_cstring(got.isEmpty() ? "no Qt object" : got)); }
 
 static void error_msg(const char* fun, cl_object l_args) {
-    STATIC_SYMBOL(s_error_output, "*ERROR-OUTPUT*")
+    STATIC_SYMBOL(s_error_output, (char*)"*ERROR-OUTPUT*")
     cl_format(4,
               cl_symbol_value(s_error_output),
-              make_constant_base_string("~%[EQL:err] ~A ~{~S~^ ~}~%"),
-              make_constant_base_string(fun),
+              make_constant_base_string((char*)"~%[EQL:err] ~A ~{~S~^ ~}~%"),
+              make_constant_base_string((char*)fun),
               l_args); }
 
 static char** to_cstring(cl_object l_str) {
@@ -306,11 +306,11 @@ static int findMethodIndex(CallType type, const QByteArray& name, const QMetaObj
     return n; }
 
 static cl_object q_keyword() {
-    STATIC_SYMBOL_PKG(s_q, "Q", "KEYWORD")
+    STATIC_SYMBOL_PKG(s_q, (char*)"Q", (char*)"KEYWORD")
     return s_q; }
 
 static cl_object make_vector() {
-    STATIC_SYMBOL_PKG(s_make_vector, "%MAKE-VECTOR", "EQL")
+    STATIC_SYMBOL_PKG(s_make_vector, (char*)"%MAKE-VECTOR", (char*)"EQL")
     return cl_funcall(1, s_make_vector); }
 
 
@@ -420,17 +420,17 @@ static int classId(cl_object l_class) {
     return id; }
 
 static QByteArray qtObjectName(cl_object l_obj) {
-    STATIC_SYMBOL_PKG(s_qt_object_p,  "QT-OBJECT-P",  "EQL")
-    STATIC_SYMBOL_PKG(s_qt_object_id, "QT-OBJECT-ID", "EQL")
+    STATIC_SYMBOL_PKG(s_qt_object_p,  (char*)"QT-OBJECT-P",  (char*)"EQL")
+    STATIC_SYMBOL_PKG(s_qt_object_id, (char*)"QT-OBJECT-ID", (char*)"EQL")
     if(cl_funcall(2, s_qt_object_p, l_obj) == Ct) {
         return QtObject::idToClassName(toInt(cl_funcall(2, s_qt_object_id, l_obj))); }
     return QByteArray(); }
 
 QtObject toQtObject(cl_object l_obj, cl_object l_cast, bool* qobject_align) {
-    STATIC_SYMBOL_PKG(s_qt_object_p,       "QT-OBJECT-P",       "EQL")
-    STATIC_SYMBOL_PKG(s_qt_object_pointer, "QT-OBJECT-POINTER", "EQL")
-    STATIC_SYMBOL_PKG(s_qt_object_unique,  "QT-OBJECT-UNIQUE",  "EQL")
-    STATIC_SYMBOL_PKG(s_qt_object_id,      "QT-OBJECT-ID",      "EQL")
+    STATIC_SYMBOL_PKG(s_qt_object_p,       (char*)"QT-OBJECT-P",       (char*)"EQL")
+    STATIC_SYMBOL_PKG(s_qt_object_pointer, (char*)"QT-OBJECT-POINTER", (char*)"EQL")
+    STATIC_SYMBOL_PKG(s_qt_object_unique,  (char*)"QT-OBJECT-UNIQUE",  (char*)"EQL")
+    STATIC_SYMBOL_PKG(s_qt_object_id,      (char*)"QT-OBJECT-ID",      (char*)"EQL")
     QtObject o;
     if(cl_funcall(2, s_qt_object_p, l_obj) == Ct) {
         o.pointer = (void*)fixnnint(cl_funcall(2, s_qt_object_pointer, l_obj));
@@ -446,7 +446,7 @@ QtObject toQtObject(cl_object l_obj, cl_object l_cast, bool* qobject_align) {
     return o; }
 
 static cl_object qt_object(void* pointer, uint unique, int id) {
-    STATIC_SYMBOL_PKG(s_qt_object, "QT-OBJECT", "EQL")
+    STATIC_SYMBOL_PKG(s_qt_object, (char*)"QT-OBJECT", (char*)"EQL")
     return cl_funcall(4, s_qt_object,
                       ecl_make_unsigned_integer((cl_index)pointer),
                       ecl_make_unsigned_integer((cl_index)unique),
@@ -1278,15 +1278,15 @@ cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
             if(found) {
                 cl_object l_doc = Cnil;
                 if(l_doc_pro != Cnil) {
-                    l_doc = CONS(CONS(make_constant_base_string("Properties:"), l_doc_pro), l_doc); }
+                    l_doc = CONS(CONS(make_constant_base_string((char*)"Properties:"), l_doc_pro), l_doc); }
                 if(l_doc_met != Cnil) {
-                    l_doc = CONS(CONS(make_constant_base_string("Methods:"), l_doc_met), l_doc); }
+                    l_doc = CONS(CONS(make_constant_base_string((char*)"Methods:"), l_doc_met), l_doc); }
                 if(l_doc_slo != Cnil) {
-                    l_doc = CONS(CONS(make_constant_base_string("Slots:"), l_doc_slo), l_doc); }
+                    l_doc = CONS(CONS(make_constant_base_string((char*)"Slots:"), l_doc_slo), l_doc); }
                 if(l_doc_sig != Cnil) {
-                    l_doc = CONS(CONS(make_constant_base_string("Signals:"), l_doc_sig), l_doc); }
+                    l_doc = CONS(CONS(make_constant_base_string((char*)"Signals:"), l_doc_sig), l_doc); }
                 if(l_doc_han != Cnil) {
-                    l_doc = CONS(CONS(make_constant_base_string("Override:"), l_doc_han), l_doc); }
+                    l_doc = CONS(CONS(make_constant_base_string((char*)"Override:"), l_doc_han), l_doc); }
                 l_doc = cl_nreverse(l_doc);
                 if(l_doc != Cnil) {
                     l_docs = CONS(CONS(make_base_string_copy((char*)cl.data()), l_doc), l_docs); }}}}
@@ -1400,7 +1400,7 @@ cl_object qdelete(cl_object l_obj) {
         LObjects::deleteNObject(-o.id, o.pointer);
         ok = true; }
     if(ok) {
-        STATIC_SYMBOL_PKG(s_qset_null, "QSET-NULL", "EQL")
+        STATIC_SYMBOL_PKG(s_qset_null, (char*)"QSET-NULL", (char*)"EQL")
         cl_funcall(2, s_qset_null, l_obj);
         return Ct; }
     error_msg("QDELETE", LIST1(l_obj));
@@ -1611,8 +1611,8 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
     return Cnil; }
 
 static void* getLispFun(cl_object l_fun) {
-    STATIC_SYMBOL(s_package, "*PACKAGE*");
-    STATIC_SYMBOL_PKG(s_get_function, "%GET-FUNCTION", "EQL")
+    STATIC_SYMBOL(s_package, (char*)"*PACKAGE*");
+    STATIC_SYMBOL_PKG(s_get_function, (char*)"%GET-FUNCTION", (char*)"EQL")
     cl_object l_ret = cl_funcall(3, s_get_function, l_fun, cl_find_package(cl_symbol_value(s_package)));
     return (Cnil == l_ret) ? 0 : (void*)l_ret; }
 
