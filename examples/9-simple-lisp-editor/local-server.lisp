@@ -136,7 +136,7 @@
   (get-output-stream-string *standard-output-buffer*))
 
 (defun output ()
-  "Tu use from a client to get the current buffer string immediately (e.g. inside a loop). See also function CLEAR."
+  "To use from a client to get the current buffer string immediately (e.g. inside a loop). See also function CLEAR."
   (send-to-client :result (get-output-stream-string *standard-output-buffer*)))
 
 (defun send-file-position (file pos)

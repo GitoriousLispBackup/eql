@@ -75,6 +75,9 @@
 (defparameter *lisp-match-rule*      nil)
 (defparameter *eql-keyword-format*   nil)
 (defparameter *lisp-keyword-format*  nil)
+(defparameter *comment-format*       nil)
+(defparameter *parenthesis-color*    "gray")
+(defparameter *string-color*         "sienna")
 (defparameter *completer*            nil)
 
 (defconstant +bold+               75 "font weight")
@@ -125,6 +128,7 @@
            (qnew "QKeySequence(QString)" str)))
     (setf *eql-keyword-format*  (qnew "QTextCharFormat")
           *lisp-keyword-format* (qnew "QTextCharFormat")
+          *comment-format*      (qnew "QTextCharFormat")
           *completer*           (qnew "QListWidget"
                                       "resizeMode" "Adjust"
                                       "horizontalScrollBarPolicy" "AlwaysOff"
@@ -214,11 +218,14 @@
 
 (defun ini-highlight-rules ()
   (x:do-with (qfun *eql-keyword-format*)
-    ("setForeground" (qnew "QBrush(QColor)" "#4040E0"))
+    ("setForeground" (qnew "QBrush(QColor)" "#2020D0"))
     ("setFontWeight" +bold+))
   (x:do-with (qfun *lisp-keyword-format*)
-    ("setForeground" (qnew "QBrush(QColor)" "#E04040"))
+    ("setForeground" (qnew "QBrush(QColor)" "#D02020"))
     ("setFontWeight" +bold+))
+  (x:do-with (qfun *comment-format*)
+    ("setForeground" (qnew "QBrush(QColor)" "#208080"))
+    ("setFontItalic" t))
   (setf *lisp-match-rule* (qnew "QRegExp(QString)" "[('][^ )]+")))
 
 (defun read* (str &optional (start 0))
@@ -232,6 +239,12 @@
                                  (end-of-file :end-of-file)
                                  (t t))))
       (values exp x))))
+
+(defun end-position (expr)
+  (multiple-value-bind (x end)
+      (read* expr)
+    (when (numberp end)
+      end)))
 
 (defun text-until-cursor (text-cursor text-block)
   (subseq (qfun text-block "text") 0 (- (qfun text-cursor "position")
@@ -345,7 +358,25 @@
                       ((gethash kw *lisp-keywords*)
                        (set-format *lisp-keyword-format*))))
               (setf i (qfun *lisp-match-rule* "indexIn" text (+ i len))))))
-        (setf cache-matches nil)))
+        (setf cache-matches nil)
+        ;; comments, strings, parenthesis
+        (flet ((set-color (pos len color)
+                 (qfun highlighter "setFormat(int,int,QColor)" pos len color)))
+          (let ((ex #\Space))
+            (dotimes (i (length text))
+              (let ((ch (char text i)))
+                (unless (char= #\\ ch)
+                  (case ch
+                    ((#\( #\))
+                       (set-color i 1 *parenthesis-color*))
+                    (#\"
+                       (x:when-it (end-position (subseq text i))
+                         (set-color i x:it *string-color*)
+                         (incf i (1- x:it))))
+                    (#\;
+                       (qfun highlighter "setFormat(int,int,QTextCharFormat)" i (- (length text) i) *comment-format*)
+                       (return))))
+                (setf ex ch)))))))
     (defun cursor-position-changed ()
       (setf *current-editor* (qsender))
       (setf cache-matches t)
@@ -896,11 +927,9 @@
     (let ((text (qget *current-editor* "plainText")))
       (when (< *latest-eval-position* (length text))
         (let ((text* (subseq text *latest-eval-position*)))
-          (multiple-value-bind (exp end)
-              (read* text*)
-            (when (numberp end)
-              (run-on-server (subseq text* 0 end))
-              (return-from repeat-eval)))))))
+          (x:when-it (end-position text*)
+            (run-on-server (subseq text* 0 x:it))
+            (return-from repeat-eval))))))
   (qmsg (tr "No valid latest region found.")))
 
 (defun data-from-server (type str)
@@ -943,7 +972,7 @@
              (unless (string= ex cmd)
                (push (setf ex cmd) history)))))
       (setf history (nthcdr (max 0 (- (length history) +max-history+)) (reverse history)))
-      (delete-file +history-file+)
+      (ignore-errors (delete-file +history-file+))
       (with-open-file (s +history-file+ :direction :output
                          :if-does-not-exist :create)
         (dolist (cmd history)
