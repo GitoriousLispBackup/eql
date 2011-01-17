@@ -166,7 +166,7 @@
 
 (in-package :si)
 
-;;; The following is taken from "src/lsp/top.lsp" version 10.4.1
+;;; The following is taken from "src/lsp/top.lsp" version 11.1.1
 ;;; added SERVE-EVENT to TPL-READ, in order to process Qt events
 ;;; (every modification is annotated with "[EQL]")
 
@@ -178,14 +178,12 @@ The top-level loop of ECL. It is called by default when ECL is invoked."
   (catch *quit-tag*
     (let* ((*debugger-hook* nil)
            + ++ +++ - * ** *** / // ///)
-
+      
       ;;(in-package "CL-USER") [EQL]
       (in-package "EQL") ;     [EQL]
-
+      
       (unless *lisp-initialized*
-        (let ((*break-enable* nil))
-          ;; process command arguments
-          (process-command-args))
+        (process-command-args)
         (format t "ECL (Embeddable Common-Lisp) ~A" (lisp-implementation-version))
         (format t "~%Copyright (C) 1984 Taiichi Yuasa and Masami Hagiya~@
 Copyright (C) 1993 Giuseppe Attardi~@
@@ -194,9 +192,8 @@ ECL is free software, and you are welcome to redistribute it~@
 under certain conditions; see file 'Copyright' for details.")
         (format *standard-output* "~%Type :h for Help.  ")
         (setq *lisp-initialized* t))
-
-      (let ((*break-enable* t)
-            (*tpl-level* -1))
+      
+      (let ((*tpl-level* -1))
         (qtpl)) ; [EQL]
       0)))
 
@@ -205,6 +202,7 @@ under certain conditions; see file 'Copyright' for details.")
                  ((:prompt-hook *tpl-prompt-hook*) *tpl-prompt-hook*)
                  (broken-at nil)
                  (quiet nil))
+  #-ecl-min
   (declare (c::policy-debug-ihs-frame))
   (let* ((*ihs-base* *ihs-top*)
          (*ihs-top* (if broken-at (ihs-search t broken-at) (ihs-top)))

@@ -1,6 +1,8 @@
 (unless (find :unicode *features*)
   (error "Please build ECL with unicode support (configure --enable-unicode)"))
 
+(require :cmp)
+
 (setf *break-on-signals* 'error)
 
 (unless (find-package :c)

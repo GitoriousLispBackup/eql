@@ -84,7 +84,8 @@
     ("pos" (list 50 50))
     ("size" (list 700 500)))
   (qfun *edit* "setFocus")
-  (qfun *gui* "show"))
+  (x:do-with (qfun *gui*)
+    "show" "raise"))
 
 (defun search-help (&optional txt)
   (unless (qfun *help* "find" (qget *search-help* "text"))

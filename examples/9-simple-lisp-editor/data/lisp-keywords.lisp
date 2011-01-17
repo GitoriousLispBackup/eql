@@ -741,6 +741,7 @@
                 "yes-or-no-p"
                 "zerop"
                 ;; package :x
+                "x:bytes-to-string"
                 "x:d"
                 "x:do-string"
                 "x:do-with"
@@ -755,6 +756,7 @@
                 "x:split"
                 "x:starts-with"
                 "x:string-substitute"
+                "x:string-to-bytes"
                 "x:when-it"
                 "x:when-it*"
                 "x:while"

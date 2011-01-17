@@ -18,12 +18,14 @@
                 (qset dlg "maximum" 20)
                 (qset dlg "labelText"
                       "<h1 style='color:crimson'>Wow!</h1><p>(updating WikiLeaks...)</p>")
-                (qfun dlg "show")
+                (x:do-with (qfun dlg)
+                  "show" "raise")
                 (dotimes (n (qget dlg "maximum"))
                   (sleep 0.1)
                   (qset dlg "value" n)
                   (qprocess-events)))
               (qfun *line-edit* "clear")))
-  (qfun *window* "show"))
+  (x:do-with (qfun *window*)
+    "show" "raise"))
 
 (start)

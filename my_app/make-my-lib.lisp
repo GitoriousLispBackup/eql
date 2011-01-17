@@ -1,6 +1,8 @@
 (unless (find-package :eql)
   (error "Please use the EQL executable (see README)"))
 
+(require :cmp)
+
 (setf *break-on-signals* 'error)
 
 (load "tr")

@@ -1,6 +1,6 @@
 (provide :top-level)
 
-;;; The following are modified/simplified functions taken from "src/lsp/top.lsp" (ECL 10.4.1)
+;;; The following are modified/simplified functions taken from "src/lsp/top.lsp" (ECL 11.1.1)
 
 (in-package :si)
 
@@ -35,8 +35,7 @@
     (let ((*debugger-hook* nil)
           -)
       (setq *lisp-initialized* t)
-      (let ((*break-enable* t)
-            (*tpl-level* -1)
+      (let ((*tpl-level* -1)
             (*debug-io* *tpl-debug-io*))
         (%tpl))
       0)))
@@ -45,6 +44,7 @@
              ((:prompt-hook *tpl-prompt-hook*) *tpl-prompt-hook*)
              (broken-at nil)
              (quiet t))
+  #-ecl-min
   (declare (c::policy-debug-ihs-frame))
   (let* ((*ihs-base* *ihs-top*)
          (*ihs-top* (if broken-at (ihs-search t broken-at) (ihs-top)))

@@ -133,11 +133,13 @@
                                       "resizeMode" "Adjust"
                                       "horizontalScrollBarPolicy" "AlwaysOff"
                                       "verticalScrollBarPolicy" "AlwaysOff")
-          *font*                (qnew "QFont(QString,int)" 
-                                      #+linux "Courier"
-                                      #-linux "Courier New"
-                                      #+darwin 13
-                                      #-darwin 10))
+          *font*                (qnew "QFont(QString,int)"
+                                      #+darwin  "Monaco"
+                                      #+linux   "Courier"
+                                      #+windows "Courier New"
+                                      #+darwin   12
+                                      #+linux    10
+                                      #+windows  10))
     (let ((editor-highlighter  (qnew "QSyntaxHighlighter(QTextDocument*)" (qfun *editor* "document")))
           (command-highlighter (qnew "QSyntaxHighlighter(QTextDocument*)" (qfun *command* "document"))))
       (qset *action-save*         "shortcut" (keys "Ctrl+S"))
