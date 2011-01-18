@@ -63,6 +63,10 @@
 (defvar *output*              (qfind-child *main* "output"))
 (defvar *command*             (qfind-child *main* "command"))
 (defvar *splitter*            (qfind-child *main* "splitter"))
+(defvar *find*                (qfind-child *main* "find"))
+(defvar *replace*             (qfind-child *main* "replace"))
+(defvar *next-button*         (qfind-child *main* "next_button"))
+(defvar *replace-button*      (qfind-child *main* "replace_button"))
 (defvar *action-open*         (qfind-child *main* "action_open"))
 (defvar *action-save*         (qfind-child *main* "action_save"))
 (defvar *action-save-as*      (qfind-child *main* "action_save_as"))
@@ -87,6 +91,7 @@
 (defconstant +previous-block+     6  "move operation")
 (defconstant +move-left+          9  "move operation")
 (defconstant +end+                11 "move operation")
+(defconstant +end-of-line+        13 "move operation")
 (defconstant +next-block+         16 "move operation")
 (defconstant +previous-character+ 7  "move operation")
 (defconstant +next-character+     17 "move operation")
@@ -173,6 +178,10 @@
       (dolist (ed (list *editor* *command*))
         (qconnect ed  "cursorPositionChanged()" 'cursor-position-changed))
       (qconnect *completer* "itemDoubleClicked(QListWidgetItem*)" 'insert-completer-option-text)
+      (qconnect *find* "returnPressed()" 'find-text)
+      (qconnect *next-button* "clicked()" 'find-text)
+      (qconnect *replace* "returnPressed()" 'replace-text)
+      (qconnect *replace-button* "clicked()" 'replace-text)
       (qconnect *action-open* "triggered()" 'file-open)
       (qconnect *action-save* "triggered()" 'file-save)
       (qconnect *action-save-as* "triggered()" 'file-save-as)
@@ -756,15 +765,33 @@
   (flet ((insert (text)
            (qlet ((cursor (qfun *editor* "textCursor")))
              (qfun cursor "insertText" text))
-           (qfun *editor* "ensureCursorVisible")
-           (return-from editor-key-pressed t)))
+           (qfun *editor* "ensureCursorVisible")))
     (case (qfun key-event "key")
       ((#.(key "Return") #.(key "Enter"))
          (let ((spaces (+ *current-depth* *current-keyword-indent*)))
            (unless (zerop spaces)
-             (insert (format nil "~%~A" (make-string spaces :initial-element #\Space))))))
+             (insert (format nil "~%~A" (make-string spaces :initial-element #\Space)))
+             t)))
       (#.(key "Tab")
-         (insert "  ")))))
+         ;; try to indent to same depth as previous line
+         (flet ((pos (block)
+                  (position #\Space (qfun block "text") :test 'char/=)))
+           (qlet ((cursor (qfun *editor* "textCursor"))
+                  (curr (qfun cursor "block"))
+                  (prev (qfun curr "previous")))
+             (let ((pos-curr (pos curr))
+                   (pos-prev (pos prev)))
+               (if (and pos-prev
+                        (not (zerop pos-prev)))
+                   (progn
+                     (when pos-curr
+                       (x:do-with (qfun cursor "movePosition")
+                         (+start-of-line+  +move-anchor+)
+                         (+next-character+ +keep-anchor+ pos-curr)))
+                     (qfun cursor "insertText" (make-string pos-prev :initial-element #\Space)))
+                   ;; fallback
+                   (insert "  ")))))
+         t))))
 
 ;;; paren highlighting
 
@@ -1009,6 +1036,17 @@
         (pop down))))
   (defun history ()
     (append (reverse up) down)))
+
+;;; find, replace
+
+(defun find-text ()
+  (unless (qfun *editor* "find" (qget *find* "text"))
+    (qfun *editor* "moveCursor" +start+)))
+
+(defun replace-text ()
+  (qlet ((cursor (qfun *editor* "textCursor")))
+    (qfun cursor "insertText" (qget *replace* "text")))
+  (find-text))
 
 ;;; profile
 

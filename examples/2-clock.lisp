@@ -19,7 +19,8 @@
     (qconnect timer "timeout()" (lambda () (qfun *clock* "update")))
     (qoverride *clock* "paintEvent(QPaintEvent*)" 'paint)
     (qfun timer "start" 500)
-    (qfun *clock* "show")))
+    (x:do-with (qfun *clock*)
+      "show" "raise")))
 
 (defun pen (width &optional (color "black"))
   (let ((pen (qnew "QPen")))

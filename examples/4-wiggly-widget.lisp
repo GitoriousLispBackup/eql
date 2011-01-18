@@ -33,7 +33,8 @@
       ("paintEvent(QPaintEvent*)" 'paint)
       ("timerEvent(QTimerEvent*)" 'timeout))
     (qset *edit* "text" "EQL - Embedded Qt Lisp")
-    (qfun dlg "show")))
+    (x:do-with (qfun dlg)
+      "show" "raise")))
 
 (let ((painter (qnew "QPainter"))
       (pen (qnew "QPen")))

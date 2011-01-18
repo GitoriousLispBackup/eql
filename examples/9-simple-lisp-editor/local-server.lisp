@@ -39,7 +39,8 @@
 (defvar *terminal-out-buffer*    (make-string-output-stream))
 
 ;; Qt
-(defvar *font* (qnew "QFont(QString,int)" #+linux "Courier" #-linux "Courier New" #+darwin 13 #-darwin 10))
+(defvar *font* (qnew "QFont(QString,int)"
+                     #+darwin "Monaco" #+linux "Courier" #+windows "Courier New" #+darwin 12 #+linux 10 #+windows 10))
 
 ;; REPL variables
 (defvar +   nil)

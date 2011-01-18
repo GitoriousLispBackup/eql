@@ -196,7 +196,8 @@
           (qfun scene "addItem" item))))
     (qconnect timer "timeout()" scene "advance()")
     (qfun timer "start" 30)
-    (qfun view "show")))
+    (x:do-with (qfun view)
+      "show" "raise")))
 
 #|
 (require :profile)
