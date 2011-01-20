@@ -1,4 +1,4 @@
-;;; copyright (c) 2010 power4projects software
+;;; copyright (c) 2010-2011 Polos Ruetz
 
 (unless (eql:qrequire :network)
   (error "[EQL] module :network required")
@@ -36,8 +36,9 @@
   (x:do-with (qfun *socket*)
     "abort"
     ("connectToServer" *server-name*)
-    ("waitForConnected" 1000)
-    ("write(QByteArray)" data)))
+    ("waitForConnected" 1000))
+  (when (qfun *socket* "isWritable")
+    (qfun *socket* "write(QByteArray)" data)))
 
 (defun string-request (str)
   (request (x:string-to-bytes (qutf8 str))))

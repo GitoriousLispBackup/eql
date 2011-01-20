@@ -1,4 +1,4 @@
-;;; copyright (c) 2010 power4projects software
+;;; copyright (c) 2010-2011 Polos Ruetz
 ;;;
 ;;; A very basic and experimental(!) Lisp editor, featuring:
 ;;;
@@ -12,7 +12,7 @@
 ;;;   - native Qt event processing through QApplication::exec()
 ;;;   - eval region
 
-(require :local-client "local-client")
+(require :local-client (probe-file "local-client.lisp"))
 
 (defpackage :editor
   (:use :common-lisp :eql)
@@ -147,6 +147,7 @@
                                       #+windows  10))
     (let ((editor-highlighter  (qnew "QSyntaxHighlighter(QTextDocument*)" (qfun *editor* "document")))
           (command-highlighter (qnew "QSyntaxHighlighter(QTextDocument*)" (qfun *command* "document"))))
+      (qset *action-open*         "shortcut" (keys "Ctrl+O"))
       (qset *action-save*         "shortcut" (keys "Ctrl+S"))
       (qset *action-save-and-run* "shortcut" (keys "Ctrl+R"))
       (qset *action-eval-region*  "shortcut" (keys "Ctrl+Return"))
@@ -942,7 +943,10 @@
 
 (defun run-on-server (str)
   (qprocess-events)
-  (local-client:string-request str))
+  (or (local-client:string-request str)
+      (progn
+        (qmsg (tr "Did you forget to start the <code><b>local-server</b></code>?"))
+        nil)))
 
 (defun save-and-run ()
   (file-save)
@@ -985,8 +989,8 @@
 
 (defun command ()
   (let ((text (string-trim '(#\Newline) (qget *command* "plainText"))))
-    (run-on-server text)
-    (history-add text)
+    (when (run-on-server text)
+      (history-add text))
     (qfun *command* "clear")))
 
 (defun saved-history ()

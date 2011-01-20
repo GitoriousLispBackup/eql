@@ -1,13 +1,13 @@
-;;; copyright (c) 2010 power4projects software
+;;; copyright (c) 2010-2011 Polos Ruetz
 
 (unless (eql:qrequire :network)
   (error "[EQL] module :network required")
   (eql:qq))
 
-(require :input-hook   "input-hook")
-(require :top-level    "top-level")
-(require :query-dialog "query-dialog")
-(require :debug-dialog "debug-dialog")
+(require :input-hook   (probe-file "input-hook.lisp"))
+(require :top-level    (probe-file "top-level.lisp"))
+(require :query-dialog (probe-file "query-dialog.lisp"))
+(require :debug-dialog (probe-file "debug-dialog.lisp"))
 
 (defpackage :local-server
   (:use :common-lisp :eql)
@@ -103,15 +103,16 @@
 
 (let ((n 0))
   (defun feed-top-level (str)
-    (let ((pkg (current-package-name))
-          (counter (princ-to-string (incf n))))
-      (format t "~%~A [~A] ~A~%~A"
-              pkg
-              counter
-              (make-string (- 50 (length counter) (length pkg)) :initial-element #\-)
-              str)
-      (setf si::*read-string* str))
-    (qsingle-shot 50 'start-top-level)))
+    (unless (x:empty-string str)
+      (let ((pkg (current-package-name))
+            (counter (princ-to-string (incf n))))
+        (format t "~%~A [~A] ~A~%~A"
+                pkg
+                counter
+                (make-string (- 50 (length counter) (length pkg)) :initial-element #\-)
+                str)
+        (setf si::*read-string* str))
+      (qsingle-shot 50 'start-top-level))))
 
 (defun send-output (type var)
   (let ((str (get-output-stream-string var)))

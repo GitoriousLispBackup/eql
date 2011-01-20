@@ -40,8 +40,7 @@ USAGE NOTES
 ===========
 
 Please see the context menu of the editor window for generic editor commands
-(offered by Qt, which include some other commands too, like Ctrl+<arrow key>,
-Alt+<arrow key>).
+(offered by Qt, which include some other commands too, like Ctrl+<arrow key>).
 
 Qt events are processed natively through QApplication::exec(), while keeping
 your program interactive (no performance loss).

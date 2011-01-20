@@ -1,4 +1,4 @@
-// copyright (c) 2010 power4projects software
+// copyright (c) 2010-2011 Polos Ruetz
 
 #include "ecl_fun.h"
 #include "eql.h"
