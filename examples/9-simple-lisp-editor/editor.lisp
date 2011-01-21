@@ -943,7 +943,7 @@
 
 (defun run-on-server (str)
   (qprocess-events)
-  (or (local-client:string-request str)
+  (or (local-client:request str)
       (progn
         (qmsg (tr "Did you forget to start the <code><b>local-server</b></code>?"))
         nil)))

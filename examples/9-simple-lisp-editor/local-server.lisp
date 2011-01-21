@@ -60,7 +60,7 @@
         (ini-streams)
         (setf si::*tpl-print-current-hook* 'send-file-position)
         (qset (qapp) "quitOnLastWindowClosed" nil)
-        (qconnect *server* "newConnection()" 'read-from-client)
+        (qconnect *server* "newConnection()" 'new-client-connection)
         (multiple-value-bind (eql-version qt-version)
             (qversion)
           (setf si:*tpl-prompt-hook*
@@ -88,12 +88,34 @@
         si::*tpl-debug-io* (make-two-way-stream (input-hook:new 'handle-debug-io)
                                                 (two-way-stream-output-stream *terminal-io*))))
 
-(defun read-from-client ()
-  (setf *client* (qfun *server* "nextPendingConnection"))
-  (qconnect *client* "disconnected()" *client* "deleteLater()")
-  (qfun *client* "waitForReadyRead")
-  (funcall *function* (qfrom-utf8 (qfun *client* "readAll")))
-  (send-output :expression *standard-output-buffer*))
+(let (size bytes-read data)
+  (defun new-client-connection ()
+    (setf size nil
+          data nil)
+    (setf *client* (qfun *server* "nextPendingConnection"))
+    (qconnect *client* "readyRead()" 'read-from-client)
+    (qconnect *client* "disconnected()" *client* "deleteLater()"))
+  (defun read-from-client ()
+    (when *function*
+      (let ((all (qfun *client* "readAll")))
+        ;; data may arrive splitted in more blocks
+        (unless size
+          (let* ((pos (min 20 (length all)))
+                 (head (x:bytes-to-string (subseq all 0 pos)))
+                 end)
+            (multiple-value-setq (size end)
+              (read-from-string head))
+            (push (subseq all end) data)
+            (setf bytes-read (length (first data)))))
+        (if (= size bytes-read)
+            (progn
+              (funcall *function* (qfrom-utf8 (apply 'concatenate 'vector (nreverse data))))
+              (send-output :expression *standard-output-buffer*)
+              (setf size nil
+                    data nil))
+            (progn
+              (push all data)
+              (incf bytes-read (length all))))))))
 
 (defun current-package-name ()
   (if (eql (find-package :cl-user) *package*)
@@ -146,9 +168,10 @@
 
 (defun send-to-client (type &optional (str ""))
   (when (qfun *client* "isValid")
-    (x:do-with (qfun *client*)
-      ("write(QByteArray)" (x:string-to-bytes (format nil "~S ~A" type (qutf8 str))))
-      "flush")))
+    (let ((utf8 (qutf8 str)))
+      (x:do-with (qfun *client*)
+        ("write(QByteArray)" (x:string-to-bytes (format nil "~D ~S ~A" (length utf8) type utf8)))
+        "flush"))))
 
 (defun handle-query-io ()
   (let ((txt (query-dialog:get-text (get-output-stream-string *terminal-out-buffer*))))
