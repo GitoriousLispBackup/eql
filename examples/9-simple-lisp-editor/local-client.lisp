@@ -25,6 +25,9 @@
   (qconnect *socket* "readyRead()" 'read-data))
 
 (let (size bytes-read type data)
+  (defun reset-data ()
+    (setf size nil
+          data nil))
   (defun read-data ()
     (when *function*
       (let ((all (qfun *socket* "readAll")))
@@ -42,13 +45,13 @@
         (if (= size bytes-read)
             (progn
               (funcall *function* type (qfrom-utf8 (apply 'concatenate 'vector (nreverse data))))
-              (setf size nil
-                    data nil))
+              (reset-data))
             (progn
               (push all data)
               (incf bytes-read (length all))))))))
 
 (defun request (str)
+  (reset-data)
   (x:do-with (qfun *socket*)
     "abort"
     ("connectToServer" *server-name*)
@@ -57,4 +60,5 @@
     (let ((utf8 (qutf8 str)))
       (x:do-with (qfun *socket*)
         ("write(QByteArray)" (x:string-to-bytes (format nil "~D ~A" (length utf8) utf8)))
-        "flush"))))
+        "waitForBytesWritten"))
+    t))

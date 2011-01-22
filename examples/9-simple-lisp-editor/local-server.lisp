@@ -89,9 +89,11 @@
                                                 (two-way-stream-output-stream *terminal-io*))))
 
 (let (size bytes-read data)
-  (defun new-client-connection ()
+  (defun reset-data ()
     (setf size nil
-          data nil)
+          data nil))
+  (defun new-client-connection ()
+    (reset-data)
     (setf *client* (qfun *server* "nextPendingConnection"))
     (qconnect *client* "readyRead()" 'read-from-client)
     (qconnect *client* "disconnected()" *client* "deleteLater()"))
@@ -110,9 +112,7 @@
         (if (= size bytes-read)
             (progn
               (funcall *function* (qfrom-utf8 (apply 'concatenate 'vector (nreverse data))))
-              (send-output :expression *standard-output-buffer*)
-              (setf size nil
-                    data nil))
+              (reset-data))
             (progn
               (push all data)
               (incf bytes-read (length all))))))))
@@ -134,7 +134,7 @@
                 (make-string (- 50 (length counter) (length pkg)) :initial-element #\-)
                 str)
         (setf si::*read-string* str))
-      (qsingle-shot 50 'start-top-level))))
+      (start-top-level))))
 
 (defun send-output (type var)
   (let ((str (get-output-stream-string var)))
@@ -146,10 +146,11 @@
           (setf str (subseq str p1 (max p1 p2)))
           (unless (x:empty-string str)
             (setf str (string-left-trim " " str)))))
-      (sleep 0.05)
-      (send-to-client type str))))
+      (send-to-client type str)
+      (sleep 0.05))))
 
 (defun start-top-level ()
+  (send-output :expression *standard-output-buffer*)
   (si::%top-level)
   (send-output :error  *error-output-buffer*)
   (send-output :trace  *trace-output-buffer*)
@@ -167,11 +168,12 @@
   (send-to-client :file-position (format nil "(~S . ~D)" file pos)))
 
 (defun send-to-client (type &optional (str ""))
-  (when (qfun *client* "isValid")
-    (let ((utf8 (qutf8 str)))
-      (x:do-with (qfun *client*)
-        ("write(QByteArray)" (x:string-to-bytes (format nil "~D ~S ~A" (length utf8) type utf8)))
-        "flush"))))
+  (if (qfun *client* "isWritable")
+      (let ((utf8 (qutf8 str)))
+        (x:do-with (qfun *client*)
+          ("write(QByteArray)" (x:string-to-bytes (format nil "~D ~S ~A" (length utf8) type utf8)))
+          "waitForBytesWritten"))
+      (qmsg (tr "Could not write to client."))))
 
 (defun handle-query-io ()
   (let ((txt (query-dialog:get-text (get-output-stream-string *terminal-out-buffer*))))

@@ -1,6 +1,7 @@
 '("in-home"
   "qadd-event-filter"
   "qapropos"
+  "qapropos*"
   "qapp"
   "qclear-event-filters"
   "qconnect"
