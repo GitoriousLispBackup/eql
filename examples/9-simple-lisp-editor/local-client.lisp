@@ -32,23 +32,22 @@
     (when *function*
       (let ((all (qfun *socket* "readAll")))
         ;; data may arrive splitted in more blocks
-        (unless size
-          (let* ((pos (min 100 (length all)))
-                 (head (x:bytes-to-string (subseq all 0 pos)))
-                 end)
-            (multiple-value-setq (size end)
-              (read-from-string head))
-            (multiple-value-setq (type end)
-              (read-from-string head nil nil :start end))
-            (push (subseq all end) data)
-            (setf bytes-read (length (first data)))))
-        (if (= size bytes-read)
-            (progn
-              (funcall *function* type (qfrom-utf8 (apply 'concatenate 'vector (nreverse data))))
-              (reset-data))
-            (progn
+        (if size
+            (when (< bytes-read size)
               (push all data)
-              (incf bytes-read (length all))))))))
+              (incf bytes-read (length all)))
+            (let* ((pos (min 100 (length all)))
+                   (head (x:bytes-to-string (subseq all 0 pos)))
+                   end)
+              (multiple-value-setq (size end)
+                (read-from-string head))
+              (multiple-value-setq (type end)
+                (read-from-string head nil nil :start end))
+              (push (subseq all end) data)
+              (setf bytes-read (length (first data)))))
+        (when (= size bytes-read)
+          (funcall *function* type (qfrom-utf8 (apply 'concatenate 'vector (nreverse data))))
+          (reset-data))))))
 
 (defun request (str)
   (reset-data)

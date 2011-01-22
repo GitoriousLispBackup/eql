@@ -101,21 +101,20 @@
     (when *function*
       (let ((all (qfun *client* "readAll")))
         ;; data may arrive splitted in more blocks
-        (unless size
-          (let* ((pos (min 20 (length all)))
-                 (head (x:bytes-to-string (subseq all 0 pos)))
-                 end)
-            (multiple-value-setq (size end)
-              (read-from-string head))
-            (push (subseq all end) data)
-            (setf bytes-read (length (first data)))))
-        (if (= size bytes-read)
-            (progn
-              (funcall *function* (qfrom-utf8 (apply 'concatenate 'vector (nreverse data))))
-              (reset-data))
-            (progn
+        (if size
+            (when (< bytes-read size)
               (push all data)
-              (incf bytes-read (length all))))))))
+              (incf bytes-read (length all)))
+            (let* ((pos (min 20 (length all)))
+                   (head (x:bytes-to-string (subseq all 0 pos)))
+                   end)
+              (multiple-value-setq (size end)
+                (read-from-string head))
+              (push (subseq all end) data)
+              (setf bytes-read (length (first data)))))
+        (when (= size bytes-read)
+          (funcall *function* (qfrom-utf8 (apply 'concatenate 'vector (nreverse data))))
+          (reset-data))))))
 
 (defun current-package-name ()
   (if (eql (find-package :cl-user) *package*)
