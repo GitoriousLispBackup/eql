@@ -8,6 +8,7 @@
 (require :top-level    (probe-file "top-level.lisp"))
 (require :query-dialog (probe-file "query-dialog.lisp"))
 (require :debug-dialog (probe-file "debug-dialog.lisp"))
+(require :settings     (probe-file "settings.lisp"))
 
 (defpackage :local-server
   (:use :common-lisp :eql)
@@ -37,10 +38,6 @@
 (defvar *trace-output-buffer*    (make-string-output-stream))
 (defvar *error-output-buffer*    (make-string-output-stream))
 (defvar *terminal-out-buffer*    (make-string-output-stream))
-
-;; Qt
-(defvar *font* (qnew "QFont(QString,int)"
-                     #+darwin "Monaco" #+linux "Courier" #+windows "Courier New" #+darwin 12 #+linux 10 #+windows 10))
 
 ;; REPL variables
 (defvar +   nil)
@@ -105,9 +102,8 @@
             (when (< bytes-read size)
               (push all data)
               (incf bytes-read (length all)))
-            (let* ((pos (min 20 (length all)))
-                   (head (x:bytes-to-string (subseq all 0 pos)))
-                   end)
+            (let ((head (x:bytes-to-string (subseq all 0 (1+ (position (char-code #\Space) all)))))
+                  end)
               (multiple-value-setq (size end)
                 (read-from-string head))
               (push (subseq all end) data)
@@ -138,13 +134,11 @@
 (defun send-output (type var)
   (let ((str (get-output-stream-string var)))
     (unless (x:empty-string str)
-      (when (eql :result type)
+      (when (eql :output type)
         ;; cut prompts
         (let ((p1 (1+ (position #\> str)))
               (p2 (position #\Newline str :from-end t)))
-          (setf str (subseq str p1 (max p1 p2)))
-          (unless (x:empty-string str)
-            (setf str (string-left-trim " " str)))))
+          (setf str (subseq str p1 (max p1 p2)))))
       (send-to-client type str)
       (sleep 0.05))))
 
@@ -153,7 +147,8 @@
   (si::%top-level)
   (send-output :error  *error-output-buffer*)
   (send-output :trace  *trace-output-buffer*)
-  (send-output :result *standard-output-buffer*))
+  (send-output :output *standard-output-buffer*)
+  (send-to-client :values (format nil "~{~%~S~}" si::*latest-values*)))
 
 (defun clear ()
   "To use from a client to clear the output buffer. See also function OUTPUT."
@@ -161,7 +156,7 @@
 
 (defun output ()
   "To use from a client to get the current buffer string immediately (e.g. inside a loop). See also function CLEAR."
-  (send-to-client :result (get-output-stream-string *standard-output-buffer*)))
+  (send-to-client :output (get-output-stream-string *standard-output-buffer*)))
 
 (defun send-file-position (file pos)
   (send-to-client :file-position (format nil "(~S . ~D)" file pos)))
@@ -182,7 +177,7 @@
 (defun handle-debug-io ()
   (let ((cmd (debug-dialog:command (list (cons (get-output-stream-string *error-output-buffer*) "red")
                                          (cons (get-output-stream-string *terminal-out-buffer*) "black"))
-                                   *font*)))
+                                   eql::*code-font*)))
     (send-to-client :activate-editor)
     (format nil "~A~%" (if (x:empty-string cmd) ":q" cmd))))
 

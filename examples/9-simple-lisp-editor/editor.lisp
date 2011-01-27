@@ -13,6 +13,7 @@
 ;;;   - eval region
 
 (require :local-client (probe-file "local-client.lisp"))
+(require :settings     (probe-file "settings.lisp"))
 
 (defpackage :editor
   (:use :common-lisp :eql)
@@ -75,7 +76,6 @@
 (defvar *action-repeat-eval*  (qfind-child *main* "action_repeat_eval"))
 
 (defparameter *current-editor*       *editor*)
-(defparameter *font*                 nil)
 (defparameter *lisp-match-rule*      nil)
 (defparameter *eql-keyword-format*   nil)
 (defparameter *lisp-keyword-format*  nil)
@@ -84,6 +84,7 @@
 (defparameter *string-color*         "sienna")
 (defparameter *completer*            nil)
 
+(defconstant +normal+             50 "font weight")
 (defconstant +bold+               75 "font weight")
 (defconstant +key-press+          6  "event type")
 (defconstant +start+              1  "move operation")
@@ -137,14 +138,7 @@
           *completer*           (qnew "QListWidget"
                                       "resizeMode" "Adjust"
                                       "horizontalScrollBarPolicy" "AlwaysOff"
-                                      "verticalScrollBarPolicy" "AlwaysOff")
-          *font*                (qnew "QFont(QString,int)"
-                                      #+darwin  "Monaco"
-                                      #+linux   "Courier"
-                                      #+windows "Courier New"
-                                      #+darwin   12
-                                      #+linux    10
-                                      #+windows  10))
+                                      "verticalScrollBarPolicy" "AlwaysOff"))
     (let ((editor-highlighter  (qnew "QSyntaxHighlighter(QTextDocument*)" (qfun *editor* "document")))
           (command-highlighter (qnew "QSyntaxHighlighter(QTextDocument*)" (qfun *command* "document"))))
       (qset *action-open*         "shortcut" (keys "Ctrl+O"))
@@ -153,12 +147,12 @@
       (qset *action-eval-region*  "shortcut" (keys "Ctrl+Return"))
       (qset *action-repeat-eval*  "shortcut" (keys "Ctrl+E"))
       (dolist (w (list *editor* *output* *command*))
-        (qset w "font" *font*))
+        (qset w "font" eql::*code-font*))
       (x:do-with (qset *output*)
         ("readOnly" t)
         ("tabStopWidth" (* 8 (first (font-metrics-size)))))
       (x:do-with (qset *completer*)
-        ("font" *font*)
+        ("font" eql::*code-font*)
         ("frameShape" "Box")
         ("frameShadow" "Plain")
         ("lineWidth" 1))
@@ -210,7 +204,7 @@
   (qfun *current-editor* "document"))
 
 (defun font-metrics-size ()
-  (qlet ((fm "QFontMetrics(QFont)" *font*))
+  (qlet ((fm "QFontMetrics(QFont)" eql::*code-font*))
     (list (qfun fm "width(QChar)" #\Space)
           (qfun fm "height"))))
 
@@ -967,11 +961,16 @@
 
 (defun data-from-server (type str)
   (case type
-    ((:expression :result :trace :error)
+    ((:expression :output :values :trace :error)
+       (when (find type '(:trace :error))
+         (qlet ((cur (qfun *output* "textCursor")))
+           (unless (zerop (qfun cur "columnNumber"))
+             (setf str (concatenate 'string (string #\Newline) str)))))
        (x:do-with (qfun *output*)
          ("moveCursor" +end+)
          ("setColor" (case type
-                       (:result "blue")
+                       (:output "blue")
+                       (:values "red")
                        (:trace  "darkmagenta")
                        (:error  "red")
                        (t       "black")))

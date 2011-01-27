@@ -93,8 +93,7 @@
                        values (multiple-value-list
                                   (eval-with-env - *break-env*)))
                  (setf *latest-form*   -
-                       *latest-values* values)
-                 (tpl-print values)))))
+                       *latest-values* values)))))
       (loop
         (when
             (catch *quit-tag*
