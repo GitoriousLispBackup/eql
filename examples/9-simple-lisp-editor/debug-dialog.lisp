@@ -47,5 +47,5 @@
 (defun add-messages (text-edit messages)
   (dolist (msg messages)
     (x:do-with (qfun text-edit)
-      ("setColor" (cdr msg))
+      ("setTextColor" (cdr msg))
       ("insertPlainText" (car msg)))))

@@ -139,8 +139,7 @@
         (let ((p1 (1+ (position #\> str)))
               (p2 (position #\Newline str :from-end t)))
           (setf str (subseq str p1 (max p1 p2)))))
-      (send-to-client type str)
-      (sleep 0.05))))
+      (send-to-client type str))))
 
 (defun start-top-level ()
   (send-output :expression *standard-output-buffer*)
@@ -166,7 +165,9 @@
       (let ((utf8 (qutf8 str)))
         (x:do-with (qfun *client*)
           ("write(QByteArray)" (x:string-to-bytes (format nil "~D ~S ~A" (length utf8) type utf8)))
-          "waitForBytesWritten"))
+          "waitForBytesWritten")
+        (qprocess-events)
+        (sleep 0.05))
       (qmsg (tr "Could not write to client."))))
 
 (defun handle-query-io ()
