@@ -161,13 +161,15 @@
   (send-to-client :file-position (format nil "(~S . ~D)" file pos)))
 
 (defun send-to-client (type &optional (str ""))
+  (x:while (not (zerop (qfun *client* "bytesToWrite")))
+    (qprocess-events)
+    (sleep 0.05))
   (if (qfun *client* "isWritable")
       (let ((utf8 (qutf8 str)))
+        (sleep 0.05)
         (x:do-with (qfun *client*)
           ("write(QByteArray)" (x:string-to-bytes (format nil "~D ~S ~A" (length utf8) type utf8)))
-          "waitForBytesWritten")
-        (qprocess-events)
-        (sleep 0.05))
+          "waitForBytesWritten"))
       (qmsg (tr "Could not write to client."))))
 
 (defun handle-query-io ()

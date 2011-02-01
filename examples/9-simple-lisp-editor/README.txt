@@ -1,10 +1,9 @@
 NOTES
 =====
 
-This is currently only an experimental snapshot of a simple "scratch buffer"
-like editor.
+This is only an experimental, simple, "scratch buffer" like editor.
 
-Run the editor:
+Run it:
   
   0) You'll need the :network module (see QREQUIRE).
 
@@ -47,6 +46,9 @@ your program interactive (no performance loss).
 
 "Eval Region" note: (see initial status-bar message)
 Remember to change to the desired package prior to eval anything.
+
+Auto indent note: hitting the <tab> key will auto indent the paragraph
+starting from the current line until the next empty line found.
 
 On errors, the local Lisp server will pop up a debug dialog, asking for an
 ECL debug command.

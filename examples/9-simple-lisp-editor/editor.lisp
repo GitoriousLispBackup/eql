@@ -4,9 +4,8 @@
 ;;;
 ;;;   - a popup completer (for EQL functions only)
 ;;;   - paren highlighting
-;;;
-;;;   - rudimentary syntax highlighter
-;;;   - rudimentary auto indent
+;;;   - simple auto indent, indent parapgraph
+;;;   - simple syntax highlighter
 ;;;
 ;;;   - an independent local Lisp server process for evaluation
 ;;;   - native Qt event processing through QApplication::exec()
@@ -105,6 +104,7 @@
 (defun file-open ()
   (let ((name (qfun "QFileDialog" "getOpenFileName" nil "" "" "Lisp files (*.lisp)")))
     (unless (x:empty-string name)
+      (file-save)
       (qset *editor* "plainText" (read-file name))
       (show-file-name))))
 
@@ -236,7 +236,7 @@
 
 (defun read* (str &optional (start 0))
   (setf *try-read-error* nil)
-  (let ((*package* (find-package :eql)))
+  (let ((*package* #.(find-package :eql)))
     (multiple-value-bind (exp x)
         (ignore-errors (read-from-string (substitute +package-char-dummy+ #\: str)
                                          nil nil :start start :preserve-whitespace t))
@@ -668,7 +668,7 @@
 (defun code-tree (str)
   (let ((tree (read* (concatenate 'string
                                   (string-right-trim '(#\Newline #\Space #\") str)
-                                  #.(make-string 100 :initial-element #\))))))
+                                  #.(make-string 99 :initial-element #\))))))
     (do ((exp tree (first (last exp)))
          (depth -1 (1+ depth)))
         ((atom exp) (setf *cursor-code-depth* depth)))
@@ -756,37 +756,91 @@
         (setf name (subseq name (1+ x:it))))
       (cdr (find name *auto-indent* :test 'string= :key 'car)))))
 
+(defun indentation (line)
+  (let ((spaces (+ *current-depth* *current-keyword-indent*))) ; see right paren matcher
+    (when (and (zerop spaces)
+               (not *extra-selections*))
+      (let ((pos (position #\Space line :test 'char/=)))
+        (when pos
+          (setf spaces (if (char= #\( (char line pos))
+                           (if (find (read* (subseq line (1+ pos))) '(prog progn prog1 prog2))
+                               (+ pos 2)
+                               (1+ (or (position #\Space line :start pos)
+                                       pos)))
+                           pos)))))
+    spaces))
+
+(defun no-string-parens (line)
+  (let ((ex #\Space)
+        in-string)
+    (dotimes (i (length line))
+      (let ((ch (char line i)))
+        (case ch
+          (#\"
+             (unless (char= #\\ ex)
+               (setf in-string (not in-string))))
+          ((#\( #\))
+             (when in-string
+               (setf (char line i) #\Space))))
+        (setf ex ch))))
+  line)
+
 (defun editor-key-pressed (key-event)
-  (flet ((insert (text)
-           (qlet ((cursor (qfun *editor* "textCursor")))
-             (qfun cursor "insertText" text))
-           (qfun *editor* "ensureCursorVisible")))
-    (case (qfun key-event "key")
-      ((#.(key "Return") #.(key "Enter"))
-         (let ((spaces (+ *current-depth* *current-keyword-indent*)))
+  (case (qfun key-event "key")
+    ((#.(key "Return") #.(key "Enter"))
+       (qlet ((cursor (qfun *editor* "textCursor"))
+              (curr (qfun cursor "block")))
+         (let ((spaces (indentation (qfun curr "text"))))
            (unless (zerop spaces)
-             (insert (format nil "~%~A" (make-string spaces :initial-element #\Space)))
-             t)))
-      (#.(key "Tab")
-         ;; try to indent to same depth as previous line
-         (flet ((pos (block)
-                  (position #\Space (qfun block "text") :test 'char/=)))
-           (qlet ((cursor (qfun *editor* "textCursor"))
-                  (curr (qfun cursor "block"))
-                  (prev (qfun curr "previous")))
-             (let ((pos-curr (pos curr))
-                   (pos-prev (pos prev)))
-               (if (and pos-prev
-                        (not (zerop pos-prev)))
-                   (progn
-                     (when pos-curr
-                       (x:do-with (qfun cursor "movePosition")
-                         (+start-of-line+  +move-anchor+)
-                         (+next-character+ +keep-anchor+ pos-curr)))
-                     (qfun cursor "insertText" (make-string pos-prev :initial-element #\Space)))
-                   ;; fallback
-                   (insert "  ")))))
-         t))))
+             (qfun cursor "insertText" (format nil "~%~A" (make-string spaces :initial-element #\Space)))
+             (qfun *editor* "ensureCursorVisible")
+             t))))
+    (#.(key "Tab")
+       ;; auto indent paragraph: current line -> next empty line
+       (qlet ((cursor* (qfun *editor* "textCursor")))
+         (qfun cursor* "movePosition" +start-of-line+ +move-anchor+)
+         (qfun *editor* "setTextCursor" cursor*)
+         (qlet ((orig* (qfun *editor* "textCursor")))
+           (loop
+             (let ((spaces 0))
+               (qlet ((cursor (qfun *editor* "textCursor"))
+                      (orig   (qfun *editor* "textCursor")))
+                 (unless (zerop (qfun cursor "blockNumber"))
+                   (qfun cursor "movePosition" +previous-block+ +move-anchor+)
+                   (qfun *editor* "setTextCursor" cursor)
+                   (qlet ((curr (qfun cursor "block")))
+                     (let ((line (no-string-parens (qfun curr "text"))))
+                       (unless (x:empty-string line)
+                         ;; apply right paren matcher (for indent info)
+                         (do* ((i (1- (length line)) (1- i))
+                               (ch (char line i) (char line i)))
+                             ((zerop i))
+                           (when (char= #\) ch)
+                             (show-matching-parenthesis cursor (subseq line 0 (1+ i)) :right)
+                             (when *extra-selections*
+                               (return)))))
+                       (setf spaces (indentation line)))))
+                 (qfun *editor* "setTextCursor" orig)
+                 ;; select current indent spaces (to be substituted)
+                 (qlet ((curr (qfun orig "block")))
+                   (let* ((line (qfun curr "text"))
+                          (pos (position #\Space line :test 'char/=)))
+                     (when (zerop (length (string-trim " " line)))
+                       (return))                                                             ; exit 1
+                     (when (not (zerop pos))
+                       (x:do-with (qfun orig "movePosition")
+                         (+start-of-line+ +move-anchor+)
+                         (+next-character+ +keep-anchor+ pos)))))
+                 (unless (zerop spaces)
+                   (qfun orig "insertText" (make-string spaces :initial-element #\Space)))))
+             (unless (qfun cursor* "movePosition" +next-block+ +move-anchor+)
+               (return))                                                                     ; exit 2
+             (qfun *editor* "setTextCursor" cursor*))
+           (x:do-with (qfun *editor*)
+             ("setTextCursor" orig*)
+             "ensureCursorVisible")))
+       (setf *extra-selections* nil)
+       t)))
 
 ;;; paren highlighting
 
@@ -796,9 +850,9 @@
         lines)
     (flet ((try-read (curr-line*)
              (setf lines (nconc lines (list curr-line*)))
-             (let* ((code (with-output-to-string (s)
-                            (dolist (line lines)
-                              (write-line line s)))))
+             (let ((code (with-output-to-string (s)
+                           (dolist (line lines)
+                             (write-line line s)))))
                ;; proceed only without EOF Lisp reader error (for performance reasons)
                (read* code)
                (unless (eql :end-of-file *try-read-error*)

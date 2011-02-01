@@ -26,7 +26,6 @@
           let*
           loop
           multiple-value-bind
-          progn
           qlet
           unless
           when
