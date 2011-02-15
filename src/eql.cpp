@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "11.1.5"; // 2011-01-17
+const char EQL::version[] = "11.2.1"; // 2011-02-15
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
@@ -72,8 +72,8 @@ void EQL::exec(const QStringList& args) {
     if(tpl) {
         qquit(); }}
 
-void EQL::exec(lisp_ini ini, const QByteArray& command, const QByteArray& package) {
+void EQL::exec(lisp_ini ini, const QByteArray& expression, const QByteArray& package) {
     eval(QString("(eql::set-home \"%1\")").arg(home()).toAscii().constData());
     read_VV(OBJNULL, ini);
     si_select_package(make_simple_base_string((char*)package.constData()));
-    eval(command.constData()); }
+    eval(expression.constData()); }

@@ -23,7 +23,6 @@ The completer currently works for:
   qset
   qget
   qfun
-  qenum
   qconnect
   qoverride
   qfind-child

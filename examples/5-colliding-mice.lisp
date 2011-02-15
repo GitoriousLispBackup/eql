@@ -9,9 +9,6 @@
 
 (in-package :colliding-mice)
 
-(defconstant +antialiasing+ 1  "render hint")
-(defconstant +no-index+     -1 "item index method")
-
 (defconstant +2pi+ (* 2 pi))
 
 (defparameter *mouse-count* 7)
@@ -40,7 +37,7 @@
                  (lambda (step) (advance mouse step)))
       item)))
 
-(defun brush (color &optional (style "SolidPattern"))
+(defun brush (color &optional (style Qt.SolidPattern))
   (let ((b (qnew "QBrush")))
     (qfun b "setStyle" style)
     (when color
@@ -51,7 +48,7 @@
       (black (brush "black"))
       (olive (brush "olive"))
       (red   (brush "red"))
-      (no-brush (brush nil "NoBrush"))
+      (no-brush (brush nil Qt.NoBrush))
       (tail (let ((p (qnew "QPainterPath")))
               (x:do-with (qfun p)
                 ("moveTo" '(0 20))
@@ -133,8 +130,8 @@
                                  (append (map-to '(0 0))
                                          (map-to '(-30 -50))
                                          (map-to '(30 -50)))
-                                 "IntersectsItemShape"
-                                 "AscendingOrder")))
+                                 Qt.IntersectsItemShape
+                                 Qt.AscendingOrder)))
           (dolist (danger-mouse danger-mice)
             (unless (qeql me danger-mouse)
               (let* ((line-to-mouse (append '(0 0)
@@ -178,16 +175,16 @@
                     "windowTitle" "Colliding Mice"
                     "size" (list 400 300)))
         (timer (qnew "QTimer")))
-    (qfun scene "setItemIndexMethod" +no-index+)
+    (qfun scene "setItemIndexMethod" QGraphicsScene.NoIndex)
     (x:do-with (qfun view)
       ("setScene" scene)
-      ("setRenderHint" +antialiasing+)
+      ("setRenderHint" QPainter.Antialiasing)
       ("setBackgroundBrush" (qnew "QBrush(QPixmap)"
                                   (qnew "QPixmap(QString)"
                                         (in-home "examples/data/icons/cheese.jpg"))))
-      ("setCacheMode" "CacheBackground")
-      ("setViewportUpdateMode" "BoundingRectViewportUpdate")
-      ("setDragMode" "ScrollHandDrag"))
+      ("setCacheMode" QGraphicsView.CacheBackground)
+      ("setViewportUpdateMode" QGraphicsView.BoundingRectViewportUpdate)
+      ("setDragMode" QGraphicsView.ScrollHandDrag))
     (dotimes (i *mouse-count*)
       (flet ((pos (fun)
                (truncate (* 200 (funcall fun (/ (* i +2pi+) *mouse-count*))))))

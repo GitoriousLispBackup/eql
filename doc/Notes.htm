@@ -4,14 +4,48 @@
 </head>
 <body>
 <h2>Notes</h2>
-<p>To run a Lisp file directly, do e.g. <code>eql examples/5-colliding-mice.lisp</code>.</p>
-<p>See the EQL UI (command <code>eql -qgui</code>) for a complete list of all supported classes and functions.</p>
-<p>In the above mentioned UI you find a "<b>Select</b>" button, allowing you to select any Qt widget (even in other main widgets), if previously loaded from the UI command line. After selecting a widget, the parameter <code>gui:*q*</code> will be set to it.</p>
-<p>If you want to use temporary Qt objects, you can use the <code>qlet</code> convenience macro (see the function list). It's a <code>let*</code> variant for Qt objects, deleting them  when leaving its body.</p>
-<p>There is no garbage collection for Qt objects. It's clear that during development there will always be some garbage. The interesting part is final applications. Qt widgets always live inside an object hierarchy (no child will be able to survive its parents...). Additionally, you have the <code>qlet</code> macro, which provides local Qt objects (deleted when leaving the <code>qlet</code> body). Now, after understanding and applying these simple rules, you should never be bitten by memory leakage problems (given you do only UI stuff with Qt).</p>
-<p>There is no CLOS integration planned. (Closures may be good enough sometimes, see <code>mouse</code> in <code>examples/5-colliding-mice.lisp</code>.)</p>
-<p>Enumerations are currently not fully intuitive. In most cases, you can use their string names. However, some non QObject derived classes ask for their integer values (see <code>qenum</code>). In a few cases you need to define integer constants by yourself (see <code>examples/</code>).</p>
+<p>To run a Lisp file directly, do e.g. <code>eql
+    examples/5-colliding-mice.lisp</code>.</p>
+<p>See the EQL UI (command <code>eql -qgui</code>) for a complete list of all
+  supported classes and functions.</p>
+<p>In the above mentioned UI you find a "<b>Select</b>" button, allowing you
+  to select any Qt widget (even in other main widgets), if previously loaded
+  from the UI command line. After selecting a widget, the
+  parameter <code>gui:*q*</code> will be set to it.</p>
+<p>If you want to use temporary Qt objects, you can use the <code>qlet</code>
+  convenience macro (see the function list). It's a <code>let*</code> variant
+  for Qt objects, deleting them  when leaving its body.</p>
+<p>No garbage collection for Qt objects:
+<ul>
+<li> It's clear that during development there will always be some garbage. The interesting part is final
+  applications.
+<li>Qt widgets always live inside an object hierarchy (no child will be able
+  to survive its parents...).
+<li>Additionally, you have the <code>qlet</code> macro, which provides local Qt objects (deleted when
+  leaving the <code>qlet</code> body).
+<li>So, you always should use <code>qlet</code> for both temporary Qt widgets
+  (e.g. dialogs) and for return values like <code>QTextCursor</code>, neither
+  being a pointer nor a primitive (see "Primitives" in the EQL UI dialog
+  mentioned above).
+</ul>
+</p>
+<p>Enumerations:
+<ul>
+<li>Please see the file <code>src/lisp/enums.lisp</code>
+      for all enumeration constants currently defined (some are still
+      missing).
+<li>SLIME users: in order to have the enum constants available
+      in code completion, you need to type them lower case, not
+      camelCase.
+<li>Example: <code>Qt.AlignCenter</code> (this should look
+      familiar, and is the same representation as choosen in other Qt
+      bindings).</ul>
+</p>
+<p>There is no CLOS integration planned. Closures may be good enough
+  sometimes <i>(understatement)</i>, see <code>mouse</code>
+  in <code>examples/5-colliding-mice.lisp</code>.</p>
 <hr>
-<p>The necessary parsing for generating the <code>src/gen/*</code> files is done by parsing the Qt Html documentation. See <code>helper/</code>
+<p>The necessary parsing for generating the <code>src/gen/*</code> files is
+  done by parsing the Qt Html documentation. See <code>helper/</code>
 </body>
 </html>

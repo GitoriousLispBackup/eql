@@ -10,10 +10,8 @@
 (defconstant +sinus+ #(0 38 71 92 100 92 71 38 0 -38 -71 -92 -100 -92 -71 -38))
 
 (defvar *wiggly* (qnew "QWidget" "autoFillBackground" t))
-(defvar *edit*   (qnew "QLineEdit" "alignment" "AlignCenter"))
+(defvar *edit*   (qnew "QLineEdit" "alignment" Qt.AlignCenter))
 (defvar *timer*  (qnew "QBasicTimer"))
-
-(defconstant +light+ 2 "color role")
 
 (defparameter *step* 0)
 
@@ -22,7 +20,7 @@
                           (qfun font "setPointSize"
                                 (+ 20 (qfun font "pointSize")))
                           font))
-  (qfun *wiggly* "setBackgroundRole" +light+)
+  (qfun *wiggly* "setBackgroundRole" QPalette.Light)
   (let ((dlg (qnew "QDialog" "size" (list 600 200)))
         (vbox (qnew "QVBoxLayout")))
     (qfun dlg "setLayout" vbox)

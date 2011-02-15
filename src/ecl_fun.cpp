@@ -91,7 +91,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object((char*)"qconnect2"),            (cl_objectfn_fixed)qconnect2,                5);
     cl_def_c_function(c_string_to_object((char*)"qcopy"),                (cl_objectfn_fixed)qcopy,                    1);
     cl_def_c_function(c_string_to_object((char*)"qdelete"),              (cl_objectfn_fixed)qdelete,                  1);
-    cl_def_c_function(c_string_to_object((char*)"qenum2"),               (cl_objectfn_fixed)qenum2,                   2);
+    cl_def_c_function(c_string_to_object((char*)"qenum"),                (cl_objectfn_fixed)qenum,                    2);
     cl_def_c_function(c_string_to_object((char*)"qescape"),              (cl_objectfn_fixed)qescape,                  1);
     cl_def_c_function(c_string_to_object((char*)"qexec"),                (cl_objectfn_fixed)qexec,                    0);
     cl_def_c_function(c_string_to_object((char*)"qfind-child"),          (cl_objectfn_fixed)qfind_child,              2);
@@ -955,12 +955,10 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
                     n = mo->indexOfEnumerator(sType.mid(i_enum + 2));
                     if(n != -1) {
                         QMetaEnum me = mo->enumerator(n);
-                        int* i = new int(me.isFlag()
-                                         ? me.keysToValue(toCString(l_arg))
-                                         : me.keyToValue(toCString(l_arg)));
+                        int* i = new int(toInt(l_arg));
                         p = i; }}
                 if(-1 == n) {
-                    int* i = new int(fixint(l_arg));
+                    int* i = new int(toInt(l_arg));
                     p = i; }}}}
     return MetaArg(sType, p); }
 
@@ -1409,7 +1407,7 @@ cl_object qdelete(cl_object l_obj) {
 cl_object qproperty(cl_object l_obj, cl_object l_name) {
     /// args: (object name)
     /// alias: qget
-    /// Gets a Qt property. Enumerator values are returned as string names.
+    /// Gets a Qt property. Enumerator values are returned as <code>int</code> values.
     ///     (qget label "text")
     QtObject o = toQtObject(l_obj);
     if(ECL_STRINGP(l_name)) {
@@ -1420,11 +1418,6 @@ cl_object qproperty(cl_object l_obj, cl_object l_name) {
                 if(n != -1) {
                     QMetaProperty mp(mo->property(n));
                     QVariant var(mp.read((QObject*)o.pointer));
-                    if(mp.isEnumType()) {
-                        QMetaEnum me(mp.enumerator());
-                        var = me.isFlag()
-                              ? QString(me.valueToKeys(var.toInt()))
-                              : QString(me.valueToKey(var.toInt())); }
                     const cl_env_ptr l_env = ecl_process_env();
                     l_env->nvalues = 2;
                     l_env->values[0] = from_qvariant_value(var);
@@ -1437,8 +1430,8 @@ cl_object qproperty(cl_object l_obj, cl_object l_name) {
 cl_object qset_property(cl_object l_obj, cl_object l_name, cl_object l_val) {
     /// args: (object name value)
     /// alias: qset
-    /// Sets a Qt property. Enumerator values have to be passed as string names.
-    ///     (qset label "alignment" "AlignCenter")
+    /// Sets a Qt property. Enumerator values have to be passed as <code>int</code> values.
+    ///     (qset label "alignment" Qt.AlignCenter)
     ecl_process_env()->nvalues = 1;
     QtObject o = toQtObject(l_obj);
     if(ECL_STRINGP(l_name)) {
@@ -1450,11 +1443,7 @@ cl_object qset_property(cl_object l_obj, cl_object l_name, cl_object l_val) {
                     QMetaProperty mp(mo->property(n));
                     QVariant var;
                     if(mp.isEnumType()) {
-                        if(ECL_STRINGP(l_val)) {
-                            QMetaEnum me(mp.enumerator());
-                            var = (me.isFlag()
-                                   ? me.keysToValue(toCString(l_val))
-                                   : me.keyToValue(toCString(l_val))); }}
+                        var = toInt(l_val); }
                     else {
                         var = toQVariant(l_val, mp.typeName()); }
                     if(mp.write((QObject*)o.pointer, var)) {
@@ -1790,7 +1779,7 @@ cl_object qadd_event_filter(cl_object l_obj, cl_object l_ev, cl_object l_fun) {
             QtObject o = toQtObject(l_obj);
             if(o.isQObject()) {
                 obj = (QObject*)o.pointer; }}
-        LObjects::dynObject->addEventFilter(obj, fixint(l_ev), fun);
+        LObjects::dynObject->addEventFilter(obj, toInt(l_ev), fun);
         return l_ev; }
     error_msg("QADD-EVENT-FILTER", LIST3(l_obj, l_ev, l_fun));
     return Cnil; }
@@ -1938,10 +1927,7 @@ cl_object qobject_names2(cl_object l_type) {
     cl_object l_ret = from_qstringlist(lst);
     return l_ret; }
 
-cl_object qenum2(cl_object l_name, cl_object l_key) {
-    /// args: (name key)
-    /// Registered enumerators only (see <code>Q_ENUMS</code> and <code>Q_FLAGS</code> in Qt Assistant).<br>Returns the integer value of the passed enumerator, passed as name and key. Needed only if an enumerator argument has to be passed as <code>int</code> value.<br><br>Enumerators in non <code>QObject</code> derived classes can't be registered, so you always need to use/define integer constants in these cases.
-    ///    (qfun item "setTextAlignment" 0 (qenum "Qt::Alignment" "AlignCenter"))
+cl_object qenum(cl_object l_name, cl_object l_key) { // for internal use only
     ecl_process_env()->nvalues = 1;
     if(ECL_STRINGP(l_name) && ECL_STRINGP(l_key)) {
         QByteArray name(toCString(l_name));
@@ -1976,9 +1962,7 @@ static cl_object enums(const QMetaObject* mo) {
             l_enums = CONS(cl_nreverse(l_keys), l_enums); }}
     return cl_nreverse(l_enums); }
 
-cl_object qmeta_enums() {
-    /// args: ()
-    /// Returns all QMetaEnum values of all (QObject derived) classes, including the <code>Qt::</code> namespace.
+cl_object qmeta_enums() { // for internal use only
     ecl_process_env()->nvalues = 1;
     cl_object l_all_enums = Cnil;
     Q_FOREACH(QByteArray name, LObjects::qNames) {

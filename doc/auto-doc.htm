@@ -51,13 +51,6 @@
 </pre>
 </p><br>
 <p>
-<b>QENUM (name key)</b>
-<p>Registered enumerators only (see <code>Q_ENUMS</code> and <code>Q_FLAGS</code> in Qt Assistant).<br>Returns the integer value of the passed enumerator, passed as name and key. Needed only if an enumerator argument has to be passed as <code>int</code> value.<br><br>Enumerators in non <code>QObject</code> derived classes can't be registered, so you always need to use/define integer constants in these cases.</p>
-<pre>
-  (qfun item "setTextAlignment" 0 (qenum "Qt::Alignment" "AlignCenter"))
-</pre>
-</p><br>
-<p>
 <b>QEQL (object1 object2)</b>
 <p>Returns <code>T</code> for same instances of a Qt class.</p>
 </p><br>
@@ -135,10 +128,6 @@
 </pre>
 </p><br>
 <p>
-<b>QMETA-ENUMS ()</b>
-<p>Returns all QMetaEnum values of all (QObject derived) classes, including the <code>Qt::</code> namespace.</p>
-</p><br>
-<p>
 <b>QNEW-INSTANCE (name &rest arguments)</b>
 <br>
 <b>QNEW</b>
@@ -180,7 +169,7 @@
 <b>QPROPERTY (object name)</b>
 <br>
 <b>QGET</b>
-<p>Gets a Qt property. Enumerator values are returned as string names.</p>
+<p>Gets a Qt property. Enumerator values are returned as <code>int</code> values.</p>
 <pre>
   (qget label "text")
 </pre>
@@ -210,9 +199,9 @@
 <b>QSET-PROPERTY (object name value)</b>
 <br>
 <b>QSET</b>
-<p>Sets a Qt property. Enumerator values have to be passed as string names.</p>
+<p>Sets a Qt property. Enumerator values have to be passed as <code>int</code> values.</p>
 <pre>
-  (qset label "alignment" "AlignCenter")
+  (qset label "alignment" Qt.AlignCenter)
 </pre>
 </p><br>
 <p>

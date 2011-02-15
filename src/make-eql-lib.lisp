@@ -8,7 +8,7 @@
 (unless (find-package :c)
   (make-package :c))
 
-(defparameter *lisp-files* (list #-win32 "serve-event" "x" "package" "ini"))
+(defparameter *lisp-files* (list #-win32 "serve-event" "x" "package" "ini" "enums"))
 
 (dolist (f *lisp-files*)
   (let ((file (format nil "lisp/~A" f)))

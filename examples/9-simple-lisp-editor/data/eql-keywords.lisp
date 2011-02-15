@@ -33,6 +33,7 @@
   "qquit"
   "qrequire"
   "qsender"
+  "qset-event-hook"
   "qset-ini"
   "qset-null"
   "qset-property"

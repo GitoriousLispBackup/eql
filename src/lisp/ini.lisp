@@ -27,9 +27,6 @@
                  (qdel ,x))
               `(qdel ,(first vars)))))))
 
-(defmacro qenum (name key) ; simpler than #.
-  (qenum2 name key))
-
 (defun %get-function (fn pkg)
   (typecase fn
     (symbol

@@ -27,15 +27,16 @@
   #+win32
   (qlocal8bit name))
 
-(defun read-file (file)
+(defun read-file (file &optional (set-name t))
   (with-open-file (s (os-pathname file) :direction :input)
-    (setf *file-name* file)
+    (when set-name
+      (setf *file-name* file))
     (let ((str (make-string (file-length s))))
       (read-sequence str s)
       str)))
 
 (defun from-file (name)
-  (eval (read-from-string (read-file name))))
+  (eval (read-from-string (read-file name nil))))
 
 (defparameter *auto-indent*   (from-file "data/auto-indent.lisp"))
 (defparameter *eql-keywords*  (from-file "data/eql-keywords.lisp"))
@@ -45,15 +46,16 @@
 (defparameter *current-depth*          0)
 (defparameter *current-keyword-indent* 0)
 (defparameter *cursor-code-depth*      0)
-(defparameter *extra-selections*       nil)
-(defparameter *keep-extra-selections*  nil)
 (defparameter *error-region*           nil)
-(defparameter *try-read-error*         nil)
+(defparameter *extra-selections*       nil)
+(defparameter *file-name*              nil)
+(defparameter *keep-extra-selections*  nil)
 (defparameter *latest-eval-position*   nil)
+(defparameter *try-read-error*         nil)
 
 (defconstant +max-shown-completions+ 10)
 (defconstant +max-history+           50)
-(defconstant +package-char-dummy+    #\$)
+(defconstant +package-char-dummy+    #\.)
 (defconstant +history-file+          ".command-history")
 
 ;;; Qt
@@ -83,30 +85,13 @@
 (defparameter *string-color*         "sienna")
 (defparameter *completer*            nil)
 
-(defconstant +normal+             50 "font weight")
-(defconstant +bold+               75 "font weight")
-(defconstant +key-press+          6  "event type")
-(defconstant +start+              1  "move operation")
-(defconstant +start-of-line+      3  "move operation")
-(defconstant +previous-block+     6  "move operation")
-(defconstant +move-left+          9  "move operation")
-(defconstant +end+                11 "move operation")
-(defconstant +end-of-line+        13 "move operation")
-(defconstant +next-block+         16 "move operation")
-(defconstant +previous-character+ 7  "move operation")
-(defconstant +next-character+     17 "move operation")
-(defconstant +move-anchor+        0  "move mode")
-(defconstant +keep-anchor+        1  "move mode")
-(defconstant +word-under-cursor+  0  "selection type")
-(defconstant +native-text+        0  "sequence format")
-(defconstant +base+               9  "color role")
-
-(defun file-open ()
-  (let ((name (qfun "QFileDialog" "getOpenFileName" nil "" "" "Lisp files (*.lisp)")))
-    (unless (x:empty-string name)
-      (file-save)
-      (qset *editor* "plainText" (read-file name))
-      (show-file-name))))
+(defun file-open (&optional name)
+  (unless name
+    (setf name (qfun "QFileDialog" "getOpenFileName" nil "" "" "Lisp files (*.lisp)")))
+  (unless (x:empty-string name)
+    (file-save)
+    (qset *editor* "plainText" (read-file name))
+    (show-file-name)))
 
 (defun save-file (name)
   (when (and (stringp name)
@@ -121,13 +106,13 @@
   (save-file *file-name*))
 
 (defun file-save-as ()
-  (save-file (qfun "QFileDialog" "getSaveFileName" nil "" "" "Lisp files (*.lisp)")))
+  (let ((name (qfun "QFileDialog" "getSaveFileName" nil "" "" "Lisp files (*.lisp)")))
+    (unless (x:ends-with ".lisp" name)
+      (setf name (concatenate 'string name ".lisp")))
+    (save-file name)))
 
 (defun show-file-name ()
-  (show-status-message (file-namestring *file-name*)))
-
-(defmacro key (name)
-  `(qenum "Qt::Key" ,(format nil "Key_~A" name)))
+  (qset *main* "windowTitle" (file-namestring *file-name*)))
 
 (defun ini ()
   (flet ((keys (str)
@@ -136,9 +121,9 @@
           *lisp-keyword-format* (qnew "QTextCharFormat")
           *comment-format*      (qnew "QTextCharFormat")
           *completer*           (qnew "QListWidget"
-                                      "resizeMode" "Adjust"
-                                      "horizontalScrollBarPolicy" "AlwaysOff"
-                                      "verticalScrollBarPolicy" "AlwaysOff"))
+                                      "resizeMode" QListView.Adjust
+                                      "horizontalScrollBarPolicy" Qt.ScrollBarAlwaysOff
+                                      "verticalScrollBarPolicy" Qt.ScrollBarAlwaysOff))
     (let ((editor-highlighter  (qnew "QSyntaxHighlighter(QTextDocument*)" (qfun *editor* "document")))
           (command-highlighter (qnew "QSyntaxHighlighter(QTextDocument*)" (qfun *command* "document"))))
       (qset *action-open*         "shortcut" (keys "Ctrl+O"))
@@ -153,23 +138,23 @@
         ("tabStopWidth" (* 8 (first (font-metrics-size)))))
       (x:do-with (qset *completer*)
         ("font" eql::*code-font*)
-        ("frameShape" "Box")
-        ("frameShadow" "Plain")
+        ("frameShape" QFrame.Box)
+        ("frameShadow" QFrame.Plain)
         ("lineWidth" 1))
       (x:do-with (qset *main*)
         ("pos" (list 40 40))
         ("size" (list 800 500))
         ("windowTitle" "Simple Lisp Editor"))
       (x:do-with (qset *command*)
-        ("horizontalScrollBarPolicy" "AlwaysOff")
-        ("verticalScrollBarPolicy" "AlwaysOff"))
+        ("horizontalScrollBarPolicy" Qt.ScrollBarAlwaysOff)
+        ("verticalScrollBarPolicy" Qt.ScrollBarAlwaysOff))
       (qfun *command* "setFixedHeight" (+ (second (font-metrics-size))
                                           (* 2 (qget *command* "frameWidth"))))
       (x:do-with (qfun *splitter* "setStretchFactor")
         (0 2)
         (1 1))
-      (set-color *output* +base+ "lavender")
-      (qfun *completer* "setWindowFlags" "Popup")
+      (set-color *output* QPalette.Base "lavender")
+      (qfun *completer* "setWindowFlags" Qt.Popup)
       (dolist (ed (list *editor* *command*))
         (qconnect ed  "cursorPositionChanged()" 'cursor-position-changed))
       (qconnect *completer* "itemDoubleClicked(QListWidgetItem*)" 'insert-completer-option-text)
@@ -191,7 +176,7 @@
       (qoverride command-highlighter "highlightBlock(QString)" (lambda (str) (highlight-block command-highlighter str)))
       (qoverride *command* "keyPressEvent(QKeyEvent*)" 'command-key-pressed)
       (show-status-message (format nil (tr "<b style='color:#4040E0'>Eval Region:</b> move to paren <b>(</b> or <b>)</b>, hit <b>~A</b>")
-                                   (qfun (qget *action-eval-region* "shortcut") "toString" +native-text+))
+                                   (qfun (qget *action-eval-region* "shortcut") "toString" QKeySequence.NativeText))
                            :html)
       (ini-highlight-rules)
       (local-client:ini 'data-from-server)
@@ -225,14 +210,14 @@
 (defun ini-highlight-rules ()
   (x:do-with (qfun *eql-keyword-format*)
     ("setForeground" (qnew "QBrush(QColor)" "#2020D0"))
-    ("setFontWeight" +bold+))
+    ("setFontWeight" QFont.Bold))
   (x:do-with (qfun *lisp-keyword-format*)
     ("setForeground" (qnew "QBrush(QColor)" "#D02020"))
-    ("setFontWeight" +bold+))
+    ("setFontWeight" QFont.Bold))
   (x:do-with (qfun *comment-format*)
     ("setForeground" (qnew "QBrush(QColor)" "#208080"))
     ("setFontItalic" t))
-  (setf *lisp-match-rule* (qnew "QRegExp(QString)" "[('][^ )]+")))
+  (setf *lisp-match-rule* (qnew "QRegExp(QString)" "[(']:*[^ )]+")))
 
 (defun read* (str &optional (start 0))
   (setf *try-read-error* nil)
@@ -263,7 +248,7 @@
            (p (position #\" text* :from-end t)))
       (when (and select
                  (not (x:ends-with "\"" text*)))
-        (qfun text-cursor "movePosition" +move-left+ +keep-anchor+ (1- (- (length text*) p))))
+        (qfun text-cursor "movePosition" QTextCursor.Left QTextCursor.KeepAnchor (1- (- (length text*) p))))
       (qfun text-cursor "insertText" text)
       (qfun *current-editor* "setTextCursor" text-cursor))))
 
@@ -326,7 +311,7 @@
       (dolist (name (mapcar (lambda (item)
                               (qfun item "text"))
                             (qfun *completer* "findItems"
-                                  (format nil "~A(" no-types) "MatchStartsWith | MatchCaseSensitive")))
+                                  (format nil "~A(" no-types) (logior Qt.MatchStartsWith Qt.MatchCaseSensitive))))
         (when (string/= fun-name name)
           (let ((num-args (arg-count name)))
             (when (= num-args* num-args)
@@ -353,7 +338,10 @@
         (let ((i (qfun *lisp-match-rule* "indexIn" text)))
           (x:while (>= i 0)
             (let* ((len (qfun *lisp-match-rule* "matchedLength"))
-                   (kw (subseq text (1+ i) (+ i len))))
+                   (kw* (subseq text (1+ i) (+ i len)))
+                   (kw (x:if-it (position #\: kw* :from-end t)
+                           (subseq kw* (1+ x:it))
+                           kw*)))
               (flet ((set-format (frm)
                        (qfun highlighter "setFormat(int,int,QTextCharFormat)" (1+ i) (1- len) frm)))
                 (cond ((find kw *eql-keywords* :test 'string=)
@@ -415,7 +403,7 @@
                       (x:when-it (position #\" line :end pos :from-end t)
                         (let* ((begin (subseq line (1+ x:it) pos))
                                (item (first (qfun *completer* "findItems"
-                                                  begin "MatchStartsWith | MatchCaseSensitive"))))
+                                                  begin (logior Qt.MatchStartsWith Qt.MatchCaseSensitive)))))
                           (if item
                               (set-current-item item begin)
                               (qfun *completer* "clearSelection")))))
@@ -489,18 +477,6 @@
                                                  (when (qid var)
                                                    (completer (call-candidates var :functions nil t :static) :qfun)
                                                    (return-from cursor-position-changed)))))))
-                                       ((x:when-it (qt-pos :qenum)
-                                          (let ((ending (ending x:it)))
-                                            (case (count #\" ending)
-                                              (1
-                                                 ;; show QENUM names completer
-                                                 (completer (enum-names) :qenum)
-                                                 (return-from cursor-position-changed))
-                                              (3
-                                                 ;; show QENUM keys completer?
-                                                 (x:when-it* (enum-keys (var ending))
-                                                   (completer x:it* :qenum)
-                                                   (return-from cursor-position-changed)))))))
                                        ((x:when-it (qt-pos :qconnect)
                                           (let ((ending (ending x:it)))
                                             (case (count #\" ending)
@@ -565,7 +541,7 @@
            (insert-text (add-quote (subseq x:it 1))))
         (:qfun
            (insert-text (add-quote (cut-optional-type-list x:it)) :select))
-        ((:qget :qset :qfun-static :qenum :qfind-child :qconnect-from :qconnect-to :qoverride)
+        ((:qget :qset :qfun-static :qfind-child :qconnect-from :qconnect-to :qoverride)
            (insert-text (add-quote x:it) :select)))))
   (close-completer))
 
@@ -573,15 +549,14 @@
   (when *current-completer*
     (flet ((leave ()
              (return-from completer-key-pressed t)))
-      (let ((key (qfun key-event "key"))
-            (forward t))
-        (case key
-          ((#.(key "Up") #.(key "Down") #.(key "PageUp") #.(key "PageDown") #.(key "Home") #.(key "End"))
+      (let ((forward t))
+        (case (qfun key-event "key")
+          ((#.Qt.Key_Up #.Qt.Key_Down #.Qt.Key_PageUp #.Qt.Key_PageDown #.Qt.Key_Home #.Qt.Key_End)
              (setf forward nil))
-          (#.(key "Return")
+          (#.Qt.Key_Return
              (insert-completer-option-text)
              (leave))
-          (#.(key "Escape")
+          (#.Qt.Key_Escape
              (close-completer)
              (leave)))
         (when forward
@@ -729,24 +704,6 @@
                    (walk-tree el (1+ depth)))))))
     (walk-tree code 1)))
 
-(let* ((enums (qmeta-enums))
-       (names (let (names*)
-                (dolist (enums* enums)
-                  (let ((scope (first enums*)))
-                    (dolist (enum (rest enums*))
-                      (push (format nil "~A::~A" scope (first enum)) names*))))
-                (sort names* 'string<))))
-  (defun enum-names ()
-    names)
-  (defun enum-keys (name)
-    (flet ((find* (str strings)
-             (find str strings :key 'first :test 'string=)))
-      (let* ((p (position +package-char-dummy+ name))
-             (scope (subseq name 0 p))
-             (name* (subseq name (+ 2 p))))
-        (rest (find* name*
-                     (rest (find* scope enums))))))))
-
 ;;; auto indent
 
 (defun auto-indent-spaces (kw)
@@ -763,7 +720,7 @@
       (let ((pos (position #\Space line :test 'char/=)))
         (when pos
           (setf spaces (if (char= #\( (char line pos))
-                           (if (find (read* (subseq line (1+ pos))) '(prog progn prog1 prog2))
+                           (if (find (read* (subseq line (1+ pos))) '(loop prog progn prog1 prog2))
                                (+ pos 2)
                                (1+ (or (position #\Space line :start pos)
                                        pos)))
@@ -787,7 +744,7 @@
 
 (defun editor-key-pressed (key-event)
   (case (qfun key-event "key")
-    ((#.(key "Return") #.(key "Enter"))
+    ((#.Qt.Key_Return #.Qt.Key_Enter)
        (qlet ((cursor (qfun *editor* "textCursor"))
               (curr (qfun cursor "block")))
          (let ((spaces (indentation (qfun curr "text"))))
@@ -795,10 +752,10 @@
              (qfun cursor "insertText" (format nil "~%~A" (make-string spaces :initial-element #\Space)))
              (qfun *editor* "ensureCursorVisible")
              t))))
-    (#.(key "Tab")
+    (#.Qt.Key_Tab
        ;; auto indent paragraph: current line -> next empty line
        (qlet ((cursor* (qfun *editor* "textCursor")))
-         (qfun cursor* "movePosition" +start-of-line+ +move-anchor+)
+         (qfun cursor* "movePosition" QTextCursor.StartOfLine QTextCursor.MoveAnchor)
          (qfun *editor* "setTextCursor" cursor*)
          (qlet ((orig* (qfun *editor* "textCursor")))
            (loop
@@ -806,7 +763,7 @@
                (qlet ((cursor (qfun *editor* "textCursor"))
                       (orig   (qfun *editor* "textCursor")))
                  (unless (zerop (qfun cursor "blockNumber"))
-                   (qfun cursor "movePosition" +previous-block+ +move-anchor+)
+                   (qfun cursor "movePosition" QTextCursor.PreviousBlock QTextCursor.MoveAnchor)
                    (qfun *editor* "setTextCursor" cursor)
                    (qlet ((curr (qfun cursor "block")))
                      (let ((line (no-string-parens (qfun curr "text"))))
@@ -826,20 +783,19 @@
                    (let* ((line (qfun curr "text"))
                           (pos (position #\Space line :test 'char/=)))
                      (when (zerop (length (string-trim " " line)))
-                       (return))                                                             ; exit 1
+                       (return))                                                                 ; exit 1
                      (when (not (zerop pos))
                        (x:do-with (qfun orig "movePosition")
-                         (+start-of-line+ +move-anchor+)
-                         (+next-character+ +keep-anchor+ pos)))))
+                         (QTextCursor.StartOfLine QTextCursor.MoveAnchor)
+                         (QTextCursor.NextCharacter QTextCursor.KeepAnchor pos)))))
                  (unless (zerop spaces)
                    (qfun orig "insertText" (make-string spaces :initial-element #\Space)))))
-             (unless (qfun cursor* "movePosition" +next-block+ +move-anchor+)
-               (return))                                                                     ; exit 2
+             (unless (qfun cursor* "movePosition" QTextCursor.NextBlock QTextCursor.MoveAnchor)
+               (return))                                                                         ; exit 2
              (qfun *editor* "setTextCursor" cursor*))
            (x:do-with (qfun *editor*)
              ("setTextCursor" orig*)
              "ensureCursorVisible")))
-       (setf *extra-selections* nil)
        t)))
 
 ;;; paren highlighting
@@ -943,24 +899,24 @@
                (cursor2 (qfun *current-editor* "textCursor")))
           (qfun format "setBackground" (if *error-region* color-region color))
           (qfun cursor1 "movePosition" (if (eql :left type)
-                                           +next-character+
-                                           +previous-character+)
-                +keep-anchor+)
+                                           QTextCursor.NextCharacter
+                                           QTextCursor.PreviousCharacter)
+                QTextCursor.KeepAnchor)
           (if (zerop move-lines)
               (qfun cursor2 "movePosition"
-                    +start-of-line+
-                    (if *error-region* +keep-anchor+ +move-anchor+))
+                    QTextCursor.StartOfLine
+                    (if *error-region* QTextCursor.KeepAnchor QTextCursor.MoveAnchor))
               (qfun cursor2 "movePosition"
-                    (if (eql :left type) +next-block+ +previous-block+)
-                    (if *error-region* +keep-anchor+ +move-anchor+)
+                    (if (eql :left type) QTextCursor.NextBlock QTextCursor.PreviousBlock)
+                    (if *error-region* QTextCursor.KeepAnchor QTextCursor.MoveAnchor)
                     move-lines))
           (unless (zerop move-characters)
             (qfun cursor2 "movePosition"
-                  +next-character+
-                  (if *error-region* +keep-anchor+ +move-anchor+)
+                  QTextCursor.NextCharacter
+                  (if *error-region* QTextCursor.KeepAnchor QTextCursor.MoveAnchor)
                   move-characters))
           (unless *error-region*
-            (qfun cursor2 "movePosition" +next-character+ +keep-anchor+))
+            (qfun cursor2 "movePosition" QTextCursor.NextCharacter QTextCursor.KeepAnchor))
           (qfun *current-editor* "setExtraSelections" (list (list cursor1 format)
                                                             (list cursor2 format)))
           (let ((p1 (qfun cursor1 "position"))
@@ -992,8 +948,21 @@
 (defun run-on-server (str)
   (qprocess-events)
   (or (local-client:request str)
-      (progn
-        (qmsg (tr "Did you forget to start the <code><b>local-server</b></code>?"))
+      (when (= QMessageBox.Yes
+               (qlet ((msg "QMessageBox"))
+                 (x:do-with (qfun msg)
+                   ("setText" (tr "The <code><b style='color: blue'>local-server</b></code> seems not running."))
+                   ("setInformativeText" (tr "Start it now?"))
+                   ("setStandardButtons" (logior QMessageBox.Yes QMessageBox.No))
+                   ("setDefaultButton(QMessageBox::StandardButton)" QMessageBox.No)
+                   "exec")))
+        (qfun "QProcess" "startDetached" "eql local-server")
+        ;; wait max. 10 seconds
+        (dotimes (i 100)
+          (qprocess-events)
+          (when (local-client:request str)
+            (return-from run-on-server t))
+          (sleep 0.1))
         nil)))
 
 (defun save-and-run ()
@@ -1024,7 +993,7 @@
                (unless (zerop (qfun cur "columnNumber"))
                  (qfun *output* "insertPlainText" nl))))))
        (x:do-with (qfun *output*)
-         ("moveCursor" +end+)
+         ("moveCursor" QTextCursor.End)
          ("setTextColor" (case type
                            (:output "sienna")
                            (:values "blue")
@@ -1073,18 +1042,17 @@
                  :if-exists :append :if-does-not-exist :create))
       down)
   (defun command-key-pressed (ev)
-    (let ((key (qfun ev "key")))
-      (x:when-it (cond ((= (key "Up") key)
-                        (x:when-it (pop up)
-                          (push x:it down)))
-                       ((= (key "Down") key)
-                        (x:when-it (pop down)
-                          (push x:it up)))
-                       ((or (= (key "Return") key)
-                            (= (key "Enter") key))
-                        (command)
-                        nil))
-        (qset *command* "plainText" (first x:it))))
+    (x:when-it (case (qfun ev "key")
+                 (#.Qt.Key_Up
+                    (x:when-it (pop up)
+                      (push x:it down)))
+                 (#.Qt.Key_Down
+                    (x:when-it (pop down)
+                      (push x:it up)))
+                 ((#.Qt.Key_Return #.Qt.Key_Enter)
+                    (command)
+                    nil))
+      (qset *command* "plainText" (first x:it)))
     nil) ; overridden
   (defun history-add (cmd)
     (when (or (not up)
@@ -1126,6 +1094,8 @@
 
 (defun start ()
   (ini)
-  (qset *editor* "plainText" (read-file "my.lisp")))
+  (file-open (x:if-it (third (qfun "QCoreApplication" "arguments"))
+                 x:it
+                 "my.lisp")))
 
 (start)

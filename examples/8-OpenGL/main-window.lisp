@@ -9,21 +9,19 @@
 
 (in-package :main-window)
 
-(defconstant +ignored+ (logior 1 4 8) "policy")
-
 (defvar *me*                (qnew "QMainWindow"))
 (defvar *pixmap-label*      (qnew "QLabel"))
 (defvar *pixmap-label-area* (qnew "QScrollArea"
-                                  "sizePolicy" +ignored+
+                                  "sizePolicy" QSizePolicy.Ignored
                                   "minimumSize" (list 50 50)))
 
 (defun ini ()
   (ini-gl-widget)
   (let ((widget-area    (qnew "QScrollArea"
                               "widgetResizable" t
-                              "horizontalScrollBarPolicy" "ScrollBarAlwaysOff"
-                              "verticalScrollBarPolicy"   "ScrollBarAlwaysOff"
-                              "sizePolicy" +ignored+
+                              "horizontalScrollBarPolicy" Qt.ScrollBarAlwaysOff
+                              "verticalScrollBarPolicy"   Qt.ScrollBarAlwaysOff
+                              "sizePolicy" QSizePolicy.Ignored
                               "minimumSize" (list 50 50)))
         (central-widget (qnew "QWidget"))
         (central-layout (qnew "QGridLayout"))
@@ -98,13 +96,13 @@
         ("addAction(QAction*)" (action :about-qt))))))
 
 (defun create-slider (changed setter)
-  (let ((slider (qnew "QSlider(Qt::Orientation)" "Horizontal"
+  (let ((slider (qnew "QSlider(Qt::Orientation)" Qt.Horizontal
                       "minimum"      0
                       "maximum"      (* 360 16)
                       "singleStep"   (* 1   16)
                       "pageStep"     (* 15  16)
                       "tickInterval" (* 15  16)
-                      "tickPosition" "TicksRight")))
+                      "tickPosition" QSlider.TicksRight)))
     (qconnect slider "valueChanged(int)" setter)
     (setf (symbol-value changed) (lambda (x) (qset slider "value" x)))
     slider))
@@ -122,7 +120,7 @@
   (let ((text (qfun "QInputDialog" "getText" *me*
                     (tr "Grabber")
                     (tr "Enter pixmap size:")
-                    "Normal"
+                    QLineEdit.Normal
                     (format nil "~{~D~^ x ~}" (qget *gl-widget* "size"))
                     nil))) ; ok
     (if (qok)

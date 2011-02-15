@@ -8,7 +8,7 @@
 (defun start ()
   (qset *window* "windowTitle" "My Personal Analyst")
   (qset *label* "text" "Please enter your <b>Top Secret</b> (you will feel better)")
-  (qset *line-edit* "echoMode" "Password")
+  (qset *line-edit* "echoMode" QLineEdit.Password)
   (dolist (w (list *label* *line-edit*))
     (qfun *layout* "addWidget" w))
   (qfun *window* "setLayout" *layout*)
