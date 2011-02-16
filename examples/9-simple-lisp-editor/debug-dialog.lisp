@@ -8,7 +8,7 @@
 (in-package :debug-dialog)
 
 (defun command (messages font)
-  (qlet ((dlg "QDialog(QWidget*,Qt::WindowFlags)" nil Qt.WindowStaysOnTopHint
+  (qlet ((dlg "QDialog(QWidget*,Qt::WindowFlags)" nil |Qt.WindowStaysOnTopHint|
               "windowTitle" (tr "Debug Dialog")
               "size" '(600 400))
          (msg "QTextEdit")
@@ -22,17 +22,17 @@
       ("tabStopWidth" (qlet ((fm "QFontMetrics(QFont)" font))
                         (* 8 (qfun fm "width(QChar)" #\Space)))))
     (x:do-with (qfun btn "addButton")
-      QDialogButtonBox.Ok
-      QDialogButtonBox.Cancel)
+      |QDialogButtonBox.Ok|
+      |QDialogButtonBox.Cancel|)
     (x:do-with (qfun lay "addWidget")
       msg lb cmd btn)
-    (set-color msg QPalette.Base "lightyellow")
+    (set-color msg |QPalette.Base| "lightyellow")
     (qconnect btn "accepted()" dlg "accept()")
     (qconnect btn "rejected()" dlg "reject()")
     (qfun cmd "setFocus")
     (qsingle-shot 0 (lambda () (x:do-with (qfun dlg) "activateWindow" "raise")))
     (add-messages msg messages)
-    (if (= QDialog.Accepted (qfun dlg "exec"))
+    (if (= |QDialog.Accepted| (qfun dlg "exec"))
         (qget cmd "text")
         ":q")))
 

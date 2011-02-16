@@ -13,6 +13,6 @@
                                  (string-capitalize (format nil "~r" 1))
                                  (loop for i from 2 to 7 collect i)
                                  *alarm*))
-              "alignment" Qt.AlignCenter
+              "alignment" |Qt.AlignCenter|
               "margin" 10)
         "show"))

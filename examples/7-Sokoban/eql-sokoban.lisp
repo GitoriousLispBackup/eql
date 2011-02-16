@@ -30,9 +30,9 @@
 (defvar *view*  (qnew "QGraphicsView"
                       "windowTitle" "Sokoban"
                       "size" (list 650 550)))
-(defvar *level* (qnew "QSlider(Qt::Orientation)" Qt.Vertical
+(defvar *level* (qnew "QSlider(Qt::Orientation)" |Qt.Vertical|
                       "tickInterval" 5
-                      "tickPosition" QSlider.TicksRight
+                      "tickPosition" |QSlider.TicksRight|
                       "maximum" (1- (length *my-mazes*))))
 
 (defun assoc* (item alist)
@@ -47,9 +47,9 @@
 (defun ini ()
   (x:do-with (qfun *view*)
     ("setScene" *scene*)
-    ("setRenderHint" QPainter.Antialiasing)
-    ("setCacheMode" QGraphicsView.CacheBackground)
-    ("setViewportUpdateMode" QGraphicsView.BoundingRectViewportUpdate))
+    ("setRenderHint" |QPainter.Antialiasing|)
+    ("setCacheMode" |QGraphicsView.CacheBackground|)
+    ("setViewportUpdateMode" |QGraphicsView.BoundingRectViewportUpdate|))
   (let ((zoom-in  (qnew "QToolButton"
                         "text" "Zoom In"))
         (zoom-out (qnew "QToolButton"
@@ -73,7 +73,7 @@
     (qconnect *level* "valueChanged(int)" (lambda (val) (set-maze) (draw)))
     (qconnect zoom-in  "clicked()" (lambda () (zoom :in)))
     (qconnect zoom-out "clicked()" (lambda () (zoom :out)))
-    (qadd-event-filter nil QEvent.KeyPress 'key-pressed)
+    (qadd-event-filter nil |QEvent.KeyPress| 'key-pressed)
     (x:do-with (qfun main)
       "show" "raise")))
 
@@ -136,19 +136,19 @@
   (flet ((change-level (x)
            (qset *level* "value" (+ x (qget *level* "value")))))
     (case (qfun* event "QKeyEvent" "key")
-      (#.Qt.Key_Up
+      (#.|Qt.Key_Up|
          (move :north *maze*))
-      (#.Qt.Key_Down
+      (#.|Qt.Key_Down|
          (move :south *maze*))
-      (#.Qt.Key_Left
+      (#.|Qt.Key_Left|
          (move :west *maze*))
-      (#.Qt.Key_Right
+      (#.|Qt.Key_Right|
          (move :east *maze*))
-      (#.Qt.Key_N
+      (#.|Qt.Key_N|
          (change-level 1))
-      (#.Qt.Key_P
+      (#.|Qt.Key_P|
          (change-level -1))
-      (#.Qt.Key_R
+      (#.|Qt.Key_R|
          (let ((level (qget *level* "value")))
            (setf (nth level *my-mazes*)
                  (copy-maze (nth level *mazes*)))

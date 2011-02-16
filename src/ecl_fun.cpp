@@ -1431,7 +1431,7 @@ cl_object qset_property(cl_object l_obj, cl_object l_name, cl_object l_val) {
     /// args: (object name value)
     /// alias: qset
     /// Sets a Qt property. Enumerator values have to be passed as <code>int</code> values.
-    ///     (qset label "alignment" Qt.AlignCenter)
+    ///     (qset label "alignment" |Qt.AlignCenter|)
     ecl_process_env()->nvalues = 1;
     QtObject o = toQtObject(l_obj);
     if(ECL_STRINGP(l_name)) {

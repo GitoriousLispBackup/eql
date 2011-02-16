@@ -121,9 +121,9 @@
           *lisp-keyword-format* (qnew "QTextCharFormat")
           *comment-format*      (qnew "QTextCharFormat")
           *completer*           (qnew "QListWidget"
-                                      "resizeMode" QListView.Adjust
-                                      "horizontalScrollBarPolicy" Qt.ScrollBarAlwaysOff
-                                      "verticalScrollBarPolicy" Qt.ScrollBarAlwaysOff))
+                                      "resizeMode" |QListView.Adjust|
+                                      "horizontalScrollBarPolicy" |Qt.ScrollBarAlwaysOff|
+                                      "verticalScrollBarPolicy" |Qt.ScrollBarAlwaysOff|))
     (let ((editor-highlighter  (qnew "QSyntaxHighlighter(QTextDocument*)" (qfun *editor* "document")))
           (command-highlighter (qnew "QSyntaxHighlighter(QTextDocument*)" (qfun *command* "document"))))
       (qset *action-open*         "shortcut" (keys "Ctrl+O"))
@@ -138,23 +138,23 @@
         ("tabStopWidth" (* 8 (first (font-metrics-size)))))
       (x:do-with (qset *completer*)
         ("font" eql::*code-font*)
-        ("frameShape" QFrame.Box)
-        ("frameShadow" QFrame.Plain)
+        ("frameShape" |QFrame.Box|)
+        ("frameShadow" |QFrame.Plain|)
         ("lineWidth" 1))
       (x:do-with (qset *main*)
         ("pos" (list 40 40))
         ("size" (list 800 500))
         ("windowTitle" "Simple Lisp Editor"))
       (x:do-with (qset *command*)
-        ("horizontalScrollBarPolicy" Qt.ScrollBarAlwaysOff)
-        ("verticalScrollBarPolicy" Qt.ScrollBarAlwaysOff))
+        ("horizontalScrollBarPolicy" |Qt.ScrollBarAlwaysOff|)
+        ("verticalScrollBarPolicy" |Qt.ScrollBarAlwaysOff|))
       (qfun *command* "setFixedHeight" (+ (second (font-metrics-size))
                                           (* 2 (qget *command* "frameWidth"))))
       (x:do-with (qfun *splitter* "setStretchFactor")
         (0 2)
         (1 1))
-      (set-color *output* QPalette.Base "lavender")
-      (qfun *completer* "setWindowFlags" Qt.Popup)
+      (set-color *output* |QPalette.Base| "lavender")
+      (qfun *completer* "setWindowFlags" |Qt.Popup|)
       (dolist (ed (list *editor* *command*))
         (qconnect ed  "cursorPositionChanged()" 'cursor-position-changed))
       (qconnect *completer* "itemDoubleClicked(QListWidgetItem*)" 'insert-completer-option-text)
@@ -176,7 +176,7 @@
       (qoverride command-highlighter "highlightBlock(QString)" (lambda (str) (highlight-block command-highlighter str)))
       (qoverride *command* "keyPressEvent(QKeyEvent*)" 'command-key-pressed)
       (show-status-message (format nil (tr "<b style='color:#4040E0'>Eval Region:</b> move to paren <b>(</b> or <b>)</b>, hit <b>~A</b>")
-                                   (qfun (qget *action-eval-region* "shortcut") "toString" QKeySequence.NativeText))
+                                   (qfun (qget *action-eval-region* "shortcut") "toString" |QKeySequence.NativeText|))
                            :html)
       (ini-highlight-rules)
       (local-client:ini 'data-from-server)
@@ -210,10 +210,10 @@
 (defun ini-highlight-rules ()
   (x:do-with (qfun *eql-keyword-format*)
     ("setForeground" (qnew "QBrush(QColor)" "#2020D0"))
-    ("setFontWeight" QFont.Bold))
+    ("setFontWeight" |QFont.Bold|))
   (x:do-with (qfun *lisp-keyword-format*)
     ("setForeground" (qnew "QBrush(QColor)" "#D02020"))
-    ("setFontWeight" QFont.Bold))
+    ("setFontWeight" |QFont.Bold|))
   (x:do-with (qfun *comment-format*)
     ("setForeground" (qnew "QBrush(QColor)" "#208080"))
     ("setFontItalic" t))
@@ -248,7 +248,7 @@
            (p (position #\" text* :from-end t)))
       (when (and select
                  (not (x:ends-with "\"" text*)))
-        (qfun text-cursor "movePosition" QTextCursor.Left QTextCursor.KeepAnchor (1- (- (length text*) p))))
+        (qfun text-cursor "movePosition" |QTextCursor.Left| |QTextCursor.KeepAnchor| (1- (- (length text*) p))))
       (qfun text-cursor "insertText" text)
       (qfun *current-editor* "setTextCursor" text-cursor))))
 
@@ -311,7 +311,7 @@
       (dolist (name (mapcar (lambda (item)
                               (qfun item "text"))
                             (qfun *completer* "findItems"
-                                  (format nil "~A(" no-types) (logior Qt.MatchStartsWith Qt.MatchCaseSensitive))))
+                                  (format nil "~A(" no-types) (logior |Qt.MatchStartsWith| |Qt.MatchCaseSensitive|))))
         (when (string/= fun-name name)
           (let ((num-args (arg-count name)))
             (when (= num-args* num-args)
@@ -403,7 +403,7 @@
                       (x:when-it (position #\" line :end pos :from-end t)
                         (let* ((begin (subseq line (1+ x:it) pos))
                                (item (first (qfun *completer* "findItems"
-                                                  begin (logior Qt.MatchStartsWith Qt.MatchCaseSensitive)))))
+                                                  begin (logior |Qt.MatchStartsWith| |Qt.MatchCaseSensitive|)))))
                           (if item
                               (set-current-item item begin)
                               (qfun *completer* "clearSelection")))))
@@ -551,12 +551,12 @@
              (return-from completer-key-pressed t)))
       (let ((forward t))
         (case (qfun key-event "key")
-          ((#.Qt.Key_Up #.Qt.Key_Down #.Qt.Key_PageUp #.Qt.Key_PageDown #.Qt.Key_Home #.Qt.Key_End)
+          ((#.|Qt.Key_Up| #.|Qt.Key_Down| #.|Qt.Key_PageUp| #.|Qt.Key_PageDown| #.|Qt.Key_Home| #.|Qt.Key_End|)
              (setf forward nil))
-          (#.Qt.Key_Return
+          (#.|Qt.Key_Return|
              (insert-completer-option-text)
              (leave))
-          (#.Qt.Key_Escape
+          (#.|Qt.Key_Escape|
              (close-completer)
              (leave)))
         (when forward
@@ -720,7 +720,7 @@
       (let ((pos (position #\Space line :test 'char/=)))
         (when pos
           (setf spaces (if (char= #\( (char line pos))
-                           (if (find (read* (subseq line (1+ pos))) '(loop prog progn prog1 prog2))
+                           (if (find (read* (subseq line (1+ pos))) '(loop prog progn prog1 prog2 when when-it when-it* while))
                                (+ pos 2)
                                (1+ (or (position #\Space line :start pos)
                                        pos)))
@@ -744,7 +744,7 @@
 
 (defun editor-key-pressed (key-event)
   (case (qfun key-event "key")
-    ((#.Qt.Key_Return #.Qt.Key_Enter)
+    ((#.|Qt.Key_Return| #.|Qt.Key_Enter|)
        (qlet ((cursor (qfun *editor* "textCursor"))
               (curr (qfun cursor "block")))
          (let ((spaces (indentation (qfun curr "text"))))
@@ -752,10 +752,10 @@
              (qfun cursor "insertText" (format nil "~%~A" (make-string spaces :initial-element #\Space)))
              (qfun *editor* "ensureCursorVisible")
              t))))
-    (#.Qt.Key_Tab
+    (#.|Qt.Key_Tab|
        ;; auto indent paragraph: current line -> next empty line
        (qlet ((cursor* (qfun *editor* "textCursor")))
-         (qfun cursor* "movePosition" QTextCursor.StartOfLine QTextCursor.MoveAnchor)
+         (qfun cursor* "movePosition" |QTextCursor.StartOfLine| |QTextCursor.MoveAnchor|)
          (qfun *editor* "setTextCursor" cursor*)
          (qlet ((orig* (qfun *editor* "textCursor")))
            (loop
@@ -763,7 +763,7 @@
                (qlet ((cursor (qfun *editor* "textCursor"))
                       (orig   (qfun *editor* "textCursor")))
                  (unless (zerop (qfun cursor "blockNumber"))
-                   (qfun cursor "movePosition" QTextCursor.PreviousBlock QTextCursor.MoveAnchor)
+                   (qfun cursor "movePosition" |QTextCursor.PreviousBlock| |QTextCursor.MoveAnchor|)
                    (qfun *editor* "setTextCursor" cursor)
                    (qlet ((curr (qfun cursor "block")))
                      (let ((line (no-string-parens (qfun curr "text"))))
@@ -783,15 +783,15 @@
                    (let* ((line (qfun curr "text"))
                           (pos (position #\Space line :test 'char/=)))
                      (when (zerop (length (string-trim " " line)))
-                       (return))                                                                 ; exit 1
+                       (return))                                                                    ; exit 1
                      (when (not (zerop pos))
                        (x:do-with (qfun orig "movePosition")
-                         (QTextCursor.StartOfLine QTextCursor.MoveAnchor)
-                         (QTextCursor.NextCharacter QTextCursor.KeepAnchor pos)))))
+                         (|QTextCursor.StartOfLine| |QTextCursor.MoveAnchor|)
+                         (|QTextCursor.NextCharacter| |QTextCursor.KeepAnchor| pos)))))
                  (unless (zerop spaces)
                    (qfun orig "insertText" (make-string spaces :initial-element #\Space)))))
-             (unless (qfun cursor* "movePosition" QTextCursor.NextBlock QTextCursor.MoveAnchor)
-               (return))                                                                         ; exit 2
+             (unless (qfun cursor* "movePosition" |QTextCursor.NextBlock| |QTextCursor.MoveAnchor|)
+               (return))                                                                            ; exit 2
              (qfun *editor* "setTextCursor" cursor*))
            (x:do-with (qfun *editor*)
              ("setTextCursor" orig*)
@@ -899,24 +899,24 @@
                (cursor2 (qfun *current-editor* "textCursor")))
           (qfun format "setBackground" (if *error-region* color-region color))
           (qfun cursor1 "movePosition" (if (eql :left type)
-                                           QTextCursor.NextCharacter
-                                           QTextCursor.PreviousCharacter)
-                QTextCursor.KeepAnchor)
+                                           |QTextCursor.NextCharacter|
+                                           |QTextCursor.PreviousCharacter|)
+                |QTextCursor.KeepAnchor|)
           (if (zerop move-lines)
               (qfun cursor2 "movePosition"
-                    QTextCursor.StartOfLine
-                    (if *error-region* QTextCursor.KeepAnchor QTextCursor.MoveAnchor))
+                    |QTextCursor.StartOfLine|
+                    (if *error-region* |QTextCursor.KeepAnchor| |QTextCursor.MoveAnchor|))
               (qfun cursor2 "movePosition"
-                    (if (eql :left type) QTextCursor.NextBlock QTextCursor.PreviousBlock)
-                    (if *error-region* QTextCursor.KeepAnchor QTextCursor.MoveAnchor)
+                    (if (eql :left type) |QTextCursor.NextBlock| |QTextCursor.PreviousBlock|)
+                    (if *error-region* |QTextCursor.KeepAnchor| |QTextCursor.MoveAnchor|)
                     move-lines))
           (unless (zerop move-characters)
             (qfun cursor2 "movePosition"
-                  QTextCursor.NextCharacter
-                  (if *error-region* QTextCursor.KeepAnchor QTextCursor.MoveAnchor)
+                  |QTextCursor.NextCharacter|
+                  (if *error-region* |QTextCursor.KeepAnchor| |QTextCursor.MoveAnchor|)
                   move-characters))
           (unless *error-region*
-            (qfun cursor2 "movePosition" QTextCursor.NextCharacter QTextCursor.KeepAnchor))
+            (qfun cursor2 "movePosition" |QTextCursor.NextCharacter| |QTextCursor.KeepAnchor|))
           (qfun *current-editor* "setExtraSelections" (list (list cursor1 format)
                                                             (list cursor2 format)))
           (let ((p1 (qfun cursor1 "position"))
@@ -936,7 +936,7 @@
            (end (nth-value 1 (read* text (cdr file-pos))))
            (*keep-extra-selections* t))
       (qlet ((text-cursor (qfun *editor* "textCursor")))
-        (qfun *editor* "moveCursor" +start+)
+        (qfun *editor* "moveCursor" |QTextCursor.Start|)
         (setf *error-region* t)
         (qfun text-cursor "setPosition" end)
         (x:do-with (qfun *editor*)
@@ -948,13 +948,12 @@
 (defun run-on-server (str)
   (qprocess-events)
   (or (local-client:request str)
-      (when (= QMessageBox.Yes
+      (when (= |QMessageBox.Yes|
                (qlet ((msg "QMessageBox"))
                  (x:do-with (qfun msg)
-                   ("setText" (tr "The <code><b style='color: blue'>local-server</b></code> seems not running."))
-                   ("setInformativeText" (tr "Start it now?"))
-                   ("setStandardButtons" (logior QMessageBox.Yes QMessageBox.No))
-                   ("setDefaultButton(QMessageBox::StandardButton)" QMessageBox.No)
+                   ("setText" (tr "<p>The <code><b style='color: blue'>local-server</b></code> seems not running.</p><p>Start it now?</p>"))
+                   ("setStandardButtons" (logior |QMessageBox.Yes| |QMessageBox.No|))
+                   ("setDefaultButton(QMessageBox::StandardButton)" |QMessageBox.No|)
                    "exec")))
         (qfun "QProcess" "startDetached" "eql local-server")
         ;; wait max. 10 seconds
@@ -993,7 +992,7 @@
                (unless (zerop (qfun cur "columnNumber"))
                  (qfun *output* "insertPlainText" nl))))))
        (x:do-with (qfun *output*)
-         ("moveCursor" QTextCursor.End)
+         ("moveCursor" |QTextCursor.End|)
          ("setTextColor" (case type
                            (:output "sienna")
                            (:values "blue")
@@ -1043,13 +1042,13 @@
       down)
   (defun command-key-pressed (ev)
     (x:when-it (case (qfun ev "key")
-                 (#.Qt.Key_Up
+                 (#.|Qt.Key_Up|
                     (x:when-it (pop up)
                       (push x:it down)))
-                 (#.Qt.Key_Down
+                 (#.|Qt.Key_Down|
                     (x:when-it (pop down)
                       (push x:it up)))
-                 ((#.Qt.Key_Return #.Qt.Key_Enter)
+                 ((#.|Qt.Key_Return| #.|Qt.Key_Enter|)
                     (command)
                     nil))
       (qset *command* "plainText" (first x:it)))
@@ -1069,7 +1068,7 @@
 
 (defun find-text ()
   (unless (qfun *editor* "find" (qget *find* "text"))
-    (qfun *editor* "moveCursor" +start+)))
+    (qfun *editor* "moveCursor" |QTextCursor.Start|)))
 
 (defun replace-text ()
   (qlet ((cursor (qfun *editor* "textCursor")))

@@ -33,7 +33,6 @@
           with-output-to-string
           ;; package :x
           do-string
-          (if-it . 4)
-          (if-it* . 4)
           when-it
+          when-it*
           while))

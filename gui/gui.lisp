@@ -114,10 +114,10 @@
       down)
   (defun history-move (ev)
     (x:when-it (case (qfun ev "key")
-                 (#.Qt.Key_Up
+                 (#.|Qt.Key_Up|
                     (x:when-it (pop up)
                       (push x:it down)))
-                 (#.Qt.Key_Down
+                 (#.|Qt.Key_Down|
                     (x:when-it (pop down)
                       (push x:it up))))
       (qset *edit* "text" (first x:it)))
@@ -186,7 +186,7 @@
                        (item (qnew "QTreeWidgetItem"))
                        (sp1 (position #\Space curr*))
                        (sp2 (when sp1 (position #\Space curr* :start (1+ sp1)))))
-                  (qfun item "setTextAlignment" 0 (logior Qt.AlignRight Qt.AlignVCenter))
+                  (qfun item "setTextAlignment" 0 (logior |Qt.AlignRight| |Qt.AlignVCenter|))
                   (when sp1
                       (qfun item "setText" 0 (subseq curr 0 sp1)))
                   (qfun item "setText" 1 (if sp1 (subseq curr (1+ sp1) sp2) curr))
@@ -207,7 +207,7 @@
           (let ((item  (qnew "QTreeWidgetItem"))
                 (sp (position #\Space curr :start (if (x:starts-with "const" curr) 6 0))))
             (x:do-with (qfun item)
-              ("setTextAlignment" 0 (logior Qt.AlignRight Qt.AlignVCenter))
+              ("setTextAlignment" 0 (logior |Qt.AlignRight| |Qt.AlignVCenter|))
               ("setText" 0 (subseq curr 0 sp))
               ("setText" 1 (subseq curr (1+ sp))))
             (qfun override "addTopLevelItem" item)))

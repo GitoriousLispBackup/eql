@@ -8,7 +8,7 @@
 
 (in-package :clock)
 
-(defvar *clock* (qnew "QWidget(QWidget*,Qt::WindowFlags)" nil Qt.WindowStaysOnTopHint
+(defvar *clock* (qnew "QWidget(QWidget*,Qt::WindowFlags)" nil |Qt.WindowStaysOnTopHint|
                       "size" (list 170 170)
                       "pos" (list 50 50)))
 
@@ -23,7 +23,7 @@
 (defun pen (width &optional (color "black"))
   (let ((pen (qnew "QPen")))
     (x:do-with (qfun pen)
-      ("setCapStyle" Qt.RoundCap)
+      ("setCapStyle" |Qt.RoundCap|)
       ("setWidth" width)
       ("setColor" color))
     pen))
@@ -31,7 +31,7 @@
 (defun brush (color)
   (let ((brush (qnew "QBrush")))
     (x:do-with (qfun brush)
-      ("setStyle" Qt.SolidPattern)
+      ("setStyle" |Qt.SolidPattern|)
       ("setColor(QColor)" color))
     brush))
 
@@ -55,7 +55,7 @@
           (! "translate(QPointF)" (mapcar (lambda (x) (/ x 2)) size))
           (! "scale" scale scale))
         (! "rotate" -90)
-        (! "setRenderHint" QPainter.Antialiasing)
+        (! "setRenderHint" |QPainter.Antialiasing|)
         (! "setPen(QPen)" pen-clock)
         (! "setBrush(QBrush)"  brush-clock)
         (! "drawEllipse(QRect)" '(-75 -75 150 150))

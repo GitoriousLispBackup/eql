@@ -23,7 +23,7 @@
   to survive its parents...).
 <li>Additionally, you have the <code>qlet</code> macro, which provides local Qt objects (deleted when
   leaving the <code>qlet</code> body).
-<li>So, you always should use <code>qlet</code> for both temporary Qt widgets
+<li>So, you always should use <code>qlet</code> for both temporary Qt objects
   (e.g. dialogs) and for return values like <code>QTextCursor</code>, neither
   being a pointer nor a primitive (see "Primitives" in the EQL UI dialog
   mentioned above).
@@ -34,10 +34,7 @@
 <li>Please see the file <code>src/lisp/enums.lisp</code>
       for all enumeration constants currently defined (some are still
       missing).
-<li>SLIME users: in order to have the enum constants available
-      in code completion, you need to type them lower case, not
-      camelCase.
-<li>Example: <code>Qt.AlignCenter</code> (this should look
+<li>Example: <code>|Qt.AlignCenter|</code> (this should look
       familiar, and is the same representation as choosen in other Qt
       bindings).</ul>
 </p>

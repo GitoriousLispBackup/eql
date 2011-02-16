@@ -4,14 +4,15 @@
 
 (defun run ()
   (with-open-file (s "auto-enums" :direction :output :if-exists :supersede)
-    (dolist (qclasses (qmeta-enums))
-      (let ((qclass (first qclasses)))
-        (dolist (enums (rest qclasses))
-          (let ((scope (first enums)))
+    (dolist (scopes (qmeta-enums))
+      (let ((scope (first scopes)))
+        (dolist (enums (rest scopes))
+          (let ((name (first enums)))
             (dolist (enum (rest enums))
-              (format s "(defenum ~A ~A)~%"
-                      (intern (format nil "~A.~A" qclass enum))
-                      (qenum (format nil "~A::~A" qclass scope) enum)))))))))
+              (format s "(defenum |~A.~A| ~D)~%"
+                      scope
+                      enum
+                      (qenum (format nil "~A::~A" scope name) enum)))))))))
 
 (progn
   (run)
