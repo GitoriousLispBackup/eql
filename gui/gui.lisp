@@ -12,10 +12,8 @@
 
 (in-package :gui)
 
-(defconstant +history-file+       (in-home "gui/.command-history"))
-(defconstant +max-history+        50)
-(defconstant +mouse-button-press+ 2 "event")
-(defconstant +start+              1 "move operation")
+(defconstant +history-file+ (in-home "gui/.command-history"))
+(defconstant +max-history+  50)
 
 (defparameter *   nil)
 (defparameter **  nil)
@@ -75,7 +73,7 @@
   (dolist (sig (list "textChanged(QString)" "returnPressed()"))
     (qconnect *search-help* sig 'search-help))
   (qoverride *edit* "keyPressEvent(QKeyEvent*)" 'history-move)
-  (qadd-event-filter nil +mouse-button-press+ 'object-selected)
+  (qadd-event-filter nil |QEvent.MouseButtonPress| 'object-selected)
   (change-class-q-object "QWidget" :super)
   (change-class-n-object "QMetaObject" :super)
   (populate-primitives)
@@ -89,7 +87,7 @@
 
 (defun search-help (&optional txt)
   (unless (qfun *help* "find" (qget *search-help* "text"))
-    (qfun *help* "moveCursor" +start+)))
+    (qfun *help* "moveCursor" |QTextCursor.Start|)))
 
 (defun saved-history ()
   (let ((ex "")
@@ -143,10 +141,10 @@
                    lb3)))
     (x:do-with (qfun tree)
       ("setHeaderLabels" (butlast lbs (- 3 cols)))
-      ("sortByColumn" (if (> cols 1) 1 0) "AscendingOrder"))
+      ("sortByColumn" (if (> cols 1) 1 0) |Qt.AscendingOrder|))
     (qconnect tree "itemDoubleClicked(QTreeWidgetItem*,int)" 'add-to-edit)))
 
-(let ((cross-cursor (qnew "QCursor(Qt::CursorShape)" "CrossCursor")))
+(let ((cross-cursor (qnew "QCursor(Qt::CursorShape)" |Qt.CrossCursor|)))
   (defun select-mode ()
     (set-listen t)
     (qfun "QApplication" "setOverrideCursor" cross-cursor)))
@@ -194,7 +192,7 @@
                     (qfun item "setText" 2 (subseq curr (1+ sp2))))
                   (qfun tree "addTopLevelItem" item)))
               (resize-tree tree)
-              (qfun tree "sortByColumn" 1 "AscendingOrder"))
+              (qfun tree "sortByColumn" 1 |Qt.AscendingOrder|))
             (if (eql :q type)
                 (list "Properties:" "Methods:" "Slots:" "Signals:")
                 (list "Methods:"))
@@ -211,7 +209,7 @@
               ("setText" 0 (subseq curr 0 sp))
               ("setText" 1 (subseq curr (1+ sp))))
             (qfun override "addTopLevelItem" item)))
-        (qfun override "sortByColumn" 1 "AscendingOrder")))
+        (qfun override "sortByColumn" 1 |Qt.AscendingOrder|)))
     (when (null info)
       (qmsg "<html>Class currently not available (see EQL modules and <b><code>qrequire</code></b>)."))))
 
@@ -235,7 +233,7 @@
       (qfun *primitives* "addTopLevelItem" item)))
   (x:do-with (qfun *primitives*)
     ("resizeColumnToContents" 0)
-    ("sortByColumn" 0 "AscendingOrder")))
+    ("sortByColumn" 0 |Qt.AscendingOrder|)))
 
 (defun show-super-classes (type)
   (qset (if (eql :q type) *q-super-classes* *n-super-classes*) "text"
@@ -364,7 +362,7 @@
            (pnt "QPainter"))
       (x:do-with (qfun brush)
         ("setColor(QColor)" "black")
-        ("setStyle" "SolidPattern"))
+        ("setStyle" |Qt.SolidPattern|))
       (x:do-with (qfun pnt)
         ("begin(QPixmap*)" dark)
         ("setOpacity" 0.6)

@@ -7,6 +7,8 @@
 #include <ecl/ecl.h>
 #include <QList>
 #include <QUiLoader>
+#include <QByteArray>
+#include <QPair>
 
 #define PRINT(x) cl_print(1, x)
 #define TERPRI() cl_terpri(0)
@@ -21,20 +23,26 @@
 
 #define LEN(x) fixint(cl_length(x))
 
-#define LIST1(a) \
-    CONS(a, Cnil)
-#define LIST2(a, b) \
-    CONS(a, LIST1(b))
-#define LIST3(a, b, c) \
-    CONS(a, LIST2(b, c))
-#define LIST4(a, b, c, d) \
-    CONS(a, LIST3(b, c, d))
-#define LIST5(a, b, c, d, e) \
-    CONS(a, LIST4(b, c, d, e))
-#define LIST6(a, b, c, d, e, f) \
-    CONS(a, LIST5(b, c, d, e, f))
-#define LIST7(a, b, c, d, e, f, g) \
-    CONS(a, LIST6(b, c, d, e, f, g))
+#define  LIST1(a1) \
+    CONS(a1,  Cnil)
+#define  LIST2(a1, a2) \
+    CONS(a1, LIST1(a2))
+#define  LIST3(a1, a2, a3) \
+    CONS(a1, LIST2(a2, a3))
+#define  LIST4(a1, a2, a3, a4) \
+    CONS(a1, LIST3(a2, a3, a4))
+#define  LIST5(a1, a2, a3, a4, a5) \
+    CONS(a1, LIST4(a2, a3, a4, a5))
+#define  LIST6(a1, a2, a3, a4, a5, a6) \
+    CONS(a1, LIST5(a2, a3, a4, a5, a6))
+#define  LIST7(a1, a2, a3, a4, a5, a6, a7) \
+    CONS(a1, LIST6(a2, a3, a4, a5, a6, a7))
+#define  LIST8(a1, a2, a3, a4, a5, a6, a7, a8) \
+    CONS(a1, LIST7(a2, a3, a4, a5, a6, a7, a8))
+#define  LIST9(a1, a2, a3, a4, a5, a6, a7, a8, a9) \
+    CONS(a1, LIST8(a2, a3, a4, a5, a6, a7, a8, a9))
+#define LIST10(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10) \
+    CONS(a1, LIST9(a2, a3, a4, a5, a6, a7, a8, a9, a10))
 
 #define TO_QT_TYPE(name) \
     static name to##name(cl_object x) { \
@@ -239,10 +247,14 @@ struct QtMetaObject : private QObject {
     static const QMetaObject* get() { return &static_cast<QtMetaObject*>(0)->staticQtMetaObject; }
 };
 
+typedef QPair<QByteArray, void*> MetaArg;
+
 void iniCLFunctions();
 void registerMetaTypes();
 void callConnectFun(void*, const QList<QByteArray>&, void**);
 bool callEventFun(void*, QObject*, QEvent*);
+cl_object to_lisp_arg(const MetaArg&);
+void error_msg(const char*, cl_object);
 
 EQL_EXPORT QVariant callOverrideFun(void*, int, const void**);
 EQL_EXPORT QtObject toQtObject(cl_object, cl_object = Cnil, bool* = 0);

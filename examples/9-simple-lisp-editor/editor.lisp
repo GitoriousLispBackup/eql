@@ -142,7 +142,6 @@
         ("frameShadow" |QFrame.Plain|)
         ("lineWidth" 1))
       (x:do-with (qset *main*)
-        ("pos" (list 40 40))
         ("size" (list 800 500))
         ("windowTitle" "Simple Lisp Editor"))
       (x:do-with (qset *command*)
@@ -392,7 +391,7 @@
                          (char/= #\\ (char line (1- pos)))))
             (let ((pos* pos))
               (when (and (plusp pos)
-                         (char= #\` (char line (1- pos)))) ; backquote
+                         (char= #\` (char line (1- pos)))) ; macros etc.
                 (decf pos*))
               (show-matching-parenthesis text-cursor (subseq line pos*) :left pos*)))
           (unless (zerop pos)
@@ -578,10 +577,12 @@
         "show"
         "setFocus")
       (qlet ((index (qfun *completer* "indexAt" '(0 0))))
-        (let ((size (nthcdr 2 (qfun *completer* "visualRect" index))))
+        (let ((size (list (* (min 80 (apply 'max (mapcar 'length options)))
+                             (first (font-metrics-size)))
+                          (fourth (qfun *completer* "visualRect" index)))))
           (setf height (second size))
           (qset *completer* "size"
-                (list (+ 2 (first size))
+                (list (+ 15 (first size))
                       (+ 2 (* (min +max-shown-completions+ (length options)) height))))))
       (set-current-item (qfun *completer* "item" 0)))
     (adjust-completer-pos :ini))
@@ -615,7 +616,7 @@
              (adjust-completer-pos))))
     (qfun item "setSelected" t)
     (x:do-with (qfun *completer*)
-      ("scrollToItem" item "PositionAtTop")
+      ("scrollToItem" item |QAbstractItemView.PositionAtTop|)
       ("setCurrentItem" item))))
 
 (defun close-completer (&optional event)
@@ -720,7 +721,8 @@
       (let ((pos (position #\Space line :test 'char/=)))
         (when pos
           (setf spaces (if (char= #\( (char line pos))
-                           (if (find (read* (subseq line (1+ pos))) '(loop prog progn prog1 prog2 when when-it when-it* while))
+                           (if (find (read* (subseq line (1+ pos)))
+                                     '(loop prog progn prog1 prog2 unless when when-it when-it* while))
                                (+ pos 2)
                                (1+ (or (position #\Space line :start pos)
                                        pos)))
@@ -850,7 +852,7 @@
                    (unless (and (plusp start)
                                 (char= #\\ (char code (1- start))))
                      (let ((code* (subseq code (if (and (plusp start)
-                                                        (char= #\` (char code (1- start)))) ; backquote
+                                                        (char= #\` (char code (1- start)))) ; macros etc.
                                                    (1- start)
                                                    start))))
                        (multiple-value-bind (exp end)

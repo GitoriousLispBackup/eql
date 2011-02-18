@@ -17,12 +17,15 @@ HEADERS += gen/_lobjects.h \
            gen/_main_n_classes.h \
            gen/_main_q_methods.h \
            gen/_main_n_methods.h \
+           eql_fun.h \
+           qt_eql.h \
            dyn_object.h \
            eql_global.h \
            ecl_fun.h \
            eql.h
 
 SOURCES += gen/_lobjects.cpp \
+           qt_eql.cpp \
            dyn_object.cpp \
            ecl_fun.cpp \
            eql.cpp

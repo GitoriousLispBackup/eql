@@ -185,7 +185,7 @@ static void type_msg(const QByteArray& wanted, const QByteArray& got) {
               from_cstring(wanted),
               from_cstring(got.isEmpty() ? "no Qt object" : got)); }
 
-static void error_msg(const char* fun, cl_object l_args) {
+void error_msg(const char* fun, cl_object l_args) {
     STATIC_SYMBOL(s_error_output, (char*)"*ERROR-OUTPUT*")
     cl_format(4,
               cl_symbol_value(s_error_output),
@@ -962,7 +962,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
                     p = i; }}}}
     return MetaArg(sType, p); }
 
-static cl_object to_lisp_arg(const MetaArg& arg) {
+cl_object to_lisp_arg(const MetaArg& arg) {
     cl_object l_ret = Cnil;
     void* p = arg.second;
     if(p) {
@@ -2036,7 +2036,14 @@ cl_object qfind_child(cl_object l_obj, cl_object l_name) {
         if(o.isQObject()) {
             QObject* obj = qFindChild<QObject*>((QObject*)o.pointer, name);
             if(obj) {
-                cl_object l_ret = qt_object_from_name(obj->metaObject()->className(),
+                const QMetaObject* mo = obj->metaObject();
+                QByteArray className(mo->className());
+                while(!className.startsWith('Q')) {
+                    mo = mo->superClass();
+                    if(!mo) {
+                        break; }
+                    className = mo->className(); }
+                cl_object l_ret = qt_object_from_name(className,
                                                       obj,
                                                       LObjects::ui_unique.value(name, 0));
                 return l_ret; }}}

@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "11.2.2"; // 2011-02-16
+const char EQL::version[] = "11.2.3"; // 2011-02-18
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
@@ -61,8 +61,8 @@ void EQL::exec(const QStringList& args) {
         forms.prepend(QString(
                 "(with-input-from-string (s \"(load \\\"%1\\\")\")"
                 "  (let ((*standard-input* s))"
-                "    (si:top-level)))"
-                ).arg(arguments.at(1))); }
+                "    (si:top-level)))")
+                      .arg(arguments.at(1))); }
     QString code;
     if(forms.length() == 1) {
         code = forms.first(); }
@@ -77,3 +77,14 @@ void EQL::exec(lisp_ini ini, const QByteArray& expression, const QByteArray& pac
     read_VV(OBJNULL, ini);
     si_select_package(make_simple_base_string((char*)package.constData()));
     eval(expression.constData()); }
+
+void EQL::exec(QWidget* widget, const QByteArray& file) {
+    si_select_package(make_simple_base_string((char*)"CL-USER"));
+    eval(QString("(eql::set-home \"%1\")").arg(home()).toAscii().constData());
+    eval(QString(
+            "(progn"
+            "  (defvar eql::*qt-main* (eql:qt-object %1 0 (eql:qid \"QWidget\")))"
+            "  (export 'eql::*qt-main* (find-package :eql)))")
+         .arg((ulong)widget)
+         .toAscii().constData());
+    eval(QString("(load \"%1\")").arg(QString(file)).toAscii().constData()); }

@@ -12,11 +12,13 @@
 *.qm
 *.ts
 *.~
+#*.*#
 _*
 .*.lisp
 *~
 t.lisp
 tr.h
+moc_*.cpp
 Makefile
 eql
 eql.app
@@ -24,9 +26,8 @@ gui/.*
 my_app/my_app
 my_app/my_app.app/*
 my_app/.*
-my_app/*.user
+*.user
 r
-src/*.user
 src/ECL*
 src/tmp
 src/first_metatype_id

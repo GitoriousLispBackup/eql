@@ -242,6 +242,7 @@
 (defenum |QTextCursor.WordUnderCursor| 0)
 
 ;;; automatic definitions (see make-auto-enums.lisp)
+
 (defenum |QAbstractAnimation.Forward| 0)
 (defenum |QAbstractAnimation.Backward| 1)
 (defenum |QAbstractAnimation.Stopped| 0)

@@ -136,12 +136,15 @@
     (unless (x:empty-string str)
       (when (eql :output type)
         ;; cut prompts
-        (let ((p1 (1+ (position #\> str)))
+        (let ((p1 (position #\> str))
               (p2 (position #\Newline str :from-end t)))
-          (setf str (subseq str p1 (max p1 p2)))))
+          (when (and p1 p2)
+            (incf p1)
+            (setf str (subseq str p1 (max p1 p2))))))
       (send-to-client type str))))
 
 (defun start-top-level ()
+  (setf si:*tpl-prompt-hook* "")
   (send-output :expression *standard-output-buffer*)
   (si::%top-level)
   (send-output :error  *error-output-buffer*)
