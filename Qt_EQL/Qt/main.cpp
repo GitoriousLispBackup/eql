@@ -1,4 +1,4 @@
-// originial copyright:
+// original copyright:
 //
 // ** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
 // ** You may use this file under the terms of the BSD license

@@ -1,4 +1,4 @@
-// originial copyright:
+// original copyright:
 //
 // ** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
 // ** You may use this file under the terms of the BSD license
@@ -8,7 +8,7 @@
 
 #include <QtGui>
 
-#include "eql_fun.h" // [EQL_Qt]
+#include "eql_fun.h" // [EQL]
 
 class LightWidget : public QWidget
 {
@@ -77,6 +77,7 @@ private:
 
 class TrafficLight : public QWidget
 {
+    Q_OBJECT
 public:
     TrafficLight(QWidget *parent = 0)
         : QWidget(parent)
@@ -86,16 +87,16 @@ public:
         vbox->addWidget(widget);
         vbox->setMargin(0);
 
-        QStateMachine *machine = new QStateMachine(this);
-        QState *redGoingYellow = createLightState(widget->redLight(), 3000);
+        machine = new QStateMachine(this);
+        QState *redGoingYellow = createLightState(widget->redLight(), 2000);
         redGoingYellow->setObjectName("redGoingYellow");
-        QState *yellowGoingGreen = createLightState(widget->yellowLight(), 1000);
+        QState *yellowGoingGreen = createLightState(widget->yellowLight(), 500);
         yellowGoingGreen->setObjectName("yellowGoingGreen");
         redGoingYellow->addTransition(redGoingYellow, QSIGNAL(finished()), yellowGoingGreen);
-        QState *greenGoingYellow = createLightState(widget->greenLight(), 3000);
+        QState *greenGoingYellow = createLightState(widget->greenLight(), 2000);
         greenGoingYellow->setObjectName("greenGoingYellow");
         yellowGoingGreen->addTransition(yellowGoingGreen, QSIGNAL(finished()), greenGoingYellow);
-        QState *yellowGoingRed = createLightState(widget->yellowLight(), 1000);
+        QState *yellowGoingRed = createLightState(widget->yellowLight(), 500);
         yellowGoingRed->setObjectName("yellowGoingRed");
         greenGoingYellow->addTransition(greenGoingYellow, QSIGNAL(finished()), yellowGoingRed);
         yellowGoingRed->addTransition(yellowGoingRed, QSIGNAL(finished()), redGoingYellow);
@@ -123,6 +124,13 @@ public:
         lightState->setInitialState(timing);
         return lightState;
     }
+
+    Q_INVOKABLE void start() { machine->start(); }
+    Q_INVOKABLE void stop() { machine->stop(); }
+
+private:
+    QStateMachine *machine;
+
 };
 
 #endif

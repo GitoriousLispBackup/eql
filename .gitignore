@@ -11,11 +11,13 @@
 *.DS_Store
 *.qm
 *.ts
+*~
 *.~
 #*.*#
 _*
 .*.lisp
-*~
+*.user
+r
 t.lisp
 tr.h
 moc_*.cpp
@@ -26,9 +28,7 @@ gui/.*
 my_app/my_app
 my_app/my_app.app/*
 my_app/.*
-*.user
-r
 src/ECL*
 src/tmp
-src/first_metatype_id
-src/first_metatype_id.h
+Qt_EQL/Qt_EQL
+examples/9-simple-lisp-editor/trafficlight.lisp

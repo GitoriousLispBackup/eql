@@ -257,7 +257,7 @@ static QByteArray prettyFunName(const QByteArray& name, bool this_arg) {
         pretty.truncate(pretty.length() - 1); }
     return pretty; }
 
-enum CallType { SignalOrSlot, Method, Static };
+enum CallType { SignalOrSlot, Method, Static, Embedded };
 
 static int findMethodIndex(CallType type, const QByteArray& name, const QMetaObject* mo, int len) {
     int n = -1;
@@ -308,6 +308,10 @@ static int findMethodIndex(CallType type, const QByteArray& name, const QMetaObj
 static cl_object q_keyword() {
     STATIC_SYMBOL_PKG(s_q, (char*)"Q", (char*)"KEYWORD")
     return s_q; }
+
+static cl_object qt_keyword() {
+    STATIC_SYMBOL_PKG(s_qt, (char*)"QT", (char*)"KEYWORD")
+    return s_qt; }
 
 static cl_object make_vector() {
     STATIC_SYMBOL_PKG(s_make_vector, (char*)"%MAKE-VECTOR", (char*)"EQL")
@@ -1462,13 +1466,18 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
     static QHash<QByteArray, int> i_method;
     if((l_obj != Cnil) && ECL_STRINGP(l_name)) {
         bool qobject_align = false;
-        QtObject o = toQtObject(l_obj, l_cast, &qobject_align);
+        bool embedded = false;
         QByteArray castClass;
-        if(ECL_STRINGP(l_cast)) {
-            castClass = toCString(l_cast); }
+        if(l_cast != Cnil) {
+            if(ECL_STRINGP(l_cast)) {
+                castClass = toCString(l_cast); }
+            else if(cl_eql(qt_keyword(), l_cast)) {
+                embedded = true; }}
+        QtObject o = toQtObject(l_obj, embedded ? Cnil : l_cast, &qobject_align);
         QByteArray name(QMetaObject::normalizedSignature(toCString(l_name)));
         int len_args = LEN(l_args);
-        QByteArray cacheName((castClass.isEmpty() ? o.className() : castClass) + '_' + name + char('A' + len_args));
+        QByteArray cacheName((castClass.isEmpty() ? (embedded ? QByteArray("Qt") : o.className()) : castClass) +
+                             '_' + name + char('A' + len_args));
         bool method = false;
         const QMetaObject* mo = 0;
         int n = i_slot.value(cacheName, -1);
@@ -1477,54 +1486,63 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
         else {
             n = i_method.value(cacheName, -1);
             if(n != -1) {
-                method = true;
-                mo = methodMetaObject(o); }}
-        if(n == -1) {
-            mo = staticMetaObject(o);
-            if(castClass.isEmpty() && o.isQObject()) {
-                n = findMethodIndex(SignalOrSlot, name, mo, len_args); }
-            if(n == -1) {
-                method = true;
-                int p = name.indexOf('(');
-                if(p == -1) {
-                    p = name.length();
-                    name.append('('); }
-                if(o.isStatic()) {
-                    mo = methodMetaObject(o);
-                    // static methods start with 'S'
-                    n = findMethodIndex(Static, QByteArray("S") + name.left(p + 1) + name.mid(p + 1), mo, len_args); }
+                if(embedded) {
+                    if(o.pointer) {
+                        mo = ((QObject*)o.pointer)->metaObject(); }}
                 else {
-                    QString sep;
-                    if(len_args) {
-                        sep = ","; }
-                    // ordinary methods start with 'M'
-                    QString _name("M" + name.left(p + 1) + "%1*" + sep + name.mid(p + 1));
-                    if(castClass.isEmpty()) {
-                        const QMetaObject* _mo = mo;
+                    method = true;
+                    mo = methodMetaObject(o); }}}
+        if(n == -1) {
+            if(embedded) {
+                if(o.pointer) {
+                    mo = ((QObject*)o.pointer)->metaObject();
+                    n = findMethodIndex(Embedded, name, mo, len_args); }}
+            else {
+                mo = staticMetaObject(o);
+                if(castClass.isEmpty() && o.isQObject()) {
+                    n = findMethodIndex(SignalOrSlot, name, mo, len_args); }
+                if(n == -1) {
+                    method = true;
+                    int p = name.indexOf('(');
+                    if(p == -1) {
+                        p = name.length();
+                        name.append('('); }
+                    if(o.isStatic()) {
                         mo = methodMetaObject(o);
-                        if(o.isQObject()) {
-                            do {
-                                n = findMethodIndex(Method, _name.arg(_mo->className()).toAscii(), mo, len_args);
-                                if(n != -1) {
-                                    break; }
-                                _mo = _mo->superClass();
-                                mo = mo->superClass(); }
-                            while(mo && _mo); }
-                        else {
-                            const char* _class = o.className().constData();
-                            do {
-                                n = findMethodIndex(Method, _name.arg(_class).toAscii(), mo, len_args);
-                                if(n != -1) {
-                                    break; }
-                                _class = LObjects::nObjectSuperClass(_class);
-                                mo = mo->superClass(); }
-                            while(_class && mo); }}
+                        // static methods start with 'S'
+                        n = findMethodIndex(Static, QByteArray("S") + name.left(p + 1) + name.mid(p + 1), mo, len_args); }
                     else {
-                        // very rare need of cast, see QFUN* for examples
-                        mo = methodMetaObject(o);
-                        n = findMethodIndex(Method, _name.arg(castClass.constData()).toAscii(), mo, len_args); }}}
+                        QString sep;
+                        if(len_args) {
+                            sep = ","; }
+                        // ordinary methods start with 'M'
+                        QString _name("M" + name.left(p + 1) + "%1*" + sep + name.mid(p + 1));
+                        if(castClass.isEmpty()) {
+                            const QMetaObject* _mo = mo;
+                            mo = methodMetaObject(o);
+                            if(o.isQObject()) {
+                                do {
+                                    n = findMethodIndex(Method, _name.arg(_mo->className()).toAscii(), mo, len_args);
+                                    if(n != -1) {
+                                        break; }
+                                    _mo = _mo->superClass();
+                                    mo = mo->superClass(); }
+                                while(mo && _mo); }
+                            else {
+                                const char* _class = o.className().constData();
+                                do {
+                                    n = findMethodIndex(Method, _name.arg(_class).toAscii(), mo, len_args);
+                                    if(n != -1) {
+                                        break; }
+                                    _class = LObjects::nObjectSuperClass(_class);
+                                    mo = mo->superClass(); }
+                                while(_class && mo); }}
+                        else {
+                            // very rare need of cast, see QFUN* for examples
+                            mo = methodMetaObject(o);
+                            n = findMethodIndex(Method, _name.arg(castClass.constData()).toAscii(), mo, len_args); }}}}
             if(n != -1) {
-                if(method) {
+                if(method || embedded) {
                     i_method[cacheName] = n; }
                 else {
                     i_slot[cacheName] = n; }}}

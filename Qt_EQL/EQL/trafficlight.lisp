@@ -21,6 +21,6 @@
       ("setRenderHint" |QPainter.Antialiasing|)
       ("setPen(QPen)" pen)
       ("setBrush(QBrush)" brush)
-      ("drawEllipse(QRect)" (list 5 5 (- width 10) (- height 10)))
       ;;("drawRect(QRect)" (list 5 5 (- width 10) (- height 10)))
+      ("drawEllipse(QRect)" (list 5 5 (- width 10) (- height 10)))
       "end")))

@@ -1,4 +1,4 @@
-// originial copyright:
+// original copyright:
 //
 // ** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
 // ** You may use this file under the terms of the BSD license
@@ -10,8 +10,8 @@ void LightWidget::paintEvent(QPaintEvent *)
     if (!m_on)
         return;
 
-    eql_fun("trafficlight:paint-event", // [EQL_Qt] function
-            Q_ARG(QWidget*, this),      // [EQL_Qt] arguments... (max. 10)
+    eql_fun("trafficlight:paint-event", // [EQL] package:function
+            Q_ARG(QWidget*, this),      // [EQL] arguments (max. 10)
             Q_ARG(QColor, m_color),
             Q_ARG(int, width()),
             Q_ARG(int, height()));

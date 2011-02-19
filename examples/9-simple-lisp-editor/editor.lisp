@@ -121,7 +121,6 @@
           *lisp-keyword-format* (qnew "QTextCharFormat")
           *comment-format*      (qnew "QTextCharFormat")
           *completer*           (qnew "QListWidget"
-                                      "resizeMode" |QListView.Adjust|
                                       "horizontalScrollBarPolicy" |Qt.ScrollBarAlwaysOff|
                                       "verticalScrollBarPolicy" |Qt.ScrollBarAlwaysOff|))
     (let ((editor-highlighter  (qnew "QSyntaxHighlighter(QTextDocument*)" (qfun *editor* "document")))
@@ -572,20 +571,18 @@
       (x:do-with (qfun *completer*)
         "clear"
         ("addItems" options)
-        ("resize" '(0 0))
-        "adjustSize"
+        "adjustSize")
+      (let ((fm-size (font-metrics-size)))
+        (setf height (second fm-size))
+        (qset *completer* "size"
+              (list (+ 15 (* (min 80 (apply 'max (mapcar 'length options)))
+                             (first fm-size)))
+                    (+ 2 (* (min +max-shown-completions+ (length options)) height)))))
+      (set-current-item (qfun *completer* "item" 0))
+      (adjust-completer-pos :ini)
+      (x:do-with (qfun *completer*)
         "show"
-        "setFocus")
-      (qlet ((index (qfun *completer* "indexAt" '(0 0))))
-        (let ((size (list (* (min 80 (apply 'max (mapcar 'length options)))
-                             (first (font-metrics-size)))
-                          (fourth (qfun *completer* "visualRect" index)))))
-          (setf height (second size))
-          (qset *completer* "size"
-                (list (+ 15 (first size))
-                      (+ 2 (* (min +max-shown-completions+ (length options)) height))))))
-      (set-current-item (qfun *completer* "item" 0)))
-    (adjust-completer-pos :ini))
+        "setFocus")))
   (defun adjust-completer-pos (&optional ini)
     (let* ((desktop (qfun (qfun "QApplication" "desktop") "availableGeometry"))
            (cursor (if ini
