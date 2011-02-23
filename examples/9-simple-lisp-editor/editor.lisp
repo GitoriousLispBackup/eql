@@ -959,9 +959,9 @@
                    ("setStandardButtons" (logior |QMessageBox.Yes| |QMessageBox.No|))
                    ("setDefaultButton(QMessageBox::StandardButton)" |QMessageBox.No|)
                    "exec")))
-        (qfun "QProcess" "startDetached" "eql local-server")
-        ;; wait max. 10 seconds
-        (dotimes (i 100)
+        (qfun "QProcess" "startDetached" "eql -io local-server")
+        ;; wait max. 15 seconds
+        (dotimes (i 150)
           (qprocess-events)
           (when (local-client:request str)
             (return-from run-on-server t))
@@ -1096,8 +1096,9 @@
 
 (defun start ()
   (ini)
-  (file-open (x:if-it (third (qfun "QCoreApplication" "arguments"))
-                 x:it
-                 "my.lisp")))
+  (file-open (let ((file (third (qfun "QCoreApplication" "arguments"))))
+               (if (and file (x:ends-with ".lisp" file))
+                   file
+                   "my.lisp"))))
 
 (start)

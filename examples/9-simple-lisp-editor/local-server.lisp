@@ -60,10 +60,9 @@
         (qconnect *server* "newConnection()" 'new-client-connection)
         (multiple-value-bind (eql-version qt-version)
             (qversion)
-          (setf si:*tpl-prompt-hook*
-                (format nil "~%EQL local-server (ECL ~A, EQL ~A, Qt ~A)~@
+          (format t "~%EQL local-server (ECL ~A, EQL ~A, Qt ~A)~@
                              Use local-client to send input."
-                        (si::lisp-implementation-version) eql-version qt-version)))
+                  (si::lisp-implementation-version) eql-version qt-version))
         t)
       (progn
         (qfun "QMessageBox" "critical" nil (tr "EQL local-server")
@@ -144,7 +143,6 @@
       (send-to-client type str))))
 
 (defun start-top-level ()
-  (setf si:*tpl-prompt-hook* "")
   (send-output :expression *standard-output-buffer*)
   (si::%top-level)
   (send-output :error  *error-output-buffer*)

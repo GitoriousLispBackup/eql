@@ -11,7 +11,7 @@ BUILD
        copy all of:
            eql-local-server.fas
            eql-editor.fas
-           data/*
+           data/
        to EQL/
 
 RUN

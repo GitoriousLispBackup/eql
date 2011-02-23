@@ -8,12 +8,7 @@
 (unless (find-package :c)
   (make-package :c))
 
-(defparameter *lisp-files* '(;;"data/auto-indent"
-                             ;;"data/eql-keywords"
-                             ;;"data/lisp-keywords"
-                             "local-client"
-                             "settings"
-                             "editor"))
+(defparameter *lisp-files* '("local-client" "settings" "editor"))
 
 (dolist (f *lisp-files*)
   (let ((file (format nil "~A.lisp" f)))
