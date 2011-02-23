@@ -9,6 +9,7 @@
 #include <QUiLoader>
 #include <QByteArray>
 #include <QPair>
+#include <QVariant>
 
 #define PRINT(x) cl_print(1, x)
 #define TERPRI() cl_terpri(0)
@@ -78,7 +79,9 @@ static cap_name* to##cap_name##Pointer(cl_object x) { \
         p = (cap_name*)o.pointer; } \
     return p; } \
 static cl_object from_##name(const cap_name& x) { \
-    return qt_object_from_name(#cap_name, new cap_name(x)); }
+    if(EQL::is_arg_return_value) { \
+        return qt_object_from_name(#cap_name, new cap_name(x), 0, true); } \
+    return qt_object_from_name(#cap_name, (void*)&x); }
 
 #define TO_QT_TYPE_PTR2(cap_name, name) \
     TO_QT_TYPE_PTR(cap_name, name) \
@@ -254,10 +257,11 @@ void registerMetaTypes();
 void callConnectFun(void*, const QList<QByteArray>&, void**);
 bool callEventFun(void*, QObject*, QEvent*);
 cl_object to_lisp_arg(const MetaArg&);
+QVariant toQVariant(cl_object, const char*, QVariant::Type = QVariant::UserType);
 void error_msg(const char*, cl_object);
 
 EQL_EXPORT QVariant callOverrideFun(void*, int, const void**);
 EQL_EXPORT QtObject toQtObject(cl_object, cl_object = Cnil, bool* = 0);
-EQL_EXPORT cl_object qt_object_from_name(const QByteArray&, void*, uint = 0);
+EQL_EXPORT cl_object qt_object_from_name(const QByteArray&, void*, uint = 0, bool = false);
 
 #endif

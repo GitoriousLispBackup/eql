@@ -1,25 +1,26 @@
-[work in progress...]
-
-
-Short description:
-==================
-
-Build:
+BUILD
+=====
 
     1) Qt/trafficlight.pro
 
     2) EQL_Qt.pro
 
-    3) in example 9, run:
+    3) in example 9:
        eql make-local-server-fasl.lisp
-       and copy the resulting eql-local-server.fas to EQL/
+       eql make-editor-fasl.lisp
+       copy all of:
+           eql-local-server.fas
+           eql-editor.fas
+           data/*
+       to EQL/
 
-Run:        
+RUN
+===       
 
-    1) run the EQL_Qt executable
+    1) EQL_Qt (executable)
 
-    2) in example 9, run:
-       eql editor.lisp ../../Qt_EQL/EQL/trafficlight.lisp
+    2) in EQL/:
+       eql eql-editor.fas trafficlight.lisp
        eval the line: (in-package :trafficlight)
        [...]
 
@@ -41,7 +42,31 @@ From Lisp you can call: (note "qfun*" and ":qt")
     (qfun* *qt-main* :qt "start")
 
 This is possible because these 2 methods are declared Q_INVOKABLE
-in Qt/trafficlight.h
+in Qt/trafficlight.h.
+
+In order to call generic Qt functions, signals, slots from *qt-main* and child
+objects, simply use the standard qfun (not qfun* as above), qget etc.
+
+You can't use qoverride for external Qt/C++ classes.
+
+The class name returned by qt-object-name is the first vanilla Qt class
+encountered walking up the super classes; in this example, *qt-main* is shown of
+type "QWidget", because the TrafficLight class directly inherits QWidget.
+
+--
+
+To prepare a Qt/C++ project to be linked with EQL (as in this example), you
+need to make these 2 changes in your *.pro file:
+
+    TEMPLATE = lib
+    CONFIG   += staticlib
+
+Following, include the above library name in your Qt_EQL.pro file:
+
+    LIBS += -lmy_qt_app
+
+Additionally, you need to adapt the main.cpp, as shown in this example,
+including Qt header file(s), creating the Qt main class, calling EQL.exec() etc.
 
 --
 

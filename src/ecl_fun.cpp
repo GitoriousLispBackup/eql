@@ -284,7 +284,7 @@ static int findMethodIndex(CallType type, const QByteArray& name, const QMetaObj
         if(!search.contains('(')) {
             search.append('('); }
         StrList candidates;
-        int min = (SignalOrSlot == type) ? 0 : mo->methodOffset();
+        int min = ((SignalOrSlot == type) || (Embedded == type)) ? 0 : mo->methodOffset();
         for(int i = mo->methodCount() - 1; i >= min; --i) {
             QByteArray sig(mo->method(i).signature());
             int len_args = sig.count(',');
@@ -449,14 +449,15 @@ QtObject toQtObject(cl_object l_obj, cl_object l_cast, bool* qobject_align) {
         o.id = classId(l_obj); }
     return o; }
 
-static cl_object qt_object(void* pointer, uint unique, int id) {
-    STATIC_SYMBOL_PKG(s_qt_object, (char*)"QT-OBJECT", (char*)"EQL")
-    return cl_funcall(4, s_qt_object,
+static cl_object new_qt_object(void* pointer, uint unique, int id, bool finalize = false) {
+    STATIC_SYMBOL_PKG(s_new_qt_object, (char*)"NEW-QT-OBJECT", (char*)"EQL")
+    return cl_funcall(5, s_new_qt_object,
                       ecl_make_unsigned_integer((cl_index)pointer),
                       ecl_make_unsigned_integer((cl_index)unique),
-                      MAKE_FIXNUM(id)); }
+                      MAKE_FIXNUM(id),
+                      finalize ? Ct : Cnil); }
 
-cl_object qt_object_from_name(const QByteArray& name, void* pointer, uint unique) {
+cl_object qt_object_from_name(const QByteArray& name, void* pointer, uint unique, bool finalize) {
     QByteArray name2(name);
     if(name2.endsWith('*')) {
         name2.truncate(name2.length() - 1); }
@@ -467,7 +468,7 @@ cl_object qt_object_from_name(const QByteArray& name, void* pointer, uint unique
     int id = LObjects::q_names.value(name2, 0);
     if(!id) {
         id = -LObjects::n_names.value(name2, 0); }
-    return qt_object(pointer, unique, id); }
+    return new_qt_object(pointer, unique, id, finalize); }
 
 static QString symbolName(cl_object l_symbol) {
     QString name;
@@ -604,7 +605,7 @@ TO_QT_VECTOR_VAL(QTextLength)
 TO_QT_VECTOR_VAL2(QRgb, UInt)
 TO_QT_VECTOR_VAL2(qreal, Real)
 
-static QVariant toQVariant(cl_object l_obj, const char* s_type, QVariant::Type n_type = QVariant::UserType) {
+QVariant toQVariant(cl_object l_obj, const char* s_type, QVariant::Type n_type) {
     QVariant var;
     int type = (QVariant::UserType == n_type) ? QVariant::nameToType(s_type) : n_type;
     switch(type) {
@@ -1350,7 +1351,7 @@ cl_object qnew_instance2(cl_object l_name, cl_object l_args) {
                     caller->qt_metacall(QMetaObject::InvokeMetaMethod, n, args);
                     clearMetaArgList(mArgs);
                     if(pointer) {
-                        cl_object l_ret = qt_object(pointer, unique, id);
+                        cl_object l_ret = new_qt_object(pointer, unique, id);
                         if(id > 0) { // QObject derived
                             while(l_do_args != Cnil) {
                                 qset_property(l_ret, cl_first(l_do_args), cl_second(l_do_args));
@@ -1381,7 +1382,7 @@ cl_object qcopy(cl_object l_obj) {
                 args[2] = &o.pointer;
                 caller->qt_metacall(QMetaObject::InvokeMetaMethod, n, args);
                 if(pointer) {
-                    cl_object l_ret = qt_object(pointer, unique, o.id);
+                    cl_object l_ret = new_qt_object(pointer, unique, o.id);
                     return l_ret; }}}}
     error_msg("QCOPY", LIST1(l_obj));
     return Cnil; }
@@ -1424,7 +1425,9 @@ cl_object qproperty(cl_object l_obj, cl_object l_name) {
                     QVariant var(mp.read((QObject*)o.pointer));
                     const cl_env_ptr l_env = ecl_process_env();
                     l_env->nvalues = 2;
+                    EQL::is_arg_return_value = true;
                     l_env->values[0] = from_qvariant_value(var);
+                    EQL::is_arg_return_value = false;
                     l_env->values[1] = Ct;
                     return l_env->values[0]; }}}}
     ecl_process_env()->nvalues = 1;
@@ -1476,8 +1479,12 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
         QtObject o = toQtObject(l_obj, embedded ? Cnil : l_cast, &qobject_align);
         QByteArray name(QMetaObject::normalizedSignature(toCString(l_name)));
         int len_args = LEN(l_args);
-        QByteArray cacheName((castClass.isEmpty() ? (embedded ? QByteArray("Qt") : o.className()) : castClass) +
-                             '_' + name + char('A' + len_args));
+        QByteArray cacheName((castClass.isEmpty()
+                              ? (embedded
+                                 ? QByteArray(o.pointer ? ((QObject*)o.pointer)->metaObject()->className() : "Qt")
+                                 : o.className())
+                              : castClass)
+                             + '_' + name + char('A' + len_args));
         bool method = false;
         const QMetaObject* mo = 0;
         int n = i_slot.value(cacheName, -1);
@@ -1604,7 +1611,9 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
                         clearMetaArgList(mArgs);
                         cl_object l_ret = Cnil;
                         if(ret.second) {
+                            EQL::is_arg_return_value = true;
                             l_ret = to_lisp_arg(ret);
+                            EQL::is_arg_return_value = false;
                             clearMetaArg(ret, true); }
                         const cl_env_ptr l_env = ecl_process_env();
                         l_env->nvalues = 2;

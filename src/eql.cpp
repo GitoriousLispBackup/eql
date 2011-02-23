@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "11.2.4"; // 2011-02-19
+const char EQL::version[] = "11.2.5"; // 2011-02-22
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
@@ -79,12 +79,22 @@ void EQL::exec(lisp_ini ini, const QByteArray& expression, const QByteArray& pac
     eval(expression.constData()); }
 
 void EQL::exec(QWidget* widget, const QByteArray& file) {
-    si_select_package(make_simple_base_string((char*)"CL-USER"));
-    eval(QString("(eql::set-home \"%1\")").arg(home()).toAscii().constData());
+    eval(QString("(set-home \"%1\")").arg(home()).toAscii().constData());
+    const QMetaObject* mo = widget->metaObject();
+    QByteArray className(mo->className());
+    while(!className.startsWith('Q')) {
+        mo = mo->superClass();
+        if(!mo) {
+            break; }
+        className = mo->className(); }
     eval(QString(
             "(progn"
-            "  (defvar eql::*qt-main* (eql:qt-object %1 0 (eql:qid \"QWidget\")))"
-            "  (export 'eql::*qt-main* (find-package :eql)))")
+            "  (defvar *qt-main* (qt-object %1 0 (eql:qid \"%2\")))"
+            "  (export '*qt-main*))")
          .arg((ulong)widget)
+         .arg(QString(className))
          .toAscii().constData());
+    si_select_package(make_simple_base_string((char*)"CL-USER"));
     eval(QString("(load \"%1\")").arg(QString(file)).toAscii().constData()); }
+
+bool EQL::is_arg_return_value = false;

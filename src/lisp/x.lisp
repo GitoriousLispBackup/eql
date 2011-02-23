@@ -71,7 +71,7 @@
 
 (defun d (&rest args)
   "A simple debug print."
-  (print (cons "[debug]" args)))
+  (print (cons :debug args)))
 
 (defun empty-string (s)
   (zerop (length s)))

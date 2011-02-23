@@ -4,6 +4,7 @@
   (:use :common-lisp)
   (:export
    #:in-home
+   #:new-qt-object
    #:qadd-event-filter
    #:qapropos
    #:qapropos*

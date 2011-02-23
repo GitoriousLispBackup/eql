@@ -3,6 +3,7 @@
 
 #include "_ini.h"
 #include "../_lobjects.h"
+#include "../../eql.h"
 #include <QtGui>
 
 TO_QT_TYPE_PTR(QNetworkRequest, qnetworkrequest)

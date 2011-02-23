@@ -7,6 +7,10 @@ DESTDIR      = ./
 OBJECTS_DIR  = ./tmp/
 MOC_DIR      = ./tmp/
 
-# include(../src/windows.pri)
+include(../src/windows.pri)
+
+win32 {
+    CONFIG += console
+}
 
 SOURCES += main.cpp

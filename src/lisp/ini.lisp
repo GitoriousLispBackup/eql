@@ -39,16 +39,26 @@
 (defun %make-vector ()
   (make-array 0 :adjustable t :fill-pointer t))
 
-(defstruct (qt-object (:constructor qt-object (pointer unique id)))
+;;; qt-object
+
+(defstruct (qt-object (:constructor qt-object (pointer unique id &optional finalize)))
   (pointer 0 :type integer)
   (unique 0 :type integer)
-  (id 0 :type fixnum))
+  (id 0 :type fixnum)
+  (finalize nil :type boolean))
+
+(defun new-qt-object (pointer unique id finalize)
+  (let ((obj (qt-object pointer unique id finalize)))
+    (when finalize
+      (ext:set-finalizer obj #'qdelete))
+    obj))
 
 (defmethod print-object ((obj qt-object) s)
   (print-unreadable-object (obj s :type nil :identity nil)
-    (format s "~A 0x~X"
+    (format s "~A 0x~X~A"
             (qt-object-name obj)
-            (qt-object-pointer obj))))
+            (qt-object-pointer obj)
+            (if (qt-object-finalize obj) " GC" ""))))
 
 (defmacro tr (src &optional con (n -1))
   "args: (source &optional context n)
@@ -124,7 +134,8 @@
    alias: qfun*
    Similar to <code>qinvoke-method</code>, additionally passing a class name, enforcing a cast to that class.
        (qfun* event \"QKeyEvent\" \"key\")
-       (qfun* graphics-text-item \"QGraphicsItem\" \"setPos\" (list x y)) ; multiple inheritance problem"
+       (qfun* graphics-text-item \"QGraphicsItem\" \"setPos\" (list x y)) ; multiple inheritance problem
+       (qfun* *qt-main* :qt \"foo\") ; call embedded Qt/C++ function (see Qt_EQL)"
   (qinvoke-method2 obj name slot args))
 
 (defun qconnect (from signal to &optional slot)

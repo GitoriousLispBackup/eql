@@ -20,6 +20,7 @@ public:
     EQL();
     ~EQL();
 
+    static bool is_arg_return_value;
     static const char version[];
     static QString home();
 

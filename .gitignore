@@ -31,4 +31,4 @@ my_app/.*
 src/ECL*
 src/tmp
 Qt_EQL/Qt_EQL
-examples/9-simple-lisp-editor/trafficlight.lisp
+Qt_EQL/EQL/data/*

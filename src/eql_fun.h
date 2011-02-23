@@ -3,31 +3,32 @@
 
 #include <QGenericArgument>
 #include <QGenericReturnArgument>
+#include <QVariant>
 
 #define QSLOT(x)   "1"#x
 #define QSIGNAL(x) "2"#x
 
-extern bool eql_fun(const QByteArray&,
-                    QGenericArgument = QGenericArgument(),
-                    QGenericArgument = QGenericArgument(),
-                    QGenericArgument = QGenericArgument(),
-                    QGenericArgument = QGenericArgument(),
-                    QGenericArgument = QGenericArgument(),
-                    QGenericArgument = QGenericArgument(),
-                    QGenericArgument = QGenericArgument(),
-                    QGenericArgument = QGenericArgument(),
-                    QGenericArgument = QGenericArgument(),
-                    QGenericArgument = QGenericArgument());
+extern QVariant eql_fun(const QByteArray&,
+                        QGenericArgument = QGenericArgument(),
+                        QGenericArgument = QGenericArgument(),
+                        QGenericArgument = QGenericArgument(),
+                        QGenericArgument = QGenericArgument(),
+                        QGenericArgument = QGenericArgument(),
+                        QGenericArgument = QGenericArgument(),
+                        QGenericArgument = QGenericArgument(),
+                        QGenericArgument = QGenericArgument(),
+                        QGenericArgument = QGenericArgument(),
+                        QGenericArgument = QGenericArgument());
 
-extern bool eql_fun(const QByteArray&,
-                    QGenericReturnArgument,
-                    QGenericArgument = QGenericArgument(),
-                    QGenericArgument = QGenericArgument(),
-                    QGenericArgument = QGenericArgument(),
-                    QGenericArgument = QGenericArgument(),
-                    QGenericArgument = QGenericArgument(),
-                    QGenericArgument = QGenericArgument(),
-                    QGenericArgument = QGenericArgument(),
-                    QGenericArgument = QGenericArgument(),
-                    QGenericArgument = QGenericArgument(),
-                    QGenericArgument = QGenericArgument());
+extern QVariant eql_fun(const QByteArray&,
+                        QVariant::Type,
+                        QGenericArgument = QGenericArgument(),
+                        QGenericArgument = QGenericArgument(),
+                        QGenericArgument = QGenericArgument(),
+                        QGenericArgument = QGenericArgument(),
+                        QGenericArgument = QGenericArgument(),
+                        QGenericArgument = QGenericArgument(),
+                        QGenericArgument = QGenericArgument(),
+                        QGenericArgument = QGenericArgument(),
+                        QGenericArgument = QGenericArgument(),
+                        QGenericArgument = QGenericArgument());

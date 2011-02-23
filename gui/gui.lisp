@@ -350,7 +350,7 @@
     (x:do-with (qfun indi)
       ("setParent" par)
       ("move" (list 0 0)))
-    (qlet ((pix (qfun "QPixmap" "grabWidget" par))
+    (let* ((pix (qfun "QPixmap" "grabWidget" par))
            (dark (to-dark pix)))
       (qfun indi "setPixmap" (set-highlight indi pix dark child)))
     (qfun indi "show")

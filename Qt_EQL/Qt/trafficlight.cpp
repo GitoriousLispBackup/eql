@@ -10,11 +10,24 @@ void LightWidget::paintEvent(QPaintEvent *)
     if (!m_on)
         return;
 
-    eql_fun("trafficlight:paint-event", // [EQL] package:function
-            Q_ARG(QWidget*, this),      // [EQL] arguments (max. 10)
+    // [EQL] example with no return value
+    //
+    eql_fun("trafficlight:paint-event", // package:function
+            Q_ARG(QWidget*, this),      // arguments (max. 10)
             Q_ARG(QColor, m_color),
             Q_ARG(int, width()),
             Q_ARG(int, height()));
+
+    // [EQL] example with return value
+    /*
+    QVariant ret =
+    eql_fun("trafficlight:paint-event", // package:function
+            QVariant::String,           // return type
+            Q_ARG(QWidget*, this),      // arguments (max. 10)
+            Q_ARG(QColor, m_color),
+            Q_ARG(int, width()),
+            Q_ARG(int, height()));
+    */
 
     // original implementation
     /*
