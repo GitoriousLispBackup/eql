@@ -712,21 +712,23 @@
       (cdr (find name *auto-indent* :test 'string= :key 'car)))))
 
 (defun indentation (line)
-  (let ((pos (position #\Space line :test 'char/=)))
-    (if (char= #\; (char line pos))
-        pos
-        (let ((spaces (+ *current-depth* *current-keyword-indent*))) ; see right paren matcher
-          (when (and (zerop spaces)
-                     (not *extra-selections*)
-                     pos)
-            (setf spaces (if (char= #\( (char line pos))
-                             (if (find (read* (subseq line (1+ pos)))
-                                       '(loop prog progn prog1 prog2 unless when when-it when-it* while))
-                                 (+ pos 2)
-                                 (1+ (or (position #\Space line :start pos)
-                                         pos)))
-                             pos)))
-          spaces))))
+  (if (x:empty-string (string-trim " " line))
+      0
+      (let ((pos (position #\Space line :test 'char/=)))
+        (if (char= #\; (char line pos))
+            pos
+            (let ((spaces (+ *current-depth* *current-keyword-indent*))) ; see right paren matcher
+              (when (and (zerop spaces)
+                         (not *extra-selections*)
+                         pos)
+                (setf spaces (if (char= #\( (char line pos))
+                                 (if (find (read* (subseq line (1+ pos)))
+                                           '(loop prog progn prog1 prog2 unless when when-it when-it* while))
+                                     (+ pos 2)
+                                     (1+ (or (position #\Space line :start pos)
+                                             pos)))
+                                 pos)))
+              spaces)))))
 
 (defun no-string-parens (line)
   (let ((ex #\Space)
@@ -784,7 +786,7 @@
                   (let* ((curr (qfun orig "block"))
                          (line (qfun curr "text"))
                          (pos (position #\Space line :test 'char/=)))
-                    (when (zerop (length (string-trim " " line)))
+                    (when (x:empty-string (string-trim " " line))
                       (return))                                                                      ; exit 1
                     (when (not (zerop pos))
                       (x:do-with (qfun orig "movePosition")
