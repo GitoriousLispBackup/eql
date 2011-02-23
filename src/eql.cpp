@@ -58,6 +58,7 @@ void EQL::exec(const QStringList& args) {
         forms << "(si::qtop-level)"; }
 #endif
     if(arguments.count() > 1) {
+        forms.prepend("(eql:qq)");
         forms.prepend("(eql:qexec)");
         forms.prepend(QString("(load \"%1\")").arg(arguments.at(1))); }
     QString code;
