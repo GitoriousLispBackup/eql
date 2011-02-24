@@ -16,6 +16,7 @@
   (qapropos "html" "QTextEdit")
   (qapropos nil "QWidget")
   (qapropos)
+  (qapropos nil *qt-main*) // embedded Qt/C++ (see Qt_EQL)
 </pre>
 </p><br>
 <p>
@@ -45,7 +46,7 @@
 <b>QDELETE (object)</b>
 <br>
 <b>QDEL</b>
-<p>Deletes any Qt object, and sets the <code>pointer</code> value to <code>0</code>.</p>
+<p>Deletes any Qt object, and sets the <code>pointer</code> value to <code>0</code>. Deleting a widget deletes all its child widgets, too.<br>See <code>qlet</code> for local Qt objects.</p>
 <pre>
   (qdel widget)
 </pre>
@@ -64,7 +65,7 @@
 </p><br>
 <p>
 <b>QFIND-CHILD (object name)</b>
-<p>Calls <code>qFindChild&lt;QObject*&gt;()</code>. Can be used to get the single widgets of a UI (see <code>qload-ui</code>), identified by <code>objectName</code>.</p>
+<p>Calls <code>qFindChild&lt;QObject*&gt;()</code>.<br>Can be used to get the child objects of any Qt object (typically from a UI, see <code>qload-ui</code>), identified by <code>objectName</code>.</p>
 </p><br>
 <p>
 <b>QFROM-UTF8 (byte-array)</b>
@@ -100,7 +101,7 @@
 <pre>
   (qfun* event "QKeyEvent" "key")
   (qfun* graphics-text-item "QGraphicsItem" "setPos" (list x y)) ; multiple inheritance problem
-  (qfun* *qt-main* :qt "foo") ; call embedded Qt/C++ function (see Qt_EQL)
+  (qfun* *qt-main* :qt "foo") ; embedded Qt/C++ (see Qt_EQL)
 </pre>
 </p><br>
 <p>

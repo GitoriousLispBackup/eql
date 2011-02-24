@@ -1163,10 +1163,12 @@ static MetaArg retArg(const QByteArray& name) {
 
 // *** meta info ***
 
-static StrList metaInfo(const QByteArray& type, const QByteArray& qclass, const QByteArray& search, bool non) {
+static StrList metaInfo(const QByteArray& type, const QByteArray& qclass, const QByteArray& search,
+                        bool non, const QMetaObject* mo) {
     StrList info;
     if("methods" == type) {
-        const QMetaObject* mo = methodMetaObjectFromName(qclass, !non);
+        if(!mo) {
+            mo = methodMetaObjectFromName(qclass, !non); }
         if(mo) {
             for(int i = mo->methodOffset(); i < mo->methodCount(); ++i) {
                 QMetaMethod mm(mo->method(i));
@@ -1231,9 +1233,9 @@ static StrList metaInfo(const QByteArray& type, const QByteArray& qclass, const 
     return info; }
 
 static cl_object collect_info(const QByteArray& type, const QByteArray& qclass, const QByteArray& qsearch,
-                              bool non, bool* found) {
+                              bool non, bool* found, const QMetaObject* mo) {
     cl_object l_info = Cnil;
-    StrList info = metaInfo(type, qclass, qsearch, non);
+    StrList info = metaInfo(type, qclass, qsearch, non, mo);
     if(info.size()) {
         *found = true;
         Q_FOREACH(QByteArray i, info) {
@@ -1246,6 +1248,7 @@ cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
     ///     (qapropos "html" "QTextEdit")
     ///     (qapropos nil "QWidget")
     ///     (qapropos)
+    ///     (qapropos nil *qt-main*) // embedded Qt/C++ (see Qt_EQL)
     ecl_process_env()->nvalues = 1;    
     QByteArray search;
     if(ECL_STRINGP(l_search)) {
@@ -1253,15 +1256,23 @@ cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
     bool all = (Cnil == l_type);
     bool q = all ? false : (Ct == cl_eql(q_keyword(), l_type));
     StrList classes;
+    bool embedded = false;
+    const QMetaObject* mo = 0;
     if(ECL_STRINGP(l_class)) {
         classes << toCString(l_class); }
-    else {
+    else if(Cnil == l_class) {
         if(all) {
             classes << LObjects::qNames;
             classes << LObjects::nNames;
             qSort(classes.begin(), classes.end()); }
         else {
             classes = q ? LObjects::qNames : LObjects::nNames; }}
+    else {
+        QtObject qobj = toQtObject(l_class);
+        if(qobj.pointer) {
+            embedded = true;
+            mo = ((QObject*)qobj.pointer)->metaObject();
+            classes << qobj.className(); }}
     cl_object l_docs = Cnil;
     Q_FOREACH(QByteArray cl, classes) {
         bool found = false;
@@ -1270,14 +1281,14 @@ cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
             cl_object l_doc_pro = Cnil;
             cl_object l_doc_slo = Cnil;
             cl_object l_doc_sig = Cnil;
-            cl_object l_doc_han = Cnil;
+            cl_object l_doc_ovr = Cnil;
             if(!non) {
-                l_doc_pro = collect_info("properties", cl, search, non, &found); }
-            cl_object l_doc_met = collect_info("methods", cl, search, non, &found);
+                l_doc_pro = collect_info("properties", cl, search, non, &found, mo); }
+            cl_object l_doc_met = collect_info("methods", cl, search, non, &found, mo);
             if(!non) {
-                l_doc_slo = collect_info("slots", cl, search, non, &found);
-                l_doc_sig = collect_info("signals", cl, search, non, &found); }
-            l_doc_han = collect_info("override", cl, search, non, &found);
+                l_doc_slo = collect_info("slots", cl, search, non, &found, mo);
+                l_doc_sig = collect_info("signals", cl, search, non, &found, mo); }
+            l_doc_ovr = collect_info("override", cl, search, non, &found, mo);
             if(found) {
                 cl_object l_doc = Cnil;
                 if(l_doc_pro != Cnil) {
@@ -1288,8 +1299,8 @@ cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
                     l_doc = CONS(CONS(make_constant_base_string((char*)"Slots:"), l_doc_slo), l_doc); }
                 if(l_doc_sig != Cnil) {
                     l_doc = CONS(CONS(make_constant_base_string((char*)"Signals:"), l_doc_sig), l_doc); }
-                if(l_doc_han != Cnil) {
-                    l_doc = CONS(CONS(make_constant_base_string((char*)"Override:"), l_doc_han), l_doc); }
+                if((l_doc_ovr != Cnil) && !embedded) {
+                    l_doc = CONS(CONS(make_constant_base_string((char*)"Override:"), l_doc_ovr), l_doc); }
                 l_doc = cl_nreverse(l_doc);
                 if(l_doc != Cnil) {
                     l_docs = CONS(CONS(make_base_string_copy((char*)cl.data()), l_doc), l_docs); }}}}
@@ -1390,7 +1401,7 @@ cl_object qcopy(cl_object l_obj) {
 cl_object qdelete(cl_object l_obj) {
     /// args: (object)
     /// alias: qdel
-    /// Deletes any Qt object, and sets the <code>pointer</code> value to <code>0</code>.
+    /// Deletes any Qt object, and sets the <code>pointer</code> value to <code>0</code>. Deleting a widget deletes all its child widgets, too.<br>See <code>qlet</code> for local Qt objects.
     ///     (qdel widget)
     ecl_process_env()->nvalues = 1;
     QtObject o = toQtObject(l_obj);
@@ -2055,7 +2066,7 @@ cl_object qload_ui(cl_object l_ui) {
 
 cl_object qfind_child(cl_object l_obj, cl_object l_name) {
     /// args: (object name)
-    /// Calls <code>qFindChild&lt;QObject*&gt;()</code>. Can be used to get the single widgets of a UI (see <code>qload-ui</code>), identified by <code>objectName</code>.
+    /// Calls <code>qFindChild&lt;QObject*&gt;()</code>.<br>Can be used to get the child objects of any Qt object (typically from a UI, see <code>qload-ui</code>), identified by <code>objectName</code>.
     ecl_process_env()->nvalues = 1;
     QString name(toQString(l_name));
     if(!name.isEmpty()) {

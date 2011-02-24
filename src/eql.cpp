@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "11.2.7"; // 2011-02-23
+const char EQL::version[] = "11.2.8"; // 2011-02-24
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
@@ -57,10 +57,10 @@ void EQL::exec(const QStringList& args) {
         tpl = true;
         forms << "(si::qtop-level)"; }
 #endif
+    bool io = arguments.contains("-io");
+    arguments.removeAll("-io");
     if(arguments.count() > 1) {
-        if(arguments.contains("-io")) {
-            arguments.removeAll("-io"); }
-        else {
+        if(!io) {
             forms.prepend("(eql:qq)");
             forms.prepend("(eql:qexec)"); }
         forms.prepend(QString("(load \"%1\")").arg(arguments.at(1))); }

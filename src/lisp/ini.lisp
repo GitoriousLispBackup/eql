@@ -135,7 +135,7 @@
    Similar to <code>qinvoke-method</code>, additionally passing a class name, enforcing a cast to that class.
        (qfun* event \"QKeyEvent\" \"key\")
        (qfun* graphics-text-item \"QGraphicsItem\" \"setPos\" (list x y)) ; multiple inheritance problem
-       (qfun* *qt-main* :qt \"foo\") ; call embedded Qt/C++ function (see Qt_EQL)"
+       (qfun* *qt-main* :qt \"foo\") ; embedded Qt/C++ (see Qt_EQL)"
   (qinvoke-method2 obj name slot args))
 
 (defun qconnect (from signal to &optional slot)
