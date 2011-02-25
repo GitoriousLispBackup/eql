@@ -2,7 +2,6 @@
 // see Qt_EQL example
 
 #include <QGenericArgument>
-#include <QGenericReturnArgument>
 #include <QVariant>
 
 #define QSLOT(x)   "1"#x

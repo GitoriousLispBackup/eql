@@ -5,7 +5,6 @@
 #define QT_EQL_H
 
 #include <QGenericArgument>
-#include <QGenericReturnArgument>
 #include <QVariant>
 #include "eql_global.h"
 
