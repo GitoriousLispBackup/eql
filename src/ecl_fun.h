@@ -253,7 +253,6 @@ struct QtMetaObject : private QObject {
 typedef QPair<QByteArray, void*> MetaArg;
 
 void iniCLFunctions();
-void registerMetaTypes();
 void callConnectFun(void*, const QList<QByteArray>&, void**);
 bool callEventFun(void*, QObject*, QEvent*);
 cl_object to_lisp_arg(const MetaArg&);

@@ -115,7 +115,14 @@
       (dolist (sub2 (rest sub1))
         (format t "~%  ~A~%~%" (first sub2))
         (dolist (sub3 (rest sub2))
-          (format t "    ~A~%" sub3))))
+          (let* ((par (position #\( sub3))
+                 (x (if par
+                        (position #\Space sub3 :end par :from-end t)
+                        (position #\Space sub3))))
+            (format t "    ~A~A~A~%"
+                    (make-string (max 0 (- 15 x)))
+                    (subseq sub3 0 x)
+                    (subseq sub3 x))))))
     (terpri)))
 
 (defun qapropos* (&optional name class type)

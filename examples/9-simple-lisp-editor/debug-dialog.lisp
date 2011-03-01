@@ -1,7 +1,7 @@
 (defpackage :debug-dialog
   (:use :common-lisp :eql)
   (:export
-    #:command))
+   #:command))
 
 (provide :debug-dialog)
 

@@ -1232,10 +1232,18 @@ static StrList metaInfo(const QByteArray& type, const QByteArray& qclass, const 
                                 info << name.toAscii(); }}}}}}}
     return info; }
 
+static bool metaInfoLessThan(const QByteArray& s1, const QString& s2) {
+    if(s1.contains('(')) {
+        return s1.mid(1 + s1.lastIndexOf(' ', s1.indexOf('('))) <
+               s2.mid(1 + s2.lastIndexOf(' ', s2.indexOf('('))); }
+    return s1.mid(1 + s1.indexOf(' ')) <
+           s2.mid(1 + s2.indexOf(' ')); }
+
 static cl_object collect_info(const QByteArray& type, const QByteArray& qclass, const QByteArray& qsearch,
                               bool non, bool* found, const QMetaObject* mo) {
     cl_object l_info = Cnil;
     StrList info = metaInfo(type, qclass, qsearch, non, mo);
+    qSort(info.begin(), info.end(), metaInfoLessThan);
     if(info.size()) {
         *found = true;
         Q_FOREACH(QByteArray i, info) {
@@ -1448,7 +1456,7 @@ cl_object qproperty(cl_object l_obj, cl_object l_name) {
 cl_object qset_property(cl_object l_obj, cl_object l_name, cl_object l_val) {
     /// args: (object name value)
     /// alias: qset
-    /// Sets a Qt property. Enumerator values have to be passed as <code>int</code> values.
+    /// Sets a Qt property. Enumerators have to be passed as <code>int</code> values.
     ///     (qset label "alignment" |Qt.AlignCenter|)
     ecl_process_env()->nvalues = 1;
     QtObject o = toQtObject(l_obj);
@@ -2076,7 +2084,8 @@ cl_object qfind_child(cl_object l_obj, cl_object l_name) {
             if(obj) {
                 const QMetaObject* mo = obj->metaObject();
                 QByteArray className(mo->className());
-                while(!className.startsWith('Q')) {
+                while(!LObjects::q_names.value(className, 0) &&
+                      !LObjects::n_names.value(className, 0)) {
                     mo = mo->superClass();
                     if(!mo) {
                         break; }

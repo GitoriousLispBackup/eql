@@ -6,8 +6,8 @@
 TESTED WITH
 ===========
 
-* ECL from CVS (2010-10-29)
-* Qt4.6.x, Qt4.7.0
+* ECL from CVS (2010-10-29), ECL 11.1.1
+* Qt4.6, Qt4.7
 * Linux, OSX 10.4, Windows XP & 7 (MSVC)
 
 

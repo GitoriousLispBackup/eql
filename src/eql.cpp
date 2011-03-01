@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "11.2.10"; // 2011-02-25
+const char EQL::version[] = "11.3.1"; // 2011-03-01
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
@@ -83,7 +83,8 @@ void EQL::exec(QWidget* widget, const QByteArray& file) {
     eval(QString("(set-home \"%1\")").arg(home()).toAscii().constData());
     const QMetaObject* mo = widget->metaObject();
     QByteArray className(mo->className());
-    while(!className.startsWith('Q')) {
+    while(!LObjects::q_names.value(className, 0) &&
+          !LObjects::n_names.value(className, 0)) {
         mo = mo->superClass();
         if(!mo) {
             break; }

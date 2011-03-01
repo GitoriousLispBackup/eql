@@ -61,7 +61,7 @@
         (multiple-value-bind (eql-version qt-version)
             (qversion)
           (format t "~%EQL local-server (ECL ~A, EQL ~A, Qt ~A)~@
-                             Use local-client to send input.~%"
+                       Use local-client to send input.~%"
                   (si::lisp-implementation-version) eql-version qt-version))
         t)
       (progn

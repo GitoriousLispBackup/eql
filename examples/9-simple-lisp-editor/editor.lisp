@@ -1043,7 +1043,7 @@
 (let ((up (saved-history))
       (out (open +history-file+ :direction :output
                  :if-exists :append :if-does-not-exist :create))
-      down)
+      down ex)
   (defun command-key-pressed (ev)
     (x:when-it (case (qfun ev "key")
                  (#.|Qt.Key_Up|
@@ -1055,7 +1055,10 @@
                  ((#.|Qt.Key_Return| #.|Qt.Key_Enter|)
                     (command)
                     nil))
-      (qset *command* "plainText" (first x:it)))
+      (let ((cmd (first x:it)))
+        (if (and ex (string= cmd ex))
+            (command-key-pressed ev)
+            (qset *command* "plainText" (setf ex cmd)))))
     nil) ; overridden
   (defun history-add (cmd)
     (when (or (not up)
@@ -1096,9 +1099,12 @@
 
 (defun start ()
   (ini)
-  (file-open (let ((file (third (qfun "QCoreApplication" "arguments"))))
-               (if (and file (x:ends-with ".lisp" file))
-                   file
+  (let* ((args (remove-if (lambda (arg) (x:starts-with "-" arg))
+                          (qfun "QCoreApplication" "arguments")))
+         (last-arg (first (last args))))
+    (file-open (if (and (> (length args) 2)
+                        (x:ends-with ".lisp" last-arg))
+                   last-arg
                    "my.lisp"))))
 
 (start)

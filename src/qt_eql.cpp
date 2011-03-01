@@ -7,15 +7,16 @@
 #include "ecl_fun.h"
 #include "eql.h"
 
-#define LISP_ARG(x) to_lisp_arg(qMakePair(QByteArray(x.name()), x.data()))
+#define PUSH_ARG(x, list) list = CONS(to_lisp_arg(qMakePair(QByteArray(x.name()), x.data())), list)
 
-static QHash<QByteArray, void*> lisp_symbols;
+static QHash<QByteArray, void*> lisp_functions;
 
 static QVariant eql_fun2(const QByteArray& pkgFun,
                          QVariant::Type retType,
                          const QGenericArgument& a1, const QGenericArgument& a2, const QGenericArgument& a3, const QGenericArgument& a4, const QGenericArgument& a5,
                          const QGenericArgument& a6, const QGenericArgument& a7, const QGenericArgument& a8, const QGenericArgument& a9, const QGenericArgument& a10) {
-    void* symbol = lisp_symbols.value(pkgFun);
+    static void* symbol = 0; // avoid GCC warning about clobbering (longjmp)
+    symbol = lisp_functions.value(pkgFun);
     if(!symbol) {
         int p1 = pkgFun.indexOf(':');
         int p2 = pkgFun.lastIndexOf(':');
@@ -26,39 +27,28 @@ static QVariant eql_fun2(const QByteArray& pkgFun,
                                          cl_find_package(make_constant_base_string(pkg.toUpper().constData())));
         if(l_sym != Cnil) {
             symbol = (void*)l_sym;
-            lisp_symbols[pkgFun] = symbol; }}
+            lisp_functions[pkgFun] = symbol; }}
     cl_object l_args = Cnil;
-    if(a1.name()) {
-        l_args = CONS(LISP_ARG(a1), l_args);
-        if(a2.name()) {
-            l_args = CONS(LISP_ARG(a2), l_args);
-            if(a3.name()) {
-                l_args = CONS(LISP_ARG(a3), l_args);
-                if(a4.name()) {
-                    l_args = CONS(LISP_ARG(a4), l_args);
-                    if(a5.name()) {
-                        l_args = CONS(LISP_ARG(a5), l_args);
-                        if(a6.name()) {
-                            l_args = CONS(LISP_ARG(a6), l_args);
-                            if(a7.name()) {
-                                l_args = CONS(LISP_ARG(a7), l_args);
-                                if(a8.name()) {
-                                    l_args = CONS(LISP_ARG(a8), l_args);
-                                    if(a9.name()) {
-                                        l_args = CONS(LISP_ARG(a9), l_args);
-                                        if(a10.name()) {
-                                            l_args = CONS(LISP_ARG(a10), l_args); }}}}}}}}}}
+    if(a1.name()) { PUSH_ARG(a1, l_args);
+        if(a2.name()) { PUSH_ARG(a2, l_args);
+            if(a3.name()) { PUSH_ARG(a3, l_args);
+                if(a4.name()) { PUSH_ARG(a4, l_args);
+                    if(a5.name()) { PUSH_ARG(a5, l_args);
+                        if(a6.name()) { PUSH_ARG(a6, l_args);
+                            if(a7.name()) { PUSH_ARG(a7, l_args);
+                                if(a8.name()) { PUSH_ARG(a8, l_args);
+                                    if(a9.name()) { PUSH_ARG(a9, l_args);
+                                        if(a10.name()) { PUSH_ARG(a10, l_args); }}}}}}}}}}
     l_args = cl_nreverse(l_args);
     QVariant ret;
     if(symbol) {
-        cl_object l_fun = cl_symbol_function((cl_object)symbol);
-        if(l_fun != Cnil) {
-            CL_CATCH_ALL_BEGIN(ecl_process_env()) {
-                cl_object l_ret = cl_apply(2, l_fun, l_args);
-                if(retType != QVariant::UserType) {
-                    ret = toQVariant(l_ret, 0, retType); }}
-            CL_CATCH_ALL_END;
-            return ret; }}
+        cl_object l_ret = Cnil;
+        CL_CATCH_ALL_BEGIN(ecl_process_env()) {
+            l_ret = cl_apply(2, (cl_object)symbol, l_args); }
+        CL_CATCH_ALL_END;
+        if(retType != QVariant::UserType) {
+            ret = toQVariant(l_ret, 0, retType); }
+        return ret; }
     error_msg(QString("eql_fun(): %1").arg(QString(pkgFun)).toAscii().constData(), l_args);
     return ret; }
 

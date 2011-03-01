@@ -3,7 +3,7 @@ BUILD
 
     1) Qt/trafficlight.pro
 
-    2) EQL_Qt.pro
+    2) Qt_EQL.pro
 
     3) in example 9:
        eql make-local-server-fasl.lisp
@@ -17,7 +17,7 @@ BUILD
 RUN
 ===       
 
-    1) EQL_Qt (executable)
+    1) Qt_EQL (executable)
 
     2) in EQL/:
        eql eql-editor.fas trafficlight.lisp
@@ -28,7 +28,7 @@ RUN
 See Qt/trafficlight.cpp:eql_fun() for an example of how to call a Lisp
 function from Qt.
 
-The parameter *qt-main* is bound to the main Qt widget.
+The variable eql:*qt-main* is bound to the main Qt widget.
 
 To get the 3 child widgets, identified by QObject::objectName(), do:
 
