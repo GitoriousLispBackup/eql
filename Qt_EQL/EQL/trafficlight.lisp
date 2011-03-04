@@ -1,4 +1,5 @@
 (progn
+  ;; optional: Lisp server for listening to an editor
   (load "EQL/eql-local-server.fas")                 ; see example 9: make-local-server-fasl.lisp
   (eql:qset (eql:qapp) "quitOnLastWindowClosed" t)) ; to exit "local-server"
 
@@ -13,6 +14,8 @@
       (pen (qnew "QPen"))
       (brush (qnew "QBrush(Qt::BrushStyle)" |Qt.SolidPattern|)))
   (defun paint-event (widget color width height)
+    ;;(x:d widget (qget widget "objectName") color) ; debug output
+    ;;(local-server:output)                         ; get output buffer (for editor output widget)
     (qfun brush "setColor(QColor)" color)
     (qfun pen "setColor" "steelblue")
     (qfun pen "setWidth" 5)
@@ -21,6 +24,6 @@
       ("setRenderHint" |QPainter.Antialiasing|)
       ("setPen(QPen)" pen)
       ("setBrush(QBrush)" brush)
-      ;;("drawRect(QRect)" (list 5 5 (- width 10) (- height 10)))
-      ("drawEllipse(QRect)" (list 5 5 (- width 10) (- height 10)))
+      ;;("drawRect(QRect)" (list 5 5 (- width 10) (- height 10))) ; square
+      ("drawEllipse(QRect)" (list 5 5 (- width 10) (- height 10))) ; circle
       "end")))

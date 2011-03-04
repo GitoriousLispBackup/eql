@@ -752,7 +752,7 @@
             (curr (qfun cursor "block"))
             (spaces (indentation (qfun curr "text"))))
        (unless (zerop spaces)
-         (qfun cursor "insertText" (format nil "~%~A" (make-string spaces :initial-element #\Space)))
+         (qfun cursor "insertText" (format nil "~%~A" (make-string spaces)))
          (qfun *editor* "ensureCursorVisible")
          t)))
     (#.|Qt.Key_Tab|
@@ -793,7 +793,7 @@
                         (|QTextCursor.StartOfLine| |QTextCursor.MoveAnchor|)
                         (|QTextCursor.NextCharacter| |QTextCursor.KeepAnchor| pos))))
                   (unless (zerop spaces)
-                    (qfun orig "insertText" (make-string spaces :initial-element #\Space)))))
+                    (qfun orig "insertText" (make-string spaces)))))
               (unless (qfun cursor* "movePosition" |QTextCursor.NextBlock| |QTextCursor.MoveAnchor|)
                 (return))                                                                            ; exit 2
               (qfun *editor* "setTextCursor" cursor*))

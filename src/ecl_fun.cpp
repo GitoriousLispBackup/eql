@@ -90,7 +90,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object((char*)"qclear-event-filters"), (cl_objectfn_fixed)qclear_event_filters,     0);
     cl_def_c_function(c_string_to_object((char*)"qconnect2"),            (cl_objectfn_fixed)qconnect2,                5);
     cl_def_c_function(c_string_to_object((char*)"qcopy"),                (cl_objectfn_fixed)qcopy,                    1);
-    cl_def_c_function(c_string_to_object((char*)"qdelete"),              (cl_objectfn_fixed)qdelete,                  1);
+    cl_def_c_function(c_string_to_object((char*)"qdelete2"),             (cl_objectfn_fixed)qdelete2,                 2);
     cl_def_c_function(c_string_to_object((char*)"qenum"),                (cl_objectfn_fixed)qenum,                    2);
     cl_def_c_function(c_string_to_object((char*)"qescape"),              (cl_objectfn_fixed)qescape,                  1);
     cl_def_c_function(c_string_to_object((char*)"qexec"),                (cl_objectfn_fixed)qexec,                    0);
@@ -1256,7 +1256,7 @@ cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
     ///     (qapropos "html" "QTextEdit")
     ///     (qapropos nil "QWidget")
     ///     (qapropos)
-    ///     (qapropos nil *qt-main*) // embedded Qt/C++ (see Qt_EQL)
+    ///     (qapropos nil *qt-main*) ; embedded Qt/C++ (see Qt_EQL)
     ecl_process_env()->nvalues = 1;    
     QByteArray search;
     if(ECL_STRINGP(l_search)) {
@@ -1406,17 +1406,22 @@ cl_object qcopy(cl_object l_obj) {
     error_msg("QCOPY", LIST1(l_obj));
     return Cnil; }
 
-cl_object qdelete(cl_object l_obj) {
-    /// args: (object)
+cl_object qdelete2(cl_object l_obj, cl_object l_later) {
+    /// args: (object &optional later)
     /// alias: qdel
-    /// Deletes any Qt object, and sets the <code>pointer</code> value to <code>0</code>. Deleting a widget deletes all its child widgets, too.<br>See <code>qlet</code> for local Qt objects.
+    /// Deletes any Qt object, and sets the <code>pointer</code> value to <code>0</code>. Deleting a widget deletes all its child widgets, too.<br>If <code>later</code> is not <code>NIL</code>, the function <code>QObject::deleteLater()</code> will be called instead.<br>See <code>qlet</code> for local Qt objects.
     ///     (qdel widget)
+    ///     (qdel socket :later)
     ecl_process_env()->nvalues = 1;
     QtObject o = toQtObject(l_obj);
     bool ok = false;
     if(o.isQObject()) {
         if(o.pointer) {
-            delete (QObject*)o.pointer;
+            QObject* obj = (QObject*)o.pointer;
+            if(Cnil == l_later) {
+                delete obj; }
+            else {
+                obj->deleteLater(); }
             ok = true; }}
     else if(o.pointer) {
         LObjects::deleteNObject(-o.id, o.pointer);
@@ -1425,7 +1430,7 @@ cl_object qdelete(cl_object l_obj) {
         STATIC_SYMBOL_PKG(s_qset_null, (char*)"QSET-NULL", (char*)"EQL")
         cl_funcall(2, s_qset_null, l_obj);
         return Ct; }
-    error_msg("QDELETE", LIST1(l_obj));
+    error_msg("QDELETE", LIST2(l_obj, l_later));
     return Cnil; }
 
 cl_object qproperty(cl_object l_obj, cl_object l_name) {
@@ -2084,8 +2089,7 @@ cl_object qfind_child(cl_object l_obj, cl_object l_name) {
             if(obj) {
                 const QMetaObject* mo = obj->metaObject();
                 QByteArray className(mo->className());
-                while(!LObjects::q_names.value(className, 0) &&
-                      !LObjects::n_names.value(className, 0)) {
+                while(!LObjects::q_names.contains(className)) {
                     mo = mo->superClass();
                     if(!mo) {
                         break; }

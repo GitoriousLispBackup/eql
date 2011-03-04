@@ -108,6 +108,9 @@
   (when (qt-object-p obj)
     (zerop (qt-object-pointer obj))))
 
+(defun qdelete (obj &optional later)
+  (qdelete2 obj later))
+
 (defun qapropos (&optional name class type)
   (let ((main (qapropos2 name class type)))
     (dolist (sub1 main)
@@ -119,10 +122,7 @@
                  (x (if par
                         (position #\Space sub3 :end par :from-end t)
                         (position #\Space sub3))))
-            (format t "    ~A~A~A~%"
-                    (make-string (max 0 (- 15 x)))
-                    (subseq sub3 0 x)
-                    (subseq sub3 x))))))
+            (format t "    ~A~A~%" (make-string (max 0 (- 15 x))) sub3)))))
     (terpri)))
 
 (defun qapropos* (&optional name class type)

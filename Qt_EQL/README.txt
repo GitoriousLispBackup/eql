@@ -1,3 +1,19 @@
+INTRO
+=====
+
+This is a simple example of embedding EQL in existing Qt/C++ projects.
+So, after statically linking a Qt/C++ application to EQL, you can:
+  - call C++ from Lisp
+  - call Lisp from C++
+
+You'll find the simple Lisp editor from example 9 to be integrated in this
+example (which allows to run the Qt application natively, keeping it listening
+to the simple editor, for eval region etc.).
+
+(For your own applications, you obviously don't need to add the editor & server
+from example 9.)
+
+
 BUILD
 =====
 
@@ -5,14 +21,16 @@ BUILD
 
     2) Qt_EQL.pro
 
-    3) in example 9:
-       eql make-local-server-fasl.lisp
-       eql make-editor-fasl.lisp
+    3) in eql/examples/9-simple-lisp-editor/:
+       $ eql make-local-server-fasl.lisp
+       $ eql make-editor-fasl.lisp
        copy all of:
            eql-local-server.fas
            eql-editor.fas
            data/
-       to EQL/
+       from: eql/examples/9-simple-lisp-editor/
+       to:   eql/Qt_EQL/EQL/
+
 
 RUN
 ===       
@@ -20,13 +38,19 @@ RUN
     1) Qt_EQL (executable)
 
     2) in EQL/:
-       eql eql-editor.fas trafficlight.lisp
-       eval the line: (in-package :trafficlight)
-       [...]
+       $ eql eql-editor.fas trafficlight.lisp
+       eval the line:
+           (in-package :trafficlight)
+       just play around with "eval region"...
 
 
 See Qt/trafficlight.cpp:eql_fun() for an example of how to call a Lisp
-function from Qt.
+function from C++. The syntax is like this:
+
+    eql_fun("my-package:my-function",
+            Q_ARG(QWidget*, this),
+            Q_ARG(QStringList, list),
+            Q_ARG(int, maximum()));
 
 The variable eql:*qt-main* is bound to the main Qt widget.
 
