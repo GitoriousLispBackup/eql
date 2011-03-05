@@ -68,10 +68,22 @@ From Lisp you can call: (note "qfun*" and ":qt")
 This is possible because these 2 methods are declared Q_INVOKABLE
 in Qt/trafficlight.h.
 
-In order to call generic Qt functions, signals, slots from *qt-main* and child
-objects, simply use the standard qfun (not qfun* as above), qget etc.
+So, in order to call either methods declared Q_INVOKABLE, or user defined
+signals/slots, use qfun* with :qt as second argument.
+(This implementation detail has been chosen to avoid name clashes with
+ordinary Qt methods, which are quite a lot...).
 
-You can't use qoverride for external Qt/C++ classes.
+To list all user defined properties, methods, signals, slots of a class
+defined in C++, see the special usage of qapropos (passing an object instead
+of a class name).
+
+For calling generic functions, signals, slots from *qt-main* and child
+objects, simply use the standard qfun.
+
+All of: qconnect, qget, qset don't need this distinction.
+
+You (quite obviously) can't use qoverride for external Qt/C++ classes (to do
+the equivalent, simply call a Lisp function from an overriden method in C++).
 
 The class name returned by qt-object-name is the first vanilla Qt class
 encountered walking up the super classes; in this example, *qt-main* is shown of

@@ -11,12 +11,12 @@
 </p><br>
 <p>
 <b>QAPROPOS (&optional search class)</b>
-<p>Finds all occurrencies of the given search term in the given object's meta information.<br>Constructors are listed under <b>Methods</b>.</p>
+<p>Finds all occurrencies of the given search term in the given object's meta information.<br>Constructors are listed under <b>Methods</b>.<br>To list the user defined functions of external C++ classes (see Qt_EQL), pass the object instead of the class name.</p>
 <pre>
   (qapropos "html" "QTextEdit")
   (qapropos nil "QWidget")
   (qapropos)
-  (qapropos nil *qt-main*) ; embedded Qt/C++ (see Qt_EQL)
+  (qapropos nil *qt-main*) ; embedded C++ (see Qt_EQL)
 </pre>
 </p><br>
 <p>
@@ -46,7 +46,7 @@
 <b>QDELETE (object &optional later)</b>
 <br>
 <b>QDEL</b>
-<p>Deletes any Qt object, and sets the <code>pointer</code> value to <code>0</code>. Deleting a widget deletes all its child widgets, too.<br>If <code>later</code> is not <code>NIL</code>, the function <code>QObject::deleteLater()</code> will be called instead.<br>See <code>qlet</code> for local Qt objects.</p>
+<p>Deletes any Qt object, and sets the <code>pointer</code> value to <code>0</code>. Deleting a widget deletes all its child widgets, too.<br>If <code>later</code> is not <code>NIL</code>, the function <code>QObject::deleteLater()</code> will be called instead.<br>See <code>qlet</code> for local Qt objects.<br>Returns <code>T</code> if the object has effectively been deleted.</p>
 <pre>
   (qdel widget)
   (qdel socket :later)

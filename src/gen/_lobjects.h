@@ -65,6 +65,15 @@ public:
     static void* overrideFun(uint, int);
     static void setOverrideFun(uint, int, void*);
 
+    static QByteArray vanillaQtSuperClassName(const QMetaObject* mo) {
+        QByteArray className(mo->className());
+        while(!q_names.contains(className)) {
+            mo = mo->superClass();
+            if(!mo) {
+                break; }
+            className = mo->className(); }
+        return className; }
+
     static StaticMetaObject staticMetaObject_help;
     static StaticMetaObject staticMetaObject_network;
     static StaticMetaObject staticMetaObject_opengl;

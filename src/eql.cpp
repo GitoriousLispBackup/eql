@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "11.3.2"; // 2011-03-04
+const char EQL::version[] = "11.3.3"; // 2011-03-05
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
@@ -81,19 +81,12 @@ void EQL::exec(lisp_ini ini, const QByteArray& expression, const QByteArray& pac
 
 void EQL::exec(QWidget* widget, const QByteArray& file) {
     eval(QString("(set-home \"%1\")").arg(home()).toAscii().constData());
-    const QMetaObject* mo = widget->metaObject();
-    QByteArray className(mo->className());
-    while(!LObjects::q_names.contains(className)) {
-        mo = mo->superClass();
-        if(!mo) {
-            break; }
-        className = mo->className(); }
     eval(QString(
             "(progn"
             "  (defvar *qt-main* (qt-object %1 0 (eql:qid \"%2\")))"
             "  (export '*qt-main*))")
          .arg((ulong)widget)
-         .arg(QString(className))
+         .arg(QString(LObjects::vanillaQtSuperClassName(widget->metaObject())))
          .toAscii().constData());
     si_select_package(make_simple_base_string((char*)"CL-USER"));
     eval(QString("(load \"%1\")").arg(QString(file)).toAscii().constData()); }

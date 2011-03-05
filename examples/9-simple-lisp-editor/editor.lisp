@@ -1043,7 +1043,7 @@
 (let ((up (saved-history))
       (out (open +history-file+ :direction :output
                  :if-exists :append :if-does-not-exist :create))
-      down ex)
+      down)
   (defun command-key-pressed (ev)
     (x:when-it (case (qfun ev "key")
                  (#.|Qt.Key_Up|
@@ -1055,10 +1055,7 @@
                  ((#.|Qt.Key_Return| #.|Qt.Key_Enter|)
                     (command)
                     nil))
-      (let ((cmd (first x:it)))
-        (if (and ex (string= cmd ex))
-            (command-key-pressed ev)
-            (qset *command* "plainText" (setf ex cmd)))))
+      (qset *command* "plainText" (first x:it)))
     nil) ; overridden
   (defun history-add (cmd)
     (when (or (not up)

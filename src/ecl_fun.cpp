@@ -1206,7 +1206,8 @@ static StrList metaInfo(const QByteArray& type, const QByteArray& qclass, const 
             if(QString(name).contains(search, Qt::CaseInsensitive)) {
                 info << name; }}}
     else if(!non) {
-        const QMetaObject* mo = LObjects::staticMetaObject(qclass);
+        if(!mo) {
+            mo = LObjects::staticMetaObject(qclass); }
         if(mo) {
             if("properties" == type) {
                 for(int i = mo->propertyOffset(); i < mo->propertyCount(); ++i) {
@@ -1252,11 +1253,11 @@ static cl_object collect_info(const QByteArray& type, const QByteArray& qclass, 
 
 cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
     /// args: (&optional search class)
-    /// Finds all occurrencies of the given search term in the given object's meta information.<br>Constructors are listed under <b>Methods</b>.
+    /// Finds all occurrencies of the given search term in the given object's meta information.<br>Constructors are listed under <b>Methods</b>.<br>To list the user defined functions of external C++ classes (see Qt_EQL), pass the object instead of the class name.
     ///     (qapropos "html" "QTextEdit")
     ///     (qapropos nil "QWidget")
     ///     (qapropos)
-    ///     (qapropos nil *qt-main*) ; embedded Qt/C++ (see Qt_EQL)
+    ///     (qapropos nil *qt-main*) ; embedded C++ (see Qt_EQL)
     ecl_process_env()->nvalues = 1;    
     QByteArray search;
     if(ECL_STRINGP(l_search)) {
@@ -1276,16 +1277,20 @@ cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
         else {
             classes = q ? LObjects::qNames : LObjects::nNames; }}
     else {
-        QtObject qobj = toQtObject(l_class);
-        if(qobj.pointer) {
-            embedded = true;
-            mo = ((QObject*)qobj.pointer)->metaObject();
-            classes << qobj.className(); }}
+        QtObject obj = toQtObject(l_class);
+        if(obj.isQObject()) {
+            if(obj.pointer) {
+                embedded = true;
+                mo = ((QObject*)obj.pointer)->metaObject();
+                classes << QString("%1 (inherits %2)")
+                        .arg(mo->className())
+                        .arg(QString(obj.className()))
+                        .toAscii(); }}}
     cl_object l_docs = Cnil;
     Q_FOREACH(QByteArray cl, classes) {
         bool found = false;
         bool non = LObjects::n_names.contains(cl);
-        if(non || LObjects::q_names.contains(cl)) {
+        if(non || embedded || LObjects::q_names.contains(cl)) {
             cl_object l_doc_pro = Cnil;
             cl_object l_doc_slo = Cnil;
             cl_object l_doc_sig = Cnil;
@@ -1409,7 +1414,7 @@ cl_object qcopy(cl_object l_obj) {
 cl_object qdelete2(cl_object l_obj, cl_object l_later) {
     /// args: (object &optional later)
     /// alias: qdel
-    /// Deletes any Qt object, and sets the <code>pointer</code> value to <code>0</code>. Deleting a widget deletes all its child widgets, too.<br>If <code>later</code> is not <code>NIL</code>, the function <code>QObject::deleteLater()</code> will be called instead.<br>See <code>qlet</code> for local Qt objects.
+    /// Deletes any Qt object, and sets the <code>pointer</code> value to <code>0</code>. Deleting a widget deletes all its child widgets, too.<br>If <code>later</code> is not <code>NIL</code>, the function <code>QObject::deleteLater()</code> will be called instead.<br>See <code>qlet</code> for local Qt objects.<br>Returns <code>T</code> if the object has effectively been deleted.
     ///     (qdel widget)
     ///     (qdel socket :later)
     ecl_process_env()->nvalues = 1;
@@ -1430,7 +1435,7 @@ cl_object qdelete2(cl_object l_obj, cl_object l_later) {
         STATIC_SYMBOL_PKG(s_qset_null, (char*)"QSET-NULL", (char*)"EQL")
         cl_funcall(2, s_qset_null, l_obj);
         return Ct; }
-    error_msg("QDELETE", LIST2(l_obj, l_later));
+    // no error message
     return Cnil; }
 
 cl_object qproperty(cl_object l_obj, cl_object l_name) {
@@ -1440,20 +1445,19 @@ cl_object qproperty(cl_object l_obj, cl_object l_name) {
     ///     (qget label "text")
     QtObject o = toQtObject(l_obj);
     if(ECL_STRINGP(l_name)) {
-        if(o.pointer) {
-            const QMetaObject* mo = staticMetaObject(o);
-            if(mo) {
-                int n = mo->indexOfProperty(toCString(l_name));
-                if(n != -1) {
-                    QMetaProperty mp(mo->property(n));
-                    QVariant var(mp.read((QObject*)o.pointer));
-                    const cl_env_ptr l_env = ecl_process_env();
-                    l_env->nvalues = 2;
-                    EQL::is_arg_return_value = true;
-                    l_env->values[0] = from_qvariant_value(var);
-                    EQL::is_arg_return_value = false;
-                    l_env->values[1] = Ct;
-                    return l_env->values[0]; }}}}
+        if(o.isQObject() && o.pointer) {
+            const QMetaObject* mo = ((QObject*)o.pointer)->metaObject();
+            int n = mo->indexOfProperty(toCString(l_name));
+            if(n != -1) {
+                QMetaProperty mp(mo->property(n));
+                QVariant var(mp.read((QObject*)o.pointer));
+                const cl_env_ptr l_env = ecl_process_env();
+                l_env->nvalues = 2;
+                EQL::is_arg_return_value = true;
+                l_env->values[0] = from_qvariant_value(var);
+                EQL::is_arg_return_value = false;
+                l_env->values[1] = Ct;
+                return l_env->values[0]; }}}
     ecl_process_env()->nvalues = 1;
     error_msg("QPROPERTY", LIST2(l_obj, l_name));
     return Cnil; }
@@ -1466,19 +1470,18 @@ cl_object qset_property(cl_object l_obj, cl_object l_name, cl_object l_val) {
     ecl_process_env()->nvalues = 1;
     QtObject o = toQtObject(l_obj);
     if(ECL_STRINGP(l_name)) {
-        if(o.pointer) {
-            const QMetaObject* mo = staticMetaObject(o);
-            if(mo) {
-                int n = mo->indexOfProperty(toCString(l_name));
-                if(n != -1) {
-                    QMetaProperty mp(mo->property(n));
-                    QVariant var;
-                    if(mp.isEnumType()) {
-                        var = toInt(l_val); }
-                    else {
-                        var = toQVariant(l_val, mp.typeName()); }
-                    if(mp.write((QObject*)o.pointer, var)) {
-                        return l_val; }}}}}
+        if(o.isQObject() && o.pointer) {
+            const QMetaObject* mo = ((QObject*)o.pointer)->metaObject();
+            int n = mo->indexOfProperty(toCString(l_name));
+            if(n != -1) {
+                QMetaProperty mp(mo->property(n));
+                QVariant var;
+                if(mp.isEnumType()) {
+                    var = toInt(l_val); }
+                else {
+                    var = toQVariant(l_val, mp.typeName()); }
+                if(mp.write((QObject*)o.pointer, var)) {
+                    return l_val; }}}}
     error_msg("QSET-PROPERTY", LIST3(l_obj, l_name, l_val));
     return Cnil; }
 
@@ -2087,14 +2090,7 @@ cl_object qfind_child(cl_object l_obj, cl_object l_name) {
         if(o.isQObject()) {
             QObject* obj = qFindChild<QObject*>((QObject*)o.pointer, name);
             if(obj) {
-                const QMetaObject* mo = obj->metaObject();
-                QByteArray className(mo->className());
-                while(!LObjects::q_names.contains(className)) {
-                    mo = mo->superClass();
-                    if(!mo) {
-                        break; }
-                    className = mo->className(); }
-                cl_object l_ret = qt_object_from_name(className,
+                cl_object l_ret = qt_object_from_name(LObjects::vanillaQtSuperClassName(obj->metaObject()),
                                                       obj,
                                                       LObjects::ui_unique.value(name, 0));
                 return l_ret; }}}
