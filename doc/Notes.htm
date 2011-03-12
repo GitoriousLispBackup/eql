@@ -17,21 +17,16 @@
   for Qt objects, deleting them  when leaving its body.</p>
 <p>No universal GC (garbage collection) for Qt objects:
 <ul>
-<li> It's clear that during development there will always be some garbage. The
-  interesting part is final applications.
-<li>Qt widgets always live inside an object hierarchy (no child will be able
-  to survive its parents...).
-<li>Additionally, you have the <code>qlet</code> macro, which provides local
- Qt objects (deleted when leaving the <code>qlet</code> body).
+<li>Qt widgets always live inside an object hierarchy, so deleting a widget
+  will delete all its child widgets/objects.
+<li>For local widgets/objects, you have the <code>qlet</code> macro, which are
+  deleted when leaving the <code>qlet</code> body.
 </ul>
 <ul>
 <li>So, always use <code>qlet</code> (instead of <code>qnew</code>) if you only
-  need a local Qt object inside a function (e.g. QDialog, QRegExp).
+  need a local Qt object inside a function (e.g. <code>QDialog</code>, <code>QRegExp</code>).
 <li><b>GC</b> is implemented for Qt objects returned by the functions
  <code>qget</code> and <code>qfun</code>.
-<li>Multiple, unintentional deletion of the same object (e.g. GC plus
-  explicit <code>qdel</code>) is not a problem (of course), because the
-  pointer value is set to <code>0</code> in <code>qdel</code>.
 </ul>
 </p>
 <p>Enumerations:

@@ -85,24 +85,24 @@ void iniCLFunctions() {
     cl_make_package(1, eql);
     si_select_package(eql);
     cl_def_c_function(c_string_to_object((char*)"qadd-event-filter"),    (cl_objectfn_fixed)qadd_event_filter,        3);
-    cl_def_c_function(c_string_to_object((char*)"qapropos2"),            (cl_objectfn_fixed)qapropos2,                3);
+    cl_def_c_function(c_string_to_object((char*)"%qapropos"),            (cl_objectfn_fixed)qapropos2,                3);
     cl_def_c_function(c_string_to_object((char*)"qapp"),                 (cl_objectfn_fixed)qapp,                     0);
     cl_def_c_function(c_string_to_object((char*)"qclear-event-filters"), (cl_objectfn_fixed)qclear_event_filters,     0);
-    cl_def_c_function(c_string_to_object((char*)"qconnect2"),            (cl_objectfn_fixed)qconnect2,                5);
+    cl_def_c_function(c_string_to_object((char*)"%qconnect"),            (cl_objectfn_fixed)qconnect2,                5);
     cl_def_c_function(c_string_to_object((char*)"qcopy"),                (cl_objectfn_fixed)qcopy,                    1);
-    cl_def_c_function(c_string_to_object((char*)"qdelete2"),             (cl_objectfn_fixed)qdelete2,                 2);
+    cl_def_c_function(c_string_to_object((char*)"%qdelete"),             (cl_objectfn_fixed)qdelete2,                 2);
     cl_def_c_function(c_string_to_object((char*)"qenum"),                (cl_objectfn_fixed)qenum,                    2);
     cl_def_c_function(c_string_to_object((char*)"qescape"),              (cl_objectfn_fixed)qescape,                  1);
     cl_def_c_function(c_string_to_object((char*)"qexec"),                (cl_objectfn_fixed)qexec,                    0);
     cl_def_c_function(c_string_to_object((char*)"qfind-child"),          (cl_objectfn_fixed)qfind_child,              2);
     cl_def_c_function(c_string_to_object((char*)"qfrom-utf8"),           (cl_objectfn_fixed)qfrom_utf8,               1);
     cl_def_c_function(c_string_to_object((char*)"qid"),                  (cl_objectfn_fixed)qid,                      1);
-    cl_def_c_function(c_string_to_object((char*)"qinvoke-method2"),      (cl_objectfn_fixed)qinvoke_method2,          4);
+    cl_def_c_function(c_string_to_object((char*)"%qinvoke-method"),      (cl_objectfn_fixed)qinvoke_method2,          4);
     cl_def_c_function(c_string_to_object((char*)"qload-ui"),             (cl_objectfn_fixed)qload_ui,                 1);
     cl_def_c_function(c_string_to_object((char*)"qlocal8bit"),           (cl_objectfn_fixed)qlocal8bit,               1);
     cl_def_c_function(c_string_to_object((char*)"qmeta-enums"),          (cl_objectfn_fixed)qmeta_enums,              0);
-    cl_def_c_function(c_string_to_object((char*)"qnew-instance2"),       (cl_objectfn_fixed)qnew_instance2,           2);
-    cl_def_c_function(c_string_to_object((char*)"qobject-names2"),       (cl_objectfn_fixed)qobject_names2,           1);
+    cl_def_c_function(c_string_to_object((char*)"%qnew-instance"),       (cl_objectfn_fixed)qnew_instance2,           2);
+    cl_def_c_function(c_string_to_object((char*)"%qobject-names"),       (cl_objectfn_fixed)qobject_names2,           1);
     cl_def_c_function(c_string_to_object((char*)"qok"),                  (cl_objectfn_fixed)qok,                      0);
     cl_def_c_function(c_string_to_object((char*)"qoverride"),            (cl_objectfn_fixed)qoverride,                3);
     cl_def_c_function(c_string_to_object((char*)"qprocess-events"),      (cl_objectfn_fixed)qprocess_events,          0);
@@ -116,7 +116,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object((char*)"qsuper-class-name"),    (cl_objectfn_fixed)qsuper_class_name,        1);
     cl_def_c_function(c_string_to_object((char*)"qtranslate"),           (cl_objectfn_fixed)qtranslate,               3);
     cl_def_c_function(c_string_to_object((char*)"qt-object-name"),       (cl_objectfn_fixed)qt_object_name,           1);
-    cl_def_c_function(c_string_to_object((char*)"qui-class2"),           (cl_objectfn_fixed)qui_class2,               2);
+    cl_def_c_function(c_string_to_object((char*)"%qui-class"),           (cl_objectfn_fixed)qui_class2,               2);
     cl_def_c_function(c_string_to_object((char*)"qui-names"),            (cl_objectfn_fixed)qui_names,                1);
     cl_def_c_function(c_string_to_object((char*)"qutf8"),                (cl_objectfn_fixed)qutf8,                    1);
     cl_def_c_function(c_string_to_object((char*)"qversion"),             (cl_objectfn_fixed)qversion,                 0); }
@@ -200,7 +200,7 @@ static char** to_cstring(cl_object l_str) {
         cl_index l = l_str->base_string.fillp;
         s[++_n_cstr_] = new char[l + 1];
         if(s[_n_cstr_]) {
-            strncpy(s[_n_cstr_], (const char*)l_str->base_string.self, l);
+            qstrncpy(s[_n_cstr_], (const char*)l_str->base_string.self, l);
             (s[_n_cstr_])[l] = 0;
             return &s[_n_cstr_]; }}
     return 0; }
@@ -1282,7 +1282,7 @@ cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
             if(obj.pointer) {
                 embedded = true;
                 mo = ((QObject*)obj.pointer)->metaObject();
-                classes << QString("%1 (inherits %2)")
+                classes << QString("%1 : %2")
                         .arg(mo->className())
                         .arg(QString(obj.className()))
                         .toAscii(); }}}
@@ -1329,8 +1329,8 @@ cl_object qnew_instance2(cl_object l_name, cl_object l_args) {
     /// alias: qnew
     /// Creates a new Qt object, optionally passing the given arguments to the constructor. Additionally you can pass any number of property/value pairs.<br>Please note how you can abbreviate long type lists.
     ///     (qnew "QWidget")
-    ///     (qnew "QPixmap(int,int)" 50 50)
-    ///     (qnew "QLabel" "text" "I love me.")
+    ///     (qnew "QPixmap(int,int)" 50 50) ; constructor
+    ///     (qnew "QLabel" "text" "I love me.") ; set property
     ///     (qnew "QMatrix4x4(qreal...)" 1 2 3 4 1 2 3 4 1 2 3 4 1 2 3 4)
     ecl_process_env()->nvalues = 1;
     static QHash<QByteArray, int> i_constructor;

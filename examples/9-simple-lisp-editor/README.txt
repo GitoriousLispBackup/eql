@@ -46,7 +46,11 @@ your program interactive (no performance loss).
 "Eval Region" note: (see initial status-bar message)
 Remember to change to the desired package prior to eval anything.
 
-Auto indent note: hitting the <tab> key will auto indent the paragraph
+Tab completion note: hitting Tab will pop up a window with symbol completions.
+This works in both the editor and command line widget, at any cursor position.
+Currently, tab completion works for all CL and EQL symbols (including Qt enums).
+
+Auto indent note: hitting the Ctrl+Tab keys will auto indent the paragraph
 starting from the current line until the next empty line found.
 
 On errors, the local Lisp server will pop up a debug dialog, asking for an

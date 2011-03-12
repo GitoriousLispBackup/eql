@@ -7,6 +7,16 @@
 
 ;;; manual definitions (not complete...)
 
+;; QCompleter::CompletionMode
+(defenum |QCompleter.PopupCompletion| 0)
+(defenum |QCompleter.InlineCompletion| 2)
+(defenum |QCompleter.UnfilteredPopupCompletion| 1)
+
+;; QCompleter::ModelSorting
+(defenum |QCompleter.UnsortedModel| 0)
+(defenum |QCompleter.CaseSensitivelySortedModel| 1)
+(defenum |QCompleter.CaseInsensitivelySortedModel| 2)
+
 ;; QDialog::DialogCode
 (defenum |QDialog.Accepted| 1)
 (defenum |QDialog.Rejected| 0)

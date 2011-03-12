@@ -20,28 +20,30 @@
 (defparameter *** nil)
 (defparameter *q* nil)
 
-(defvar *gui*             (qload-ui (in-home "gui/gui.ui")))
-(defvar *display*         (qfind-child *gui* "display"))
-(defvar *edit*            (qfind-child *gui* "edit"))
-(defvar *help*            (qfind-child *gui* "help"))
-(defvar *main-tab*        (qfind-child *gui* "main_tab"))
-(defvar *n-methods*       (qfind-child *gui* "n_methods"))
-(defvar *n-names*         (qfind-child *gui* "n_names"))
-(defvar *n-override*      (qfind-child *gui* "n_override"))
-(defvar *n-super-classes* (qfind-child *gui* "n_super_classes"))
-(defvar *package-name*    (qfind-child *gui* "package_name"))
-(defvar *primitives*      (qfind-child *gui* "primitives"))
-(defvar *q-methods*       (qfind-child *gui* "q_methods"))
-(defvar *q-names*         (qfind-child *gui* "q_names"))
-(defvar *q-override*      (qfind-child *gui* "q_override"))
-(defvar *q-properties*    (qfind-child *gui* "q_properties"))
-(defvar *q-signals*       (qfind-child *gui* "q_signals"))
-(defvar *q-slots*         (qfind-child *gui* "q_slots"))
-(defvar *q-super-classes* (qfind-child *gui* "q_super_classes"))
-(defvar *qt-tab*          (qfind-child *gui* "qt_tab"))
-(defvar *search-help*     (qfind-child *gui* "search_help"))
-(defvar *select*          (qfind-child *gui* "select"))
-(defvar *selected-widget* (qfind-child *gui* "selected_widget"))
+(defvar *gui* (qload-ui (in-home "gui/gui.ui")))
+
+(defvar-ui *gui*
+  *display*
+  *edit*
+  *help*
+  *main-tab*
+  *n-methods*
+  *n-names*
+  *n-override*
+  *n-super-classes*
+  *package-name*
+  *primitives*
+  *q-methods*
+  *q-names*
+  *q-override*
+  *q-properties*
+  *q-signals*
+  *q-slots*
+  *q-super-classes*
+  *qt-tab*
+  *search-help*
+  *select*
+  *selected-widget*)
 
 (defvar *completer-list* (qnew "QStringListModel"))
 
@@ -281,12 +283,10 @@
 (defun all-symbols ()
   (let (all)
     (do-symbols (s)
-      (let ((sym (format nil "~A~(~A~)" (if (or (ignore-errors (symbol-function s))
-                                                (macro-function s)) "(" "")
-                         s)))
-        (unless (and (x:starts-with "(q" sym)
-                     (x:ends-with "2" sym))
-          (push sym all))))
+      (push (format nil "~A~(~A~)" (if (or (ignore-errors (symbol-function s))
+                                           (macro-function s)) "(" "")
+                    s)
+            all))
     (sort all 'string<)))
 
 (let (pkg)
@@ -405,4 +405,3 @@
    qset
    qget))
 |#
-

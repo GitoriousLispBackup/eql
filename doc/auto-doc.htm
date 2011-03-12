@@ -1,4 +1,12 @@
 <html><body><p>
+<b>DEFVAR-UI (main-widget &rest variable-names)</b>
+<p>This macro simplifies the definition of UI variables:</p>
+<pre>
+  (defvar-ui *main* *line-edit* ...) ; this will expand to:
+  (progn (defvar *line-edit* (qfind-child *main* "line_edit")) ...)
+</pre>
+</p><br>
+<p>
 <b>QADD-EVENT-FILTER (object event function)</b>
 <p>Adds a Lisp function to be called on a given event type. The event type has to be passed as integer value. If the object argument is <code>NIL</code>, the event will be captured for any object. If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.</p>
 <pre>
@@ -137,8 +145,8 @@
 <p>Creates a new Qt object, optionally passing the given arguments to the constructor. Additionally you can pass any number of property/value pairs.<br>Please note how you can abbreviate long type lists.</p>
 <pre>
   (qnew "QWidget")
-  (qnew "QPixmap(int,int)" 50 50)
-  (qnew "QLabel" "text" "I love me.")
+  (qnew "QPixmap(int,int)" 50 50) ; constructor
+  (qnew "QLabel" "text" "I love me.") ; set property
   (qnew "QMatrix4x4(qreal...)" 1 2 3 4 1 2 3 4 1 2 3 4 1 2 3 4)
 </pre>
 </p><br>

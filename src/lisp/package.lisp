@@ -3,6 +3,7 @@
 (defpackage :eql
   (:use :common-lisp)
   (:export
+   #:defvar-ui
    #:in-home
    #:new-qt-object
    #:qadd-event-filter

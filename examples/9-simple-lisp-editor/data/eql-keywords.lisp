@@ -1,4 +1,5 @@
-'("in-home"
+'("defvar-ui"
+  "in-home"
   "new-qt-object"
   "qadd-event-filter"
   "qapropos"

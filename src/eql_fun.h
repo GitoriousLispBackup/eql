@@ -1,6 +1,9 @@
 // copyright (c) 2011 Polos Ruetz
 // see Qt_EQL example
 
+#ifndef EQL_FUN_H
+#define EQL_FUN_H
+
 #include <QGenericArgument>
 #include <QVariant>
 
@@ -31,3 +34,5 @@ extern QVariant eql_fun(const QByteArray&,
                         QGenericArgument = QGenericArgument(),
                         QGenericArgument = QGenericArgument(),
                         QGenericArgument = QGenericArgument());
+
+#endif

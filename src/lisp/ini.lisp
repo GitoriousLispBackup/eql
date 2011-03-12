@@ -27,6 +27,16 @@
                  (qdel ,x))
               `(qdel ,(first vars)))))))
 
+(defmacro defvar-ui (main &rest names)
+  "args: (main-widget &rest variable-names)
+   This macro simplifies the definition of UI variables:
+       (defvar-ui *main* *line-edit* ...) ; this will expand to:
+       (progn (defvar *line-edit* (qfind-child *main* \"line_edit\")) ...)"
+  `(progn
+     ,@(mapcar (lambda (name)
+                 `(defvar ,name (qfind-child ,main ,(string-downcase (substitute #\_ #\- (string-trim "*" (symbol-name name)))))))
+               names)))
+
 (defun %get-function (fn pkg)
   (typecase fn
     (symbol
@@ -109,10 +119,10 @@
     (zerop (qt-object-pointer obj))))
 
 (defun qdelete (obj &optional later)
-  (qdelete2 obj later))
+  (%qdelete obj later))
 
 (defun qapropos (&optional name class type)
-  (let ((main (qapropos2 name class type)))
+  (let ((main (%qapropos name class type)))
     (dolist (sub1 main)
       (format t "~%~%~A~%" (first sub1))
       (dolist (sub2 (rest sub1))
@@ -128,13 +138,13 @@
 (defun qapropos* (&optional name class type)
   "args: (&optional search class)
    Similar to <code>qapropos</code>, returning the results as nested list."
-  (qapropos2 name class type))
+  (%qapropos name class type))
 
 (defun qnew-instance (name &rest args)
-  (qnew-instance2 name args))
+  (%qnew-instance name args))
 
 (defun qinvoke-method (obj slot &rest args)
-  (qinvoke-method2 obj nil slot args))
+  (%qinvoke-method obj nil slot args))
 
 (defun qinvoke-method* (obj name slot &rest args)
   "args: (object class name &rest arguments)
@@ -143,19 +153,19 @@
        (qfun* event \"QKeyEvent\" \"key\")
        (qfun* graphics-text-item \"QGraphicsItem\" \"setPos\" (list x y)) ; multiple inheritance problem
        (qfun* *qt-main* :qt \"foo\") ; embedded Qt/C++ (see Qt_EQL)"
-  (qinvoke-method2 obj name slot args))
+  (%qinvoke-method obj name slot args))
 
 (defun qconnect (from signal to &optional slot)
-  (qconnect2 from signal to slot nil))
+  (%qconnect from signal to slot nil))
 
 (defun qdisconnect (from signal to &optional slot)
-  (qconnect2 from signal to slot t))
+  (%qconnect from signal to slot t))
 
 (defun qobject-names (&optional type)
-  (qobject-names2 type))
+  (%qobject-names type))
 
 (defun qui-class (file &optional var)
-  (qui-class2 file var))
+  (%qui-class file var))
 
 (defun qmessage-box (msg)
   "args: (x)

@@ -24,10 +24,9 @@ BUILD
     3) in eql/examples/9-simple-lisp-editor/:
        $ eql make-local-server-fasl.lisp
        $ eql make-editor-fasl.lisp
-       copy all of:
+       copy both:
            eql-local-server.fas
            eql-editor.fas
-           data/
        from: eql/examples/9-simple-lisp-editor/
        to:   eql/Qt_EQL/EQL/
 
@@ -69,9 +68,8 @@ This is possible because these 2 methods are declared Q_INVOKABLE
 in Qt/trafficlight.h.
 
 So, in order to call either methods declared Q_INVOKABLE, or user defined
-signals/slots, use qfun* with :qt as second argument.
-(This implementation detail has been chosen to avoid name clashes with
-ordinary Qt methods, which are quite a lot...).
+signals/slots, use qfun* with :qt as second argument (to avoid name clashes with
+ordinary Qt methods).
 
 To list all user defined properties, methods, signals, slots of a class
 defined in C++, see the special usage of qapropos (passing an object instead
