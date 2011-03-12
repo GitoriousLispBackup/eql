@@ -43,9 +43,15 @@ static QVariant eql_fun2(const QByteArray& pkgFun,
     QVariant ret;
     if(symbol) {
         cl_object l_ret = Cnil;
+// MSVC users:
+// currently I'm stuck here, because MSVC complains about something I don't currently understand...
+#ifndef Q_CC_MSVC
         CL_CATCH_ALL_BEGIN(ecl_process_env()) {
-            l_ret = cl_apply(2, (cl_object)symbol, l_args); }
-        CL_CATCH_ALL_END;
+#endif
+            l_ret = cl_apply(2, (cl_object)symbol, l_args);
+#ifndef Q_CC_MSVC
+        } CL_CATCH_ALL_END;
+#endif
         if(retType != QVariant::UserType) {
             ret = toQVariant(l_ret, 0, retType); }
         return ret; }
