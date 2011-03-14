@@ -57,15 +57,12 @@
                                                 (floor (- y (/ (* h (svref +sinus+ ix)) 400))))
                                           (string ch)))
             (incf x (qfun fm "width(QChar)" ch))))))
-    (qfun painter "end")
-    t)) ; overridden
+    (qfun painter "end")))
 
 (defun timeout (ev)
-  (if (= (qfun ev "timerId") (qfun *timer* "timerId"))
-      (progn
-        (incf *step*)
-        (qfun *wiggly* "update")
-        t)
-      nil)) ; overridden
+  (when (= (qfun ev "timerId") (qfun *timer* "timerId"))
+    (incf *step*)
+    (qfun *wiggly* "update")
+    (qcall-default)))
 
 (start)

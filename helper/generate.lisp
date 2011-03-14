@@ -274,15 +274,14 @@
 
 (defun arg-to-c-null-value (arg)
   (let ((type (arg-type arg)))
-    (cond ((void-p arg)
-           "")
-          ((string= "bool" type)
+    (cond ((string= "bool" type)
            "false")
           ((or (pointer-p arg)
-               (find* type '("int" "qlonglong")))
+               (find* type '("int" "qlonglong" "double" "qreal")))
            "0")
-          ((qt-class-p type)
-           (format nil "~A()" type))
+          ((or (void-p arg)
+               (qt-class-p type))
+           nil)
           ((upper-case-p (char type 0))
            (format nil "(~A)0" type))
           (t
@@ -521,29 +520,37 @@
                                              id))
                                    (call (format nil "callOverrideFun(fun, ~D, ~A)"
                                                  sig-id
-                                                 (if (function-args fun) "args" "0"))))
+                                                 (if (function-args fun) "args" "0")))
+                                   (pure-virtual (pure-virtual-p fun class super)))
                               (when 1st
                                 (push sig-id sig-ids))
                               (unless (find* fun-name fun-names)
                                 (push fun-name fun-names)
-                                (format s "~%    ~A ~A(~A)~A { void* fun = LObjects::overrideFun(unique, ~D); if(fun) { ~A~A~A~A}"
+                                (format s "~%    ~A ~A(~A)~A { void* fun = LObjects::overrideFun(unique, ~D); ~A if(fun) { ~A~A; }~A~A~A~A~A}"
                                         (arg-to-c ret)
                                         fun-name
                                         (add-var-names args)
                                         (if (const-p fun) " const" "")
                                         sig-id
+                                        (if void
+                                            ""
+                                            (format nil "~A ret~A;"
+                                                    (arg-to-c ret)
+                                                    (x:if-it (arg-to-c-null-value ret)
+                                                        (format nil " = ~A" x:it)
+                                                        "")))
                                         (if args (format nil "const void* args[] = { ~{&~A~^, ~} }; " (n-var-names (length args))) "")
-                                        (if void (format nil "if(~A" call) (format nil "return ~A" (from-qvariant ret call)))
-                                        (if void ".toBool()) return; }" "; } return")
-                                        (if (pure-virtual-p fun class super)
-                                            (let ((val (arg-to-c-null-value ret)))
-                                              (if (empty-string val)
-                                                  ""
-                                                  (format nil " ~A; " val)))
+                                        (if void call (format nil "ret = ~A" (from-qvariant ret call)))
+                                        (if pure-virtual "" " if(!fun || LObjects::call_default) {")
+                                        (if (or void pure-virtual) "" " ret =")
+                                        (if pure-virtual
+                                            ""
                                             (format nil " ~A::~A(~{~A~^, ~}); "
                                                     class
                                                     fun-name
-                                                    (n-var-names (length args)))))))))))
+                                                    (n-var-names (length args))))
+                                        (if pure-virtual "" "}")
+                                        (if void "" " return ret; "))))))))
                     (when 1st
                       (setf 1st nil)
                       (push (nreverse sig-ids) *override-signature-ids*)))
@@ -734,6 +741,7 @@
                ~%DynObject* LObjects::dynObject = 0;~
                ~%QObject** LObjects::Q = 0;~
                ~%QObject** LObjects::N = 0;~
+               ~%bool LObjects::call_default = false;~
                ~%uint LObjects::i_unique = 0;~
                ~%const char*** LObjects::override_arg_types = 0;~
                ~%QList<QByteArray> LObjects::qNames;~

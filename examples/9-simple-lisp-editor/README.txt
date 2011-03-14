@@ -48,7 +48,10 @@ Remember to change to the desired package prior to eval anything.
 
 Tab completion note: hitting Tab will pop up a window with symbol completions.
 This works in both the editor and command line widget, at any cursor position.
-Currently, tab completion works for all CL and EQL symbols (including Qt enums).
+Currently, tab completion works for all CL and EQL symbols (including Qt
+enums).
+After selecting a symbol (<arrow key>, Return), the function arguments (if
+available) will be shown in the status bar.
 
 Auto indent note: hitting the Ctrl+Tab keys will auto indent the paragraph
 starting from the current line until the next empty line found.

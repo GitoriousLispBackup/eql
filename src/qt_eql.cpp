@@ -11,12 +11,18 @@
 
 static QHash<QByteArray, void*> lisp_functions;
 
+static cl_object eql_fun(cl_object l_fun, cl_object l_args) {
+    cl_object l_ret = Cnil;
+    CL_CATCH_ALL_BEGIN(ecl_process_env()) {
+        l_ret = cl_apply(2, l_fun, l_args); }
+    CL_CATCH_ALL_END;
+    return l_ret; }
+
 static QVariant eql_fun2(const QByteArray& pkgFun,
                          QVariant::Type retType,
                          const QGenericArgument& a1, const QGenericArgument& a2, const QGenericArgument& a3, const QGenericArgument& a4, const QGenericArgument& a5,
                          const QGenericArgument& a6, const QGenericArgument& a7, const QGenericArgument& a8, const QGenericArgument& a9, const QGenericArgument& a10) {
-    static void* symbol = 0; // avoid GCC warning about clobbering (longjmp)
-    symbol = lisp_functions.value(pkgFun);
+    void* symbol = lisp_functions.value(pkgFun);
     if(!symbol) {
         int p1 = pkgFun.indexOf(':');
         int p2 = pkgFun.lastIndexOf(':');
@@ -42,16 +48,7 @@ static QVariant eql_fun2(const QByteArray& pkgFun,
     l_args = cl_nreverse(l_args);
     QVariant ret;
     if(symbol) {
-        cl_object l_ret = Cnil;
-// MSVC users:
-// currently I'm stuck here, because MSVC complains about something I don't currently understand...
-#ifndef Q_CC_MSVC
-        CL_CATCH_ALL_BEGIN(ecl_process_env()) {
-#endif
-            l_ret = cl_apply(2, (cl_object)symbol, l_args);
-#ifndef Q_CC_MSVC
-        } CL_CATCH_ALL_END;
-#endif
+        cl_object l_ret = eql_fun((cl_object)symbol, l_args);
         if(retType != QVariant::UserType) {
             ret = toQVariant(l_ret, 0, retType); }
         return ret; }

@@ -10,6 +10,7 @@
    #:qapropos
    #:qapropos*
    #:qapp
+   #:qcall-default
    #:qclear-event-filters
    #:qconnect
    #:qcopy

@@ -17,27 +17,27 @@ public:
     static NumList overrideIds;
     uint unique;
 
-    bool atEnd() const { void* fun = LObjects::overrideFun(unique, 107); if(fun) { return callOverrideFun(fun, 107, 0).toBool(); } return QAbstractSocket::atEnd(); }
-    qlonglong bytesAvailable() const { void* fun = LObjects::overrideFun(unique, 108); if(fun) { return callOverrideFun(fun, 108, 0).toLongLong(); } return QAbstractSocket::bytesAvailable(); }
-    qlonglong bytesToWrite() const { void* fun = LObjects::overrideFun(unique, 109); if(fun) { return callOverrideFun(fun, 109, 0).toLongLong(); } return QAbstractSocket::bytesToWrite(); }
-    bool canReadLine() const { void* fun = LObjects::overrideFun(unique, 110); if(fun) { return callOverrideFun(fun, 110, 0).toBool(); } return QAbstractSocket::canReadLine(); }
-    void close() { void* fun = LObjects::overrideFun(unique, 111); if(fun) { if(callOverrideFun(fun, 111, 0).toBool()) return; } QAbstractSocket::close(); }
-    bool isSequential() const { void* fun = LObjects::overrideFun(unique, 112); if(fun) { return callOverrideFun(fun, 112, 0).toBool(); } return QAbstractSocket::isSequential(); }
-    bool waitForBytesWritten(int x1 = 30000) { void* fun = LObjects::overrideFun(unique, 113); if(fun) { const void* args[] = { &x1 }; return callOverrideFun(fun, 113, args).toBool(); } return QAbstractSocket::waitForBytesWritten(x1); }
-    bool waitForReadyRead(int x1 = 30000) { void* fun = LObjects::overrideFun(unique, 114); if(fun) { const void* args[] = { &x1 }; return callOverrideFun(fun, 114, args).toBool(); } return QAbstractSocket::waitForReadyRead(x1); }
-    qlonglong readData(char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 115); if(fun) { const void* args[] = { &x1, &x2 }; return callOverrideFun(fun, 115, args).toLongLong(); } return QAbstractSocket::readData(x1, x2); }
-    qlonglong readLineData(char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 116); if(fun) { const void* args[] = { &x1, &x2 }; return callOverrideFun(fun, 116, args).toLongLong(); } return QAbstractSocket::readLineData(x1, x2); }
-    qlonglong writeData(const char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 117); if(fun) { const void* args[] = { &x1, &x2 }; return callOverrideFun(fun, 117, args).toLongLong(); } return QAbstractSocket::writeData(x1, x2); }
-    bool open(OpenMode x1) { void* fun = LObjects::overrideFun(unique, 118); if(fun) { const void* args[] = { &x1 }; return callOverrideFun(fun, 118, args).toBool(); } return QAbstractSocket::open(x1); }
-    qlonglong pos() const { void* fun = LObjects::overrideFun(unique, 119); if(fun) { return callOverrideFun(fun, 119, 0).toLongLong(); } return QAbstractSocket::pos(); }
-    bool reset() { void* fun = LObjects::overrideFun(unique, 120); if(fun) { return callOverrideFun(fun, 120, 0).toBool(); } return QAbstractSocket::reset(); }
-    bool seek(qint64 x1) { void* fun = LObjects::overrideFun(unique, 121); if(fun) { const void* args[] = { &x1 }; return callOverrideFun(fun, 121, args).toBool(); } return QAbstractSocket::seek(x1); }
-    qlonglong size() const { void* fun = LObjects::overrideFun(unique, 122); if(fun) { return callOverrideFun(fun, 122, 0).toLongLong(); } return QAbstractSocket::size(); }
-    void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 5, args).toBool()) return; } QAbstractSocket::childEvent(x1); }
-    void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 6, args).toBool()) return; } QAbstractSocket::connectNotify(x1); }
-    void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 7, args).toBool()) return; } QAbstractSocket::customEvent(x1); }
-    void disconnectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 8); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 8, args).toBool()) return; } QAbstractSocket::disconnectNotify(x1); }
-    void timerEvent(QTimerEvent* x1) { void* fun = LObjects::overrideFun(unique, 9); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 9, args).toBool()) return; } QAbstractSocket::timerEvent(x1); }
+    bool atEnd() const { void* fun = LObjects::overrideFun(unique, 107); bool ret = false; if(fun) { ret = callOverrideFun(fun, 107, 0).toBool(); } if(!fun || LObjects::call_default) { ret = QAbstractSocket::atEnd(); } return ret; }
+    qlonglong bytesAvailable() const { void* fun = LObjects::overrideFun(unique, 108); qlonglong ret = 0; if(fun) { ret = callOverrideFun(fun, 108, 0).toLongLong(); } if(!fun || LObjects::call_default) { ret = QAbstractSocket::bytesAvailable(); } return ret; }
+    qlonglong bytesToWrite() const { void* fun = LObjects::overrideFun(unique, 109); qlonglong ret = 0; if(fun) { ret = callOverrideFun(fun, 109, 0).toLongLong(); } if(!fun || LObjects::call_default) { ret = QAbstractSocket::bytesToWrite(); } return ret; }
+    bool canReadLine() const { void* fun = LObjects::overrideFun(unique, 110); bool ret = false; if(fun) { ret = callOverrideFun(fun, 110, 0).toBool(); } if(!fun || LObjects::call_default) { ret = QAbstractSocket::canReadLine(); } return ret; }
+    void close() { void* fun = LObjects::overrideFun(unique, 111);  if(fun) { callOverrideFun(fun, 111, 0); } if(!fun || LObjects::call_default) { QAbstractSocket::close(); }}
+    bool isSequential() const { void* fun = LObjects::overrideFun(unique, 112); bool ret = false; if(fun) { ret = callOverrideFun(fun, 112, 0).toBool(); } if(!fun || LObjects::call_default) { ret = QAbstractSocket::isSequential(); } return ret; }
+    bool waitForBytesWritten(int x1 = 30000) { void* fun = LObjects::overrideFun(unique, 113); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 113, args).toBool(); } if(!fun || LObjects::call_default) { ret = QAbstractSocket::waitForBytesWritten(x1); } return ret; }
+    bool waitForReadyRead(int x1 = 30000) { void* fun = LObjects::overrideFun(unique, 114); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 114, args).toBool(); } if(!fun || LObjects::call_default) { ret = QAbstractSocket::waitForReadyRead(x1); } return ret; }
+    qlonglong readData(char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 115); qlonglong ret = 0; if(fun) { const void* args[] = { &x1, &x2 }; ret = callOverrideFun(fun, 115, args).toLongLong(); } if(!fun || LObjects::call_default) { ret = QAbstractSocket::readData(x1, x2); } return ret; }
+    qlonglong readLineData(char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 116); qlonglong ret = 0; if(fun) { const void* args[] = { &x1, &x2 }; ret = callOverrideFun(fun, 116, args).toLongLong(); } if(!fun || LObjects::call_default) { ret = QAbstractSocket::readLineData(x1, x2); } return ret; }
+    qlonglong writeData(const char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 117); qlonglong ret = 0; if(fun) { const void* args[] = { &x1, &x2 }; ret = callOverrideFun(fun, 117, args).toLongLong(); } if(!fun || LObjects::call_default) { ret = QAbstractSocket::writeData(x1, x2); } return ret; }
+    bool open(OpenMode x1) { void* fun = LObjects::overrideFun(unique, 118); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 118, args).toBool(); } if(!fun || LObjects::call_default) { ret = QAbstractSocket::open(x1); } return ret; }
+    qlonglong pos() const { void* fun = LObjects::overrideFun(unique, 119); qlonglong ret = 0; if(fun) { ret = callOverrideFun(fun, 119, 0).toLongLong(); } if(!fun || LObjects::call_default) { ret = QAbstractSocket::pos(); } return ret; }
+    bool reset() { void* fun = LObjects::overrideFun(unique, 120); bool ret = false; if(fun) { ret = callOverrideFun(fun, 120, 0).toBool(); } if(!fun || LObjects::call_default) { ret = QAbstractSocket::reset(); } return ret; }
+    bool seek(qint64 x1) { void* fun = LObjects::overrideFun(unique, 121); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 121, args).toBool(); } if(!fun || LObjects::call_default) { ret = QAbstractSocket::seek(x1); } return ret; }
+    qlonglong size() const { void* fun = LObjects::overrideFun(unique, 122); qlonglong ret = 0; if(fun) { ret = callOverrideFun(fun, 122, 0).toLongLong(); } if(!fun || LObjects::call_default) { ret = QAbstractSocket::size(); } return ret; }
+    void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 5, args); } if(!fun || LObjects::call_default) { QAbstractSocket::childEvent(x1); }}
+    void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 6, args); } if(!fun || LObjects::call_default) { QAbstractSocket::connectNotify(x1); }}
+    void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 7, args); } if(!fun || LObjects::call_default) { QAbstractSocket::customEvent(x1); }}
+    void disconnectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 8);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 8, args); } if(!fun || LObjects::call_default) { QAbstractSocket::disconnectNotify(x1); }}
+    void timerEvent(QTimerEvent* x1) { void* fun = LObjects::overrideFun(unique, 9);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 9, args); } if(!fun || LObjects::call_default) { QAbstractSocket::timerEvent(x1); }}
 };
 
 class LFtp : public QFtp {
@@ -49,11 +49,11 @@ public:
     static NumList overrideIds;
     uint unique;
 
-    void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 5, args).toBool()) return; } QFtp::childEvent(x1); }
-    void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 6, args).toBool()) return; } QFtp::connectNotify(x1); }
-    void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 7, args).toBool()) return; } QFtp::customEvent(x1); }
-    void disconnectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 8); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 8, args).toBool()) return; } QFtp::disconnectNotify(x1); }
-    void timerEvent(QTimerEvent* x1) { void* fun = LObjects::overrideFun(unique, 9); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 9, args).toBool()) return; } QFtp::timerEvent(x1); }
+    void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 5, args); } if(!fun || LObjects::call_default) { QFtp::childEvent(x1); }}
+    void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 6, args); } if(!fun || LObjects::call_default) { QFtp::connectNotify(x1); }}
+    void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 7, args); } if(!fun || LObjects::call_default) { QFtp::customEvent(x1); }}
+    void disconnectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 8);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 8, args); } if(!fun || LObjects::call_default) { QFtp::disconnectNotify(x1); }}
+    void timerEvent(QTimerEvent* x1) { void* fun = LObjects::overrideFun(unique, 9);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 9, args); } if(!fun || LObjects::call_default) { QFtp::timerEvent(x1); }}
 };
 
 class LLocalServer : public QLocalServer {
@@ -65,14 +65,14 @@ public:
     static NumList overrideIds;
     uint unique;
 
-    bool hasPendingConnections() const { void* fun = LObjects::overrideFun(unique, 274); if(fun) { return callOverrideFun(fun, 274, 0).toBool(); } return QLocalServer::hasPendingConnections(); }
-    QLocalSocket* nextPendingConnection() { void* fun = LObjects::overrideFun(unique, 275); if(fun) { return (QLocalSocket*)qVariantValue<void*>(callOverrideFun(fun, 275, 0)); } return QLocalServer::nextPendingConnection(); }
-    void incomingConnection(quintptr x1) { void* fun = LObjects::overrideFun(unique, 276); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 276, args).toBool()) return; } QLocalServer::incomingConnection(x1); }
-    void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 5, args).toBool()) return; } QLocalServer::childEvent(x1); }
-    void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 6, args).toBool()) return; } QLocalServer::connectNotify(x1); }
-    void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 7, args).toBool()) return; } QLocalServer::customEvent(x1); }
-    void disconnectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 8); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 8, args).toBool()) return; } QLocalServer::disconnectNotify(x1); }
-    void timerEvent(QTimerEvent* x1) { void* fun = LObjects::overrideFun(unique, 9); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 9, args).toBool()) return; } QLocalServer::timerEvent(x1); }
+    bool hasPendingConnections() const { void* fun = LObjects::overrideFun(unique, 274); bool ret = false; if(fun) { ret = callOverrideFun(fun, 274, 0).toBool(); } if(!fun || LObjects::call_default) { ret = QLocalServer::hasPendingConnections(); } return ret; }
+    QLocalSocket* nextPendingConnection() { void* fun = LObjects::overrideFun(unique, 275); QLocalSocket* ret = 0; if(fun) { ret = (QLocalSocket*)qVariantValue<void*>(callOverrideFun(fun, 275, 0)); } if(!fun || LObjects::call_default) { ret = QLocalServer::nextPendingConnection(); } return ret; }
+    void incomingConnection(quintptr x1) { void* fun = LObjects::overrideFun(unique, 276);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 276, args); } if(!fun || LObjects::call_default) { QLocalServer::incomingConnection(x1); }}
+    void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 5, args); } if(!fun || LObjects::call_default) { QLocalServer::childEvent(x1); }}
+    void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 6, args); } if(!fun || LObjects::call_default) { QLocalServer::connectNotify(x1); }}
+    void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 7, args); } if(!fun || LObjects::call_default) { QLocalServer::customEvent(x1); }}
+    void disconnectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 8);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 8, args); } if(!fun || LObjects::call_default) { QLocalServer::disconnectNotify(x1); }}
+    void timerEvent(QTimerEvent* x1) { void* fun = LObjects::overrideFun(unique, 9);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 9, args); } if(!fun || LObjects::call_default) { QLocalServer::timerEvent(x1); }}
 };
 
 class LLocalSocket : public QLocalSocket {
@@ -84,27 +84,27 @@ public:
     static NumList overrideIds;
     uint unique;
 
-    qlonglong bytesAvailable() const { void* fun = LObjects::overrideFun(unique, 108); if(fun) { return callOverrideFun(fun, 108, 0).toLongLong(); } return QLocalSocket::bytesAvailable(); }
-    qlonglong bytesToWrite() const { void* fun = LObjects::overrideFun(unique, 109); if(fun) { return callOverrideFun(fun, 109, 0).toLongLong(); } return QLocalSocket::bytesToWrite(); }
-    bool canReadLine() const { void* fun = LObjects::overrideFun(unique, 110); if(fun) { return callOverrideFun(fun, 110, 0).toBool(); } return QLocalSocket::canReadLine(); }
-    void close() { void* fun = LObjects::overrideFun(unique, 111); if(fun) { if(callOverrideFun(fun, 111, 0).toBool()) return; } QLocalSocket::close(); }
-    bool isSequential() const { void* fun = LObjects::overrideFun(unique, 112); if(fun) { return callOverrideFun(fun, 112, 0).toBool(); } return QLocalSocket::isSequential(); }
-    bool waitForBytesWritten(int x1 = 30000) { void* fun = LObjects::overrideFun(unique, 113); if(fun) { const void* args[] = { &x1 }; return callOverrideFun(fun, 113, args).toBool(); } return QLocalSocket::waitForBytesWritten(x1); }
-    bool waitForReadyRead(int x1 = 30000) { void* fun = LObjects::overrideFun(unique, 114); if(fun) { const void* args[] = { &x1 }; return callOverrideFun(fun, 114, args).toBool(); } return QLocalSocket::waitForReadyRead(x1); }
-    qlonglong readData(char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 115); if(fun) { const void* args[] = { &x1, &x2 }; return callOverrideFun(fun, 115, args).toLongLong(); } return QLocalSocket::readData(x1, x2); }
-    qlonglong writeData(const char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 117); if(fun) { const void* args[] = { &x1, &x2 }; return callOverrideFun(fun, 117, args).toLongLong(); } return QLocalSocket::writeData(x1, x2); }
-    bool atEnd() const { void* fun = LObjects::overrideFun(unique, 107); if(fun) { return callOverrideFun(fun, 107, 0).toBool(); } return QLocalSocket::atEnd(); }
-    bool open(OpenMode x1) { void* fun = LObjects::overrideFun(unique, 118); if(fun) { const void* args[] = { &x1 }; return callOverrideFun(fun, 118, args).toBool(); } return QLocalSocket::open(x1); }
-    qlonglong pos() const { void* fun = LObjects::overrideFun(unique, 119); if(fun) { return callOverrideFun(fun, 119, 0).toLongLong(); } return QLocalSocket::pos(); }
-    bool reset() { void* fun = LObjects::overrideFun(unique, 120); if(fun) { return callOverrideFun(fun, 120, 0).toBool(); } return QLocalSocket::reset(); }
-    bool seek(qint64 x1) { void* fun = LObjects::overrideFun(unique, 121); if(fun) { const void* args[] = { &x1 }; return callOverrideFun(fun, 121, args).toBool(); } return QLocalSocket::seek(x1); }
-    qlonglong size() const { void* fun = LObjects::overrideFun(unique, 122); if(fun) { return callOverrideFun(fun, 122, 0).toLongLong(); } return QLocalSocket::size(); }
-    qlonglong readLineData(char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 116); if(fun) { const void* args[] = { &x1, &x2 }; return callOverrideFun(fun, 116, args).toLongLong(); } return QLocalSocket::readLineData(x1, x2); }
-    void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 5, args).toBool()) return; } QLocalSocket::childEvent(x1); }
-    void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 6, args).toBool()) return; } QLocalSocket::connectNotify(x1); }
-    void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 7, args).toBool()) return; } QLocalSocket::customEvent(x1); }
-    void disconnectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 8); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 8, args).toBool()) return; } QLocalSocket::disconnectNotify(x1); }
-    void timerEvent(QTimerEvent* x1) { void* fun = LObjects::overrideFun(unique, 9); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 9, args).toBool()) return; } QLocalSocket::timerEvent(x1); }
+    qlonglong bytesAvailable() const { void* fun = LObjects::overrideFun(unique, 108); qlonglong ret = 0; if(fun) { ret = callOverrideFun(fun, 108, 0).toLongLong(); } if(!fun || LObjects::call_default) { ret = QLocalSocket::bytesAvailable(); } return ret; }
+    qlonglong bytesToWrite() const { void* fun = LObjects::overrideFun(unique, 109); qlonglong ret = 0; if(fun) { ret = callOverrideFun(fun, 109, 0).toLongLong(); } if(!fun || LObjects::call_default) { ret = QLocalSocket::bytesToWrite(); } return ret; }
+    bool canReadLine() const { void* fun = LObjects::overrideFun(unique, 110); bool ret = false; if(fun) { ret = callOverrideFun(fun, 110, 0).toBool(); } if(!fun || LObjects::call_default) { ret = QLocalSocket::canReadLine(); } return ret; }
+    void close() { void* fun = LObjects::overrideFun(unique, 111);  if(fun) { callOverrideFun(fun, 111, 0); } if(!fun || LObjects::call_default) { QLocalSocket::close(); }}
+    bool isSequential() const { void* fun = LObjects::overrideFun(unique, 112); bool ret = false; if(fun) { ret = callOverrideFun(fun, 112, 0).toBool(); } if(!fun || LObjects::call_default) { ret = QLocalSocket::isSequential(); } return ret; }
+    bool waitForBytesWritten(int x1 = 30000) { void* fun = LObjects::overrideFun(unique, 113); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 113, args).toBool(); } if(!fun || LObjects::call_default) { ret = QLocalSocket::waitForBytesWritten(x1); } return ret; }
+    bool waitForReadyRead(int x1 = 30000) { void* fun = LObjects::overrideFun(unique, 114); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 114, args).toBool(); } if(!fun || LObjects::call_default) { ret = QLocalSocket::waitForReadyRead(x1); } return ret; }
+    qlonglong readData(char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 115); qlonglong ret = 0; if(fun) { const void* args[] = { &x1, &x2 }; ret = callOverrideFun(fun, 115, args).toLongLong(); } if(!fun || LObjects::call_default) { ret = QLocalSocket::readData(x1, x2); } return ret; }
+    qlonglong writeData(const char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 117); qlonglong ret = 0; if(fun) { const void* args[] = { &x1, &x2 }; ret = callOverrideFun(fun, 117, args).toLongLong(); } if(!fun || LObjects::call_default) { ret = QLocalSocket::writeData(x1, x2); } return ret; }
+    bool atEnd() const { void* fun = LObjects::overrideFun(unique, 107); bool ret = false; if(fun) { ret = callOverrideFun(fun, 107, 0).toBool(); } if(!fun || LObjects::call_default) { ret = QLocalSocket::atEnd(); } return ret; }
+    bool open(OpenMode x1) { void* fun = LObjects::overrideFun(unique, 118); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 118, args).toBool(); } if(!fun || LObjects::call_default) { ret = QLocalSocket::open(x1); } return ret; }
+    qlonglong pos() const { void* fun = LObjects::overrideFun(unique, 119); qlonglong ret = 0; if(fun) { ret = callOverrideFun(fun, 119, 0).toLongLong(); } if(!fun || LObjects::call_default) { ret = QLocalSocket::pos(); } return ret; }
+    bool reset() { void* fun = LObjects::overrideFun(unique, 120); bool ret = false; if(fun) { ret = callOverrideFun(fun, 120, 0).toBool(); } if(!fun || LObjects::call_default) { ret = QLocalSocket::reset(); } return ret; }
+    bool seek(qint64 x1) { void* fun = LObjects::overrideFun(unique, 121); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 121, args).toBool(); } if(!fun || LObjects::call_default) { ret = QLocalSocket::seek(x1); } return ret; }
+    qlonglong size() const { void* fun = LObjects::overrideFun(unique, 122); qlonglong ret = 0; if(fun) { ret = callOverrideFun(fun, 122, 0).toLongLong(); } if(!fun || LObjects::call_default) { ret = QLocalSocket::size(); } return ret; }
+    qlonglong readLineData(char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 116); qlonglong ret = 0; if(fun) { const void* args[] = { &x1, &x2 }; ret = callOverrideFun(fun, 116, args).toLongLong(); } if(!fun || LObjects::call_default) { ret = QLocalSocket::readLineData(x1, x2); } return ret; }
+    void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 5, args); } if(!fun || LObjects::call_default) { QLocalSocket::childEvent(x1); }}
+    void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 6, args); } if(!fun || LObjects::call_default) { QLocalSocket::connectNotify(x1); }}
+    void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 7, args); } if(!fun || LObjects::call_default) { QLocalSocket::customEvent(x1); }}
+    void disconnectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 8);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 8, args); } if(!fun || LObjects::call_default) { QLocalSocket::disconnectNotify(x1); }}
+    void timerEvent(QTimerEvent* x1) { void* fun = LObjects::overrideFun(unique, 9);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 9, args); } if(!fun || LObjects::call_default) { QLocalSocket::timerEvent(x1); }}
 };
 
 class LNetworkAccessManager : public QNetworkAccessManager {
@@ -116,11 +116,11 @@ public:
     static NumList overrideIds;
     uint unique;
 
-    void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 5, args).toBool()) return; } QNetworkAccessManager::childEvent(x1); }
-    void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 6, args).toBool()) return; } QNetworkAccessManager::connectNotify(x1); }
-    void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 7, args).toBool()) return; } QNetworkAccessManager::customEvent(x1); }
-    void disconnectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 8); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 8, args).toBool()) return; } QNetworkAccessManager::disconnectNotify(x1); }
-    void timerEvent(QTimerEvent* x1) { void* fun = LObjects::overrideFun(unique, 9); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 9, args).toBool()) return; } QNetworkAccessManager::timerEvent(x1); }
+    void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 5, args); } if(!fun || LObjects::call_default) { QNetworkAccessManager::childEvent(x1); }}
+    void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 6, args); } if(!fun || LObjects::call_default) { QNetworkAccessManager::connectNotify(x1); }}
+    void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 7, args); } if(!fun || LObjects::call_default) { QNetworkAccessManager::customEvent(x1); }}
+    void disconnectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 8);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 8, args); } if(!fun || LObjects::call_default) { QNetworkAccessManager::disconnectNotify(x1); }}
+    void timerEvent(QTimerEvent* x1) { void* fun = LObjects::overrideFun(unique, 9);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 9, args); } if(!fun || LObjects::call_default) { QNetworkAccessManager::timerEvent(x1); }}
 };
 
 class LNetworkCookieJar : public QNetworkCookieJar {
@@ -132,13 +132,13 @@ public:
     static NumList overrideIds;
     uint unique;
 
-    QList<QNetworkCookie> cookiesForUrl(const QUrl& x1) const { void* fun = LObjects::overrideFun(unique, 281); if(fun) { const void* args[] = { &x1 }; return qVariantValue<QList<QNetworkCookie> >(callOverrideFun(fun, 281, args)); } return QNetworkCookieJar::cookiesForUrl(x1); }
-    bool setCookiesFromUrl(const QList<QNetworkCookie>& x1, const QUrl& x2) { void* fun = LObjects::overrideFun(unique, 282); if(fun) { const void* args[] = { &x1, &x2 }; return callOverrideFun(fun, 282, args).toBool(); } return QNetworkCookieJar::setCookiesFromUrl(x1, x2); }
-    void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 5, args).toBool()) return; } QNetworkCookieJar::childEvent(x1); }
-    void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 6, args).toBool()) return; } QNetworkCookieJar::connectNotify(x1); }
-    void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 7, args).toBool()) return; } QNetworkCookieJar::customEvent(x1); }
-    void disconnectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 8); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 8, args).toBool()) return; } QNetworkCookieJar::disconnectNotify(x1); }
-    void timerEvent(QTimerEvent* x1) { void* fun = LObjects::overrideFun(unique, 9); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 9, args).toBool()) return; } QNetworkCookieJar::timerEvent(x1); }
+    QList<QNetworkCookie> cookiesForUrl(const QUrl& x1) const { void* fun = LObjects::overrideFun(unique, 281); QList<QNetworkCookie> ret; if(fun) { const void* args[] = { &x1 }; ret = qVariantValue<QList<QNetworkCookie> >(callOverrideFun(fun, 281, args)); } if(!fun || LObjects::call_default) { ret = QNetworkCookieJar::cookiesForUrl(x1); } return ret; }
+    bool setCookiesFromUrl(const QList<QNetworkCookie>& x1, const QUrl& x2) { void* fun = LObjects::overrideFun(unique, 282); bool ret = false; if(fun) { const void* args[] = { &x1, &x2 }; ret = callOverrideFun(fun, 282, args).toBool(); } if(!fun || LObjects::call_default) { ret = QNetworkCookieJar::setCookiesFromUrl(x1, x2); } return ret; }
+    void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 5, args); } if(!fun || LObjects::call_default) { QNetworkCookieJar::childEvent(x1); }}
+    void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 6, args); } if(!fun || LObjects::call_default) { QNetworkCookieJar::connectNotify(x1); }}
+    void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 7, args); } if(!fun || LObjects::call_default) { QNetworkCookieJar::customEvent(x1); }}
+    void disconnectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 8);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 8, args); } if(!fun || LObjects::call_default) { QNetworkCookieJar::disconnectNotify(x1); }}
+    void timerEvent(QTimerEvent* x1) { void* fun = LObjects::overrideFun(unique, 9);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 9, args); } if(!fun || LObjects::call_default) { QNetworkCookieJar::timerEvent(x1); }}
 };
 
 class LNetworkDiskCache : public QNetworkDiskCache {
@@ -150,16 +150,16 @@ public:
     static NumList overrideIds;
     uint unique;
 
-    qlonglong expire() { void* fun = LObjects::overrideFun(unique, 283); if(fun) { return callOverrideFun(fun, 283, 0).toLongLong(); } return QNetworkDiskCache::expire(); }
-    qlonglong cacheSize() const { void* fun = LObjects::overrideFun(unique, 284); if(fun) { return callOverrideFun(fun, 284, 0).toLongLong(); } return QNetworkDiskCache::cacheSize(); }
-    QNetworkCacheMetaData metaData(const QUrl& x1) { void* fun = LObjects::overrideFun(unique, 285); if(fun) { const void* args[] = { &x1 }; return qVariantValue<QNetworkCacheMetaData>(callOverrideFun(fun, 285, args)); } return QNetworkDiskCache::metaData(x1); }
-    bool remove(const QUrl& x1) { void* fun = LObjects::overrideFun(unique, 286); if(fun) { const void* args[] = { &x1 }; return callOverrideFun(fun, 286, args).toBool(); } return QNetworkDiskCache::remove(x1); }
-    void updateMetaData(const QNetworkCacheMetaData& x1) { void* fun = LObjects::overrideFun(unique, 287); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 287, args).toBool()) return; } QNetworkDiskCache::updateMetaData(x1); }
-    void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 5, args).toBool()) return; } QNetworkDiskCache::childEvent(x1); }
-    void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 6, args).toBool()) return; } QNetworkDiskCache::connectNotify(x1); }
-    void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 7, args).toBool()) return; } QNetworkDiskCache::customEvent(x1); }
-    void disconnectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 8); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 8, args).toBool()) return; } QNetworkDiskCache::disconnectNotify(x1); }
-    void timerEvent(QTimerEvent* x1) { void* fun = LObjects::overrideFun(unique, 9); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 9, args).toBool()) return; } QNetworkDiskCache::timerEvent(x1); }
+    qlonglong expire() { void* fun = LObjects::overrideFun(unique, 283); qlonglong ret = 0; if(fun) { ret = callOverrideFun(fun, 283, 0).toLongLong(); } if(!fun || LObjects::call_default) { ret = QNetworkDiskCache::expire(); } return ret; }
+    qlonglong cacheSize() const { void* fun = LObjects::overrideFun(unique, 284); qlonglong ret = 0; if(fun) { ret = callOverrideFun(fun, 284, 0).toLongLong(); } if(!fun || LObjects::call_default) { ret = QNetworkDiskCache::cacheSize(); } return ret; }
+    QNetworkCacheMetaData metaData(const QUrl& x1) { void* fun = LObjects::overrideFun(unique, 285); QNetworkCacheMetaData ret; if(fun) { const void* args[] = { &x1 }; ret = qVariantValue<QNetworkCacheMetaData>(callOverrideFun(fun, 285, args)); } if(!fun || LObjects::call_default) { ret = QNetworkDiskCache::metaData(x1); } return ret; }
+    bool remove(const QUrl& x1) { void* fun = LObjects::overrideFun(unique, 286); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 286, args).toBool(); } if(!fun || LObjects::call_default) { ret = QNetworkDiskCache::remove(x1); } return ret; }
+    void updateMetaData(const QNetworkCacheMetaData& x1) { void* fun = LObjects::overrideFun(unique, 287);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 287, args); } if(!fun || LObjects::call_default) { QNetworkDiskCache::updateMetaData(x1); }}
+    void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 5, args); } if(!fun || LObjects::call_default) { QNetworkDiskCache::childEvent(x1); }}
+    void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 6, args); } if(!fun || LObjects::call_default) { QNetworkDiskCache::connectNotify(x1); }}
+    void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 7, args); } if(!fun || LObjects::call_default) { QNetworkDiskCache::customEvent(x1); }}
+    void disconnectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 8);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 8, args); } if(!fun || LObjects::call_default) { QNetworkDiskCache::disconnectNotify(x1); }}
+    void timerEvent(QTimerEvent* x1) { void* fun = LObjects::overrideFun(unique, 9);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 9, args); } if(!fun || LObjects::call_default) { QNetworkDiskCache::timerEvent(x1); }}
 };
 
 class LTcpServer : public QTcpServer {
@@ -171,14 +171,14 @@ public:
     static NumList overrideIds;
     uint unique;
 
-    bool hasPendingConnections() const { void* fun = LObjects::overrideFun(unique, 274); if(fun) { return callOverrideFun(fun, 274, 0).toBool(); } return QTcpServer::hasPendingConnections(); }
-    QTcpSocket* nextPendingConnection() { void* fun = LObjects::overrideFun(unique, 275); if(fun) { return (QTcpSocket*)qVariantValue<void*>(callOverrideFun(fun, 275, 0)); } return QTcpServer::nextPendingConnection(); }
-    void incomingConnection(int x1) { void* fun = LObjects::overrideFun(unique, 310); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 310, args).toBool()) return; } QTcpServer::incomingConnection(x1); }
-    void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 5, args).toBool()) return; } QTcpServer::childEvent(x1); }
-    void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 6, args).toBool()) return; } QTcpServer::connectNotify(x1); }
-    void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 7, args).toBool()) return; } QTcpServer::customEvent(x1); }
-    void disconnectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 8); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 8, args).toBool()) return; } QTcpServer::disconnectNotify(x1); }
-    void timerEvent(QTimerEvent* x1) { void* fun = LObjects::overrideFun(unique, 9); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 9, args).toBool()) return; } QTcpServer::timerEvent(x1); }
+    bool hasPendingConnections() const { void* fun = LObjects::overrideFun(unique, 274); bool ret = false; if(fun) { ret = callOverrideFun(fun, 274, 0).toBool(); } if(!fun || LObjects::call_default) { ret = QTcpServer::hasPendingConnections(); } return ret; }
+    QTcpSocket* nextPendingConnection() { void* fun = LObjects::overrideFun(unique, 275); QTcpSocket* ret = 0; if(fun) { ret = (QTcpSocket*)qVariantValue<void*>(callOverrideFun(fun, 275, 0)); } if(!fun || LObjects::call_default) { ret = QTcpServer::nextPendingConnection(); } return ret; }
+    void incomingConnection(int x1) { void* fun = LObjects::overrideFun(unique, 310);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 310, args); } if(!fun || LObjects::call_default) { QTcpServer::incomingConnection(x1); }}
+    void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 5, args); } if(!fun || LObjects::call_default) { QTcpServer::childEvent(x1); }}
+    void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 6, args); } if(!fun || LObjects::call_default) { QTcpServer::connectNotify(x1); }}
+    void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 7, args); } if(!fun || LObjects::call_default) { QTcpServer::customEvent(x1); }}
+    void disconnectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 8);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 8, args); } if(!fun || LObjects::call_default) { QTcpServer::disconnectNotify(x1); }}
+    void timerEvent(QTimerEvent* x1) { void* fun = LObjects::overrideFun(unique, 9);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 9, args); } if(!fun || LObjects::call_default) { QTcpServer::timerEvent(x1); }}
 };
 
 class LTcpSocket : public QTcpSocket {
@@ -190,27 +190,27 @@ public:
     static NumList overrideIds;
     uint unique;
 
-    bool atEnd() const { void* fun = LObjects::overrideFun(unique, 107); if(fun) { return callOverrideFun(fun, 107, 0).toBool(); } return QTcpSocket::atEnd(); }
-    qlonglong bytesAvailable() const { void* fun = LObjects::overrideFun(unique, 108); if(fun) { return callOverrideFun(fun, 108, 0).toLongLong(); } return QTcpSocket::bytesAvailable(); }
-    qlonglong bytesToWrite() const { void* fun = LObjects::overrideFun(unique, 109); if(fun) { return callOverrideFun(fun, 109, 0).toLongLong(); } return QTcpSocket::bytesToWrite(); }
-    bool canReadLine() const { void* fun = LObjects::overrideFun(unique, 110); if(fun) { return callOverrideFun(fun, 110, 0).toBool(); } return QTcpSocket::canReadLine(); }
-    void close() { void* fun = LObjects::overrideFun(unique, 111); if(fun) { if(callOverrideFun(fun, 111, 0).toBool()) return; } QTcpSocket::close(); }
-    bool isSequential() const { void* fun = LObjects::overrideFun(unique, 112); if(fun) { return callOverrideFun(fun, 112, 0).toBool(); } return QTcpSocket::isSequential(); }
-    bool waitForBytesWritten(int x1 = 30000) { void* fun = LObjects::overrideFun(unique, 113); if(fun) { const void* args[] = { &x1 }; return callOverrideFun(fun, 113, args).toBool(); } return QTcpSocket::waitForBytesWritten(x1); }
-    bool waitForReadyRead(int x1 = 30000) { void* fun = LObjects::overrideFun(unique, 114); if(fun) { const void* args[] = { &x1 }; return callOverrideFun(fun, 114, args).toBool(); } return QTcpSocket::waitForReadyRead(x1); }
-    qlonglong readData(char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 115); if(fun) { const void* args[] = { &x1, &x2 }; return callOverrideFun(fun, 115, args).toLongLong(); } return QTcpSocket::readData(x1, x2); }
-    qlonglong readLineData(char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 116); if(fun) { const void* args[] = { &x1, &x2 }; return callOverrideFun(fun, 116, args).toLongLong(); } return QTcpSocket::readLineData(x1, x2); }
-    qlonglong writeData(const char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 117); if(fun) { const void* args[] = { &x1, &x2 }; return callOverrideFun(fun, 117, args).toLongLong(); } return QTcpSocket::writeData(x1, x2); }
-    bool open(OpenMode x1) { void* fun = LObjects::overrideFun(unique, 118); if(fun) { const void* args[] = { &x1 }; return callOverrideFun(fun, 118, args).toBool(); } return QTcpSocket::open(x1); }
-    qlonglong pos() const { void* fun = LObjects::overrideFun(unique, 119); if(fun) { return callOverrideFun(fun, 119, 0).toLongLong(); } return QTcpSocket::pos(); }
-    bool reset() { void* fun = LObjects::overrideFun(unique, 120); if(fun) { return callOverrideFun(fun, 120, 0).toBool(); } return QTcpSocket::reset(); }
-    bool seek(qint64 x1) { void* fun = LObjects::overrideFun(unique, 121); if(fun) { const void* args[] = { &x1 }; return callOverrideFun(fun, 121, args).toBool(); } return QTcpSocket::seek(x1); }
-    qlonglong size() const { void* fun = LObjects::overrideFun(unique, 122); if(fun) { return callOverrideFun(fun, 122, 0).toLongLong(); } return QTcpSocket::size(); }
-    void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 5, args).toBool()) return; } QTcpSocket::childEvent(x1); }
-    void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 6, args).toBool()) return; } QTcpSocket::connectNotify(x1); }
-    void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 7, args).toBool()) return; } QTcpSocket::customEvent(x1); }
-    void disconnectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 8); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 8, args).toBool()) return; } QTcpSocket::disconnectNotify(x1); }
-    void timerEvent(QTimerEvent* x1) { void* fun = LObjects::overrideFun(unique, 9); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 9, args).toBool()) return; } QTcpSocket::timerEvent(x1); }
+    bool atEnd() const { void* fun = LObjects::overrideFun(unique, 107); bool ret = false; if(fun) { ret = callOverrideFun(fun, 107, 0).toBool(); } if(!fun || LObjects::call_default) { ret = QTcpSocket::atEnd(); } return ret; }
+    qlonglong bytesAvailable() const { void* fun = LObjects::overrideFun(unique, 108); qlonglong ret = 0; if(fun) { ret = callOverrideFun(fun, 108, 0).toLongLong(); } if(!fun || LObjects::call_default) { ret = QTcpSocket::bytesAvailable(); } return ret; }
+    qlonglong bytesToWrite() const { void* fun = LObjects::overrideFun(unique, 109); qlonglong ret = 0; if(fun) { ret = callOverrideFun(fun, 109, 0).toLongLong(); } if(!fun || LObjects::call_default) { ret = QTcpSocket::bytesToWrite(); } return ret; }
+    bool canReadLine() const { void* fun = LObjects::overrideFun(unique, 110); bool ret = false; if(fun) { ret = callOverrideFun(fun, 110, 0).toBool(); } if(!fun || LObjects::call_default) { ret = QTcpSocket::canReadLine(); } return ret; }
+    void close() { void* fun = LObjects::overrideFun(unique, 111);  if(fun) { callOverrideFun(fun, 111, 0); } if(!fun || LObjects::call_default) { QTcpSocket::close(); }}
+    bool isSequential() const { void* fun = LObjects::overrideFun(unique, 112); bool ret = false; if(fun) { ret = callOverrideFun(fun, 112, 0).toBool(); } if(!fun || LObjects::call_default) { ret = QTcpSocket::isSequential(); } return ret; }
+    bool waitForBytesWritten(int x1 = 30000) { void* fun = LObjects::overrideFun(unique, 113); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 113, args).toBool(); } if(!fun || LObjects::call_default) { ret = QTcpSocket::waitForBytesWritten(x1); } return ret; }
+    bool waitForReadyRead(int x1 = 30000) { void* fun = LObjects::overrideFun(unique, 114); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 114, args).toBool(); } if(!fun || LObjects::call_default) { ret = QTcpSocket::waitForReadyRead(x1); } return ret; }
+    qlonglong readData(char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 115); qlonglong ret = 0; if(fun) { const void* args[] = { &x1, &x2 }; ret = callOverrideFun(fun, 115, args).toLongLong(); } if(!fun || LObjects::call_default) { ret = QTcpSocket::readData(x1, x2); } return ret; }
+    qlonglong readLineData(char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 116); qlonglong ret = 0; if(fun) { const void* args[] = { &x1, &x2 }; ret = callOverrideFun(fun, 116, args).toLongLong(); } if(!fun || LObjects::call_default) { ret = QTcpSocket::readLineData(x1, x2); } return ret; }
+    qlonglong writeData(const char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 117); qlonglong ret = 0; if(fun) { const void* args[] = { &x1, &x2 }; ret = callOverrideFun(fun, 117, args).toLongLong(); } if(!fun || LObjects::call_default) { ret = QTcpSocket::writeData(x1, x2); } return ret; }
+    bool open(OpenMode x1) { void* fun = LObjects::overrideFun(unique, 118); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 118, args).toBool(); } if(!fun || LObjects::call_default) { ret = QTcpSocket::open(x1); } return ret; }
+    qlonglong pos() const { void* fun = LObjects::overrideFun(unique, 119); qlonglong ret = 0; if(fun) { ret = callOverrideFun(fun, 119, 0).toLongLong(); } if(!fun || LObjects::call_default) { ret = QTcpSocket::pos(); } return ret; }
+    bool reset() { void* fun = LObjects::overrideFun(unique, 120); bool ret = false; if(fun) { ret = callOverrideFun(fun, 120, 0).toBool(); } if(!fun || LObjects::call_default) { ret = QTcpSocket::reset(); } return ret; }
+    bool seek(qint64 x1) { void* fun = LObjects::overrideFun(unique, 121); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 121, args).toBool(); } if(!fun || LObjects::call_default) { ret = QTcpSocket::seek(x1); } return ret; }
+    qlonglong size() const { void* fun = LObjects::overrideFun(unique, 122); qlonglong ret = 0; if(fun) { ret = callOverrideFun(fun, 122, 0).toLongLong(); } if(!fun || LObjects::call_default) { ret = QTcpSocket::size(); } return ret; }
+    void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 5, args); } if(!fun || LObjects::call_default) { QTcpSocket::childEvent(x1); }}
+    void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 6, args); } if(!fun || LObjects::call_default) { QTcpSocket::connectNotify(x1); }}
+    void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 7, args); } if(!fun || LObjects::call_default) { QTcpSocket::customEvent(x1); }}
+    void disconnectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 8);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 8, args); } if(!fun || LObjects::call_default) { QTcpSocket::disconnectNotify(x1); }}
+    void timerEvent(QTimerEvent* x1) { void* fun = LObjects::overrideFun(unique, 9);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 9, args); } if(!fun || LObjects::call_default) { QTcpSocket::timerEvent(x1); }}
 };
 
 class LUdpSocket : public QUdpSocket {
@@ -222,27 +222,27 @@ public:
     static NumList overrideIds;
     uint unique;
 
-    bool atEnd() const { void* fun = LObjects::overrideFun(unique, 107); if(fun) { return callOverrideFun(fun, 107, 0).toBool(); } return QUdpSocket::atEnd(); }
-    qlonglong bytesAvailable() const { void* fun = LObjects::overrideFun(unique, 108); if(fun) { return callOverrideFun(fun, 108, 0).toLongLong(); } return QUdpSocket::bytesAvailable(); }
-    qlonglong bytesToWrite() const { void* fun = LObjects::overrideFun(unique, 109); if(fun) { return callOverrideFun(fun, 109, 0).toLongLong(); } return QUdpSocket::bytesToWrite(); }
-    bool canReadLine() const { void* fun = LObjects::overrideFun(unique, 110); if(fun) { return callOverrideFun(fun, 110, 0).toBool(); } return QUdpSocket::canReadLine(); }
-    void close() { void* fun = LObjects::overrideFun(unique, 111); if(fun) { if(callOverrideFun(fun, 111, 0).toBool()) return; } QUdpSocket::close(); }
-    bool isSequential() const { void* fun = LObjects::overrideFun(unique, 112); if(fun) { return callOverrideFun(fun, 112, 0).toBool(); } return QUdpSocket::isSequential(); }
-    bool waitForBytesWritten(int x1 = 30000) { void* fun = LObjects::overrideFun(unique, 113); if(fun) { const void* args[] = { &x1 }; return callOverrideFun(fun, 113, args).toBool(); } return QUdpSocket::waitForBytesWritten(x1); }
-    bool waitForReadyRead(int x1 = 30000) { void* fun = LObjects::overrideFun(unique, 114); if(fun) { const void* args[] = { &x1 }; return callOverrideFun(fun, 114, args).toBool(); } return QUdpSocket::waitForReadyRead(x1); }
-    qlonglong readData(char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 115); if(fun) { const void* args[] = { &x1, &x2 }; return callOverrideFun(fun, 115, args).toLongLong(); } return QUdpSocket::readData(x1, x2); }
-    qlonglong readLineData(char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 116); if(fun) { const void* args[] = { &x1, &x2 }; return callOverrideFun(fun, 116, args).toLongLong(); } return QUdpSocket::readLineData(x1, x2); }
-    qlonglong writeData(const char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 117); if(fun) { const void* args[] = { &x1, &x2 }; return callOverrideFun(fun, 117, args).toLongLong(); } return QUdpSocket::writeData(x1, x2); }
-    bool open(OpenMode x1) { void* fun = LObjects::overrideFun(unique, 118); if(fun) { const void* args[] = { &x1 }; return callOverrideFun(fun, 118, args).toBool(); } return QUdpSocket::open(x1); }
-    qlonglong pos() const { void* fun = LObjects::overrideFun(unique, 119); if(fun) { return callOverrideFun(fun, 119, 0).toLongLong(); } return QUdpSocket::pos(); }
-    bool reset() { void* fun = LObjects::overrideFun(unique, 120); if(fun) { return callOverrideFun(fun, 120, 0).toBool(); } return QUdpSocket::reset(); }
-    bool seek(qint64 x1) { void* fun = LObjects::overrideFun(unique, 121); if(fun) { const void* args[] = { &x1 }; return callOverrideFun(fun, 121, args).toBool(); } return QUdpSocket::seek(x1); }
-    qlonglong size() const { void* fun = LObjects::overrideFun(unique, 122); if(fun) { return callOverrideFun(fun, 122, 0).toLongLong(); } return QUdpSocket::size(); }
-    void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 5, args).toBool()) return; } QUdpSocket::childEvent(x1); }
-    void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 6, args).toBool()) return; } QUdpSocket::connectNotify(x1); }
-    void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 7, args).toBool()) return; } QUdpSocket::customEvent(x1); }
-    void disconnectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 8); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 8, args).toBool()) return; } QUdpSocket::disconnectNotify(x1); }
-    void timerEvent(QTimerEvent* x1) { void* fun = LObjects::overrideFun(unique, 9); if(fun) { const void* args[] = { &x1 }; if(callOverrideFun(fun, 9, args).toBool()) return; } QUdpSocket::timerEvent(x1); }
+    bool atEnd() const { void* fun = LObjects::overrideFun(unique, 107); bool ret = false; if(fun) { ret = callOverrideFun(fun, 107, 0).toBool(); } if(!fun || LObjects::call_default) { ret = QUdpSocket::atEnd(); } return ret; }
+    qlonglong bytesAvailable() const { void* fun = LObjects::overrideFun(unique, 108); qlonglong ret = 0; if(fun) { ret = callOverrideFun(fun, 108, 0).toLongLong(); } if(!fun || LObjects::call_default) { ret = QUdpSocket::bytesAvailable(); } return ret; }
+    qlonglong bytesToWrite() const { void* fun = LObjects::overrideFun(unique, 109); qlonglong ret = 0; if(fun) { ret = callOverrideFun(fun, 109, 0).toLongLong(); } if(!fun || LObjects::call_default) { ret = QUdpSocket::bytesToWrite(); } return ret; }
+    bool canReadLine() const { void* fun = LObjects::overrideFun(unique, 110); bool ret = false; if(fun) { ret = callOverrideFun(fun, 110, 0).toBool(); } if(!fun || LObjects::call_default) { ret = QUdpSocket::canReadLine(); } return ret; }
+    void close() { void* fun = LObjects::overrideFun(unique, 111);  if(fun) { callOverrideFun(fun, 111, 0); } if(!fun || LObjects::call_default) { QUdpSocket::close(); }}
+    bool isSequential() const { void* fun = LObjects::overrideFun(unique, 112); bool ret = false; if(fun) { ret = callOverrideFun(fun, 112, 0).toBool(); } if(!fun || LObjects::call_default) { ret = QUdpSocket::isSequential(); } return ret; }
+    bool waitForBytesWritten(int x1 = 30000) { void* fun = LObjects::overrideFun(unique, 113); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 113, args).toBool(); } if(!fun || LObjects::call_default) { ret = QUdpSocket::waitForBytesWritten(x1); } return ret; }
+    bool waitForReadyRead(int x1 = 30000) { void* fun = LObjects::overrideFun(unique, 114); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 114, args).toBool(); } if(!fun || LObjects::call_default) { ret = QUdpSocket::waitForReadyRead(x1); } return ret; }
+    qlonglong readData(char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 115); qlonglong ret = 0; if(fun) { const void* args[] = { &x1, &x2 }; ret = callOverrideFun(fun, 115, args).toLongLong(); } if(!fun || LObjects::call_default) { ret = QUdpSocket::readData(x1, x2); } return ret; }
+    qlonglong readLineData(char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 116); qlonglong ret = 0; if(fun) { const void* args[] = { &x1, &x2 }; ret = callOverrideFun(fun, 116, args).toLongLong(); } if(!fun || LObjects::call_default) { ret = QUdpSocket::readLineData(x1, x2); } return ret; }
+    qlonglong writeData(const char* x1, qint64 x2) { void* fun = LObjects::overrideFun(unique, 117); qlonglong ret = 0; if(fun) { const void* args[] = { &x1, &x2 }; ret = callOverrideFun(fun, 117, args).toLongLong(); } if(!fun || LObjects::call_default) { ret = QUdpSocket::writeData(x1, x2); } return ret; }
+    bool open(OpenMode x1) { void* fun = LObjects::overrideFun(unique, 118); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 118, args).toBool(); } if(!fun || LObjects::call_default) { ret = QUdpSocket::open(x1); } return ret; }
+    qlonglong pos() const { void* fun = LObjects::overrideFun(unique, 119); qlonglong ret = 0; if(fun) { ret = callOverrideFun(fun, 119, 0).toLongLong(); } if(!fun || LObjects::call_default) { ret = QUdpSocket::pos(); } return ret; }
+    bool reset() { void* fun = LObjects::overrideFun(unique, 120); bool ret = false; if(fun) { ret = callOverrideFun(fun, 120, 0).toBool(); } if(!fun || LObjects::call_default) { ret = QUdpSocket::reset(); } return ret; }
+    bool seek(qint64 x1) { void* fun = LObjects::overrideFun(unique, 121); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 121, args).toBool(); } if(!fun || LObjects::call_default) { ret = QUdpSocket::seek(x1); } return ret; }
+    qlonglong size() const { void* fun = LObjects::overrideFun(unique, 122); qlonglong ret = 0; if(fun) { ret = callOverrideFun(fun, 122, 0).toLongLong(); } if(!fun || LObjects::call_default) { ret = QUdpSocket::size(); } return ret; }
+    void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 5, args); } if(!fun || LObjects::call_default) { QUdpSocket::childEvent(x1); }}
+    void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 6, args); } if(!fun || LObjects::call_default) { QUdpSocket::connectNotify(x1); }}
+    void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 7, args); } if(!fun || LObjects::call_default) { QUdpSocket::customEvent(x1); }}
+    void disconnectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 8);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 8, args); } if(!fun || LObjects::call_default) { QUdpSocket::disconnectNotify(x1); }}
+    void timerEvent(QTimerEvent* x1) { void* fun = LObjects::overrideFun(unique, 9);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 9, args); } if(!fun || LObjects::call_default) { QUdpSocket::timerEvent(x1); }}
 };
 
 #endif

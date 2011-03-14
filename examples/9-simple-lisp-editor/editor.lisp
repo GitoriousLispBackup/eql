@@ -136,20 +136,19 @@
                                       "maxVisibleItems" 10)
           *symbol-model*        (qnew "QStringListModel")
           *symbol-popup*        (qfun *symbol-completer* "popup"))
-    (let ((editor-highlighter  (qnew "QSyntaxHighlighter(QTextDocument*)" (qfun *editor*  "document")))
+    (let ((editor-highlighter  (qnew "QSyntaxHighlighter(QTextDocument*)" (qfun *editor* "document")))
           (command-highlighter (qnew "QSyntaxHighlighter(QTextDocument*)" (qfun *command* "document"))))
       (qset *action-open*         "shortcut" (keys "Ctrl+O"))
       (qset *action-save*         "shortcut" (keys "Ctrl+S"))
       (qset *action-save-and-run* "shortcut" (keys "Ctrl+R"))
       (qset *action-eval-region*  "shortcut" (keys "Ctrl+Return"))
       (qset *action-repeat-eval*  "shortcut" (keys "Ctrl+E"))
-      (dolist (w (list *editor* *output* *command* *symbol-popup*))
+      (dolist (w (list *editor* *output* *command* *completer* *symbol-popup*))
         (qset w "font" eql::*code-font*))
       (x:do-with (qset *output*)
         ("readOnly" t)
         ("tabStopWidth" (* 8 (first (font-metrics-size)))))
       (x:do-with (qset *completer*)
-        ("font" eql::*code-font*)
         ("frameShape" |QFrame.Box|)
         ("frameShadow" |QFrame.Plain|)
         ("lineWidth" 1))
@@ -189,7 +188,7 @@
       (qoverride *command* "keyPressEvent(QKeyEvent*)" 'command-key-pressed)
       (qoverride *completer* "keyPressEvent(QKeyEvent*)" 'completer-key-pressed)
       (qoverride *completer* "focusOutEvent(QFocusEvent*)" 'close-completer)
-      (qoverride editor-highlighter  "highlightBlock(QString)" (lambda (str) (highlight-block editor-highlighter str)))
+      (qoverride editor-highlighter "highlightBlock(QString)" (lambda (str) (highlight-block editor-highlighter str)))
       (qoverride command-highlighter "highlightBlock(QString)" (lambda (str) (highlight-block command-highlighter str)))
       (show-status-message (format nil (tr "<b style='color:#4040E0'>Eval Region:</b> move to paren <b>(</b> or <b>)</b>, hit <b>~A</b>")
                                    (qfun (qget *action-eval-region* "shortcut") "toString" |QKeySequence.NativeText|))
@@ -219,7 +218,7 @@
   (defun show-status-message (msg &optional html)
     (let ((bar (qfun *main* "statusBar")))
       (when (and html (not label))
-        (qfun bar "addWidget" (setf label (qnew "QLabel")) 1))
+        (qfun bar "addWidget" (setf label (qnew "QLabel" "wordWrap" t)) 1))
       (if html
           (qset label "text" msg)
           (qfun bar "showMessage" msg)))))
@@ -768,17 +767,17 @@
   (case (qfun key-event "key")
     ((#.|Qt.Key_Return| #.|Qt.Key_Enter|)
        (if (qget *symbol-popup* "visible")
-           (progn
-             (insert-symbol-completion)
-             t)
+           (insert-symbol-completion)
            (let* ((cursor (qfun *editor* "textCursor"))
                   (curr (qfun cursor "block"))
                   (spaces (indentation (qfun curr "text"))))
-             (unless (zerop spaces)
-               (qfun cursor "insertText" (format nil "~%~A" (make-string spaces)))
-               (qfun *editor* "ensureCursorVisible")
-               t))))
+             (if (zerop spaces)
+                 (qcall-default)
+                 (progn
+                   (qfun cursor "insertText" (format nil "~%~A" (make-string spaces)))
+                   (qfun *editor* "ensureCursorVisible"))))))
     (#.|Qt.Key_Tab|
+       (qfun* key-event "QEvent" "accept")
        (if (= |Qt.ControlModifier| (qfun key-event "modifiers"))
            ;; auto indent paragraph: current line -> next empty line
            (let ((cursor* (qfun *editor* "textCursor")))
@@ -824,11 +823,10 @@
                (x:do-with (qfun *editor*)
                  ("setTextCursor" orig*)
                  "ensureCursorVisible")))
-           (update-symbol-completer key-event :show))
-       t)
+           (update-symbol-completer key-event :show)))
     (t
        (update-symbol-completer key-event)
-       nil)))
+       (qcall-default))))
 
 ;;; paren highlighting
 
@@ -1082,18 +1080,16 @@
                     (push x:it up)))
                (#.|Qt.Key_Tab|
                   (update-symbol-completer key-event :show)
-                  (return-from command-key-pressed t))
+                  (return-from command-key-pressed))
                ((#.|Qt.Key_Return| #.|Qt.Key_Enter|)
                   (if (qget *symbol-popup* "visible")
                       (progn
                         (insert-symbol-completion)
-                        (return-from command-key-pressed t))
-                      (progn
-                        (command)
-                        nil))))
+                        (return-from command-key-pressed))
+                      (command))))
         (qset *command* "plainText" (first x:it))
         (update-symbol-completer key-event))
-    nil) ; overridden
+    (qcall-default))
   (defun history-add (cmd)
     (when (or (not up)
               (and up (string/= cmd (first up))))
@@ -1122,6 +1118,15 @@
                 all))))
     (sort all 'string<)))
 
+(defun function-lambda-list* (name)
+  (let ((symbol (intern (string-upcase name))))
+    (multiple-value-bind (args ok)
+        (and (ignore-errors (symbol-function symbol))
+             (ignore-errors (ext:function-lambda-list symbol)))
+      (if ok
+          (format nil "~(<b>~A</b> ~A~)" name args)
+          ""))))
+
 (let (name*)
   (defun update-completer-symbols (&optional (package-name :eql))
     (when (string/= package-name name*)
@@ -1148,6 +1153,7 @@
     (when (and current
                (not (x:empty-string current)))
       (qfun *current-editor* "insertPlainText" (subseq current (length prefix))))
+    (show-status-message (function-lambda-list* current) :html)
     (close-symbol-popup))
   (defun close-symbol-popup ()
     (qfun *symbol-popup* "hide")

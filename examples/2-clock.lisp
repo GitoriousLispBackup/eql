@@ -87,7 +87,6 @@
             (! "setOpacity" 0.7)
             (! "drawLine(QLine)" '(-15 0 52 0))
             (! "drawEllipse(QRect)" '(53 -4 8 8))))
-        (! "end")))
-    t)) ; overridden
+        (! "end")))))
 
 (start)

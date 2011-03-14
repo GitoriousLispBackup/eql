@@ -121,7 +121,7 @@
                     (x:when-it (pop down)
                       (push x:it up))))
       (qset *edit* "text" (first x:it)))
-    nil) ; overridden
+    (qcall-default))
   (defun history-add (cmd)
     (when (or (not up)
               (and up (string/= cmd (first up))))

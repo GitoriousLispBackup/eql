@@ -87,6 +87,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object((char*)"qadd-event-filter"),    (cl_objectfn_fixed)qadd_event_filter,        3);
     cl_def_c_function(c_string_to_object((char*)"%qapropos"),            (cl_objectfn_fixed)qapropos2,                3);
     cl_def_c_function(c_string_to_object((char*)"qapp"),                 (cl_objectfn_fixed)qapp,                     0);
+    cl_def_c_function(c_string_to_object((char*)"qcall-default"),        (cl_objectfn_fixed)qcall_default,            0);
     cl_def_c_function(c_string_to_object((char*)"qclear-event-filters"), (cl_objectfn_fixed)qclear_event_filters,     0);
     cl_def_c_function(c_string_to_object((char*)"%qconnect"),            (cl_objectfn_fixed)qconnect2,                5);
     cl_def_c_function(c_string_to_object((char*)"qcopy"),                (cl_objectfn_fixed)qcopy,                    1);
@@ -1731,8 +1732,8 @@ void callConnectFun(void* fun, const StrList& types, void** args) {
 
 cl_object qoverride(cl_object l_obj, cl_object l_name, cl_object l_fun) {
     /// args: (object name function)
-    /// Sets a Lisp function to be called on a virtual Qt method. If the Lisp function returns <code>NIL</code>, the default Qt method will be called afterwards.<br><br>To remove a function, pass <code>NIL</code> instead of the function argument.
-    ///     (qoverride edit "keyPressEvent(QKeyEvent*)" (lambda (ev) (print (qfun ev "key")) nil))
+    /// Sets a Lisp function to be called on a virtual Qt method.<br>To remove a function, pass <code>NIL</code> instead of the function argument.<br>Use <code>qcall-default</code> inside your function to call the base implementation.
+    ///     (qoverride edit "keyPressEvent(QKeyEvent*)" (lambda (ev) (print (qfun ev "key")) (qcall-default)))
     ecl_process_env()->nvalues = 1;
     QtObject o = toQtObject(l_obj);
     void* fun = (Cnil == l_fun) ? 0 : getLispFun(l_fun);
@@ -1744,6 +1745,13 @@ cl_object qoverride(cl_object l_obj, cl_object l_name, cl_object l_fun) {
             return Ct; }}
     error_msg("QOVERRIDE", LIST3(l_obj, l_name, l_fun));
     return Cnil; }
+
+cl_object qcall_default() {
+    /// args: ()
+    /// To use inside an overriden function (see <code>qoverride</code>).<br>Calls the base implementation of the virtual Qt method.
+    ecl_process_env()->nvalues = 1;
+    LObjects::call_default = true;
+    return Ct; }
 
 QVariant callOverrideFun(void* fun, int id, const void** args) {
     int n = id - 1;
@@ -1773,8 +1781,9 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
             cl_object l_args = Cnil;
             Q_FOREACH(MetaArg arg, mArgs) {
                 l_args = CONS(to_lisp_arg(arg), l_args); }
+            LObjects::call_default = false; // see qcall_default()
             l_ret = cl_apply(2, l_fun, cl_nreverse(l_args)); }}
-    QVariant ret(false);
+    QVariant ret;
     const char* ret_type = LObjects::override_arg_types[n][0];
     if(ret_type) {
         QByteArray type(ret_type);
@@ -1817,8 +1826,6 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
                 else if(type == T_QVariant)                   ret = qVariantFromValue(*(QVariant*)o.pointer);
 #endif
                 else                                          ret = toQVariant(l_ret, ret_type); }}}
-    else {
-        ret = (Ct == l_ret); }
     return ret; }
 
 cl_object qadd_event_filter(cl_object l_obj, cl_object l_ev, cl_object l_fun) {

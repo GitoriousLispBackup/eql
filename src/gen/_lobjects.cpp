@@ -20,6 +20,7 @@ EQL* LObjects::eql = 0;
 DynObject* LObjects::dynObject = 0;
 QObject** LObjects::Q = 0;
 QObject** LObjects::N = 0;
+bool LObjects::call_default = false;
 uint LObjects::i_unique = 0;
 const char*** LObjects::override_arg_types = 0;
 QList<QByteArray> LObjects::qNames;

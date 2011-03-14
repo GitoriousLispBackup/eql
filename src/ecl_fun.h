@@ -197,6 +197,7 @@ class QEvent;
 cl_object qadd_event_filter    (cl_object, cl_object, cl_object);
 cl_object qapropos2            (cl_object, cl_object, cl_object);
 cl_object qapp                 ();
+cl_object qcall_default        ();
 cl_object qclear_event_filters ();
 cl_object qconnect2            (cl_object, cl_object, cl_object, cl_object, cl_object);
 cl_object qcopy                (cl_object);
