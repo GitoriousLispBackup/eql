@@ -563,21 +563,19 @@
 
 (defun completer-key-pressed (key-event)
   (when *current-completer*
-    (flet ((leave ()
-             (return-from completer-key-pressed t)))
-      (let ((forward t))
-        (case (qfun key-event "key")
-          ((#.|Qt.Key_Up| #.|Qt.Key_Down| #.|Qt.Key_PageUp| #.|Qt.Key_PageDown| #.|Qt.Key_Home| #.|Qt.Key_End|)
-             (setf forward nil))
-          ((#.|Qt.Key_Return| #.|Qt.Key_Enter|)
-             (insert-completer-option-text)
-             (leave))
-          (#.|Qt.Key_Escape|
-             (close-completer)
-             (leave)))
-        (when forward
+    (let ((forward t))
+      (case (qfun key-event "key")
+        ((#.|Qt.Key_Up| #.|Qt.Key_Down| #.|Qt.Key_PageUp| #.|Qt.Key_PageDown| #.|Qt.Key_Home| #.|Qt.Key_End|)
+           (setf forward nil))
+        ((#.|Qt.Key_Return| #.|Qt.Key_Enter|)
+           (insert-completer-option-text)
+           (return-from completer-key-pressed))
+        (#.|Qt.Key_Escape|
+           (close-completer)
+           (return-from completer-key-pressed)))
+      (if forward
           (qfun "QCoreApplication" "sendEvent" *current-editor* key-event)
-          t)))))
+          (qcall-default)))))
 
 (defun current-completer-option ()
   (qfun (first (qfun *completer* "selectedItems")) "text"))
