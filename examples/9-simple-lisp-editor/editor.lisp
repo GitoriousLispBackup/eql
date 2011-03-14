@@ -777,7 +777,6 @@
                    (qfun cursor "insertText" (format nil "~%~A" (make-string spaces)))
                    (qfun *editor* "ensureCursorVisible"))))))
     (#.|Qt.Key_Tab|
-       (qfun* key-event "QEvent" "accept")
        (if (= |Qt.ControlModifier| (qfun key-event "modifiers"))
            ;; auto indent paragraph: current line -> next empty line
            (let ((cursor* (qfun *editor* "textCursor")))

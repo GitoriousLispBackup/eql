@@ -1763,6 +1763,7 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
         mArgs << MetaArg(type, (void*)args[i]);
         ++i; }
     cl_object l_ret = Cnil;
+    LObjects::call_default = false; // see qcall_default()
     switch(i) {
         case 0: l_ret = cl_funcall(1, l_fun);
             break;
@@ -1781,7 +1782,6 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
             cl_object l_args = Cnil;
             Q_FOREACH(MetaArg arg, mArgs) {
                 l_args = CONS(to_lisp_arg(arg), l_args); }
-            LObjects::call_default = false; // see qcall_default()
             l_ret = cl_apply(2, l_fun, cl_nreverse(l_args)); }}
     QVariant ret;
     const char* ret_type = LObjects::override_arg_types[n][0];
