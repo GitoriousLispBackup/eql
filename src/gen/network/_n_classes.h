@@ -193,17 +193,17 @@ public:
     static NumList overrideIds;
     uint unique;
 
-    void setDir(bool x1) { void* fun = LObjects::overrideFun(unique, 400);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 400, args); } if(!fun || LObjects::call_default) { QUrlInfo::setDir(x1); }}
-    void setFile(bool x1) { void* fun = LObjects::overrideFun(unique, 401);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 401, args); } if(!fun || LObjects::call_default) { QUrlInfo::setFile(x1); }}
-    void setGroup(const QString& x1) { void* fun = LObjects::overrideFun(unique, 402);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 402, args); } if(!fun || LObjects::call_default) { QUrlInfo::setGroup(x1); }}
-    void setLastModified(const QDateTime& x1) { void* fun = LObjects::overrideFun(unique, 403);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 403, args); } if(!fun || LObjects::call_default) { QUrlInfo::setLastModified(x1); }}
-    void setName(const QString& x1) { void* fun = LObjects::overrideFun(unique, 404);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 404, args); } if(!fun || LObjects::call_default) { QUrlInfo::setName(x1); }}
-    void setOwner(const QString& x1) { void* fun = LObjects::overrideFun(unique, 405);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 405, args); } if(!fun || LObjects::call_default) { QUrlInfo::setOwner(x1); }}
-    void setPermissions(int x1) { void* fun = LObjects::overrideFun(unique, 406);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 406, args); } if(!fun || LObjects::call_default) { QUrlInfo::setPermissions(x1); }}
-    void setReadable(bool x1) { void* fun = LObjects::overrideFun(unique, 407);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 407, args); } if(!fun || LObjects::call_default) { QUrlInfo::setReadable(x1); }}
-    void setSize(qint64 x1) { void* fun = LObjects::overrideFun(unique, 408);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 408, args); } if(!fun || LObjects::call_default) { QUrlInfo::setSize(x1); }}
-    void setSymLink(bool x1) { void* fun = LObjects::overrideFun(unique, 409);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 409, args); } if(!fun || LObjects::call_default) { QUrlInfo::setSymLink(x1); }}
-    void setWritable(bool x1) { void* fun = LObjects::overrideFun(unique, 410);  if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 410, args); } if(!fun || LObjects::call_default) { QUrlInfo::setWritable(x1); }}
+    void setDir(bool x1) { void* fun = LObjects::overrideFun(unique, 400); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 400, args); } if(!fun || LObjects::call_default) { QUrlInfo::setDir(x1); }}
+    void setFile(bool x1) { void* fun = LObjects::overrideFun(unique, 401); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 401, args); } if(!fun || LObjects::call_default) { QUrlInfo::setFile(x1); }}
+    void setGroup(const QString& x1) { void* fun = LObjects::overrideFun(unique, 402); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 402, args); } if(!fun || LObjects::call_default) { QUrlInfo::setGroup(x1); }}
+    void setLastModified(const QDateTime& x1) { void* fun = LObjects::overrideFun(unique, 403); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 403, args); } if(!fun || LObjects::call_default) { QUrlInfo::setLastModified(x1); }}
+    void setName(const QString& x1) { void* fun = LObjects::overrideFun(unique, 404); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 404, args); } if(!fun || LObjects::call_default) { QUrlInfo::setName(x1); }}
+    void setOwner(const QString& x1) { void* fun = LObjects::overrideFun(unique, 405); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 405, args); } if(!fun || LObjects::call_default) { QUrlInfo::setOwner(x1); }}
+    void setPermissions(int x1) { void* fun = LObjects::overrideFun(unique, 406); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 406, args); } if(!fun || LObjects::call_default) { QUrlInfo::setPermissions(x1); }}
+    void setReadable(bool x1) { void* fun = LObjects::overrideFun(unique, 407); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 407, args); } if(!fun || LObjects::call_default) { QUrlInfo::setReadable(x1); }}
+    void setSize(qint64 x1) { void* fun = LObjects::overrideFun(unique, 408); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 408, args); } if(!fun || LObjects::call_default) { QUrlInfo::setSize(x1); }}
+    void setSymLink(bool x1) { void* fun = LObjects::overrideFun(unique, 409); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 409, args); } if(!fun || LObjects::call_default) { QUrlInfo::setSymLink(x1); }}
+    void setWritable(bool x1) { void* fun = LObjects::overrideFun(unique, 410); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 410, args); } if(!fun || LObjects::call_default) { QUrlInfo::setWritable(x1); }}
 };
 
 #endif

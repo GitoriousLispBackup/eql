@@ -526,7 +526,7 @@
                                 (push sig-id sig-ids))
                               (unless (find* fun-name fun-names)
                                 (push fun-name fun-names)
-                                (format s "~%    ~A ~A(~A)~A { void* fun = LObjects::overrideFun(unique, ~D); ~A if(fun) { ~A~A; }~A~A~A~A~A}"
+                                (format s "~%    ~A ~A(~A)~A { void* fun = LObjects::overrideFun(unique, ~D); ~Aif(fun) { ~A~A; }~A~A~A~A~A}"
                                         (arg-to-c ret)
                                         fun-name
                                         (add-var-names args)
@@ -534,7 +534,7 @@
                                         sig-id
                                         (if void
                                             ""
-                                            (format nil "~A ret~A;"
+                                            (format nil "~A ret~A; "
                                                     (arg-to-c ret)
                                                     (x:if-it (arg-to-c-null-value ret)
                                                         (format nil " = ~A" x:it)
