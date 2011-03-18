@@ -52,6 +52,7 @@ Currently, tab completion works for all CL and EQL symbols (including Qt
 enums).
 After selecting a symbol (<arrow key>, Return), the function arguments (if
 available) will be shown in the status bar.
+Hitting Tab after a " character will show the pathname completer instead.
 
 Auto indent note: hitting the Ctrl+Tab keys will auto indent the paragraph
 starting from the current line until the next empty line found.

@@ -1254,7 +1254,7 @@ static cl_object collect_info(const QByteArray& type, const QByteArray& qclass, 
 
 cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
     /// args: (&optional search class)
-    /// Finds all occurrencies of the given search term in the given object's meta information.<br>Constructors are listed under <b>Methods</b>.<br>To list the user defined functions of external C++ classes (see Qt_EQL), pass the object instead of the class name.
+    /// Finds all occurrencies of the given search term in the given object's meta information.<br>Constructors are listed under "Methods".<br>To list the user defined functions of external C++ classes (see Qt_EQL), pass the object instead of the class name.
     ///     (qapropos "html" "QTextEdit")
     ///     (qapropos nil "QWidget")
     ///     (qapropos)
@@ -1830,8 +1830,8 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
 
 cl_object qadd_event_filter(cl_object l_obj, cl_object l_ev, cl_object l_fun) {
     /// args: (object event function)
-    /// Adds a Lisp function to be called on a given event type. The event type has to be passed as integer value. If the object argument is <code>NIL</code>, the event will be captured for any object. If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.
-    ///     (qadd-event-filter nil +mouse-button-press+ (lambda (obj ev) (print obj) nil))
+    /// Adds a Lisp function to be called on a given event type.<br>If the object argument is <code>NIL</code>, the event will be captured for any object.<br>If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.
+    ///     (qadd-event-filter nil |QEvent.MouseButtonPress| (lambda (obj ev) (print obj) nil))
     ecl_process_env()->nvalues = 1;
     void* fun = getLispFun(l_fun);
     if(fun) {

@@ -45,6 +45,11 @@
   *select*
   *selected-widget*)
 
+(defvar *code-font* (qnew "QFont(QString,int)"
+                          #+darwin  "Monaco"      #+darwin  12
+                          #+linux   "Monospace"   #+linux   9
+                          #+windows "Courier New" #+windows 10))
+
 (defvar *completer-list* (qnew "QStringListModel"))
 
 (defun gui ()
@@ -59,9 +64,10 @@
   (set-tree *n-methods* 3 nil (tr "Method") (tr "Static"))
   (set-tree *n-override*)
   (set-tree *primitives* 2 nil (tr "Example"))
+  ;; please see example 9: editor.lisp for better completer examples
   (let ((cpl (qnew "QCompleter")))
     (dolist (w (list *display* *edit* *package-name* *selected-widget* (qfun cpl "popup")))
-      (qset w "styleSheet" "font-family: Courier"))
+      (qset w "font" *code-font*))
     (qfun cpl "setModel" *completer-list*)
     (qfun *edit* "setCompleter" cpl))
   (qfun *q-names* "addItems" (qobject-names :q))

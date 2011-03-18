@@ -8,9 +8,9 @@
 </p><br>
 <p>
 <b>QADD-EVENT-FILTER (object event function)</b>
-<p>Adds a Lisp function to be called on a given event type. The event type has to be passed as integer value. If the object argument is <code>NIL</code>, the event will be captured for any object. If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.</p>
+<p>Adds a Lisp function to be called on a given event type.<br>If the object argument is <code>NIL</code>, the event will be captured for any object.<br>If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.</p>
 <pre>
-  (qadd-event-filter nil +mouse-button-press+ (lambda (obj ev) (print obj) nil))
+  (qadd-event-filter nil |QEvent.MouseButtonPress| (lambda (obj ev) (print obj) nil))
 </pre>
 </p><br>
 <p>
@@ -19,7 +19,7 @@
 </p><br>
 <p>
 <b>QAPROPOS (&optional search class)</b>
-<p>Finds all occurrencies of the given search term in the given object's meta information.<br>Constructors are listed under <b>Methods</b>.<br>To list the user defined functions of external C++ classes (see Qt_EQL), pass the object instead of the class name.</p>
+<p>Finds all occurrencies of the given search term in the given object's meta information.<br>Constructors are listed under "Methods".<br>To list the user defined functions of external C++ classes (see Qt_EQL), pass the object instead of the class name.</p>
 <pre>
   (qapropos "html" "QTextEdit")
   (qapropos nil "QWidget")
