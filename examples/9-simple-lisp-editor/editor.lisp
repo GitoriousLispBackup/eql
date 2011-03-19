@@ -11,6 +11,8 @@
 ;;;   - an independent local Lisp server process for evaluation
 ;;;   - native Qt event processing through QApplication::exec()
 ;;;   - eval region
+;;;
+;;; N.B: requires Qt 4.7 for signal QFileSystemModel::directoryLoaded(QString)
 
 (require :local-client (probe-file "local-client.lisp"))
 (require :settings     (probe-file "settings.lisp"))
@@ -1157,7 +1159,16 @@
                                 (text-until-cursor cursor (qfun cursor "block"))
                                 (if show "" (qfun key-event "text"))))
              (start (unless (x:empty-string text)
-                      (position-if (lambda (ch) (find ch " '(:\"")) text :from-end t)))
+                      (let ((p1 (let ((p (position #\: text :from-end t)))
+                                  ;; Windows pathnames may contain ":"
+                                  (when (and p
+                                             (> (length text) (1+ p))
+                                             (char/= #\/ (char text (1+ p))))
+                                    p)))
+                            (p2 (position-if (lambda (ch) (find ch " '(\"")) text :from-end t)))
+                        (if (and p1 p2)
+                            (max p1 p2)
+                            (or p1 p2)))))
              (file (and start (char= #\" (char text start)))))
         (setf completer (if file *file-completer* *symbol-completer*))
         (when show
