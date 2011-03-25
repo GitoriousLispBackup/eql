@@ -184,7 +184,8 @@
       (dolist (ed (list *editor* *command*))
         (qconnect ed  "cursorPositionChanged()" 'cursor-position-changed))
       (qconnect *completer* "itemDoubleClicked(QListWidgetItem*)" 'insert-completer-option-text)
-      (qconnect *file-completer* "highlighted(QString)" 'item-highlighted)
+      (qconnect *file-completer* "highlighted(QString)"
+                (lambda (str) (item-highlighted str :file)))
       (qconnect *file-model* "directoryLoaded(QString)"
                 (lambda (arg) (update-tab-completer-2 :file)))
       (qconnect *symbol-completer* "highlighted(QString)" 'item-highlighted)
@@ -269,7 +270,11 @@
     (when (numberp end)
       end)))
 
-(defun text-until-cursor (text-cursor text-block)
+(defun text-until-cursor (&optional text-cursor text-block)
+  (unless text-cursor
+    (setf text-cursor (qfun *current-editor* "textCursor")))
+  (unless text-block
+    (setf text-block (qfun text-cursor "block")))
   (subseq (qfun text-block "text") 0 (- (qfun text-cursor "position")
                                         (qfun text-block "position"))))
 
@@ -1148,33 +1153,41 @@
       (setf name* package-name)
       (qfun *symbol-model* "setStringList" (all-symbols package-name)))))
 
-(let (prefix current completer file)
+(let (prefix current completer file*)
   (defun update-tab-completer (key-event &optional show)
-    (setf delayed nil)
     (when (or show
               (qget *file-popup* "visible")
               (qget *symbol-popup* "visible"))
       (let* ((cursor (qfun *current-editor* "textCursor"))
              (text (concatenate 'string
-                                (text-until-cursor cursor (qfun cursor "block"))
+                                (text-until-cursor cursor)
                                 (if show "" (qfun key-event "text"))))
              (start (unless (x:empty-string text)
-                      (let ((p1 (let ((p (position #\: text :from-end t)))
-                                  ;; Windows pathnames may contain ":"
-                                  (when (and p
-                                             (> (length text) (1+ p))
-                                             (char/= #\/ (char text (1+ p))))
-                                    p)))
-                            (p2 (position-if (lambda (ch) (find ch " '(\"")) text :from-end t)))
-                        (if (and p1 p2)
-                            (max p1 p2)
-                            (or p1 p2)))))
-             (file (and start (char= #\" (char text start)))))
+                      (cond ((x:ends-with " " text)
+                             (length text))
+                            ((x:ends-with "*" text)
+                             (1- (length text)))
+                            (t
+                             (let ((p1 (let ((p (position #\: text :from-end t)))
+                                         ;; Windows pathnames may contain ":"
+                                         (when (and p
+                                                    (> (length text) (1+ p))
+                                                    (char/= #\/ (char text (1+ p))))
+                                           p)))
+                                   (p2 (position-if (lambda (ch) (find ch "'(\"")) text :from-end t)))
+                               (cond ((and p1 p2)
+                                      (1+ (max p1 p2)))
+                                     ((or p1 p2)
+                                      (1+ (or p1 p2)))
+                                     (t
+                                      0)))))))
+             (file (and (plusp start)
+                        (char= #\" (char text (1- start))))))
         (setf completer (if file *file-completer* *symbol-completer*))
         (when show
           (unless (qeql *current-editor* (qfun completer "widget"))
             (qfun completer "setWidget" *current-editor*)))
-        (qset completer "completionPrefix" (setf prefix (subseq text (if start (1+ start) 0))))
+        (qset completer "completionPrefix" (setf prefix (subseq text start)))
         (update-tab-completer-2 file))))
   (defun update-tab-completer-2 (&optional file)
     (qfun completer "complete")
@@ -1188,12 +1201,20 @@
                                              (* (min (qget *symbol-completer* "maxVisibleItems")
                                                      (qfun *symbol-completer* "completionCount"))
                                                 (second (font-metrics-size))))))))
-  (defun item-highlighted (name)
-    (setf current name))
+  (defun item-highlighted (name &optional file)
+    (setf current name
+          file* file))
   (defun insert-tab-completion ()
     (when (and current
                (not (x:empty-string current)))
-      (qfun *current-editor* "insertPlainText" (subseq current (length prefix))))
+      (let ((txt (subseq current (length prefix))))
+        (when file*
+          (let* ((line (concatenate 'string (text-until-cursor) txt))
+                 (path (subseq line (1+ (position #\" line :from-end t)))))
+            (qlet ((info "QFileInfo(QString)" path))
+              (when (qfun info "isDir")
+                (setf txt (concatenate 'string txt "/"))))))
+        (qfun *current-editor* "insertPlainText" txt)))
     (when (qget *symbol-popup* "visible")
       (show-status-message (function-lambda-list* current) :html))
     (close-tab-popups))
