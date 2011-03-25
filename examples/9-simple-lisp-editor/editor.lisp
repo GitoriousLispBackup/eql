@@ -609,9 +609,9 @@
         "clear"
         ("addItems" options)
         "adjustSize")
-      (setf height (second (font-metrics-size)))
+      (setf height (qfun *completer* "sizeHintForRow" 0))
       (qset *completer* "size"
-            (list (+ 15 (* (min 80 (apply 'max (mapcar 'length options)))
+            (list (+ 25 (* (min 80 (apply 'max (mapcar 'length options)))
                            (first (font-metrics-size))))
                   (+ 2 (* (min +max-shown-completions+ (length options)) height))))
       (set-current-item (qfun *completer* "item" 0))
@@ -1162,26 +1162,25 @@
              (text (concatenate 'string
                                 (text-until-cursor cursor)
                                 (if show "" (qfun key-event "text"))))
-             (start (if (x:empty-string text)
-                        0
-                        (cond ((x:ends-with " " text)
-                               (length text))
-                              ((x:ends-with "*" text)
-                               (1- (length text)))
-                              (t
-                               (let ((p1 (let ((p (position #\: text :from-end t)))
-                                           ;; Windows pathnames may contain ":"
-                                           (when (and p
-                                                      (> (length text) (1+ p))
-                                                      (char/= #\/ (char text (1+ p))))
-                                             p)))
-                                     (p2 (position-if (lambda (ch) (find ch "'(\"")) text :from-end t)))
-                                 (cond ((and p1 p2)
-                                        (1+ (max p1 p2)))
-                                       ((or p1 p2)
-                                        (1+ (or p1 p2)))
-                                       (t
-                                        0)))))))
+             (start (cond ((x:empty-string text)
+                           0)
+                          ((x:ends-with " " text)
+                           (length text))
+                          ((position-if (lambda (ch) (find ch "*|")) text :from-end t))
+                          (t
+                           (let ((p1 (let ((p (position #\: text :from-end t)))
+                                       ;; Windows pathnames may contain ":"
+                                       (when (and p
+                                                  (> (length text) (1+ p))
+                                                  (char/= #\/ (char text (1+ p))))
+                                         p)))
+                                 (p2 (position-if (lambda (ch) (find ch "'(\"")) text :from-end t)))
+                             (cond ((and p1 p2)
+                                    (1+ (max p1 p2)))
+                                   ((or p1 p2)
+                                    (1+ (or p1 p2)))
+                                   (t
+                                    0))))))
              (file (and (plusp start)
                         (char= #\" (char text (1- start))))))
         (setf completer (if file *file-completer* *symbol-completer*))
@@ -1195,13 +1194,12 @@
     (let ((popup (if file *file-popup* *symbol-popup*)))
       (dotimes (n 2)
         (qprocess-events)) ; seems necessary for QFileSystemModel
-      (qfun popup "setCurrentIndex" (qfun popup "indexAt" '(0 0))))
-    (unless file
-      (qfun *symbol-popup* "resize" (list (qget *current-editor* "width")
-                                          (+ (* 2 (qget *symbol-popup* "frameWidth"))
-                                             (* (min (qget *symbol-completer* "maxVisibleItems")
-                                                     (qfun *symbol-completer* "completionCount"))
-                                                (second (font-metrics-size))))))))
+      (qfun popup "setCurrentIndex" (qfun popup "indexAt" '(0 0)))
+      (qfun popup "resize" (list (qget *current-editor* "width")
+                                 (+ (* 2 (qget popup "frameWidth"))
+                                    (* (min (qget completer "maxVisibleItems")
+                                            (qfun completer "completionCount"))
+                                       (qfun popup "sizeHintForRow" 0)))))))
   (defun item-highlighted (name &optional file)
     (setf current name
           file* file))
