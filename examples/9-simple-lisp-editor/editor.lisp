@@ -1162,25 +1162,26 @@
              (text (concatenate 'string
                                 (text-until-cursor cursor)
                                 (if show "" (qfun key-event "text"))))
-             (start (unless (x:empty-string text)
-                      (cond ((x:ends-with " " text)
-                             (length text))
-                            ((x:ends-with "*" text)
-                             (1- (length text)))
-                            (t
-                             (let ((p1 (let ((p (position #\: text :from-end t)))
-                                         ;; Windows pathnames may contain ":"
-                                         (when (and p
-                                                    (> (length text) (1+ p))
-                                                    (char/= #\/ (char text (1+ p))))
-                                           p)))
-                                   (p2 (position-if (lambda (ch) (find ch "'(\"")) text :from-end t)))
-                               (cond ((and p1 p2)
-                                      (1+ (max p1 p2)))
-                                     ((or p1 p2)
-                                      (1+ (or p1 p2)))
-                                     (t
-                                      0)))))))
+             (start (if (x:empty-string text)
+                        0
+                        (cond ((x:ends-with " " text)
+                               (length text))
+                              ((x:ends-with "*" text)
+                               (1- (length text)))
+                              (t
+                               (let ((p1 (let ((p (position #\: text :from-end t)))
+                                           ;; Windows pathnames may contain ":"
+                                           (when (and p
+                                                      (> (length text) (1+ p))
+                                                      (char/= #\/ (char text (1+ p))))
+                                             p)))
+                                     (p2 (position-if (lambda (ch) (find ch "'(\"")) text :from-end t)))
+                                 (cond ((and p1 p2)
+                                        (1+ (max p1 p2)))
+                                       ((or p1 p2)
+                                        (1+ (or p1 p2)))
+                                       (t
+                                        0)))))))
              (file (and (plusp start)
                         (char= #\" (char text (1- start))))))
         (setf completer (if file *file-completer* *symbol-completer*))
