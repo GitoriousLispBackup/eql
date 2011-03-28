@@ -40,7 +40,8 @@ BUILD (see also: "Windows Easy Guide" in doc/)
     To force creation of a Makefile (instead of an Xcode project), use this flag:
         qmake -spec macx-g++
 
-1) In src/ run:
+1) In src/ run: (on slow hardware, this may take a few minutes, caused by the enum constants)
+
     ecl -shell make-eql-lib.lisp
 
 2) Do:

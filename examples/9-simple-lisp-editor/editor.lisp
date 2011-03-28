@@ -90,7 +90,7 @@
 (defparameter *lisp-keyword-format*  nil)
 (defparameter *comment-format*       nil)
 (defparameter *parenthesis-color*    "gray")
-(defparameter *string-color*         "sienna")
+(defparameter *string-color*         "saddlebrown")
 (defparameter *completer*            nil)
 (defparameter *file-completer*       nil)
 (defparameter *symbol-completer*     nil)
@@ -245,10 +245,10 @@
           (qfun bar "showMessage" msg)))))
 
 (defun ini-highlight-rules ()
-  (qfun *eql-keyword-format* "setForeground" (qnew "QBrush(QColor)" "#0000E0"))
-  (qfun *lisp-keyword-format* "setForeground" (qnew "QBrush(QColor)" "#E00000"))
+  (qfun *eql-keyword-format* "setForeground" (qnew "QBrush(QColor)" "#0000C0"))
+  (qfun *lisp-keyword-format* "setForeground" (qnew "QBrush(QColor)" "#C00000"))
   (x:do-with (qfun *comment-format*)
-    ("setForeground" (qnew "QBrush(QColor)" "#00A0A0"))
+    ("setForeground" (qnew "QBrush(QColor)" "#80A080"))
     ("setFontItalic" t))
   (setf *lisp-match-rule* (qnew "QRegExp(QString)" "[(']:*[^ )]+")))
 
@@ -797,7 +797,8 @@
                    (qfun cursor "insertText" (format nil "~%~A" (make-string spaces)))
                    (qfun *editor* "ensureCursorVisible"))))))
     (#.|Qt.Key_Tab|
-       (if (= |Qt.ControlModifier| (qfun key-event "modifiers"))
+       (if (zerop (qfun key-event "modifiers"))
+           (update-tab-completer nil :show)
            ;; auto indent paragraph: current line -> next empty line
            (let ((cursor* (qfun *editor* "textCursor")))
              (qfun cursor* "movePosition" |QTextCursor.StartOfLine| |QTextCursor.MoveAnchor|)
@@ -841,8 +842,7 @@
                  (qfun *editor* "setTextCursor" cursor*))
                (x:do-with (qfun *editor*)
                  ("setTextCursor" orig*)
-                 "ensureCursorVisible")))
-           (update-tab-completer nil :show)))
+                 "ensureCursorVisible")))))
     (t
        (update-tab-completer key-event)
        (qcall-default))))
@@ -1043,7 +1043,7 @@
        (x:do-with (qfun *output*)
          ("moveCursor" |QTextCursor.End|)
          ("setTextColor" (case type
-                           (:output "sienna")
+                           (:output "saddlebrown")
                            (:values "blue")
                            (:trace  "darkmagenta")
                            (:error  "red")
@@ -1192,7 +1192,7 @@
   (defun update-tab-completer-2 (&optional file)
     (qfun completer "complete")
     (let ((popup (if file *file-popup* *symbol-popup*)))
-      (dotimes (n 2)
+      (dotimes (n 3)
         (qprocess-events)) ; seems necessary for QFileSystemModel
       (qfun popup "setCurrentIndex" (qfun popup "indexAt" '(0 0)))
       (qfun popup "resize" (list (qget *current-editor* "width")

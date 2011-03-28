@@ -79,6 +79,9 @@
 <p>
 <b>QFIND-CHILD (object name)</b>
 <p>Calls <code>qFindChild&lt;QObject*&gt;()</code>.<br>Can be used to get the child objects of any Qt object (typically from a UI, see <code>qload-ui</code>), identified by <code>objectName</code>.</p>
+<pre>
+  (qfind-child *main* "editor")
+</pre>
 </p><br>
 <p>
 <b>QFROM-UTF8 (byte-array)</b>
@@ -86,7 +89,7 @@
 </p><br>
 <p>
 <b>QGUI (&optional process-events)</b>
-<p>Launches the <code>EQL</code> convenience GUI.<br>If you don't have an interactive environment, you can pass <code>T</code> to run a pseudo Qt event loop. A better option is to start the tool like so:<br><code>./eql -qgui</code>, in order to run the Qt event loop natively.</p>
+<p>Launches the <code>EQL</code> convenience GUI.<br>If you don't have an interactive environment, you can pass <code>T</code> to run a pseudo Qt event loop. A better option is to start the tool like so:<br><code>eql -qgui</code>, in order to run the Qt event loop natively.</p>
 </p><br>
 <p>
 <b>QID (name)</b>

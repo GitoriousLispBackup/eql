@@ -2,17 +2,9 @@
 
 (load "load-modules")
 (load "../src/lisp/x")
+(load "share")
 
 (use-package :x)
-
-(defparameter *qt-html-documentation-path*
-  ;; tested with Qt 4.6.x and 4.7.0 (4.5 will not work!)
-  #+darwin "/Developer/Documentation/Qt/html/"
-  #+win32  "C:/qt/4.6.2/doc/html/"
-  #+linux 
-  "/usr/share/doc/packages/libqt4/html/" ; Qt 4.6
-  ;;"~/qtsdk-2010.05/qt/doc/html/" ; Qt 4.7
-  )
 
 (defconstant +skip+
   (list "( Type )"
@@ -103,15 +95,7 @@
         "void setNativeArguments ( const QString & )"
         ))
 
-(defparameter *not-found* 0)
-(defparameter *check*     nil)
-
-(defun html-file (class)
-  (format nil "~A~(~A~).html" *qt-html-documentation-path* class))
-
-(unless (probe-file (html-file "QWidget"))
-  (error "Please set the *qt-html-documentation-path* first")
-  (ext:quit))
+(defparameter *check* nil)
 
 (defun text (str)
   (with-output-to-string (s)
@@ -153,9 +137,6 @@
                   (t (if enc
                          (buf-add ch)
                          (write-char* ch)))))))))))
-
-(defun search* (str1 str2 &optional (start 0))
-  (search str1 str2 :test 'string-equal :start2 start))
 
 (let (html)
   (defun read-html (class)
@@ -245,11 +226,6 @@
       (format so ")~%")))
   (format s "))~%")
   (format so "))~%"))
-
-(defun sort-names (names)
-  (sort (remove-duplicates names :test 'string=)
-        'string<
-        :key (lambda (str) (string-trim "=/" str))))
 
 (defun start ()
   (with-open-file (*check* "multiple-inheritance.txt" :direction :output :if-exists :supersede)

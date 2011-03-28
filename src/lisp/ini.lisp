@@ -96,7 +96,7 @@
 
 (defun qgui (&optional ev)
   "args: (&optional process-events)
-   Launches the <code>EQL</code> convenience GUI.<br>If you don't have an interactive environment, you can pass <code>T</code> to run a pseudo Qt event loop. A better option is to start the tool like so:<br><code>./eql -qgui</code>, in order to run the Qt event loop natively."
+   Launches the <code>EQL</code> convenience GUI.<br>If you don't have an interactive environment, you can pass <code>T</code> to run a pseudo Qt event loop. A better option is to start the tool like so:<br><code>eql -qgui</code>, in order to run the Qt event loop natively."
   (in-package :eql)
   (load (in-home "gui/gui"))
   (when ev
