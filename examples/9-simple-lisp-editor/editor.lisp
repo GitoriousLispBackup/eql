@@ -216,7 +216,14 @@
       (ini-highlight-rules)
       (update-completer-symbols)
       (local-client:ini 'data-from-server)
-      (qfun *main* "show"))))
+      (qfun *main* "show")
+      (qsingle-shot 0 'delayed-ini))))
+
+(defun delayed-ini ()
+  (let* ((buttons (list *next-button* *replace-button*))
+         (width (apply 'max (mapcar (lambda (w) (qget w "width")) buttons))))
+    (dolist (button buttons)
+      (qfun button "setFixedWidth" width))))
 
 (defun clean-up ()
   (file-save))
