@@ -21,12 +21,9 @@ void LightWidget::paintEvent(QPaintEvent *)
     // [EQL] example with return value
     /*
     QVariant ret =
-    eql_fun("trafficlight:paint-event", // package:function
-            QVariant::String,           // return type
-            Q_ARG(QWidget*, this),      // arguments (max. 10)
-            Q_ARG(QColor, m_color),
-            Q_ARG(int, width()),
-            Q_ARG(int, height()));
+    eql_fun("my-package:my-function",
+            QVariant::String,          // see ecl_fun.cpp::toQVariant() for all return types
+            Q_ARG(QStringList, list)); // see ecl_fun.cpp::to_lisp_arg() for all arg types
     */
 
     // original implementation

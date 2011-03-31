@@ -42,14 +42,26 @@ RUN
            (in-package :trafficlight)
        just play around with "eval region"...
 
+--
 
-See Qt/trafficlight.cpp:eql_fun() for an example of how to call a Lisp
-function from C++. The syntax is like this:
+See Qt/trafficlight.cpp:eql_fun() for an example how to call Lisp from C++.
 
+The syntax is like this:
+
+    QVariant ret =                     // optional
     eql_fun("my-package:my-function",
-            Q_ARG(QWidget*, this),
+            QVariant::String,          // see ecl_fun.cpp::toQVariant(); optional
+            Q_ARG(QWidget*, this),     // see ecl_fun.cpp::to_lisp_arg()
             Q_ARG(QStringList, list),
             Q_ARG(int, maximum()));
+
+You may pass up to 10 arguments. The return value/type are optional.
+If you want to return a Qt object, pass QMetaType::VoidStar as type specifier,
+and cast the return value like this:
+
+    QWidget* w = (QWidget*)qVariantValue<void*>(ret);
+
+--
 
 The variable eql:*qt-main* is bound to the main Qt widget.
 

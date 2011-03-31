@@ -1498,9 +1498,6 @@
   (("QTextList" . "QTextBlockGroup"))
   (("QTextObject" . "QObject"))
   (("QTextTable" . "QTextFrame"))
-  (("QThread" . "QObject")
-   "virtual void run ()")
-  (("QThreadPool" . "QObject"))
   (("QTimeEdit" . "QDateTimeEdit"))
   (("QTimeLine" . "QObject")
    "virtual qreal valueForTime ( int ) const"

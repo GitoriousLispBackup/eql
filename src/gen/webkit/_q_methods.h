@@ -8,7 +8,7 @@
 #include <QtGui>
 #include <QtWebKit>
 
-class Q211 : public Q127 { // QWebFrame
+class Q209 : public Q127 { // QWebFrame
     Q_OBJECT
 public:
     Q_INVOKABLE void MaddToJavaScriptWindowObject(QWebFrame* o, const QString& x1, QObject* x2) { o->addToJavaScriptWindowObject(x1, x2); }
@@ -59,7 +59,7 @@ public:
     Q_INVOKABLE bool Mevent(QWebFrame* o, QEvent* x1) { return o->event(x1); }
 };
 
-class Q212 : public Q127 { // QWebHistoryInterface
+class Q210 : public Q127 { // QWebHistoryInterface
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QObject* x1 = 0) { return new LWebHistoryInterface(u, x1); }
@@ -69,7 +69,7 @@ public:
     Q_INVOKABLE void SsetDefaultInterface(QWebHistoryInterface* x1) { QWebHistoryInterface::setDefaultInterface(x1); }
 };
 
-class Q214 : public Q127 { // QWebPage
+class Q212 : public Q127 { // QWebPage
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QObject* x1 = 0) { return new LWebPage(u, x1); }
@@ -145,7 +145,7 @@ public:
     Q_INVOKABLE void MupdateGeometry(QGraphicsWebView* o) { o->updateGeometry(); }
 };
 
-class Q213 : public Q216 { // QWebInspector
+class Q211 : public Q214 { // QWebInspector
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QWidget* x1 = 0) { return new LWebInspector(u, x1); }
@@ -155,7 +155,7 @@ public:
     Q_INVOKABLE QSize MsizeHint(QWebInspector* o) const { return o->sizeHint(); }
 };
 
-class Q215 : public Q216 { // QWebView
+class Q213 : public Q214 { // QWebView
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QWidget* x1 = 0) { return new LWebView(u, x1); }

@@ -923,6 +923,12 @@
                                     (when spc
                                       (setf *current-depth* x:it
                                             *current-keyword-indent* spc))))
+                                (when (plusp *current-depth*)
+                                  (let ((prev (char curr-line* (1- *current-depth*))))
+                                    (unless (find prev " (")
+                                      (setf  *current-depth* (x:if-it (position #\Space curr-line* :end *current-depth* :from-end t)
+                                                                 (1+ x:it)
+                                                                 0)))))
                                 (return-from right-paren (values (1- (length lines)) ; lines up
                                                                  start)))            ; characters right
                                ((null exp)
@@ -1199,14 +1205,15 @@
   (defun update-tab-completer-2 (&optional file)
     (qfun completer "complete")
     (let ((popup (if file *file-popup* *symbol-popup*)))
-      (dotimes (n 3)
-        (qprocess-events)) ; seems necessary for QFileSystemModel
-      (qfun popup "setCurrentIndex" (qfun popup "indexAt" '(0 0)))
       (qfun popup "resize" (list (qget *current-editor* "width")
                                  (+ (* 2 (qget popup "frameWidth"))
                                     (* (min (qget completer "maxVisibleItems")
                                             (qfun completer "completionCount"))
-                                       (qfun popup "sizeHintForRow" 0)))))))
+                                       (qfun popup "sizeHintForRow" 0)))))
+      ;; hack (necessary for QFileSystemModel, OS X)
+      (dotimes (n 10)
+        (qprocess-events))
+      (qfun popup "setCurrentIndex" (qfun popup "indexAt" '(0 0)))))
   (defun item-highlighted (name &optional file)
     (setf current name
           file* file))
@@ -1221,7 +1228,7 @@
               (when (qfun info "isDir")
                 (setf txt (concatenate 'string txt "/"))))))
         (qfun *current-editor* "insertPlainText" txt)))
-    (when (qget *symbol-popup* "visible")
+    (unless file*
       (show-status-message (function-lambda-list* current) :html))
     (close-tab-popups))
   (defun close-tab-popups ()

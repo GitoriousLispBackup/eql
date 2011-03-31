@@ -153,7 +153,7 @@ public:
     Q_INVOKABLE bool ShasOpenGLShaderPrograms(const QGLContext* x1 = 0) { return QGLShaderProgram::hasOpenGLShaderPrograms(x1); }
 };
 
-class Q65 : public Q216 { // QGLWidget
+class Q65 : public Q214 { // QGLWidget
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QWidget* x1 = 0, const QGLWidget* x2 = 0, Qt::WindowFlags x3 = 0) { return new LGLWidget(u, x1, x2, x3); }

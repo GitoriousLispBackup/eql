@@ -33,15 +33,16 @@
                   (return))
                 (let* ((name2 (search* "</tt></td>" enums name1))
                        (val1 (search* "><tt>" enums name2)))
-                  (unless val1
-                    (return))
-                  (setf val2  (search* "</tt></td>" enums val1))
-                  (let ((name (subseq enums (+ name1 4) name2))
-                        (val (subseq enums (+ val1 5) val2)))
-                    (format s "~%(\"|~A|\" . ~A)"
-                            (x:string-substitute "." "::" name)
-                            (x:string-substitute "#x" "0x" val)
-                            val)))))))))))
+                  (if val1
+                      (progn
+                        (setf val2  (search* "</tt></td>" enums val1))
+                        (let ((name (subseq enums (+ name1 4) name2))
+                              (val (subseq enums (+ val1 5) val2)))
+                          (format s "~%(\"|~A|\" . ~A)"
+                                  (x:string-substitute "." "::" name)
+                                  (x:string-substitute "#x" "0x" val)
+                                  val)))
+                      (setf val2 name2)))))))))))
  
 (defun parse-classes (classes s)
   (dolist (class classes)

@@ -4014,37 +4014,6 @@
    "int rows () const"
    "void setFormat ( const QTextTableFormat & )"
    "void splitCell ( int , int , int , int )")
-  (("QThread" . "QObject")
-   "new QThread ( QObject * = 0 )"
-   "void exit ( int = 0 )"
-   "bool isFinished () const"
-   "bool isRunning () const"
-   "Priority priority () const"
-   "void setPriority ( Priority )"
-   "void setStackSize ( uint )"
-   "uint stackSize () const"
-   "bool wait ( unsigned long = ULONG_MAX )"
-   "protected int exec ()"
-   "static QThread * currentThread ()"
-   "static int idealThreadCount ()"
-   "static void yieldCurrentThread ()"
-   "protected void msleep ( unsigned long )"
-   "protected void setTerminationEnabled ( bool = true )"
-   "protected void sleep ( unsigned long )"
-   "protected void usleep ( unsigned long )")
-  (("QThreadPool" . "QObject")
-   "new QThreadPool ( QObject * = 0 )"
-   "int activeThreadCount () const"
-   "int expiryTimeout () const"
-   "int maxThreadCount () const"
-   "void releaseThread ()"
-   "void reserveThread ()"
-   "void setExpiryTimeout ( int )"
-   "void setMaxThreadCount ( int )"
-   "void start ( QRunnable * , int = 0 )"
-   "bool tryStart ( QRunnable * )"
-   "void waitForDone ()"
-   "static QThreadPool * globalInstance ()")
   (("QTimeEdit" . "QDateTimeEdit")
    "new QTimeEdit ( QWidget * = 0 )"
    "new QTimeEdit ( const QTime & , QWidget * = 0 )")

@@ -45,6 +45,7 @@ QStyleOptionTab
 QStyleOptionTabWidgetFrame
 QStyleOptionToolButton
 QStyleOptionViewItem
+QThread
 QVariantList
 QWebPluginFactory
 Q_IPV6ADDR

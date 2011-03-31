@@ -168,8 +168,6 @@
         "QTextList"
         "QTextObject"
         "QTextTable"
-        "QThread"
-        "QThreadPool"
         "QTimeEdit"
         "QTimeLine"
         "QTimer"

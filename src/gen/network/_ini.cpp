@@ -22,7 +22,7 @@ NumList LNetworkCacheMetaData::overrideIds = NumList();
 NumList LNetworkCookie::overrideIds = NumList();
 NumList LNetworkInterface::overrideIds = NumList();
 NumList LNetworkProxy::overrideIds = NumList();
-NumList LNetworkProxyFactory::overrideIds = NumList() << 385;
+NumList LNetworkProxyFactory::overrideIds = NumList() << 384;
 NumList LNetworkProxyQuery::overrideIds = NumList();
 NumList LNetworkRequest::overrideIds = NumList();
 NumList LSslCertificate::overrideIds = NumList();
@@ -46,7 +46,7 @@ void ini() {
     LObjects::Q[125] = new Q126;
     LObjects::Q[182] = new Q183;
     LObjects::Q[183] = new Q184;
-    LObjects::Q[203] = new Q204;
+    LObjects::Q[201] = new Q202;
     LObjects::N[7] = new N8;
     LObjects::N[73] = new N74;
     LObjects::N[74] = new N75;
@@ -79,7 +79,7 @@ const QMetaObject* staticMetaObject(int n) {
         case 126: m = &QNetworkReply::staticMetaObject; break;
         case 183: m = &QTcpServer::staticMetaObject; break;
         case 184: m = &QTcpSocket::staticMetaObject; break;
-        case 204: m = &QUdpSocket::staticMetaObject; break; }
+        case 202: m = &QUdpSocket::staticMetaObject; break; }
     return m; }
 
 void deleteNObject(int n, void* p) {
@@ -116,7 +116,7 @@ NumList* override(const QByteArray& name) {
             case 125: ids = &LNetworkDiskCache::overrideIds; break;
             case 183: ids = &LTcpServer::overrideIds; break;
             case 184: ids = &LTcpSocket::overrideIds; break;
-            case 204: ids = &LUdpSocket::overrideIds; break; }}
+            case 202: ids = &LUdpSocket::overrideIds; break; }}
     else {
         n = LObjects::n_names.value(name);
         switch(n) {

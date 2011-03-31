@@ -606,9 +606,10 @@ TO_QT_VECTOR_VAL(QTextLength)
 TO_QT_VECTOR_VAL2(QRgb, UInt)
 TO_QT_VECTOR_VAL2(qreal, Real)
 
-QVariant toQVariant(cl_object l_obj, const char* s_type, QVariant::Type n_type) {
+QVariant toQVariant(cl_object l_obj, const char* s_type, int type) {
     QVariant var;
-    int type = (QVariant::UserType == n_type) ? QVariant::nameToType(s_type) : n_type;
+    if(type == -1) {
+        type = QVariant::nameToType(s_type); }
     switch(type) {
         case QVariant::Bool:        var = (l_obj != Cnil); break;
         case QVariant::Brush:       var = toQBrush(l_obj); break;
@@ -647,6 +648,11 @@ QVariant toQVariant(cl_object l_obj, const char* s_type, QVariant::Type n_type) 
         case QVariant::Url:         var = toQUrl(l_obj); break;
         case QVariant::UInt:        var = toUInt(l_obj); break;
         case QVariant::ULongLong:   var = toUInt<qulonglong>(l_obj); break; }
+    // for Qt_EQL (object pointer)
+    if(QMetaType::VoidStar == type) {
+        QtObject obj = toQtObject(l_obj);
+        if(obj.pointer) {
+            var = qVariantFromValue(obj.pointer); }}
     return var; }
 
 static cl_object from_char(char ch) {

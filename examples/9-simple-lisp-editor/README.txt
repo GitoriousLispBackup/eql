@@ -37,6 +37,8 @@ It tries to be intelligent, for example:
 USAGE NOTES
 ===========
 
+There's no "New" button; instead, "new.lisp" can be used as simple template.
+
 Please see the context menu of the editor window for generic editor commands
 (offered by Qt, which include some other commands too, like Ctrl+<arrow key>).
 
@@ -50,9 +52,10 @@ Tab completion note: hitting Tab will pop up a window with symbol completions.
 This works in both the editor and command line widget, at any cursor position.
 Currently, tab completion works for all CL and EQL symbols (including Qt
 enums).
-After selecting a symbol (<arrow key>, Return), the function arguments (if
-available) will be shown in the status bar.
-Hitting Tab after a " character will show the pathname completer instead.
+If the inserted symbol is a function, its argument list (if available) will be
+shown in the status bar.
+Hitting Tab after a " character will show the pathname completer instead (works
+for absolute path names only).
 
 Auto indent note: hitting the Ctrl+Tab keys will auto indent the paragraph
 starting from the current line until the next empty line found.
@@ -62,6 +65,7 @@ ECL debug command.
 
 If you want to pause/continue the local-server process, use the usual Ctrl+C
 (terminal command) and :c (ECL command).
+(N.B. might not work on Windows).
 
 The "Save and Run" action (Ctrl+R) will load the current code in the local
 Lisp server process (if you don't see the application window, it might be

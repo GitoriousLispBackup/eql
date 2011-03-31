@@ -19,7 +19,7 @@ static cl_object eql_fun(cl_object l_fun, cl_object l_args) {
     return l_ret; }
 
 static QVariant eql_fun2(const QByteArray& pkgFun,
-                         QVariant::Type retType,
+                         int ret_type,
                          const QGenericArgument& a1, const QGenericArgument& a2, const QGenericArgument& a3, const QGenericArgument& a4, const QGenericArgument& a5,
                          const QGenericArgument& a6, const QGenericArgument& a7, const QGenericArgument& a8, const QGenericArgument& a9, const QGenericArgument& a10) {
     void* symbol = lisp_functions.value(pkgFun);
@@ -49,8 +49,8 @@ static QVariant eql_fun2(const QByteArray& pkgFun,
     QVariant ret;
     if(symbol) {
         cl_object l_ret = eql_fun((cl_object)symbol, l_args);
-        if(retType != QVariant::UserType) {
-            ret = toQVariant(l_ret, 0, retType); }
+        if(ret_type != -1) {
+            ret = toQVariant(l_ret, 0, ret_type); }
         return ret; }
     error_msg(QString("eql_fun(): %1").arg(QString(pkgFun)).toAscii().constData(), l_args);
     return ret; }
@@ -58,11 +58,11 @@ static QVariant eql_fun2(const QByteArray& pkgFun,
 QVariant eql_fun(const QByteArray& fun,
                  QGenericArgument a1, QGenericArgument a2, QGenericArgument a3, QGenericArgument a4, QGenericArgument a5,
                  QGenericArgument a6, QGenericArgument a7, QGenericArgument a8, QGenericArgument a9, QGenericArgument a10) {
-    return eql_fun2(fun, QVariant::UserType, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10); }
+    return eql_fun2(fun, -1, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10); }
 
 
 QVariant eql_fun(const QByteArray& fun,
-                 QVariant::Type retType,
+                 int ret_type,
                  QGenericArgument a1, QGenericArgument a2, QGenericArgument a3, QGenericArgument a4, QGenericArgument a5,
                  QGenericArgument a6, QGenericArgument a7, QGenericArgument a8, QGenericArgument a9, QGenericArgument a10) {
-    return eql_fun2(fun, retType, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10); }
+    return eql_fun2(fun, ret_type, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10); }

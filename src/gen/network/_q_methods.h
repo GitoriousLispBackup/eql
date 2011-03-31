@@ -234,7 +234,7 @@ public:
     Q_INVOKABLE void* C(uint u, QObject* x1 = 0) { return new LTcpSocket(u, x1); }
 };
 
-class Q204 : public Q12 { // QUdpSocket
+class Q202 : public Q12 { // QUdpSocket
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QObject* x1 = 0) { return new LUdpSocket(u, x1); }

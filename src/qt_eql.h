@@ -23,7 +23,7 @@ QVariant eql_fun(const QByteArray&,
 
 EQL_EXPORT
 QVariant eql_fun(const QByteArray&,
-                 QVariant::Type,
+                 int,
                  QGenericArgument = QGenericArgument(),
                  QGenericArgument = QGenericArgument(),
                  QGenericArgument = QGenericArgument(),
