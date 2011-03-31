@@ -59,7 +59,7 @@ You may pass up to 10 arguments. The return value/type are optional.
 If you want to return a Qt object, pass QMetaType::VoidStar as type specifier,
 and cast the return value like this:
 
-    QWidget* w = (QWidget*)qVariantValue<void*>(ret);
+    QWidget* w = Q_PTR(QWidget*, ret);
 
 --
 

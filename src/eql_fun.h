@@ -10,6 +10,8 @@
 #define QSLOT(x)   "1"#x
 #define QSIGNAL(x) "2"#x
 
+#define Q_PTR(type, var) (type)qVariantValue<void*>(var)
+
 extern QVariant eql_fun(const QByteArray&,
                         QGenericArgument = QGenericArgument(),
                         QGenericArgument = QGenericArgument(),

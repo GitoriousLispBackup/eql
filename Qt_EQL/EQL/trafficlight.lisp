@@ -1,7 +1,11 @@
 (progn
   ;; optional: Lisp server for listening to an editor
-  (load "EQL/eql-local-server.fas")                 ; see example 9: make-local-server-fasl.lisp
-  (eql:qset (eql:qapp) "quitOnLastWindowClosed" t)) ; to exit "local-server"
+  (let ((file "EQL/eql-local-server.fas"))                  ; see example 9: make-local-server-fasl.lisp
+    (if (probe-file file)
+        (progn
+          (load file)                 
+          (eql:qset (eql:qapp) "quitOnLastWindowClosed" t)) ; to exit "local-server"
+        (warn "eql-local-server.fas not found."))))
 
 (defpackage :trafficlight
   (:use :common-lisp :eql)

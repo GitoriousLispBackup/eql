@@ -42,7 +42,6 @@
    #:qquit
    #:qrequire
    #:qsender
-   #:qset-ini
    #:qset-null
    #:qset-property
    #:qsingle-shot
