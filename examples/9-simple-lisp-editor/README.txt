@@ -11,7 +11,7 @@ Run it:
       eql -io local-server
 
   2) Run the editor:
-      eql editor
+      eql editor <file>.lisp (defaults to "my.lisp")
 
 The main motivation behind this editor is the need for a popup completer
 for the (huge) Qt library.
