@@ -92,7 +92,7 @@
 (defparameter *comment-format*       nil)
 (defparameter *parenthesis-color*    "lightslategray")
 (defparameter *string-color*         "saddlebrown")
-(defparameter *completer*            nil)
+(defparameter *eql-completer*        nil)
 (defparameter *file-completer*       nil)
 (defparameter *symbol-completer*     nil)
 (defparameter *file-model            nil)
@@ -157,7 +157,7 @@
   (ini-actions)
   (ini-highlighter)
   (ini-completer)
-  (dolist (w (list *editor* *output* *command* *completer* *symbol-popup*))
+  (dolist (w (list *editor* *output* *command* *eql-completer* *symbol-popup*))
     (qset w "font" eql::*code-font*))
   (local-client:ini 'data-from-server)
   (show-status-message (format nil (tr "<b style='color:#4040E0'>Eval Region:</b> move to paren <b>(</b> or <b>)</b>, hit <b>~A</b>")
@@ -201,7 +201,7 @@
                (lambda (str) (highlight-block syntax-command str)))))
 
 (defun ini-completer ()
-  (setf *completer*        (qnew "QListWidget"
+  (setf *eql-completer*    (qnew "QListWidget"
                                  "horizontalScrollBarPolicy" |Qt.ScrollBarAlwaysOff|
                                  "verticalScrollBarPolicy"   |Qt.ScrollBarAlwaysOff|)
         *symbol-completer* (qnew "QCompleter"
@@ -212,25 +212,25 @@
         *file-model*       (qnew "QFileSystemModel")
         *symbol-popup*     (qfun *symbol-completer* "popup")
         *file-popup*       (qfun *file-completer* "popup"))
-  (x:do-with (qset *completer*)
+  (x:do-with (qset *eql-completer*)
     ("frameShape" |QFrame.Box|)
     ("frameShadow" |QFrame.Plain|)
     ("lineWidth" 1))
-  (qfun *completer* "setWindowFlags" |Qt.Popup|)
+  (qfun *eql-completer* "setWindowFlags" |Qt.Popup|)
   (qfun *symbol-completer* "setWidget" *command*)
   (qfun *file-completer*   "setWidget" *command*)
   (qfun *symbol-completer* "setModel" *symbol-model*)
   (qfun *file-completer*   "setModel" *file-model*)
   (qfun *file-model* "setRootPath" "")
   (set-color *symbol-popup* |QPalette.Base| "palegreen")
-  (qconnect *completer* "itemDoubleClicked(QListWidgetItem*)" 'insert-completer-option-text)
+  (qconnect *eql-completer* "itemDoubleClicked(QListWidgetItem*)" 'insert-completer-option-text)
   (qconnect *file-completer* "highlighted(QString)"
             (lambda (str) (item-highlighted str :file)))
   (qconnect *file-model* "directoryLoaded(QString)"
             (lambda (arg) (update-tab-completer-2 :file)))
   (qconnect *symbol-completer* "highlighted(QString)" 'item-highlighted)
-  (qoverride *completer* "keyPressEvent(QKeyEvent*)" 'completer-key-pressed)
-  (qoverride *completer* "focusOutEvent(QFocusEvent*)" 'close-completer)
+  (qoverride *eql-completer* "keyPressEvent(QKeyEvent*)" 'completer-key-pressed)
+  (qoverride *eql-completer* "focusOutEvent(QFocusEvent*)" 'close-completer)
   (update-completer-symbols))
 
 (defun delayed-ini ()
@@ -360,7 +360,7 @@
           (num-args* (arg-count fun-name)))
       (dolist (name (mapcar (lambda (item)
                               (qfun item "text"))
-                            (qfun *completer* "findItems"
+                            (qfun *eql-completer* "findItems"
                                   (format nil "~A(" no-types) (logior |Qt.MatchStartsWith| |Qt.MatchCaseSensitive|))))
         (when (string/= fun-name name)
           (let ((num-args (arg-count name)))
@@ -452,11 +452,11 @@
                     (close-completer)
                     (x:when-it (position #\" line :end pos :from-end t)
                       (let* ((begin (subseq line (1+ x:it) pos))
-                             (item (first (qfun *completer* "findItems"
+                             (item (first (qfun *eql-completer* "findItems"
                                                 begin (logior |Qt.MatchStartsWith| |Qt.MatchCaseSensitive|)))))
                         (if item
                             (set-current-item item begin)
-                            (qfun *completer* "clearSelection")))))
+                            (qfun *eql-completer* "clearSelection")))))
                 (let ((fun (qt-fun pos)))
                   (if (find fun '(:qnew :qfun))
                       ;; show object name completer?
@@ -580,7 +580,7 @@
                                       (return-from cursor-position-changed)))))))))))))))))
 
 (defun insert-completer-option-text (&optional item)
-  (qfun *completer* "resize" '(0 0))
+  (qfun *eql-completer* "resize" '(0 0))
   (flet ((add-quote (x)
            (format nil "~A\"" x)))
     (x:when-it (current-completer-option)
@@ -612,24 +612,24 @@
           (qcall-default)))))
 
 (defun current-completer-option ()
-  (qfun (first (qfun *completer* "selectedItems")) "text"))
+  (qfun (first (qfun *eql-completer* "selectedItems")) "text"))
 
 (let (cursor-pos height)
   (defun completer (options name)
     (setf *current-completer* name)
     (unless (null options)
-      (x:do-with (qfun *completer*)
+      (x:do-with (qfun *eql-completer*)
         "clear"
         ("addItems" options)
         "adjustSize")
-      (setf height (qfun *completer* "sizeHintForRow" 0))
-      (qset *completer* "size"
+      (setf height (qfun *eql-completer* "sizeHintForRow" 0))
+      (qset *eql-completer* "size"
             (list (+ 25 (* (min 80 (apply 'max (mapcar 'length options)))
                            (first (font-metrics-size))))
                   (+ 2 (* (min +max-shown-completions+ (length options)) height))))
-      (set-current-item (qfun *completer* "item" 0))
+      (set-current-item (qfun *eql-completer* "item" 0))
       (adjust-completer-pos :ini)
-      (x:do-with (qfun *completer*)
+      (x:do-with (qfun *eql-completer*)
         "show"
         "setFocus")))
   (defun adjust-completer-pos (&optional ini)
@@ -640,7 +640,7 @@
            (pos (qfun (qfun *current-editor* "viewport") "mapToGlobal"
                       (list (+ (first cursor) (third cursor))
                             (+ (second cursor) (fourth cursor)))))
-           (size (qget *completer* "size"))
+           (size (qget *eql-completer* "size"))
            (dx (- (+ (first pos) (first size))
                   (third desktop)))
            (dy (- (+ (second pos) (second size))
@@ -649,25 +649,25 @@
         (decf (first pos) dx))
       (when (plusp dy)
         (decf (second pos) (+ (fourth cursor) (second size))))
-      (qset *completer* "pos" pos)))
+      (qset *eql-completer* "pos" pos)))
   (defun set-current-item (item &optional begin)
     (when begin
-      (do ((row (qfun *completer* "row" item) (1+ row))
+      (do ((row (qfun *eql-completer* "row" item) (1+ row))
            (n-shown 0 (1+ n-shown)))
-          ((or (= row (qfun *completer* "count"))
+          ((or (= row (qfun *eql-completer* "count"))
                (= +max-shown-completions+ n-shown)
-               (not (x:starts-with begin (qfun (qfun *completer* "item" row) "text"))))
-             (qset *completer* "size" (list (qget *completer* "width")
-                                            (+ 2 (* n-shown height))))
+               (not (x:starts-with begin (qfun (qfun *eql-completer* "item" row) "text"))))
+             (qset *eql-completer* "size" (list (qget *eql-completer* "width")
+                                                (+ 2 (* n-shown height))))
              (adjust-completer-pos))))
     (qfun item "setSelected" t)
-    (x:do-with (qfun *completer*)
+    (x:do-with (qfun *eql-completer*)
       ("scrollToItem" item |QAbstractItemView.PositionAtTop|)
       ("setCurrentItem" item))))
 
 (defun close-completer (&optional event)
   (setf *current-completer* nil)
-  (x:do-with (qfun *completer*)
+  (x:do-with (qfun *eql-completer*)
     "hide"
     "clear")
   (qfun *current-editor* "setFocus"))
@@ -761,10 +761,26 @@
         (setf name (subseq name (1+ x:it))))
       (cdr (find name *auto-indent* :test 'string= :key 'car)))))
 
+(defun cut-comment (line)
+  (let ((ex #\Space))
+    (dotimes (i (length line))
+      (let ((ch (char line i)))
+        (when (and (char= #\; ch)
+                   (char/= #\\ ex))
+          (return-from cut-comment (subseq line 0 i)))
+        (setf ex ch))))
+  line)
+
+(defun last-expression-indent (line)
+  (let* ((line* (cut-comment line))
+         (open (position #\( line* :from-end t))
+         (space (when open (position #\Space line* :start open))))
+    (position #\Space (if space line* line) :test 'char/= :start (if space space 0))))
+
 (defun indentation (line)
   (if (x:empty-string (string-trim " " line))
       0
-      (let ((pos (position #\Space line :test 'char/=)))
+      (let ((pos (last-expression-indent line)))
         (if (char= #\; (char line pos))
             pos
             (let ((spaces (+ *current-depth* *current-keyword-indent*))) ; see right paren matcher
@@ -773,7 +789,8 @@
                          pos)
                 (setf spaces (if (char= #\( (char line pos))
                                  (if (find (read* (subseq line (1+ pos)))
-                                           '(defvar-ui loop prog progn prog1 prog2 unless when when-it when-it* while))
+                                           '(case ccase ecase defvar-ui loop prog progn prog1 prog2
+                                             typecase unless when when-it when-it* while))
                                      (+ pos 2)
                                      (1+ (or (position #\Space line :start pos)
                                              pos)))
@@ -1176,6 +1193,15 @@
       (setf name* package-name)
       (qfun *symbol-model* "setStringList" (all-symbols package-name)))))
 
+(defun in-string-p (line)
+  (let ((ex #\Space)
+        in-string)
+    (x:do-string (ch line)
+      (when (and (char= #\" ch)
+                 (char/= #\\ ex))
+        (setf in-string (not in-string))))
+    in-string))
+
 (let (prefix current completer file*)
   (defun update-tab-completer (key-event &optional show)
     (when (or show
@@ -1185,30 +1211,24 @@
              (text (concatenate 'string
                                 (text-until-cursor cursor)
                                 (if show "" (qfun key-event "text"))))
-             (start (cond ((x:empty-string text)
+             (file (in-string-p text))
+             (start (cond (file
+                           (1+ (position #\" text :from-end t)))
+                          ((x:empty-string text)
                            0)
                           ((x:ends-with " " text)
                            (length text))
-                          ((position-if (lambda (ch) (find ch "*|")) text :from-end t))
                           (t
-                           (let ((p1 (let ((p (position #\: text :from-end t)))
-                                       ;; Windows pathnames may contain ":"
-                                       (when (and p
-                                                  (> (length text) (1+ p))
-                                                  (char/= #\/ (char text (1+ p))))
-                                         (if (or (zerop p)
-                                                 (char= #\Space (char text (1- p))))
-                                             p          ; keyword
-                                             (1+ p))))) ; package
-                                 (p2 (position-if (lambda (ch) (find ch "'(\"")) text :from-end t)))
-                             (cond ((and p1 p2)
-                                    (max p1 (1+ p2)))
-                                   ((or p1 p2)
-                                    (or p1 (1+ p2)))
-                                   (t
-                                    0))))))
-             (file (and (plusp start)
-                        (char= #\" (char text (1- start))))))
+                           (let ((p1 (position-if (lambda (ch) (find ch ":*|")) text :from-end t))
+                                 (p2 (position-if (lambda (ch) (find ch "'(")) text :from-end t)))
+                             (when (and p1
+                                        (plusp p1)
+                                        (char= #\: (char text p1))
+                                        (char/= #\Space (char text (1- p1))))
+                               (incf p1))
+                             (if (and p1 p2)
+                                 (max p1 (1+ p2))
+                                 (or p1 (1+ p2))))))))
         (setf completer (if file *file-completer* *symbol-completer*))
         (when show
           (unless (qeql *current-editor* (qfun completer "widget"))
