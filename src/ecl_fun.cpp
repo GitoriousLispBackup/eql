@@ -542,7 +542,7 @@ TO_QT_TYPE_PTR(QPainterPath, qpainterpath)
 TO_QT_TYPE_PTR2(QPalette, qpalette)
 TO_QT_TYPE_PTR2(QPen, qpen)
 TO_QT_TYPE_PTR2(QPixmap, qpixmap)
-TO_QT_TYPE_PTR3(QSizePolicy)
+TO_QT_TYPE_PTR2(QSizePolicy, qsizepolicy)
 TO_QT_TYPE_PTR2(QTableWidgetSelectionRange, qtablewidgetselectionrange)
 TO_QT_TYPE_PTR2(QTextBlock, qtextblock)
 TO_QT_TYPE_PTR(QTextCharFormat, qtextcharformat)
@@ -807,7 +807,7 @@ static cl_object from_qvariant_value(const QVariant& var) {
         case QVariant::RectF:       l_obj = from_qrectf(var.toRectF()); break;
         case QVariant::Size:        l_obj = from_qsize(var.toSize()); break;
         case QVariant::SizeF:       l_obj = from_qsizef(var.toSizeF()); break;
-        case QVariant::SizePolicy:  l_obj = MAKE_FIXNUM(var.toInt()); break;
+        case QVariant::SizePolicy:  l_obj = from_qsizepolicy(qVariantValue<QSizePolicy>(var)); break;
         case QVariant::String:      l_obj = from_qstring(var.toString()); break;
         case QVariant::StringList:  l_obj = from_qstringlist(var.toStringList()); break;
         case QVariant::TextFormat:  l_obj = from_qtextformat(qVariantValue<QTextFormat>(var)); break;
