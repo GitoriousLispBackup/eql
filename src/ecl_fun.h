@@ -91,6 +91,19 @@ static cap_name to##cap_name(cl_object l_x) { \
         return *x; } \
     return cap_name(); }
 
+#define TO_QT_TYPE_PTR3(cap_name) \
+static cap_name* to##cap_name##Pointer(cl_object x) { \
+    cap_name* p = 0; \
+    QtObject o = toQtObject(x); \
+    if(#cap_name == o.className()) { \
+        p = (cap_name*)o.pointer; } \
+    return p; } \
+static cap_name to##cap_name(cl_object l_x) { \
+    cap_name* x = to##cap_name##Pointer(l_x); \
+    if(x) { \
+        return *x; } \
+    return cap_name(); }
+
 #define TO_CL_TYPE(cap_name, name, x1, x2) \
     static cl_object from_##name(const cap_name& q) { \
         return LIST2(MAKE_FIXNUM(q.x1()), MAKE_FIXNUM(q.x2())); }

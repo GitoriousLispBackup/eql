@@ -366,10 +366,6 @@ static T toFloat(cl_object l_num) {
 static qreal toReal(cl_object l_num) {
     return toFloat<qreal>(l_num); }
 
-static QSizePolicy toQSizePolicy(cl_object l_sp) {
-    QSizePolicy::Policy sp = (QSizePolicy::Policy)toInt(l_sp);
-    return QSizePolicy(sp, sp); }
-
 static char toChar(cl_object l_ch) {
     char ch = 0;
     if(CHARACTERP(l_ch)) {
@@ -546,6 +542,7 @@ TO_QT_TYPE_PTR(QPainterPath, qpainterpath)
 TO_QT_TYPE_PTR2(QPalette, qpalette)
 TO_QT_TYPE_PTR2(QPen, qpen)
 TO_QT_TYPE_PTR2(QPixmap, qpixmap)
+TO_QT_TYPE_PTR3(QSizePolicy)
 TO_QT_TYPE_PTR2(QTableWidgetSelectionRange, qtablewidgetselectionrange)
 TO_QT_TYPE_PTR2(QTextBlock, qtextblock)
 TO_QT_TYPE_PTR(QTextCharFormat, qtextcharformat)
@@ -1442,7 +1439,7 @@ cl_object qdelete2(cl_object l_obj, cl_object l_later) {
         STATIC_SYMBOL_PKG(s_qset_null, (char*)"QSET-NULL", (char*)"EQL")
         cl_funcall(2, s_qset_null, l_obj);
         return Ct; }
-    // no error message
+    // no error message (unintentional multiple deletion, GC)
     return Cnil; }
 
 cl_object qproperty(cl_object l_obj, cl_object l_name) {
