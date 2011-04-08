@@ -780,21 +780,20 @@
 (defun indentation (line)
   (if (x:empty-string (string-trim " " line))
       0
-      (let ((pos (last-expression-indent line)))
-        (if (char= #\; (char line pos))
-            pos
+      (let ((pos-1 (position #\Space line :test 'char/=))
+            (pos-x (last-expression-indent line)))
+        (if (char= #\; (char line pos-1))
+            pos-1
             (let ((spaces (+ *current-depth* *current-keyword-indent*))) ; see right paren matcher
               (when (and (zerop spaces)
                          (not *extra-selections*)
-                         pos)
-                (setf spaces (if (char= #\( (char line pos))
-                                 (if (find (read* (subseq line (1+ pos)))
-                                           '(case ccase ecase defvar-ui loop prog progn prog1 prog2
-                                             typecase unless when when-it when-it* while))
-                                     (+ pos 2)
-                                     (1+ (or (position #\Space line :start pos)
-                                             pos)))
-                                 pos)))
+                         pos-1)
+                (setf spaces (if (and (char= #\( (char line pos-1))
+                                      (find (read* (subseq line (1+ pos-1)))
+                                            '(case ccase ecase defvar-ui loop prog progn prog1 prog2
+                                              typecase unless when when-it when-it* while)))
+                                 (+ pos-1 2)
+                                 pos-x)))
               spaces)))))
 
 (defun no-string-parens (line)
