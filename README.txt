@@ -1,5 +1,7 @@
 # contact: gmail, polos.ruetz
 # mailing list: http://groups.google.com/group/eql-user/topics
+#
+# MANY THANKS to the users of the eql-user mailing list for their contributions!
 
 
 
@@ -130,4 +132,9 @@ LGPL
 
 
 
-THANKS to all users of the eql-user mailing list for their contributions!
+SUPPORT
+=======
+
+For eventual professional support, please see SUPPORT.txt.
+
+

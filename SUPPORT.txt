@@ -1,0 +1,12 @@
+For eventual professional support, including:
+
+   - providing a canonical solution to a given problem
+   - porting (maybe partially) existing Qt/C++ code to EQL
+   - embed EQL (e.g. for scripting) in existing Qt/C++ applications
+   - hire me to develop an application using EQL
+   - other
+
+please contact me at:
+
+Support EQL <EmbeddedQtLisp@gmail.com>
+
