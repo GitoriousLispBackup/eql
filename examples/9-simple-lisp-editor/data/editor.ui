@@ -86,7 +86,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="next_button">
+       <widget class="QToolButton" name="button_next">
         <property name="text">
          <string>Next</string>
         </property>
@@ -96,7 +96,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="replace_button">
+       <widget class="QToolButton" name="button_replace">
         <property name="text">
          <string>Replace</string>
         </property>
@@ -149,6 +149,9 @@
    <addaction name="separator"/>
    <addaction name="action_save_and_run"/>
    <addaction name="separator"/>
+   <addaction name="action_copy"/>
+   <addaction name="action_cut"/>
+   <addaction name="separator"/>
    <addaction name="action_eval_region"/>
    <addaction name="action_repeat_eval"/>
   </widget>
@@ -186,6 +189,22 @@
    </property>
    <property name="toolTip">
     <string>Eval starting from left paren of latest eval</string>
+   </property>
+  </action>
+  <action name="action_copy">
+   <property name="text">
+    <string>Copy ( )</string>
+   </property>
+   <property name="toolTip">
+    <string>Copy highlighted region</string>
+   </property>
+  </action>
+  <action name="action_cut">
+   <property name="text">
+    <string>Cut ( )</string>
+   </property>
+   <property name="toolTip">
+    <string>Cut highlighted region</string>
    </property>
   </action>
  </widget>

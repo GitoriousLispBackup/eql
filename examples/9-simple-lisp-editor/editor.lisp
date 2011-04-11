@@ -76,12 +76,14 @@
   *splitter*
   *find*
   *replace*
-  *next-button*
-  *replace-button*
+  *button-next*
+  *button-replace*
   *action-open*
   *action-save*
   *action-save-as*
   *action-save-and-run*
+  *action-copy*
+  *action-cut*
   *action-eval-region*
   *action-repeat-eval*)
 
@@ -149,8 +151,8 @@
     (qconnect ed  "cursorPositionChanged()" 'cursor-position-changed))
   (qconnect *find*    "returnPressed()" 'find-text)
   (qconnect *replace* "returnPressed()" 'replace-text)
-  (qconnect *next-button*    "clicked()" 'find-text)
-  (qconnect *replace-button* "clicked()" 'replace-text)
+  (qconnect *button-next*    "clicked()" 'find-text)
+  (qconnect *button-replace* "clicked()" 'replace-text)
   (qconnect (qapp) "aboutToQuit()" 'clean-up)
   (qoverride *editor*  "keyPressEvent(QKeyEvent*)" 'editor-key-pressed)
   (qoverride *command* "keyPressEvent(QKeyEvent*)" 'command-key-pressed)
@@ -172,14 +174,18 @@
     (qset *action-open*         "shortcut" (keys "Ctrl+O"))
     (qset *action-save*         "shortcut" (keys "Ctrl+S"))
     (qset *action-save-and-run* "shortcut" (keys "Ctrl+R"))
+    (qset *action-copy*         "shortcut" (keys "Alt+C"))
+    (qset *action-cut*          "shortcut" (keys "Alt+X"))
     (qset *action-eval-region*  "shortcut" (keys "Ctrl+Return"))
     (qset *action-repeat-eval*  "shortcut" (keys "Ctrl+E"))
-    (qset *next-button*         "shortcut" (keys "Ctrl+F"))
-    (qset *replace-button*      "shortcut" (keys "Ctrl+G"))
+    (qset *button-next*         "shortcut" (keys "Ctrl+F"))
+    (qset *button-replace*      "shortcut" (keys "Ctrl+G"))
     (qconnect *action-open*         "triggered()" 'file-open)
     (qconnect *action-save*         "triggered()" 'file-save)
     (qconnect *action-save-as*      "triggered()" 'file-save-as)
     (qconnect *action-save-and-run* "triggered()" 'save-and-run)
+    (qconnect *action-copy*         "triggered()" (lambda () (copy/cut-highlighted-region :copy)))
+    (qconnect *action-cut*          "triggered()" (lambda () (copy/cut-highlighted-region :cut)))
     (qconnect *action-eval-region*  "triggered()" 'eval-region)
     (qconnect *action-repeat-eval*  "triggered()" 'repeat-eval)))
 
@@ -211,7 +217,7 @@
         *symbol-model*     (qnew "QStringListModel")
         *file-model*       (qnew "QFileSystemModel")
         *symbol-popup*     (qfun *symbol-completer* "popup")
-        *file-popup*       (qfun *file-completer* "popup"))
+        *file-popup*       (qfun *file-completer*   "popup"))
   (x:do-with (qset *eql-completer*)
     ("frameShape" |QFrame.Box|)
     ("frameShadow" |QFrame.Plain|)
@@ -224,17 +230,15 @@
   (qfun *file-model* "setRootPath" "")
   (set-color *symbol-popup* |QPalette.Base| "palegreen")
   (qconnect *eql-completer* "itemDoubleClicked(QListWidgetItem*)" 'insert-completer-option-text)
-  (qconnect *file-completer* "highlighted(QString)"
-            (lambda (str) (item-highlighted str :file)))
-  (qconnect *file-model* "directoryLoaded(QString)"
-            (lambda (arg) (update-tab-completer-2 :file)))
   (qconnect *symbol-completer* "highlighted(QString)" 'item-highlighted)
+  (qconnect *file-completer*   "highlighted(QString)" (lambda (str) (item-highlighted str :file)))
+  (qconnect *file-model* "directoryLoaded(QString)" (lambda (arg) (update-tab-completer-2 :file)))
   (qoverride *eql-completer* "keyPressEvent(QKeyEvent*)" 'completer-key-pressed)
   (qoverride *eql-completer* "focusOutEvent(QFocusEvent*)" 'close-completer)
   (update-completer-symbols))
 
 (defun delayed-ini ()
-  (let* ((buttons (list *next-button* *replace-button*))
+  (let* ((buttons (list *button-next* *button-replace*))
          (width (apply 'max (mapcar (lambda (w) (qget w "width")) buttons))))
     (dolist (button buttons)
       (qfun button "setFixedWidth" width))))
@@ -1012,7 +1016,22 @@
             (setf *extra-selections* t))))))
   (defun highlighted-parenthesis-text ()
     (setf *latest-eval-position* pos-open)
-    (subseq (qget *current-editor* "plainText") pos-open pos-close)))
+    (subseq (qget *current-editor* "plainText") pos-open pos-close))
+  (defun copy/cut-highlighted-region (type)
+    (when (and pos-open pos-close)
+      (let* ((cursor (qfun *current-editor* "textCursor"))
+             (pos (qfun cursor "position"))
+             (copy (eql :copy type)))
+        (x:do-with (qfun cursor)
+          ("setPosition" pos-open)
+          ("setPosition" pos-close |QTextCursor.KeepAnchor|))
+        (qfun *current-editor* "setTextCursor" cursor)
+        (qfun *current-editor* (if copy "copy" "cut"))
+        (when copy
+          (qprocess-events)
+          (sleep 0.3))
+        (qfun cursor "setPosition" (if copy pos pos-open))
+        (qfun *current-editor* "setTextCursor" cursor)))))
 
 (defun mark-error-region (file-pos)
   (when (string= *file-name* (file-namestring (car file-pos)))
@@ -1198,7 +1217,8 @@
     (x:do-string (ch line)
       (when (and (char= #\" ch)
                  (char/= #\\ ex))
-        (setf in-string (not in-string))))
+        (setf in-string (not in-string)))
+      (setf ex ch))
     in-string))
 
 (let (prefix current completer file*)
