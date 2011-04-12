@@ -92,8 +92,6 @@
         "QModelIndex"
         "QMouseEvent"
         "QMoveEvent"
-        "QMutex"
-        "QMutexLocker"
         "//QPaintDevice"
         "QPaintEvent"
         "QPainter"

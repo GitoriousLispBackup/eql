@@ -1742,17 +1742,6 @@
    "new QMoveEvent ( const QPoint & , const QPoint & )"
    "const QPoint & oldPos () const"
    "const QPoint & pos () const")
-  (("QMutex" . NIL)
-   "new QMutex ( RecursionMode = NonRecursive )"
-   "void lock ()"
-   "bool tryLock ()"
-   "bool tryLock ( int )"
-   "void unlock ()")
-  (("QMutexLocker" . NIL)
-   "new QMutexLocker ( QMutex * )"
-   "QMutex * mutex () const"
-   "void relock ()"
-   "void unlock ()")
   (("QNetworkAddressEntry" . NIL)
    "new QNetworkAddressEntry ()"
    "new QNetworkAddressEntry ( const QNetworkAddressEntry & )"

@@ -276,8 +276,6 @@
   (("QModelIndex" . NIL))
   (("QMouseEvent" . "QInputEvent"))
   (("QMoveEvent" . "QEvent"))
-  (("QMutex" . NIL))
-  (("QMutexLocker" . NIL))
   (("QNetworkAddressEntry" . NIL))
   (("QNetworkCacheMetaData" . NIL))
   (("QNetworkCookie" . NIL))

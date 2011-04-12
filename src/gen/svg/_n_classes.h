@@ -9,7 +9,7 @@
 #include <QtGui>
 
 class LSvgGenerator : public QSvgGenerator {
-    friend class N143;
+    friend class N141;
 public:
     LSvgGenerator(uint u) : unique(u) {}
 

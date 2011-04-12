@@ -69,7 +69,7 @@ public:
     Q_INVOKABLE int SlookupHost(const QString& x1, QObject* x2, const char* x3) { return QHostInfo::lookupHost(x1, x2, x3); }
 };
 
-class N101 : public QObject { // QNetworkAddressEntry
+class N99 : public QObject { // QNetworkAddressEntry
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LNetworkAddressEntry(u); }
@@ -84,7 +84,7 @@ public:
     Q_INVOKABLE void MsetPrefixLength(QNetworkAddressEntry* o, int x1) { o->setPrefixLength(x1); }
 };
 
-class N102 : public QObject { // QNetworkCacheMetaData
+class N100 : public QObject { // QNetworkCacheMetaData
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LNetworkCacheMetaData(u); }
@@ -100,7 +100,7 @@ public:
     Q_INVOKABLE QUrl Murl(QNetworkCacheMetaData* o) const { return o->url(); }
 };
 
-class N103 : public QObject { // QNetworkCookie
+class N101 : public QObject { // QNetworkCookie
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QByteArray& x1 = QByteArray(), const QByteArray& x2 = QByteArray()) { return new LNetworkCookie(u, x1, x2); }
@@ -124,7 +124,7 @@ public:
     Q_INVOKABLE QList<QNetworkCookie> SparseCookies(const QByteArray& x1) { return QNetworkCookie::parseCookies(x1); }
 };
 
-class N104 : public QObject { // QNetworkInterface
+class N102 : public QObject { // QNetworkInterface
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LNetworkInterface(u); }
@@ -142,7 +142,7 @@ public:
     Q_INVOKABLE QNetworkInterface SinterfaceFromName(const QString& x1) { return QNetworkInterface::interfaceFromName(x1); }
 };
 
-class N105 : public QObject { // QNetworkProxy
+class N103 : public QObject { // QNetworkProxy
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LNetworkProxy(u); }
@@ -166,7 +166,7 @@ public:
     Q_INVOKABLE void SsetApplicationProxy(const QNetworkProxy& x1) { QNetworkProxy::setApplicationProxy(x1); }
 };
 
-class N106 : public QObject { // QNetworkProxyFactory
+class N104 : public QObject { // QNetworkProxyFactory
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LNetworkProxyFactory(u); }
@@ -177,7 +177,7 @@ public:
     Q_INVOKABLE QList<QNetworkProxy> SsystemProxyForQuery(const QNetworkProxyQuery& x1 = QNetworkProxyQuery()) { return QNetworkProxyFactory::systemProxyForQuery(x1); }
 };
 
-class N107 : public QObject { // QNetworkProxyQuery
+class N105 : public QObject { // QNetworkProxyQuery
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LNetworkProxyQuery(u); }
@@ -199,7 +199,7 @@ public:
     Q_INVOKABLE QUrl Murl(QNetworkProxyQuery* o) const { return o->url(); }
 };
 
-class N108 : public QObject { // QNetworkRequest
+class N106 : public QObject { // QNetworkRequest
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QUrl& x1 = QUrl()) { return new LNetworkRequest(u, x1); }
@@ -220,7 +220,7 @@ public:
     Q_INVOKABLE QUrl Murl(QNetworkRequest* o) const { return o->url(); }
 };
 
-class N136 : public QObject { // QSslCertificate
+class N134 : public QObject { // QSslCertificate
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QByteArray& x1 = QByteArray(), QSsl::EncodingFormat x2 = QSsl::Pem) { return new LSslCertificate(u, x1, x2); }
@@ -245,7 +245,7 @@ public:
     Q_INVOKABLE QList<QSslCertificate> SfromPath(const QString& x1, QSsl::EncodingFormat x2 = QSsl::Pem, QRegExp::PatternSyntax x3 = QRegExp::FixedString) { return QSslCertificate::fromPath(x1, x2, x3); }
 };
 
-class N137 : public QObject { // QSslCipher
+class N135 : public QObject { // QSslCipher
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LSslCipher(u); }
@@ -262,7 +262,7 @@ public:
     Q_INVOKABLE int MusedBits(QSslCipher* o) const { return o->usedBits(); }
 };
 
-class N138 : public QObject { // QSslConfiguration
+class N136 : public QObject { // QSslConfiguration
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LSslConfiguration(u); }
@@ -289,7 +289,7 @@ public:
     Q_INVOKABLE void SsetDefaultConfiguration(const QSslConfiguration& x1) { QSslConfiguration::setDefaultConfiguration(x1); }
 };
 
-class N139 : public QObject { // QSslError
+class N137 : public QObject { // QSslError
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LSslError(u); }
@@ -301,7 +301,7 @@ public:
     Q_INVOKABLE QString MerrorString(QSslError* o) const { return o->errorString(); }
 };
 
-class N140 : public QObject { // QSslKey
+class N138 : public QObject { // QSslKey
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LSslKey(u); }
@@ -316,7 +316,7 @@ public:
     Q_INVOKABLE int Mtype(QSslKey* o) const { return o->type(); }
 };
 
-class N179 : public QObject { // QUrlInfo
+class N177 : public QObject { // QUrlInfo
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LUrlInfo(u); }

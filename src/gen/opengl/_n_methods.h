@@ -131,7 +131,7 @@ public:
     Q_INVOKABLE GLenum MtextureTarget(QGLFramebufferObjectFormat* o) const { return o->textureTarget(); }
 };
 
-class N42 : public N109 { // QGLFramebufferObject
+class N42 : public N107 { // QGLFramebufferObject
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QSize& x1, GLenum x2 = GL_TEXTURE_2D) { return new LGLFramebufferObject(u, x1, x2); }
@@ -156,7 +156,7 @@ public:
     Q_INVOKABLE bool ShasOpenGLFramebufferObjects() { return QGLFramebufferObject::hasOpenGLFramebufferObjects(); }
 };
 
-class N44 : public N109 { // QGLPixelBuffer
+class N44 : public N107 { // QGLPixelBuffer
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QSize& x1, const QGLFormat& x2 = QGLFormat::defaultFormat(), QGLWidget* x3 = 0) { return new LGLPixelBuffer(u, x1, x2, x3); }

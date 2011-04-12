@@ -8,7 +8,7 @@
 #include <QtGui>
 #include <QtSvg>
 
-class N143 : public N109 { // QSvgGenerator
+class N141 : public N107 { // QSvgGenerator
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LSvgGenerator(u); }
