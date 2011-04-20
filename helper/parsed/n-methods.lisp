@@ -3677,12 +3677,6 @@
    "qreal y () const"
    "qreal z () const"
    "static qreal dotProduct ( const QVector4D & , const QVector4D & )")
-  (("QWaitCondition" . NIL)
-   "new QWaitCondition ()"
-   "bool wait ( QMutex * , unsigned long = ULONG_MAX )"
-   "bool wait ( QReadWriteLock * , unsigned long = ULONG_MAX )"
-   "void wakeAll ()"
-   "void wakeOne ()")
   (("QWebDatabase" . NIL)
    "new QWebDatabase ( const QWebDatabase & )"
    "QString displayName () const"

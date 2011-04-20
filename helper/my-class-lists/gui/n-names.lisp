@@ -160,7 +160,6 @@
         "QVector2D"
         "QVector3D"
         "QVector4D"
-        "QWaitCondition"
         "QWhatsThis"
         "QWhatsThisClickedEvent"
         "QWheelEvent"

@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "11.4.2"; // 2011-04-12
+const char EQL::version[] = "11.4.3"; // 2011-04-20
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
@@ -57,12 +57,7 @@ void EQL::exec(const QStringList& args) {
         tpl = true;
         forms << "(si::qtop-level)"; }
 #endif
-    bool io = arguments.contains("-io");
-    arguments.removeAll("-io");
     if(arguments.count() > 1) {
-        if(!io) {
-            forms.prepend("(eql:qq)");
-            forms.prepend("(eql:qexec)"); }
         forms.prepend(QString("(load \"%1\")").arg(arguments.at(1))); }
     QString code;
     if(forms.length() == 1) {
@@ -76,7 +71,7 @@ void EQL::exec(const QStringList& args) {
 void EQL::exec(lisp_ini ini, const QByteArray& expression, const QByteArray& package) {
     eval(QString("(eql::set-home \"%1\")").arg(home()).toAscii().constData());
     read_VV(OBJNULL, ini);
-    si_select_package(make_simple_base_string((char*)package.constData()));
+    si_select_package(make_simple_base_string((char*)package.toUpper().constData()));
     eval(expression.constData()); }
 
 void EQL::exec(QWidget* widget, const QByteArray& file) {

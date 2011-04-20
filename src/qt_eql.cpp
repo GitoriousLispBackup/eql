@@ -55,11 +55,10 @@ static QVariant eql_fun2(const QByteArray& pkgFun,
     error_msg(QString("eql_fun(): %1").arg(QString(pkgFun)).toAscii().constData(), l_args);
     return ret; }
 
-QVariant eql_fun(const QByteArray& fun,
-                 QGenericArgument a1, QGenericArgument a2, QGenericArgument a3, QGenericArgument a4, QGenericArgument a5,
-                 QGenericArgument a6, QGenericArgument a7, QGenericArgument a8, QGenericArgument a9, QGenericArgument a10) {
-    return eql_fun2(fun, -1, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10); }
-
+void eql_fun(const QByteArray& fun,
+             QGenericArgument a1, QGenericArgument a2, QGenericArgument a3, QGenericArgument a4, QGenericArgument a5,
+             QGenericArgument a6, QGenericArgument a7, QGenericArgument a8, QGenericArgument a9, QGenericArgument a10) {
+    return (void)eql_fun2(fun, -1, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10); }
 
 QVariant eql_fun(const QByteArray& fun,
                  int ret_type,

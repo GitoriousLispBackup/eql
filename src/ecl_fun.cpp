@@ -1352,39 +1352,41 @@ cl_object qnew_instance2(cl_object l_name, cl_object l_args) {
             if(caller) {
                 const QMetaObject* mo = caller->metaObject();
                 int n = i_constructor.value(name, -1);
+                int len = LEN(l_args);
                 if(n == -1) {
-                    n = findMethodIndex(Method, QByteArray("C(uint") + ((p == -1) ? ")" : ("," + name.mid(p + 1))), mo, LEN(l_args));
+                    n = findMethodIndex(Method, QByteArray("C(uint") + ((p == -1) ? ")" : ("," + name.mid(p + 1))), mo, len);
                     if(n != -1) {
                         i_constructor[name] = n; }}
                 if(n != -1) {
                     // qt_metacall to given constructor "C(uint...)"
                     QMetaMethod mm(mo->method(n));
                     StrList types(mm.parameterTypes());
-                    const int MAX_ARGS = 16;
-                    //               r = return, u = unique
-                    //               r  u  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16
-                    void* args[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-                    void* pointer = 0;
-                    args[0] = &pointer; // return value
-                    uint unique = LObjects::unique();
-                    args[1] = &unique;
-                    MetaArgList mArgs;
-                    cl_object l_do_args = l_args;
-                    if(p != -1) {
-                        for(int i = 0; (i < (types.length() - 1)) && (i < MAX_ARGS) && (l_do_args != Cnil); ++i) {
-                            MetaArg m_arg(toMetaArg(types.at(i + 1), cl_car(l_do_args)));
-                            args[i + 2] = m_arg.second;
-                            mArgs << m_arg;
-                            l_do_args = cl_cdr(l_do_args); }}
-                    caller->qt_metacall(QMetaObject::InvokeMetaMethod, n, args);
-                    clearMetaArgList(mArgs);
-                    if(pointer) {
-                        cl_object l_ret = new_qt_object(pointer, unique, id);
-                        if(id > 0) { // QObject derived
-                            while(l_do_args != Cnil) {
-                                qset_property(l_ret, cl_first(l_do_args), cl_second(l_do_args));
-                                l_do_args = cl_cddr(l_do_args); }}
-                        return l_ret; }}}}}
+                    if(len >= (types.length() - 1)) {
+                        const int MAX_ARGS = 16;
+                        //               r = return, u = unique
+                        //               r  u  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16
+                        void* args[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                        void* pointer = 0;
+                        args[0] = &pointer; // return value
+                        uint unique = LObjects::unique();
+                        args[1] = &unique;
+                        MetaArgList mArgs;
+                        cl_object l_do_args = l_args;
+                        if(p != -1) {
+                            for(int i = 0; (i < (types.length() - 1)) && (i < MAX_ARGS) && (l_do_args != Cnil); ++i) {
+                                MetaArg m_arg(toMetaArg(types.at(i + 1), cl_car(l_do_args)));
+                                args[i + 2] = m_arg.second;
+                                mArgs << m_arg;
+                                l_do_args = cl_cdr(l_do_args); }}
+                        caller->qt_metacall(QMetaObject::InvokeMetaMethod, n, args);
+                        clearMetaArgList(mArgs);
+                        if(pointer) {
+                            cl_object l_ret = new_qt_object(pointer, unique, id);
+                            if(id > 0) { // QObject derived
+                                while(l_do_args != Cnil) {
+                                    qset_property(l_ret, cl_first(l_do_args), cl_second(l_do_args));
+                                    l_do_args = cl_cddr(l_do_args); }}
+                            return l_ret; }}}}}}
     error_msg("QNEW-INSTANCE", LIST2(l_name, l_args));
     return Cnil; }
 

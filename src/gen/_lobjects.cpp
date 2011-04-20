@@ -386,7 +386,6 @@ NumList LVariant::overrideIds = NumList();
 NumList LVector2D::overrideIds = NumList();
 NumList LVector3D::overrideIds = NumList();
 NumList LVector4D::overrideIds = NumList();
-NumList LWaitCondition::overrideIds = NumList();
 NumList LWhatsThis::overrideIds = NumList();
 NumList LWhatsThisClickedEvent::overrideIds = NumList();
 NumList LWheelEvent::overrideIds = NumList();
@@ -401,7 +400,7 @@ void LObjects::ini(EQL* e) {
         eql = e;
         dynObject = new DynObject;
         Q = new QObject* [219]; for(int i = 0; i < 219; ++i) { Q[i] = 0; }
-        N = new QObject* [196]; for(int i = 0; i < 196; ++i) { N[i] = 0; }
+        N = new QObject* [195]; for(int i = 0; i < 195; ++i) { N[i] = 0; }
         Q[0] = new Q1;
         Q[1] = new Q2;
         Q[2] = new Q3;
@@ -744,13 +743,12 @@ void LObjects::ini(EQL* e) {
         N[178] = new N179;
         N[179] = new N180;
         N[180] = new N181;
-        N[181] = new N182;
+        N[189] = new N190;
         N[190] = new N191;
         N[191] = new N192;
         N[192] = new N193;
         N[193] = new N194;
         N[194] = new N195;
-        N[195] = new N196;
         q_names["QAbstractAnimation"] = 1;
         q_names["QAbstractButton"] = 2;
         q_names["QAbstractItemDelegate"] = 3;
@@ -1151,21 +1149,20 @@ void LObjects::ini(EQL* e) {
         n_names["QVector2D"] = 179;
         n_names["QVector3D"] = 180;
         n_names["QVector4D"] = 181;
-        n_names["QWaitCondition"] = 182;
-        n_names["QWebDatabase"] = 183;
-        n_names["QWebElement"] = 184;
-        n_names["QWebElementCollection"] = 185;
-        n_names["QWebHistory"] = 186;
-        n_names["QWebHistoryItem"] = 187;
-        n_names["QWebHitTestResult"] = 188;
-        n_names["QWebSecurityOrigin"] = 189;
-        n_names["QWebSettings"] = 190;
-        n_names["QWhatsThis"] = 191;
-        n_names["QWhatsThisClickedEvent"] = 192;
-        n_names["QWheelEvent"] = 193;
-        n_names["QWidgetItem"] = 194;
-        n_names["QWindowStateChangeEvent"] = 195;
-        n_names["QWriteLocker"] = 196;
+        n_names["QWebDatabase"] = 182;
+        n_names["QWebElement"] = 183;
+        n_names["QWebElementCollection"] = 184;
+        n_names["QWebHistory"] = 185;
+        n_names["QWebHistoryItem"] = 186;
+        n_names["QWebHitTestResult"] = 187;
+        n_names["QWebSecurityOrigin"] = 188;
+        n_names["QWebSettings"] = 189;
+        n_names["QWhatsThis"] = 190;
+        n_names["QWhatsThisClickedEvent"] = 191;
+        n_names["QWheelEvent"] = 192;
+        n_names["QWidgetItem"] = 193;
+        n_names["QWindowStateChangeEvent"] = 194;
+        n_names["QWriteLocker"] = 195;
         override_function_ids["duration()"] = 1;
         override_function_ids["updateCurrentTime(int)"] = 2;
         override_function_ids["updateDirection(QAbstractAnimation::Direction)"] = 3;
@@ -2391,13 +2388,12 @@ void LObjects::deleteNObject(int n, void* p) {
         case 179: delete (LVector2D*)p; break;
         case 180: delete (LVector3D*)p; break;
         case 181: delete (LVector4D*)p; break;
-        case 182: delete (LWaitCondition*)p; break;
-        case 191: delete (LWhatsThis*)p; break;
-        case 192: delete (LWhatsThisClickedEvent*)p; break;
-        case 193: delete (LWheelEvent*)p; break;
-        case 194: delete (LWidgetItem*)p; break;
-        case 195: delete (LWindowStateChangeEvent*)p; break;
-        case 196: delete (LWriteLocker*)p; break;
+        case 190: delete (LWhatsThis*)p; break;
+        case 191: delete (LWhatsThisClickedEvent*)p; break;
+        case 192: delete (LWheelEvent*)p; break;
+        case 193: delete (LWidgetItem*)p; break;
+        case 194: delete (LWindowStateChangeEvent*)p; break;
+        case 195: delete (LWriteLocker*)p; break;
         case 70:
         case 72:
             if(deleteNObject_help) {
@@ -2436,6 +2432,7 @@ void LObjects::deleteNObject(int n, void* p) {
             if(deleteNObject_svg) {
                 deleteNObject_svg(n, p); }
             break;
+        case 182:
         case 183:
         case 184:
         case 185:
@@ -2443,7 +2440,6 @@ void LObjects::deleteNObject(int n, void* p) {
         case 187:
         case 188:
         case 189:
-        case 190:
             if(deleteNObject_webkit) {
                 deleteNObject_webkit(n, p); }
             break; }}
@@ -2525,10 +2521,10 @@ const char* LObjects::nObjectSuperClass(const QByteArray& name) {
         case 168: s = "QTextFrameFormat"; break;
         case 170: s = "QEvent"; break;
         case 172: s = "QInputEvent"; break;
-        case 192: s = "QEvent"; break;
-        case 193: s = "QInputEvent"; break;
-        case 194: s = "QLayoutItem"; break;
-        case 195: s = "QEvent"; break; }
+        case 191: s = "QEvent"; break;
+        case 192: s = "QInputEvent"; break;
+        case 193: s = "QLayoutItem"; break;
+        case 194: s = "QEvent"; break; }
     return s; }
 
 StrList LObjects::override(const QByteArray& name) {
@@ -2929,13 +2925,12 @@ StrList LObjects::override(const QByteArray& name) {
             case 179: ids = LVector2D::overrideIds; break;
             case 180: ids = LVector3D::overrideIds; break;
             case 181: ids = LVector4D::overrideIds; break;
-            case 182: ids = LWaitCondition::overrideIds; break;
-            case 191: ids = LWhatsThis::overrideIds; break;
-            case 192: ids = LWhatsThisClickedEvent::overrideIds; break;
-            case 193: ids = LWheelEvent::overrideIds; break;
-            case 194: ids = LWidgetItem::overrideIds; break;
-            case 195: ids = LWindowStateChangeEvent::overrideIds; break;
-            case 196: ids = LWriteLocker::overrideIds; break;
+            case 190: ids = LWhatsThis::overrideIds; break;
+            case 191: ids = LWhatsThisClickedEvent::overrideIds; break;
+            case 192: ids = LWheelEvent::overrideIds; break;
+            case 193: ids = LWidgetItem::overrideIds; break;
+            case 194: ids = LWindowStateChangeEvent::overrideIds; break;
+            case 195: ids = LWriteLocker::overrideIds; break;
             case 70:
             case 72:
                 if(override_help) {
@@ -2974,6 +2969,7 @@ StrList LObjects::override(const QByteArray& name) {
                 if(override_svg) {
                     ids = *override_svg(name); }
                 break;
+            case 182:
             case 183:
             case 184:
             case 185:
@@ -2981,7 +2977,6 @@ StrList LObjects::override(const QByteArray& name) {
             case 187:
             case 188:
             case 189:
-            case 190:
                 if(override_webkit) {
                     ids = *override_webkit(name); }
                 break; }}

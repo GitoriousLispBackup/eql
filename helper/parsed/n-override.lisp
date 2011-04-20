@@ -402,7 +402,6 @@
   (("QVector2D" . NIL))
   (("QVector3D" . NIL))
   (("QVector4D" . NIL))
-  (("QWaitCondition" . NIL))
   (("QWebDatabase" . NIL))
   (("QWebElement" . NIL))
   (("QWebElementCollection" . NIL))

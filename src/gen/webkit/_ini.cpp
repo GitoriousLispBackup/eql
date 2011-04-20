@@ -25,14 +25,14 @@ void ini() {
     LObjects::Q[210] = new Q211;
     LObjects::Q[211] = new Q212;
     LObjects::Q[212] = new Q213;
+    LObjects::N[181] = new N182;
     LObjects::N[182] = new N183;
     LObjects::N[183] = new N184;
     LObjects::N[184] = new N185;
     LObjects::N[185] = new N186;
     LObjects::N[186] = new N187;
     LObjects::N[187] = new N188;
-    LObjects::N[188] = new N189;
-    LObjects::N[189] = new N190; }
+    LObjects::N[188] = new N189; }
 
 const QMetaObject* staticMetaObject(int n) {
     const QMetaObject* m = 0;
@@ -47,12 +47,12 @@ const QMetaObject* staticMetaObject(int n) {
 
 void deleteNObject(int n, void* p) {
     switch(n) {
-        case 183: delete (LWebDatabase*)p; break;
-        case 184: delete (LWebElement*)p; break;
-        case 185: delete (LWebElementCollection*)p; break;
-        case 187: delete (LWebHistoryItem*)p; break;
-        case 188: delete (LWebHitTestResult*)p; break;
-        case 189: delete (LWebSecurityOrigin*)p; break; }}
+        case 182: delete (LWebDatabase*)p; break;
+        case 183: delete (LWebElement*)p; break;
+        case 184: delete (LWebElementCollection*)p; break;
+        case 186: delete (LWebHistoryItem*)p; break;
+        case 187: delete (LWebHitTestResult*)p; break;
+        case 188: delete (LWebSecurityOrigin*)p; break; }}
 
 NumList* override(const QByteArray& name) {
     NumList* ids = 0;
@@ -67,10 +67,10 @@ NumList* override(const QByteArray& name) {
     else {
         n = LObjects::n_names.value(name);
         switch(n) {
-            case 183: ids = &LWebDatabase::overrideIds; break;
-            case 184: ids = &LWebElement::overrideIds; break;
-            case 185: ids = &LWebElementCollection::overrideIds; break;
-            case 187: ids = &LWebHistoryItem::overrideIds; break;
-            case 188: ids = &LWebHitTestResult::overrideIds; break;
-            case 189: ids = &LWebSecurityOrigin::overrideIds; break; }}
+            case 182: ids = &LWebDatabase::overrideIds; break;
+            case 183: ids = &LWebElement::overrideIds; break;
+            case 184: ids = &LWebElementCollection::overrideIds; break;
+            case 186: ids = &LWebHistoryItem::overrideIds; break;
+            case 187: ids = &LWebHitTestResult::overrideIds; break;
+            case 188: ids = &LWebSecurityOrigin::overrideIds; break; }}
     return ids; }

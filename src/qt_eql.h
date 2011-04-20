@@ -8,31 +8,31 @@
 #include <QVariant>
 #include "eql_global.h"
 
-EQL_EXPORT
-QVariant eql_fun(const QByteArray&,
-                 QGenericArgument = QGenericArgument(),
-                 QGenericArgument = QGenericArgument(),
-                 QGenericArgument = QGenericArgument(),
-                 QGenericArgument = QGenericArgument(),
-                 QGenericArgument = QGenericArgument(),
-                 QGenericArgument = QGenericArgument(),
-                 QGenericArgument = QGenericArgument(),
-                 QGenericArgument = QGenericArgument(),
-                 QGenericArgument = QGenericArgument(),
-                 QGenericArgument = QGenericArgument());
+EQL_EXPORT void
+eql_fun(const QByteArray&,
+        QGenericArgument = QGenericArgument(),
+        QGenericArgument = QGenericArgument(),
+        QGenericArgument = QGenericArgument(),
+        QGenericArgument = QGenericArgument(),
+        QGenericArgument = QGenericArgument(),
+        QGenericArgument = QGenericArgument(),
+        QGenericArgument = QGenericArgument(),
+        QGenericArgument = QGenericArgument(),
+        QGenericArgument = QGenericArgument(),
+        QGenericArgument = QGenericArgument());
 
-EQL_EXPORT
-QVariant eql_fun(const QByteArray&,
-                 int,
-                 QGenericArgument = QGenericArgument(),
-                 QGenericArgument = QGenericArgument(),
-                 QGenericArgument = QGenericArgument(),
-                 QGenericArgument = QGenericArgument(),
-                 QGenericArgument = QGenericArgument(),
-                 QGenericArgument = QGenericArgument(),
-                 QGenericArgument = QGenericArgument(),
-                 QGenericArgument = QGenericArgument(),
-                 QGenericArgument = QGenericArgument(),
-                 QGenericArgument = QGenericArgument());
+EQL_EXPORT QVariant
+eql_fun(const QByteArray&,
+        int,
+        QGenericArgument = QGenericArgument(),
+        QGenericArgument = QGenericArgument(),
+        QGenericArgument = QGenericArgument(),
+        QGenericArgument = QGenericArgument(),
+        QGenericArgument = QGenericArgument(),
+        QGenericArgument = QGenericArgument(),
+        QGenericArgument = QGenericArgument(),
+        QGenericArgument = QGenericArgument(),
+        QGenericArgument = QGenericArgument(),
+        QGenericArgument = QGenericArgument());
 
 #endif

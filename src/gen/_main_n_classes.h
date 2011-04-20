@@ -1929,17 +1929,8 @@ public:
     uint unique;
 };
 
-class LWaitCondition : public QWaitCondition {
-    friend class N182;
-public:
-    LWaitCondition(uint u) : unique(u) {}
-
-    static NumList overrideIds;
-    uint unique;
-};
-
 class LWhatsThis : public QWhatsThis {
-    friend class N191;
+    friend class N190;
 public:
 
     static NumList overrideIds;
@@ -1947,7 +1938,7 @@ public:
 };
 
 class LWhatsThisClickedEvent : public QWhatsThisClickedEvent {
-    friend class N192;
+    friend class N191;
 public:
     LWhatsThisClickedEvent(uint u, const QString& x1) : QWhatsThisClickedEvent(x1), unique(u) {}
 
@@ -1956,7 +1947,7 @@ public:
 };
 
 class LWheelEvent : public QWheelEvent {
-    friend class N193;
+    friend class N192;
 public:
     LWheelEvent(uint u, const QPoint& x1, int x2, Qt::MouseButtons x3, Qt::KeyboardModifiers x4, Qt::Orientation x5 = Qt::Vertical) : QWheelEvent(x1, x2, x3, x4, x5), unique(u) {}
     LWheelEvent(uint u, const QPoint& x1, const QPoint& x2, int x3, Qt::MouseButtons x4, Qt::KeyboardModifiers x5, Qt::Orientation x6 = Qt::Vertical) : QWheelEvent(x1, x2, x3, x4, x5, x6), unique(u) {}
@@ -1966,7 +1957,7 @@ public:
 };
 
 class LWidgetItem : public QWidgetItem {
-    friend class N194;
+    friend class N193;
 public:
     LWidgetItem(uint u, QWidget* x1) : QWidgetItem(x1), unique(u) {}
 
@@ -1990,7 +1981,7 @@ public:
 };
 
 class LWindowStateChangeEvent : public QWindowStateChangeEvent {
-    friend class N195;
+    friend class N194;
 public:
 
     static NumList overrideIds;
@@ -1998,7 +1989,7 @@ public:
 };
 
 class LWriteLocker : public QWriteLocker {
-    friend class N196;
+    friend class N195;
 public:
     LWriteLocker(uint u, QReadWriteLock* x1) : QWriteLocker(x1), unique(u) {}
 

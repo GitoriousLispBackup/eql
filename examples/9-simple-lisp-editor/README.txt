@@ -78,3 +78,14 @@ position of the offending region to the editor, and it will be marked red.
 Closing & re-opening the editor does not affect the local-server process.
 You may even open multiple editor instances, which will all connect to the
 same local-server.
+
+--
+
+[Linux]
+
+Bugs occurring while a completer is shown are nasty, as they may freeze all
+mouse clicks; if this happens, remedy with:
+
+    Ctrl+Alt+F1
+    killall -9 eql
+    Alt+F7

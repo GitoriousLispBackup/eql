@@ -16,8 +16,9 @@
   (qconnect *manager* "finished(QNetworkReply*)" 'download-finished))
 
 (defun download (name)
-  (qlet ((url "QUrl(QString)" name))
-    (qfun *manager* "get" (qnew "QNetworkRequest(QUrl)" url))))
+  (qlet ((url "QUrl(QString)" name)
+         (request "QNetworkRequest(QUrl)" url))
+    (qfun *manager* "get" request)))
 
 (defun download-finished (reply)
   (qfun reply "deleteLater") ; QNetworkReply*: heap result, delete manually

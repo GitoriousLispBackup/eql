@@ -25,7 +25,6 @@ QMatrix3x4
 QMatrix4x2
 QMatrix4x3
 QMultiMap<QString,QString>
-QMutex
 QPair<QHostAddress,int>
 QStyleHintReturn
 QStyleOption

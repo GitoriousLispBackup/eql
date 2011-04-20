@@ -194,7 +194,7 @@
                        (sp2 (when sp1 (position #\Space curr* :start (1+ sp1)))))
                   (qfun item "setTextAlignment" 0 (logior |Qt.AlignRight| |Qt.AlignVCenter|))
                   (when sp1
-                      (qfun item "setText" 0 (subseq curr 0 sp1)))
+                    (qfun item "setText" 0 (subseq curr 0 sp1)))
                   (qfun item "setText" 1 (if sp1 (subseq curr (1+ sp1) sp2) curr))
                   (when sp2
                     (qfun item "setText" 2 (subseq curr (1+ sp2))))
@@ -391,10 +391,10 @@
                           (qget child "height"))))))
 
 (defun set-highlight (indi pix dark child)
-  (qlet ((p "QPainter"))
-    (qfun p "begin(QPixmap*)" dark)
-    (let ((r (highlight indi child)))
-      (qfun p "drawPixmap(QRect,QPixmap,QRect)" r pix r)))
+  (qlet ((pnt "QPainter"))
+    (qfun pnt "begin(QPixmap*)" dark)
+    (let ((rect (highlight indi child)))
+      (qfun pnt "drawPixmap(QRect,QPixmap,QRect)" rect pix rect)))
   dark)
 
 (gui)

@@ -2659,17 +2659,7 @@ public:
     Q_INVOKABLE qreal SdotProduct(const QVector4D& x1, const QVector4D& x2) { return QVector4D::dotProduct(x1, x2); }
 };
 
-class EQL_EXPORT N182 : public QObject { // QWaitCondition
-    Q_OBJECT
-public:
-    Q_INVOKABLE void* C(uint u) { return new LWaitCondition(u); }
-    Q_INVOKABLE bool Mwait(QWaitCondition* o, QMutex* x1, ulong x2 = ULONG_MAX) { return o->wait(x1, x2); }
-    Q_INVOKABLE bool Mwait(QWaitCondition* o, QReadWriteLock* x1, ulong x2 = ULONG_MAX) { return o->wait(x1, x2); }
-    Q_INVOKABLE void MwakeAll(QWaitCondition* o) { o->wakeAll(); }
-    Q_INVOKABLE void MwakeOne(QWaitCondition* o) { o->wakeOne(); }
-};
-
-class EQL_EXPORT N191 : public QObject { // QWhatsThis
+class EQL_EXPORT N190 : public QObject { // QWhatsThis
     Q_OBJECT
 public:
     Q_INVOKABLE QAction* ScreateAction(QObject* x1 = 0) { return QWhatsThis::createAction(x1); }
@@ -2680,7 +2670,7 @@ public:
     Q_INVOKABLE void SshowText(const QPoint& x1, const QString& x2, QWidget* x3 = 0) { QWhatsThis::showText(x1, x2, x3); }
 };
 
-class EQL_EXPORT N196 : public QObject { // QWriteLocker
+class EQL_EXPORT N195 : public QObject { // QWriteLocker
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QReadWriteLock* x1) { return new LWriteLocker(u, x1); }
@@ -3732,14 +3722,14 @@ public:
     Q_INVOKABLE QWidget* Mwidget(QTouchEvent* o) const { return o->widget(); }
 };
 
-class EQL_EXPORT N192 : public N31 { // QWhatsThisClickedEvent
+class EQL_EXPORT N191 : public N31 { // QWhatsThisClickedEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QString& x1) { return new LWhatsThisClickedEvent(u, x1); }
     Q_INVOKABLE QString Mhref(QWhatsThisClickedEvent* o) const { return o->href(); }
 };
 
-class EQL_EXPORT N193 : public N80 { // QWheelEvent
+class EQL_EXPORT N192 : public N80 { // QWheelEvent
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QPoint& x1, int x2, Qt::MouseButtons x3, Qt::KeyboardModifiers x4, Qt::Orientation x5 = Qt::Vertical) { return new LWheelEvent(u, x1, x2, x3, x4, x5); }
@@ -3755,7 +3745,7 @@ public:
     Q_INVOKABLE int My(QWheelEvent* o) const { return o->y(); }
 };
 
-class EQL_EXPORT N194 : public N87 { // QWidgetItem
+class EQL_EXPORT N193 : public N87 { // QWidgetItem
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QWidget* x1) { return new LWidgetItem(u, x1); }
@@ -3771,7 +3761,7 @@ public:
     Q_INVOKABLE QWidget* Mwidget(QWidgetItem* o) { return o->widget(); }
 };
 
-class EQL_EXPORT N195 : public N31 { // QWindowStateChangeEvent
+class EQL_EXPORT N194 : public N31 { // QWindowStateChangeEvent
     Q_OBJECT
 public:
     Q_INVOKABLE int MoldState(QWindowStateChangeEvent* o) const { return o->oldState(); }

@@ -26,7 +26,7 @@ public:
 
     void* fun;
     void exec(const QStringList&);
-    void exec(lisp_ini, const QByteArray&, const QByteArray& = "CL-USER"); // see my_app example
+    void exec(lisp_ini, const QByteArray&, const QByteArray& = "cl-user"); // see my_app example
     void exec(QWidget*, const QByteArray&);                                // see Qt_EQL example
 
 public Q_SLOTS:

@@ -6,7 +6,7 @@
 ;;;   - a tab completer for CL/EQL symbols (including Qt enums)
 ;;;   - a tab completer for absolute pathnames
 ;;;   - paren highlighting
-;;;   - simple auto indent, indent parapgraph
+;;;   - simple auto indent, indent paragraph
 ;;;   - simple syntax highlighter
 ;;;
 ;;;   - an independent local Lisp server process for evaluation
@@ -1226,9 +1226,11 @@
 
 (let (prefix current completer file*)
   (defun update-tab-completer (key-event &optional show)
-    (when (or show
-              (qget *file-popup* "visible")
-              (qget *symbol-popup* "visible"))
+    (when (and (or (not key-event)
+                   (not (= |Qt.Key_Escape| (qfun key-event "key"))))
+               (or show
+                   (qget *file-popup* "visible")
+                   (qget *symbol-popup* "visible")))
       (let* ((cursor (qfun *current-editor* "textCursor"))
              (text (concatenate 'string
                                 (text-until-cursor cursor)
@@ -1242,7 +1244,7 @@
                            (length text))
                           (t
                            (let ((p1 (position-if (lambda (ch) (find ch ":*|")) text :from-end t))
-                                 (p2 (position-if (lambda (ch) (find ch "'(")) text :from-end t)))
+                                 (p2 (position-if (lambda (ch) (find ch " '(")) text :from-end t)))
                              (when (and p1
                                         (plusp p1)
                                         (char= #\: (char text p1))
@@ -1265,7 +1267,7 @@
                                     (* (min (qget completer "maxVisibleItems")
                                             (qfun completer "completionCount"))
                                        (qfun popup "sizeHintForRow" 0)))))
-      (dotimes (n #+darwin 10 #-darwin 1) ; hack (pathname completer)  
+      (dotimes (n 10) ; hack (pathname completer)  
         (qprocess-events))
       (qfun popup "setCurrentIndex" (qfun popup "indexAt" '(0 0)))))
   (defun item-highlighted (name &optional file)
@@ -1294,6 +1296,7 @@
 
 (defun find-text ()
   (unless (qfun *editor* "find" (qget *find* "text"))
+    (qfun *find* "setFocus")
     (qfun *editor* "moveCursor" |QTextCursor.Start|)))
 
 (defun replace-text ()

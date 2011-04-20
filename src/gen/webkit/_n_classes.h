@@ -11,7 +11,7 @@
 typedef QList<int> NumList;
 
 class LWebDatabase : public QWebDatabase {
-    friend class N183;
+    friend class N182;
 public:
     LWebDatabase(uint u, const QWebDatabase& x1) : QWebDatabase(x1), unique(u) {}
 
@@ -20,7 +20,7 @@ public:
 };
 
 class LWebElement : public QWebElement {
-    friend class N184;
+    friend class N183;
 public:
     LWebElement(uint u) : unique(u) {}
     LWebElement(uint u, const QWebElement& x1) : QWebElement(x1), unique(u) {}
@@ -30,7 +30,7 @@ public:
 };
 
 class LWebElementCollection : public QWebElementCollection {
-    friend class N185;
+    friend class N184;
 public:
     LWebElementCollection(uint u) : unique(u) {}
     LWebElementCollection(uint u, const QWebElement& x1, const QString& x2) : QWebElementCollection(x1, x2), unique(u) {}
@@ -41,7 +41,7 @@ public:
 };
 
 class LWebHistoryItem : public QWebHistoryItem {
-    friend class N187;
+    friend class N186;
 public:
     LWebHistoryItem(uint u, const QWebHistoryItem& x1) : QWebHistoryItem(x1), unique(u) {}
 
@@ -50,7 +50,7 @@ public:
 };
 
 class LWebHitTestResult : public QWebHitTestResult {
-    friend class N188;
+    friend class N187;
 public:
     LWebHitTestResult(uint u) : unique(u) {}
     LWebHitTestResult(uint u, const QWebHitTestResult& x1) : QWebHitTestResult(x1), unique(u) {}
@@ -60,7 +60,7 @@ public:
 };
 
 class LWebSecurityOrigin : public QWebSecurityOrigin {
-    friend class N189;
+    friend class N188;
 public:
     LWebSecurityOrigin(uint u, const QWebSecurityOrigin& x1) : QWebSecurityOrigin(x1), unique(u) {}
 

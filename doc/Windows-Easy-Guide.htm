@@ -38,7 +38,9 @@ Included you find ECL, EQL, Qt (except sources), and a compiled Slime.
 </ul>
 <li>Open the <b>Visual Studio 2008 Command Prompt</b> from the Windows main menu, change to the <code>C:\ecl\msvc</code> directory, and run <code>nmake</code>.
 <li>After the build, run <code>nmake install</code>. This will create a directory <code>package</code>.
-</ul></p>
+<li>Compiler note: to always use the C compiler (ECL 11.1.1 and later), put <code>(require :cmp)</code> in your <code>.eclrc</code> file.
+</ul>
+</p>
 <p>Install the latest official release of <a href="http://qt.nokia.com/downloads">Qt4</a>. Choose the version <b>Qt libraries for Windows (VS 2008)</b>.</p>
 <p>
 Make sure all of the following are in your <code>Path</code> environment variable, see &lt;Control Panel:System:Advanced:Environment Variables&gt;.

@@ -7,6 +7,13 @@
 
 extern "C" void ini_app(cl_object);
 
+int catch_all_qexec() {
+    int ret = 0;
+    CL_CATCH_ALL_BEGIN(ecl_process_env()) {
+        ret = QApplication::exec(); }
+    CL_CATCH_ALL_END;
+    return ret; }
+
 int main(int argc, char** argv) {
 
     cl_boot(1, argv);
@@ -25,8 +32,8 @@ int main(int argc, char** argv) {
             qapp.installTranslator(&trQt); }}
 
     EQL eql;
-    eql.exec(ini_app,     // see make-my-lib.lisp
-             "(START)",   // the initial form to be evaluated
-             "EXAMPLE");  // your package name
+    eql.exec(ini_app,    // see make-my-lib.lisp
+             "(start)",  // the initial form to be evaluated
+             "example"); // your package name
 
-    return qapp.exec(); } // closing the main/last window will quit the program
+    return catch_all_qexec(); } // closing the main/last window will quit the program
