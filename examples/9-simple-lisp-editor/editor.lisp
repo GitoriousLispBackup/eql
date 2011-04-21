@@ -159,6 +159,7 @@
   (ini-actions)
   (ini-highlighter)
   (ini-completer)
+  (hide-popups-on-errors)
   (dolist (w (list *editor* *output* *command* *eql-completer* *symbol-popup*))
     (qset w "font" eql::*code-font*))
   (local-client:ini 'data-from-server)
@@ -1317,7 +1318,19 @@
    read*))
 |#
 
-;;; ini
+;;; debugger hook
+
+(defun hide-popups-on-errors ()
+  "On errors, prevent possible freezing of window manager (mouse clicks). Useful in e.g. Linux."
+  (setf *debugger-hook* (lambda (&rest args)
+                          (setf *debugger-hook* nil)
+                          (qfun "QMessageBox" "critical" nil (tr "EQL Editor Error")
+                                        (tr "<p>The debugger has been invoked.</p><p>The popup widgets will now be <b>hidden</b>.</p>"))
+                          (dolist (w (qfun "QApplication" "topLevelWidgets"))
+                            (unless (qeql *main* w)
+                              (qfun w "hide"))))))
+
+;;; start
 
 (defun start ()
   (ini)
