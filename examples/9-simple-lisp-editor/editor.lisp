@@ -1263,7 +1263,6 @@
         (update-tab-completer-2 file))))
   (defun update-tab-completer-2 (&optional file) ; see "directoryLoaded(QString)" from *file-model*
     (qfun completer "complete")
-(/ 1 0)
     (let ((popup (if file *file-popup* *symbol-popup*)))
       (qfun popup "resize" (list (qget *current-editor* "width")
                                  (+ (* 2 (qget popup "frameWidth"))
@@ -1326,7 +1325,7 @@
   "On errors, prevent possible freezing of mouse click events."
   (setf *debugger-hook* (lambda (&rest args)
                           (setf *debugger-hook* nil)
-                          (qfun "QMessageBox" "critical" nil (tr "EQL") (tr "<p>Internal editor error, sorry.</p>"))
+                          (qfun "QMessageBox" "critical" nil "EQL" (tr "Internal editor error, sorry."))
                           (dolist (w (qfun "QApplication" "topLevelWidgets"))
                             (unless (qeql *main* w)
                               (qfun w "hide"))))))
