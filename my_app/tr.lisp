@@ -1,5 +1,5 @@
 (defpackage :eql-tr
-  (:use common-lisp :eql))
+  (:use :common-lisp :eql))
 
 (in-package :eql-tr)
 
@@ -14,13 +14,13 @@
            (context (if (stringp context*)
                         context*
                         (file-namestring *compile-file-truename*))))
-      (with-open-file  (out "tr.h" :direction :output :if-exists :append :if-does-not-exist :create)
+      (with-open-file (out "tr.h" :direction :output :if-exists :append :if-does-not-exist :create)
         (if (stringp source)
             (unless (gethash (cons source context) *sources*)
               (setf (gethash (cons source context) *sources*) t)
-              (format out "QCoreApplication::translate(~s, ~s, 0, QCoreApplication::CodecForTr~a);~%"
+              (format out "QCoreApplication::translate(~S, ~S, 0, QCoreApplication::CodecForTr~A);~%"
                       context
                       source
-                      (if (= -1 n) "" (format nil ", ~d" n))))
+                      (if (= -1 n) "" (format nil ", ~D" n))))
             (error (format nil "[TR: error] ~s from context ~s doesn't evaluate to a string" src context)))))
     form))
