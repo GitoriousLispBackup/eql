@@ -22,8 +22,8 @@ void LightWidget::paintEvent(QPaintEvent *)
     /*
     QVariant ret =
     eql_fun("my-package:my-function",
-            QVariant::String,          // see ecl_fun.cpp::toQVariant() for all return types
-            Q_ARG(QStringList, list)); // see ecl_fun.cpp::to_lisp_arg() for all arg types
+            QVariant::String,          // see ecl_fun.cpp:toQVariant() for all return types
+            Q_ARG(QStringList, list)); // see ecl_fun.cpp:to_lisp_arg() for all arg types
     */
 
     // original implementation

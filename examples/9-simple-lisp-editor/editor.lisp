@@ -159,7 +159,7 @@
   (ini-actions)
   (ini-highlighter)
   (ini-completer)
-  (hide-popups-on-errors)
+  (set-debugger-hook)
   (dolist (w (list *editor* *output* *command* *eql-completer* *symbol-popup*))
     (qset w "font" eql::*code-font*))
   (local-client:ini 'data-from-server)
@@ -354,7 +354,7 @@
                                    candidates))))))))
           (dolist (x types)
             (add x)))))
-    (sort candidates 'string<)))
+    (remove-duplicates (sort candidates 'string<) :test 'string=)))
 
 (defun cut-optional-type-list (fun-name)
   (flet ((arg-count (x)
@@ -1322,11 +1322,15 @@
 
 ;;; debugger hook
 
-(defun hide-popups-on-errors ()
-  "On errors, prevent possible freezing of mouse click events."
+(defun set-debugger-hook ()
   (setf *debugger-hook* (lambda (&rest args)
                           (setf *debugger-hook* nil)
-                          (qfun "QMessageBox" "critical" nil "EQL" (tr "Internal editor error, sorry."))
+                          (when (= |QMessageBox.Save|
+                                   (qfun "QMessageBox" "critical" nil "EQL"
+                                         (tr "<p>Internal editor error, sorry.</p><p>Save changes?</p>")
+                                         (logior |QMessageBox.Save| |QMessageBox.Discard|)))
+                            (file-save))
+                          ;; hide current popup to prevent possible freezing of mouse click events
                           (dolist (w (qfun "QApplication" "topLevelWidgets"))
                             (unless (qeql *main* w)
                               (qfun w "hide"))))))

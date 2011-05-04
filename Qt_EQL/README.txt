@@ -50,8 +50,8 @@ The syntax is like this:
 
     QVariant ret =                     // optional
     eql_fun("my-package:my-function",
-            QVariant::String,          // see ecl_fun.cpp::toQVariant(); optional
-            Q_ARG(QWidget*, this),     // see ecl_fun.cpp::to_lisp_arg()
+            QVariant::String,          // see ecl_fun.cpp:toQVariant(); optional
+            Q_ARG(QWidget*, this),     // see ecl_fun.cpp:to_lisp_arg()
             Q_ARG(QStringList, list),
             Q_ARG(int, maximum()));
 
