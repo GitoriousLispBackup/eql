@@ -198,11 +198,10 @@ static char** to_cstring(cl_object l_str) {
     static char* s[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     ++_n_cstr_;
     if((_n_cstr_ >= 0) && (_n_cstr_ <= 9)) {
-        cl_index l = l_str->base_string.fillp;
+        uint l = l_str->base_string.fillp;
         s[++_n_cstr_] = new char[l + 1];
         if(s[_n_cstr_]) {
-            qstrncpy(s[_n_cstr_], (const char*)l_str->base_string.self, l);
-            (s[_n_cstr_])[l] = 0;
+            qstrncpy(s[_n_cstr_], (const char*)l_str->base_string.self, l + 1);
             return &s[_n_cstr_]; }}
     return 0; }
 
@@ -393,10 +392,10 @@ static QByteArray toCString(cl_object l_str) {
         if(ECL_BASE_STRING_P(l_str)) {
             ba = QByteArray((char*)l_str->base_string.self, l_str->base_string.fillp); }
         else {
-            int l = l_str->string.fillp;
+            uint l = l_str->string.fillp;
             ba.reserve(l);
             ecl_character* l_s = l_str->string.self;
-            for(int i = 0; i < l; ++i) {
+            for(uint i = 0; i < l; ++i) {
                 ba[i] = l_s[i]; }}}
     return ba; }
 
@@ -406,10 +405,10 @@ static QString toQString(cl_object l_str) {
         if(ECL_BASE_STRING_P(l_str)) {
             s = QString::fromLatin1((char*)l_str->string.self, l_str->base_string.fillp); }
         else {
-            int l = l_str->string.fillp;
+            uint l = l_str->string.fillp;
             s.reserve(l);
             ecl_character* l_s = l_str->string.self;
-            for(int i = 0; i < l; ++i) {
+            for(uint i = 0; i < l; ++i) {
                 s[i] = QChar(l_s[i]); }}}
     return s; }
 
