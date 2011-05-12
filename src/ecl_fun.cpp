@@ -17,7 +17,6 @@ static bool _check_argument_types_ = true;
 static const char SIG = '2';
 static const char SLO = '1';
 static bool _ok_ = false;
-static int _n_cstr_ = -1;
 static const QMetaObject* staticQtMetaObject = QtMetaObject::get();
 
 // meta types
@@ -194,15 +193,9 @@ void error_msg(const char* fun, cl_object l_args) {
               make_constant_base_string((char*)fun),
               l_args); }
 
-static char** to_cstring(cl_object l_str) {
-    static char* s[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-    ++_n_cstr_;
-    if((_n_cstr_ >= 0) && (_n_cstr_ <= 9)) {
-        uint l = l_str->base_string.fillp;
-        s[++_n_cstr_] = new char[l + 1];
-        if(s[_n_cstr_]) {
-            qstrncpy(s[_n_cstr_], (const char*)l_str->base_string.self, l + 1);
-            return &s[_n_cstr_]; }}
+static char** to_cstring_ptr(cl_object l_str) {
+    if(ECL_BASE_STRING_P(l_str)) {
+        return (char**)&l_str->base_string.self; }
     return 0; }
 
 static const QMetaObject* staticMetaObject(QtObject o) {
@@ -877,8 +870,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
                 void** v = new void*((void*)l);
                 p = v; }
             else if("const char*" == sType) {
-                if(ECL_STRINGP(l_arg)) {
-                    p = to_cstring(l_arg); }}}
+                p = to_cstring_ptr(l_arg); }}
         else if(T_QFileInfo == n)                        p = new QFileInfo(toQFileInfo(l_arg));
         else if(T_QFileInfoList == n)                    p = new QFileInfoList(toQFileInfoList(l_arg));
         else if(T_QGradientStop == n)                    p = new QGradientStop(toQGradientStop(l_arg));
@@ -1127,13 +1119,8 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
         delete (void**)p; }
     else if(sType.endsWith('*')) {
         if("const char*" == sType) {
-            char** s = (char**)p;
             if(is_ret) {
-                delete s; }
-            else {
-                if((_n_cstr_ >= 0) && (_n_cstr_ <= 9)) {
-                    delete[] *s;
-                    --_n_cstr_; }}}
+                delete (char**)p; }}
         else {
             delete (void**)p; }}
     // enums
