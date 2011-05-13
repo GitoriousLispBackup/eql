@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "11.5.2"; // 2011-05-12
+const char EQL::version[] = "11.5.3"; // 2011-05-13
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
@@ -69,12 +69,14 @@ void EQL::exec(const QStringList& args) {
         qquit(); }}
 
 void EQL::exec(lisp_ini ini, const QByteArray& expression, const QByteArray& package) {
+    // see my_app example
     eval(QString("(eql::set-home \"%1\")").arg(home()).toAscii().constData());
     read_VV(OBJNULL, ini);
     si_select_package(make_simple_base_string((char*)package.toUpper().constData()));
     eval(expression.constData()); }
 
-void EQL::exec(QWidget* widget, const QByteArray& file) {
+void EQL::exec(QWidget* widget, const QString& file) {
+    // see Qt_EQL example
     eval(QString("(set-home \"%1\")").arg(home()).toAscii().constData());
     eval(QString(
             "(progn"
@@ -84,6 +86,6 @@ void EQL::exec(QWidget* widget, const QByteArray& file) {
          .arg(QString(LObjects::vanillaQtSuperClassName(widget->metaObject())))
          .toAscii().constData());
     si_select_package(make_simple_base_string((char*)"CL-USER"));
-    eval(QString("(load \"%1\")").arg(QString(file)).toAscii().constData()); }
+    eval(QString("(load \"%1\")").arg(file).toAscii().constData()); }
 
 bool EQL::is_arg_return_value = false;

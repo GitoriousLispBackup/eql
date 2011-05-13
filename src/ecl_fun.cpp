@@ -64,6 +64,7 @@ static const int T_QTextBlock =                       qRegisterMetaType<QTextBlo
 static const int T_QTextCharFormat =                  qRegisterMetaType<QTextCharFormat>("QTextCharFormat");
 static const int T_QTextCursor =                      qRegisterMetaType<QTextCursor>("QTextCursor");
 static const int T_QTextDocumentFragment =            qRegisterMetaType<QTextDocumentFragment>("QTextDocumentFragment");
+static const int T_QTextOption =                      qRegisterMetaType<QTextOption>("QTextOption");
 #if QT_VERSION < 0x40700
 static const int T_QVariant =                         qRegisterMetaType<QVariant>("QVariant");
 #endif
@@ -542,6 +543,7 @@ TO_QT_TYPE_PTR(QTextCursor, qtextcursor)
 TO_QT_TYPE_PTR(QTextDocumentFragment, qtextdocumentfragment)
 TO_QT_TYPE_PTR2(QTextFormat, qtextformat)
 TO_QT_TYPE_PTR2(QTextLength, qtextlength)
+TO_QT_TYPE_PTR(QTextOption, qtextoption)
 TO_QT_TYPE_PTR2(QTime, qtime)
 TO_QT_TYPE_PTR2(QUrl, qurl)
 TO_QT_TYPE_PTR(QVariant, qvariant)
@@ -914,6 +916,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         else if(T_QTextCharFormat == n)                  p = new QTextCharFormat(*toQTextCharFormatPointer(l_arg));
         else if(T_QTextCursor == n)                      p = new QTextCursor(*toQTextCursorPointer(l_arg));
         else if(T_QTextDocumentFragment == n)            p = new QTextDocumentFragment(*toQTextDocumentFragmentPointer(l_arg));
+        else if(T_QTextOption == n)                      p = new QTextOption(*toQTextOptionPointer(l_arg));
 #if QT_VERSION < 0x40700
         else if(T_QVariant == n)                         p = new QVariant(*toQVariantPointer(l_arg));
 #endif
@@ -1064,6 +1067,7 @@ cl_object to_lisp_arg(const MetaArg& arg) {
             else if(T_QTextCharFormat == n)                  l_ret = from_qtextcharformat(*(QTextCharFormat*)p);
             else if(T_QTextCursor == n)                      l_ret = from_qtextcursor(*(QTextCursor*)p);
             else if(T_QTextDocumentFragment == n)            l_ret = from_qtextdocumentfragment(*(QTextDocumentFragment*)p);
+            else if(T_QTextOption == n)                      l_ret = from_qtextoption(*(QTextOption*)p);
 #if QT_VERSION < 0x40700
             else if(T_QVariant)                              l_ret = from_qvariant(*(QVariant*)p);
 #endif
@@ -1814,6 +1818,7 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
                 else if(type == T_QTextCharFormat)            ret = qVariantFromValue(*(QTextCharFormat*)o.pointer);
                 else if(type == T_QTextCursor)                ret = qVariantFromValue(*(QTextCursor*)o.pointer);
                 else if(type == T_QTextDocumentFragment)      ret = qVariantFromValue(*(QTextDocumentFragment*)o.pointer);
+                else if(type == T_QTextOption)                ret = qVariantFromValue(*(QTextOption*)o.pointer);
 #if QT_VERSION < 0x40700
                 else if(type == T_QVariant)                   ret = qVariantFromValue(*(QVariant*)o.pointer);
 #endif

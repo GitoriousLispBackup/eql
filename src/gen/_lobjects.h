@@ -21,6 +21,7 @@ Q_DECLARE_METATYPE(QTextBlock)
 Q_DECLARE_METATYPE(QTextCharFormat)
 Q_DECLARE_METATYPE(QTextCursor)
 Q_DECLARE_METATYPE(QTextDocumentFragment)
+Q_DECLARE_METATYPE(QTextOption)
 
 class EQL;
 class DynObject;
