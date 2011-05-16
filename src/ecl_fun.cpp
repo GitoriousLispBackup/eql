@@ -2079,7 +2079,9 @@ cl_object qload_ui(cl_object l_ui) {
             QWidget* w = loader.load(&file);
             file.close();
             if(w) {
-                cl_object l_ret = qt_object_from_name(w->metaObject()->className(), w);
+                cl_object l_ret = qt_object_from_name(LObjects::vanillaQtSuperClassName(w->metaObject()),
+                                                      w,
+                                                      LObjects::ui_unique.value(w->objectName(), 0));
                 return  l_ret; }}}
     error_msg("QLOAD-UI", LIST1(l_ui));
     return Cnil; }
