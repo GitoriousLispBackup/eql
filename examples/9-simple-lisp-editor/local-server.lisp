@@ -55,7 +55,7 @@
   (if (qfun *server* "listen" name)
       (progn
         (ini-streams)
-        (set-debugger-hook)
+        ;;(set-debugger-hook) ; please don't enable for now!
         (setf si::*tpl-print-current-hook* 'send-file-position)
         (qset (qapp) "quitOnLastWindowClosed" nil)
         (qconnect *server* "newConnection()" 'new-client-connection)
@@ -190,6 +190,7 @@
 
 (let (msg)
   (defun set-debugger-hook ()
+    ;; please don't use, work in progress...
     "Kind of an 'emergency exit' for errors not caught by HANDLE-DEBUG-IO."
     (setf *debugger-hook* (lambda (cond x)
                             (unless (eql 'si:interactive-interrupt (type-of cond))
