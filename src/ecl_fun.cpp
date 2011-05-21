@@ -130,7 +130,7 @@ QByteArray QtObject::idToClassName(int id) {
     return (id > 0) ? LObjects::qNames.at(id - 1) : LObjects::nNames.at(-id - 1); }
 
 QByteArray QtObject::className() const {
-    return id ? idToClassName(id) : QByteArray(); }
+    return id ? idToClassName(id) : QByteArray("?"); }
 
 class LUiLoader : public QUiLoader {
 public:
@@ -397,7 +397,7 @@ static QString toQString(cl_object l_str) {
     QString s;
     if(ECL_STRINGP(l_str)) {
         if(ECL_BASE_STRING_P(l_str)) {
-            s = QString::fromLatin1((char*)l_str->string.self, l_str->base_string.fillp); }
+            s = QString::fromLatin1((char*)l_str->base_string.self, l_str->base_string.fillp); }
         else {
             uint l = l_str->string.fillp;
             s.reserve(l);
@@ -494,6 +494,8 @@ static QPolygonF toQPolygonF(cl_object l_lst) {
     return p; }
 
 static QColor toQColor(cl_object l_c) {
+    if(Cnil == l_c) {
+        return QColor(); }
     return QColor(toQString(l_c)); }
 
 static QGradientStop toQGradientStop(cl_object l_gs) {
@@ -683,8 +685,8 @@ static cl_object from_qreallist(const QList<qreal>& l) {
         l_lst = CONS(ecl_make_doublefloat(r), l_lst); }
     return cl_nreverse(l_lst); }
 
-static cl_object from_qcolor(const QColor& c) {
-    return from_qstring(c.name()); }
+static cl_object from_qcolor(const QColor& col) {
+    return col.isValid() ? from_qstring(col.name()) : Cnil; }
 
 static cl_object from_qpolygon(const QPolygon& p) {
     cl_object l_lst = Cnil;
@@ -1610,7 +1612,7 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
                                (types.at(i).startsWith('Q')) &&
                                !types.at(i).contains(':') &&
                                !types.at(i).endsWith('>')) {
-                                if(!strstr("QByteArray QChar QColor QGradientStop QLineF QPointF QPolygonF QRectF QRgb QSizeF QString QStringList", // primitives
+                                if(!strstr("QByteArray QChar QColor QGradientStop QLineF QPointF QPolygonF QRectF QRgb QSizeF QStringList", // primitives
                                            types.at(i))) {
                                     QByteArray name1(types.at(i));
                                     if(name1.endsWith('*')) {
@@ -2067,7 +2069,8 @@ cl_object qstatic_meta_object(cl_object l_class) {
 
 cl_object qload_ui(cl_object l_ui) {
     /// args: (file)
-    /// Calls a custom <code>QUiLoader::load()</code> function, loading a UI file created by Qt Designer. Returns the top level widget of the UI. Use <code>qfind-child</code> to retrieve the child widgets.
+    /// Calls a custom <code>QUiLoader::load()</code> function, loading a UI file created by Qt Designer. Returns the top level widget of the UI.<br>Use <code>qfind-child</code> to retrieve the child widgets.
+    ///     (qload-ui "my-fancy-gui.ui")
     ecl_process_env()->nvalues = 1;
     QString ui(toQString(l_ui));
     if(!ui.isEmpty()) {

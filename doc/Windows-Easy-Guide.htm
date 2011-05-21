@@ -25,7 +25,7 @@ Included you find ECL, EQL, Qt (except sources), and a compiled Slime.
 <tr><td>ECL install path</td><td><code>C:\ecl\msvc\package</code></td></tr>
 <tr><td>Qt</td><td><code>C:\qt\4.x.x</code></td></tr>
 <tr><td>Emacs</td><td><code>C:\emacs</code></td></tr>
-<tr><td>SLIME</td><td><code>C:\emacs\slime</code></td></tr>
+<tr><td>Slime</td><td><code>C:\emacs\slime</code></td></tr>
 <tr><td>EQL</td><td><code>C:\eql</code></td></tr>
 </table>
 <p>Install the free <a href="http://www.microsoft.com/express/Downloads/#Visual_Studio_2008_Express_Downloads">Visual C++ 2008 Express Edition</a> (you may uncheck both of SQL Server and .NET, as you probably don't need them).</p>
@@ -68,10 +68,10 @@ Make sure all of the following are in your <code>Path</code> environment variabl
 <li>Unpack it to <code>C:\emacs</code>.
 <li>To launch it, run <code>C:\emacs\bin\runemacs.exe</code>.
 </ul>
-<p>Get <a href="http://common-lisp.net/project/slime/">SLIME</a>. Choose the <b>cvs snapshot</b> (slime-current.tgz)</a>.
+<p>Get <a href="http://common-lisp.net/project/slime/">Slime</a>. Choose the <b>cvs snapshot</b> (slime-current.tgz)</a>.
 <ul>
 <li>Unpack it to <code>C:\emacs\slime</code>.
-<li>Patch your <code>C:\emacs\slime\swank-backend.lisp</code> (see EQL documentation). This will make your SLIME interactive (processing Qt events).
+<li>Patch your <code>C:\emacs\slime\swank-backend.lisp</code> (see EQL documentation). This will make your Slime interactive (processing Qt events).
 <li>Open your <code>C:\emacs\slime\swank-loader.lisp</code>, and insert the following lines at the top of the file (important: choose a path with <b>no spaces</b>). 
 <pre>
 (make-package :swank-loader)
@@ -95,7 +95,7 @@ The last step is your <code>.emacs</code> file.
   (require 'slime)
   (slime-setup '(slime-fancy))
 </pre>
-After firing up Emacs, and hitting <code>Meta-X slime</code>, your SLIME should compile and run.
+After firing up Emacs, and hitting <code>Meta-X slime</code>, your Slime should compile and run.
 <br>As a final test, try this: <code>(eql:qgui)</code>.
 <br><br>
 </body>

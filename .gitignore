@@ -16,6 +16,8 @@
 #*.*#
 _*
 .*.lisp
+.*.ui
+.*.txt
 *.user
 r
 t.lisp

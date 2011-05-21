@@ -1324,7 +1324,6 @@
 
 (defun set-debugger-hook ()
   (setf *debugger-hook* (lambda (&rest args)
-                          (setf *debugger-hook* nil)
                           (when (= |QMessageBox.Save|
                                    (qfun "QMessageBox" "critical" nil "EQL"
                                          (tr "<p>Internal editor error, sorry.</p><p>Save changes?</p>")

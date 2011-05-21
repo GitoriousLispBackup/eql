@@ -19,7 +19,7 @@ REQUIREMENTS
 
 * ECL >= 10.4 Unicode (./configure --enable-unicode)
 * Qt  >= 4.6 http://qt.nokia.com/
-* SLIME from CVS (e.g. 2010-06-01)
+* Slime from CVS (e.g. 2010-06-01)
 
 
 

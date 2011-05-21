@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
     QTextCodec::setCodecForTr(utf8);
 
 #ifdef Q_OS_WIN
-    // necessary when using SLIME
+    // necessary when using Slime
     { QWidget ini; ini.setGeometry(0, 0, 0, 0); ini.show(); ini.close(); }
 #endif
 
