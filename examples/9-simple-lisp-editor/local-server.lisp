@@ -55,7 +55,6 @@
   (if (qfun *server* "listen" name)
       (progn
         (ini-streams)
-        ;;(set-debugger-hook) ; please don't enable for now!
         (setf si::*tpl-print-current-hook* 'send-file-position)
         (qset (qapp) "quitOnLastWindowClosed" nil)
         (qconnect *server* "newConnection()" 'new-client-connection)
@@ -187,20 +186,5 @@
                                    eql::*code-font*)))
     (send-to-client :activate-editor)
     (format nil "~A~%" (if (x:empty-string cmd) ":q" cmd))))
-
-(let (msg)
-  (defun set-debugger-hook ()
-    ;; please don't use, work in progress...
-    "Kind of an 'emergency exit' for errors not caught by HANDLE-DEBUG-IO."
-    (setf *debugger-hook* (lambda (cond x)
-                            (unless (eql 'si:interactive-interrupt (type-of cond))
-                              (unless msg
-                                (setf msg t)
-                                (princ cond)
-                                (terpri)
-                                (qfun "QMessageBox" "critical" nil "EQL"
-                                      (format nil "<p style='color:red'><b>~A</b></p><p>Serious <b>local-server</b> error.<br>Please use the terminal to enter debug commands.<br></p>"
-                                              cond)))
-                              (break))))))
 
 (ini)

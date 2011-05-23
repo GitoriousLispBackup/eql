@@ -1702,31 +1702,19 @@ cl_object qsender() {
     error_msg("QSENDER", Cnil);
     return Cnil; }
 
+static cl_object call_lisp_fun(cl_object l_fun, cl_object l_args) {
+    cl_object l_ret = Cnil;
+    CL_CATCH_ALL_BEGIN(ecl_process_env()) {
+        l_ret = cl_apply(2, l_fun, l_args); }
+    CL_CATCH_ALL_END;
+    return l_ret; }
+
 void callConnectFun(void* fun, const StrList& types, void** args) {
-    cl_object l_fun = (cl_object)fun;
     int i = 0;
-    MetaArgList mArgs;
+    cl_object l_args = Cnil;
     Q_FOREACH(QByteArray type, types) {
-        mArgs << MetaArg(type, args[++i]); }
-    switch(types.size()) {
-        case 0: cl_funcall(1, l_fun);
-            break;
-        case 1: cl_funcall(2, l_fun, to_lisp_arg(mArgs.at(0)));
-            break;
-        case 2: cl_funcall(3, l_fun,
-                           to_lisp_arg(mArgs.at(0)),
-                           to_lisp_arg(mArgs.at(1)));
-            break;
-        case 3: cl_funcall(4, l_fun,
-                           to_lisp_arg(mArgs.at(0)),
-                           to_lisp_arg(mArgs.at(1)),
-                           to_lisp_arg(mArgs.at(2)));
-            break;
-        default: {
-            cl_object l_args = Cnil;
-            Q_FOREACH(MetaArg arg, mArgs) {
-                l_args = CONS(to_lisp_arg(arg), l_args); }
-            cl_apply(2, l_fun, cl_nreverse(l_args)); }}}
+        l_args = CONS(to_lisp_arg(MetaArg(type, args[++i])), l_args); }
+    call_lisp_fun((cl_object)fun, cl_nreverse(l_args)); }
 
 cl_object qoverride(cl_object l_obj, cl_object l_name, cl_object l_fun) {
     /// args: (object name function)
@@ -1753,34 +1741,14 @@ cl_object qcall_default() {
 
 QVariant callOverrideFun(void* fun, int id, const void** args) {
     int n = id - 1;
-    cl_object l_fun = (cl_object)fun;
-    MetaArgList mArgs;
     int i = 0;
     const char* type = 0;
+    cl_object l_args = Cnil;
     while((type = LObjects::override_arg_types[n][i + 1])) {
-        mArgs << MetaArg(type, (void*)args[i]);
+        l_args = CONS(to_lisp_arg(MetaArg(type, (void*)args[i])), l_args);
         ++i; }
-    cl_object l_ret = Cnil;
     LObjects::call_default = false; // see qcall_default()
-    switch(i) {
-        case 0: l_ret = cl_funcall(1, l_fun);
-            break;
-        case 1: l_ret = cl_funcall(2, l_fun, to_lisp_arg(mArgs.at(0)));
-            break;
-        case 2: l_ret = cl_funcall(3, l_fun,
-                                   to_lisp_arg(mArgs.at(0)),
-                                   to_lisp_arg(mArgs.at(1)));
-            break;
-        case 3: l_ret = cl_funcall(4, l_fun,
-                                   to_lisp_arg(mArgs.at(0)),
-                                   to_lisp_arg(mArgs.at(1)),
-                                   to_lisp_arg(mArgs.at(2)));
-            break;
-        default: {
-            cl_object l_args = Cnil;
-            Q_FOREACH(MetaArg arg, mArgs) {
-                l_args = CONS(to_lisp_arg(arg), l_args); }
-            l_ret = cl_apply(2, l_fun, cl_nreverse(l_args)); }}
+    cl_object l_ret = call_lisp_fun((cl_object)fun, cl_nreverse(l_args));
     QVariant ret;
     const char* ret_type = LObjects::override_arg_types[n][0];
     if(ret_type) {
@@ -1848,9 +1816,9 @@ bool callEventFun(void* fun, QObject* obj, QEvent* ev) {
     if(fun) {
         if(obj->objectName().endsWith("viewport")) {
             obj = obj->parent(); }
-        return (cl_funcall(3, (cl_object)fun,
-                           qt_object_from_name(obj->metaObject()->className(), (void*)obj),
-                           qt_object_from_name("QEvent", (void*)ev))
+        return (call_lisp_fun((cl_object)fun,
+                              LIST2(qt_object_from_name(obj->metaObject()->className(), (void*)obj),
+                                    qt_object_from_name("QEvent", (void*)ev)))
                 != Cnil); }
     return true; }
 
