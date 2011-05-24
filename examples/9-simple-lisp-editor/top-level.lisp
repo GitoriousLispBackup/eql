@@ -95,6 +95,8 @@
                  (setf *latest-form*   -
                        *latest-values* values)))))
       (loop
+        (when (eql :eof *read-string*)
+          (return))
         (when
             (catch *quit-tag*
               (if (zerop break-level)
@@ -110,17 +112,15 @@
 (defun %tpl-read (&aux (*read-suppress* nil))
   (eql:qprocess-events)
   (finish-output)
-  (cond ((eql :eof *read-string*)
-         (tpl-make-command :eof ""))
-        (*read-string*
-         (prog1
-             (multiple-value-bind (exp err)
-                 (ignore-errors (read-from-string *read-string*))
-               (if exp
-                   (progn
-                     (setf +++ ++ ++ + + *latest-form*
-                           *** ** ** * * (first *latest-values*)
-                           /// // // / / *latest-values*)
-                     exp)
-                   err))
-           (setf *read-string* :eof)))))
+  (when *read-string*
+    (prog1
+        (multiple-value-bind (exp err)
+            (ignore-errors (read-from-string *read-string*))
+          (if exp
+              (progn
+                (setf +++ ++ ++ + + *latest-form*
+                      *** ** ** * * (first *latest-values*)
+                      /// // // / / *latest-values*)
+                exp)
+              err))
+      (setf *read-string* :eof))))

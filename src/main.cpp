@@ -23,18 +23,14 @@ int main(int argc, char** argv) {
     QStringList args(QCoreApplication::arguments());
     if(args.contains("-h") || (args.contains("--help"))) {
 #ifdef Q_OS_WIN
-        std::cout << "Usage: eql [-qgui] [-io] [file]" << std::endl;
+        std::cout << "Usage: eql [-qgui] [file]" << std::endl;
 #else
-        std::cout << "Usage: eql [-qgui] [-qtpl] [-io] [file]" << std::endl;
+        std::cout << "Usage: eql [-qgui] [-qtpl] [file]" << std::endl;
 #endif
         exit(0); }
     if(args.contains("-v") || args.contains("--version")) {
         std::cout << "EQL " << EQL::version << std::endl;
         exit(0); }
-    bool io = false;
-    if(args.contains("-io")) {
-        args.removeAll("-io");
-        io = true; }
 
     QTextCodec* utf8 = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForCStrings(utf8);
@@ -48,6 +44,4 @@ int main(int argc, char** argv) {
     EQL eql;
     eql.exec(args);
 
-    if(!io) {
-      return catch_all_qexec(); }
-    return qapp.exec(); }
+    return catch_all_qexec(); }

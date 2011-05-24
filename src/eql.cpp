@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "11.5.6"; // 2011-05-24
+const char EQL::version[] = "11.5.7"; // 2011-05-24
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
@@ -36,7 +36,9 @@ QString EQL::home() {
 
 void EQL::singleShot() {
     if(fun) {
-        cl_funcall(1, (cl_object)fun);
+        CL_CATCH_ALL_BEGIN(ecl_process_env()) {
+            cl_funcall(1, (cl_object)fun); }
+        CL_CATCH_ALL_END;
         fun = 0; }}
 
 void EQL::exec(const QStringList& args) {

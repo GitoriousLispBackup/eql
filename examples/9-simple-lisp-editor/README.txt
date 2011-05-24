@@ -8,7 +8,7 @@ Run it:
   0) You'll need the :network module (see QREQUIRE).
 
   1) Run the independent local Lisp server:
-      eql -io local-server
+      eql local-server
 
   2) Run the editor:
       eql editor <file>.lisp (defaults to "my.lisp")
