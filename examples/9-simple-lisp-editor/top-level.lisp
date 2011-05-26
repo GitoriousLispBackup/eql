@@ -4,7 +4,6 @@
 
 (in-package :si)
 
-(defvar *tpl-debug-io*           nil)
 (defvar *tpl-print-current-hook* nil)
 
 (defparameter *read-string*   nil)
@@ -35,8 +34,7 @@
     (let ((*debugger-hook* nil)
           -)
       (setq *lisp-initialized* t)
-      (let ((*tpl-level* -1)
-            (*debug-io* *tpl-debug-io*))
+      (let ((*tpl-level* -1))
         (%tpl))
       0)))
 

@@ -38,6 +38,7 @@
 (defvar *trace-output-buffer*    (make-string-output-stream))
 (defvar *error-output-buffer*    (make-string-output-stream))
 (defvar *terminal-out-buffer*    (make-string-output-stream))
+(defvar *gui-debug-io*)
 
 ;; REPL variables
 (defvar +   nil)
@@ -55,6 +56,7 @@
   (if (qfun *server* "listen" name)
       (progn
         (ini-streams)
+        (set-debugger-hook)
         (setf si::*tpl-print-current-hook* 'send-file-position)
         (qset (qapp) "quitOnLastWindowClosed" nil)
         (qconnect *server* "newConnection()" 'new-client-connection)
@@ -76,13 +78,13 @@
                                                  *trace-output-buffer*)
         *error-output*    (make-broadcast-stream *error-output*
                                                  *error-output-buffer*))
-  (setf *terminal-io*      (make-two-way-stream (two-way-stream-input-stream *terminal-io*)
-                                                (make-broadcast-stream (two-way-stream-output-stream *terminal-io*)
-                                                                       *terminal-out-buffer*))
-        *query-io*         (make-two-way-stream (input-hook:new 'handle-query-io)
-                                                (two-way-stream-output-stream *terminal-io*))
-        si::*tpl-debug-io* (make-two-way-stream (input-hook:new 'handle-debug-io)
-                                                (two-way-stream-output-stream *terminal-io*))))
+  (setf *terminal-io*  (make-two-way-stream (two-way-stream-input-stream *terminal-io*)
+                                            (make-broadcast-stream (two-way-stream-output-stream *terminal-io*)
+                                                                   *terminal-out-buffer*))
+        *query-io*     (make-two-way-stream (input-hook:new 'handle-query-io)
+                                            (two-way-stream-output-stream *terminal-io*))
+        *gui-debug-io* (make-two-way-stream (input-hook:new 'handle-debug-io)
+                                            (two-way-stream-output-stream *terminal-io*))))
 
 (let (size bytes-read data)
   (defun reset-data ()
@@ -97,6 +99,7 @@
     (when *function*
       (let ((all (qfun *client* "readAll")))
         ;; data may arrive splitted in more blocks
+        (x:d (x:bytes-to-string all))
         (if size
             (when (< bytes-read size)
               (push all data)
@@ -144,11 +147,17 @@
 
 (defun start-top-level ()
   (send-output :expression *standard-output-buffer*)
+  (setf *debug-io* *gui-debug-io*)
+  (clear-gui-debug-buffers)
   (si::%top-level)
   (send-output :error  *error-output-buffer*)
   (send-output :trace  *trace-output-buffer*)
   (send-output :output *standard-output-buffer*)
   (send-to-client :values (format nil "~{~%~S~}" si::*latest-values*)))
+
+(defun clear-gui-debug-buffers ()
+  (get-output-stream-string *error-output-buffer*)
+  (get-output-stream-string *terminal-out-buffer*))
 
 (defun clear ()
   "To use from a client to clear the output buffer. See also function OUTPUT."
@@ -185,6 +194,12 @@
                                          (cons (get-output-stream-string *terminal-out-buffer*) "black"))
                                    eql::*code-font*)))
     (send-to-client :activate-editor)
-    (format nil "~A~%" (if (x:empty-string cmd) ":q" cmd))))
+    (format nil "~A~%" (if (x:empty-string cmd) ":exit" cmd))))
+
+(defun set-debugger-hook ()
+  (setf *debugger-hook* (lambda (cond x)
+                          ;; allow terminal input after console interrupts
+                          (when (eql 'si:interactive-interrupt (type-of cond))
+                            (setf *debug-io* *terminal-io*)))))
 
 (ini)

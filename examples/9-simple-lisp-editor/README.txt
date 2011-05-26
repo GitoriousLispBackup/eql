@@ -61,14 +61,7 @@ Auto indent note: hitting the Ctrl+Tab keys will auto indent the paragraph
 starting from the current line until the next empty line found.
 
 On errors, the local Lisp server will pop up a debug dialog, asking for an
-ECL debug command.
-This happens only for forms evaluated interactively (command line, eval region),
-and not for functions eventually called by:
-  qconnect
-  qoverride
-  qsingle-shot
-  qadd-event-filter
-which errors are instead handled in the terminal.
+ECL debug command (even for internal errors of "local-server.lisp").
 
 If you want to pause/continue the local-server process, use the usual Ctrl+C
 (terminal command) and :c (ECL command).

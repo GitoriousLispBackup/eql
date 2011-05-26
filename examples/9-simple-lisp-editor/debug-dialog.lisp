@@ -34,7 +34,7 @@
     (add-messages msg messages)
     (if (= |QDialog.Accepted| (qfun dlg "exec"))
         (qget cmd "text")
-        ":q")))
+        ":exit")))
 
 (defun set-color (widget role color)
   (let ((pal (qget widget "palette")))
