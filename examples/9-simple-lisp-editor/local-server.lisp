@@ -99,7 +99,6 @@
     (when *function*
       (let ((all (qfun *client* "readAll")))
         ;; data may arrive splitted in more blocks
-        (x:d (x:bytes-to-string all))
         (if size
             (when (< bytes-read size)
               (push all data)
