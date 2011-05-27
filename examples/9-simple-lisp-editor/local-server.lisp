@@ -136,12 +136,11 @@
   (let ((str (get-output-stream-string var)))
     (unless (x:empty-string str)
       (when (eql :output type)
-        ;; cut prompts
-        (let ((p1 (position #\> str))
-              (p2 (position #\Newline str :from-end t)))
-          (when (and p1 p2)
-            (incf p1)
-            (setf str (subseq str p1 (max p1 p2))))))
+        ;; cut prompt
+        (let ((p (position #\> str)))
+          (when p
+            (incf p)
+            (setf str (subseq str p)))))
       (send-to-client type str))))
 
 (defun start-top-level ()

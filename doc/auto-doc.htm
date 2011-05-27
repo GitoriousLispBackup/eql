@@ -65,6 +65,16 @@
 </pre>
 </p><br>
 <p>
+<b>QDISCONNECT (caller &optional signal receiver slot)</b>
+<p>Disconnects signals to either Qt slots or Lisp functions. Everything but the caller can be either <code>NIL</code> or omitted.</p>
+<pre>
+  (qdisconnect edit "textChanged(QString)" label "setText(QString)")
+  (qdisconnect edit "textChanged(QString)")
+  (qdisconnect edit nil label)
+  (qdisconnect edit)
+</pre>
+</p><br>
+<p>
 <b>QEQL (object1 object2)</b>
 <p>Returns <code>T</code> for same instances of a Qt class.</p>
 </p><br>

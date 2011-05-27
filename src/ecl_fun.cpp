@@ -89,9 +89,10 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object((char*)"qapp"),                 (cl_objectfn_fixed)qapp,                     0);
     cl_def_c_function(c_string_to_object((char*)"qcall-default"),        (cl_objectfn_fixed)qcall_default,            0);
     cl_def_c_function(c_string_to_object((char*)"qclear-event-filters"), (cl_objectfn_fixed)qclear_event_filters,     0);
-    cl_def_c_function(c_string_to_object((char*)"%qconnect"),            (cl_objectfn_fixed)qconnect2,                5);
+    cl_def_c_function(c_string_to_object((char*)"%qconnect"),            (cl_objectfn_fixed)qconnect2,                4);
     cl_def_c_function(c_string_to_object((char*)"qcopy"),                (cl_objectfn_fixed)qcopy,                    1);
     cl_def_c_function(c_string_to_object((char*)"%qdelete"),             (cl_objectfn_fixed)qdelete2,                 2);
+    cl_def_c_function(c_string_to_object((char*)"%qdisconnect"),         (cl_objectfn_fixed)qdisconnect2,             4);
     cl_def_c_function(c_string_to_object((char*)"qenum"),                (cl_objectfn_fixed)qenum,                    2);
     cl_def_c_function(c_string_to_object((char*)"qescape"),              (cl_objectfn_fixed)qescape,                  1);
     cl_def_c_function(c_string_to_object((char*)"qexec"),                (cl_objectfn_fixed)qexec,                    0);
@@ -1658,14 +1659,14 @@ static void* getLispFun(cl_object l_fun) {
     cl_object l_ret = cl_funcall(3, s_get_function, l_fun, cl_find_package(cl_symbol_value(s_package)));
     return (Cnil == l_ret) ? 0 : (void*)l_ret; }
 
-cl_object qconnect2(cl_object l_caller, cl_object l_signal, cl_object l_receiver, cl_object l_slot, cl_object l_dis) {
+cl_object qconnect2(cl_object l_caller, cl_object l_signal, cl_object l_receiver, cl_object l_slot) {
     /// args: (caller signal receiver slot)
     /// Connects either a Qt signal to a Qt slot, or a Qt signal to a Lisp function.
     ///     (qconnect edit "textChanged(QString)" label "setText(QString)")
     ///     (qconnect edit "textChanged(QString)" (lambda (txt) (print txt)))
     ecl_process_env()->nvalues = 1;
-    QtObject o1 = toQtObject(l_caller);
     if(ECL_STRINGP(l_signal)) {
+        QtObject o1 = toQtObject(l_caller);
         if(o1.isQObject() && o1.pointer) {
             QByteArray signal(QMetaObject::normalizedSignature(toCString(l_signal)));
             if(ECL_STRINGP(l_slot)) {
@@ -1673,22 +1674,53 @@ cl_object qconnect2(cl_object l_caller, cl_object l_signal, cl_object l_receiver
                 if(o2.isQObject() && o2.pointer) {
                     QByteArray slot(QMetaObject::normalizedSignature(toCString(l_slot)));
                     if(QMetaObject::checkConnectArgs(signal, slot)) {
-                        if(Ct == l_dis) {
-                            if(QObject::disconnect((QObject*)o1.pointer, SIG + signal, (QObject*)o2.pointer, SLO + slot)) {
-                                return Ct; }}
-                        else {
-                            if(QObject::connect((QObject*)o1.pointer, SIG + signal, (QObject*)o2.pointer, SLO + slot)) {
-                                return Ct; }}}}}
+                        if(QObject::connect((QObject*)o1.pointer, SIG + signal, (QObject*)o2.pointer, SLO + slot)) {
+                            return Ct; }}}}
             else if(Cnil == l_slot) {
                 void* fun = getLispFun(l_receiver);
                 if(fun) {
-                    if(Ct == l_dis) {
-                        if(DynObject::disconnect((QObject*)o1.pointer, SIG + signal, LObjects::dynObject, fun)) {
-                            return Ct; }}
-                    else {
-                        if(DynObject::connect((QObject*)o1.pointer, SIG + signal, LObjects::dynObject, fun)) {
-                            return Ct; }}}}}}
-    error_msg("QCONNECT", LIST5(l_caller, l_signal, l_receiver, l_slot, l_dis));
+                    if(DynObject::connect((QObject*)o1.pointer, SIG + signal, LObjects::dynObject, fun)) {
+                        return Ct; }}}}}
+    error_msg("QCONNECT", LIST4(l_caller, l_signal, l_receiver, l_slot));
+     return Cnil; }
+
+cl_object qdisconnect2(cl_object l_caller, cl_object l_signal, cl_object l_receiver, cl_object l_slot) {
+    /// args: (caller &optional signal receiver slot)
+    /// Disconnects signals to either Qt slots or Lisp functions. Everything but the caller can be either <code>NIL</code> or omitted.
+    ///     (qdisconnect edit "textChanged(QString)" label "setText(QString)")
+    ///     (qdisconnect edit "textChanged(QString)")
+    ///     (qdisconnect edit nil label)
+    ///     (qdisconnect edit)
+    ecl_process_env()->nvalues = 1;
+    QtObject o1 = toQtObject(l_caller);
+    if(o1.isQObject() && o1.pointer) {
+        QtObject o2 = toQtObject(l_receiver);
+        QByteArray signal(toCString(l_signal));
+        QByteArray slot(toCString(l_slot));
+        if(!signal.isEmpty()) {
+            signal = QMetaObject::normalizedSignature(signal);
+            signal.prepend(SIG); }
+        if(!slot.isEmpty()) {
+            slot = QMetaObject::normalizedSignature(slot);
+            slot.prepend(SLO); }
+        bool lisp = (l_receiver != Cnil) && !o2.pointer;
+        void* lisp_fun = lisp ? getLispFun(l_receiver) : 0;
+        bool ok = false;
+        if(!lisp) {
+            if(QObject::disconnect((QObject*)o1.pointer,
+                                   signal.isEmpty() ? 0: signal.constData(),
+                                   o2.isQObject() ? (QObject*)o2.pointer : 0,
+                                   slot.isEmpty() ? 0 : slot.constData())) {
+                ok = true; }}
+        if(lisp_fun) {
+            if(DynObject::disconnect((QObject*)o1.pointer,
+                                     signal.isEmpty() ? 0 : signal.constData(),
+                                     LObjects::dynObject,
+                                     lisp_fun)) {
+                ok = true; }}
+        if(ok) {
+            return Ct; }}
+    error_msg("QDISCONNECT", LIST4(l_caller, l_signal, l_receiver, l_slot));
     return Cnil; }
 
 cl_object qsender() {

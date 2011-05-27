@@ -19,6 +19,7 @@ public:
     bool filters;
     QList<void*> functions;
     QList<StrList> types;
+    StrList signal_names;
     QList<QObject*> senders;
     QVector<int> ev_types;
     QVector<void*> ev_funs;

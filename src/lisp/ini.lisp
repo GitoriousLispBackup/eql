@@ -156,10 +156,10 @@
   (%qinvoke-method obj name slot args))
 
 (defun qconnect (from signal to &optional slot)
-  (%qconnect from signal to slot nil))
+  (%qconnect from signal to slot))
 
-(defun qdisconnect (from signal to &optional slot)
-  (%qconnect from signal to slot t))
+(defun qdisconnect (from &optional signal to slot)
+  (%qdisconnect from signal to slot))
 
 (defun qobject-names (&optional type)
   (%qobject-names type))

@@ -94,6 +94,7 @@
                        *latest-values* values)))))
       (loop
         (when (eql :eof *read-string*)
+          (finish-output)
           (return))
         (when
             (catch *quit-tag*
