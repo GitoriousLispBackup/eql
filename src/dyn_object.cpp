@@ -29,27 +29,17 @@ bool DynObject::connect(QObject* from, const char* signal, DynObject* dyn, void*
 
 bool DynObject::disconnect(QObject* from, const char* signal, DynObject* dyn, void* fun) {
     int id_sig = signal ? from->metaObject()->indexOfSignal(signal + 1) : -1;
-    int id = -1;
+    int id_slot = -1;
+    bool ok = false;
     Q_FOREACH(void* curr, dyn->functions) {
-        ++id;
-        if(id_sig != -1) {
-            int id_slot = dyn->functions.indexOf(fun);
-            if(id_slot != -1) {
-                dyn->functions[id_slot] = 0;
-                dyn->types[id_slot].clear();
-                dyn->senders[id_slot] = 0;
-                return QMetaObject::disconnect(from, id_sig, dyn, id_slot); }
-            return false; }
-        if(fun) {
-            if(curr == fun) {
-                dyn->functions[id] = 0;
-                dyn->types[id].clear();
-                dyn->senders[id] = 0;
-                if(!QMetaObject::disconnect(from, -1, dyn, id)) {
-                    return false; }}}
-        else {
-            return false; }}
-    return true; }
+        ++id_slot;
+        if(curr == fun) {
+            dyn->functions[id_slot] = 0;
+            dyn->types[id_slot].clear();
+            dyn->senders[id_slot] = 0;
+            if(QMetaObject::disconnect(from, id_sig, dyn, id_slot)) {
+                ok = true; }}}
+    return ok; }
 
 void DynObject::addEventFilter(QObject* obj, int type, void* fun) {
     filters = true;
