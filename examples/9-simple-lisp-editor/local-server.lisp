@@ -25,7 +25,8 @@
    #:*function*
    #:ini
    #:clear
-   #:output))
+   #:output
+   #:send-to-client))
 
 (provide :local-server)
 
@@ -87,11 +88,15 @@
                                             (two-way-stream-output-stream *terminal-io*))))
 
 (let (size bytes-read data)
-  (defun reset-data ()
+  (defun reset (&optional data-only)
+    (unless data-only
+      (when (and *client* (not (qnull-object *client*)))
+        (qdisconnect *client*)
+        (qdel *client*)))
     (setf size nil
           data nil))
   (defun new-client-connection ()
-    (reset-data)
+    (reset)
     (setf *client* (qfun *server* "nextPendingConnection"))
     (qconnect *client* "readyRead()" 'read-from-client)
     (qconnect *client* "disconnected()" (lambda () (qdel *client* :later))))
@@ -111,7 +116,7 @@
               (setf bytes-read (length (first data)))))
         (when (= size bytes-read)
           (funcall *function* (qfrom-utf8 (apply 'concatenate 'vector (nreverse data))))
-          (reset-data))))))
+          (reset :data-only))))))
 
 (defun current-package-name ()
   (if (eql (find-package :cl-user) *package*)
@@ -137,10 +142,8 @@
     (unless (x:empty-string str)
       (when (eql :output type)
         ;; cut prompt
-        (let ((p (position #\> str)))
-          (when p
-            (incf p)
-            (setf str (subseq str p)))))
+        (x:when-it (position #\> str)
+          (setf str (subseq str (1+ x:it)))))
       (send-to-client type str))))
 
 (defun start-top-level ()

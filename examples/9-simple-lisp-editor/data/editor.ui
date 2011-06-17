@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>583</width>
+    <width>605</width>
     <height>435</height>
    </rect>
   </property>
@@ -118,6 +118,20 @@
         </property>
        </spacer>
       </item>
+      <item>
+       <widget class="QLabel" name="q_label">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="select">
+        <property name="text">
+         <string>Select</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
    </layout>
@@ -127,7 +141,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>583</width>
+     <width>605</width>
      <height>19</height>
     </rect>
    </property>

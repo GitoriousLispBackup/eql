@@ -78,6 +78,8 @@
   *replace*
   *button-next*
   *button-replace*
+  *q-label*
+  *select*
   *action-open*
   *action-save*
   *action-save-as*
@@ -153,6 +155,7 @@
   (qconnect *replace* "returnPressed()" 'replace-text)
   (qconnect *button-next*    "clicked()" 'find-text)
   (qconnect *button-replace* "clicked()" 'replace-text)
+  (qconnect *select* "clicked()" 'select-widget)
   (qconnect (qapp) "aboutToQuit()" 'clean-up)
   (qoverride *editor*  "keyPressEvent(QKeyEvent*)" 'editor-key-pressed)
   (qoverride *command* "keyPressEvent(QKeyEvent*)" 'command-key-pressed)
@@ -160,7 +163,7 @@
   (ini-highlighter)
   (ini-completer)
   (set-debugger-hook)
-  (dolist (w (list *editor* *output* *command* *eql-completer* *symbol-popup*))
+  (dolist (w (list *editor* *output* *command* *eql-completer* *symbol-popup* *q-label*))
     (qset w "font" eql::*code-font*))
   (local-client:ini 'data-from-server)
   (show-status-message (format nil (tr "<b style='color:#4040E0'>Eval Region:</b> move to paren <b>(</b> or <b>)</b>, hit <b>~A</b>")
@@ -1116,7 +1119,12 @@
     (:activate-editor
        (x:do-with (qfun *main*)
          "activateWindow"
-         "raise"))))
+         "raise"))
+    (:select-loaded
+       (select-widget))
+    (:selected
+       (qset *q-label* "text" str)
+       (run-on-server "eql:*sel*"))))
 
 ;;; command line
 
@@ -1306,6 +1314,14 @@
   (qfun (qfun *editor* "textCursor") "insertText" (qget *replace* "text"))
   (find-text))
 
+(let (ini)
+  (defun select-widget ()
+    (if ini
+        (run-on-server "(select:select-mode)")
+        (progn
+          (setf ini t)
+          (run-on-server "(load \"select.lisp\")")))))
+
 ;;; profile
 
 #|
@@ -1324,6 +1340,7 @@
 
 (defun set-debugger-hook ()
   (setf *debugger-hook* (lambda (&rest args)
+                          (setf *debugger-hook* nil)
                           (when (= |QMessageBox.Save|
                                    (qfun "QMessageBox" "critical" nil "EQL"
                                          (tr "<p>Internal editor error, sorry.</p><p>Save changes?</p>")
