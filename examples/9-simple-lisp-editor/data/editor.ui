@@ -119,7 +119,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QLabel" name="q_label">
+       <widget class="QLabel" name="sel_label">
         <property name="text">
          <string/>
         </property>

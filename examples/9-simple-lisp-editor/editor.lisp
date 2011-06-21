@@ -78,7 +78,7 @@
   *replace*
   *button-next*
   *button-replace*
-  *q-label*
+  *sel-label*
   *select*
   *action-open*
   *action-save*
@@ -163,7 +163,7 @@
   (ini-highlighter)
   (ini-completer)
   (set-debugger-hook)
-  (dolist (w (list *editor* *output* *command* *eql-completer* *symbol-popup* *q-label*))
+  (dolist (w (list *editor* *output* *command* *eql-completer* *symbol-popup* *sel-label*))
     (qset w "font" eql::*code-font*))
   (local-client:ini 'data-from-server)
   (show-status-message (format nil (tr "<b style='color:#4040E0'>Eval Region:</b> move to paren <b>(</b> or <b>)</b>, hit <b>~A</b>")
@@ -1123,7 +1123,7 @@
     (:select-loaded
        (select-widget))
     (:selected
-       (qset *q-label* "text" str)
+       (qset *sel-label* "text" str)
        (run-on-server "eql:*sel*"))))
 
 ;;; command line
@@ -1256,6 +1256,8 @@
                           (t
                            (let ((p1 (position-if (lambda (ch) (find ch ":*|")) text :from-end t))
                                  (p2 (position-if (lambda (ch) (find ch " '(")) text :from-end t)))
+                             (unless (or p1 p2)
+                               (return-from update-tab-completer))
                              (when (and p1
                                         (plusp p1)
                                         (char= #\: (char text p1))
@@ -1314,27 +1316,15 @@
   (qfun (qfun *editor* "textCursor") "insertText" (qget *replace* "text"))
   (find-text))
 
-(let (ini)
+;;; select
+
+(let ((ini t))
   (defun select-widget ()
     (if ini
-        (run-on-server "(select:select-mode)")
         (progn
-          (setf ini t)
-          (run-on-server "(load \"select.lisp\")")))))
-
-;;; profile
-
-#|
-(require :profile)
-
-(progn
-  (use-package :profile)
-  (profile:profile
-   highlight-block
-   left-paren
-   right-paren
-   read*))
-|#
+          (setf ini nil)
+          (run-on-server "(load \"select\")"))
+        (run-on-server "(select:select-mode)"))))
 
 ;;; debugger hook
 
@@ -1364,3 +1354,17 @@
                    "my.lisp"))))
 
 (start)
+
+;;; profile
+
+#|
+(require :profile)
+
+(progn
+  (use-package :profile)
+  (profile:profile
+   highlight-block
+   left-paren
+   right-paren
+   read*))
+|#

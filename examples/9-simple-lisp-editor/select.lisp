@@ -20,7 +20,8 @@
   (qadd-event-filter nil |QEvent.MouseButtonPress| 'object-selected)
   (local-server:send-to-client :select-loaded))
 
-(let (listen)
+(let ((cross-cursor (qnew "QCursor(Qt::CursorShape)" |Qt.CrossCursor|))
+      listen)
   (defun object-selected (obj ev)
     (when listen
       (setf listen nil)
@@ -29,13 +30,12 @@
       (qfun "QApplication" "restoreOverrideCursor")
       (local-server:send-to-client :selected (princ-to-string eql:*sel*))
       t)) ; event filter
-  (defun set-listen (x)
-    (setf listen x)))
-
-(let ((cross-cursor (qnew "QCursor(Qt::CursorShape)" |Qt.CrossCursor|)))
   (defun select-mode ()
-    (set-listen t)
-    (qfun "QApplication" "setOverrideCursor" cross-cursor)))
+    (if (qfun "QApplication" "topLevelWidgets")
+        (progn
+          (setf listen t)
+          (qfun "QApplication" "setOverrideCursor" cross-cursor))
+        (qmsg (tr "Please create widgets first.")))))
 
 (defun indicate ()
   (let ((obj eql:*sel*))
