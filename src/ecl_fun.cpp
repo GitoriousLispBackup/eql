@@ -440,7 +440,7 @@ QtObject toQtObject(cl_object l_obj, cl_object l_cast, bool* qobject_align) {
         o.id = classId(l_obj); }
     return o; }
 
-cl_object new_qt_object(void* pointer, uint unique, int id, bool finalize) {
+static cl_object new_qt_object(void* pointer, uint unique, int id, bool finalize = false) {
     STATIC_SYMBOL_PKG(s_new_qt_object, (char*)"NEW-QT-OBJECT", (char*)"EQL")
     return cl_funcall(5, s_new_qt_object,
                       ecl_make_unsigned_integer((cl_index)pointer),

@@ -262,11 +262,6 @@ QVariant toQVariant(cl_object, const char*, int = -1);
 void error_msg(const char*, cl_object);
 
 EQL_EXPORT QVariant callOverrideFun(void*, int, const void**);
-EQL_EXPORT cl_object new_qt_object(void*, uint, int id, bool = false);
-EQL_EXPORT cl_object qexec();
-EQL_EXPORT cl_object qinvoke_method2(cl_object, cl_object, cl_object, cl_object);
-EQL_EXPORT cl_object qnew_instance2(cl_object, cl_object);
-EQL_EXPORT cl_object qproperty(cl_object, cl_object);
 EQL_EXPORT cl_object qt_object_from_name(const QByteArray&, void*, uint = 0, bool = false);
 EQL_EXPORT QtObject toQtObject(cl_object, cl_object = Cnil, bool* = 0);
 
