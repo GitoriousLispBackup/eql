@@ -578,8 +578,7 @@
                    ~%#define ~A~A_METHODS_H~
                    ~%~
                    ~%#include \"_~A~(~A~)_classes.h\"~A~
-                   ~%#include <QtGui>~
-                   ~%#include \"static_extras.h\"~A~%"
+                   ~%#include <QtGui>~A~%"
                 +message-generated+
                 (if gui "MAIN_" "")
                 type
@@ -589,7 +588,7 @@
                 type
                 (if gui "" (format nil "~%#include \"../_main_~(~A~)_methods.h\"" type))
                 (if gui 
-                    (format nil "~%#include \"../eql_global.h\"")
+                    (format nil "~%#include \"../static_extras.h\"~%#include \"../eql_global.h\"")
                     (format nil "~%~A" (module-include module))))))
     (let* ((n 0)
            (methods (if (eql :q type) *q-methods* *n-methods*))

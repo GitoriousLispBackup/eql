@@ -1,3 +1,5 @@
+// copyright (c) 2011 Polos Ruetz
+
 #include "static_extras.h"
 #include <math.h>
 

@@ -5,7 +5,7 @@
 
 #include "_main_n_classes.h"
 #include <QtGui>
-#include "static_extras.h"
+#include "../static_extras.h"
 #include "../eql_global.h"
 
 class EQL_EXPORT N2 : public QObject { // QAccessible

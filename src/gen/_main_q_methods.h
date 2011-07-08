@@ -5,7 +5,7 @@
 
 #include "_main_q_classes.h"
 #include <QtGui>
-#include "static_extras.h"
+#include "../static_extras.h"
 #include "../eql_global.h"
 
 class EQL_EXPORT Q127 : public QObject { // QObject

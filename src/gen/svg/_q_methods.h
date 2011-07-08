@@ -6,7 +6,6 @@
 #include "_q_classes.h"
 #include "../_main_q_methods.h"
 #include <QtGui>
-#include "static_extras.h"
 #include <QtSvg>
 
 class Q78 : public Q72 { // QGraphicsSvgItem

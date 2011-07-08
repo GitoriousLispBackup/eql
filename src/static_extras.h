@@ -1,4 +1,4 @@
-// copyright (c) 2010-2011 Polos Ruetz
+// copyright (c) 2011 Polos Ruetz
 //
 // static functions added to some Qt class
 // e.g. (qfun "QImage" "changeBrightness" image 50)
