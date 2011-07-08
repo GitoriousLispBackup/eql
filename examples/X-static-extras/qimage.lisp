@@ -27,8 +27,8 @@
   (dolist (slider (list *brightness* *contrast* *gamma*))
     (x:do-with (qset slider)
       ("minimum" 0)
-      ("maximum" 100)
-      ("value" 50))
+      ("maximum" 255)
+      ("value" 127))
     (qconnect slider "valueChanged(int)" 'change))
   (qconnect *reset* "clicked()" 'reset)
   (qoverride *display* "paintEvent(QPaintEvent*)" 'paint)
@@ -37,7 +37,7 @@
 
 (defun reset ()
   (dolist (slider (list *brightness* *contrast* *gamma*))
-    (qset slider "value" 50)))
+    (qset slider "value" 127)))
 
 (let ((pnt (qnew "QPainter")))
   (defun paint (ev)
@@ -48,9 +48,9 @@
 
 (defun change (value)
   ;; we use QLET here to force immediate deletion of temporary images (memory usage)
-  (qlet ((img1 (qfun "QImage" "changeBrightness" *image* (- (qget *brightness* "value") 50)))
-         (img2 (qfun "QImage" "changeContrast"   img1    (* 2 (qget *contrast* "value"))))
-         (img3 (qfun "QImage" "changeGamma"      img2    (* 2 (qget *gamma* "value")))))
+  (qlet ((img1 (qfun "QImage" "changeBrightness" *image* (floor (/ (- (qget *brightness* "value") 127) 2))))
+         (img2 (qfun "QImage" "changeContrast"   img1    (qget *contrast* "value")))
+         (img3 (qfun "QImage" "changeGamma"      img2    (qget *gamma* "value"))))
     (setf *pixmap* (qfun "QPixmap" "fromImage" img3)))
   (qfun *display* "repaint"))
 
