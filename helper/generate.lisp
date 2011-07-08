@@ -578,7 +578,8 @@
                    ~%#define ~A~A_METHODS_H~
                    ~%~
                    ~%#include \"_~A~(~A~)_classes.h\"~A~
-                   ~%#include <QtGui>~A~%"
+                   ~%#include <QtGui>~
+                   ~%#include \"static_extras.h\"~A~%"
                 +message-generated+
                 (if gui "MAIN_" "")
                 type
@@ -651,7 +652,8 @@
                                                           (if (value-p fun)
                                                               ""
                                                               (format nil "(~{~A~^, ~})" (n-var-names len-fun-args))))
-                                                  (setf *max-method-args* (max len-fun-args *max-method-args*))))))))))
+                                                  (setf *max-method-args* (max len-fun-args *max-method-args*)))))))))
+                                  (add-static-extras type class s))
                                 (format s "};~%")))
                             methods)))
       ;; class hierarchy
@@ -695,6 +697,15 @@
     (dolist (module *all-modules*)
       (change-file-stream module :methods type)
       (format s "~%#endif~%"))))
+
+(defun add-static-extras (type class s)
+  (if (eql :q type)
+      nil
+      (cond ((string= "QImage" class)
+             (format s "    // see static_extras.cpp~
+                      ~%    Q_INVOKABLE QImage SchangeBrightness(const QImage& x1, int x2) { return QImage_changeBrightness(x1, x2); }~
+                      ~%    Q_INVOKABLE QImage SchangeContrast(const QImage& x1, int x2) { return QImage_changeContrast(x1, x2); }~
+                      ~%    Q_INVOKABLE QImage SchangeGamma(const QImage& x1, int x2) { return QImage_changeGamma(x1, x2); }~%")))))
 
 (defun from-qvariant (arg x)
   (let* ((type (arg-type arg))

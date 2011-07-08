@@ -22,10 +22,12 @@ HEADERS += gen/_lobjects.h \
            dyn_object.h \
            eql_global.h \
            ecl_fun.h \
+           static_extras.h \
            eql.h
 
 SOURCES += gen/_lobjects.cpp \
            qt_eql.cpp \
            dyn_object.cpp \
            ecl_fun.cpp \
+           static_extras.cpp \
            eql.cpp

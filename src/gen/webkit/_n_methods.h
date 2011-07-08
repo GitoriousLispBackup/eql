@@ -6,6 +6,7 @@
 #include "_n_classes.h"
 #include "../_main_n_methods.h"
 #include <QtGui>
+#include "static_extras.h"
 #include <QtWebKit>
 
 class N182 : public QObject { // QWebDatabase

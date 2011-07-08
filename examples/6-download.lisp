@@ -27,7 +27,7 @@
         (let ((data (qfun reply "readAll")))
           (save-data data)
           (qfun "QMessageBox" "information" nil "EQL"
-                (format nil (tr "~%Downloaded ~:D bytes, see \"download.data\".~%~%") (length data))))
+                (format nil (tr "Downloaded ~:D bytes, see \"download.data\".") (length data))))
         (show-error error)))
   (qq))
 
@@ -40,13 +40,14 @@
   (let (msg) 
     (do-external-symbols (symbol)
       (let ((name (symbol-name symbol)))
+        ;; take the error string from the Qt enumerator symbol name
         (when (and (x:starts-with "QNetworkReply." name)
                    (x:ends-with "Error" name)
                    (= error (symbol-value symbol)))
           (setf msg (format nil (tr "Download error: <span style='color:red; font-weight:bold;'>~A</span>")
-                            (subseq name (1+ (position #\. name)) (- (length name) (length "Error")))))
+                            (subseq name (1+ (position #\. name)) (- (length name) #.(length "Error")))))
           (return))))
-    (qfun "QMessageBox" "critical" nil "EQL" (if msg msg (tr "Unkown download error.")))))
+    (qfun "QMessageBox" "critical" nil "EQL" (if msg msg (tr "Unknown download error.")))))
 
 (progn
   (ini)

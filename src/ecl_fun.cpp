@@ -2110,7 +2110,7 @@ cl_object qfind_child(cl_object l_obj, cl_object l_name) {
 cl_object qui_class2(cl_object l_ui, cl_object l_name) {
     /// args: (file &optional name)
     /// Finds the class name for the given user-defined object name in the given UI file.<br>Omitting the object name will return the top level class name of the UI.
-    ///     (qui-class "examples/data/main-window.ui" "edit") ; returns "QTextEdit"
+    ///     (qui-class "examples/data/main-window.ui" "editor") ; returns "QTextEdit"
     ecl_process_env()->nvalues = 1;
     QString ui(toQString(l_ui));
     QString name(toQString(l_name));
@@ -2226,7 +2226,7 @@ cl_object qid(cl_object l_class) {
             return l_ret; }}
     return Cnil; }
 
-cl_object qversion () {
+cl_object qversion() {
     /// args: ()
     /// Returns the EQL version number as "&lt;year&gt;.&lt;month&gt;.&lt;counter&gt;", analogous to the ECL version number.<br>The second return value is the Qt version as returned by <code>qVersion()</code>.
     const cl_env_ptr l_env = ecl_process_env();

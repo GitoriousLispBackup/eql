@@ -264,7 +264,7 @@
 <b>QUI-CLASS (file &optional name)</b>
 <p>Finds the class name for the given user-defined object name in the given UI file.<br>Omitting the object name will return the top level class name of the UI.</p>
 <pre>
-  (qui-class "examples/data/main-window.ui" "edit") ; returns "QTextEdit"
+  (qui-class "examples/data/main-window.ui" "editor") ; returns "QTextEdit"
 </pre>
 </p><br>
 <p>
@@ -279,7 +279,7 @@
 <p>Returns the string converted using <code>QString::toUtf8()</code>.<br>Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.</p>
 </p><br>
 <p>
-<b>QVERSION  ()</b>
+<b>QVERSION ()</b>
 <p>Returns the EQL version number as "&lt;year&gt;.&lt;month&gt;.&lt;counter&gt;", analogous to the ECL version number.<br>The second return value is the Qt version as returned by <code>qVersion()</code>.</p>
 </p><br>
 <p>

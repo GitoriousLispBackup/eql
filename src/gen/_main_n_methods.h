@@ -5,6 +5,7 @@
 
 #include "_main_n_classes.h"
 #include <QtGui>
+#include "static_extras.h"
 #include "../eql_global.h"
 
 class EQL_EXPORT N2 : public QObject { // QAccessible
@@ -3238,6 +3239,10 @@ public:
     Q_INVOKABLE QImage SfromData(const QByteArray& x1, const char* x2 = 0) { return QImage::fromData(x1, x2); }
     Q_INVOKABLE QMatrix StrueMatrix(const QMatrix& x1, int x2, int x3) { return QImage::trueMatrix(x1, x2, x3); }
     Q_INVOKABLE QTransform StrueMatrix(const QTransform& x1, int x2, int x3) { return QImage::trueMatrix(x1, x2, x3); }
+    // see static_extras.cpp
+    Q_INVOKABLE QImage SchangeBrightness(const QImage& x1, int x2) { return QImage_changeBrightness(x1, x2); }
+    Q_INVOKABLE QImage SchangeContrast(const QImage& x1, int x2) { return QImage_changeContrast(x1, x2); }
+    Q_INVOKABLE QImage SchangeGamma(const QImage& x1, int x2) { return QImage_changeGamma(x1, x2); }
 };
 
 class EQL_EXPORT N80 : public N31 { // QInputEvent
