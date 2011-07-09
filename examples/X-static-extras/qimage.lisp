@@ -6,7 +6,8 @@
 
 (defpackage :image-manipulation
   (:use :common-lisp :eql)
-  (:export))
+  (:export
+   #:start))
 
 (in-package :image-manipulation)
 
@@ -26,9 +27,9 @@
   (qfun *display* "setFixedSize" (qfun *image* "size"))
   (dolist (slider (list *brightness* *contrast* *gamma*))
     (x:do-with (qset slider)
-      ("minimum" 0)
-      ("maximum" 255)
-      ("value" 127))
+      ("minimum" -100)
+      ("maximum" 100)
+      ("value" 0))
     (qconnect slider "valueChanged(int)" 'change))
   (qconnect *reset* "clicked()" 'reset)
   (qoverride *display* "paintEvent(QPaintEvent*)" 'paint)
@@ -37,7 +38,7 @@
 
 (defun reset ()
   (dolist (slider (list *brightness* *contrast* *gamma*))
-    (qset slider "value" 127)))
+    (qset slider "value" 0)))
 
 (let ((pnt (qnew "QPainter")))
   (defun paint (ev)
@@ -47,11 +48,15 @@
       "end")))
 
 (defun change (value)
-  ;; we use QLET here to force immediate deletion of temporary images (memory usage)
-  (qlet ((img1 (qfun "QImage" "changeBrightness" *image* (floor (/ (- (qget *brightness* "value") 127) 2))))
-         (img2 (qfun "QImage" "changeContrast"   img1    (qget *contrast* "value")))
-         (img3 (qfun "QImage" "changeGamma"      img2    (qget *gamma* "value"))))
-    (setf *pixmap* (qfun "QPixmap" "fromImage" img3)))
-  (qfun *display* "repaint"))
+  (flet ((adjust-1 (x)
+           (floor (* 3/4 x)))
+         (adjust-2 (x)
+           (floor (expt 100 (/ (+ 100 x) 100)))))
+    ;; we use QLET here to force immediate deletion of temporary images (memory usage)
+    (qlet ((img1 (qfun "QImage" "changeBrightness" *image* (adjust-1 (qget *brightness* "value")))) ; -75   0    75
+           (img2 (qfun "QImage" "changeContrast"   img1    (adjust-2 (qget *contrast* "value"))))   ;   1 100 10000
+           (img3 (qfun "QImage" "changeGamma"      img2    (adjust-2 (qget *gamma* "value")))))     ;   1 100 10000
+      (setf *pixmap* (qfun "QPixmap" "fromImage" img3)))
+    (qfun *display* "repaint")))
 
 (start)
