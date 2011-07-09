@@ -1,4 +1,4 @@
-;;; see "src/static-extras.*" for static methods added to QImage:
+;;; see "src/static_extras.*" for static methods added to QImage:
 ;;;
 ;;;     (qfun "QImage" "changeBrightness" image x)
 ;;;     (qfun "QImage" "changeContrast" image x)
@@ -56,6 +56,7 @@
     (qlet ((img1 (qfun "QImage" "changeBrightness" *image* (adjust-1 (qget *brightness* "value")))) ; -75   0    75
            (img2 (qfun "QImage" "changeContrast"   img1    (adjust-2 (qget *contrast* "value"))))   ;   1 100 10000
            (img3 (qfun "QImage" "changeGamma"      img2    (adjust-2 (qget *gamma* "value")))))     ;   1 100 10000
+      (qdel *pixmap*)
       (setf *pixmap* (qfun "QPixmap" "fromImage" img3)))
     (qfun *display* "repaint")))
 

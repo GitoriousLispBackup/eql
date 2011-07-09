@@ -588,7 +588,8 @@
                 type
                 (if gui "" (format nil "~%#include \"../_main_~(~A~)_methods.h\"" type))
                 (if gui 
-                    (format nil "~%#include \"../static_extras.h\"~%#include \"../eql_global.h\"")
+                    (format nil "~%#include \"../static_extras.h\"~
+                                 ~%#include \"../eql_global.h\"")
                     (format nil "~%~A" (module-include module))))))
     (let* ((n 0)
            (methods (if (eql :q type) *q-methods* *n-methods*))

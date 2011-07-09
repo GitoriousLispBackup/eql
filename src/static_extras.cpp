@@ -7,7 +7,7 @@
 
 template<class T>
 inline const T& clamp(const T& x, const T& low, const T& high) {
-    return (x < low) ? low : ((high < x) ? high : x); }
+    return (x < low) ? low : ((x > high) ? high : x); }
 
 inline int changeBrightness(int value, int brightness) {
     return clamp(value + brightness * 255 / 100, 0, 255); }
