@@ -1,8 +1,8 @@
-;;; see "src/static_extras.*" for static methods added to QImage:
+;;; see "src/extras.*" for extra methods added to QImage:
 ;;;
-;;;     (qfun "QImage" "changeBrightness" image x)
-;;;     (qfun "QImage" "changeContrast" image x)
-;;;     (qfun "QImage" "changeGamma" image x)
+;;;     (qfun image "changeBrightness" x)
+;;;     (qfun image "changeContrast" x)
+;;;     (qfun image "changeGamma" x)
 
 (defpackage :image-manipulation
   (:use :common-lisp :eql)
@@ -53,9 +53,9 @@
          (adjust-2 (x)
            (floor (expt 100 (/ (+ 100 x) 100)))))
     ;; we use QLET here to force immediate deletion of temporary images (memory usage)
-    (qlet ((img1 (qfun "QImage" "changeBrightness" *image* (adjust-1 (qget *brightness* "value")))) ; -75   0    75
-           (img2 (qfun "QImage" "changeContrast"   img1    (adjust-2 (qget *contrast* "value"))))   ;   1 100 10000
-           (img3 (qfun "QImage" "changeGamma"      img2    (adjust-2 (qget *gamma* "value")))))     ;   1 100 10000
+    (qlet ((img1 (qfun *image* "changeBrightness"(adjust-1 (qget *brightness* "value")))) ; -75   0     75
+           (img2 (qfun img1    "changeContrast"  (adjust-2 (qget *contrast* "value"))))   ;   1 100 10,000
+           (img3 (qfun img2    "changeGamma"     (adjust-2 (qget *gamma* "value")))))     ;   1 100 10,000
       (qdel *pixmap*)
       (setf *pixmap* (qfun "QPixmap" "fromImage" img3)))
     (qfun *display* "repaint")))

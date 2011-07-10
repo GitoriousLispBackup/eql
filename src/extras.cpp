@@ -1,6 +1,6 @@
 // copyright (c) 2011 Polos Ruetz
 
-#include "static_extras.h"
+#include "extras.h"
 #include <math.h>
 
 // *** QImage *** (code found in a Qt forum)
@@ -55,16 +55,19 @@ static QImage changeImage(const QImage& image, int value) {
     return _image; }
 
 QImage QImage_changeBrightness(const QImage& image, int brightness) {
-    if(!brightness) {
+    // example for range: -75 .. 75 (0)
+    if(0 == brightness) {
         return image; }
     return changeImage<changeBrightness>(image, brightness); }
 
 QImage QImage_changeContrast(const QImage& image, int contrast) {
-    if(contrast == 100) {
+    // example for range: 1 .. 10,000 (100)
+    if(100 == contrast) {
         return image; }
     return changeImage<changeContrast>(image, contrast); }
 
 QImage QImage_changeGamma(const QImage& image, int gamma) {
-    if(gamma == 100) {
+    // example for range: 1 .. 10,000 (100)
+    if(100 == gamma) {
         return image; }
     return changeImage<changeGamma>(image, gamma); }

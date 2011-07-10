@@ -588,7 +588,7 @@
                 type
                 (if gui "" (format nil "~%#include \"../_main_~(~A~)_methods.h\"" type))
                 (if gui 
-                    (format nil "~%#include \"../static_extras.h\"~
+                    (format nil "~%#include \"../extras.h\"~
                                  ~%#include \"../eql_global.h\"")
                     (format nil "~%~A" (module-include module))))))
     (let* ((n 0)
@@ -653,7 +653,7 @@
                                                               ""
                                                               (format nil "(~{~A~^, ~})" (n-var-names len-fun-args))))
                                                   (setf *max-method-args* (max len-fun-args *max-method-args*)))))))))
-                                  (add-static-extras type class s))
+                                  (add-extras type class s))
                                 (format s "};~%")))
                             methods)))
       ;; class hierarchy
@@ -698,14 +698,14 @@
       (change-file-stream module :methods type)
       (format s "~%#endif~%"))))
 
-(defun add-static-extras (type class s)
+(defun add-extras (type class s)
   (if (eql :q type)
       nil
       (cond ((string= "QImage" class)
-             (format s "    // see static_extras.cpp~
-                      ~%    Q_INVOKABLE QImage SchangeBrightness(const QImage& x1, int x2) { return QImage_changeBrightness(x1, x2); }~
-                      ~%    Q_INVOKABLE QImage SchangeContrast(const QImage& x1, int x2) { return QImage_changeContrast(x1, x2); }~
-                      ~%    Q_INVOKABLE QImage SchangeGamma(const QImage& x1, int x2) { return QImage_changeGamma(x1, x2); }~%")))))
+             (format s "    // see extras.cpp~
+                      ~%    Q_INVOKABLE QImage MchangeBrightness(QImage* o, int x1) { return QImage_changeBrightness(*o, x1); }~
+                      ~%    Q_INVOKABLE QImage MchangeContrast(QImage* o, int x1) { return QImage_changeContrast(*o, x1); }~
+                      ~%    Q_INVOKABLE QImage MchangeGamma(QImage* o, int x1) { return QImage_changeGamma(*o, x1); }~%")))))
 
 (defun from-qvariant (arg x)
   (let* ((type (arg-type arg))

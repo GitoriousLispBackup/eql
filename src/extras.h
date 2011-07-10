@@ -1,10 +1,10 @@
 // copyright (c) 2011 Polos Ruetz
 //
-// static functions added to some Qt class
-// e.g. (qfun "QImage" "changeBrightness" image 50)
+// extra functions added to some Qt class
+// e.g. (qfun image "changeBrightness" 10)
 
-#ifndef STATIC_EXTRAS_H
-#define STATIC_EXTRAS_H
+#ifndef EXTRAS_H
+#define EXTRAS_H
 
 #include <QImage>
 
