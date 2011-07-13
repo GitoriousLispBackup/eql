@@ -3239,7 +3239,7 @@ public:
     Q_INVOKABLE QImage SfromData(const QByteArray& x1, const char* x2 = 0) { return QImage::fromData(x1, x2); }
     Q_INVOKABLE QMatrix StrueMatrix(const QMatrix& x1, int x2, int x3) { return QImage::trueMatrix(x1, x2, x3); }
     Q_INVOKABLE QTransform StrueMatrix(const QTransform& x1, int x2, int x3) { return QImage::trueMatrix(x1, x2, x3); }
-    // see extras.cpp
+    // see src/extras.cpp
     Q_INVOKABLE QImage MchangeBrightness(QImage* o, int x1) { return QImage_changeBrightness(*o, x1); }
     Q_INVOKABLE QImage MchangeContrast(QImage* o, int x1) { return QImage_changeContrast(*o, x1); }
     Q_INVOKABLE QImage MchangeGamma(QImage* o, int x1) { return QImage_changeGamma(*o, x1); }

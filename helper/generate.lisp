@@ -702,7 +702,7 @@
   (if (eql :q type)
       nil
       (cond ((string= "QImage" class)
-             (format s "    // see extras.cpp~
+             (format s "    // see src/extras.cpp~
                       ~%    Q_INVOKABLE QImage MchangeBrightness(QImage* o, int x1) { return QImage_changeBrightness(*o, x1); }~
                       ~%    Q_INVOKABLE QImage MchangeContrast(QImage* o, int x1) { return QImage_changeContrast(*o, x1); }~
                       ~%    Q_INVOKABLE QImage MchangeGamma(QImage* o, int x1) { return QImage_changeGamma(*o, x1); }~%")))))
