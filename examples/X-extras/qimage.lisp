@@ -1,3 +1,9 @@
+;;; see "src/extras.*" for extra methods added to QImage:
+;;;
+;;; (qfun image "changeBrightness" x)
+;;; (qfun image "changeContrast" x)
+;;; (qfun image "changeGamma" x)
+
 (defpackage :image-manipulation
   (:use :common-lisp :eql)
   (:export
