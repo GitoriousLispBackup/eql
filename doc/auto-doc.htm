@@ -76,7 +76,10 @@
 </p><br>
 <p>
 <b>QEQL (object1 object2)</b>
-<p>Returns <code>T</code> for same instances of a Qt class.</p>
+<p>Returns <code>T</code> for same instances of a Qt class.<br>To test for same Qt classes only, do:</p>
+<pre>
+  (= (qt-object-id object1) (qt-object-id object2))
+</pre>
 </p><br>
 <p>
 <b>QESCAPE (string)</b>

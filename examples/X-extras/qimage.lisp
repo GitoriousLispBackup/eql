@@ -26,7 +26,6 @@
 
 (defvar *image*  (qnew "QImage(QString)" (in-home "examples/data/vernazza.jpg")))
 (defvar *pixmap* (qfun "QPixmap" "fromImage" *image*))
-(defvar *filter* (qnew "QPixmap(QSize)" (qfun *pixmap* "size")))
 
 (defun start ()
   (qfun *display* "setFixedSize" (qfun *image* "size"))
@@ -48,20 +47,17 @@
 
 (let ((pnt (qnew "QPainter")))
   (defun paint (ev)
-    (flet ((set-filter (color)
-             (qfun *filter* "fill" color)
-             (x:do-with (qfun pnt)
-               ("setOpacity" (/ (qget *opacity* "value") 100))
-               ("drawPixmap(QPoint,QPixmap)" '(0 0) *filter*))))
-      (let ((color (qget *color* "text")))
+    (x:do-with (qfun pnt)
+      ("begin(QWidget*)" *display*)
+      ("drawPixmap(QPoint,QPixmap)" '(0 0) *pixmap*))
+    (let ((color (qget *color* "text")))
+      (when (= #.(length "#RRGGBB") (length color))
         (x:do-with (qfun pnt)
-          ("begin(QWidget*)" *display*)
-          ("drawPixmap(QPoint,QPixmap)" '(0 0) *pixmap*))
-        (when (= #.(length "#RRGGBB") (length color))
-          (set-filter color))
-        (qfun pnt "end")))))
+          ("setOpacity" (/ (qget *opacity* "value") 100))
+          ("fillRect(QRect,QColor)" (qfun *pixmap* "rect") color))))
+    (qfun pnt "end")))
 
-(defun repaint (arg)
+(defun repaint (&optional arg)
   (qfun *display* "repaint"))
 
 (defun change (value)
@@ -75,7 +71,7 @@
            (img3 (qfun img2    "changeGamma"      (adjust-2 (qget *gamma* "value")))))     ;   1 100 10,000
       (qdel *pixmap*)
       (setf *pixmap* (qfun "QPixmap" "fromImage" img3)))
-    (qfun *display* "repaint")))
+    (repaint)))
 
 (defun reset ()
   (dolist (slider (list *brightness* *contrast* *gamma*))

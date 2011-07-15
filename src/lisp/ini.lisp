@@ -106,9 +106,12 @@
 
 (defun qeql (obj1 obj2)
   "args: (object1 object2)
-   Returns <code>T</code> for same instances of a Qt class."
+   Returns <code>T</code> for same instances of a Qt class.<br>To test for same Qt classes only, do:
+       (= (qt-object-id object1) (qt-object-id object2))"
   (and (qt-object-p obj1)
        (qt-object-p obj2)
+       (= (qt-object-id obj1)
+          (qt-object-id obj2))
        (= (qt-object-pointer obj1)
           (qt-object-pointer obj2))))
 
