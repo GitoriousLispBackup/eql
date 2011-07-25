@@ -6,41 +6,79 @@ So, after statically linking a Qt/C++ application to EQL, you can:
   - call C++ from Lisp
   - call Lisp from C++
 
-You'll find the simple Lisp editor from example 9 to be integrated in this
-example (which allows to run the Qt application natively, keeping it listening
-to the simple editor, for eval region etc.).
+For interactive development there are 2 alternatives:
 
-(For your own applications, you obviously don't need to add the editor & server
-from example 9.)
+1) The simple (not really stable) Lisp editor from example 9, which allows to
+run the Qt application natively (no performance loss, responsive Qt
+application).
+
+2) Slime, with the drawback of non-native Qt event processing (which might, in
+some cases, slow down your application considerably, and will make it anyway
+less responsive).
 
 
-BUILD
+
+BUILD (MSVC: nmake instead of make)
 =====
 
-    1) Qt/trafficlight.pro
 
-    2) Qt_EQL.pro
+    ALTERNATIVE 1: Simple Lisp Editor (example 9):
 
-    3) in eql/examples/9-simple-lisp-editor/:
-       $ eql make-local-server-fasl.lisp
-       $ eql make-editor-fasl.lisp
-       copy both:
-           eql-local-server.fas
-           eql-editor.fas
-       from: eql/examples/9-simple-lisp-editor/
-       to:   eql/Qt_EQL/EQL/
+        a) Qt/trafficlight.pro (as usual)
+
+        b) Qt_EQL.pro:
+
+           qmake
+           make clean (if you change alternative)
+           make
+
+        c) in eql/examples/9-simple-lisp-editor/:
+
+           $ eql make-local-server-fasl.lisp
+           $ eql make-editor-fasl.lisp
+
+           copy both:
+               eql-local-server.fas
+               eql-editor.fas
+           from: eql/examples/9-simple-lisp-editor/
+           to:   eql/Qt_EQL/EQL/
+
+
+    ALTERNATIVE 2: Slime
+
+        a) Qt/trafficlight.pro (as usual)
+
+        b) Qt_EQL.pro:
+ 
+           qmake "DEFINES+=SLIME"
+           make clean (if you change alternative)
+           make
+
 
 
 RUN
 ===       
 
-    1) Qt_EQL (executable)
 
-    2) in EQL/:
-       $ eql eql-editor.fas trafficlight.lisp
-       eval the line:
-           (in-package :trafficlight)
-       just play around with "eval region"...
+    ALTERNATIVE 1: Simple Lisp Editor (example 9):
+        
+        1) Qt_EQL (executable)
+
+        2) in EQL/:
+
+           $ eql eql-editor.fas trafficlight.lisp
+           eval the line:
+               (in-package :trafficlight)
+           just play around with "eval region"...
+
+
+    ALTERNATIVE 2: Slime
+
+        in your ".emacs" file, point your inferior Lisp program to Qt_EQL
+        (instead of EQL):
+
+            (setq inferior-lisp-program "~/eql/Qt_EQL/Qt_EQL")
+
 
 --
 

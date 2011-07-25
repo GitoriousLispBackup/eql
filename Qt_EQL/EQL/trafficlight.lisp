@@ -1,4 +1,4 @@
-(progn
+(unless *slime-mode*
   ;; optional: Lisp server for listening to an editor
   (let ((file "EQL/eql-local-server.fas"))                  ; see example 9: make-local-server-fasl.lisp
     (if (probe-file file)
@@ -31,3 +31,7 @@
       ;;("drawRect(QRect)" (list 5 5 (- width 10) (- height 10))) ; square
       ("drawEllipse(QRect)" (list 5 5 (- width 10) (- height 10))) ; circle
       "end")))
+
+(progn
+  (qfun *qt-main* "resize" '(110 300))
+  (qfun *qt-main* "show"))

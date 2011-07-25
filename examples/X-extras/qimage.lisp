@@ -3,6 +3,8 @@
 ;;; (qfun image "changeBrightness" x)
 ;;; (qfun image "changeContrast" x)
 ;;; (qfun image "changeGamma" x)
+;;;
+;;; optionally pass image file as command line argument
 
 (defpackage :image-manipulation
   (:use :common-lisp :eql)
@@ -24,7 +26,11 @@
   *opacity*
   *reset-color*)
 
-(defvar *image*  (qnew "QImage(QString)" (in-home "examples/data/vernazza.jpg")))
+(defvar *image* (qnew "QImage(QString)" (x:if-it (third (remove-if (lambda (arg) (x:starts-with "-" arg))
+                                                                   (qfun "QApplication" "arguments")))
+                                                 x:it
+                                                 (in-home "examples/data/vernazza.jpg"))))
+
 (defvar *pixmap* (qfun "QPixmap" "fromImage" *image*))
 
 (defun start ()

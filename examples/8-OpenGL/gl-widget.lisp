@@ -13,6 +13,8 @@
    #:set-y-rotation
    #:set-z-rotation))
 
+(provide :gl-widget)
+
 (in-package :gl-widget)
 
 (defconstant +360+ (* 360 16))

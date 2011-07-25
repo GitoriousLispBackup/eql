@@ -13,4 +13,4 @@ win32 {
     CONFIG += console
 }
 
-SOURCES += main.cpp
+SOURCES = main.cpp

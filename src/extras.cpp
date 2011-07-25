@@ -23,36 +23,36 @@ inline int changeUsingTable(int value, const int table[]) {
 
 template<int operation(int, int) >
 static QImage changeImage(const QImage& image, int value) {
-    QImage _image = image;
-    _image.detach();
-    if(!_image.numColors()) {
-        if(_image.format() != QImage::Format_RGB32) {
-            _image = _image.convertToFormat(QImage::Format_RGB32); }
+    QImage image2 = image;
+    image2.detach();
+    if(!image2.numColors()) {
+        if(image2.format() != QImage::Format_RGB32) {
+            image2 = image2.convertToFormat(QImage::Format_RGB32); }
         int table[256];
         for(int i = 0; i < 256; ++i) {
             table[i] = operation(i, value); }
-        if(_image.hasAlphaChannel()) {
-            for(int y = 0; y < _image.height(); ++y) {
-                QRgb* line = reinterpret_cast<QRgb*>(_image.scanLine(y));
-                for(int x = 0; x < _image.width(); ++x) {
+        if(image2.hasAlphaChannel()) {
+            for(int y = 0; y < image2.height(); ++y) {
+                QRgb* line = reinterpret_cast<QRgb*>(image2.scanLine(y));
+                for(int x = 0; x < image2.width(); ++x) {
                     line[x] = qRgba(changeUsingTable(qRed(line[x]), table),
                                     changeUsingTable(qGreen(line[x]), table),
                                     changeUsingTable(qBlue(line[x]), table),
                                     changeUsingTable(qAlpha(line[x]), table)); }}}
         else {
-            for(int y = 0; y < _image.height(); ++y) {
-                QRgb* line = reinterpret_cast<QRgb*>(_image.scanLine(y));
-                for(int x = 0; x < _image.width(); ++x) {
+            for(int y = 0; y < image2.height(); ++y) {
+                QRgb* line = reinterpret_cast<QRgb*>(image2.scanLine(y));
+                for(int x = 0; x < image2.width(); ++x) {
                     line[x] = qRgb(changeUsingTable(qRed(line[x]), table),
                                    changeUsingTable(qGreen(line[x]), table),
                                    changeUsingTable(qBlue(line[x]), table)); }}}}
     else {
-        QVector<QRgb> colors = _image.colorTable();
-        for(int i = 0; i < _image.numColors(); ++i) {
+        QVector<QRgb> colors = image2.colorTable();
+        for(int i = 0; i < image2.numColors(); ++i) {
             colors[i] = qRgb(operation(qRed(colors[i]), value),
                              operation(qGreen(colors[i]), value),
                              operation(qBlue(colors[i]), value)); }}
-    return _image; }
+    return image2; }
 
 QImage QImage_changeBrightness(const QImage& image, int brightness) {
     // example for range: -75 .. 75 (0)

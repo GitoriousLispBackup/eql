@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "11.7.4"; // 2011-07-15
+const char EQL::version[] = "11.7.5"; // 2011-07-25
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
@@ -77,17 +77,22 @@ void EQL::exec(lisp_ini ini, const QByteArray& expression, const QByteArray& pac
     si_select_package(make_simple_base_string((char*)package.toUpper().constData()));
     eval(expression.constData()); }
 
-void EQL::exec(QWidget* widget, const QString& file) {
+void EQL::exec(QWidget* widget, const QString& file, bool slime_mode) {
     // see Qt_EQL example
     eval(QString("(set-home \"%1\")").arg(home()).toAscii().constData());
-    eval(QString(
-            "(progn"
-            "  (defvar *qt-main* (qt-object %1 0 (eql:qid \"%2\")))"
-            "  (export '*qt-main*))")
-         .arg((ulong)widget)
-         .arg(QString(LObjects::vanillaQtSuperClassName(widget->metaObject())))
-         .toAscii().constData());
-    si_select_package(make_simple_base_string((char*)"CL-USER"));
-    eval(QString("(load \"%1\")").arg(file).toAscii().constData()); }
+    QStringList forms =
+            QStringList()
+            << QString("(in-package :eql)")
+            << (QString("(defvar *qt-main* (qt-object %1 0 (qid \"%2\")))")
+                .arg((ulong)widget)
+                .arg(QString(LObjects::vanillaQtSuperClassName(widget->metaObject()))))
+            << QString("(defvar *slime-mode* nil)")
+            << QString("(export '*qt-main*)")
+            << QString("(export '*slime-mode*)")
+            << QString("(load \"%1\")").arg(file)
+            << QString("(in-package :cl-user)");
+    if(slime_mode) {
+        forms << "(setf *slime-mode* t)" << "(si:top-level)"; }
+    eval(QString("(progn " + forms.join(" ") + ")").toAscii().constData()); }
 
 bool EQL::is_arg_return_value = false;

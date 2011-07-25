@@ -1345,7 +1345,7 @@
 (defun start ()
   (ini)
   (let* ((args (remove-if (lambda (arg) (x:starts-with "-" arg))
-                          (qfun "QCoreApplication" "arguments")))
+                          (qfun "QApplication" "arguments")))
          (last-arg (first (last args))))
     (file-open (if (and (> (length args) 2)
                         (x:ends-with ".lisp" last-arg))

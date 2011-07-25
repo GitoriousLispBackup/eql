@@ -135,8 +135,9 @@
                  (x (if par
                         (position #\Space sub3 :end par :from-end t)
                         (position #\Space sub3))))
-            (format t "    ~A~A~%" (make-string (max 0 (- 15 x))) sub3)))))
-    (terpri)))
+            (format t "    ~A~A~%" (make-string (max 0 (- 15 x))) sub3))))))
+  (terpri)
+  nil)
 
 (defun qapropos* (&optional name class type)
   "args: (&optional search class)
@@ -170,12 +171,15 @@
 (defun qui-class (file &optional var)
   (%qui-class file var))
 
-(defun qmessage-box (msg)
+(defun qmessage-box (x)
   "args: (x)
    alias: qmsg
-   Convenience function, calling: (converting x to a string if necessary)
-       (qfun \"QMessageBox\" \"information\" nil \"EQL\" x))"
-  (qfun "QMessageBox" "information" nil "EQL" (if (stringp msg) msg (prin1-to-string msg))))
+   Convenience function: a simple message box, converting x to a string if necessary."
+  (qlet ((msg "QMessageBox"
+              "icon" |QMessageBox.Information|
+              "text" (if (stringp x) x (prin1-to-string x))))
+    (dolist (fun '("show" "raise" "exec")) ; "raise" needed in some situations
+      (qfun msg fun))))
 
 (defun qevents ()
   (eql:qprocess-events)

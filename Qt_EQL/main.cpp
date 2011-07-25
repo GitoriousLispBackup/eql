@@ -17,10 +17,19 @@ int main(int argc, char** argv) {
     EQL eql;
     TrafficLight trafficlight;
 
+#ifdef SLIME
+  #ifdef Q_OS_WIN
+    // necessary when using Slime
+    { QWidget ini; ini.setGeometry(0, 0, 0, 0); ini.show(); ini.close(); }
+  #endif
+    eql.exec(&trafficlight,                    // main Qt class
+             EQL::home() + "EQL/trafficlight", // Lisp file to load
+             true);                            // Slime mode
+    return 0;
+#else
     eql.exec(&trafficlight,       // main Qt class
              "EQL/trafficlight"); // Lisp file to load
+    return qapp.exec();
+#endif
 
-    trafficlight.resize(110, 300);
-    trafficlight.show();
-
-    return qapp.exec(); }
+}

@@ -13,4 +13,4 @@ Run these commands in order: (after setting the *qt-html-documentation-path* in 
 Take a look at missing-types.txt: 
 These types are currently not available, as they must be integrated manually (by the author).
 
-Make a clean rebuild of the project (from src/eql_lib.pro and src/eql_exe.pro).
+Make a clean rebuild of the project (see README-REBUILD.txt).
