@@ -79,20 +79,21 @@ void EQL::exec(lisp_ini ini, const QByteArray& expression, const QByteArray& pac
 
 void EQL::exec(QWidget* widget, const QString& file, bool slime_mode) {
     // see Qt_EQL example
-    eval(QString("(set-home \"%1\")").arg(home()).toAscii().constData());
+    eval("(progn"
+         "  (in-package :eql)"
+         "  (defvar *slime-mode* nil)"
+         "  (export '*slime-mode*))");
     QStringList forms =
             QStringList()
-            << QString("(in-package :eql)")
+            << QString("(set-home \"%1\")").arg(home())
             << (QString("(defvar *qt-main* (qt-object %1 0 (qid \"%2\")))")
                 .arg((ulong)widget)
                 .arg(QString(LObjects::vanillaQtSuperClassName(widget->metaObject()))))
-            << QString("(defvar *slime-mode* nil)")
             << QString("(export '*qt-main*)")
-            << QString("(export '*slime-mode*)")
             << QString("(load \"%1\")").arg(file)
             << QString("(in-package :cl-user)");
     if(slime_mode) {
-        forms << "(setf *slime-mode* t)" << "(si:top-level)"; }
+        forms << "(setf eql:*slime-mode* t)" << "(si:top-level)"; }
     eval(QString("(progn " + forms.join(" ") + ")").toAscii().constData()); }
 
 bool EQL::is_arg_return_value = false;
