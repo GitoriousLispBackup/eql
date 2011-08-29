@@ -9,14 +9,14 @@
 <span class="added">(let ((embedded-qt-lisp (find :eql *features*))) ; [EQL]</span>
   (defun wait-for-streams (streams timeout)
     (loop
-       <span class="added">;; [EQL]
-       (when embedded-qt-lisp
-         (eql:qprocess-events))</span>
        (when (check-slime-interrupts) (return :interrupt))
        (let ((ready (remove-if-not #'stream-readable-p streams)))
          (when ready (return ready)))
        (when timeout (return nil))
-       (sleep <span class="added">(if embedded-qt-lisp 0.02</span> 0.1)))<span class="added">)) ; [EQL]</span></pre>
+       <span class="added">;; [EQL]
+       (if embedded-qt-lisp
+           (eql:qexec 100)
+           </span>(sleep 0.1)<span class="added">)</span>)))</pre>
 <li>In your <code>.emacs</code> file, point your Lisp implementation to the <code>eql</code> executable: 
 <code>(setq inferior-lisp-program "/path-to-eql/eql")</code>
 <li>For help in Slime mode, see the <code>qapropos</code> and <code>qgui</code> functions.

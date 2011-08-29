@@ -86,8 +86,8 @@
 <p>Calls <code>Qt::escape()</code>.</p>
 </p><br>
 <p>
-<b>QEXEC ()</b>
-<p>Convenience function to call <code>QApplication::exec()</code>.</p>
+<b>QEXEC (&optional milliseconds)</b>
+<p>Convenience function to call <code>QApplication::exec()</code>.<br>Optionally pass the time in milliseconds after which <code>QCoreApplication::exit()</code> will be called (which doesn't quit Qt, it only stops event processing).</p>
 </p><br>
 <p>
 <b>QFIND-CHILD (object name)</b>

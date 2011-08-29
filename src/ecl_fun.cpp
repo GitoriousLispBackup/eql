@@ -2053,7 +2053,7 @@ cl_object qprocess_events() {
 
 cl_object qexec2(cl_object l_milliseconds) {
     /// args: (&optional milliseconds)
-    /// Convenience function to call <code>QApplication::exec()</code>.<br>Optionally pass the time in milliseconds after which <code>QApplication::exit()</code> will be called (which doesn't quit Qt, it only stops event processing).
+    /// Convenience function to call <code>QApplication::exec()</code>.<br>Optionally pass the time in milliseconds after which <code>QCoreApplication::exit()</code> will be called (which doesn't quit Qt, it only stops event processing).
     static QTimer* timer = 0;
     if(!timer) {
         timer = new QTimer;
