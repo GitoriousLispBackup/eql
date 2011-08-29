@@ -2,6 +2,9 @@
 
 (in-package :eql)
 
+(defparameter *break-on-errors* nil
+  "Unless NIL, causes a simple (BREAK) after showing any EQL error message.")
+
 (defmacro alias (s1 s2)
   `(setf (symbol-function ',s1) (function ,s2)))
 
@@ -48,6 +51,9 @@
 
 (defun %make-vector ()
   (make-array 0 :adjustable t :fill-pointer t))
+
+(defun %break ()
+  (break))
 
 ;;; qt-object
 
@@ -180,6 +186,9 @@
               "text" (if (stringp x) x (prin1-to-string x))))
     (dolist (fun '("show" "raise" "exec")) ; "raise" needed in some situations
       (qfun msg fun))))
+
+(defun qexec (&optional ms)
+  (%qexec ms))
 
 (defun qevents ()
   (eql:qprocess-events)

@@ -8,4 +8,7 @@
        (let ((ready (remove-if-not #'stream-readable-p streams)))
          (when ready (return ready)))
        (when timeout (return nil))
-       (sleep (if embedded-qt-lisp 0.02 0.1))))) ; [EQL]
+       ;; [EQL]
+       (if embedded-qt-lisp
+	   (eql:qexec 100)
+           (sleep 0.1)))))

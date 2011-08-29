@@ -3,6 +3,7 @@
 (defpackage :eql
   (:use :common-lisp)
   (:export
+   #:*break-on-errors*
    #:defvar-ui
    #:in-home
    #:new-qt-object

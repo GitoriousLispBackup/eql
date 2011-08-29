@@ -1,4 +1,4 @@
-(unless *slime-mode*
+(unless eql:*slime-mode*
   ;; optional: Lisp server for listening to an editor
   (let ((file "EQL/eql-local-server.fas"))                  ; see example 9: make-local-server-fasl.lisp
     (if (probe-file file)
@@ -6,6 +6,8 @@
           (load file)                 
           (eql:qset (eql:qapp) "quitOnLastWindowClosed" t)) ; to exit "local-server"
         (warn "eql-local-server.fas not found."))))
+
+(setf eql:*break-on-errors* t) ; see (documentation 'eql:*break-on-errors* 'variable)
 
 (defpackage :trafficlight
   (:use :common-lisp :eql)

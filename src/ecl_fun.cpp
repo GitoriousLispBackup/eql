@@ -95,7 +95,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object((char*)"%qdisconnect"),         (cl_objectfn_fixed)qdisconnect2,             4);
     cl_def_c_function(c_string_to_object((char*)"qenum"),                (cl_objectfn_fixed)qenum,                    2);
     cl_def_c_function(c_string_to_object((char*)"qescape"),              (cl_objectfn_fixed)qescape,                  1);
-    cl_def_c_function(c_string_to_object((char*)"qexec"),                (cl_objectfn_fixed)qexec,                    0);
+    cl_def_c_function(c_string_to_object((char*)"%qexec"),               (cl_objectfn_fixed)qexec2,                   1);
     cl_def_c_function(c_string_to_object((char*)"qfind-child"),          (cl_objectfn_fixed)qfind_child,              2);
     cl_def_c_function(c_string_to_object((char*)"qfrom-utf8"),           (cl_objectfn_fixed)qfrom_utf8,               1);
     cl_def_c_function(c_string_to_object((char*)"qid"),                  (cl_objectfn_fixed)qid,                      1);
@@ -189,11 +189,15 @@ static void type_msg(const QByteArray& wanted, const QByteArray& got) {
 
 void error_msg(const char* fun, cl_object l_args) {
     STATIC_SYMBOL(s_error_output, (char*)"*ERROR-OUTPUT*")
+    STATIC_SYMBOL_PKG(s_break_on_errors, (char*)"*BREAK-ON-ERRORS*", (char*)"EQL")
+    STATIC_SYMBOL_PKG(s_break, (char*)"%BREAK", (char*)"EQL")
     cl_format(4,
               cl_symbol_value(s_error_output),
               make_constant_base_string((char*)"~%[EQL:err] ~A ~{~S~^ ~}~%"),
               make_constant_base_string((char*)fun),
-              l_args); }
+              l_args);
+    if(cl_symbol_value(s_break_on_errors) != Cnil) {
+        cl_funcall(1, s_break); }}
 
 static char** to_cstring_ptr(cl_object l_str) {
     if(ECL_BASE_STRING_P(l_str)) {
@@ -2047,10 +2051,17 @@ cl_object qprocess_events() {
     QApplication::processEvents();
     return Ct; }
 
-cl_object qexec() {
-    /// args: ()
-    /// Convenience function to call <code>QApplication::exec()</code>.
+cl_object qexec2(cl_object l_milliseconds) {
+    /// args: (&optional milliseconds)
+    /// Convenience function to call <code>QApplication::exec()</code>.<br>Optionally pass the time in milliseconds after which <code>QApplication::exit()</code> will be called (which doesn't quit Qt, it only stops event processing).
+    static QTimer* timer = 0;
+    if(!timer) {
+        timer = new QTimer;
+        timer->setSingleShot(true);
+        QObject::connect(timer, QSIGNAL(timeout()), LObjects::eql, QSLOT(exit())); }
     ecl_process_env()->nvalues = 1;
+    if(l_milliseconds !=  Cnil) {
+        timer->start(toInt(l_milliseconds)); }
     QApplication::exec();
     return Ct; }
 

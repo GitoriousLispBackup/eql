@@ -19,12 +19,12 @@
   (defimplementation wait-for-input (streams &optional timeout)
     (assert (member timeout '(nil t)))
     (loop
-      ;; [EQL]
-      (when embedded-qt-lisp
-        (eql:qprocess-events))
       (cond ((check-slime-interrupts) (return :interrupt))
             (timeout (return (poll-streams streams 0)))
             (t
+             ;; [EQL]
+             (when embedded-qt-lisp
+               (eql:qexec 200))
              (when-let (ready (poll-streams streams (if embedded-qt-lisp 0.02 0.2))) ; [EQL]
                (return ready))))))  
 

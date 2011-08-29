@@ -12,9 +12,8 @@ For interactive development there are 2 alternatives:
 run the Qt application natively (no performance loss, responsive Qt
 application).
 
-2) Slime, with the drawback of non-native Qt event processing (which might, in
-some cases, slow down your application considerably, and will make it anyway
-less responsive).
+2) Slime (which means not perfectly native Qt event processing, but you
+probably won't even notice).
 
 
 

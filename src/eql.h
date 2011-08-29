@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QByteArray>
 #include <QStringList>
+#include <QCoreApplication>
 #include <ecl/ecl.h>
 #include "eql_global.h"
 
@@ -31,6 +32,7 @@ public:
 
 public Q_SLOTS:
     void singleShot();
+    void exit() { QCoreApplication::exit(); }
 };
 
 #endif
