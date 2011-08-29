@@ -191,10 +191,9 @@
   (%qexec ms))
 
 (defun qevents ()
-  (eql:qprocess-events)
+  (qexec 100)
   #-win32
-  (serve-event:serve-all-events 0.01)
-  (sleep 0.01))
+  (serve-event:serve-all-events 0.01))
 
 (alias qnew  qnew-instance)
 (alias qdel  qdelete)
