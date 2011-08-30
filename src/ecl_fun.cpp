@@ -188,16 +188,21 @@ static void type_msg(const QByteArray& wanted, const QByteArray& got) {
               from_cstring(got.isEmpty() ? "no Qt object" : got)); }
 
 void error_msg(const char* fun, cl_object l_args) {
-    STATIC_SYMBOL(s_error_output, (char*)"*ERROR-OUTPUT*")
     STATIC_SYMBOL_PKG(s_break_on_errors, (char*)"*BREAK-ON-ERRORS*", (char*)"EQL")
-    STATIC_SYMBOL_PKG(s_break, (char*)"%BREAK", (char*)"EQL")
-    cl_format(4,
-              cl_symbol_value(s_error_output),
-              make_constant_base_string((char*)"~%[EQL:err] ~A ~{~S~^ ~}~%"),
-              make_constant_base_string((char*)fun),
-              l_args);
     if(cl_symbol_value(s_break_on_errors) != Cnil) {
-        cl_funcall(1, s_break); }}
+        STATIC_SYMBOL_PKG(s_break, (char*)"%BREAK", (char*)"EQL")
+        cl_funcall(4,
+                   s_break,
+                   make_constant_base_string((char*)"~%[EQL:err] ~A ~{~S~^ ~}~%"),
+                   make_constant_base_string((char*)fun),
+                   l_args); }
+    else {
+        STATIC_SYMBOL(s_error_output, (char*)"*ERROR-OUTPUT*")
+        cl_format(4,
+                  cl_symbol_value(s_error_output),
+                  make_constant_base_string((char*)"~%[EQL:err] ~A ~{~S~^ ~}~%"),
+                  make_constant_base_string((char*)fun),
+                  l_args); }}
 
 static char** to_cstring_ptr(cl_object l_str) {
     if(ECL_BASE_STRING_P(l_str)) {
@@ -2053,17 +2058,17 @@ cl_object qprocess_events() {
 
 cl_object qexec2(cl_object l_milliseconds) {
     /// args: (&optional milliseconds)
-    /// Convenience function to call <code>QApplication::exec()</code>.<br>Optionally pass the time in milliseconds after which <code>QCoreApplication::exit()</code> will be called (which doesn't quit Qt, it only stops event processing).
+    /// Convenience function to call <code>QApplication::exec()</code>.<br>Optionally pass the time in milliseconds after which <code>QCoreApplication::exit()</code> will be called (to suspend event processing).
+    ecl_process_env()->nvalues = 1;
     static QTimer* timer = 0;
     if(!timer) {
         timer = new QTimer;
         timer->setSingleShot(true);
         QObject::connect(timer, QSIGNAL(timeout()), LObjects::eql, QSLOT(exit())); }
-    ecl_process_env()->nvalues = 1;
-    if(l_milliseconds !=  Cnil) {
+    if(l_milliseconds != Cnil) {
         timer->start(toInt(l_milliseconds)); }
     QApplication::exec();
-    return Ct; }
+    return (l_milliseconds == Cnil) ? Ct : l_milliseconds; }
 
 cl_object qstatic_meta_object(cl_object l_class) {
     /// args: (name)

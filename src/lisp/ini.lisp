@@ -3,7 +3,7 @@
 (in-package :eql)
 
 (defparameter *break-on-errors* nil
-  "Unless NIL, causes a simple (BREAK) after showing any EQL error message.")
+  "Unless NIL, causes a simple (BREAK) on any EQL error.")
 
 (defmacro alias (s1 s2)
   `(setf (symbol-function ',s1) (function ,s2)))
@@ -52,8 +52,8 @@
 (defun %make-vector ()
   (make-array 0 :adjustable t :fill-pointer t))
 
-(defun %break ()
-  (break))
+(defun %break (&rest args)
+  (apply 'break args))
 
 ;;; qt-object
 
