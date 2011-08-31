@@ -90,7 +90,7 @@ The last step is your <code>.emacs</code> file.
 (Don't try to create the file with Explorer, simply use any editor.)
 <br>The content is something like:
 <pre>
-  (setq inferior-lisp-program "C:/eql/eql.exe")
+  (setq inferior-lisp-program "C:/eql/eql.exe -slime")
   (add-to-list 'load-path "C:/emacs/slime/") 
   (require 'slime)
   (slime-setup '(slime-fancy))

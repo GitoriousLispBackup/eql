@@ -23,9 +23,9 @@ int main(int argc, char** argv) {
     QStringList args(QCoreApplication::arguments());
     if(args.contains("-h") || (args.contains("--help"))) {
 #ifdef Q_OS_WIN
-        std::cout << "Usage: eql [-qgui] [file]" << std::endl;
+        std::cout << "Usage: eql [-qgui] [-slime] [file]" << std::endl;
 #else
-        std::cout << "Usage: eql [-qgui] [-qtpl] [file]" << std::endl;
+        std::cout << "Usage: eql [-qgui] [-qtpl] [-slime] [file]" << std::endl;
 #endif
         exit(0); }
     if(args.contains("-v") || args.contains("--version")) {

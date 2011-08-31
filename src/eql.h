@@ -22,8 +22,10 @@ public:
     ~EQL();
 
     static bool is_arg_return_value;
+    static bool initialize_slime;
     static const char version[];
     static QString home();
+    static void eval(const char*);
 
     void* fun;
     void exec(const QStringList&);
@@ -32,7 +34,7 @@ public:
 
 public Q_SLOTS:
     void singleShot();
-    void exit() { QCoreApplication::exit(); }
+    void exitEventLoop() { QCoreApplication::exit(); }
 };
 
 #endif

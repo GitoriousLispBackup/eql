@@ -70,10 +70,6 @@
    #:tr))
 
 #-win32
-(progn
-  (provide :serve-event)
-  (pushnew :serve-event *features*))
+(pushnew :serve-event *features*)
 
-(progn
-  (provide :eql)
-  (pushnew :eql *features*))
+(pushnew :eql *features*)

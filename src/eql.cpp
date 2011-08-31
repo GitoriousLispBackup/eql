@@ -7,9 +7,9 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "11.8.1"; // 2011-08-29
+const char EQL::version[] = "11.8.2"; // 2011-08-31
 
-static void eval(const char* lisp_code) {
+void EQL::eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
         si_safe_eval(2, ecl_read_from_cstring((char*)lisp_code), Cnil); }
     CL_CATCH_ALL_END; }
@@ -47,6 +47,9 @@ void EQL::exec(const QStringList& args) {
     eval(QString("(set-home \"%1\")").arg(home()).toAscii().constData());
     bool tpl = false;
     QStringList forms;
+    if(arguments.contains("-slime")) {
+        arguments.removeAll("-slime");
+        initialize_slime = true; }
     if(arguments.count() == 1) {
         tpl = true;
         forms << "(si:top-level)"; }
@@ -97,3 +100,4 @@ void EQL::exec(QWidget* widget, const QString& file, bool slime_mode) {
     eval(QString("(progn " + forms.join(" ") + ")").toAscii().constData()); }
 
 bool EQL::is_arg_return_value = false;
+bool EQL::initialize_slime = false;

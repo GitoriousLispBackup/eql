@@ -1475,6 +1475,9 @@ cl_object qset_property(cl_object l_obj, cl_object l_name, cl_object l_val) {
     /// alias: qset
     /// Sets a Qt property. Enumerators have to be passed as <code>int</code> values.
     ///     (qset label "alignment" |Qt.AlignCenter|)
+    if(EQL::initialize_slime) {
+        EQL::initialize_slime = false;
+        EQL::eval("(load (eql:in-home \"slime/ini\"))"); }
     ecl_process_env()->nvalues = 1;
     QtObject o = toQtObject(l_obj);
     if(ECL_STRINGP(l_name)) {
@@ -1500,6 +1503,9 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
     ///     (qfun item "setText" 0 "Some objects are EQL.")
     ///     (qfun "QDateTime" "currentDateTime") ; static method
     ///     (qfun slider "valueChanged" 10) ; emit signal
+    if(EQL::initialize_slime) {
+        EQL::initialize_slime = false;
+        EQL::eval("(load (eql:in-home \"slime/ini\"))"); }
     static QHash<QByteArray, int> i_slot;
     static QHash<QByteArray, int> i_method;
     if((l_obj != Cnil) && ECL_STRINGP(l_name)) {
@@ -2064,7 +2070,7 @@ cl_object qexec2(cl_object l_milliseconds) {
     if(!timer) {
         timer = new QTimer;
         timer->setSingleShot(true);
-        QObject::connect(timer, QSIGNAL(timeout()), LObjects::eql, QSLOT(exit())); }
+        QObject::connect(timer, QSIGNAL(timeout()), LObjects::eql, QSLOT(exitEventLoop())); }
     if(l_milliseconds != Cnil) {
         timer->start(toInt(l_milliseconds)); }
     QApplication::exec();
