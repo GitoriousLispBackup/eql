@@ -71,7 +71,6 @@ Make sure all of the following are in your <code>Path</code> environment variabl
 <p>Get <a href="http://common-lisp.net/project/slime/">Slime</a>. Choose the <b>cvs snapshot</b> (slime-current.tgz)</a>.
 <ul>
 <li>Unpack it to <code>C:\emacs\slime</code>.
-<li>Patch your <code>C:\emacs\slime\swank-backend.lisp</code> (see EQL documentation). This will make your Slime interactive (processing Qt events).
 <li>Open your <code>C:\emacs\slime\swank-loader.lisp</code>, and insert the following lines at the top of the file (important: choose a path with <b>no spaces</b>). 
 <pre>
 (make-package :swank-loader)
@@ -88,7 +87,7 @@ The last step is your <code>.emacs</code> file.
 </ul>
 </code>
 (Don't try to create the file with Explorer, simply use any editor.)
-<br>The content is something like:
+<br>The content is something like (please note <code>-slime</code>):
 <pre>
   (setq inferior-lisp-program "C:/eql/eql.exe -slime")
   (add-to-list 'load-path "C:/emacs/slime/") 
