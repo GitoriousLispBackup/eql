@@ -12,6 +12,7 @@
 (defpackage :trafficlight
   (:use :common-lisp :eql)
   (:export
+   #:run
    #:paint-event))
 
 (in-package :trafficlight)
@@ -34,6 +35,9 @@
       ("drawEllipse(QRect)" (list 5 5 (- width 10) (- height 10))) ; circle
       "end")))
 
-(progn
+(defun run ()
   (qfun *qt-main* "resize" '(110 300))
   (qfun *qt-main* "show"))
+
+(unless *slime-mode*
+  (run))

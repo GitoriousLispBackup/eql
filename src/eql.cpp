@@ -9,14 +9,14 @@
 
 const char EQL::version[] = "11.8.2"; // 2011-08-31
 
-void EQL::eval(const char* lisp_code) {
+static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
         si_safe_eval(2, ecl_read_from_cstring((char*)lisp_code), Cnil); }
     CL_CATCH_ALL_END; }
 
 extern "C" void ini_EQL(cl_object);
 
-EQL::EQL() : QObject(), fun(0) {
+EQL::EQL() : QObject(), single_shot_fun(0) {
     iniCLFunctions();
     LObjects::ini(this);
     read_VV(OBJNULL, ini_EQL); } // see src/make-eql-lib.lisp
@@ -35,11 +35,11 @@ QString EQL::home() {
     return path; }
 
 void EQL::singleShot() {
-    if(fun) {
+    if(single_shot_fun) {
         CL_CATCH_ALL_BEGIN(ecl_process_env()) {
-            cl_funcall(1, (cl_object)fun); }
+            cl_funcall(1, (cl_object)single_shot_fun); }
         CL_CATCH_ALL_END;
-        fun = 0; }}
+        single_shot_fun = 0; }}
 
 void EQL::exec(const QStringList& args) {
     QStringList arguments(args);
@@ -49,7 +49,8 @@ void EQL::exec(const QStringList& args) {
     QStringList forms;
     if(arguments.contains("-slime")) {
         arguments.removeAll("-slime");
-        initialize_slime = true; }
+        initialize_slime = true;
+        forms << "(eql::set-slime-ini (in-home \"slime/\"))"; }
     if(arguments.count() == 1) {
         tpl = true;
         forms << "(si:top-level)"; }
@@ -80,24 +81,31 @@ void EQL::exec(lisp_ini ini, const QByteArray& expression, const QByteArray& pac
     si_select_package(make_simple_base_string((char*)package.toUpper().constData()));
     eval(expression.constData()); }
 
-void EQL::exec(QWidget* widget, const QString& file, bool slime_mode) {
+void EQL::exec(QWidget* widget, const QString& lispFile, const QString& slimeIniPath) {
     // see Qt_EQL example
     eval("(progn"
          "  (in-package :eql)"
          "  (defvar *slime-mode* nil)"
          "  (export '*slime-mode*))");
-    QStringList forms =
-            QStringList()
-            << QString("(set-home \"%1\")").arg(home())
-            << (QString("(defvar *qt-main* (qt-object %1 0 (qid \"%2\")))")
-                .arg((ulong)widget)
-                .arg(QString(LObjects::vanillaQtSuperClassName(widget->metaObject()))))
-            << QString("(export '*qt-main*)")
-            << QString("(load \"%1\")").arg(file)
-            << QString("(in-package :cl-user)");
-    if(slime_mode) {
-        forms << "(setf eql:*slime-mode* t)" << "(si:top-level)"; }
+    QStringList forms;
+    if(!slimeIniPath.isEmpty()) {
+        initialize_slime = true;
+        forms << QString("(eql::set-slime-ini \"%1\")").arg(slimeIniPath)
+              << QString("(setf eql:*slime-mode* t)"); }
+    forms << QString("(set-home \"%1\")").arg(home())
+          << QString("(defvar *qt-main* (qt-object %1 0 (qid \"%2\")))")
+                     .arg((ulong)widget)
+                     .arg(QString(LObjects::vanillaQtSuperClassName(widget->metaObject())))
+          << QString("(export '*qt-main*)")
+          << QString("(load \"%1\")").arg(lispFile)
+          << QString("(in-package :cl-user)");
+    if(initialize_slime) {
+        forms << "(si:top-level)"; }
     eval(QString("(progn " + forms.join(" ") + ")").toAscii().constData()); }
+
+void EQL::iniSlime() {
+    initialize_slime = false;
+    eval("(load (eql::in-slime-ini \"ini\"))"); }
 
 bool EQL::is_arg_return_value = false;
 bool EQL::initialize_slime = false;

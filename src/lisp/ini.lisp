@@ -100,6 +100,12 @@
   (defun in-home (file)
     (concatenate 'string home file)))
 
+(let (slime-ini)
+  (defun set-slime-ini (path)
+    (setf slime-ini path))
+  (defun in-slime-ini (file)
+    (concatenate 'string slime-ini file)))
+
 (defun qgui (&optional ev)
   "args: (&optional process-events)
    Launches the <code>EQL</code> convenience GUI.<br>If you don't have an interactive environment, you can pass <code>T</code> to run a pseudo Qt event loop. A better option is to start the tool like so:<br><code>eql -qgui</code>, in order to run the Qt event loop natively."
@@ -191,9 +197,9 @@
   (%qexec ms))
 
 (defun qevents ()
-  (qexec 100)
+  (qexec 200)
   #-win32
-  (serve-event:serve-all-events 0.01))
+  (serve-event:serve-all-events 0.02))
 
 (alias qnew  qnew-instance)
 (alias qdel  qdelete)

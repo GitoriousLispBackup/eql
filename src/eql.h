@@ -25,12 +25,12 @@ public:
     static bool initialize_slime;
     static const char version[];
     static QString home();
-    static void eval(const char*);
+    static void iniSlime();
 
-    void* fun;
+    void* single_shot_fun;
     void exec(const QStringList&);
     void exec(lisp_ini, const QByteArray&, const QByteArray& = "cl-user"); // see my_app example
-    void exec(QWidget*, const QString&, bool = false);                     // see Qt_EQL example
+    void exec(QWidget*, const QString&, const QString& = QString());       // see Qt_EQL example
 
 public Q_SLOTS:
     void singleShot();

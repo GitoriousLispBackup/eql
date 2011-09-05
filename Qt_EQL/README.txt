@@ -8,12 +8,10 @@ So, after statically linking a Qt/C++ application to EQL, you can:
 
 For interactive development there are 2 alternatives:
 
-1) The simple (not really stable) Lisp editor from example 9, which allows to
-run the Qt application natively (no performance loss, responsive Qt
-application).
+1) The simple (not really stable) Lisp editor from example 9 (native Qt event
+ processing).
 
-2) Slime (which means not perfectly native Qt event processing, but you
-probably won't even notice).
+2) Slime (near-to-native Qt event processing).
 
 
 
@@ -73,10 +71,15 @@ RUN
 
     ALTERNATIVE 2: Slime
 
-        in your ".emacs" file, point your inferior Lisp program to Qt_EQL
-        (instead of EQL):
+        1) in your ".emacs" file, point your inferior Lisp program to Qt_EQL
+           (instead of EQL):
 
-            (setq inferior-lisp-program "~/eql/Qt_EQL/Qt_EQL")
+           (setq inferior-lisp-program "~/eql/Qt_EQL/Qt_EQL")
+
+        2) to run the program (manually, because Slime needs to be loaded
+           first), do:
+
+           (trafficlight:run)
 
 
 --
@@ -85,10 +88,14 @@ See Qt/trafficlight.cpp:eql_fun() for an example how to call Lisp from C++.
 
 The syntax is like this:
 
-    QVariant ret =                     // optional
+    QVariant ret =                     // return value; optional
+
     eql_fun("my-package:my-function",
-            QVariant::String,          // see ecl_fun.cpp:toQVariant(); optional
-            Q_ARG(QWidget*, this),     // see ecl_fun.cpp:to_lisp_arg()
+
+            QVariant::String,          // return type; optional
+                                       // for all return types, see: ecl_fun.cpp:toQVariant()
+
+            Q_ARG(QWidget*, this),     // for all argument types, see: ecl_fun.cpp:to_lisp_arg()
             Q_ARG(QStringList, list),
             Q_ARG(int, maximum()));
 

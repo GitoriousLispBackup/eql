@@ -11,7 +11,10 @@
 
 (defconstant +2pi+ (* 2 pi))
 
-(defparameter *mouse-count* 7)
+(defvar *graphics-scene* (qnew "QGraphicsScene"
+                               "sceneRect" (list -300 -300 600 600)))
+(defvar *timer*          (qnew "QTimer"))
+(defvar *mouse-count*    0)
 
 (defstruct mouse
   (item (qnew "QGraphicsItem"))
@@ -24,6 +27,7 @@
                (qfun p "addRect" (list -10 -20 20 40))
                p)))
   (defun new-mouse ()
+    (incf *mouse-count*)
     (let* ((mouse (make-mouse))
            (item (mouse-item mouse)))
       (qfun item "setRotation" (random (* 360 16)))
@@ -169,15 +173,12 @@
 
 (defun start ()
   (setf *random-state* (make-random-state t))
-  (let ((scene (qnew "QGraphicsScene"
-                     "sceneRect" (list -300 -300 600 600)))
-        (view (qnew "QGraphicsView"
+  (let ((view (qnew "QGraphicsView"
                     "windowTitle" "Colliding Mice"
-                    "size" (list 400 300)))
-        (timer (qnew "QTimer")))
-    (qfun scene "setItemIndexMethod" |QGraphicsScene.NoIndex|)
+                    "size" (list 400 300))))
+    (qfun *graphics-scene* "setItemIndexMethod" |QGraphicsScene.NoIndex|)
     (x:do-with (qfun view)
-      ("setScene" scene)
+      ("setScene" *graphics-scene*)
       ("setRenderHint" |QPainter.Antialiasing|)
       ("setBackgroundBrush" (qnew "QBrush(QPixmap)"
                                   (qnew "QPixmap(QString)"
@@ -185,16 +186,40 @@
       ("setCacheMode" |QGraphicsView.CacheBackground|)
       ("setViewportUpdateMode" |QGraphicsView.BoundingRectViewportUpdate|)
       ("setDragMode" |QGraphicsView.ScrollHandDrag|))
-    (dotimes (i *mouse-count*)
-      (flet ((pos (fun)
-               (truncate (* 200 (funcall fun (/ (* i +2pi+) *mouse-count*))))))
-        (let ((item (new-mouse)))
-          (qfun item "setPos" (list (pos 'sin) (pos 'cos)))
-          (qfun scene "addItem" item))))
-    (qconnect timer "timeout()" scene "advance()")
-    (qfun timer "start" 30)
+    (let ((count 7))
+      (dotimes (i count)
+        (flet ((pos (fun)
+                 (truncate (* 200 (funcall fun (/ (* i +2pi+) count))))))
+          (let ((item (new-mouse)))
+            (qfun item "setPos" (list (pos 'sin) (pos 'cos)))
+            (qfun *graphics-scene* "addItem" item)))))
+    (qconnect *timer* "timeout()" *graphics-scene* "advance()")
+    (qfun *timer* "start" 30)
     (x:do-with (qfun view)
       "show" "raise")))
+
+;;; for playing around interactively
+
+(defun m+ (&optional (n 1))
+  "Add n mice."
+  (dotimes (i n)
+    (let ((item (new-mouse)))
+      (qfun item "setPos" (list (- 100 (random 200)) (- 100 (random 200))))
+      (qfun *graphics-scene* "addItem" item)))
+  *mouse-count*)
+
+(defun m- (&optional (n 1))
+  "Remove n mice."
+  (dotimes (i n)
+    (when (zerop *mouse-count*)
+      (return))
+    (decf *mouse-count*)
+    (qdel (first (last (qfun *graphics-scene* "items")))))
+  *mouse-count*)
+
+(defun iv (&optional (ms 30))
+  "Change move interval."
+  (qset *timer* "interval" ms))
 
 #|
 (require :profile)

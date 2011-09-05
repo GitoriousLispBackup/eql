@@ -1,4 +1,4 @@
-(let ((file (eql:in-home "slime/process-qt-events")))
+(let ((file (eql::in-slime-ini "process-qt-events")))
   (flet ((file* (x)
            (format nil "~A.~A" file x)))
     (load file)

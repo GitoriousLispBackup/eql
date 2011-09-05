@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
   #endif
     eql.exec(&trafficlight,                    // main Qt class
              EQL::home() + "EQL/trafficlight", // Lisp file to load
-             true);                            // Slime mode
+             EQL::home() + "../slime/");       // path to Slime ini file (eql/slime/ini.lisp)
     return 0;
 #else
     eql.exec(&trafficlight,       // main Qt class
