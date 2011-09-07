@@ -2060,17 +2060,20 @@ cl_object qprocess_events() {
 
 cl_object qexec2(cl_object l_milliseconds) {
     /// args: (&optional milliseconds)
-    /// Convenience function to call <code>QApplication::exec()</code>.<br>Optionally pass the time in milliseconds after which <code>QCoreApplication::exit()</code> will be called (to suspend event processing).
+    /// Convenience function to call <code>QApplication::exec()</code>.<br>Optionally pass the time in milliseconds after which <code>QEventLoop::exit()</code> will be called.
     ecl_process_env()->nvalues = 1;
-    static QTimer* timer = 0;
-    if(!timer) {
-        timer = new QTimer;
-        timer->setSingleShot(true);
-        QObject::connect(timer, QSIGNAL(timeout()), LObjects::eql, QSLOT(exitEventLoop())); }
     if(l_milliseconds != Cnil) {
-        timer->start(toInt(l_milliseconds)); }
+        static QTimer* timer = 0;
+        if(!timer) {
+            timer = new QTimer;
+            EQL::eventLoop = new QEventLoop;
+            timer->setSingleShot(true);
+            QObject::connect(timer, QSIGNAL(timeout()), LObjects::eql, QSLOT(exitEventLoop())); }
+        timer->start(toInt(l_milliseconds));
+        EQL::eventLoop->exec();
+        return l_milliseconds; }
     QApplication::exec();
-    return (l_milliseconds == Cnil) ? Ct : l_milliseconds; }
+    return Ct; }
 
 cl_object qstatic_meta_object(cl_object l_class) {
     /// args: (name)

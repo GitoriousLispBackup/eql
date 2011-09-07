@@ -24,6 +24,7 @@ public:
     static bool is_arg_return_value;
     static bool initialize_slime;
     static const char version[];
+    static QEventLoop* eventLoop;
     static QString home();
     static void iniSlime();
 
@@ -34,7 +35,7 @@ public:
 
 public Q_SLOTS:
     void singleShot();
-    void exitEventLoop() { QCoreApplication::exit(); }
+    void exitEventLoop() { eventLoop->exit(); }
 };
 
 #endif

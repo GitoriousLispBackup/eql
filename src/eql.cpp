@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "11.8.2"; // 2011-08-31
+const char EQL::version[] = "11.9.1"; // 2011-09-07
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
@@ -109,3 +109,4 @@ void EQL::iniSlime() {
 
 bool EQL::is_arg_return_value = false;
 bool EQL::initialize_slime = false;
+QEventLoop* EQL::eventLoop = 0;

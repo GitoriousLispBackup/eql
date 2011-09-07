@@ -11,11 +11,12 @@
 (in-package :download)
 
 (defvar *manager* (qnew "QNetworkAccessManager"))
-
-(defun ini ()
-  (qconnect *manager* "finished(QNetworkReply*)" 'download-finished))
+(defvar *ini*     t)
 
 (defun download (name)
+  (when *ini*
+    (setf *ini* nil)
+    (qconnect *manager* "finished(QNetworkReply*)" 'download-finished))
   (qlet ((url "QUrl(QString)" name)
          (request "QNetworkRequest(QUrl)" url))
     (qfun *manager* "get" request)))
@@ -28,8 +29,7 @@
           (save-data data)
           (qfun "QMessageBox" "information" nil "EQL"
                 (format nil (tr "Downloaded ~:D bytes, see \"download.data\".") (length data))))
-        (show-error error)))
-  (qq))
+        (show-error error))))
 
 (defun save-data (data)
   (with-open-file (s "download.data" :direction :output :if-exists :supersede
@@ -49,6 +49,4 @@
           (return))))
     (qfun "QMessageBox" "critical" nil "EQL" (if msg msg (tr "Unknown download error.")))))
 
-(progn
-  (ini)
-  (download "http://planet.lisp.org/"))
+(download "http://planet.lisp.org/")
