@@ -53,11 +53,8 @@
   (reset-data)
   (x:do-with (qfun *socket*)
     "abort"
-    ("connectToServer" *server-name*)
-    ("waitForConnected" 1000))
+    ("connectToServer" *server-name*))
   (when (qfun *socket* "isWritable")
     (let ((utf8 (qutf8 str)))
-      (x:do-with (qfun *socket*)
-        ("write(QByteArray)" (x:string-to-bytes (format nil "~D ~A" (length utf8) utf8)))
-        "waitForBytesWritten"))
+      (qfun *socket* "write(QByteArray)" (x:string-to-bytes (format nil "~D ~A" (length utf8) utf8))))
     t))

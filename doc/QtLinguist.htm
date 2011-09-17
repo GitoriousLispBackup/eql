@@ -11,7 +11,7 @@ For every new project:
 </ul>
 For every new release (in order to create the <code>*.qm</code> files):
 <ul>
-<li>In <code>my_app/</code>, run <code>../eql make-my-lib.lisp</code> (compiling all files). This will find all source strings to translate and save them in the file  <code>tr.h</code> (only a dummy needed for the Qt <code>lupdate</code> function). This is done using a compiler macro, see <code>my_app/tr.lisp</code>.</i> 
+<li>In <code>my_app/</code>, run <code>eql make-my-lib.lisp</code> (compiling all files). This will find all source strings to translate and save them in the file  <code>tr.h</code> (only a dummy needed for the Qt <code>lupdate</code> function). This is done using a compiler macro, see <code>my_app/tr.lisp</code>.</i> 
 <li>Run the <code>my_app/eql-lupdate</code> script; this will create/update the single <code>*.ts</code> files for every language.
 <li>Use Qt Linguist on the <code>*.ts</code> files (as usual).
 <li>Run the <code>my_app/eql-lrelease</code> script.

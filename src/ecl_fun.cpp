@@ -190,7 +190,7 @@ static void type_msg(const QByteArray& wanted, const QByteArray& got) {
 void error_msg(const char* fun, cl_object l_args) {
     STATIC_SYMBOL_PKG(s_break_on_errors, (char*)"*BREAK-ON-ERRORS*", (char*)"EQL")
     if(cl_symbol_value(s_break_on_errors) != Cnil) {
-        STATIC_SYMBOL_PKG(s_break, (char*)"%BREAK", (char*)"EQL")
+        STATIC_SYMBOL_PKG(s_break, (char*)"%BREAK", (char*)"EQL") // see lisp/ini.lisp
         cl_funcall(4,
                    s_break,
                    make_constant_base_string((char*)"~%[EQL:err] ~A ~{~S~^ ~}~%"),
@@ -318,7 +318,7 @@ static cl_object qt_keyword() {
     return s_qt; }
 
 static cl_object make_vector() {
-    STATIC_SYMBOL_PKG(s_make_vector, (char*)"%MAKE-VECTOR", (char*)"EQL")
+    STATIC_SYMBOL_PKG(s_make_vector, (char*)"%MAKE-VECTOR", (char*)"EQL") // see lisp/ini.lisp
     return cl_funcall(1, s_make_vector); }
 
 
@@ -451,7 +451,8 @@ QtObject toQtObject(cl_object l_obj, cl_object l_cast, bool* qobject_align) {
 
 static cl_object new_qt_object(void* pointer, uint unique, int id, bool finalize = false) {
     STATIC_SYMBOL_PKG(s_new_qt_object, (char*)"NEW-QT-OBJECT", (char*)"EQL")
-    return cl_funcall(5, s_new_qt_object,
+    return cl_funcall(5,
+                      s_new_qt_object,
                       ecl_make_unsigned_integer((cl_index)pointer),
                       ecl_make_unsigned_integer((cl_index)unique),
                       MAKE_FIXNUM(id),
@@ -1666,8 +1667,11 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
 
 static void* getLispFun(cl_object l_fun) {
     STATIC_SYMBOL(s_package, (char*)"*PACKAGE*");
-    STATIC_SYMBOL_PKG(s_get_function, (char*)"%GET-FUNCTION", (char*)"EQL")
-    cl_object l_ret = cl_funcall(3, s_get_function, l_fun, cl_find_package(cl_symbol_value(s_package)));
+    STATIC_SYMBOL_PKG(s_get_function, (char*)"%GET-FUNCTION", (char*)"EQL") // see lisp/ini.lisp
+    cl_object l_ret = cl_funcall(3,
+                                 s_get_function,
+                                 l_fun,
+                                 cl_find_package(cl_symbol_value(s_package)));
     return (Cnil == l_ret) ? 0 : (void*)l_ret; }
 
 cl_object qconnect2(cl_object l_caller, cl_object l_signal, cl_object l_receiver, cl_object l_slot) {
@@ -1767,7 +1771,7 @@ cl_object qoverride(cl_object l_obj, cl_object l_name, cl_object l_fun) {
     QtObject o = toQtObject(l_obj);
     void* fun = (Cnil == l_fun) ? 0 : getLispFun(l_fun);
     if(o.pointer) {
-        QByteArray name(toCString(l_name));
+        QByteArray name(QMetaObject::normalizedSignature(toCString(l_name)));
         uint id = LObjects::override_function_ids.value(name, 0);
         if(id) {
             LObjects::setOverrideFun(o.unique, id, fun);
