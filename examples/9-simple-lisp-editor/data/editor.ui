@@ -165,6 +165,7 @@
    <addaction name="separator"/>
    <addaction name="action_copy"/>
    <addaction name="action_cut"/>
+   <addaction name="action_insert_file"/>
    <addaction name="separator"/>
    <addaction name="action_eval_region"/>
    <addaction name="action_repeat_eval"/>
@@ -219,6 +220,14 @@
    </property>
    <property name="toolTip">
     <string>Cut highlighted region</string>
+   </property>
+  </action>
+  <action name="action_insert_file">
+   <property name="text">
+    <string>Insert File</string>
+   </property>
+   <property name="toolTip">
+    <string>Insert a file at current cursor position</string>
    </property>
   </action>
  </widget>

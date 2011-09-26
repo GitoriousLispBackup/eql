@@ -31,9 +31,9 @@
   #+win32
   (qlocal8bit name))
 
-(defun read-file (file &optional (set-name t))
+(defun read-file (file &optional (set-name :set))
   (with-open-file (s (os-pathname file) :direction :input)
-    (when set-name
+    (when (eql :set set-name)
       (setf *file-name* file))
     (let ((str (make-string (file-length s))))
       (read-sequence str s)
@@ -43,7 +43,7 @@
   (in-home (concatenate 'string "examples/9-simple-lisp-editor/" name)))
 
 (defun from-file (name)
-  (eval (read-from-string (read-file (in-home* name) nil))))
+  (eval (read-from-string (read-file (in-home* name) :do-not-set))))
 
 (defparameter *auto-indent*   (from-file "data/auto-indent.lisp"))
 (defparameter *eql-keywords*  (from-file "data/eql-keywords.lisp"))
@@ -86,6 +86,7 @@
   *action-save-and-run*
   *action-copy*
   *action-cut*
+  *action-insert-file*
   *action-eval-region*
   *action-repeat-eval*)
 
@@ -180,6 +181,7 @@
     (qset *action-save-and-run* "shortcut" (keys "Ctrl+R"))
     (qset *action-copy*         "shortcut" (keys "Alt+C"))
     (qset *action-cut*          "shortcut" (keys "Alt+X"))
+    (qset *action-insert-file*  "shortcut" (keys "Ctrl+I"))
     (qset *action-eval-region*  "shortcut" (keys "Ctrl+Return"))
     (qset *action-repeat-eval*  "shortcut" (keys "Ctrl+E"))
     (qset *button-next*         "shortcut" (keys "Ctrl+F"))
@@ -190,6 +192,7 @@
     (qconnect *action-save-and-run* "triggered()" 'save-and-run)
     (qconnect *action-copy*         "triggered()" (lambda () (copy/cut-highlighted-region :copy)))
     (qconnect *action-cut*          "triggered()" (lambda () (copy/cut-highlighted-region :cut)))
+    (qconnect *action-insert-file*  "triggered()" 'insert-file)
     (qconnect *action-eval-region*  "triggered()" 'eval-region)
     (qconnect *action-repeat-eval*  "triggered()" 'repeat-eval)))
 
@@ -1211,13 +1214,13 @@
     (sort all 'string<)))
 
 (defun function-lambda-list* (name)
-  (let ((symbol (intern (string-upcase name))))
-    (multiple-value-bind (args ok)
-        (and (ignore-errors (symbol-function symbol))
-             (ignore-errors (ext:function-lambda-list symbol)))
-      (if ok
-          (format nil "<b>~A</b> ~(~A~)" name args)
-          ""))))
+  (let* ((symbol (intern (string-upcase name)))
+         (args (or (get symbol :function-lambda-list)
+                   (and (ignore-errors (symbol-function symbol))
+                        (ignore-errors (ext:function-lambda-list symbol))))))
+    (if args
+        (format nil "<b>~A</b> ~(~A~)" name args)
+        "")))
 
 (let (name*)
   (defun update-completer-symbols (&optional (package-name :eql))
@@ -1305,6 +1308,11 @@
     (qfun *symbol-popup* "hide")
     (setf current nil)))
 
+(defun insert-file ()
+  (let ((file (qfun "QFileDialog" "getOpenFileName")))
+    (unless (x:empty-string file)
+      (qfun (qfun *editor* "textCursor") "insertText" (read-file file :do-not-set)))))
+
 ;;; find, replace
 
 (defun find-text ()
@@ -1352,8 +1360,6 @@
                    last-arg
                    "my.lisp"))))
 
-(start)
-
 ;;; profile
 
 #|
@@ -1362,8 +1368,12 @@
 (progn
   (use-package :profile)
   (profile:profile
+   all-symbols
+   update-completer-symbols
    highlight-block
    left-paren
    right-paren
    read*))
 |#
+
+(start)

@@ -1883,13 +1883,13 @@
    "const QRect & rect () const"
    "const QRegion & region () const")
   (("QPainter" . NIL)
+   "new QPainter ( QWidget * )"
+   "new QPainter ( QPixmap * )"
    "bool begin ( QWidget * )"
    "bool begin ( QPixmap * )"
    "new QPainter ()"
-   "new QPainter ( QPaintDevice * )"
    "const QBrush & background () const"
    "Qt::BGMode backgroundMode () const"
-   "bool begin ( QPaintDevice * )"
    "void beginNativePainting ()"
    "QRectF boundingRect ( const QRectF & , int , const QString & )"
    "QRect boundingRect ( const QRect & , int , const QString & )"
@@ -1901,7 +1901,6 @@
    "QRegion clipRegion () const"
    "QTransform combinedTransform () const"
    "CompositionMode compositionMode () const"
-   "QPaintDevice * device () const"
    "const QTransform & deviceTransform () const"
    "void drawArc ( const QRectF & , int , int )"
    "void drawArc ( const QRect & , int , int )"

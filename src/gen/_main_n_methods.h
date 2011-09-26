@@ -1138,13 +1138,13 @@ public:
 class EQL_EXPORT N109 : public QObject { // QPainter
     Q_OBJECT
 public:
+    Q_INVOKABLE void* C(uint u, QWidget* x1) { return new LPainter(u, x1); }
+    Q_INVOKABLE void* C(uint u, QPixmap* x1) { return new LPainter(u, x1); }
     Q_INVOKABLE bool Mbegin(QPainter* o, QWidget* x1) { return o->begin(x1); }
     Q_INVOKABLE bool Mbegin(QPainter* o, QPixmap* x1) { return o->begin(x1); }
     Q_INVOKABLE void* C(uint u) { return new LPainter(u); }
-    Q_INVOKABLE void* C(uint u, QPaintDevice* x1) { return new LPainter(u, x1); }
     Q_INVOKABLE QBrush Mbackground(QPainter* o) const { return o->background(); }
     Q_INVOKABLE int MbackgroundMode(QPainter* o) const { return o->backgroundMode(); }
-    Q_INVOKABLE bool Mbegin(QPainter* o, QPaintDevice* x1) { return o->begin(x1); }
     Q_INVOKABLE void MbeginNativePainting(QPainter* o) { o->beginNativePainting(); }
     Q_INVOKABLE QRectF MboundingRect(QPainter* o, const QRectF& x1, int x2, const QString& x3) { return o->boundingRect(x1, x2, x3); }
     Q_INVOKABLE QRect MboundingRect(QPainter* o, const QRect& x1, int x2, const QString& x3) { return o->boundingRect(x1, x2, x3); }
@@ -1156,7 +1156,6 @@ public:
     Q_INVOKABLE QRegion MclipRegion(QPainter* o) const { return o->clipRegion(); }
     Q_INVOKABLE QTransform McombinedTransform(QPainter* o) const { return o->combinedTransform(); }
     Q_INVOKABLE int McompositionMode(QPainter* o) const { return o->compositionMode(); }
-    Q_INVOKABLE QPaintDevice* Mdevice(QPainter* o) const { return o->device(); }
     Q_INVOKABLE QTransform MdeviceTransform(QPainter* o) const { return o->deviceTransform(); }
     Q_INVOKABLE void MdrawArc(QPainter* o, const QRectF& x1, int x2, int x3) { o->drawArc(x1, x2, x3); }
     Q_INVOKABLE void MdrawArc(QPainter* o, const QRect& x1, int x2, int x3) { o->drawArc(x1, x2, x3); }

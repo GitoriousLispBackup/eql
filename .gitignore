@@ -19,6 +19,7 @@ _*
 .*.ui
 .*.txt
 *.user
+.r
 r
 t.lisp
 tr.h

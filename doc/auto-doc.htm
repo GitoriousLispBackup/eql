@@ -1,5 +1,5 @@
 <html><body><p>
-<b>DEFVAR-UI (main-widget &rest variable-names)</b>
+<b>DEFVAR-UI (main-widget &rest variables)</b>
 <p>This macro simplifies the definition of UI variables:</p>
 <pre>
   (defvar-ui *main* *line-edit* ...) ; this will expand to:
@@ -18,8 +18,8 @@
 <p>Convenience function returning <code>qApp</code>.</p>
 </p><br>
 <p>
-<b>QAPROPOS (&optional search class)</b>
-<p>Finds all occurrencies of the given search term in the given object's meta information.<br>Constructors are listed under "Methods".<br>To list the user defined functions of external C++ classes (see Qt_EQL), pass the object instead of the class name.</p>
+<b>QAPROPOS (&optional search-string class-name)</b>
+<p>Finds all occurrencies of the given search string in the given object's meta information.<br>Constructors are listed under "Methods".<br>To list the user defined functions of external C++ classes (see Qt_EQL), pass the object instead of the class name.</p>
 <pre>
   (qapropos "html" "QTextEdit")
   (qapropos nil "QWidget")
@@ -28,7 +28,7 @@
 </pre>
 </p><br>
 <p>
-<b>QAPROPOS* (&optional search class)</b>
+<b>QAPROPOS* (&optional search-string class-name)</b>
 <p>Similar to <code>qapropos</code>, returning the results as nested list.</p>
 </p><br>
 <p>
@@ -40,7 +40,7 @@
 <p>Clears all added event filters.</p>
 </p><br>
 <p>
-<b>QCONNECT (caller signal receiver slot)</b>
+<b>QCONNECT (caller signal receiver/function &optional slot)</b>
 <p>Connects either a Qt signal to a Qt slot, or a Qt signal to a Lisp function.</p>
 <pre>
   (qconnect edit "textChanged(QString)" label "setText(QString)")
@@ -65,7 +65,7 @@
 </pre>
 </p><br>
 <p>
-<b>QDISCONNECT (caller &optional signal receiver slot)</b>
+<b>QDISCONNECT (caller &optional signal receiver/function slot)</b>
 <p>Disconnects signals to either Qt slots or Lisp functions. Everything but the caller can be either <code>NIL</code> or omitted.</p>
 <pre>
   (qdisconnect edit "textChanged(QString)" label "setText(QString)")
@@ -112,7 +112,7 @@
 </pre>
 </p><br>
 <p>
-<b>QINVOKE-METHOD (object name &rest arguments)</b>
+<b>QINVOKE-METHOD (object function-name &rest arguments)</b>
 <br>
 <b>QFUN</b>
 <p>Calls any of Qt methods, slots, signals ("emit" in jargon). Static methods can be called by passing the string name of an object.<br>For overloaded Qt methods you may need to pass the argument types (as for <code>qconnect</code> and <code>qoverride</code>). In these (very few) ambiguous cases you will see a runtime error message, together with a list of all possible candidates.</p>
@@ -123,7 +123,7 @@
 </pre>
 </p><br>
 <p>
-<b>QINVOKE-METHOD* (object class name &rest arguments)</b>
+<b>QINVOKE-METHOD* (object cast-class-name function-name &rest arguments)</b>
 <br>
 <b>QFUN*</b>
 <p>Similar to <code>qinvoke-method</code>, additionally passing a class name, enforcing a cast to that class.</p>
@@ -142,7 +142,7 @@
 </pre>
 </p><br>
 <p>
-<b>QLOAD-UI (file)</b>
+<b>QLOAD-UI (file-name)</b>
 <p>Calls a custom <code>QUiLoader::load()</code> function, loading a UI file created by Qt Designer. Returns the top level widget of the UI.<br>Use <code>qfind-child</code> to retrieve the child widgets.</p>
 <pre>
   (qload-ui "my-fancy-gui.ui")
@@ -159,7 +159,7 @@
 <p>Convenience function: a simple message box, converting x to a string if necessary.</p>
 </p><br>
 <p>
-<b>QNEW-INSTANCE (name &rest arguments)</b>
+<b>QNEW-INSTANCE (class-name &rest arguments/properties)</b>
 <br>
 <b>QNEW</b>
 <p>Creates a new Qt object, optionally passing the given arguments to the constructor. Additionally you can pass any number of property/value pairs.<br>Please note how you can abbreviate long type lists.</p>
@@ -243,8 +243,8 @@
 </pre>
 </p><br>
 <p>
-<b>QSTATIC-META-OBJECT (name)</b>
-<p>Returns the static QMetaObject of the given QObject name.</p>
+<b>QSTATIC-META-OBJECT (class-name)</b>
+<p>Returns the static QMetaObject of the given class name (for <code>QObject</code> inherited classes).</p>
 <pre>
   (qstatic-meta-object "QWidget")
 </pre>
@@ -261,14 +261,14 @@
 <p>Returns the Qt class name.</p>
 </p><br>
 <p>
-<b>QUI-CLASS (file &optional name)</b>
+<b>QUI-CLASS (file-name &optional object-name)</b>
 <p>Finds the class name for the given user-defined object name in the given UI file.<br>Omitting the object name will return the top level class name of the UI.</p>
 <pre>
   (qui-class "examples/data/main-window.ui" "editor") ; returns "QTextEdit"
 </pre>
 </p><br>
 <p>
-<b>QUI-NAMES (file)</b>
+<b>QUI-NAMES (file-name)</b>
 <p>Finds all user-defined object names in the given UI file.</p>
 <pre>
   (qui-names "examples/data/main-window.ui")
@@ -283,7 +283,7 @@
 <p>Returns the EQL version number as "&lt;year&gt;.&lt;month&gt;.&lt;counter&gt;", analogous to the ECL version number.<br>The second return value is the Qt version as returned by <code>qVersion()</code>.</p>
 </p><br>
 <p>
-<b>TR (source &optional context n)</b>
-<p>Macro expanding to <code>qtranslate</code>, which calls <code>QCoreApplication::translate()</code>. Both <code>source</code> and <code>context</code> can be Lisp forms evaluating to constant strings (at compile time).<br>The <code>context</code> argument defaults to the Lisp file name, and the <code>n</code> argument is a plural indicator (see Qt Assistant).</p>
+<b>TR (source &optional context plural-number)</b>
+<p>Macro expanding to <code>qtranslate</code>, which calls <code>QCoreApplication::translate()</code>. Both <code>source</code> and <code>context</code> can be Lisp forms evaluating to constant strings (at compile time).<br>The <code>context</code> argument defaults to the Lisp file name. For the <code>plural-number</code>, see Qt Assistant.</p>
 </p><br>
 </body></html>

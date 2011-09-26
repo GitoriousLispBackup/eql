@@ -1259,8 +1259,8 @@ static cl_object collect_info(const QByteArray& type, const QByteArray& qclass, 
     return cl_nreverse(l_info); }
 
 cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
-    /// args: (&optional search class)
-    /// Finds all occurrencies of the given search term in the given object's meta information.<br>Constructors are listed under "Methods".<br>To list the user defined functions of external C++ classes (see Qt_EQL), pass the object instead of the class name.
+    /// args: (&optional search-string class-name)
+    /// Finds all occurrencies of the given search string in the given object's meta information.<br>Constructors are listed under "Methods".<br>To list the user defined functions of external C++ classes (see Qt_EQL), pass the object instead of the class name.
     ///     (qapropos "html" "QTextEdit")
     ///     (qapropos nil "QWidget")
     ///     (qapropos)
@@ -1332,7 +1332,7 @@ cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
 // *** main functions ***
 
 cl_object qnew_instance2(cl_object l_name, cl_object l_args) {
-    /// args: (name &rest arguments)
+    /// args: (class-name &rest arguments/properties)
     /// alias: qnew
     /// Creates a new Qt object, optionally passing the given arguments to the constructor. Additionally you can pass any number of property/value pairs.<br>Please note how you can abbreviate long type lists.
     ///     (qnew "QWidget")
@@ -1496,7 +1496,7 @@ cl_object qset_property(cl_object l_obj, cl_object l_name, cl_object l_val) {
     return Cnil; }
 
 cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, cl_object l_args) {
-    /// args: (object name &rest arguments)
+    /// args: (object function-name &rest arguments)
     /// alias: qfun
     /// Calls any of Qt methods, slots, signals ("emit" in jargon). Static methods can be called by passing the string name of an object.<br>For overloaded Qt methods you may need to pass the argument types (as for <code>qconnect</code> and <code>qoverride</code>). In these (very few) ambiguous cases you will see a runtime error message, together with a list of all possible candidates.
     ///     (qfun item "setText" 0 "Some objects are EQL.")
@@ -1675,7 +1675,7 @@ static void* getLispFun(cl_object l_fun) {
     return (Cnil == l_ret) ? 0 : (void*)l_ret; }
 
 cl_object qconnect2(cl_object l_caller, cl_object l_signal, cl_object l_receiver, cl_object l_slot) {
-    /// args: (caller signal receiver slot)
+    /// args: (caller signal receiver/function &optional slot)
     /// Connects either a Qt signal to a Qt slot, or a Qt signal to a Lisp function.
     ///     (qconnect edit "textChanged(QString)" label "setText(QString)")
     ///     (qconnect edit "textChanged(QString)" (lambda (txt) (print txt)))
@@ -1700,7 +1700,7 @@ cl_object qconnect2(cl_object l_caller, cl_object l_signal, cl_object l_receiver
      return Cnil; }
 
 cl_object qdisconnect2(cl_object l_caller, cl_object l_signal, cl_object l_receiver, cl_object l_slot) {
-    /// args: (caller &optional signal receiver slot)
+    /// args: (caller &optional signal receiver/function slot)
     /// Disconnects signals to either Qt slots or Lisp functions. Everything but the caller can be either <code>NIL</code> or omitted.
     ///     (qdisconnect edit "textChanged(QString)" label "setText(QString)")
     ///     (qdisconnect edit "textChanged(QString)")
@@ -2080,8 +2080,8 @@ cl_object qexec2(cl_object l_milliseconds) {
     return Ct; }
 
 cl_object qstatic_meta_object(cl_object l_class) {
-    /// args: (name)
-    /// Returns the static QMetaObject of the given QObject name.
+    /// args: (class-name)
+    /// Returns the static QMetaObject of the given class name (for <code>QObject</code> inherited classes).
     ///     (qstatic-meta-object "QWidget")
     ecl_process_env()->nvalues = 1;
     if(ECL_STRINGP(l_class)) {
@@ -2093,7 +2093,7 @@ cl_object qstatic_meta_object(cl_object l_class) {
     return Cnil; }
 
 cl_object qload_ui(cl_object l_ui) {
-    /// args: (file)
+    /// args: (file-name)
     /// Calls a custom <code>QUiLoader::load()</code> function, loading a UI file created by Qt Designer. Returns the top level widget of the UI.<br>Use <code>qfind-child</code> to retrieve the child widgets.
     ///     (qload-ui "my-fancy-gui.ui")
     ecl_process_env()->nvalues = 1;
@@ -2133,7 +2133,7 @@ cl_object qfind_child(cl_object l_obj, cl_object l_name) {
     return Cnil; }
 
 cl_object qui_class2(cl_object l_ui, cl_object l_name) {
-    /// args: (file &optional name)
+    /// args: (file-name &optional object-name)
     /// Finds the class name for the given user-defined object name in the given UI file.<br>Omitting the object name will return the top level class name of the UI.
     ///     (qui-class "examples/data/main-window.ui" "editor") ; returns "QTextEdit"
     ecl_process_env()->nvalues = 1;
@@ -2178,7 +2178,7 @@ cl_object qui_class2(cl_object l_ui, cl_object l_name) {
     return Cnil; }
 
 cl_object qui_names(cl_object l_ui) {
-    /// args: (file)
+    /// args: (file-name)
     /// Finds all user-defined object names in the given UI file.
     ///     (qui-names "examples/data/main-window.ui")
     ecl_process_env()->nvalues = 1;

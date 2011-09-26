@@ -31,7 +31,7 @@
               `(qdel ,(first vars)))))))
 
 (defmacro defvar-ui (main &rest names)
-  "args: (main-widget &rest variable-names)
+  "args: (main-widget &rest variables)
    This macro simplifies the definition of UI variables:
        (defvar-ui *main* *line-edit* ...) ; this will expand to:
        (progn (defvar *line-edit* (qfind-child *main* \"line_edit\")) ...)"
@@ -77,8 +77,8 @@
             (if (qt-object-finalize obj) " GC" ""))))
 
 (defmacro tr (src &optional con (n -1))
-  "args: (source &optional context n)
-   Macro expanding to <code>qtranslate</code>, which calls <code>QCoreApplication::translate()</code>. Both <code>source</code> and <code>context</code> can be Lisp forms evaluating to constant strings (at compile time).<br>The <code>context</code> argument defaults to the Lisp file name, and the <code>n</code> argument is a plural indicator (see Qt Assistant)."
+  "args: (source &optional context plural-number)
+   Macro expanding to <code>qtranslate</code>, which calls <code>QCoreApplication::translate()</code>. Both <code>source</code> and <code>context</code> can be Lisp forms evaluating to constant strings (at compile time).<br>The <code>context</code> argument defaults to the Lisp file name. For the <code>plural-number</code>, see Qt Assistant."
   ;; see compiler-macro in my_app/tr.lisp
   (let ((source (ignore-errors (eval src)))
         (context (ignore-errors (eval con))))
@@ -152,7 +152,7 @@
   nil)
 
 (defun qapropos* (&optional name class type)
-  "args: (&optional search class)
+  "args: (&optional search-string class-name)
    Similar to <code>qapropos</code>, returning the results as nested list."
   (%qapropos name class type))
 
@@ -163,7 +163,7 @@
   (%qinvoke-method obj nil slot args))
 
 (defun qinvoke-method* (obj name slot &rest args)
-  "args: (object class name &rest arguments)
+  "args: (object cast-class-name function-name &rest arguments)
    alias: qfun*
    Similar to <code>qinvoke-method</code>, additionally passing a class name, enforcing a cast to that class.
        (qfun* event \"QKeyEvent\" \"key\")
@@ -209,6 +209,58 @@
 (alias qfun* qinvoke-method*)
 (alias qmsg  qmessage-box)
 (alias qq    qquit)
+
+;; add property :function-lambda-list to plist of EQL functions (inspired by ext:function-lambda-list)
+
+(dolist (el (list (cons 'defvar-ui            '(main-widget &rest variables))
+                  (cons 'in-home              '(file-name))
+                  (cons 'qadd-event-filter    '(object event function))
+                  (cons 'qapropos             '(&optional search-string class-name))
+                  (cons 'qapropos*            '(&optional search-string class-name))
+                  (cons 'qconnect             '(caller signal receiver/function &optional slot))
+                  (cons 'qcopy                '(object))
+                  (cons 'qdelete              '(object))
+                  (cons 'qdel                 '(object))
+                  (cons 'qdisconnect          '(caller &optional signal receiver/function slot))
+                  (cons 'qeql                 '(object1 object2))
+                  (cons 'qescape              '(string))
+                  (cons 'qexec                '(&optional milliseconds))
+                  (cons 'qfind-child          '(object name))
+                  (cons 'qfrom-utf8           '(byte-array))
+                  (cons 'qfun                 '(object function-name &rest arguments))
+                  (cons 'qfun*                '(object cast-class-name function-name &rest arguments))
+                  (cons 'qget                 '(object name))
+                  (cons 'qgui                 '(&optional process-events))
+                  (cons 'qid                  '(class-name))
+                  (cons 'qinvoke-method       '(object function-name &rest arguments))
+                  (cons 'qinvoke-method*      '(object cast-class-name function-name &rest arguments))
+                  (cons 'qload-ui             '(file-name))
+                  (cons 'qlocal8bit           '(string))
+                  (cons 'qmessage-box         '(x))
+                  (cons 'qmsg                 '(x))
+                  (cons 'qnew                 '(class-name &rest arguments/properties))
+                  (cons 'qnew-instance        '(class-name &rest arguments/properties))
+                  (cons 'qnull-object         '(object))
+                  (cons 'qobject-names        '(&optional type))
+                  (cons 'qoverride            '(object name function))
+                  (cons 'qproperty            '(object name))
+                  (cons 'qrequire             '(module))
+                  (cons 'qset-null            '(object))
+                  (cons 'qset                 '(object name value))
+                  (cons 'qset-property        '(object name value))
+                  (cons 'qsingle-shot         '(milliseconds function))
+                  (cons 'qstatic-meta-object  '(class-name))
+                  (cons 'qsuper-class-name    '(class-name))
+                  (cons 'qt-object-id         '(object))
+                  (cons 'qt-object-name       '(object))
+                  (cons 'qt-object-p          '(object))
+                  (cons 'qt-object-pointer    '(object))
+                  (cons 'qt-object-unique     '(object))
+                  (cons 'qui-class            '(file-name &optional object-name))
+                  (cons 'qui-names            '(file-name))
+                  (cons 'qutf8                '(string))
+                  (cons 'tr                   '(source &optional context plural-number))))
+  (setf (get (car el) :function-lambda-list) (cdr el)))
 
 (in-package :si)
 

@@ -164,46 +164,50 @@
             super)))))
   (defun parse (type class s so no-new)
     ;; "bool QPainter::begin ( QPaintDevice * )": multiple inheritance problem
-    (when (and (string= "QPainter" class)
-               (string= "public functions" type))
-      (format s "~%   \"bool begin ( QWidget * )\"~
-                 ~%   \"bool begin ( QPixmap * )\""))
-    (let ((static (starts-with "static" type))
-          (protected (search "protected" type))
-          (p (search* (format nil "<h2>~A</h2>" type) html)))
-      (when p
-        (let* ((tb1 (search* "<table" html p))
-               (tb2 (search* "</table>" html tb1))
-               (funs (subseq html tb1 tb2))
-               tr1 (tr2 0))
-          (loop
-             (setf tr1 (search* "<tr" funs tr2))
-             (unless tr1
-               (return))
-             (setf tr2 (search* "</tr>" funs tr1))
-             (let* ((fun (string-trim " " (text (subseq funs tr1 tr2))))
-                    (new (or (starts-with (format nil "Q_INVOKABLE ~A (" class) fun)
-                             (starts-with (format nil "~A (" class) fun)))
-                    (virtual (starts-with "virtual" fun)))
-               (unless (or (and new no-new)
-                           (find #\~ fun) ; destructor
-                           (dolist (str +skip+)
-                             (when (search str fun)
-                               (return t)))
-                           ;; template problem
-                           (and (string= "QVariant" class)
-                                (string= "bool canConvert () const" fun))
-                           ;; primitives
-                           (and (string= "QColor" class)
-                                (not static)))
-                 (when virtual
-                   (format so "~%   \"~A\"" fun))
-                 (unless (and virtual protected)
-                   (format s "~%   \"~A~A\"" (cond (new "new ") ; constructor
-                                                   (protected "protected ")
-                                                   (static "static ")
-                                                   (t ""))
-                           (subseq fun (if (starts-with "Q_INVOKABLE" fun) 12 0))))))))))))
+    (let ((qpainter (and (string= "QPainter" class)
+                         (string= "public functions" type))))
+      (when qpainter
+        (format s "~%   \"new QPainter ( QWidget * )\"~
+                   ~%   \"new QPainter ( QPixmap * )\"~
+                   ~%   \"bool begin ( QWidget * )\"~
+                   ~%   \"bool begin ( QPixmap * )\""))
+      (let ((static (starts-with "static" type))
+            (protected (search "protected" type))
+            (p (search* (format nil "<h2>~A</h2>" type) html)))
+        (when p
+          (let* ((tb1 (search* "<table" html p))
+                 (tb2 (search* "</table>" html tb1))
+                 (funs (subseq html tb1 tb2))
+                 tr1 (tr2 0))
+            (loop
+              (setf tr1 (search* "<tr" funs tr2))
+              (unless tr1
+                (return))
+              (setf tr2 (search* "</tr>" funs tr1))
+              (let* ((fun (string-trim " " (text (subseq funs tr1 tr2))))
+                     (new (or (starts-with (format nil "Q_INVOKABLE ~A (" class) fun)
+                              (starts-with (format nil "~A (" class) fun)))
+                     (virtual (starts-with "virtual" fun)))
+                (unless (or (and qpainter (search "QPaintDevice" fun :test 'string=))
+                            (and new no-new)
+                            (find #\~ fun) ; destructor
+                            (dolist (str +skip+)
+                              (when (search str fun)
+                                (return t)))
+                            ;; template problem
+                            (and (string= "QVariant" class)
+                                 (string= "bool canConvert () const" fun))
+                            ;; primitives
+                            (and (string= "QColor" class)
+                                 (not static)))
+                  (when virtual
+                    (format so "~%   \"~A\"" fun))
+                  (unless (and virtual protected)
+                    (format s "~%   \"~A~A\"" (cond (new "new ") ; constructor
+                                                    (protected "protected ")
+                                                    (static "static ")
+                                                    (t ""))
+                            (subseq fun (if (starts-with "Q_INVOKABLE" fun) 12 0)))))))))))))
 
 (defun parse-classes (classes s so non)
   (dolist (class classes)
