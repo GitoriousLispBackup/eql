@@ -1781,7 +1781,7 @@ cl_object qoverride(cl_object l_obj, cl_object l_name, cl_object l_fun) {
 
 cl_object qcall_default() {
     /// args: ()
-    /// To use inside an overriden function (see <code>qoverride</code>).<br>Calls the base implementation of the virtual Qt method.
+    /// To use inside an overridden function (see <code>qoverride</code>).<br>Calls the base implementation of the virtual Qt method.
     ecl_process_env()->nvalues = 1;
     LObjects::call_default = true;
     return Ct; }

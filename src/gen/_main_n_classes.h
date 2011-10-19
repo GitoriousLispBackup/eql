@@ -1169,8 +1169,11 @@ public:
 class LPainter : public QPainter {
     friend class N109;
 public:
-    LPainter(uint u, QWidget* x1) : QPainter(x1), unique(u) {}
+    LPainter(uint u, QImage* x1) : QPainter(x1), unique(u) {}
+    LPainter(uint u, QPicture* x1) : QPainter(x1), unique(u) {}
     LPainter(uint u, QPixmap* x1) : QPainter(x1), unique(u) {}
+    LPainter(uint u, QPrinter* x1) : QPainter(x1), unique(u) {}
+    LPainter(uint u, QWidget* x1) : QPainter(x1), unique(u) {}
     LPainter(uint u) : unique(u) {}
 
     static NumList overrideIds;

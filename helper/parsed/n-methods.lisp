@@ -1883,10 +1883,16 @@
    "const QRect & rect () const"
    "const QRegion & region () const")
   (("QPainter" . NIL)
-   "new QPainter ( QWidget * )"
+   "new QPainter ( QImage * )"
+   "bool begin ( QImage * )"
+   "new QPainter ( QPicture * )"
+   "bool begin ( QPicture * )"
    "new QPainter ( QPixmap * )"
-   "bool begin ( QWidget * )"
    "bool begin ( QPixmap * )"
+   "new QPainter ( QPrinter * )"
+   "bool begin ( QPrinter * )"
+   "new QPainter ( QWidget * )"
+   "bool begin ( QWidget * )"
    "new QPainter ()"
    "const QBrush & background () const"
    "Qt::BGMode backgroundMode () const"

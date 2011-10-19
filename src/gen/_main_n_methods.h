@@ -1138,10 +1138,16 @@ public:
 class EQL_EXPORT N109 : public QObject { // QPainter
     Q_OBJECT
 public:
-    Q_INVOKABLE void* C(uint u, QWidget* x1) { return new LPainter(u, x1); }
+    Q_INVOKABLE void* C(uint u, QImage* x1) { return new LPainter(u, x1); }
+    Q_INVOKABLE bool Mbegin(QPainter* o, QImage* x1) { return o->begin(x1); }
+    Q_INVOKABLE void* C(uint u, QPicture* x1) { return new LPainter(u, x1); }
+    Q_INVOKABLE bool Mbegin(QPainter* o, QPicture* x1) { return o->begin(x1); }
     Q_INVOKABLE void* C(uint u, QPixmap* x1) { return new LPainter(u, x1); }
-    Q_INVOKABLE bool Mbegin(QPainter* o, QWidget* x1) { return o->begin(x1); }
     Q_INVOKABLE bool Mbegin(QPainter* o, QPixmap* x1) { return o->begin(x1); }
+    Q_INVOKABLE void* C(uint u, QPrinter* x1) { return new LPainter(u, x1); }
+    Q_INVOKABLE bool Mbegin(QPainter* o, QPrinter* x1) { return o->begin(x1); }
+    Q_INVOKABLE void* C(uint u, QWidget* x1) { return new LPainter(u, x1); }
+    Q_INVOKABLE bool Mbegin(QPainter* o, QWidget* x1) { return o->begin(x1); }
     Q_INVOKABLE void* C(uint u) { return new LPainter(u); }
     Q_INVOKABLE QBrush Mbackground(QPainter* o) const { return o->background(); }
     Q_INVOKABLE int MbackgroundMode(QPainter* o) const { return o->backgroundMode(); }

@@ -169,6 +169,8 @@
    <addaction name="separator"/>
    <addaction name="action_eval_region"/>
    <addaction name="action_repeat_eval"/>
+   <addaction name="separator"/>
+   <addaction name="action_reset_lisp"/>
   </widget>
   <action name="action_open">
    <property name="text">
@@ -228,6 +230,14 @@
    </property>
    <property name="toolTip">
     <string>Insert a file at current cursor position</string>
+   </property>
+  </action>
+  <action name="action_reset_lisp">
+   <property name="text">
+    <string>Reset Lisp</string>
+   </property>
+   <property name="toolTip">
+    <string>Restart local Lisp server</string>
    </property>
   </action>
  </widget>

@@ -201,6 +201,16 @@
   #-win32
   (serve-event:serve-all-events 0.02))
 
+(let (loaded)
+  (defun qselect (&optional on-selected)
+    "args: ()
+     alias: qsel
+     Allows to select (by clicking) any (child) widget. The variable <code>qsel:*q*</code> is bound to the latest selected widget."
+    (unless loaded
+      (setf loaded t)
+      (load (in-home "src/lisp/qselect")))
+    (%qselect on-selected)))
+
 (alias qnew  qnew-instance)
 (alias qdel  qdelete)
 (alias qget  qproperty)
@@ -208,6 +218,7 @@
 (alias qfun  qinvoke-method)
 (alias qfun* qinvoke-method*)
 (alias qmsg  qmessage-box)
+(alias qsel  qselect)
 (alias qq    qquit)
 
 ;; add property :function-lambda-list to plist of EQL functions (inspired by ext:function-lambda-list)
@@ -262,11 +273,11 @@
                   (cons 'tr                   '(source &optional context plural-number))))
   (setf (get (car el) :function-lambda-list) (cdr el)))
 
-(in-package :si)
-
 ;;; The following is taken from "src/lsp/top.lsp" version 11.1.1
 ;;; added SERVE-EVENT to TPL-READ, in order to process Qt events
 ;;; (every modification is annotated with "[EQL]")
+
+(in-package :si)
 
 #-win32
 (defun qtop-level ()

@@ -167,10 +167,10 @@
     (let ((qpainter (and (string= "QPainter" class)
                          (string= "public functions" type))))
       (when qpainter
-        (format s "~%   \"new QPainter ( QWidget * )\"~
-                   ~%   \"new QPainter ( QPixmap * )\"~
-                   ~%   \"bool begin ( QWidget * )\"~
-                   ~%   \"bool begin ( QPixmap * )\""))
+        (dolist (device (list "QImage" "QPicture" "QPixmap" "QPrinter" "QWidget")) 
+          (format s "~%   \"new QPainter ( ~A * )\"~
+                     ~%   \"bool begin ( ~A * )\""
+                  device device)))
       (let ((static (starts-with "static" type))
             (protected (search "protected" type))
             (p (search* (format nil "<h2>~A</h2>" type) html)))

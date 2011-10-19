@@ -42,6 +42,8 @@
   "qq"
   "qquit"
   "qrequire"
+  "qsel"
+  "qselect"
   "qsender"
   "qset"
   "qset-ini"

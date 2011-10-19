@@ -88,7 +88,8 @@
   *action-cut*
   *action-insert-file*
   *action-eval-region*
-  *action-repeat-eval*)
+  *action-repeat-eval*
+  *action-reset-lisp*)
 
 (defparameter *current-editor*       *editor*)
 (defparameter *lisp-match-rule*      nil)
@@ -156,7 +157,7 @@
   (qconnect *replace* "returnPressed()" 'replace-text)
   (qconnect *button-next*    "clicked()" 'find-text)
   (qconnect *button-replace* "clicked()" 'replace-text)
-  (qconnect *select* "clicked()" 'select-widget)
+  (qconnect *select* "clicked()" (lambda () (run-on-server "(qselect 'local-server::widget-selected)")))
   (qconnect (qapp) "aboutToQuit()" 'clean-up)
   (qoverride *editor*  "keyPressEvent(QKeyEvent*)" 'editor-key-pressed)
   (qoverride *command* "keyPressEvent(QKeyEvent*)" 'command-key-pressed)
@@ -174,27 +175,23 @@
   (qsingle-shot 0 'delayed-ini))
 
 (defun ini-actions ()
-  (flet ((keys (str)
-           (qnew "QKeySequence(QString)" str)))
-    (qset *action-open*         "shortcut" (keys "Ctrl+O"))
-    (qset *action-save*         "shortcut" (keys "Ctrl+S"))
-    (qset *action-save-and-run* "shortcut" (keys "Ctrl+R"))
-    (qset *action-copy*         "shortcut" (keys "Alt+C"))
-    (qset *action-cut*          "shortcut" (keys "Alt+X"))
-    (qset *action-insert-file*  "shortcut" (keys "Ctrl+I"))
-    (qset *action-eval-region*  "shortcut" (keys "Ctrl+Return"))
-    (qset *action-repeat-eval*  "shortcut" (keys "Ctrl+E"))
-    (qset *button-next*         "shortcut" (keys "Ctrl+F"))
-    (qset *button-replace*      "shortcut" (keys "Ctrl+G"))
-    (qconnect *action-open*         "triggered()" 'file-open)
-    (qconnect *action-save*         "triggered()" 'file-save)
-    (qconnect *action-save-as*      "triggered()" 'file-save-as)
-    (qconnect *action-save-and-run* "triggered()" 'save-and-run)
-    (qconnect *action-copy*         "triggered()" (lambda () (copy/cut-highlighted-region :copy)))
-    (qconnect *action-cut*          "triggered()" (lambda () (copy/cut-highlighted-region :cut)))
-    (qconnect *action-insert-file*  "triggered()" 'insert-file)
-    (qconnect *action-eval-region*  "triggered()" 'eval-region)
-    (qconnect *action-repeat-eval*  "triggered()" 'repeat-eval)))
+  (flet ((ini (action keys &optional fun)
+           (when keys
+             (qset action "shortcut" (qnew "QKeySequence(QString)" keys)))
+           (when fun
+             (qconnect action "triggered()" fun))))
+    (ini *action-open*         "Ctrl+O"      'file-open)
+    (ini *action-save*         "Ctrl+S"      'file-save)
+    (ini *action-save-as*      nil           'file-save-as)
+    (ini *action-save-and-run* "Ctrl+R"      'save-and-run)
+    (ini *action-copy*         "Alt+C"       (lambda () (copy/cut-highlighted-region :copy)))
+    (ini *action-cut*          "Alt+X"       (lambda () (copy/cut-highlighted-region :cut)))
+    (ini *action-insert-file*  "Ctrl+I"      'insert-file)
+    (ini *action-eval-region*  "Ctrl+Return" 'eval-region)
+    (ini *action-repeat-eval*  "Ctrl+E"      'repeat-eval)
+    (ini *action-reset-lisp*   "Ctrl+Alt+R"  'restart-server)
+    (ini *button-next*         "Ctrl+F")
+    (ini *button-replace*      "Ctrl+G")))
 
 (defun ini-highlighter ()
   (setf *eql-keyword-format*  (qnew "QTextCharFormat")
@@ -1060,24 +1057,35 @@
 
 ;;; external lisp process
 
-(defun run-on-server (str)
+(defun run-on-server (str &optional restart)
+  (flet ((path-to-server (name)
+           (x:when-it (probe-file (in-home (concatenate 'string "examples/9-simple-lisp-editor/" name)))
+             (namestring x:it))))
+    (qprocess-events)
+    (or (local-client:request str)
+        (when (or restart
+                  (= |QMessageBox.Yes|
+                     (qlet ((msg "QMessageBox"))
+                       (x:do-with (qfun msg)
+                         ("setText" (tr "<p>The <code><b style='color: blue'>local-server</b></code> seems not running.</p><p>Start it now?</p>"))
+                         ("setStandardButtons" (logior |QMessageBox.Yes| |QMessageBox.No|))
+                         ("setDefaultButton(QMessageBox::StandardButton)" |QMessageBox.No|)
+                         "exec"))))
+          (qfun "QProcess" "startDetached" "eql" (list (or (path-to-server "eql-local-server.fas")
+                                                           (path-to-server "local-server.lisp"))))
+          ;; wait max. 15 seconds
+          (dotimes (i 150)
+            (qprocess-events)
+            (when (local-client:request str)
+              (return-from run-on-server t))
+            (sleep 0.1))
+          nil))))
+
+(defun restart-server ()
+  (run-on-server "(qquit)" :restart)
   (qprocess-events)
-  (or (local-client:request str)
-      (when (= |QMessageBox.Yes|
-               (qlet ((msg "QMessageBox"))
-                 (x:do-with (qfun msg)
-                   ("setText" (tr "<p>The <code><b style='color: blue'>local-server</b></code> seems not running.</p><p>Start it now?</p>"))
-                   ("setStandardButtons" (logior |QMessageBox.Yes| |QMessageBox.No|))
-                   ("setDefaultButton(QMessageBox::StandardButton)" |QMessageBox.No|)
-                   "exec")))
-        (qfun "QProcess" "startDetached" "eql local-server")
-        ;; wait max. 15 seconds
-        (dotimes (i 150)
-          (qprocess-events)
-          (when (local-client:request str)
-            (return-from run-on-server t))
-          (sleep 0.1))
-        nil)))
+  (sleep 1)
+  (run-on-server ":reset" :restart))
 
 (defun save-and-run ()
   (file-save)
@@ -1123,11 +1131,8 @@
        (x:do-with (qfun *main*)
          "activateWindow"
          "raise"))
-    (:select-loaded
-       (select-widget))
-    (:selected
-       (qset *sel-label* "text" str)
-       (run-on-server "eql:*sel*"))))
+    (:widget-selected
+       (widget-selected str))))
 
 ;;; command line
 
@@ -1326,13 +1331,9 @@
 
 ;;; select
 
-(let ((ini t))
-  (defun select-widget ()
-    (if ini
-        (progn
-          (setf ini nil)
-          (run-on-server "(load \"select\")"))
-        (run-on-server "(select:select-mode)"))))
+(defun widget-selected (str)
+  (qset *sel-label* "text" str)
+  (run-on-server "qsel:*q*"))
 
 ;;; debugger hook
 

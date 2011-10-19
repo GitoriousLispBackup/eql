@@ -35,7 +35,7 @@
       "show" "raise")))
 
 (defun paint (ev)
-  (qlet ((painter "QPainter(QWidget*)" *wiggly*)
+  (qlet ((painter "QPainter(QWidget*)" *wiggly*) ; local QPainter variable: no need to call "begin", "end"
          (pen "QPen")
          (metrics "QFontMetrics(QFont)" (qget *wiggly* "font")))
     (let* ((txt (qget *edit* "text"))
@@ -60,7 +60,7 @@
 (defun timeout (ev)
   (when (= (qfun ev "timerId") (qfun *timer* "timerId"))
     (incf *step*)
-    (qfun *wiggly* "update")
-    (qcall-default)))
+    (qfun *wiggly* "update"))
+  (qcall-default))
 
 (start)

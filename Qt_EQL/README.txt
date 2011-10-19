@@ -137,7 +137,7 @@ objects, simply use the standard qfun.
 All of: qconnect, qget, qset don't need this distinction.
 
 You (quite obviously) can't use qoverride for external Qt/C++ classes (to do
-the equivalent, simply call a Lisp function from an overriden method in C++).
+the equivalent, simply call a Lisp function from an overridden method in C++).
 
 The class name returned by qt-object-name is the first vanilla Qt class
 encountered walking up the super classes; in this example, *qt-main* is shown of

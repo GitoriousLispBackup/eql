@@ -203,4 +203,9 @@
                           (when (eql 'si:interactive-interrupt (type-of cond))
                             (setf *debug-io* *terminal-io*)))))
 
+;;; extensions
+
+(defun widget-selected (widget)
+  (send-to-client :widget-selected (princ-to-string widget)))
+
 (ini)
