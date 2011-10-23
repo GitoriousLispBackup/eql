@@ -1,3 +1,8 @@
+;;; copyright (c) 2010-2011 Polos Ruetz
+;;;
+;;; Allows to visually select any (child) widget.
+;;; On selecting, the widget will be highlighted and bound to the variable qsel:*q* 
+
 (defpackage :qselect
   (:nicknames :qsel)
   (:use :common-lisp :eql)
@@ -6,7 +11,7 @@
 
 (in-package :eql)
 
-(let (initialized fun)
+(let (initialized)
   (defun %qselect (on-selected)
     (unless initialized
       (setf initialized t)
@@ -25,6 +30,7 @@
     (when listen
       (setf listen nil)
       (setf *q* object)
+      (setf (qt-object-unique object) (qfun (qfun *q* "property" "EQL.unique") "toUInt"))
       (indicate)
       (qfun "QApplication" "restoreOverrideCursor")
       (when *on-selected*

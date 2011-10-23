@@ -155,7 +155,7 @@ public:
                     w = (QWidget*)pointer;
                     if(par) {
                         w->setParent(par); }
-                    LObjects::ui_unique[objName] = unique;
+                    w->setProperty("EQL.unique", unique);
                     w->setObjectName(objName); }}
             else {
                 // fallback
@@ -1386,6 +1386,9 @@ cl_object qnew_instance2(cl_object l_name, cl_object l_args) {
                         if(pointer) {
                             cl_object l_ret = new_qt_object(pointer, unique, id);
                             if(id > 0) { // QObject derived
+                                QObject* obj = (QObject*)pointer;
+                                if(obj->isWidgetType()) {
+                                    obj->setProperty("EQL.unique", unique); }
                                 while(l_do_args != Cnil) {
                                     qset_property(l_ret, cl_first(l_do_args), cl_second(l_do_args));
                                     l_do_args = cl_cddr(l_do_args); }}
@@ -2109,7 +2112,7 @@ cl_object qload_ui(cl_object l_ui) {
             if(w) {
                 cl_object l_ret = qt_object_from_name(LObjects::vanillaQtSuperClassName(w->metaObject()),
                                                       w,
-                                                      LObjects::ui_unique.value(w->objectName(), 0));
+                                                      w->property("EQL.unique").toUInt());
                 return  l_ret; }}}
     error_msg("QLOAD-UI", LIST1(l_ui));
     return Cnil; }
@@ -2127,7 +2130,7 @@ cl_object qfind_child(cl_object l_obj, cl_object l_name) {
             if(obj) {
                 cl_object l_ret = qt_object_from_name(LObjects::vanillaQtSuperClassName(obj->metaObject()),
                                                       obj,
-                                                      LObjects::ui_unique.value(name, 0));
+                                                      obj->property("EQL.unique").toUInt());
                 return l_ret; }}}
     error_msg("QFIND-CHILD", LIST2(l_obj, l_name));
     return Cnil; }

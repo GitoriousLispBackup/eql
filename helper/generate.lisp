@@ -759,7 +759,6 @@
                ~%QList<QByteArray> LObjects::nNames;~
                ~%QMap<QByteArray, int> LObjects::q_names;~
                ~%QMap<QByteArray, int> LObjects::n_names;~
-               ~%QHash<QString, uint> LObjects::ui_unique;~
                ~%QHash<QByteArray, uint> LObjects::override_function_ids;~
                ~%QHash<quint64, void*> LObjects::override_lisp_functions;~%"
             +message-generated+)

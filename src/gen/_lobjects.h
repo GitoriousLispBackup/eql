@@ -54,7 +54,6 @@ public:
     static QList<QByteArray> nNames;
     static QMap<QByteArray, int> q_names;
     static QMap<QByteArray, int> n_names;
-    static QHash<QString, uint> ui_unique;
     static QHash<QByteArray, uint> override_function_ids;
     static QHash<quint64, void*> override_lisp_functions;
 
