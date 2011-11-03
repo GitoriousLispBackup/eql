@@ -3,7 +3,11 @@
 
 #include "_ini.h"
 #include "../_lobjects.h"
+#include "../../eql.h"
 #include <QtGui>
+
+TO_QT_TYPE_PTR(QGLFormat, qglformat)
+TO_QT_TYPE_PTR(QGLFramebufferObjectFormat, qglframebufferobjectformat)
 
 static GLfloat toFloat(cl_object l_num) {
     GLfloat f = 0;
@@ -38,22 +42,31 @@ static GLuint toUInt(cl_object l_num) {
     return i; }
 
 void ini2() {
-    LObjects::T_GLfloat = qRegisterMetaType<GLfloat>("GLfloat");
-    LObjects::T_GLint =   qRegisterMetaType<GLint>("GLint");
-    LObjects::T_GLuint =  qRegisterMetaType<GLuint>("GLuint"); }
+    LObjects::T_GLenum =                     qRegisterMetaType<GLenum>("GLenum");
+    LObjects::T_GLfloat =                    qRegisterMetaType<GLfloat>("GLfloat");
+    LObjects::T_GLint =                      qRegisterMetaType<GLint>("GLint");
+    LObjects::T_GLuint =                     qRegisterMetaType<GLuint>("GLuint");
+    LObjects::T_QGLFormat =                  qRegisterMetaType<QGLFormat>("QGLFormat");
+    LObjects::T_QGLFramebufferObjectFormat = qRegisterMetaType<QGLFramebufferObjectFormat>("QGLFramebufferObjectFormat"); }
 
 void* toMetaArg(int n, cl_object l_arg) {
     void* p = 0;
-    if(LObjects::T_GLfloat == n)     { p = new GLfloat(toFloat(l_arg)); }
-    else if(LObjects::T_GLint == n)  { p = new GLint(toInt(l_arg)); }
-    else if(LObjects::T_GLuint == n) { p = new GLuint(toUInt(l_arg)); }
+    if(LObjects::T_GLenum == n)                           { p = new GLenum(toInt(l_arg)); }
+    else if(LObjects::T_GLfloat == n)                     { p = new GLfloat(toFloat(l_arg)); }
+    else if(LObjects::T_GLint == n)                       { p = new GLint(toInt(l_arg)); }
+    else if(LObjects::T_GLuint == n)                      { p = new GLuint(toUInt(l_arg)); }
+    else if(LObjects::T_QGLFormat == n)                   { p = new QGLFormat(*toQGLFormatPointer(l_arg)); }
+    else if(LObjects::T_QGLFramebufferObjectFormat == n)  { p = new QGLFramebufferObjectFormat(*toQGLFramebufferObjectFormatPointer(l_arg)); }
     return p; }
 
 cl_object to_lisp_arg(int n, void* p) {
     cl_object l_ret = Cnil;
-    if(LObjects::T_GLfloat == n)     { l_ret = ecl_make_doublefloat(*(GLfloat*)p); }
-    else if(LObjects::T_GLint == n)  { l_ret = MAKE_FIXNUM(*(GLint*)p); }
-    else if(LObjects::T_GLuint == n) { l_ret = MAKE_FIXNUM(*(GLuint*)p); }
+    if(LObjects::T_GLenum == n)                           { l_ret = MAKE_FIXNUM(*(GLenum*)p); }
+    else if(LObjects::T_GLfloat == n)                     { l_ret = ecl_make_doublefloat(*(GLfloat*)p); }
+    else if(LObjects::T_GLint == n)                       { l_ret = MAKE_FIXNUM(*(GLint*)p); }
+    else if(LObjects::T_GLuint == n)                      { l_ret = MAKE_FIXNUM(*(GLuint*)p); }
+    else if(LObjects::T_QGLFormat == n)                   { l_ret = from_qglformat(*(QGLFormat*)p); }
+    else if(LObjects::T_QGLFramebufferObjectFormat == n)  { l_ret = from_qglframebufferobjectformat(*(QGLFramebufferObjectFormat*)p); }
     return l_ret; }
 
 #endif

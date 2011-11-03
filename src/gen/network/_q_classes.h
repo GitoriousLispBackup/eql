@@ -164,7 +164,7 @@ public:
 
 class LTcpServer : public QTcpServer {
     Q_OBJECT
-    friend class Q183;
+    friend class Q188;
 public:
     LTcpServer(uint u, QObject* x1 = 0) : QTcpServer(x1), unique(u) {}
 
@@ -173,7 +173,7 @@ public:
 
     bool hasPendingConnections() const { void* fun = LObjects::overrideFun(unique, 274); bool ret = false; if(fun) { ret = callOverrideFun(fun, 274, 0).toBool(); } if(!fun || LObjects::call_default) { ret = QTcpServer::hasPendingConnections(); } return ret; }
     QTcpSocket* nextPendingConnection() { void* fun = LObjects::overrideFun(unique, 275); QTcpSocket* ret = 0; if(fun) { ret = (QTcpSocket*)qVariantValue<void*>(callOverrideFun(fun, 275, 0)); } if(!fun || LObjects::call_default) { ret = QTcpServer::nextPendingConnection(); } return ret; }
-    void incomingConnection(int x1) { void* fun = LObjects::overrideFun(unique, 310); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 310, args); } if(!fun || LObjects::call_default) { QTcpServer::incomingConnection(x1); }}
+    void incomingConnection(int x1) { void* fun = LObjects::overrideFun(unique, 341); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 341, args); } if(!fun || LObjects::call_default) { QTcpServer::incomingConnection(x1); }}
     void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 5, args); } if(!fun || LObjects::call_default) { QTcpServer::childEvent(x1); }}
     void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 6, args); } if(!fun || LObjects::call_default) { QTcpServer::connectNotify(x1); }}
     void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 7, args); } if(!fun || LObjects::call_default) { QTcpServer::customEvent(x1); }}
@@ -183,7 +183,7 @@ public:
 
 class LTcpSocket : public QTcpSocket {
     Q_OBJECT
-    friend class Q184;
+    friend class Q189;
 public:
     LTcpSocket(uint u, QObject* x1 = 0) : QTcpSocket(x1), unique(u) {}
 
@@ -215,7 +215,7 @@ public:
 
 class LUdpSocket : public QUdpSocket {
     Q_OBJECT
-    friend class Q202;
+    friend class Q207;
 public:
     LUdpSocket(uint u, QObject* x1 = 0) : QUdpSocket(x1), unique(u) {}
 

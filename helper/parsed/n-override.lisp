@@ -323,6 +323,38 @@
    "virtual void setGeometry ( const QRect & )"
    "virtual QSize sizeHint () const"
    "virtual QSpacerItem * spacerItem ()")
+  (("QSqlDatabase" . NIL))
+  (("QSqlError" . NIL))
+  (("QSqlField" . NIL))
+  (("QSqlIndex" . "QSqlRecord"))
+  (("QSqlQuery" . NIL))
+  (("QSqlRecord" . NIL))
+  (("QSqlRelation" . NIL))
+  (("QSqlResult" . NIL)
+   "virtual QVariant handle () const"
+   "virtual void bindValue ( int , const QVariant & , QSql::ParamType )"
+   "virtual void bindValue ( const QString & , const QVariant & , QSql::ParamType )"
+   "virtual QVariant data ( int ) = 0"
+   "virtual bool exec ()"
+   "virtual bool fetch ( int ) = 0"
+   "virtual bool fetchFirst () = 0"
+   "virtual bool fetchLast () = 0"
+   "virtual bool fetchNext ()"
+   "virtual bool fetchPrevious ()"
+   "virtual bool isNull ( int ) = 0"
+   "virtual QVariant lastInsertId () const"
+   "virtual int numRowsAffected () = 0"
+   "virtual bool prepare ( const QString & )"
+   "virtual QSqlRecord record () const"
+   "virtual bool reset ( const QString & ) = 0"
+   "virtual bool savePrepare ( const QString & )"
+   "virtual void setActive ( bool )"
+   "virtual void setAt ( int )"
+   "virtual void setForwardOnly ( bool )"
+   "virtual void setLastError ( const QSqlError & )"
+   "virtual void setQuery ( const QString & )"
+   "virtual void setSelect ( bool )"
+   "virtual int size () = 0")
   (("QSslCertificate" . NIL))
   (("QSslCipher" . NIL))
   (("QSslConfiguration" . NIL))

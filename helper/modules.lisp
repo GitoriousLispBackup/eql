@@ -1,2 +1,1 @@
-(defparameter *modules* (list :help :network :opengl :svg :webkit))
-
+(defparameter *modules* (list :help :network :opengl :sql :svg :webkit))

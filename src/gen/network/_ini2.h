@@ -6,19 +6,55 @@
 #include "../../eql.h"
 #include <QtGui>
 
+TO_QT_TYPE_PTR(QHostAddress, qhostaddress)
+TO_QT_TYPE_PTR(QHostInfo, qhostinfo)
+TO_QT_TYPE_PTR(QNetworkCacheMetaData, qnetworkcachemetadata)
+TO_QT_TYPE_PTR(QNetworkInterface, qnetworkinterface)
+TO_QT_TYPE_PTR(QNetworkProxy, qnetworkproxy)
 TO_QT_TYPE_PTR(QNetworkRequest, qnetworkrequest)
+TO_QT_TYPE_PTR(QSslCertificate, qsslcertificate)
+TO_QT_TYPE_PTR(QSslCipher, qsslcipher)
+TO_QT_TYPE_PTR(QSslConfiguration, qsslconfiguration)
+TO_QT_TYPE_PTR(QSslKey, qsslkey)
 
 void ini2() {
-    LObjects::T_QNetworkRequest = qRegisterMetaType<QNetworkRequest>("QNetworkRequest"); }
+    LObjects::T_QHostAddress =          qRegisterMetaType<QHostAddress>("QHostAddress");
+    LObjects::T_QHostInfo =             qRegisterMetaType<QHostInfo>("QHostInfo");
+    LObjects::T_QNetworkCacheMetaData = qRegisterMetaType<QNetworkCacheMetaData>("QNetworkCacheMetaData");
+    LObjects::T_QNetworkInterface =     qRegisterMetaType<QNetworkInterface>("QNetworkInterface");
+    LObjects::T_QNetworkProxy =         qRegisterMetaType<QNetworkProxy>("QNetworkProxy");
+    LObjects::T_QNetworkRequest =       qRegisterMetaType<QNetworkRequest>("QNetworkRequest");
+    LObjects::T_QSslCertificate =       qRegisterMetaType<QSslCertificate>("QSslCertificate");
+    LObjects::T_QSslCipher =            qRegisterMetaType<QSslCipher>("QSslCipher");
+    LObjects::T_QSslConfiguration =     qRegisterMetaType<QSslConfiguration>("QSslConfiguration");
+    LObjects::T_QSslKey =               qRegisterMetaType<QSslKey>("QSslKey"); }
 
 void* toMetaArg(int n, cl_object l_arg) {
     void* p = 0;
-    if(LObjects::T_QNetworkRequest == n) { p = new QNetworkRequest(*toQNetworkRequestPointer(l_arg)); }
+    if(LObjects::T_QHostAddress == n)               { p = new QHostAddress(*toQHostAddressPointer(l_arg)); }
+    else if(LObjects::T_QHostInfo == n)             { p = new QHostInfo(*toQHostInfoPointer(l_arg)); }
+    else if(LObjects::T_QNetworkCacheMetaData == n) { p = new QNetworkCacheMetaData(*toQNetworkCacheMetaDataPointer(l_arg)); }
+    else if(LObjects::T_QNetworkInterface == n)     { p = new QNetworkInterface(*toQNetworkInterfacePointer(l_arg)); }
+    else if(LObjects::T_QNetworkProxy == n)         { p = new QNetworkProxy(*toQNetworkProxyPointer(l_arg)); }
+    else if(LObjects::T_QNetworkRequest == n)       { p = new QNetworkRequest(*toQNetworkRequestPointer(l_arg)); }
+    else if(LObjects::T_QSslCertificate == n)       { p = new QSslCertificate(*toQSslCertificatePointer(l_arg)); }
+    else if(LObjects::T_QSslCipher == n)            { p = new QSslCipher(*toQSslCipherPointer(l_arg)); }
+    else if(LObjects::T_QSslConfiguration == n)     { p = new QSslConfiguration(*toQSslConfigurationPointer(l_arg)); }
+    else if(LObjects::T_QSslKey == n)               { p = new QSslKey(*toQSslKeyPointer(l_arg)); }
     return p; }
 
 cl_object to_lisp_arg(int n, void* p) {
     cl_object l_ret = Cnil;
-    if(LObjects::T_QNetworkRequest == n) { l_ret = from_qnetworkrequest(*(QNetworkRequest*)p); }
+    if(LObjects::T_QHostAddress == n)               { l_ret = from_qhostaddress(*(QHostAddress*)p); }
+    else if(LObjects::T_QHostInfo == n)             { l_ret = from_qhostinfo(*(QHostInfo*)p); }
+    else if(LObjects::T_QNetworkCacheMetaData == n) { l_ret = from_qnetworkcachemetadata(*(QNetworkCacheMetaData*)p); }
+    else if(LObjects::T_QNetworkInterface == n)     { l_ret = from_qnetworkinterface(*(QNetworkInterface*)p); }
+    else if(LObjects::T_QNetworkProxy == n)         { l_ret = from_qnetworkproxy(*(QNetworkProxy*)p); }
+    else if(LObjects::T_QNetworkRequest == n)       { l_ret = from_qnetworkrequest(*(QNetworkRequest*)p); }
+    else if(LObjects::T_QSslCertificate == n)       { l_ret = from_qsslcertificate(*(QSslCertificate*)p); }
+    else if(LObjects::T_QSslCipher == n)            { l_ret = from_qsslcipher(*(QSslCipher*)p); }
+    else if(LObjects::T_QSslConfiguration == n)     { l_ret = from_qsslconfiguration(*(QSslConfiguration*)p); }
+    else if(LObjects::T_QSslKey == n)               { l_ret = from_qsslkey(*(QSslKey*)p); }
     return l_ret; }
 
 #endif

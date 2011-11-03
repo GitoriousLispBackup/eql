@@ -71,15 +71,15 @@ public:
 
 class LWebHistoryInterface : public QWebHistoryInterface {
     Q_OBJECT
-    friend class Q210;
+    friend class Q215;
 public:
     LWebHistoryInterface(uint u, QObject* x1 = 0) : QWebHistoryInterface(x1), unique(u) {}
 
     static NumList overrideIds;
     uint unique;
 
-    void addHistoryEntry(const QString& x1) { void* fun = LObjects::overrideFun(unique, 321); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 321, args); }}
-    bool historyContains(const QString& x1) const { void* fun = LObjects::overrideFun(unique, 322); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 322, args).toBool(); } return ret; }
+    void addHistoryEntry(const QString& x1) { void* fun = LObjects::overrideFun(unique, 352); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 352, args); }}
+    bool historyContains(const QString& x1) const { void* fun = LObjects::overrideFun(unique, 353); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 353, args).toBool(); } return ret; }
     void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 5, args); } if(!fun || LObjects::call_default) { QWebHistoryInterface::childEvent(x1); }}
     void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 6, args); } if(!fun || LObjects::call_default) { QWebHistoryInterface::connectNotify(x1); }}
     void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 7, args); } if(!fun || LObjects::call_default) { QWebHistoryInterface::customEvent(x1); }}
@@ -89,7 +89,7 @@ public:
 
 class LWebInspector : public QWebInspector {
     Q_OBJECT
-    friend class Q211;
+    friend class Q216;
 public:
     LWebInspector(uint u, QWidget* x1 = 0) : QWebInspector(x1), unique(u) {}
 
@@ -137,25 +137,25 @@ public:
 
 class LWebPage : public QWebPage {
     Q_OBJECT
-    friend class Q212;
+    friend class Q217;
 public:
     LWebPage(uint u, QObject* x1 = 0) : QWebPage(x1), unique(u) {}
 
     static NumList overrideIds;
     uint unique;
 
-    bool extension(Extension x1, const ExtensionOption* x2 = 0, ExtensionReturn* x3 = 0) { void* fun = LObjects::overrideFun(unique, 323); bool ret = false; if(fun) { const void* args[] = { &x1, &x2, &x3 }; ret = callOverrideFun(fun, 323, args).toBool(); } if(!fun || LObjects::call_default) { ret = QWebPage::extension(x1, x2, x3); } return ret; }
-    bool supportsExtension(Extension x1) const { void* fun = LObjects::overrideFun(unique, 324); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 324, args).toBool(); } if(!fun || LObjects::call_default) { ret = QWebPage::supportsExtension(x1); } return ret; }
-    void triggerAction(WebAction x1, bool x2 = false) { void* fun = LObjects::overrideFun(unique, 325); if(fun) { const void* args[] = { &x1, &x2 }; callOverrideFun(fun, 325, args); } if(!fun || LObjects::call_default) { QWebPage::triggerAction(x1, x2); }}
-    bool acceptNavigationRequest(QWebFrame* x1, const QNetworkRequest& x2, NavigationType x3) { void* fun = LObjects::overrideFun(unique, 326); bool ret = false; if(fun) { const void* args[] = { &x1, &x2, &x3 }; ret = callOverrideFun(fun, 326, args).toBool(); } if(!fun || LObjects::call_default) { ret = QWebPage::acceptNavigationRequest(x1, x2, x3); } return ret; }
-    QString chooseFile(QWebFrame* x1, const QString& x2) { void* fun = LObjects::overrideFun(unique, 327); QString ret; if(fun) { const void* args[] = { &x1, &x2 }; ret = qVariantValue<QString>(callOverrideFun(fun, 327, args)); } if(!fun || LObjects::call_default) { ret = QWebPage::chooseFile(x1, x2); } return ret; }
-    QObject* createPlugin(const QString& x1, const QUrl& x2, const QStringList& x3, const QStringList& x4) { void* fun = LObjects::overrideFun(unique, 328); QObject* ret = 0; if(fun) { const void* args[] = { &x1, &x2, &x3, &x4 }; ret = (QObject*)qVariantValue<void*>(callOverrideFun(fun, 328, args)); } if(!fun || LObjects::call_default) { ret = QWebPage::createPlugin(x1, x2, x3, x4); } return ret; }
-    QWebPage* createWindow(WebWindowType x1) { void* fun = LObjects::overrideFun(unique, 329); QWebPage* ret = 0; if(fun) { const void* args[] = { &x1 }; ret = (QWebPage*)qVariantValue<void*>(callOverrideFun(fun, 329, args)); } if(!fun || LObjects::call_default) { ret = QWebPage::createWindow(x1); } return ret; }
-    void javaScriptAlert(QWebFrame* x1, const QString& x2) { void* fun = LObjects::overrideFun(unique, 330); if(fun) { const void* args[] = { &x1, &x2 }; callOverrideFun(fun, 330, args); } if(!fun || LObjects::call_default) { QWebPage::javaScriptAlert(x1, x2); }}
-    bool javaScriptConfirm(QWebFrame* x1, const QString& x2) { void* fun = LObjects::overrideFun(unique, 331); bool ret = false; if(fun) { const void* args[] = { &x1, &x2 }; ret = callOverrideFun(fun, 331, args).toBool(); } if(!fun || LObjects::call_default) { ret = QWebPage::javaScriptConfirm(x1, x2); } return ret; }
-    void javaScriptConsoleMessage(const QString& x1, int x2, const QString& x3) { void* fun = LObjects::overrideFun(unique, 332); if(fun) { const void* args[] = { &x1, &x2, &x3 }; callOverrideFun(fun, 332, args); } if(!fun || LObjects::call_default) { QWebPage::javaScriptConsoleMessage(x1, x2, x3); }}
-    bool javaScriptPrompt(QWebFrame* x1, const QString& x2, const QString& x3, QString* x4) { void* fun = LObjects::overrideFun(unique, 333); bool ret = false; if(fun) { const void* args[] = { &x1, &x2, &x3, &x4 }; ret = callOverrideFun(fun, 333, args).toBool(); } if(!fun || LObjects::call_default) { ret = QWebPage::javaScriptPrompt(x1, x2, x3, x4); } return ret; }
-    QString userAgentForUrl(const QUrl& x1) const { void* fun = LObjects::overrideFun(unique, 334); QString ret; if(fun) { const void* args[] = { &x1 }; ret = qVariantValue<QString>(callOverrideFun(fun, 334, args)); } if(!fun || LObjects::call_default) { ret = QWebPage::userAgentForUrl(x1); } return ret; }
+    bool extension(Extension x1, const ExtensionOption* x2 = 0, ExtensionReturn* x3 = 0) { void* fun = LObjects::overrideFun(unique, 354); bool ret = false; if(fun) { const void* args[] = { &x1, &x2, &x3 }; ret = callOverrideFun(fun, 354, args).toBool(); } if(!fun || LObjects::call_default) { ret = QWebPage::extension(x1, x2, x3); } return ret; }
+    bool supportsExtension(Extension x1) const { void* fun = LObjects::overrideFun(unique, 355); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 355, args).toBool(); } if(!fun || LObjects::call_default) { ret = QWebPage::supportsExtension(x1); } return ret; }
+    void triggerAction(WebAction x1, bool x2 = false) { void* fun = LObjects::overrideFun(unique, 356); if(fun) { const void* args[] = { &x1, &x2 }; callOverrideFun(fun, 356, args); } if(!fun || LObjects::call_default) { QWebPage::triggerAction(x1, x2); }}
+    bool acceptNavigationRequest(QWebFrame* x1, const QNetworkRequest& x2, NavigationType x3) { void* fun = LObjects::overrideFun(unique, 357); bool ret = false; if(fun) { const void* args[] = { &x1, &x2, &x3 }; ret = callOverrideFun(fun, 357, args).toBool(); } if(!fun || LObjects::call_default) { ret = QWebPage::acceptNavigationRequest(x1, x2, x3); } return ret; }
+    QString chooseFile(QWebFrame* x1, const QString& x2) { void* fun = LObjects::overrideFun(unique, 358); QString ret; if(fun) { const void* args[] = { &x1, &x2 }; ret = qVariantValue<QString>(callOverrideFun(fun, 358, args)); } if(!fun || LObjects::call_default) { ret = QWebPage::chooseFile(x1, x2); } return ret; }
+    QObject* createPlugin(const QString& x1, const QUrl& x2, const QStringList& x3, const QStringList& x4) { void* fun = LObjects::overrideFun(unique, 359); QObject* ret = 0; if(fun) { const void* args[] = { &x1, &x2, &x3, &x4 }; ret = (QObject*)qVariantValue<void*>(callOverrideFun(fun, 359, args)); } if(!fun || LObjects::call_default) { ret = QWebPage::createPlugin(x1, x2, x3, x4); } return ret; }
+    QWebPage* createWindow(WebWindowType x1) { void* fun = LObjects::overrideFun(unique, 360); QWebPage* ret = 0; if(fun) { const void* args[] = { &x1 }; ret = (QWebPage*)qVariantValue<void*>(callOverrideFun(fun, 360, args)); } if(!fun || LObjects::call_default) { ret = QWebPage::createWindow(x1); } return ret; }
+    void javaScriptAlert(QWebFrame* x1, const QString& x2) { void* fun = LObjects::overrideFun(unique, 361); if(fun) { const void* args[] = { &x1, &x2 }; callOverrideFun(fun, 361, args); } if(!fun || LObjects::call_default) { QWebPage::javaScriptAlert(x1, x2); }}
+    bool javaScriptConfirm(QWebFrame* x1, const QString& x2) { void* fun = LObjects::overrideFun(unique, 362); bool ret = false; if(fun) { const void* args[] = { &x1, &x2 }; ret = callOverrideFun(fun, 362, args).toBool(); } if(!fun || LObjects::call_default) { ret = QWebPage::javaScriptConfirm(x1, x2); } return ret; }
+    void javaScriptConsoleMessage(const QString& x1, int x2, const QString& x3) { void* fun = LObjects::overrideFun(unique, 363); if(fun) { const void* args[] = { &x1, &x2, &x3 }; callOverrideFun(fun, 363, args); } if(!fun || LObjects::call_default) { QWebPage::javaScriptConsoleMessage(x1, x2, x3); }}
+    bool javaScriptPrompt(QWebFrame* x1, const QString& x2, const QString& x3, QString* x4) { void* fun = LObjects::overrideFun(unique, 364); bool ret = false; if(fun) { const void* args[] = { &x1, &x2, &x3, &x4 }; ret = callOverrideFun(fun, 364, args).toBool(); } if(!fun || LObjects::call_default) { ret = QWebPage::javaScriptPrompt(x1, x2, x3, x4); } return ret; }
+    QString userAgentForUrl(const QUrl& x1) const { void* fun = LObjects::overrideFun(unique, 365); QString ret; if(fun) { const void* args[] = { &x1 }; ret = qVariantValue<QString>(callOverrideFun(fun, 365, args)); } if(!fun || LObjects::call_default) { ret = QWebPage::userAgentForUrl(x1); } return ret; }
     void childEvent(QChildEvent* x1) { void* fun = LObjects::overrideFun(unique, 5); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 5, args); } if(!fun || LObjects::call_default) { QWebPage::childEvent(x1); }}
     void connectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 6); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 6, args); } if(!fun || LObjects::call_default) { QWebPage::connectNotify(x1); }}
     void customEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 7); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 7, args); } if(!fun || LObjects::call_default) { QWebPage::customEvent(x1); }}
@@ -165,14 +165,14 @@ public:
 
 class LWebView : public QWebView {
     Q_OBJECT
-    friend class Q213;
+    friend class Q218;
 public:
     LWebView(uint u, QWidget* x1 = 0) : QWebView(x1), unique(u) {}
 
     static NumList overrideIds;
     uint unique;
 
-    QWebView* createWindow(QWebPage::WebWindowType x1) { void* fun = LObjects::overrideFun(unique, 335); QWebView* ret = 0; if(fun) { const void* args[] = { &x1 }; ret = (QWebView*)qVariantValue<void*>(callOverrideFun(fun, 335, args)); } if(!fun || LObjects::call_default) { ret = QWebView::createWindow(x1); } return ret; }
+    QWebView* createWindow(QWebPage::WebWindowType x1) { void* fun = LObjects::overrideFun(unique, 366); QWebView* ret = 0; if(fun) { const void* args[] = { &x1 }; ret = (QWebView*)qVariantValue<void*>(callOverrideFun(fun, 366, args)); } if(!fun || LObjects::call_default) { ret = QWebView::createWindow(x1); } return ret; }
     QVariant inputMethodQuery(Qt::InputMethodQuery x1) const { void* fun = LObjects::overrideFun(unique, 23); QVariant ret; if(fun) { const void* args[] = { &x1 }; ret = qVariantValue<QVariant>(callOverrideFun(fun, 23, args)); } if(!fun || LObjects::call_default) { ret = QWebView::inputMethodQuery(x1); } return ret; }
     QSize sizeHint() const { void* fun = LObjects::overrideFun(unique, 25); QSize ret; if(fun) { ret = qVariantValue<QSize>(callOverrideFun(fun, 25, 0)); } if(!fun || LObjects::call_default) { ret = QWebView::sizeHint(); } return ret; }
     void changeEvent(QEvent* x1) { void* fun = LObjects::overrideFun(unique, 13); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 13, args); } if(!fun || LObjects::call_default) { QWebView::changeEvent(x1); }}

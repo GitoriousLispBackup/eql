@@ -945,13 +945,18 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         else if(T_QVector_QTextLength == n)              p = new QVector<QTextLength>(toQTextLengthVector(l_arg));
         else if(T_QVector_qreal == n)                    p = new QVector<qreal>(toqrealVector(l_arg));
         // module types
-        else if(LObjects::T_QNetworkRequest == n) {
-            if(LObjects::toMetaArg_network) {
-                p = LObjects::toMetaArg_network(n, l_arg); }}
-        else if((n >= LObjects::T_GLfloat) &&
-                (n <= LObjects::T_GLuint)) {
+        else if((n >= LObjects::T_GLenum) &&
+                (n <= LObjects::T_QGLFramebufferObjectFormat)) {
             if(LObjects::toMetaArg_opengl) {
                 p = LObjects::toMetaArg_opengl(n, l_arg); }}
+        else if((n >= LObjects::T_QHostAddress) &&
+                (n <= LObjects::T_QSslKey)) {
+            if(LObjects::toMetaArg_network) {
+                p = LObjects::toMetaArg_network(n, l_arg); }}
+        else if((n >= LObjects::T_QSqlDatabase) &&
+                (n <= LObjects::T_QSqlRelation)) {
+            if(LObjects::toMetaArg_sql) {
+                p = LObjects::toMetaArg_sql(n, l_arg); }}
         else if((n >= LObjects::T_QWebElement) &&
                 (n <= LObjects::T_QWebHitTestResult)) {
             if(LObjects::toMetaArg_webkit) {
@@ -991,7 +996,7 @@ cl_object to_lisp_arg(const MetaArg& arg) {
             case QMetaType::Float:                   l_ret = ecl_make_singlefloat(*(float*)p); break;
             case QMetaType::Int:                     l_ret = MAKE_FIXNUM(*(int*)p); break;
             case QMetaType::Long:                    l_ret = MAKE_FIXNUM(*(long*)p); break;
-            case QMetaType::LongLong:                l_ret = MAKE_FIXNUM(*(qulonglong*)p); break;
+            case QMetaType::LongLong:                l_ret = MAKE_FIXNUM(*(qlonglong*)p); break;
             case QMetaType::UInt:                    l_ret = MAKE_FIXNUM(*(uint*)p); break;
             case QMetaType::ULong:                   l_ret = MAKE_FIXNUM(*(ulong*)p); break;
             case QMetaType::ULongLong:               l_ret = MAKE_FIXNUM(*(qulonglong*)p); break;
@@ -1096,13 +1101,18 @@ cl_object to_lisp_arg(const MetaArg& arg) {
             else if(T_QVector_QTextLength == n)              l_ret = from_qtextlengthvector(*(QVector<QTextLength>*)p);
             else if(T_QVector_qreal == n)                    l_ret = from_qrealvector(*(QVector<qreal>*)p);
             // module types
-            else if(LObjects::T_QNetworkRequest == n) {
-                if(LObjects::to_lisp_arg_network) {
-                    l_ret = LObjects::to_lisp_arg_network(n, p); }}
-            else if((n >= LObjects::T_GLfloat) &&
-                    (n <= LObjects::T_GLuint)) {
+            else if((n >= LObjects::T_GLenum) &&
+                    (n <= LObjects::T_QGLFramebufferObjectFormat)) {
                 if(LObjects::to_lisp_arg_opengl) {
                     l_ret = LObjects::to_lisp_arg_opengl(n, p); }}
+            else if((n >= LObjects::T_QHostAddress) &&
+                    (n <= LObjects::T_QSslKey)) {
+                if(LObjects::to_lisp_arg_network) {
+                    l_ret = LObjects::to_lisp_arg_network(n, p); }}
+            else if((n >= LObjects::T_QSqlDatabase) &&
+                    (n <= LObjects::T_QSqlRelation)) {
+                if(LObjects::to_lisp_arg_sql) {
+                    l_ret = LObjects::to_lisp_arg_sql(n, p); }}
             else if((n >= LObjects::T_QWebElement) &&
                     (n <= LObjects::T_QWebHitTestResult)) {
                 if(LObjects::toMetaArg_webkit) {
@@ -1925,6 +1935,12 @@ cl_object qrequire(cl_object l_name) {
                         LObjects::override_opengl = over;
                         LObjects::toMetaArg_opengl = metaArg;
                         LObjects::to_lisp_arg_opengl = lispArg; }
+                    else if("sql" == name) {
+                        LObjects::staticMetaObject_sql = meta;
+                        LObjects::deleteNObject_sql = del;
+                        LObjects::override_sql = over;
+                        LObjects::toMetaArg_sql = metaArg;
+                        LObjects::to_lisp_arg_sql = lispArg; }
                     else if("webkit" == name) {
                         LObjects::staticMetaObject_webkit = meta;
                         LObjects::deleteNObject_webkit = del;

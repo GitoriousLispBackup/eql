@@ -487,7 +487,10 @@
                                                        "QTreeWidget")))
                                    (and (find* class '("QAbstractListModel"
                                                        "QAbstractTableModel"
-                                                       "QHelpIndexModel"))
+                                                       "QHelpIndexModel"
+						       "QSqlQueryModel"
+						       "QSqlRelationalTableModel"
+						       "QSqlTableModel"))
                                         (find* fun-name '("columnCount"
                                                           "hasChildren"
                                                           "parent")))
@@ -740,10 +743,29 @@
                ~%#include \"../dyn_object.h\"~
                ~%#include \"../eql.h\"~
                ~%~
-               ~%int LObjects::T_QNetworkRequest = -1;~
-               ~%int LObjects::T_GLfloat = -1;~
+               ~%int LObjects::T_GLenum = -1;~
                ~%int LObjects::T_GLint = -1;~
+               ~%int LObjects::T_GLfloat = -1;~
                ~%int LObjects::T_GLuint = -1;~
+               ~%int LObjects::T_QGLFormat = -1;~
+               ~%int LObjects::T_QGLFramebufferObjectFormat = -1;~
+               ~%int LObjects::T_QHostAddress = -1;~
+               ~%int LObjects::T_QHostInfo = -1;~
+               ~%int LObjects::T_QNetworkCacheMetaData = -1;~
+               ~%int LObjects::T_QNetworkInterface = -1;~
+               ~%int LObjects::T_QNetworkProxy = -1;~
+               ~%int LObjects::T_QNetworkRequest = -1;~
+               ~%int LObjects::T_QSslCertificate = -1;~
+               ~%int LObjects::T_QSslCipher = -1;~
+               ~%int LObjects::T_QSslConfiguration = -1;~
+               ~%int LObjects::T_QSslKey = -1;~
+               ~%int LObjects::T_QSqlDatabase = -1;~
+               ~%int LObjects::T_QSqlError = -1;~
+               ~%int LObjects::T_QSqlField = -1;~
+               ~%int LObjects::T_QSqlIndex = -1;~
+               ~%int LObjects::T_QSqlQuery = -1;~
+               ~%int LObjects::T_QSqlRecord = -1;~
+               ~%int LObjects::T_QSqlRelation = -1;~
                ~%int LObjects::T_QWebElement = -1;~
                ~%int LObjects::T_QWebElementCollection = -1;~
                ~%int LObjects::T_QWebHitTestResult = -1;~
@@ -772,7 +794,7 @@
       (format s "~%DeleteNObject LObjects::deleteNObject_~(~A~) = 0;" module))
     (dolist (module *modules*)
       (format s "~%Override LObjects::override_~(~A~) = 0;" module))
-    (dolist (module (list :network :opengl :webkit))
+    (dolist (module (list :network :opengl :sql :webkit))
       (format s "~%ToMetaArg LObjects::toMetaArg_~(~A~) = 0;~
                  ~%To_lisp_arg LObjects::to_lisp_arg_~(~A~) = 0;"
               module module))
@@ -1023,15 +1045,9 @@
                     "QByteArray"
                     "QChar"
                     "QFileInfoList"
-                    "QFont"
                     "QGradientStop"
-                    "QItemEditorCreatorBase"
-                    "QKeySequence"
                     "QLine"
                     "QLineF"
-                    "QList<QAbstractAnimation*>"
-                    "QList<QAbstractButton*>"
-                    "QList<QAbstractState*>"
                     "QList<QAction*>"
                     "QList<QByteArray>"
                     "QList<QDockWidget*>"
@@ -1056,7 +1072,6 @@
                     "QList<QWidget*>"
                     "QList<int>"
                     "QList<qreal>"
-                    "QMatrix"
                     "QModelIndexList"
                     "QObjectList"
                     "QPoint"
@@ -1070,10 +1085,7 @@
                     "QSizeF"
                     "QString"
                     "QStringList"
-                    "QTextBlock"
-                    "QTextBlockUserData"
                     "QTextInlineObject"
-                    "QUrl"
                     "QGradientStops"
                     "QVector<QLine>"
                     "QVector<QLineF>"
@@ -1085,15 +1097,23 @@
                     "QVector<QTextFormat>"
                     "QVector<QTextLength>"
                     "QVector<qreal>"
-                    "QVariant"
                     "QWidgetList")))
     (with-open-file (s "missing-types.txt" :direction :output :if-exists :supersede)
-      (dolist (arg (sort (loop for arg being the hash-keys in *argument-types* collect arg) 'string<))
-        (unless (or (find* arg skip)
-                    (find* arg *q-methods* 'caaar)
-                    (find* arg *n-methods* 'caaar))
-          (incf *missing-types*)
-          (write-line arg s))))))
+      (let ((all-classes (append *q-names* *n-names*)))
+	(flet ((classes (module type)
+		 (symbol-value (intern (format nil "*~A-~A-NAMES*" module type)))))
+	  (dolist (module *modules*)
+	    (dolist (type '(:q :n))
+	      (setf all-classes (append all-classes (classes module type))))))
+	(map-into all-classes 'trim* all-classes)
+	(dolist (arg (sort (loop for arg being the hash-keys in *argument-types* collect arg) 'string<))
+	  (unless (or (find* arg skip)
+		      (find* arg all-classes)
+		      (search "Abstract" arg)
+		      (search "Base" arg)
+		      (search "QStyleOption" arg))
+	    (incf *missing-types*)
+	    (write-line arg s)))))))
 
 (progn
   (ini)
