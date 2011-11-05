@@ -5,10 +5,10 @@
 #include "_ini2.h"
 
 NumList LSqlDriver::overrideIds = NumList() << 301 << 111 << 302 << 303 << 304 << 305 << 306 << 307 << 308 << 309 << 310 << 311 << 312 << 313 << 314 << 315 << 316 << 317;
-NumList LSqlQueryModel::overrideIds = NumList() << 191 << 318 << 53 << 55 << 57 << 60 << 62 << 68 << 70 << 72;
+NumList LSqlQueryModel::overrideIds = NumList() << 193 << 318 << 53 << 55 << 57 << 60 << 62 << 68 << 70 << 72;
 NumList LSqlRelationalDelegate::overrideIds = NumList() << 45 << 48 << 49;
-NumList LSqlRelationalTableModel::overrideIds = NumList() << 319 << 320 << 191 << 55 << 68 << 321 << 71 << 322 << 323 << 324 << 325 << 326;
-NumList LSqlTableModel::overrideIds = NumList() << 327 << 321 << 328 << 329 << 330 << 322 << 331 << 323 << 324 << 325 << 326 << 191 << 55 << 58 << 60 << 63 << 68 << 69 << 70 << 71 << 73;
+NumList LSqlRelationalTableModel::overrideIds = NumList() << 319 << 320 << 193 << 55 << 68 << 321 << 71 << 322 << 323 << 324 << 325 << 326;
+NumList LSqlTableModel::overrideIds = NumList() << 327 << 321 << 328 << 329 << 330 << 322 << 331 << 323 << 324 << 325 << 326 << 193 << 55 << 58 << 60 << 63 << 68 << 69 << 70 << 71 << 73;
 NumList LSqlDatabase::overrideIds = NumList();
 NumList LSqlError::overrideIds = NumList();
 NumList LSqlField::overrideIds = NumList();
@@ -16,7 +16,7 @@ NumList LSqlIndex::overrideIds = NumList();
 NumList LSqlQuery::overrideIds = NumList();
 NumList LSqlRecord::overrideIds = NumList();
 NumList LSqlRelation::overrideIds = NumList();
-NumList LSqlResult::overrideIds = NumList() << 306;
+NumList LSqlResult::overrideIds = NumList() << 306 << 418 << 419 << 413 << 97 << 420 << 421 << 422 << 423 << 424 << 425 << 426 << 427 << 428 << 429 << 430 << 431 << 432 << 433 << 434 << 315 << 435 << 436 << 122;
 
 void ini() {
     static bool _ = false; if(_) return; _ = true;

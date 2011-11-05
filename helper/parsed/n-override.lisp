@@ -286,7 +286,8 @@
    "virtual QList<QNetworkProxy> queryProxy ( const QNetworkProxyQuery & = QNetworkProxyQuery() ) = 0")
   (("QNetworkProxyQuery" . NIL))
   (("QNetworkRequest" . NIL))
-  (("QPaintDevice" . NIL))
+  (("QPaintDevice" . NIL)
+   "virtual int metric ( PaintDeviceMetric ) const")
   (("QPaintEvent" . "QEvent"))
   (("QPainter" . NIL))
   (("QPainterPath" . NIL))
@@ -331,7 +332,30 @@
   (("QSqlRecord" . NIL))
   (("QSqlRelation" . NIL))
   (("QSqlResult" . NIL)
-   "virtual QVariant handle () const")
+   "virtual QVariant handle () const"
+   "virtual void bindValue ( int , const QVariant & , QSql::ParamType )"
+   "virtual void bindValue ( const QString & , const QVariant & , QSql::ParamType )"
+   "virtual QVariant data ( int ) = 0"
+   "virtual bool exec ()"
+   "virtual bool fetch ( int ) = 0"
+   "virtual bool fetchFirst () = 0"
+   "virtual bool fetchLast () = 0"
+   "virtual bool fetchNext ()"
+   "virtual bool fetchPrevious ()"
+   "virtual bool isNull ( int ) = 0"
+   "virtual QVariant lastInsertId () const"
+   "virtual int numRowsAffected () = 0"
+   "virtual bool prepare ( const QString & )"
+   "virtual QSqlRecord record () const"
+   "virtual bool reset ( const QString & ) = 0"
+   "virtual bool savePrepare ( const QString & )"
+   "virtual void setActive ( bool )"
+   "virtual void setAt ( int )"
+   "virtual void setForwardOnly ( bool )"
+   "virtual void setLastError ( const QSqlError & )"
+   "virtual void setQuery ( const QString & )"
+   "virtual void setSelect ( bool )"
+   "virtual int size () = 0")
   (("QSslCertificate" . NIL))
   (("QSslCipher" . NIL))
   (("QSslConfiguration" . NIL))
@@ -360,7 +384,9 @@
   (("QTextCodec" . NIL)
    "virtual QList<QByteArray> aliases () const"
    "virtual int mibEnum () const = 0"
-   "virtual QByteArray name () const = 0")
+   "virtual QByteArray name () const = 0"
+   "virtual QByteArray convertFromUnicode ( const QChar * , int , ConverterState * ) const = 0"
+   "virtual QString convertToUnicode ( const char * , int , ConverterState * ) const = 0")
   (("QTextCursor" . NIL))
   (("QTextDecoder" . NIL))
   (("QTextDocumentFragment" . NIL))

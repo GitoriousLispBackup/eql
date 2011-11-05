@@ -7,7 +7,7 @@
 NumList LGraphicsSvgItem::overrideIds = NumList() << 239 << 210 << 212;
 NumList LSvgRenderer::overrideIds = NumList();
 NumList LSvgWidget::overrideIds = NumList() << 25 << 21;
-NumList LSvgGenerator::overrideIds = NumList() << 416;
+NumList LSvgGenerator::overrideIds = NumList() << 438;
 
 void ini() {
     static bool _ = false; if(_) return; _ = true;

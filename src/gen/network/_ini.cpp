@@ -22,7 +22,7 @@ NumList LNetworkCacheMetaData::overrideIds = NumList();
 NumList LNetworkCookie::overrideIds = NumList();
 NumList LNetworkInterface::overrideIds = NumList();
 NumList LNetworkProxy::overrideIds = NumList();
-NumList LNetworkProxyFactory::overrideIds = NumList() << 412;
+NumList LNetworkProxyFactory::overrideIds = NumList() << 415;
 NumList LNetworkProxyQuery::overrideIds = NumList();
 NumList LNetworkRequest::overrideIds = NumList();
 NumList LSslCertificate::overrideIds = NumList();
@@ -30,7 +30,7 @@ NumList LSslCipher::overrideIds = NumList();
 NumList LSslConfiguration::overrideIds = NumList();
 NumList LSslError::overrideIds = NumList();
 NumList LSslKey::overrideIds = NumList();
-NumList LUrlInfo::overrideIds = NumList() << 426 << 427 << 428 << 429 << 430 << 431 << 432 << 433 << 434 << 435 << 436;
+NumList LUrlInfo::overrideIds = NumList() << 450 << 451 << 452 << 453 << 454 << 455 << 456 << 457 << 458 << 459 << 460;
 
 void ini() {
     static bool _ = false; if(_) return; _ = true;

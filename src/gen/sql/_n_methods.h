@@ -196,6 +196,26 @@ class N142 : public QObject { // QSqlResult
     Q_OBJECT
 public:
     Q_INVOKABLE QVariant Mhandle(QSqlResult* o) const { return o->handle(); }
+    Q_INVOKABLE void MaddBindValue(QSqlResult* o, const QVariant& x1, QSql::ParamType x2) { ((LSqlResult*)o)->addBindValue(x1, x2); }
+    Q_INVOKABLE int Mat(QSqlResult* o) const { return ((LSqlResult*)o)->at(); }
+    Q_INVOKABLE int MbindValueType(QSqlResult* o, int x1) const { return ((LSqlResult*)o)->bindValueType(x1); }
+    Q_INVOKABLE int MbindValueType(QSqlResult* o, const QString& x1) const { return ((LSqlResult*)o)->bindValueType(x1); }
+    Q_INVOKABLE int MbindingSyntax(QSqlResult* o) const { return ((LSqlResult*)o)->bindingSyntax(); }
+    Q_INVOKABLE QVariant MboundValue(QSqlResult* o, int x1) const { return ((LSqlResult*)o)->boundValue(x1); }
+    Q_INVOKABLE QVariant MboundValue(QSqlResult* o, const QString& x1) const { return ((LSqlResult*)o)->boundValue(x1); }
+    Q_INVOKABLE int MboundValueCount(QSqlResult* o) const { return ((LSqlResult*)o)->boundValueCount(); }
+    Q_INVOKABLE QString MboundValueName(QSqlResult* o, int x1) const { return ((LSqlResult*)o)->boundValueName(x1); }
+    Q_INVOKABLE QVector<QVariant> MboundValues(QSqlResult* o) const { return ((LSqlResult*)o)->boundValues(); }
+    Q_INVOKABLE void Mclear(QSqlResult* o) { ((LSqlResult*)o)->clear(); }
+    Q_INVOKABLE const QSqlDriver* Mdriver(QSqlResult* o) const { return ((LSqlResult*)o)->driver(); }
+    Q_INVOKABLE QString MexecutedQuery(QSqlResult* o) const { return ((LSqlResult*)o)->executedQuery(); }
+    Q_INVOKABLE bool MhasOutValues(QSqlResult* o) const { return ((LSqlResult*)o)->hasOutValues(); }
+    Q_INVOKABLE bool MisActive(QSqlResult* o) const { return ((LSqlResult*)o)->isActive(); }
+    Q_INVOKABLE bool MisForwardOnly(QSqlResult* o) const { return ((LSqlResult*)o)->isForwardOnly(); }
+    Q_INVOKABLE bool MisSelect(QSqlResult* o) const { return ((LSqlResult*)o)->isSelect(); }
+    Q_INVOKABLE bool MisValid(QSqlResult* o) const { return ((LSqlResult*)o)->isValid(); }
+    Q_INVOKABLE QSqlError MlastError(QSqlResult* o) const { return ((LSqlResult*)o)->lastError(); }
+    Q_INVOKABLE QString MlastQuery(QSqlResult* o) const { return ((LSqlResult*)o)->lastQuery(); }
 };
 
 class N138 : public N140 { // QSqlIndex

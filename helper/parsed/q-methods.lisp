@@ -2794,6 +2794,13 @@
    "void setSslConfiguration ( const QSslConfiguration & )"
    "QSslConfiguration sslConfiguration () const"
    "QUrl url () const"
+   "protected void setAttribute ( QNetworkRequest::Attribute , const QVariant & )"
+   "protected void setError ( NetworkError , const QString & )"
+   "protected void setHeader ( QNetworkRequest::KnownHeaders , const QVariant & )"
+   "protected void setOperation ( QNetworkAccessManager::Operation )"
+   "protected void setRawHeader ( const QByteArray & , const QByteArray & )"
+   "protected void setRequest ( const QNetworkRequest & )"
+   "protected void setUrl ( const QUrl & )"
    "virtual void close ()")
   (("QObject" . NIL)
    "new QObject ( QObject * = 0 )"
@@ -3900,7 +3907,8 @@
    "bool waitForNewConnection ( int = 0, bool * = 0 )")
   (("QTcpSocket" . "QAbstractSocket")
    "new QTcpSocket ( QObject * = 0 )")
-  (("QTextBlockGroup" . "QTextObject"))
+  (("QTextBlockGroup" . "QTextObject")
+   "protected QList<QTextBlock> blockList () const")
   (("QTextBrowser" . "QTextEdit")
    "new QTextBrowser ( QWidget * = 0 )"
    "int backwardHistoryCount () const"
@@ -4073,7 +4081,8 @@
    "QTextDocument * document () const"
    "QTextFormat format () const"
    "int formatIndex () const"
-   "int objectIndex () const")
+   "int objectIndex () const"
+   "protected void setFormat ( const QTextFormat & )")
   (("QTextTable" . "QTextFrame")
    "void appendColumns ( int )"
    "void appendRows ( int )"

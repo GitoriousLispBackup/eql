@@ -1696,6 +1696,7 @@ public:
     Q_INVOKABLE QTextFormat Mformat(QTextObject* o) const { return o->format(); }
     Q_INVOKABLE int MformatIndex(QTextObject* o) const { return o->formatIndex(); }
     Q_INVOKABLE int MobjectIndex(QTextObject* o) const { return o->objectIndex(); }
+    Q_INVOKABLE void MsetFormat(QTextObject* o, const QTextFormat& x1) { ((LTextObject*)o)->setFormat(x1); }
 };
 
 class EQL_EXPORT Q199 : public Q127 { // QTimeLine
@@ -3778,6 +3779,7 @@ public:
 class EQL_EXPORT Q190 : public Q196 { // QTextBlockGroup
     Q_OBJECT
 public:
+    Q_INVOKABLE QList<QTextBlock> MblockList(QTextBlockGroup* o) const { return ((LTextBlockGroup*)o)->blockList(); }
 };
 
 class EQL_EXPORT Q194 : public Q196 { // QTextFrame

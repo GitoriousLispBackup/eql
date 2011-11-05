@@ -2722,7 +2722,27 @@
    "bool isValid () const"
    "QString tableName () const")
   (("QSqlResult" . NIL)
-   "virtual QVariant handle () const")
+   "virtual QVariant handle () const"
+   "protected void addBindValue ( const QVariant & , QSql::ParamType )"
+   "protected int at () const"
+   "protected QSql::ParamType bindValueType ( int ) const"
+   "protected QSql::ParamType bindValueType ( const QString & ) const"
+   "protected BindingSyntax bindingSyntax () const"
+   "protected QVariant boundValue ( int ) const"
+   "protected QVariant boundValue ( const QString & ) const"
+   "protected int boundValueCount () const"
+   "protected QString boundValueName ( int ) const"
+   "protected QVector<QVariant> & boundValues () const"
+   "protected void clear ()"
+   "protected const QSqlDriver * driver () const"
+   "protected QString executedQuery () const"
+   "protected bool hasOutValues () const"
+   "protected bool isActive () const"
+   "protected bool isForwardOnly () const"
+   "protected bool isSelect () const"
+   "protected bool isValid () const"
+   "protected QSqlError lastError () const"
+   "protected QString lastQuery () const")
   (("QSslCertificate" . NIL)
    "new QSslCertificate ( const QByteArray & = QByteArray(), QSsl::EncodingFormat = QSsl::Pem )"
    "new QSslCertificate ( const QSslCertificate & )"
@@ -2880,7 +2900,8 @@
    "Qt::Alignment textAlignment () const"
    "QString toolTip () const"
    "virtual int type () const"
-   "QString whatsThis () const")
+   "QString whatsThis () const"
+   "protected void emitDataChanged ()")
   (("QStatusTipEvent" . "QEvent")
    "new QStatusTipEvent ( const QString & )"
    "QString tip () const")

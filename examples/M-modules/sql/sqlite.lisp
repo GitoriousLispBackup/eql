@@ -34,6 +34,6 @@
           (qfun *table-view* "setItemDelegate" (qnew "QSqlRelationalDelegate"))
           (qfun *table-view* "resizeColumnsToContents")
           (qfun *table-view* "show")))
-      (qfun "QMessageBox" "critical" nil "EQL" (tr "Could not open database"))))
+      (qfun "QMessageBox" "critical" nil "EQL" (tr "Could not open database."))))
 
 (ini)

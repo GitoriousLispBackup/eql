@@ -26,11 +26,11 @@ public:
     static NumList overrideIds;
     uint unique;
 
-    bool create(const QGLContext* x1 = 0) { void* fun = LObjects::overrideFun(unique, 398); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 398, args).toBool(); } if(!fun || LObjects::call_default) { ret = QGLContext::create(x1); } return ret; }
-    void doneCurrent() { void* fun = LObjects::overrideFun(unique, 399); if(fun) { callOverrideFun(fun, 399, 0); } if(!fun || LObjects::call_default) { QGLContext::doneCurrent(); }}
-    void makeCurrent() { void* fun = LObjects::overrideFun(unique, 400); if(fun) { callOverrideFun(fun, 400, 0); } if(!fun || LObjects::call_default) { QGLContext::makeCurrent(); }}
-    void swapBuffers() const { void* fun = LObjects::overrideFun(unique, 401); if(fun) { callOverrideFun(fun, 401, 0); } if(!fun || LObjects::call_default) { QGLContext::swapBuffers(); }}
-    bool chooseContext(const QGLContext* x1 = 0) { void* fun = LObjects::overrideFun(unique, 402); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 402, args).toBool(); } if(!fun || LObjects::call_default) { ret = QGLContext::chooseContext(x1); } return ret; }
+    bool create(const QGLContext* x1 = 0) { void* fun = LObjects::overrideFun(unique, 401); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 401, args).toBool(); } if(!fun || LObjects::call_default) { ret = QGLContext::create(x1); } return ret; }
+    void doneCurrent() { void* fun = LObjects::overrideFun(unique, 402); if(fun) { callOverrideFun(fun, 402, 0); } if(!fun || LObjects::call_default) { QGLContext::doneCurrent(); }}
+    void makeCurrent() { void* fun = LObjects::overrideFun(unique, 403); if(fun) { callOverrideFun(fun, 403, 0); } if(!fun || LObjects::call_default) { QGLContext::makeCurrent(); }}
+    void swapBuffers() const { void* fun = LObjects::overrideFun(unique, 404); if(fun) { callOverrideFun(fun, 404, 0); } if(!fun || LObjects::call_default) { QGLContext::swapBuffers(); }}
+    bool chooseContext(const QGLContext* x1 = 0) { void* fun = LObjects::overrideFun(unique, 405); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 405, args).toBool(); } if(!fun || LObjects::call_default) { ret = QGLContext::chooseContext(x1); } return ret; }
 };
 
 class LGLFormat : public QGLFormat {

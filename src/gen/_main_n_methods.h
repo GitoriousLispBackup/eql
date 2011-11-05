@@ -1805,6 +1805,7 @@ public:
     Q_INVOKABLE QString MtoolTip(QStandardItem* o) const { return o->toolTip(); }
     Q_INVOKABLE int Mtype(QStandardItem* o) const { return o->type(); }
     Q_INVOKABLE QString MwhatsThis(QStandardItem* o) const { return o->whatsThis(); }
+    Q_INVOKABLE void MemitDataChanged(QStandardItem* o) { ((LStandardItem*)o)->emitDataChanged(); }
 };
 
 class EQL_EXPORT N151 : public QObject { // QSystemSemaphore

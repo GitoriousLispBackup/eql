@@ -187,10 +187,9 @@
                                (or (starts-with (format nil "Q_INVOKABLE ~A (" class) fun)
                                    (starts-with (format nil "~A (" class) fun))))
                      (virtual (starts-with "virtual" fun)))
-                (when (and new protected)
-                  (return))
                 (unless (or (and qpainter (search "QPaintDevice" fun :test 'string=))
                             (and new no-new)
+                            (and new protected)
                             (find #\~ fun) ; destructor
                             (dolist (str +skip+)
                               (when (search str fun)
