@@ -8,7 +8,7 @@
 #include <QtGui>
 #include <QtHelp>
 
-class N70 : public QObject { // QHelpContentItem
+class N71 : public QObject { // QHelpContentItem
     Q_OBJECT
 public:
     Q_INVOKABLE QHelpContentItem* Mchild(QHelpContentItem* o, int x1) const { return o->child(x1); }
@@ -20,7 +20,7 @@ public:
     Q_INVOKABLE QUrl Murl(QHelpContentItem* o) const { return o->url(); }
 };
 
-class N72 : public QObject { // QHelpSearchQuery
+class N73 : public QObject { // QHelpSearchQuery
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LHelpSearchQuery(u); }

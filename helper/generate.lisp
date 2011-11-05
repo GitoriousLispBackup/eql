@@ -488,9 +488,9 @@
                                    (and (find* class '("QAbstractListModel"
                                                        "QAbstractTableModel"
                                                        "QHelpIndexModel"
-						       "QSqlQueryModel"
-						       "QSqlRelationalTableModel"
-						       "QSqlTableModel"))
+                                                       "QSqlQueryModel"
+                                                       "QSqlRelationalTableModel"
+                                                       "QSqlTableModel"))
                                         (find* fun-name '("columnCount"
                                                           "hasChildren"
                                                           "parent")))
@@ -1039,6 +1039,7 @@
                     "qulonglong"
                     "uint"
                     "ulong"
+                    "GLenum"
                     "GLfloat"
                     "GLint"
                     "GLuint"
@@ -1100,20 +1101,20 @@
                     "QWidgetList")))
     (with-open-file (s "missing-types.txt" :direction :output :if-exists :supersede)
       (let ((all-classes (append *q-names* *n-names*)))
-	(flet ((classes (module type)
-		 (symbol-value (intern (format nil "*~A-~A-NAMES*" module type)))))
-	  (dolist (module *modules*)
-	    (dolist (type '(:q :n))
-	      (setf all-classes (append all-classes (classes module type))))))
-	(map-into all-classes 'trim* all-classes)
-	(dolist (arg (sort (loop for arg being the hash-keys in *argument-types* collect arg) 'string<))
-	  (unless (or (find* arg skip)
-		      (find* arg all-classes)
-		      (search "Abstract" arg)
-		      (search "Base" arg)
-		      (search "QStyleOption" arg))
-	    (incf *missing-types*)
-	    (write-line arg s)))))))
+        (flet ((classes (module type)
+                 (symbol-value (intern (format nil "*~A-~A-NAMES*" module type)))))
+          (dolist (module *modules*)
+            (dolist (type '(:q :n))
+              (setf all-classes (append all-classes (classes module type))))))
+        (map-into all-classes 'trim* all-classes)
+        (dolist (arg (sort (loop for arg being the hash-keys in *argument-types* collect arg) 'string<))
+          (unless (or (find* arg skip)
+                      (find* arg all-classes)
+                      (search "Abstract" arg)
+                      (search "Base" arg)
+                      (search "QStyleOption" arg))
+            (incf *missing-types*)
+            (write-line arg s)))))))
 
 (progn
   (ini)

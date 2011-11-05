@@ -18,6 +18,10 @@
 (require :local-client (probe-file "local-client.lisp"))
 (require :settings     (probe-file "settings.lisp"))
 
+;; load all available modules for tab completions
+(dolist (m (list :help :network :opengl :sql :svg :webkit))
+  (ignore-errors (eql:qrequire m)))
+
 (defpackage :editor
   (:use :common-lisp :eql)
   (:export

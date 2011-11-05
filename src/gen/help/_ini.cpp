@@ -25,8 +25,8 @@ void ini() {
     LObjects::Q[92] = new Q93;
     LObjects::Q[93] = new Q94;
     LObjects::Q[94] = new Q95;
-    LObjects::N[69] = new N70;
-    LObjects::N[71] = new N72; }
+    LObjects::N[70] = new N71;
+    LObjects::N[72] = new N73; }
 
 const QMetaObject* staticMetaObject(int n) {
     const QMetaObject* m = 0;
@@ -43,8 +43,8 @@ const QMetaObject* staticMetaObject(int n) {
 
 void deleteNObject(int n, void* p) {
     switch(n) {
-        case 70: delete (LHelpContentItem*)p; break;
-        case 72: delete (LHelpSearchQuery*)p; break; }}
+        case 71: delete (LHelpContentItem*)p; break;
+        case 73: delete (LHelpSearchQuery*)p; break; }}
 
 NumList* override(const QByteArray& name) {
     NumList* ids = 0;
@@ -61,6 +61,6 @@ NumList* override(const QByteArray& name) {
     else {
         n = LObjects::n_names.value(name);
         switch(n) {
-            case 70: ids = &LHelpContentItem::overrideIds; break;
-            case 72: ids = &LHelpSearchQuery::overrideIds; break; }}
+            case 71: ids = &LHelpContentItem::overrideIds; break;
+            case 73: ids = &LHelpSearchQuery::overrideIds; break; }}
     return ids; }

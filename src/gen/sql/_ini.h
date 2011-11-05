@@ -13,6 +13,8 @@ Q_DECLARE_METATYPE(QSqlRecord)
 #define LIB_EXPORT
 #endif
 
+#define defaultConnection QSqlDatabase::defaultConnection
+
 typedef QList<int> NumList;
 
 extern "C" {

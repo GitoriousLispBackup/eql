@@ -8,7 +8,7 @@
 #include <QtGui>
 #include <QtWebKit>
 
-class N190 : public QObject { // QWebDatabase
+class N191 : public QObject { // QWebDatabase
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QWebDatabase& x1) { return new LWebDatabase(u, x1); }
@@ -22,7 +22,7 @@ public:
     Q_INVOKABLE void SremoveDatabase(const QWebDatabase& x1) { QWebDatabase::removeDatabase(x1); }
 };
 
-class N191 : public QObject { // QWebElement
+class N192 : public QObject { // QWebElement
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LWebElement(u); }
@@ -89,7 +89,7 @@ public:
     Q_INVOKABLE QWebFrame* MwebFrame(QWebElement* o) const { return o->webFrame(); }
 };
 
-class N192 : public QObject { // QWebElementCollection
+class N193 : public QObject { // QWebElementCollection
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LWebElementCollection(u); }
@@ -103,7 +103,7 @@ public:
     Q_INVOKABLE QList<QWebElement> MtoList(QWebElementCollection* o) const { return o->toList(); }
 };
 
-class N193 : public QObject { // QWebHistory
+class N194 : public QObject { // QWebHistory
     Q_OBJECT
 public:
     Q_INVOKABLE void Mback(QWebHistory* o) { o->back(); }
@@ -125,7 +125,7 @@ public:
     Q_INVOKABLE void MsetMaximumItemCount(QWebHistory* o, int x1) { o->setMaximumItemCount(x1); }
 };
 
-class N194 : public QObject { // QWebHistoryItem
+class N195 : public QObject { // QWebHistoryItem
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QWebHistoryItem& x1) { return new LWebHistoryItem(u, x1); }
@@ -139,7 +139,7 @@ public:
     Q_INVOKABLE QVariant MuserData(QWebHistoryItem* o) const { return o->userData(); }
 };
 
-class N195 : public QObject { // QWebHitTestResult
+class N196 : public QObject { // QWebHitTestResult
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LWebHitTestResult(u); }
@@ -163,7 +163,7 @@ public:
     Q_INVOKABLE QString Mtitle(QWebHitTestResult* o) const { return o->title(); }
 };
 
-class N196 : public QObject { // QWebSecurityOrigin
+class N197 : public QObject { // QWebSecurityOrigin
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QWebSecurityOrigin& x1) { return new LWebSecurityOrigin(u, x1); }
@@ -180,7 +180,7 @@ public:
     Q_INVOKABLE void SremoveLocalScheme(const QString& x1) { QWebSecurityOrigin::removeLocalScheme(x1); }
 };
 
-class N197 : public QObject { // QWebSettings
+class N198 : public QObject { // QWebSettings
     Q_OBJECT
 public:
     Q_INVOKABLE QString MdefaultTextEncoding(QWebSettings* o) const { return o->defaultTextEncoding(); }

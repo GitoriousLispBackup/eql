@@ -60,12 +60,10 @@
         "Q_PID"
         "QDataStream"
         "QDecoration"
-        "QFontInfo"
         "QGenericArgument"
         "QGenericMatrix"
         "QHash"
         "QIODevice"
-        "QLatin1String"
         "QList<Country>"
         "QList<QPair<"
         "QList<T>"
@@ -79,7 +77,6 @@
         "QPrinterInfo"
         "QSet<"
         "QSymbianEvent"
-        "QTextLayout"
         "QTextObjectInterface"
         "QWebNetworkRequest"
         "QWSEvent"
@@ -94,6 +91,7 @@
         "QString nativeArguments () const"
         "void setNativeArguments ( const QString & )"
         ))
+
 
 (defparameter *check* nil)
 
@@ -185,9 +183,12 @@
                 (return))
               (setf tr2 (search* "</tr>" funs tr1))
               (let* ((fun (string-trim " " (text (subseq funs tr1 tr2))))
-                     (new (or (starts-with (format nil "Q_INVOKABLE ~A (" class) fun)
-                              (starts-with (format nil "~A (" class) fun)))
+                     (new (and (not static)
+                               (or (starts-with (format nil "Q_INVOKABLE ~A (" class) fun)
+                                   (starts-with (format nil "~A (" class) fun))))
                      (virtual (starts-with "virtual" fun)))
+                (when (and new protected)
+                  (return))
                 (unless (or (and qpainter (search "QPaintDevice" fun :test 'string=))
                             (and new no-new)
                             (find #\~ fun) ; destructor

@@ -9,7 +9,7 @@
 #include <QtGui>
 
 class LHelpContentItem : public QHelpContentItem {
-    friend class N70;
+    friend class N71;
 public:
 
     static NumList overrideIds;
@@ -17,7 +17,7 @@ public:
 };
 
 class LHelpSearchQuery : public QHelpSearchQuery {
-    friend class N72;
+    friend class N73;
 public:
     LHelpSearchQuery(uint u) : unique(u) {}
     LHelpSearchQuery(uint u, FieldName x1, const QStringList& x2) : QHelpSearchQuery(x1, x2), unique(u) {}

@@ -5,10 +5,10 @@
 #include "_ini2.h"
 
 NumList LGraphicsWebView::overrideIds = NumList() << 23 << 222 << 210 << 211 << 228 << 242 << 213 << 214 << 215 << 216 << 217 << 14 << 34 << 15 << 220 << 221 << 36 << 16 << 17 << 223 << 224 << 225 << 226 << 241 << 230;
-NumList LWebHistoryInterface::overrideIds = NumList() << 352 << 353;
+NumList LWebHistoryInterface::overrideIds = NumList() << 349 << 350;
 NumList LWebInspector::overrideIds = NumList() << 25 << 35 << 40 << 41;
-NumList LWebPage::overrideIds = NumList() << 354 << 355 << 356 << 357 << 358 << 359 << 360 << 361 << 362 << 363 << 364 << 365;
-NumList LWebView::overrideIds = NumList() << 366 << 23 << 25 << 13 << 28 << 29 << 30 << 31 << 32 << 14 << 34 << 15 << 36 << 16 << 17 << 38 << 18 << 19 << 20 << 21 << 40 << 43;
+NumList LWebPage::overrideIds = NumList() << 351 << 352 << 353 << 354 << 355 << 356 << 357 << 358 << 359 << 360 << 361 << 362;
+NumList LWebView::overrideIds = NumList() << 363 << 23 << 25 << 13 << 28 << 29 << 30 << 31 << 32 << 14 << 34 << 15 << 36 << 16 << 17 << 38 << 18 << 19 << 20 << 21 << 40 << 43;
 NumList LWebDatabase::overrideIds = NumList();
 NumList LWebElement::overrideIds = NumList();
 NumList LWebElementCollection::overrideIds = NumList();
@@ -25,14 +25,14 @@ void ini() {
     LObjects::Q[215] = new Q216;
     LObjects::Q[216] = new Q217;
     LObjects::Q[217] = new Q218;
-    LObjects::N[189] = new N190;
     LObjects::N[190] = new N191;
     LObjects::N[191] = new N192;
     LObjects::N[192] = new N193;
     LObjects::N[193] = new N194;
     LObjects::N[194] = new N195;
     LObjects::N[195] = new N196;
-    LObjects::N[196] = new N197; }
+    LObjects::N[196] = new N197;
+    LObjects::N[197] = new N198; }
 
 const QMetaObject* staticMetaObject(int n) {
     const QMetaObject* m = 0;
@@ -47,12 +47,12 @@ const QMetaObject* staticMetaObject(int n) {
 
 void deleteNObject(int n, void* p) {
     switch(n) {
-        case 190: delete (LWebDatabase*)p; break;
-        case 191: delete (LWebElement*)p; break;
-        case 192: delete (LWebElementCollection*)p; break;
-        case 194: delete (LWebHistoryItem*)p; break;
-        case 195: delete (LWebHitTestResult*)p; break;
-        case 196: delete (LWebSecurityOrigin*)p; break; }}
+        case 191: delete (LWebDatabase*)p; break;
+        case 192: delete (LWebElement*)p; break;
+        case 193: delete (LWebElementCollection*)p; break;
+        case 195: delete (LWebHistoryItem*)p; break;
+        case 196: delete (LWebHitTestResult*)p; break;
+        case 197: delete (LWebSecurityOrigin*)p; break; }}
 
 NumList* override(const QByteArray& name) {
     NumList* ids = 0;
@@ -67,10 +67,10 @@ NumList* override(const QByteArray& name) {
     else {
         n = LObjects::n_names.value(name);
         switch(n) {
-            case 190: ids = &LWebDatabase::overrideIds; break;
-            case 191: ids = &LWebElement::overrideIds; break;
-            case 192: ids = &LWebElementCollection::overrideIds; break;
-            case 194: ids = &LWebHistoryItem::overrideIds; break;
-            case 195: ids = &LWebHitTestResult::overrideIds; break;
-            case 196: ids = &LWebSecurityOrigin::overrideIds; break; }}
+            case 191: ids = &LWebDatabase::overrideIds; break;
+            case 192: ids = &LWebElement::overrideIds; break;
+            case 193: ids = &LWebElementCollection::overrideIds; break;
+            case 195: ids = &LWebHistoryItem::overrideIds; break;
+            case 196: ids = &LWebHitTestResult::overrideIds; break;
+            case 197: ids = &LWebSecurityOrigin::overrideIds; break; }}
     return ids; }

@@ -19,7 +19,7 @@ public:
 };
 
 class LHostAddress : public QHostAddress {
-    friend class N74;
+    friend class N75;
 public:
     LHostAddress(uint u) : unique(u) {}
     LHostAddress(uint u, quint8* x1) : QHostAddress(x1), unique(u) {}
@@ -34,7 +34,7 @@ public:
 };
 
 class LHostInfo : public QHostInfo {
-    friend class N75;
+    friend class N76;
 public:
     LHostInfo(uint u, int x1 = -1) : QHostInfo(x1), unique(u) {}
     LHostInfo(uint u, const QHostInfo& x1) : QHostInfo(x1), unique(u) {}
@@ -44,7 +44,7 @@ public:
 };
 
 class LNetworkAddressEntry : public QNetworkAddressEntry {
-    friend class N99;
+    friend class N100;
 public:
     LNetworkAddressEntry(uint u) : unique(u) {}
     LNetworkAddressEntry(uint u, const QNetworkAddressEntry& x1) : QNetworkAddressEntry(x1), unique(u) {}
@@ -54,7 +54,7 @@ public:
 };
 
 class LNetworkCacheMetaData : public QNetworkCacheMetaData {
-    friend class N100;
+    friend class N101;
 public:
     LNetworkCacheMetaData(uint u) : unique(u) {}
     LNetworkCacheMetaData(uint u, const QNetworkCacheMetaData& x1) : QNetworkCacheMetaData(x1), unique(u) {}
@@ -64,7 +64,7 @@ public:
 };
 
 class LNetworkCookie : public QNetworkCookie {
-    friend class N101;
+    friend class N102;
 public:
     LNetworkCookie(uint u, const QByteArray& x1 = QByteArray(), const QByteArray& x2 = QByteArray()) : QNetworkCookie(x1, x2), unique(u) {}
     LNetworkCookie(uint u, const QNetworkCookie& x1) : QNetworkCookie(x1), unique(u) {}
@@ -74,7 +74,7 @@ public:
 };
 
 class LNetworkInterface : public QNetworkInterface {
-    friend class N102;
+    friend class N103;
 public:
     LNetworkInterface(uint u) : unique(u) {}
     LNetworkInterface(uint u, const QNetworkInterface& x1) : QNetworkInterface(x1), unique(u) {}
@@ -84,7 +84,7 @@ public:
 };
 
 class LNetworkProxy : public QNetworkProxy {
-    friend class N103;
+    friend class N104;
 public:
     LNetworkProxy(uint u) : unique(u) {}
     LNetworkProxy(uint u, ProxyType x1, const QString& x2 = QString(), quint16 x3 = 0, const QString& x4 = QString(), const QString& x5 = QString()) : QNetworkProxy(x1, x2, x3, x4, x5), unique(u) {}
@@ -95,18 +95,18 @@ public:
 };
 
 class LNetworkProxyFactory : public QNetworkProxyFactory {
-    friend class N104;
+    friend class N105;
 public:
     LNetworkProxyFactory(uint u) : unique(u) {}
 
     static NumList overrideIds;
     uint unique;
 
-    QList<QNetworkProxy> queryProxy(const QNetworkProxyQuery& x1 = QNetworkProxyQuery()) { void* fun = LObjects::overrideFun(unique, 415); QList<QNetworkProxy> ret; if(fun) { const void* args[] = { &x1 }; ret = qVariantValue<QList<QNetworkProxy> >(callOverrideFun(fun, 415, args)); } return ret; }
+    QList<QNetworkProxy> queryProxy(const QNetworkProxyQuery& x1 = QNetworkProxyQuery()) { void* fun = LObjects::overrideFun(unique, 412); QList<QNetworkProxy> ret; if(fun) { const void* args[] = { &x1 }; ret = qVariantValue<QList<QNetworkProxy> >(callOverrideFun(fun, 412, args)); } return ret; }
 };
 
 class LNetworkProxyQuery : public QNetworkProxyQuery {
-    friend class N105;
+    friend class N106;
 public:
     LNetworkProxyQuery(uint u) : unique(u) {}
     LNetworkProxyQuery(uint u, const QUrl& x1, QueryType x2 = UrlRequest) : QNetworkProxyQuery(x1, x2), unique(u) {}
@@ -119,7 +119,7 @@ public:
 };
 
 class LNetworkRequest : public QNetworkRequest {
-    friend class N106;
+    friend class N107;
 public:
     LNetworkRequest(uint u, const QUrl& x1 = QUrl()) : QNetworkRequest(x1), unique(u) {}
     LNetworkRequest(uint u, const QNetworkRequest& x1) : QNetworkRequest(x1), unique(u) {}
@@ -129,7 +129,7 @@ public:
 };
 
 class LSslCertificate : public QSslCertificate {
-    friend class N142;
+    friend class N143;
 public:
     LSslCertificate(uint u, const QByteArray& x1 = QByteArray(), QSsl::EncodingFormat x2 = QSsl::Pem) : QSslCertificate(x1, x2), unique(u) {}
     LSslCertificate(uint u, const QSslCertificate& x1) : QSslCertificate(x1), unique(u) {}
@@ -139,7 +139,7 @@ public:
 };
 
 class LSslCipher : public QSslCipher {
-    friend class N143;
+    friend class N144;
 public:
     LSslCipher(uint u) : unique(u) {}
     LSslCipher(uint u, const QString& x1, QSsl::SslProtocol x2) : QSslCipher(x1, x2), unique(u) {}
@@ -150,7 +150,7 @@ public:
 };
 
 class LSslConfiguration : public QSslConfiguration {
-    friend class N144;
+    friend class N145;
 public:
     LSslConfiguration(uint u) : unique(u) {}
     LSslConfiguration(uint u, const QSslConfiguration& x1) : QSslConfiguration(x1), unique(u) {}
@@ -160,7 +160,7 @@ public:
 };
 
 class LSslError : public QSslError {
-    friend class N145;
+    friend class N146;
 public:
     LSslError(uint u) : unique(u) {}
     LSslError(uint u, SslError x1) : QSslError(x1), unique(u) {}
@@ -172,7 +172,7 @@ public:
 };
 
 class LSslKey : public QSslKey {
-    friend class N146;
+    friend class N147;
 public:
     LSslKey(uint u) : unique(u) {}
     LSslKey(uint u, const QByteArray& x1, QSsl::KeyAlgorithm x2, QSsl::EncodingFormat x3 = QSsl::Pem, QSsl::KeyType x4 = QSsl::PrivateKey, const QByteArray& x5 = QByteArray()) : QSslKey(x1, x2, x3, x4, x5), unique(u) {}
@@ -183,7 +183,7 @@ public:
 };
 
 class LUrlInfo : public QUrlInfo {
-    friend class N185;
+    friend class N186;
 public:
     LUrlInfo(uint u) : unique(u) {}
     LUrlInfo(uint u, const QUrlInfo& x1) : QUrlInfo(x1), unique(u) {}
@@ -193,17 +193,17 @@ public:
     static NumList overrideIds;
     uint unique;
 
-    void setDir(bool x1) { void* fun = LObjects::overrideFun(unique, 450); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 450, args); } if(!fun || LObjects::call_default) { QUrlInfo::setDir(x1); }}
-    void setFile(bool x1) { void* fun = LObjects::overrideFun(unique, 451); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 451, args); } if(!fun || LObjects::call_default) { QUrlInfo::setFile(x1); }}
-    void setGroup(const QString& x1) { void* fun = LObjects::overrideFun(unique, 452); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 452, args); } if(!fun || LObjects::call_default) { QUrlInfo::setGroup(x1); }}
-    void setLastModified(const QDateTime& x1) { void* fun = LObjects::overrideFun(unique, 453); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 453, args); } if(!fun || LObjects::call_default) { QUrlInfo::setLastModified(x1); }}
-    void setName(const QString& x1) { void* fun = LObjects::overrideFun(unique, 454); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 454, args); } if(!fun || LObjects::call_default) { QUrlInfo::setName(x1); }}
-    void setOwner(const QString& x1) { void* fun = LObjects::overrideFun(unique, 455); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 455, args); } if(!fun || LObjects::call_default) { QUrlInfo::setOwner(x1); }}
-    void setPermissions(int x1) { void* fun = LObjects::overrideFun(unique, 456); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 456, args); } if(!fun || LObjects::call_default) { QUrlInfo::setPermissions(x1); }}
-    void setReadable(bool x1) { void* fun = LObjects::overrideFun(unique, 457); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 457, args); } if(!fun || LObjects::call_default) { QUrlInfo::setReadable(x1); }}
-    void setSize(qint64 x1) { void* fun = LObjects::overrideFun(unique, 458); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 458, args); } if(!fun || LObjects::call_default) { QUrlInfo::setSize(x1); }}
-    void setSymLink(bool x1) { void* fun = LObjects::overrideFun(unique, 459); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 459, args); } if(!fun || LObjects::call_default) { QUrlInfo::setSymLink(x1); }}
-    void setWritable(bool x1) { void* fun = LObjects::overrideFun(unique, 460); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 460, args); } if(!fun || LObjects::call_default) { QUrlInfo::setWritable(x1); }}
+    void setDir(bool x1) { void* fun = LObjects::overrideFun(unique, 426); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 426, args); } if(!fun || LObjects::call_default) { QUrlInfo::setDir(x1); }}
+    void setFile(bool x1) { void* fun = LObjects::overrideFun(unique, 427); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 427, args); } if(!fun || LObjects::call_default) { QUrlInfo::setFile(x1); }}
+    void setGroup(const QString& x1) { void* fun = LObjects::overrideFun(unique, 428); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 428, args); } if(!fun || LObjects::call_default) { QUrlInfo::setGroup(x1); }}
+    void setLastModified(const QDateTime& x1) { void* fun = LObjects::overrideFun(unique, 429); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 429, args); } if(!fun || LObjects::call_default) { QUrlInfo::setLastModified(x1); }}
+    void setName(const QString& x1) { void* fun = LObjects::overrideFun(unique, 430); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 430, args); } if(!fun || LObjects::call_default) { QUrlInfo::setName(x1); }}
+    void setOwner(const QString& x1) { void* fun = LObjects::overrideFun(unique, 431); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 431, args); } if(!fun || LObjects::call_default) { QUrlInfo::setOwner(x1); }}
+    void setPermissions(int x1) { void* fun = LObjects::overrideFun(unique, 432); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 432, args); } if(!fun || LObjects::call_default) { QUrlInfo::setPermissions(x1); }}
+    void setReadable(bool x1) { void* fun = LObjects::overrideFun(unique, 433); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 433, args); } if(!fun || LObjects::call_default) { QUrlInfo::setReadable(x1); }}
+    void setSize(qint64 x1) { void* fun = LObjects::overrideFun(unique, 434); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 434, args); } if(!fun || LObjects::call_default) { QUrlInfo::setSize(x1); }}
+    void setSymLink(bool x1) { void* fun = LObjects::overrideFun(unique, 435); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 435, args); } if(!fun || LObjects::call_default) { QUrlInfo::setSymLink(x1); }}
+    void setWritable(bool x1) { void* fun = LObjects::overrideFun(unique, 436); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 436, args); } if(!fun || LObjects::call_default) { QUrlInfo::setWritable(x1); }}
 };
 
 #endif

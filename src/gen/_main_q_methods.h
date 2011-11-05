@@ -165,7 +165,6 @@ class EQL_EXPORT Q14 : public Q127 { // QAbstractState
 public:
     Q_INVOKABLE QStateMachine* Mmachine(QAbstractState* o) const { return o->machine(); }
     Q_INVOKABLE QState* MparentState(QAbstractState* o) const { return o->parentState(); }
-    Q_INVOKABLE void* C(uint u, QState* x1 = 0) { return new LAbstractState(u, x1); }
 };
 
 class EQL_EXPORT Q15 : public Q4 { // QAbstractTableModel
@@ -1697,8 +1696,6 @@ public:
     Q_INVOKABLE QTextFormat Mformat(QTextObject* o) const { return o->format(); }
     Q_INVOKABLE int MformatIndex(QTextObject* o) const { return o->formatIndex(); }
     Q_INVOKABLE int MobjectIndex(QTextObject* o) const { return o->objectIndex(); }
-    Q_INVOKABLE void* C(uint u, QTextDocument* x1) { return new LTextObject(u, x1); }
-    Q_INVOKABLE void MsetFormat(QTextObject* o, const QTextFormat& x1) { ((LTextObject*)o)->setFormat(x1); }
 };
 
 class EQL_EXPORT Q199 : public Q127 { // QTimeLine
@@ -1851,6 +1848,7 @@ public:
     Q_INVOKABLE QWidget* MfocusProxy(QWidget* o) const { return o->focusProxy(); }
     Q_INVOKABLE QWidget* MfocusWidget(QWidget* o) const { return o->focusWidget(); }
     Q_INVOKABLE QFont Mfont(QWidget* o) const { return o->font(); }
+    Q_INVOKABLE QFontInfo MfontInfo(QWidget* o) const { return o->fontInfo(); }
     Q_INVOKABLE QFontMetrics MfontMetrics(QWidget* o) const { return o->fontMetrics(); }
     Q_INVOKABLE int MforegroundRole(QWidget* o) const { return o->foregroundRole(); }
     Q_INVOKABLE QRect MframeGeometry(QWidget* o) const { return o->frameGeometry(); }
@@ -3780,8 +3778,6 @@ public:
 class EQL_EXPORT Q190 : public Q196 { // QTextBlockGroup
     Q_OBJECT
 public:
-    Q_INVOKABLE void* C(uint u, QTextDocument* x1) { return new LTextBlockGroup(u, x1); }
-    Q_INVOKABLE QList<QTextBlock> MblockList(QTextBlockGroup* o) const { return ((LTextBlockGroup*)o)->blockList(); }
 };
 
 class EQL_EXPORT Q194 : public Q196 { // QTextFrame

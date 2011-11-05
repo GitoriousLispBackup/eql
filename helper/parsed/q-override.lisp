@@ -178,8 +178,6 @@
    "virtual void timerEvent ( QTimerEvent * )"
    "virtual void wheelEvent ( QWheelEvent * )")
   (("QAbstractState" . "QObject")
-   "virtual void onEntry ( QEvent * ) = 0"
-   "virtual void onExit ( QEvent * ) = 0"
    "virtual bool event ( QEvent * )")
   (("QAbstractTableModel" . "QAbstractItemModel")
    "virtual bool dropMimeData ( const QMimeData * , Qt::DropAction , int , int , const QModelIndex & )"
@@ -1519,10 +1517,7 @@
    "virtual QTcpSocket * nextPendingConnection ()"
    "virtual void incomingConnection ( int )")
   (("QTcpSocket" . "QAbstractSocket"))
-  (("QTextBlockGroup" . "QTextObject")
-   "virtual void blockFormatChanged ( const QTextBlock & )"
-   "virtual void blockInserted ( const QTextBlock & )"
-   "virtual void blockRemoved ( const QTextBlock & )")
+  (("QTextBlockGroup" . "QTextObject"))
   (("QTextBrowser" . "QTextEdit")
    "virtual QVariant loadResource ( int , const QUrl & )"
    "virtual bool event ( QEvent * )"

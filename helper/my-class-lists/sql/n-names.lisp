@@ -7,10 +7,10 @@
 (defparameter *sql-n-names*
   (list "QSqlDatabase"
         "QSqlError"
-	"QSqlField"
-	"QSqlIndex"
-	"QSqlQuery"
-	"QSqlRecord"
-	"QSqlRelation"
-	"QSqlResult"
+        "QSqlField"
+        "QSqlIndex"
+        "QSqlQuery"
+        "QSqlRecord"
+        "QSqlRelation"
+        "QSqlResult"
         ))

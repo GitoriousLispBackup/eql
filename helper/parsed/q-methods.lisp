@@ -323,8 +323,7 @@
    "virtual QSize sizeHint () const")
   (("QAbstractState" . "QObject")
    "QStateMachine * machine () const"
-   "QState * parentState () const"
-   "new QAbstractState ( QState * = 0 )")
+   "QState * parentState () const")
   (("QAbstractTableModel" . "QAbstractItemModel")
    "virtual bool dropMimeData ( const QMimeData * , Qt::DropAction , int , int , const QModelIndex & )"
    "virtual QModelIndex index ( int , int , const QModelIndex & = QModelIndex() ) const")
@@ -2795,13 +2794,6 @@
    "void setSslConfiguration ( const QSslConfiguration & )"
    "QSslConfiguration sslConfiguration () const"
    "QUrl url () const"
-   "protected void setAttribute ( QNetworkRequest::Attribute , const QVariant & )"
-   "protected void setError ( NetworkError , const QString & )"
-   "protected void setHeader ( QNetworkRequest::KnownHeaders , const QVariant & )"
-   "protected void setOperation ( QNetworkAccessManager::Operation )"
-   "protected void setRawHeader ( const QByteArray & , const QByteArray & )"
-   "protected void setRequest ( const QNetworkRequest & )"
-   "protected void setUrl ( const QUrl & )"
    "virtual void close ()")
   (("QObject" . NIL)
    "new QObject ( QObject * = 0 )"
@@ -3908,9 +3900,7 @@
    "bool waitForNewConnection ( int = 0, bool * = 0 )")
   (("QTcpSocket" . "QAbstractSocket")
    "new QTcpSocket ( QObject * = 0 )")
-  (("QTextBlockGroup" . "QTextObject")
-   "new QTextBlockGroup ( QTextDocument * )"
-   "protected QList<QTextBlock> blockList () const")
+  (("QTextBlockGroup" . "QTextObject"))
   (("QTextBrowser" . "QTextEdit")
    "new QTextBrowser ( QWidget * = 0 )"
    "int backwardHistoryCount () const"
@@ -4083,9 +4073,7 @@
    "QTextDocument * document () const"
    "QTextFormat format () const"
    "int formatIndex () const"
-   "int objectIndex () const"
-   "new QTextObject ( QTextDocument * )"
-   "protected void setFormat ( const QTextFormat & )")
+   "int objectIndex () const")
   (("QTextTable" . "QTextFrame")
    "void appendColumns ( int )"
    "void appendRows ( int )"
@@ -4541,6 +4529,7 @@
    "QWidget * focusProxy () const"
    "QWidget * focusWidget () const"
    "const QFont & font () const"
+   "QFontInfo fontInfo () const"
    "QFontMetrics fontMetrics () const"
    "QPalette::ColorRole foregroundRole () const"
    "QRect frameGeometry () const"

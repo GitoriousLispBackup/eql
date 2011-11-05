@@ -41,6 +41,7 @@
         "QFocusEvent"
         "QFont"
         "QFontDatabase"
+        "QFontInfo"
         "QFontMetrics"
         "QGestureEvent"
         "QGradient"

@@ -1,4 +1,4 @@
-GLenum
+QLatin1String
 QList<ExtraSelection>
 QList<QGLShader*>
 QList<QHelpSearchQuery>
@@ -29,7 +29,6 @@ QPair<QHostAddress,int>
 QStyleHintReturn
 QThread
 QVariantList
-QVector<QVariant>
 QWebPluginFactory
 Q_IPV6ADDR
 quint16

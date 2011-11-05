@@ -8,7 +8,7 @@ NumList LGLShader::overrideIds = NumList();
 NumList LGLShaderProgram::overrideIds = NumList() << 198;
 NumList LGLWidget::overrideIds = NumList() << 199 << 200 << 201 << 202 << 203 << 204 << 205 << 206 << 21 << 40;
 NumList LGLColormap::overrideIds = NumList();
-NumList LGLContext::overrideIds = NumList() << 401 << 402 << 403 << 404 << 405;
+NumList LGLContext::overrideIds = NumList() << 398 << 399 << 400 << 401 << 402;
 NumList LGLFormat::overrideIds = NumList();
 NumList LGLFramebufferObject::overrideIds = NumList() << 44;
 NumList LGLFramebufferObjectFormat::overrideIds = NumList();
@@ -20,12 +20,12 @@ void ini() {
     LObjects::Q[62] = new Q63;
     LObjects::Q[63] = new Q64;
     LObjects::Q[64] = new Q65;
-    LObjects::N[38] = new N39;
     LObjects::N[39] = new N40;
     LObjects::N[40] = new N41;
     LObjects::N[41] = new N42;
     LObjects::N[42] = new N43;
-    LObjects::N[43] = new N44; }
+    LObjects::N[43] = new N44;
+    LObjects::N[44] = new N45; }
 
 const QMetaObject* staticMetaObject(int n) {
     const QMetaObject* m = 0;
@@ -37,12 +37,12 @@ const QMetaObject* staticMetaObject(int n) {
 
 void deleteNObject(int n, void* p) {
     switch(n) {
-        case 39: delete (LGLColormap*)p; break;
-        case 40: delete (LGLContext*)p; break;
-        case 41: delete (LGLFormat*)p; break;
-        case 42: delete (LGLFramebufferObject*)p; break;
-        case 43: delete (LGLFramebufferObjectFormat*)p; break;
-        case 44: delete (LGLPixelBuffer*)p; break; }}
+        case 40: delete (LGLColormap*)p; break;
+        case 41: delete (LGLContext*)p; break;
+        case 42: delete (LGLFormat*)p; break;
+        case 43: delete (LGLFramebufferObject*)p; break;
+        case 44: delete (LGLFramebufferObjectFormat*)p; break;
+        case 45: delete (LGLPixelBuffer*)p; break; }}
 
 NumList* override(const QByteArray& name) {
     NumList* ids = 0;
@@ -55,10 +55,10 @@ NumList* override(const QByteArray& name) {
     else {
         n = LObjects::n_names.value(name);
         switch(n) {
-            case 39: ids = &LGLColormap::overrideIds; break;
-            case 40: ids = &LGLContext::overrideIds; break;
-            case 41: ids = &LGLFormat::overrideIds; break;
-            case 42: ids = &LGLFramebufferObject::overrideIds; break;
-            case 43: ids = &LGLFramebufferObjectFormat::overrideIds; break;
-            case 44: ids = &LGLPixelBuffer::overrideIds; break; }}
+            case 40: ids = &LGLColormap::overrideIds; break;
+            case 41: ids = &LGLContext::overrideIds; break;
+            case 42: ids = &LGLFormat::overrideIds; break;
+            case 43: ids = &LGLFramebufferObject::overrideIds; break;
+            case 44: ids = &LGLFramebufferObjectFormat::overrideIds; break;
+            case 45: ids = &LGLPixelBuffer::overrideIds; break; }}
     return ids; }

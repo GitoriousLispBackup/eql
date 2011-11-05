@@ -7,7 +7,7 @@
 NumList LGraphicsSvgItem::overrideIds = NumList() << 239 << 210 << 212;
 NumList LSvgRenderer::overrideIds = NumList();
 NumList LSvgWidget::overrideIds = NumList() << 25 << 21;
-NumList LSvgGenerator::overrideIds = NumList() << 438;
+NumList LSvgGenerator::overrideIds = NumList() << 416;
 
 void ini() {
     static bool _ = false; if(_) return; _ = true;
@@ -15,7 +15,7 @@ void ini() {
     LObjects::Q[77] = new Q78;
     LObjects::Q[176] = new Q177;
     LObjects::Q[177] = new Q178;
-    LObjects::N[148] = new N149; }
+    LObjects::N[149] = new N150; }
 
 const QMetaObject* staticMetaObject(int n) {
     const QMetaObject* m = 0;
@@ -27,7 +27,7 @@ const QMetaObject* staticMetaObject(int n) {
 
 void deleteNObject(int n, void* p) {
     switch(n) {
-        case 149: delete (LSvgGenerator*)p; break; }}
+        case 150: delete (LSvgGenerator*)p; break; }}
 
 NumList* override(const QByteArray& name) {
     NumList* ids = 0;
@@ -40,5 +40,5 @@ NumList* override(const QByteArray& name) {
     else {
         n = LObjects::n_names.value(name);
         switch(n) {
-            case 149: ids = &LSvgGenerator::overrideIds; break; }}
+            case 150: ids = &LSvgGenerator::overrideIds; break; }}
     return ids; }

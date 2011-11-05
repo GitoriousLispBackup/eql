@@ -3,8 +3,8 @@
 
 (defparameter *sql-q-names*
   (list "QSqlDriver"
-	"QSqlRelationalDelegate"
-	"QSqlRelationalTableModel"
-	"QSqlTableModel"
-	"QSqlQueryModel"
+        "QSqlRelationalDelegate"
+        "QSqlRelationalTableModel"
+        "QSqlTableModel"
+        "QSqlQueryModel"
         ))

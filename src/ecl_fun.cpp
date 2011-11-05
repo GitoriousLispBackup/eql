@@ -64,6 +64,7 @@ static const int T_QTextBlock =                       qRegisterMetaType<QTextBlo
 static const int T_QTextCharFormat =                  qRegisterMetaType<QTextCharFormat>("QTextCharFormat");
 static const int T_QTextCursor =                      qRegisterMetaType<QTextCursor>("QTextCursor");
 static const int T_QTextDocumentFragment =            qRegisterMetaType<QTextDocumentFragment>("QTextDocumentFragment");
+static const int T_QTextLine =                        qRegisterMetaType<QTextLine>("QTextLine");
 static const int T_QTextOption =                      qRegisterMetaType<QTextOption>("QTextOption");
 #if QT_VERSION < 0x40700
 static const int T_QVariant =                         qRegisterMetaType<QVariant>("QVariant");
@@ -556,6 +557,7 @@ TO_QT_TYPE_PTR(QTextCursor, qtextcursor)
 TO_QT_TYPE_PTR(QTextDocumentFragment, qtextdocumentfragment)
 TO_QT_TYPE_PTR2(QTextFormat, qtextformat)
 TO_QT_TYPE_PTR2(QTextLength, qtextlength)
+TO_QT_TYPE_PTR(QTextLine, qtextline)
 TO_QT_TYPE_PTR(QTextOption, qtextoption)
 TO_QT_TYPE_PTR2(QTime, qtime)
 TO_QT_TYPE_PTR2(QUrl, qurl)
@@ -929,6 +931,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         else if(T_QTextCharFormat == n)                  p = new QTextCharFormat(*toQTextCharFormatPointer(l_arg));
         else if(T_QTextCursor == n)                      p = new QTextCursor(*toQTextCursorPointer(l_arg));
         else if(T_QTextDocumentFragment == n)            p = new QTextDocumentFragment(*toQTextDocumentFragmentPointer(l_arg));
+        else if(T_QTextLine == n)                        p = new QTextLine(*toQTextLinePointer(l_arg));
         else if(T_QTextOption == n)                      p = new QTextOption(*toQTextOptionPointer(l_arg));
 #if QT_VERSION < 0x40700
         else if(T_QVariant == n)                         p = new QVariant(*toQVariantPointer(l_arg));
@@ -1085,6 +1088,7 @@ cl_object to_lisp_arg(const MetaArg& arg) {
             else if(T_QTextCharFormat == n)                  l_ret = from_qtextcharformat(*(QTextCharFormat*)p);
             else if(T_QTextCursor == n)                      l_ret = from_qtextcursor(*(QTextCursor*)p);
             else if(T_QTextDocumentFragment == n)            l_ret = from_qtextdocumentfragment(*(QTextDocumentFragment*)p);
+            else if(T_QTextLine == n)                        l_ret = from_qtextline(*(QTextLine*)p);
             else if(T_QTextOption == n)                      l_ret = from_qtextoption(*(QTextOption*)p);
 #if QT_VERSION < 0x40700
             else if(T_QVariant)                              l_ret = from_qvariant(*(QVariant*)p);
@@ -1891,7 +1895,7 @@ cl_object qclear_event_filters() {
 
 cl_object qrequire(cl_object l_name) {
     /// args: (module)
-    /// Loads an EQL module, corresponding to a Qt module. Returns the module name if both loading and initializing have been successful.
+    /// Loads an EQL module, corresponding to a Qt module. Returns the module name if both loading and initializing have been successful.<br>Available modules: <code>:help :network :opengl :sql :svg :webkit</code>
     ///     (qrequire :network)
     ecl_process_env()->nvalues = 1;
     QString name = symbolName(l_name).toLower();

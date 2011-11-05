@@ -9,7 +9,7 @@
 #include <QtGui>
 
 class LGLColormap : public QGLColormap {
-    friend class N39;
+    friend class N40;
 public:
     LGLColormap(uint u) : unique(u) {}
     LGLColormap(uint u, const QGLColormap& x1) : QGLColormap(x1), unique(u) {}
@@ -19,22 +19,22 @@ public:
 };
 
 class LGLContext : public QGLContext {
-    friend class N40;
+    friend class N41;
 public:
     LGLContext(uint u, const QGLFormat& x1) : QGLContext(x1), unique(u) {}
 
     static NumList overrideIds;
     uint unique;
 
-    bool create(const QGLContext* x1 = 0) { void* fun = LObjects::overrideFun(unique, 401); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 401, args).toBool(); } if(!fun || LObjects::call_default) { ret = QGLContext::create(x1); } return ret; }
-    void doneCurrent() { void* fun = LObjects::overrideFun(unique, 402); if(fun) { callOverrideFun(fun, 402, 0); } if(!fun || LObjects::call_default) { QGLContext::doneCurrent(); }}
-    void makeCurrent() { void* fun = LObjects::overrideFun(unique, 403); if(fun) { callOverrideFun(fun, 403, 0); } if(!fun || LObjects::call_default) { QGLContext::makeCurrent(); }}
-    void swapBuffers() const { void* fun = LObjects::overrideFun(unique, 404); if(fun) { callOverrideFun(fun, 404, 0); } if(!fun || LObjects::call_default) { QGLContext::swapBuffers(); }}
-    bool chooseContext(const QGLContext* x1 = 0) { void* fun = LObjects::overrideFun(unique, 405); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 405, args).toBool(); } if(!fun || LObjects::call_default) { ret = QGLContext::chooseContext(x1); } return ret; }
+    bool create(const QGLContext* x1 = 0) { void* fun = LObjects::overrideFun(unique, 398); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 398, args).toBool(); } if(!fun || LObjects::call_default) { ret = QGLContext::create(x1); } return ret; }
+    void doneCurrent() { void* fun = LObjects::overrideFun(unique, 399); if(fun) { callOverrideFun(fun, 399, 0); } if(!fun || LObjects::call_default) { QGLContext::doneCurrent(); }}
+    void makeCurrent() { void* fun = LObjects::overrideFun(unique, 400); if(fun) { callOverrideFun(fun, 400, 0); } if(!fun || LObjects::call_default) { QGLContext::makeCurrent(); }}
+    void swapBuffers() const { void* fun = LObjects::overrideFun(unique, 401); if(fun) { callOverrideFun(fun, 401, 0); } if(!fun || LObjects::call_default) { QGLContext::swapBuffers(); }}
+    bool chooseContext(const QGLContext* x1 = 0) { void* fun = LObjects::overrideFun(unique, 402); bool ret = false; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 402, args).toBool(); } if(!fun || LObjects::call_default) { ret = QGLContext::chooseContext(x1); } return ret; }
 };
 
 class LGLFormat : public QGLFormat {
-    friend class N41;
+    friend class N42;
 public:
     LGLFormat(uint u) : unique(u) {}
     LGLFormat(uint u, QGL::FormatOptions x1, int x2 = 0) : QGLFormat(x1, x2), unique(u) {}
@@ -45,7 +45,7 @@ public:
 };
 
 class LGLFramebufferObject : public QGLFramebufferObject {
-    friend class N42;
+    friend class N43;
 public:
     LGLFramebufferObject(uint u, const QSize& x1, GLenum x2 = GL_TEXTURE_2D) : QGLFramebufferObject(x1, x2), unique(u) {}
     LGLFramebufferObject(uint u, int x1, int x2, GLenum x3 = GL_TEXTURE_2D) : QGLFramebufferObject(x1, x2, x3), unique(u) {}
@@ -61,7 +61,7 @@ public:
 };
 
 class LGLFramebufferObjectFormat : public QGLFramebufferObjectFormat {
-    friend class N43;
+    friend class N44;
 public:
     LGLFramebufferObjectFormat(uint u) : unique(u) {}
     LGLFramebufferObjectFormat(uint u, const QGLFramebufferObjectFormat& x1) : QGLFramebufferObjectFormat(x1), unique(u) {}
@@ -71,7 +71,7 @@ public:
 };
 
 class LGLPixelBuffer : public QGLPixelBuffer {
-    friend class N44;
+    friend class N45;
 public:
     LGLPixelBuffer(uint u, const QSize& x1, const QGLFormat& x2 = QGLFormat::defaultFormat(), QGLWidget* x3 = 0) : QGLPixelBuffer(x1, x2, x3), unique(u) {}
     LGLPixelBuffer(uint u, int x1, int x2, const QGLFormat& x3 = QGLFormat::defaultFormat(), QGLWidget* x4 = 0) : QGLPixelBuffer(x1, x2, x3, x4), unique(u) {}

@@ -8,7 +8,7 @@
 #include <QtGui>
 #include <QtSql>
 
-class N134 : public QObject { // QSqlDatabase
+class N135 : public QObject { // QSqlDatabase
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LSqlDatabase(u); }
@@ -44,17 +44,19 @@ public:
     Q_INVOKABLE QStringList Mtables(QSqlDatabase* o, QSql::TableType x1 = QSql::Tables) const { return o->tables(x1); }
     Q_INVOKABLE bool Mtransaction(QSqlDatabase* o) { return o->transaction(); }
     Q_INVOKABLE QString MuserName(QSqlDatabase* o) const { return o->userName(); }
-    Q_INVOKABLE void* C(uint u, const QString& x1) { return new LSqlDatabase(u, x1); }
-    Q_INVOKABLE void* C(uint u, QSqlDriver* x1) { return new LSqlDatabase(u, x1); }
+    Q_INVOKABLE QSqlDatabase SaddDatabase(const QString& x1, const QString& x2 = QLatin1String(defaultConnection)) { return QSqlDatabase::addDatabase(x1, x2); }
+    Q_INVOKABLE QSqlDatabase SaddDatabase(QSqlDriver* x1, const QString& x2 = QLatin1String(defaultConnection)) { return QSqlDatabase::addDatabase(x1, x2); }
     Q_INVOKABLE QSqlDatabase ScloneDatabase(const QSqlDatabase& x1, const QString& x2) { return QSqlDatabase::cloneDatabase(x1, x2); }
     Q_INVOKABLE QStringList SconnectionNames() { return QSqlDatabase::connectionNames(); }
+    Q_INVOKABLE bool Scontains(const QString& x1 = QLatin1String(defaultConnection)) { return QSqlDatabase::contains(x1); }
+    Q_INVOKABLE QSqlDatabase Sdatabase(const QString& x1 = QLatin1String(defaultConnection), bool x2 = true) { return QSqlDatabase::database(x1, x2); }
     Q_INVOKABLE QStringList Sdrivers() { return QSqlDatabase::drivers(); }
     Q_INVOKABLE bool SisDriverAvailable(const QString& x1) { return QSqlDatabase::isDriverAvailable(x1); }
     Q_INVOKABLE void SregisterSqlDriver(const QString& x1, QSqlDriverCreatorBase* x2) { QSqlDatabase::registerSqlDriver(x1, x2); }
     Q_INVOKABLE void SremoveDatabase(const QString& x1) { QSqlDatabase::removeDatabase(x1); }
 };
 
-class N135 : public QObject { // QSqlError
+class N136 : public QObject { // QSqlError
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QString& x1 = QString(), const QString& x2 = QString(), QSqlError::ErrorType x3 = QSqlError::NoError, int x4 = -1) { return new LSqlError(u, x1, x2, x3, x4); }
@@ -71,7 +73,7 @@ public:
     Q_INVOKABLE int Mtype(QSqlError* o) const { return o->type(); }
 };
 
-class N136 : public QObject { // QSqlField
+class N137 : public QObject { // QSqlField
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QString& x1 = QString(), QVariant::Type x2 = QVariant::Invalid) { return new LSqlField(u, x1, x2); }
@@ -102,7 +104,7 @@ public:
     Q_INVOKABLE QVariant Mvalue(QSqlField* o) const { return o->value(); }
 };
 
-class N138 : public QObject { // QSqlQuery
+class N139 : public QObject { // QSqlQuery
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QSqlResult* x1) { return new LSqlQuery(u, x1); }
@@ -147,7 +149,7 @@ public:
     Q_INVOKABLE QVariant Mvalue(QSqlQuery* o, int x1) const { return o->value(x1); }
 };
 
-class N139 : public QObject { // QSqlRecord
+class N140 : public QObject { // QSqlRecord
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LSqlRecord(u); }
@@ -179,7 +181,7 @@ public:
     Q_INVOKABLE QVariant Mvalue(QSqlRecord* o, const QString& x1) const { return o->value(x1); }
 };
 
-class N140 : public QObject { // QSqlRelation
+class N141 : public QObject { // QSqlRelation
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LSqlRelation(u); }
@@ -190,34 +192,13 @@ public:
     Q_INVOKABLE QString MtableName(QSqlRelation* o) const { return o->tableName(); }
 };
 
-class N141 : public QObject { // QSqlResult
+class N142 : public QObject { // QSqlResult
     Q_OBJECT
 public:
     Q_INVOKABLE QVariant Mhandle(QSqlResult* o) const { return o->handle(); }
-    Q_INVOKABLE void* C(uint u, const QSqlDriver* x1) { return new LSqlResult(u, x1); }
-    Q_INVOKABLE void MaddBindValue(QSqlResult* o, const QVariant& x1, QSql::ParamType x2) { ((LSqlResult*)o)->addBindValue(x1, x2); }
-    Q_INVOKABLE int Mat(QSqlResult* o) const { return ((LSqlResult*)o)->at(); }
-    Q_INVOKABLE int MbindValueType(QSqlResult* o, int x1) const { return ((LSqlResult*)o)->bindValueType(x1); }
-    Q_INVOKABLE int MbindValueType(QSqlResult* o, const QString& x1) const { return ((LSqlResult*)o)->bindValueType(x1); }
-    Q_INVOKABLE int MbindingSyntax(QSqlResult* o) const { return ((LSqlResult*)o)->bindingSyntax(); }
-    Q_INVOKABLE QVariant MboundValue(QSqlResult* o, int x1) const { return ((LSqlResult*)o)->boundValue(x1); }
-    Q_INVOKABLE QVariant MboundValue(QSqlResult* o, const QString& x1) const { return ((LSqlResult*)o)->boundValue(x1); }
-    Q_INVOKABLE int MboundValueCount(QSqlResult* o) const { return ((LSqlResult*)o)->boundValueCount(); }
-    Q_INVOKABLE QString MboundValueName(QSqlResult* o, int x1) const { return ((LSqlResult*)o)->boundValueName(x1); }
-    Q_INVOKABLE QVector<QVariant> MboundValues(QSqlResult* o) const { return ((LSqlResult*)o)->boundValues(); }
-    Q_INVOKABLE void Mclear(QSqlResult* o) { ((LSqlResult*)o)->clear(); }
-    Q_INVOKABLE const QSqlDriver* Mdriver(QSqlResult* o) const { return ((LSqlResult*)o)->driver(); }
-    Q_INVOKABLE QString MexecutedQuery(QSqlResult* o) const { return ((LSqlResult*)o)->executedQuery(); }
-    Q_INVOKABLE bool MhasOutValues(QSqlResult* o) const { return ((LSqlResult*)o)->hasOutValues(); }
-    Q_INVOKABLE bool MisActive(QSqlResult* o) const { return ((LSqlResult*)o)->isActive(); }
-    Q_INVOKABLE bool MisForwardOnly(QSqlResult* o) const { return ((LSqlResult*)o)->isForwardOnly(); }
-    Q_INVOKABLE bool MisSelect(QSqlResult* o) const { return ((LSqlResult*)o)->isSelect(); }
-    Q_INVOKABLE bool MisValid(QSqlResult* o) const { return ((LSqlResult*)o)->isValid(); }
-    Q_INVOKABLE QSqlError MlastError(QSqlResult* o) const { return ((LSqlResult*)o)->lastError(); }
-    Q_INVOKABLE QString MlastQuery(QSqlResult* o) const { return ((LSqlResult*)o)->lastQuery(); }
 };
 
-class N137 : public N139 { // QSqlIndex
+class N138 : public N140 { // QSqlIndex
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QString& x1 = QString(), const QString& x2 = QString()) { return new LSqlIndex(u, x1, x2); }

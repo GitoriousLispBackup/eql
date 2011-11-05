@@ -8,7 +8,7 @@
 #include <QtGui>
 #include <QtOpenGL>
 
-class N39 : public QObject { // QGLColormap
+class N40 : public QObject { // QGLColormap
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LGLColormap(u); }
@@ -24,7 +24,7 @@ public:
     Q_INVOKABLE int Msize(QGLColormap* o) const { return o->size(); }
 };
 
-class N40 : public QObject { // QGLContext
+class N41 : public QObject { // QGLContext
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QGLFormat& x1) { return new LGLContext(u, x1); }
@@ -59,7 +59,7 @@ public:
     Q_INVOKABLE int StextureCacheLimit() { return QGLContext::textureCacheLimit(); }
 };
 
-class N41 : public QObject { // QGLFormat
+class N42 : public QObject { // QGLFormat
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LGLFormat(u); }
@@ -116,7 +116,7 @@ public:
     Q_INVOKABLE void SsetDefaultOverlayFormat(const QGLFormat& x1) { QGLFormat::setDefaultOverlayFormat(x1); }
 };
 
-class N43 : public QObject { // QGLFramebufferObjectFormat
+class N44 : public QObject { // QGLFramebufferObjectFormat
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LGLFramebufferObjectFormat(u); }
@@ -131,7 +131,7 @@ public:
     Q_INVOKABLE GLenum MtextureTarget(QGLFramebufferObjectFormat* o) const { return o->textureTarget(); }
 };
 
-class N42 : public N107 { // QGLFramebufferObject
+class N43 : public N108 { // QGLFramebufferObject
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QSize& x1, GLenum x2 = GL_TEXTURE_2D) { return new LGLFramebufferObject(u, x1, x2); }
@@ -156,7 +156,7 @@ public:
     Q_INVOKABLE bool ShasOpenGLFramebufferObjects() { return QGLFramebufferObject::hasOpenGLFramebufferObjects(); }
 };
 
-class N44 : public N107 { // QGLPixelBuffer
+class N45 : public N108 { // QGLPixelBuffer
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, const QSize& x1, const QGLFormat& x2 = QGLFormat::defaultFormat(), QGLWidget* x3 = 0) { return new LGLPixelBuffer(u, x1, x2, x3); }
