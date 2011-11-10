@@ -35,14 +35,14 @@ const QMetaObject* staticMetaObject(int n) {
         case 65: m = &QGLWidget::staticMetaObject; break; }
     return m; }
 
-void deleteNObject(int n, void* p) {
+void deleteNObject(int n, void* p, int gc) {
     switch(n) {
-        case 40: delete (LGLColormap*)p; break;
-        case 41: delete (LGLContext*)p; break;
-        case 42: delete (LGLFormat*)p; break;
-        case 43: delete (LGLFramebufferObject*)p; break;
-        case 44: delete (LGLFramebufferObjectFormat*)p; break;
-        case 45: delete (LGLPixelBuffer*)p; break; }}
+        case 40: if(gc) delete (QGLColormap*)p; else delete (LGLColormap*)p; break;
+        case 41: if(gc) delete (QGLContext*)p; else delete (LGLContext*)p; break;
+        case 42: if(gc) delete (QGLFormat*)p; else delete (LGLFormat*)p; break;
+        case 43: if(gc) delete (QGLFramebufferObject*)p; else delete (LGLFramebufferObject*)p; break;
+        case 44: if(gc) delete (QGLFramebufferObjectFormat*)p; else delete (LGLFramebufferObjectFormat*)p; break;
+        case 45: if(gc) delete (QGLPixelBuffer*)p; else delete (LGLPixelBuffer*)p; break; }}
 
 NumList* override(const QByteArray& name) {
     NumList* ids = 0;

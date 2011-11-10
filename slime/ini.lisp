@@ -5,4 +5,4 @@
     (when (or (not (probe-file (file* "fas")))
               (> (file-write-date (file* "lisp"))
                  (file-write-date (file* "fas"))))
-      (compile-file file))))
+      (compile-file file :load t))))

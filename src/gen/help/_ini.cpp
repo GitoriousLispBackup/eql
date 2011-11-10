@@ -41,10 +41,10 @@ const QMetaObject* staticMetaObject(int n) {
         case 95: m = &QHelpSearchResultWidget::staticMetaObject; break; }
     return m; }
 
-void deleteNObject(int n, void* p) {
+void deleteNObject(int n, void* p, int gc) {
     switch(n) {
-        case 71: delete (LHelpContentItem*)p; break;
-        case 73: delete (LHelpSearchQuery*)p; break; }}
+        case 71: if(gc) delete (QHelpContentItem*)p; else delete (LHelpContentItem*)p; break;
+        case 73: if(gc) delete (QHelpSearchQuery*)p; else delete (LHelpSearchQuery*)p; break; }}
 
 NumList* override(const QByteArray& name) {
     NumList* ids = 0;

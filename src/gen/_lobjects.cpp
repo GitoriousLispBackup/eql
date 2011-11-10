@@ -2381,171 +2381,171 @@ const QMetaObject* LObjects::staticMetaObject(const QByteArray& name, int n) {
             break; }
     return m; }
 
-void LObjects::deleteNObject(int n, void* p) {
+void LObjects::deleteNObject(int n, void* p, int gc) {
     switch(n) {
-        case 1: delete (LAbstractGraphicsShapeItem*)p; break;
-        case 2: delete (LAccessible*)p; break;
-        case 3: delete (LAccessibleEvent*)p; break;
-        case 4: delete (LAccessibleInterface*)p; break;
-        case 6: delete (LAccessibleWidget*)p; break;
-        case 7: delete (LActionEvent*)p; break;
-        case 9: delete (LBasicTimer*)p; break;
-        case 10: delete (LBitArray*)p; break;
-        case 11: delete (LBitmap*)p; break;
-        case 12: delete (LBrush*)p; break;
-        case 13: delete (LChildEvent*)p; break;
-        case 14: delete (LCloseEvent*)p; break;
-        case 16: delete (LConicalGradient*)p; break;
-        case 17: delete (LContextMenuEvent*)p; break;
-        case 18: delete (LCryptographicHash*)p; break;
-        case 19: delete (LCursor*)p; break;
-        case 20: delete (LDate*)p; break;
-        case 21: delete (LDateTime*)p; break;
-        case 22: delete (LDesktopServices*)p; break;
-        case 23: delete (LDir*)p; break;
-        case 24: delete (LDirIterator*)p; break;
-        case 25: delete (LDragEnterEvent*)p; break;
-        case 26: delete (LDragLeaveEvent*)p; break;
-        case 27: delete (LDragMoveEvent*)p; break;
-        case 28: delete (LDropEvent*)p; break;
-        case 29: delete (LDynamicPropertyChangeEvent*)p; break;
-        case 30: delete (LEasingCurve*)p; break;
-        case 31: delete (LEvent*)p; break;
-        case 32: delete (LFileIconProvider*)p; break;
-        case 33: delete (LFileInfo*)p; break;
-        case 34: delete (LFileOpenEvent*)p; break;
-        case 35: delete (LFocusEvent*)p; break;
-        case 36: delete (LFont*)p; break;
-        case 37: delete (LFontDatabase*)p; break;
-        case 38: delete (LFontInfo*)p; break;
-        case 39: delete (LFontMetrics*)p; break;
-        case 46: delete (LGestureEvent*)p; break;
-        case 47: delete (LGradient*)p; break;
-        case 48: delete (LGraphicsAnchorLayout*)p; break;
-        case 49: delete (LGraphicsEllipseItem*)p; break;
-        case 50: delete (LGraphicsGridLayout*)p; break;
-        case 51: delete (LGraphicsItem*)p; break;
-        case 52: delete (LGraphicsItemGroup*)p; break;
-        case 53: delete (LGraphicsLayout*)p; break;
-        case 54: delete (LGraphicsLayoutItem*)p; break;
-        case 55: delete (LGraphicsLineItem*)p; break;
-        case 56: delete (LGraphicsLinearLayout*)p; break;
-        case 57: delete (LGraphicsPathItem*)p; break;
-        case 58: delete (LGraphicsPixmapItem*)p; break;
-        case 59: delete (LGraphicsPolygonItem*)p; break;
-        case 60: delete (LGraphicsRectItem*)p; break;
-        case 61: delete (LGraphicsSceneContextMenuEvent*)p; break;
-        case 62: delete (LGraphicsSceneDragDropEvent*)p; break;
-        case 63: delete (LGraphicsSceneEvent*)p; break;
-        case 64: delete (LGraphicsSceneHelpEvent*)p; break;
-        case 65: delete (LGraphicsSceneHoverEvent*)p; break;
-        case 66: delete (LGraphicsSceneMouseEvent*)p; break;
-        case 67: delete (LGraphicsSceneMoveEvent*)p; break;
-        case 68: delete (LGraphicsSceneResizeEvent*)p; break;
-        case 69: delete (LGraphicsSceneWheelEvent*)p; break;
-        case 70: delete (LGraphicsSimpleTextItem*)p; break;
-        case 72: delete (LHelpEvent*)p; break;
-        case 74: delete (LHideEvent*)p; break;
-        case 77: delete (LHoverEvent*)p; break;
-        case 78: delete (LIcon*)p; break;
-        case 79: delete (LIconDragEvent*)p; break;
-        case 80: delete (LImage*)p; break;
-        case 81: delete (LInputEvent*)p; break;
-        case 82: delete (LInputMethodEvent*)p; break;
-        case 83: delete (LItemEditorFactory*)p; break;
-        case 84: delete (LItemSelection*)p; break;
-        case 85: delete (LItemSelectionRange*)p; break;
-        case 86: delete (LKeyEvent*)p; break;
-        case 87: delete (LKeySequence*)p; break;
-        case 88: delete (LLayoutItem*)p; break;
-        case 89: delete (LLibraryInfo*)p; break;
-        case 90: delete (LLinearGradient*)p; break;
-        case 91: delete (LListWidgetItem*)p; break;
-        case 92: delete (LLocale*)p; break;
-        case 93: delete (LMargins*)p; break;
-        case 94: delete (LMatrix*)p; break;
-        case 95: delete (LMatrix4x4*)p; break;
-        case 96: delete (LMetaObject*)p; break;
-        case 97: delete (LModelIndex*)p; break;
-        case 98: delete (LMouseEvent*)p; break;
-        case 99: delete (LMoveEvent*)p; break;
-        case 109: delete (LPaintEvent*)p; break;
-        case 110: delete (LPainter*)p; break;
-        case 111: delete (LPainterPath*)p; break;
-        case 112: delete (LPainterPathStroker*)p; break;
-        case 113: delete (LPalette*)p; break;
-        case 114: delete (LPen*)p; break;
-        case 115: delete (LPersistentModelIndex*)p; break;
-        case 116: delete (LPicture*)p; break;
-        case 117: delete (LPixmap*)p; break;
-        case 118: delete (LPixmapCache*)p; break;
-        case 119: delete (LPrinter*)p; break;
-        case 120: delete (LPrinterInfo*)p; break;
-        case 121: delete (LProcessEnvironment*)p; break;
-        case 122: delete (LQuaternion*)p; break;
-        case 123: delete (LRadialGradient*)p; break;
-        case 124: delete (LReadLocker*)p; break;
-        case 125: delete (LReadWriteLock*)p; break;
-        case 126: delete (LRegExp*)p; break;
-        case 127: delete (LRegion*)p; break;
-        case 128: delete (LResizeEvent*)p; break;
-        case 129: delete (LRunnable*)p; break;
-        case 130: delete (LSemaphore*)p; break;
-        case 131: delete (LShortcutEvent*)p; break;
-        case 132: delete (LShowEvent*)p; break;
-        case 133: delete (LSizePolicy*)p; break;
-        case 134: delete (LSpacerItem*)p; break;
-        case 148: delete (LStandardItem*)p; break;
-        case 149: delete (LStatusTipEvent*)p; break;
-        case 151: delete (LSystemSemaphore*)p; break;
-        case 152: delete (LTableWidgetItem*)p; break;
-        case 153: delete (LTableWidgetSelectionRange*)p; break;
-        case 154: delete (LTabletEvent*)p; break;
-        case 155: delete (LTextBlock*)p; break;
-        case 156: delete (LTextBlockFormat*)p; break;
-        case 157: delete (LTextBlockUserData*)p; break;
-        case 158: delete (LTextBoundaryFinder*)p; break;
-        case 159: delete (LTextCharFormat*)p; break;
-        case 160: delete (LTextCodec*)p; break;
-        case 161: delete (LTextCursor*)p; break;
-        case 162: delete (LTextDecoder*)p; break;
-        case 163: delete (LTextDocumentFragment*)p; break;
-        case 164: delete (LTextDocumentWriter*)p; break;
-        case 165: delete (LTextEncoder*)p; break;
-        case 166: delete (LTextFormat*)p; break;
-        case 167: delete (LTextFragment*)p; break;
-        case 168: delete (LTextFrameFormat*)p; break;
-        case 169: delete (LTextImageFormat*)p; break;
-        case 170: delete (LTextLayout*)p; break;
-        case 171: delete (LTextLength*)p; break;
-        case 172: delete (LTextLine*)p; break;
-        case 173: delete (LTextListFormat*)p; break;
-        case 174: delete (LTextOption*)p; break;
-        case 175: delete (LTextTableCell*)p; break;
-        case 176: delete (LTextTableCellFormat*)p; break;
-        case 177: delete (LTextTableFormat*)p; break;
-        case 178: delete (LTime*)p; break;
-        case 179: delete (LTimerEvent*)p; break;
-        case 180: delete (LToolTip*)p; break;
-        case 181: delete (LTouchEvent*)p; break;
-        case 182: delete (LTransform*)p; break;
-        case 183: delete (LTreeWidgetItem*)p; break;
-        case 184: delete (LUndoCommand*)p; break;
-        case 185: delete (LUrl*)p; break;
-        case 187: delete (LVariant*)p; break;
-        case 188: delete (LVector2D*)p; break;
-        case 189: delete (LVector3D*)p; break;
-        case 190: delete (LVector4D*)p; break;
-        case 199: delete (LWhatsThis*)p; break;
-        case 200: delete (LWhatsThisClickedEvent*)p; break;
-        case 201: delete (LWheelEvent*)p; break;
-        case 202: delete (LWidgetItem*)p; break;
-        case 203: delete (LWindowStateChangeEvent*)p; break;
-        case 204: delete (LWriteLocker*)p; break;
+        case 1: if(gc) delete (QAbstractGraphicsShapeItem*)p; else delete (LAbstractGraphicsShapeItem*)p; break;
+        case 2: if(gc) delete (QAccessible*)p; else delete (LAccessible*)p; break;
+        case 3: if(gc) delete (QAccessibleEvent*)p; else delete (LAccessibleEvent*)p; break;
+        case 4: if(gc) delete (QAccessibleInterface*)p; else delete (LAccessibleInterface*)p; break;
+        case 6: if(gc) /* nothing */; else delete (LAccessibleWidget*)p; break;
+        case 7: if(gc) delete (QActionEvent*)p; else delete (LActionEvent*)p; break;
+        case 9: if(gc) delete (QBasicTimer*)p; else delete (LBasicTimer*)p; break;
+        case 10: if(gc) delete (QBitArray*)p; else delete (LBitArray*)p; break;
+        case 11: if(gc) delete (QBitmap*)p; else delete (LBitmap*)p; break;
+        case 12: if(gc) delete (QBrush*)p; else delete (LBrush*)p; break;
+        case 13: if(gc) delete (QChildEvent*)p; else delete (LChildEvent*)p; break;
+        case 14: if(gc) delete (QCloseEvent*)p; else delete (LCloseEvent*)p; break;
+        case 16: if(gc) delete (QConicalGradient*)p; else delete (LConicalGradient*)p; break;
+        case 17: if(gc) delete (QContextMenuEvent*)p; else delete (LContextMenuEvent*)p; break;
+        case 18: if(gc) delete (QCryptographicHash*)p; else delete (LCryptographicHash*)p; break;
+        case 19: if(gc) delete (QCursor*)p; else delete (LCursor*)p; break;
+        case 20: if(gc) delete (QDate*)p; else delete (LDate*)p; break;
+        case 21: if(gc) delete (QDateTime*)p; else delete (LDateTime*)p; break;
+        case 22: if(gc) delete (QDesktopServices*)p; else delete (LDesktopServices*)p; break;
+        case 23: if(gc) delete (QDir*)p; else delete (LDir*)p; break;
+        case 24: if(gc) delete (QDirIterator*)p; else delete (LDirIterator*)p; break;
+        case 25: if(gc) delete (QDragEnterEvent*)p; else delete (LDragEnterEvent*)p; break;
+        case 26: if(gc) delete (QDragLeaveEvent*)p; else delete (LDragLeaveEvent*)p; break;
+        case 27: if(gc) delete (QDragMoveEvent*)p; else delete (LDragMoveEvent*)p; break;
+        case 28: if(gc) delete (QDropEvent*)p; else delete (LDropEvent*)p; break;
+        case 29: if(gc) delete (QDynamicPropertyChangeEvent*)p; else delete (LDynamicPropertyChangeEvent*)p; break;
+        case 30: if(gc) delete (QEasingCurve*)p; else delete (LEasingCurve*)p; break;
+        case 31: if(gc) delete (QEvent*)p; else delete (LEvent*)p; break;
+        case 32: if(gc) delete (QFileIconProvider*)p; else delete (LFileIconProvider*)p; break;
+        case 33: if(gc) delete (QFileInfo*)p; else delete (LFileInfo*)p; break;
+        case 34: if(gc) delete (QFileOpenEvent*)p; else delete (LFileOpenEvent*)p; break;
+        case 35: if(gc) delete (QFocusEvent*)p; else delete (LFocusEvent*)p; break;
+        case 36: if(gc) delete (QFont*)p; else delete (LFont*)p; break;
+        case 37: if(gc) delete (QFontDatabase*)p; else delete (LFontDatabase*)p; break;
+        case 38: if(gc) delete (QFontInfo*)p; else delete (LFontInfo*)p; break;
+        case 39: if(gc) delete (QFontMetrics*)p; else delete (LFontMetrics*)p; break;
+        case 46: if(gc) delete (QGestureEvent*)p; else delete (LGestureEvent*)p; break;
+        case 47: if(gc) delete (QGradient*)p; else delete (LGradient*)p; break;
+        case 48: if(gc) delete (QGraphicsAnchorLayout*)p; else delete (LGraphicsAnchorLayout*)p; break;
+        case 49: if(gc) delete (QGraphicsEllipseItem*)p; else delete (LGraphicsEllipseItem*)p; break;
+        case 50: if(gc) delete (QGraphicsGridLayout*)p; else delete (LGraphicsGridLayout*)p; break;
+        case 51: if(gc) delete (QGraphicsItem*)p; else delete (LGraphicsItem*)p; break;
+        case 52: if(gc) delete (QGraphicsItemGroup*)p; else delete (LGraphicsItemGroup*)p; break;
+        case 53: if(gc) delete (QGraphicsLayout*)p; else delete (LGraphicsLayout*)p; break;
+        case 54: if(gc) delete (QGraphicsLayoutItem*)p; else delete (LGraphicsLayoutItem*)p; break;
+        case 55: if(gc) delete (QGraphicsLineItem*)p; else delete (LGraphicsLineItem*)p; break;
+        case 56: if(gc) delete (QGraphicsLinearLayout*)p; else delete (LGraphicsLinearLayout*)p; break;
+        case 57: if(gc) delete (QGraphicsPathItem*)p; else delete (LGraphicsPathItem*)p; break;
+        case 58: if(gc) delete (QGraphicsPixmapItem*)p; else delete (LGraphicsPixmapItem*)p; break;
+        case 59: if(gc) delete (QGraphicsPolygonItem*)p; else delete (LGraphicsPolygonItem*)p; break;
+        case 60: if(gc) delete (QGraphicsRectItem*)p; else delete (LGraphicsRectItem*)p; break;
+        case 61: if(gc) delete (QGraphicsSceneContextMenuEvent*)p; else delete (LGraphicsSceneContextMenuEvent*)p; break;
+        case 62: if(gc) delete (QGraphicsSceneDragDropEvent*)p; else delete (LGraphicsSceneDragDropEvent*)p; break;
+        case 63: if(gc) delete (QGraphicsSceneEvent*)p; else delete (LGraphicsSceneEvent*)p; break;
+        case 64: if(gc) delete (QGraphicsSceneHelpEvent*)p; else delete (LGraphicsSceneHelpEvent*)p; break;
+        case 65: if(gc) delete (QGraphicsSceneHoverEvent*)p; else delete (LGraphicsSceneHoverEvent*)p; break;
+        case 66: if(gc) delete (QGraphicsSceneMouseEvent*)p; else delete (LGraphicsSceneMouseEvent*)p; break;
+        case 67: if(gc) delete (QGraphicsSceneMoveEvent*)p; else delete (LGraphicsSceneMoveEvent*)p; break;
+        case 68: if(gc) delete (QGraphicsSceneResizeEvent*)p; else delete (LGraphicsSceneResizeEvent*)p; break;
+        case 69: if(gc) delete (QGraphicsSceneWheelEvent*)p; else delete (LGraphicsSceneWheelEvent*)p; break;
+        case 70: if(gc) delete (QGraphicsSimpleTextItem*)p; else delete (LGraphicsSimpleTextItem*)p; break;
+        case 72: if(gc) delete (QHelpEvent*)p; else delete (LHelpEvent*)p; break;
+        case 74: if(gc) delete (QHideEvent*)p; else delete (LHideEvent*)p; break;
+        case 77: if(gc) delete (QHoverEvent*)p; else delete (LHoverEvent*)p; break;
+        case 78: if(gc) delete (QIcon*)p; else delete (LIcon*)p; break;
+        case 79: if(gc) delete (QIconDragEvent*)p; else delete (LIconDragEvent*)p; break;
+        case 80: if(gc) delete (QImage*)p; else delete (LImage*)p; break;
+        case 81: if(gc) delete (QInputEvent*)p; else delete (LInputEvent*)p; break;
+        case 82: if(gc) delete (QInputMethodEvent*)p; else delete (LInputMethodEvent*)p; break;
+        case 83: if(gc) delete (QItemEditorFactory*)p; else delete (LItemEditorFactory*)p; break;
+        case 84: if(gc) delete (QItemSelection*)p; else delete (LItemSelection*)p; break;
+        case 85: if(gc) delete (QItemSelectionRange*)p; else delete (LItemSelectionRange*)p; break;
+        case 86: if(gc) delete (QKeyEvent*)p; else delete (LKeyEvent*)p; break;
+        case 87: if(gc) delete (QKeySequence*)p; else delete (LKeySequence*)p; break;
+        case 88: if(gc) delete (QLayoutItem*)p; else delete (LLayoutItem*)p; break;
+        case 89: if(gc) delete (QLibraryInfo*)p; else delete (LLibraryInfo*)p; break;
+        case 90: if(gc) delete (QLinearGradient*)p; else delete (LLinearGradient*)p; break;
+        case 91: if(gc) delete (QListWidgetItem*)p; else delete (LListWidgetItem*)p; break;
+        case 92: if(gc) delete (QLocale*)p; else delete (LLocale*)p; break;
+        case 93: if(gc) delete (QMargins*)p; else delete (LMargins*)p; break;
+        case 94: if(gc) delete (QMatrix*)p; else delete (LMatrix*)p; break;
+        case 95: if(gc) delete (QMatrix4x4*)p; else delete (LMatrix4x4*)p; break;
+        case 96: if(gc) delete (QMetaObject*)p; else delete (LMetaObject*)p; break;
+        case 97: if(gc) delete (QModelIndex*)p; else delete (LModelIndex*)p; break;
+        case 98: if(gc) delete (QMouseEvent*)p; else delete (LMouseEvent*)p; break;
+        case 99: if(gc) delete (QMoveEvent*)p; else delete (LMoveEvent*)p; break;
+        case 109: if(gc) delete (QPaintEvent*)p; else delete (LPaintEvent*)p; break;
+        case 110: if(gc) delete (QPainter*)p; else delete (LPainter*)p; break;
+        case 111: if(gc) delete (QPainterPath*)p; else delete (LPainterPath*)p; break;
+        case 112: if(gc) delete (QPainterPathStroker*)p; else delete (LPainterPathStroker*)p; break;
+        case 113: if(gc) delete (QPalette*)p; else delete (LPalette*)p; break;
+        case 114: if(gc) delete (QPen*)p; else delete (LPen*)p; break;
+        case 115: if(gc) delete (QPersistentModelIndex*)p; else delete (LPersistentModelIndex*)p; break;
+        case 116: if(gc) delete (QPicture*)p; else delete (LPicture*)p; break;
+        case 117: if(gc) delete (QPixmap*)p; else delete (LPixmap*)p; break;
+        case 118: if(gc) delete (QPixmapCache*)p; else delete (LPixmapCache*)p; break;
+        case 119: if(gc) delete (QPrinter*)p; else delete (LPrinter*)p; break;
+        case 120: if(gc) delete (QPrinterInfo*)p; else delete (LPrinterInfo*)p; break;
+        case 121: if(gc) delete (QProcessEnvironment*)p; else delete (LProcessEnvironment*)p; break;
+        case 122: if(gc) delete (QQuaternion*)p; else delete (LQuaternion*)p; break;
+        case 123: if(gc) delete (QRadialGradient*)p; else delete (LRadialGradient*)p; break;
+        case 124: if(gc) delete (QReadLocker*)p; else delete (LReadLocker*)p; break;
+        case 125: if(gc) delete (QReadWriteLock*)p; else delete (LReadWriteLock*)p; break;
+        case 126: if(gc) delete (QRegExp*)p; else delete (LRegExp*)p; break;
+        case 127: if(gc) delete (QRegion*)p; else delete (LRegion*)p; break;
+        case 128: if(gc) delete (QResizeEvent*)p; else delete (LResizeEvent*)p; break;
+        case 129: if(gc) delete (QRunnable*)p; else delete (LRunnable*)p; break;
+        case 130: if(gc) delete (QSemaphore*)p; else delete (LSemaphore*)p; break;
+        case 131: if(gc) delete (QShortcutEvent*)p; else delete (LShortcutEvent*)p; break;
+        case 132: if(gc) delete (QShowEvent*)p; else delete (LShowEvent*)p; break;
+        case 133: if(gc) delete (QSizePolicy*)p; else delete (LSizePolicy*)p; break;
+        case 134: if(gc) delete (QSpacerItem*)p; else delete (LSpacerItem*)p; break;
+        case 148: if(gc) delete (QStandardItem*)p; else delete (LStandardItem*)p; break;
+        case 149: if(gc) delete (QStatusTipEvent*)p; else delete (LStatusTipEvent*)p; break;
+        case 151: if(gc) delete (QSystemSemaphore*)p; else delete (LSystemSemaphore*)p; break;
+        case 152: if(gc) delete (QTableWidgetItem*)p; else delete (LTableWidgetItem*)p; break;
+        case 153: if(gc) delete (QTableWidgetSelectionRange*)p; else delete (LTableWidgetSelectionRange*)p; break;
+        case 154: if(gc) delete (QTabletEvent*)p; else delete (LTabletEvent*)p; break;
+        case 155: if(gc) delete (QTextBlock*)p; else delete (LTextBlock*)p; break;
+        case 156: if(gc) delete (QTextBlockFormat*)p; else delete (LTextBlockFormat*)p; break;
+        case 157: if(gc) delete (QTextBlockUserData*)p; else delete (LTextBlockUserData*)p; break;
+        case 158: if(gc) delete (QTextBoundaryFinder*)p; else delete (LTextBoundaryFinder*)p; break;
+        case 159: if(gc) delete (QTextCharFormat*)p; else delete (LTextCharFormat*)p; break;
+        case 160: if(gc) /* nothing */; else delete (LTextCodec*)p; break;
+        case 161: if(gc) delete (QTextCursor*)p; else delete (LTextCursor*)p; break;
+        case 162: if(gc) delete (QTextDecoder*)p; else delete (LTextDecoder*)p; break;
+        case 163: if(gc) delete (QTextDocumentFragment*)p; else delete (LTextDocumentFragment*)p; break;
+        case 164: if(gc) delete (QTextDocumentWriter*)p; else delete (LTextDocumentWriter*)p; break;
+        case 165: if(gc) delete (QTextEncoder*)p; else delete (LTextEncoder*)p; break;
+        case 166: if(gc) delete (QTextFormat*)p; else delete (LTextFormat*)p; break;
+        case 167: if(gc) delete (QTextFragment*)p; else delete (LTextFragment*)p; break;
+        case 168: if(gc) delete (QTextFrameFormat*)p; else delete (LTextFrameFormat*)p; break;
+        case 169: if(gc) delete (QTextImageFormat*)p; else delete (LTextImageFormat*)p; break;
+        case 170: if(gc) delete (QTextLayout*)p; else delete (LTextLayout*)p; break;
+        case 171: if(gc) delete (QTextLength*)p; else delete (LTextLength*)p; break;
+        case 172: if(gc) delete (QTextLine*)p; else delete (LTextLine*)p; break;
+        case 173: if(gc) delete (QTextListFormat*)p; else delete (LTextListFormat*)p; break;
+        case 174: if(gc) delete (QTextOption*)p; else delete (LTextOption*)p; break;
+        case 175: if(gc) delete (QTextTableCell*)p; else delete (LTextTableCell*)p; break;
+        case 176: if(gc) delete (QTextTableCellFormat*)p; else delete (LTextTableCellFormat*)p; break;
+        case 177: if(gc) delete (QTextTableFormat*)p; else delete (LTextTableFormat*)p; break;
+        case 178: if(gc) delete (QTime*)p; else delete (LTime*)p; break;
+        case 179: if(gc) delete (QTimerEvent*)p; else delete (LTimerEvent*)p; break;
+        case 180: if(gc) delete (QToolTip*)p; else delete (LToolTip*)p; break;
+        case 181: if(gc) delete (QTouchEvent*)p; else delete (LTouchEvent*)p; break;
+        case 182: if(gc) delete (QTransform*)p; else delete (LTransform*)p; break;
+        case 183: if(gc) delete (QTreeWidgetItem*)p; else delete (LTreeWidgetItem*)p; break;
+        case 184: if(gc) delete (QUndoCommand*)p; else delete (LUndoCommand*)p; break;
+        case 185: if(gc) delete (QUrl*)p; else delete (LUrl*)p; break;
+        case 187: if(gc) delete (QVariant*)p; else delete (LVariant*)p; break;
+        case 188: if(gc) delete (QVector2D*)p; else delete (LVector2D*)p; break;
+        case 189: if(gc) delete (QVector3D*)p; else delete (LVector3D*)p; break;
+        case 190: if(gc) delete (QVector4D*)p; else delete (LVector4D*)p; break;
+        case 199: if(gc) delete (QWhatsThis*)p; else delete (LWhatsThis*)p; break;
+        case 200: if(gc) delete (QWhatsThisClickedEvent*)p; else delete (LWhatsThisClickedEvent*)p; break;
+        case 201: if(gc) delete (QWheelEvent*)p; else delete (LWheelEvent*)p; break;
+        case 202: if(gc) delete (QWidgetItem*)p; else delete (LWidgetItem*)p; break;
+        case 203: if(gc) delete (QWindowStateChangeEvent*)p; else delete (LWindowStateChangeEvent*)p; break;
+        case 204: if(gc) delete (QWriteLocker*)p; else delete (LWriteLocker*)p; break;
         case 71:
         case 73:
             if(deleteNObject_help) {
-                deleteNObject_help(n, p); }
+                deleteNObject_help(n, p, gc); }
             break;
         case 8:
         case 75:
@@ -2565,7 +2565,7 @@ void LObjects::deleteNObject(int n, void* p) {
         case 147:
         case 186:
             if(deleteNObject_network) {
-                deleteNObject_network(n, p); }
+                deleteNObject_network(n, p, gc); }
             break;
         case 40:
         case 41:
@@ -2574,7 +2574,7 @@ void LObjects::deleteNObject(int n, void* p) {
         case 44:
         case 45:
             if(deleteNObject_opengl) {
-                deleteNObject_opengl(n, p); }
+                deleteNObject_opengl(n, p, gc); }
             break;
         case 135:
         case 136:
@@ -2585,11 +2585,11 @@ void LObjects::deleteNObject(int n, void* p) {
         case 141:
         case 142:
             if(deleteNObject_sql) {
-                deleteNObject_sql(n, p); }
+                deleteNObject_sql(n, p, gc); }
             break;
         case 150:
             if(deleteNObject_svg) {
-                deleteNObject_svg(n, p); }
+                deleteNObject_svg(n, p, gc); }
             break;
         case 191:
         case 192:
@@ -2600,7 +2600,7 @@ void LObjects::deleteNObject(int n, void* p) {
         case 197:
         case 198:
             if(deleteNObject_webkit) {
-                deleteNObject_webkit(n, p); }
+                deleteNObject_webkit(n, p, gc); }
             break; }}
 
 const char* LObjects::nObjectSuperClass(const QByteArray& name) {

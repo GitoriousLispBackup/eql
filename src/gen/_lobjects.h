@@ -28,7 +28,7 @@ class DynObject;
 
 // functions from EQL modules
 typedef const QMetaObject* (*StaticMetaObject)(int);
-typedef void (*DeleteNObject)(int, void*);
+typedef void (*DeleteNObject)(int, void*, int);
 typedef NumList* (*Override)(const QByteArray&);
 typedef void* (*ToMetaArg)(int, cl_object);
 typedef cl_object (*To_lisp_arg)(int, void*);
@@ -78,7 +78,7 @@ public:
 
     static void ini(EQL*);
     static uint unique() { return ++i_unique; }
-    static void deleteNObject(int, void*);
+    static void deleteNObject(int, void*, int = 0);
     static const QMetaObject* staticMetaObject(const QByteArray&, int n = -1);
     static const char* nObjectSuperClass(const QByteArray&);
     static StrList override(const QByteArray&);

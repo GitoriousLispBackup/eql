@@ -45,14 +45,14 @@ const QMetaObject* staticMetaObject(int n) {
         case 218: m = &QWebView::staticMetaObject; break; }
     return m; }
 
-void deleteNObject(int n, void* p) {
+void deleteNObject(int n, void* p, int gc) {
     switch(n) {
-        case 191: delete (LWebDatabase*)p; break;
-        case 192: delete (LWebElement*)p; break;
-        case 193: delete (LWebElementCollection*)p; break;
-        case 195: delete (LWebHistoryItem*)p; break;
-        case 196: delete (LWebHitTestResult*)p; break;
-        case 197: delete (LWebSecurityOrigin*)p; break; }}
+        case 191: if(gc) delete (QWebDatabase*)p; else delete (LWebDatabase*)p; break;
+        case 192: if(gc) delete (QWebElement*)p; else delete (LWebElement*)p; break;
+        case 193: if(gc) delete (QWebElementCollection*)p; else delete (LWebElementCollection*)p; break;
+        case 195: if(gc) delete (QWebHistoryItem*)p; else delete (LWebHistoryItem*)p; break;
+        case 196: if(gc) delete (QWebHitTestResult*)p; else delete (LWebHitTestResult*)p; break;
+        case 197: if(gc) delete (QWebSecurityOrigin*)p; else delete (LWebSecurityOrigin*)p; break; }}
 
 NumList* override(const QByteArray& name) {
     NumList* ids = 0;

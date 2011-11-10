@@ -45,16 +45,16 @@ const QMetaObject* staticMetaObject(int n) {
         case 167: m = &QSqlTableModel::staticMetaObject; break; }
     return m; }
 
-void deleteNObject(int n, void* p) {
+void deleteNObject(int n, void* p, int gc) {
     switch(n) {
-        case 135: delete (LSqlDatabase*)p; break;
-        case 136: delete (LSqlError*)p; break;
-        case 137: delete (LSqlField*)p; break;
-        case 138: delete (LSqlIndex*)p; break;
-        case 139: delete (LSqlQuery*)p; break;
-        case 140: delete (LSqlRecord*)p; break;
-        case 141: delete (LSqlRelation*)p; break;
-        case 142: delete (LSqlResult*)p; break; }}
+        case 135: if(gc) delete (QSqlDatabase*)p; else delete (LSqlDatabase*)p; break;
+        case 136: if(gc) delete (QSqlError*)p; else delete (LSqlError*)p; break;
+        case 137: if(gc) delete (QSqlField*)p; else delete (LSqlField*)p; break;
+        case 138: if(gc) delete (QSqlIndex*)p; else delete (LSqlIndex*)p; break;
+        case 139: if(gc) delete (QSqlQuery*)p; else delete (LSqlQuery*)p; break;
+        case 140: if(gc) delete (QSqlRecord*)p; else delete (LSqlRecord*)p; break;
+        case 141: if(gc) delete (QSqlRelation*)p; else delete (LSqlRelation*)p; break;
+        case 142: if(gc) delete (QSqlResult*)p; else delete (LSqlResult*)p; break; }}
 
 NumList* override(const QByteArray& name) {
     NumList* ids = 0;

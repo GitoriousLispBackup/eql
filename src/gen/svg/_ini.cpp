@@ -25,9 +25,9 @@ const QMetaObject* staticMetaObject(int n) {
         case 178: m = &QSvgWidget::staticMetaObject; break; }
     return m; }
 
-void deleteNObject(int n, void* p) {
+void deleteNObject(int n, void* p, int gc) {
     switch(n) {
-        case 150: delete (LSvgGenerator*)p; break; }}
+        case 150: if(gc) delete (QSvgGenerator*)p; else delete (LSvgGenerator*)p; break; }}
 
 NumList* override(const QByteArray& name) {
     NumList* ids = 0;

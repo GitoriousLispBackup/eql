@@ -907,7 +907,7 @@
                 " }~
                  ~%    return m; }~
                  ~%~
-                 ~%void ~AdeleteNObject(int n, void* p) {~
+                 ~%void ~AdeleteNObject(int n, void* p, int gc) {~
                  ~%    switch(n) {"
                 (if gui "LObjects::" ""))))
     (let ((i 0))
@@ -919,8 +919,12 @@
             (format (if (eql :gui module)
                         s
                         (module-stream module :ini))
-                    "~%        case ~D: delete (~A*)p; break;"
-                    i (sub-class-name obj))))))
+                    "~%        case ~D: if(gc) ~A; else delete (~A*)p; break;"
+                    i
+                    (if (find* (class-name* obj) '("QAccessibleWidget" "QTextCodec")) ; virtual protected destructors
+                        "/* nothing */"
+                        (format nil "delete (~A*)p" (class-name* obj)))
+                    (sub-class-name obj))))))
     (dolist (module *modules*)
       (let ((i 0))
         (dolist (name *n-names*)
@@ -929,7 +933,7 @@
             (format s "~%        case ~D:" i)))
         (when (plusp i)
           (format s "~%            if(deleteNObject_~(~A~)) {~
-                     ~%                deleteNObject_~(~A~)(n, p); }~
+                     ~%                deleteNObject_~(~A~)(n, p, gc); }~
                      ~%            break;"
                   module module))))
     (format s " }}~

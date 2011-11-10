@@ -66,7 +66,7 @@
 (defun new-qt-object (pointer unique id finalize)
   (let ((obj (qt-object pointer unique id finalize)))
     (when finalize
-      (ext:set-finalizer obj #'qdelete))
+      (ext:set-finalizer obj #'qdelete-gc))
     obj))
 
 (defmethod print-object ((obj qt-object) s)
