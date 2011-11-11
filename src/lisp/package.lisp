@@ -69,7 +69,8 @@
    #:qui-names
    #:qutf8
    #:qversion
-   #:tr))
+   #:tr
+   #:with-no-qt-garbage-collection))
 
 #-win32
 (pushnew :serve-event *features*)

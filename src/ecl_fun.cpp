@@ -13,6 +13,7 @@ typedef QList<QByteArray>        StrList;
 
 // switches
 static bool _check_argument_types_ = true;
+static bool _garbage_collection_ =   true;
 
 static const char SIG = '2';
 static const char SLO = '1';
@@ -114,6 +115,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object((char*)"qquit"),                (cl_objectfn_fixed)qquit,                    0);
     cl_def_c_function(c_string_to_object((char*)"qrequire"),             (cl_objectfn_fixed)qrequire,                 1);
     cl_def_c_function(c_string_to_object((char*)"qsender"),              (cl_objectfn_fixed)qsender,                  0);
+    cl_def_c_function(c_string_to_object((char*)"%qset-gc"),             (cl_objectfn_fixed)qset_gc,                  1);
     cl_def_c_function(c_string_to_object((char*)"qset-property"),        (cl_objectfn_fixed)qset_property,            3);
     cl_def_c_function(c_string_to_object((char*)"qsingle-shot"),         (cl_objectfn_fixed)qsingle_shot,             2);
     cl_def_c_function(c_string_to_object((char*)"qstatic-meta-object"),  (cl_objectfn_fixed)qstatic_meta_object,      1);
@@ -1438,6 +1440,10 @@ cl_object qcopy(cl_object l_obj) {
     error_msg("QCOPY", LIST1(l_obj));
     return Cnil; }
 
+static void set_null(cl_object l_obj) {
+    STATIC_SYMBOL_PKG(s_qset_null, (char*)"QSET-NULL", (char*)"EQL")
+    cl_funcall(2, s_qset_null, l_obj); }
+
 cl_object qdelete2(cl_object l_obj, cl_object l_later) {
     /// args: (object &optional later)
     /// alias: qdel
@@ -1459,30 +1465,34 @@ cl_object qdelete2(cl_object l_obj, cl_object l_later) {
         LObjects::deleteNObject(-o.id, o.pointer);
         ok = true; }
     if(ok) {
-        STATIC_SYMBOL_PKG(s_qset_null, (char*)"QSET-NULL", (char*)"EQL")
-        cl_funcall(2, s_qset_null, l_obj);
+        set_null(l_obj);
         return Ct; }
     // no error message (unintentional multiple deletion)
     return Cnil; }
+
+cl_object qset_gc(cl_object l_obj) {
+    ecl_process_env()->nvalues = 1;
+    _garbage_collection_ = (l_obj != Cnil);
+    return l_obj; }
 
 enum { GarbageCollection = 1 };
 
 cl_object qdelete_gc(cl_object l_obj) { // used internally, for garbage collection only
     ecl_process_env()->nvalues = 1;
-    QtObject o = toQtObject(l_obj);
-    bool ok = false;
-    if(o.isQObject()) {
-        if(o.pointer) {
-            QObject* obj = (QObject*)o.pointer;
-            delete obj;
-            ok = true; }}
-    else if(o.pointer) {
-        LObjects::deleteNObject(-o.id, o.pointer, GarbageCollection);
-        ok = true; }
-    if(ok) {
-        STATIC_SYMBOL_PKG(s_qset_null, (char*)"QSET-NULL", (char*)"EQL")
-        cl_funcall(2, s_qset_null, l_obj);
-        return Ct; }
+    if(_garbage_collection_) {
+        QtObject o = toQtObject(l_obj);
+        bool ok = false;
+        if(o.isQObject()) {
+            if(o.pointer) {
+                QObject* obj = (QObject*)o.pointer;
+                delete obj;
+                ok = true; }}
+        else if(o.pointer) {
+            LObjects::deleteNObject(-o.id, o.pointer, GarbageCollection);
+            ok = true; }
+        if(ok) {
+            set_null(l_obj);
+            return Ct; }}
     // no error message
     return Cnil; }
 

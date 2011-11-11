@@ -223,6 +223,7 @@ cl_object qproperty            (cl_object, cl_object);
 cl_object qquit                ();
 cl_object qrequire             (cl_object);
 cl_object qsender              ();
+cl_object qset_gc              (cl_object);
 cl_object qset_property        (cl_object, cl_object, cl_object);
 cl_object qsingle_shot         (cl_object, cl_object);
 cl_object qstatic_meta_object  (cl_object);
