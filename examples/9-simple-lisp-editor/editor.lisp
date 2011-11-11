@@ -1213,12 +1213,9 @@
             (setf (gethash sym unique) t)
             (let ((name (symbol-name sym)))
               (unless (char= #\% (char name 0)) ; exclude internally used symbols
-                (push (if (every (lambda (ch)
-                                   (or (not (alpha-char-p ch))
-                                       (upper-case-p ch)))
-                                 name)
-                          (write-to-string sym :case :downcase)
-                          (write-to-string sym)) ; preserve case (for Qt enums)
+                (push (if (x:starts-with "|Q" name)
+                          (write-to-string sym) ; preserve case (for Qt enums)
+                          (write-to-string sym :case :downcase))
                       all)))))))
     (sort all 'string<)))
 
