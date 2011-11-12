@@ -1739,8 +1739,6 @@
 (defenum |QMovie.NotRunning| 0)
 (defenum |QMovie.Paused| 1)
 (defenum |QMovie.Running| 2)
-(defenum |QMutex.NonRecursive| 0)
-(defenum |QMutex.Recursive| 1)
 (defenum |QNetworkAccessManager.Accessible| 1)
 (defenum |QNetworkAccessManager.CustomOperation| 6)
 (defenum |QNetworkAccessManager.DeleteOperation| 5)

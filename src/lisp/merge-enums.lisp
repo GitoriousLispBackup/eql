@@ -5,7 +5,7 @@
       str)))
 
 (defun from-file (name)
-  (read-from-string (read-file (format nil "enums/~A.lisp" name))))
+  (read-from-string (read-file (format nil "enum-lists/~A.lisp" name))))
 
 (defvar *parsed*  (from-file "parsed-enums"))
 (defvar *dynamic* (from-file "dynamic-enums"))
