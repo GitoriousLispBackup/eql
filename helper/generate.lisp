@@ -951,7 +951,7 @@
         (format (if gui s (module-stream module :ini))
                 " }~A~
                  ~%~
-                 ~%~AList~A ~Aoverride(const QByteArray& name) {~
+                 ~%~AList~A ~AoverrideFunctions(const QByteArray& name) {~
                  ~%    NumList~A ids~A;~
                  ~%    int n = ~Aq_names.value(name, -1);~
                  ~%    if(n != -1) {~

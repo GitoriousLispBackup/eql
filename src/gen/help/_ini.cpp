@@ -46,7 +46,7 @@ void deleteNObject(int n, void* p, int gc) {
         case 71: if(gc) delete (QHelpContentItem*)p; else delete (LHelpContentItem*)p; break;
         case 73: if(gc) delete (QHelpSearchQuery*)p; else delete (LHelpSearchQuery*)p; break; }}
 
-NumList* override(const QByteArray& name) {
+NumList* overrideFunctions(const QByteArray& name) {
     NumList* ids = 0;
     int n = LObjects::q_names.value(name, -1);
     if(n != -1) {

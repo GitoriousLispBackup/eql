@@ -102,7 +102,7 @@ void deleteNObject(int n, void* p, int gc) {
         case 147: if(gc) delete (QSslKey*)p; else delete (LSslKey*)p; break;
         case 186: if(gc) delete (QUrlInfo*)p; else delete (LUrlInfo*)p; break; }}
 
-NumList* override(const QByteArray& name) {
+NumList* overrideFunctions(const QByteArray& name) {
     NumList* ids = 0;
     int n = LObjects::q_names.value(name, -1);
     if(n != -1) {

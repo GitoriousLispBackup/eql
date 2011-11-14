@@ -1226,7 +1226,7 @@ static StrList metaInfo(const QByteArray& type, const QByteArray& qclass, const 
                         if(name.contains(search, Qt::CaseInsensitive)) {
                             info << name.toAscii(); }}}}}}
     else if("override" == type) {
-        Q_FOREACH(QByteArray name, LObjects::override(qclass)) {
+        Q_FOREACH(QByteArray name, LObjects::overrideFunctions(qclass)) {
             if(QString(name).contains(search, Qt::CaseInsensitive)) {
                 info << name; }}}
     else if(!non) {
@@ -1440,10 +1440,6 @@ cl_object qcopy(cl_object l_obj) {
     error_msg("QCOPY", LIST1(l_obj));
     return Cnil; }
 
-static void set_null(cl_object l_obj) {
-    STATIC_SYMBOL_PKG(s_qset_null, (char*)"QSET-NULL", (char*)"EQL")
-    cl_funcall(2, s_qset_null, l_obj); }
-
 cl_object qdelete2(cl_object l_obj, cl_object l_later) {
     /// args: (object &optional later)
     /// alias: qdel
@@ -1465,7 +1461,8 @@ cl_object qdelete2(cl_object l_obj, cl_object l_later) {
         LObjects::deleteNObject(-o.id, o.pointer);
         ok = true; }
     if(ok) {
-        set_null(l_obj);
+        STATIC_SYMBOL_PKG(s_qset_null, (char*)"QSET-NULL", (char*)"EQL")
+        cl_funcall(2, s_qset_null, l_obj);
         return Ct; }
     // no error message (unintentional multiple deletion)
     return Cnil; }
@@ -1481,19 +1478,13 @@ cl_object qdelete_gc(cl_object l_obj) { // used internally, for garbage collecti
     ecl_process_env()->nvalues = 1;
     if(_garbage_collection_) {
         QtObject o = toQtObject(l_obj);
-        bool ok = false;
-        if(o.isQObject()) {
-            if(o.pointer) {
+        if(o.pointer) {
+            if(o.isQObject()) {
                 QObject* obj = (QObject*)o.pointer;
-                delete obj;
-                ok = true; }}
-        else if(o.pointer) {
-            LObjects::deleteNObject(-o.id, o.pointer, GarbageCollection);
-            ok = true; }
-        if(ok) {
-            set_null(l_obj);
-            return Ct; }}
-    // no error message
+                delete obj; }}
+            else {
+                LObjects::deleteNObject(-o.id, o.pointer, GarbageCollection); }
+        return Ct; }
     return Cnil; }
 
 cl_object qproperty(cl_object l_obj, cl_object l_name) {

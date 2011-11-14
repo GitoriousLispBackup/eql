@@ -29,7 +29,7 @@ void deleteNObject(int n, void* p, int gc) {
     switch(n) {
         case 150: if(gc) delete (QSvgGenerator*)p; else delete (LSvgGenerator*)p; break; }}
 
-NumList* override(const QByteArray& name) {
+NumList* overrideFunctions(const QByteArray& name) {
     NumList* ids = 0;
     int n = LObjects::q_names.value(name, -1);
     if(n != -1) {

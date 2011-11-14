@@ -54,7 +54,7 @@ void deleteNObject(int n, void* p, int gc) {
         case 196: if(gc) delete (QWebHitTestResult*)p; else delete (LWebHitTestResult*)p; break;
         case 197: if(gc) delete (QWebSecurityOrigin*)p; else delete (LWebSecurityOrigin*)p; break; }}
 
-NumList* override(const QByteArray& name) {
+NumList* overrideFunctions(const QByteArray& name) {
     NumList* ids = 0;
     int n = LObjects::q_names.value(name, -1);
     if(n != -1) {

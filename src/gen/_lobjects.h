@@ -81,7 +81,7 @@ public:
     static void deleteNObject(int, void*, int = 0);
     static const QMetaObject* staticMetaObject(const QByteArray&, int n = -1);
     static const char* nObjectSuperClass(const QByteArray&);
-    static StrList override(const QByteArray&);
+    static StrList overrideFunctions(const QByteArray&);
     static void* overrideFun(uint, int);
     static void setOverrideFun(uint, int, void*);
 

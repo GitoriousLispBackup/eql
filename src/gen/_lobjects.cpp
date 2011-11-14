@@ -2687,7 +2687,7 @@ const char* LObjects::nObjectSuperClass(const QByteArray& name) {
         case 203: s = "QEvent"; break; }
     return s; }
 
-StrList LObjects::override(const QByteArray& name) {
+StrList LObjects::overrideFunctions(const QByteArray& name) {
     NumList ids;
     int n = q_names.value(name, -1);
     if(n != -1) {

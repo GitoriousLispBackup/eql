@@ -44,7 +44,7 @@ void deleteNObject(int n, void* p, int gc) {
         case 44: if(gc) delete (QGLFramebufferObjectFormat*)p; else delete (LGLFramebufferObjectFormat*)p; break;
         case 45: if(gc) delete (QGLPixelBuffer*)p; else delete (LGLPixelBuffer*)p; break; }}
 
-NumList* override(const QByteArray& name) {
+NumList* overrideFunctions(const QByteArray& name) {
     NumList* ids = 0;
     int n = LObjects::q_names.value(name, -1);
     if(n != -1) {

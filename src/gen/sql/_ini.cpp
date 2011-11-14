@@ -56,7 +56,7 @@ void deleteNObject(int n, void* p, int gc) {
         case 141: if(gc) delete (QSqlRelation*)p; else delete (LSqlRelation*)p; break;
         case 142: if(gc) delete (QSqlResult*)p; else delete (LSqlResult*)p; break; }}
 
-NumList* override(const QByteArray& name) {
+NumList* overrideFunctions(const QByteArray& name) {
     NumList* ids = 0;
     int n = LObjects::q_names.value(name, -1);
     if(n != -1) {
