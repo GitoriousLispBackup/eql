@@ -43,13 +43,6 @@
                  `(defvar ,name (qfind-child ,main ,(string-downcase (substitute #\_ #\- (string-trim "*" (symbol-name name)))))))
                names)))
 
-(defmacro with-no-qt-garbage-collection (() &body body)
-  `(unwind-protect
-        (progn
-          (eql::%qset-gc nil)
-          ,@body)
-     (eql::%qset-gc t)))
-
 (defun %get-function (fn pkg)
   (typecase fn
     (symbol
