@@ -1936,7 +1936,7 @@ cl_object qrequire(cl_object l_name) {
         ini();
         StaticMetaObject meta = (StaticMetaObject)lib.resolve("staticMetaObject");
         DeleteNObject del = (DeleteNObject)lib.resolve("deleteNObject");
-        Override over = (Override)lib.resolve("override");
+        Override over = (Override)lib.resolve("overrideFunctions");
         if(meta && del && over) {
             if("help" == name) {
                 LObjects::staticMetaObject_help = meta;
