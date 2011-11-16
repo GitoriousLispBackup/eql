@@ -26,12 +26,9 @@
             (progn
               ,@body)
          ,(if (second vars)
-              `(progn . ,(mapcar (lambda (var exp)
-                                   (list (if (eql 'qnew (first exp)) 'qdelete 'eql::qdelete-gc)
-                                         var))
-                                 (nreverse vars)
-                                 (nreverse exps)))
-              `(,(if (eql 'qnew (caar exps)) 'qdelete 'eql::qdelete-gc) ,(first vars)))))))
+              `(progn . ,(mapcar (lambda (var) (list 'qdelete var))
+                                 (nreverse vars)))
+              `(qdelete ,(first vars)))))))
 
 (defmacro defvar-ui (main &rest names)
   "args: (main-widget &rest variables)
@@ -69,7 +66,7 @@
 (defun new-qt-object (pointer unique id finalize)
   (let ((obj (qt-object pointer unique id finalize)))
     (when finalize
-      (ext:set-finalizer obj #'eql::qdelete-gc))
+      (ext:set-finalizer obj 'qdelete))
     obj))
 
 (defmethod print-object ((obj qt-object) s)

@@ -202,7 +202,6 @@ cl_object qclear_event_filters ();
 cl_object qconnect2            (cl_object, cl_object, cl_object, cl_object);
 cl_object qcopy                (cl_object);
 cl_object qdelete2             (cl_object, cl_object);
-cl_object qdelete_gc           (cl_object);
 cl_object qdisconnect2         (cl_object, cl_object, cl_object, cl_object);
 cl_object qenum                (cl_object, cl_object);
 cl_object qescape              (cl_object);
