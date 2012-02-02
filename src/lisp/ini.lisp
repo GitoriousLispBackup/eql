@@ -19,8 +19,7 @@
                           (if (stringp (first exp))
                               (apply 'list 'qnew exp)
                               (first exp))))
-                      pairs))
-        (x (gensym)))
+                      pairs)))
     `(let* ,(mapcar 'list vars exps)
        (unwind-protect
             (progn

@@ -1,4 +1,4 @@
-// copyright (c) 2010-2011 Polos Ruetz
+// copyright (c) 2010-2012 Polos Ruetz
 
 #include "ecl_fun.h"
 #include "eql.h"
@@ -546,6 +546,7 @@ TO_QT_TYPE_PTR2(QIcon, qicon)
 TO_QT_TYPE_PTR2(QImage, qimage)
 TO_QT_TYPE_PTR2(QKeySequence, qkeysequence)
 TO_QT_TYPE_PTR2(QLocale, qlocale)
+TO_QT_TYPE_PTR(QMatrix, qmatrix)
 TO_QT_TYPE_PTR(QModelIndex, qmodelindex)
 TO_QT_TYPE_PTR(QPainterPath, qpainterpath)
 TO_QT_TYPE_PTR2(QPalette, qpalette)
@@ -562,6 +563,7 @@ TO_QT_TYPE_PTR2(QTextLength, qtextlength)
 TO_QT_TYPE_PTR(QTextLine, qtextline)
 TO_QT_TYPE_PTR(QTextOption, qtextoption)
 TO_QT_TYPE_PTR2(QTime, qtime)
+TO_QT_TYPE_PTR(QTransform, qtransform)
 TO_QT_TYPE_PTR2(QUrl, qurl)
 TO_QT_TYPE_PTR(QVariant, qvariant)
 
@@ -854,6 +856,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case QMetaType::QLine:                   p = new QLine(toQLine(l_arg)); break;
         case QMetaType::QLineF:                  p = new QLineF(toQLineF(l_arg)); break;
         case QMetaType::QLocale:                 p = new QLocale(*toQLocalePointer(l_arg)); break;
+        case QMetaType::QMatrix:                 p = new QMatrix(*toQMatrixPointer(l_arg)); break;
         case QMetaType::QPoint:                  p = new QPoint(toQPoint(l_arg)); break;
         case QMetaType::QPointF:                 p = new QPointF(toQPointF(l_arg)); break;
         case QMetaType::QPolygon:                p = new QPolygon(toQPolygon(l_arg)); break;
@@ -872,6 +875,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case QMetaType::QTextFormat:             p = new QTextFormat(*toQTextFormatPointer(l_arg)); break;
         case QMetaType::QTextLength:             p = new QTextLength(*toQTextLengthPointer(l_arg)); break;
         case QMetaType::QTime:                   p = new QTime(*toQTimePointer(l_arg)); break;
+        case QMetaType::QTransform:              p = new QTransform(*toQTransformPointer(l_arg)); break;
         case QMetaType::QUrl:                    p = new QUrl(*toQUrlPointer(l_arg)); break;
 #if QT_VERSION >= 0x40700
         case QMetaType::QVariant:                p = new QVariant(*toQVariantPointer(l_arg)); break;
@@ -1018,6 +1022,7 @@ cl_object to_lisp_arg(const MetaArg& arg) {
             case QMetaType::QLine:                   l_ret = from_qline(*(QLine*)p); break;
             case QMetaType::QLineF:                  l_ret = from_qlinef(*(QLineF*)p); break;
             case QMetaType::QLocale:                 l_ret = from_qlocale(*(QLocale*)p); break;
+            case QMetaType::QMatrix:                 l_ret = from_qmatrix(*(QMatrix*)p); break;
             case QMetaType::QPalette:                l_ret = from_qpalette(*(QPalette*)p); break;
             case QMetaType::QPen:                    l_ret = from_qpen(*(QPen*)p); break;
             case QMetaType::QPixmap:                 l_ret = from_qpixmap(*(QPixmap*)p); break;
@@ -1032,6 +1037,7 @@ cl_object to_lisp_arg(const MetaArg& arg) {
             case QMetaType::QStringList:             l_ret = from_qstringlist(*(QStringList*)p); break;
             case QMetaType::QTextFormat:             l_ret = from_qtextformat(*(QTextFormat*)p); break;
             case QMetaType::QTextLength:             l_ret = from_qtextlength(*(QTextLength*)p); break;
+            case QMetaType::QTransform:              l_ret = from_qtransform(*(QTransform*)p); break;
             case QMetaType::QTime:                   l_ret = from_qtime(*(QTime*)p); break;
             case QMetaType::QUrl:                    l_ret = from_qurl(*(QUrl*)p); break;
 #if QT_VERSION >= 0x40700
@@ -1738,7 +1744,7 @@ cl_object qconnect2(cl_object l_caller, cl_object l_signal, cl_object l_receiver
 
 cl_object qdisconnect2(cl_object l_caller, cl_object l_signal, cl_object l_receiver, cl_object l_slot) {
     /// args: (caller &optional signal receiver/function slot)
-    /// Disconnects signals to either Qt slots or Lisp functions. Everything but the caller can be either <code>NIL</code> or omitted.
+    /// Disconnects signals to either Qt slots or Lisp functions. Anything but the caller can be either <code>NIL</code> or omitted.
     ///     (qdisconnect edit "textChanged(QString)" label "setText(QString)")
     ///     (qdisconnect edit "textChanged(QString)")
     ///     (qdisconnect edit nil label)

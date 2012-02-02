@@ -4,7 +4,7 @@
 
 (qrequire :sql)
 
-(defvar *db*         (qnew "QSqlDatabase(QSqlDatabase)" (qfun "QSqlDatabase" "addDatabase(QString)" "QSQLITE")))
+(defvar *db*         (qfun "QSqlDatabase" "addDatabase(QString)" "QSQLITE"))
 (defvar *table-view* (qnew "QTableView" "windowTitle" "sqlite"))
 
 (defun populate-db ()
