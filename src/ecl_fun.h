@@ -1,4 +1,4 @@
-// copyright (c) 2010-2011 Polos Ruetz
+// copyright (c) 2010-2012 Polos Ruetz
 
 #ifndef ECL_FUN_H
 #define ECL_FUN_H
@@ -10,6 +10,8 @@
 #include <QByteArray>
 #include <QPair>
 #include <QVariant>
+
+QT_BEGIN_NAMESPACE
 
 #define PRINT(x) cl_print(1, x)
 #define TERPRI() cl_terpri(0)
@@ -190,6 +192,11 @@ static cap_name to##cap_name(cl_object l_x) { \
             cl_vector_push_extend(2, fun(v.at(i)), l_vec); } \
         return l_vec; }
 
+typedef QPair<QByteArray, void*> MetaArg;
+typedef QList<MetaArg>           MetaArgList;
+typedef QListIterator<MetaArg>   MetaArgIterator;
+typedef QList<QByteArray>        StrList;
+
 class QByteArray;
 class QObject;
 class QEvent;
@@ -265,5 +272,7 @@ void error_msg(const char*, cl_object);
 EQL_EXPORT QVariant callOverrideFun(void*, int, const void**);
 EQL_EXPORT cl_object qt_object_from_name(const QByteArray&, void*, uint = 0, bool = false);
 EQL_EXPORT QtObject toQtObject(cl_object, cl_object = Cnil, bool* = 0);
+
+QT_END_NAMESPACE
 
 #endif

@@ -5,9 +5,6 @@
 #include <QtGui>
 #include <ecl/ecl.h>
 
-typedef QList<int>        NumList;
-typedef QList<QByteArray> StrList;
-
 Q_DECLARE_METATYPE(QFileInfo)
 Q_DECLARE_METATYPE(QItemSelection)
 Q_DECLARE_METATYPE(QList<QAction*>)
@@ -22,6 +19,11 @@ Q_DECLARE_METATYPE(QTextCharFormat)
 Q_DECLARE_METATYPE(QTextCursor)
 Q_DECLARE_METATYPE(QTextDocumentFragment)
 Q_DECLARE_METATYPE(QTextOption)
+
+QT_BEGIN_NAMESPACE
+
+typedef QList<int>        NumList;
+typedef QList<QByteArray> StrList;
 
 class EQL;
 class DynObject;
@@ -124,5 +126,7 @@ public:
     static ToMetaArg toMetaArg_webkit;
     static To_lisp_arg to_lisp_arg_webkit;
 };
+
+QT_END_NAMESPACE
 
 #endif

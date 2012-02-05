@@ -4,6 +4,8 @@
 #include "_n_methods.h"
 #include "_ini2.h"
 
+QT_BEGIN_NAMESPACE
+
 NumList LGLShader::overrideIds = NumList();
 NumList LGLShaderProgram::overrideIds = NumList() << 198;
 NumList LGLWidget::overrideIds = NumList() << 199 << 200 << 201 << 202 << 203 << 204 << 205 << 206 << 21 << 40;
@@ -62,3 +64,5 @@ NumList* overrideFunctions(const QByteArray& name) {
             case 44: ids = &LGLFramebufferObjectFormat::overrideIds; break;
             case 45: ids = &LGLPixelBuffer::overrideIds; break; }}
     return ids; }
+
+QT_END_NAMESPACE

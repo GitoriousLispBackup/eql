@@ -8,6 +8,8 @@
 #include "../_lobjects.h"
 #include <QtGui>
 
+QT_BEGIN_NAMESPACE
+
 class LHelpContentItem : public QHelpContentItem {
     friend class N71;
 public:
@@ -25,5 +27,7 @@ public:
     static NumList overrideIds;
     uint unique;
 };
+
+QT_END_NAMESPACE
 
 #endif

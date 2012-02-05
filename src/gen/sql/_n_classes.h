@@ -8,6 +8,8 @@
 #include "../_lobjects.h"
 #include <QtGui>
 
+QT_BEGIN_NAMESPACE
+
 class LSqlDatabase : public QSqlDatabase {
     friend class N135;
 public:
@@ -111,5 +113,7 @@ public:
     void setSelect(bool x1) { void* fun = LObjects::overrideFun(unique, 436); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 436, args); } if(!fun || LObjects::call_default) { QSqlResult::setSelect(x1); }}
     int size() { void* fun = LObjects::overrideFun(unique, 122); int ret = 0; if(fun) { ret = callOverrideFun(fun, 122, 0).toInt(); } return ret; }
 };
+
+QT_END_NAMESPACE
 
 #endif

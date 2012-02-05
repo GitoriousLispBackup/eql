@@ -8,6 +8,8 @@
 #include <QtGui>
 #include <QtNetwork>
 
+QT_BEGIN_NAMESPACE
+
 class N8 : public QObject { // QAuthenticator
     Q_OBJECT
 public:
@@ -353,5 +355,7 @@ public:
     Q_INVOKABLE bool SgreaterThan(const QUrlInfo& x1, const QUrlInfo& x2, int x3) { return QUrlInfo::greaterThan(x1, x2, x3); }
     Q_INVOKABLE bool SlessThan(const QUrlInfo& x1, const QUrlInfo& x2, int x3) { return QUrlInfo::lessThan(x1, x2, x3); }
 };
+
+QT_END_NAMESPACE
 
 #endif

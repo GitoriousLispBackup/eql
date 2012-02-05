@@ -8,6 +8,8 @@
 #include <QtGui>
 #include <QtSvg>
 
+QT_BEGIN_NAMESPACE
+
 class N150 : public N108 { // QSvgGenerator
     Q_OBJECT
 public:
@@ -27,5 +29,7 @@ public:
     Q_INVOKABLE QRect MviewBox(QSvgGenerator* o) const { return o->viewBox(); }
     Q_INVOKABLE QRectF MviewBoxF(QSvgGenerator* o) const { return o->viewBoxF(); }
 };
+
+QT_END_NAMESPACE
 
 #endif

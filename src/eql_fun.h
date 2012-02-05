@@ -1,4 +1,4 @@
-// copyright (c) 2011 Polos Ruetz
+// copyright (c) 2012 Polos Ruetz
 // see Qt_EQL example
 
 #ifndef EQL_FUN_H
@@ -6,6 +6,8 @@
 
 #include <QGenericArgument>
 #include <QVariant>
+
+QT_BEGIN_NAMESPACE
 
 #define QSLOT(x)   "1"#x
 #define QSIGNAL(x) "2"#x
@@ -38,5 +40,7 @@ eql_fun(const QByteArray&,
         QGenericArgument = QGenericArgument(),
         QGenericArgument = QGenericArgument(),
         QGenericArgument = QGenericArgument());
+
+QT_END_NAMESPACE
 
 #endif

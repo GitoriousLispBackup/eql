@@ -8,6 +8,8 @@
 #include <QtGui>
 #include <QtWebKit>
 
+QT_BEGIN_NAMESPACE
+
 class N191 : public QObject { // QWebDatabase
     Q_OBJECT
 public:
@@ -219,5 +221,7 @@ public:
     Q_INVOKABLE void SsetWebGraphic(QWebSettings::WebGraphic x1, const QPixmap& x2) { QWebSettings::setWebGraphic(x1, x2); }
     Q_INVOKABLE QPixmap SwebGraphic(QWebSettings::WebGraphic x1) { return QWebSettings::webGraphic(x1); }
 };
+
+QT_END_NAMESPACE
 
 #endif

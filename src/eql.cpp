@@ -1,4 +1,4 @@
-// copyright (c) 2010-2011 Polos Ruetz
+// copyright (c) 2010-2012 Polos Ruetz
 
 #include "eql.h"
 #include "ecl_fun.h"
@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "11.11.7"; // 2011-11-15
+const char EQL::version[] = "12.2.1"; // 2012-02-06
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {

@@ -8,6 +8,8 @@
 #include <QtGui>
 #include <QtHelp>
 
+QT_BEGIN_NAMESPACE
+
 class Q88 : public Q4 { // QHelpContentModel
     Q_OBJECT
 public:
@@ -93,5 +95,7 @@ class Q92 : public Q109 { // QHelpIndexWidget
     Q_OBJECT
 public:
 };
+
+QT_END_NAMESPACE
 
 #endif

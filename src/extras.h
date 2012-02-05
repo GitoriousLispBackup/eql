@@ -1,4 +1,4 @@
-// copyright (c) 2011 Polos Ruetz
+// copyright (c) 2011-2012 Polos Ruetz
 //
 // extra functions added to some Qt class
 // e.g. (qfun image "changeBrightness" 10)
@@ -8,9 +8,13 @@
 
 #include <QImage>
 
+QT_BEGIN_NAMESPACE
+
 // QImage
 QImage QImage_changeBrightness(const QImage&, int);
 QImage QImage_changeContrast(const QImage&, int);
 QImage QImage_changeGamma(const QImage&, int);
+
+QT_END_NAMESPACE
 
 #endif

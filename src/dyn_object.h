@@ -1,4 +1,4 @@
-// copyright (c) 2010-2011 Polos Ruetz
+// copyright (c) 2010-2012 Polos Ruetz
 
 #ifndef DYN_OBJECT_H
 #define DYN_OBJECT_H
@@ -6,6 +6,8 @@
 #include <QObject>
 #include <QHash>
 #include <QVector>
+
+QT_BEGIN_NAMESPACE
 
 typedef QList<QByteArray> StrList;
 
@@ -32,5 +34,7 @@ public:
     void clearEventFilters();
     bool eventFilter(QObject*, QEvent*);
 };
+
+QT_END_NAMESPACE
 
 #endif

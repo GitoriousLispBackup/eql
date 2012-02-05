@@ -4,6 +4,8 @@
 #include "_n_methods.h"
 #include "_ini2.h"
 
+QT_BEGIN_NAMESPACE
+
 NumList LGraphicsSvgItem::overrideIds = NumList() << 239 << 210 << 212;
 NumList LSvgRenderer::overrideIds = NumList();
 NumList LSvgWidget::overrideIds = NumList() << 25 << 21;
@@ -42,3 +44,5 @@ NumList* overrideFunctions(const QByteArray& name) {
         switch(n) {
             case 150: ids = &LSvgGenerator::overrideIds; break; }}
     return ids; }
+
+QT_END_NAMESPACE

@@ -1,7 +1,9 @@
-// copyright (c) 2011 Polos Ruetz
+// copyright (c) 2011-2012 Polos Ruetz
 
 #include "extras.h"
 #include <math.h>
+
+QT_BEGIN_NAMESPACE
 
 // *** QImage *** (code found in a Qt forum)
 
@@ -71,3 +73,5 @@ QImage QImage_changeGamma(const QImage& image, int gamma) {
     if(100 == gamma) {
         return image; }
     return changeImage<changeGamma>(image, gamma); }
+
+QT_END_NAMESPACE

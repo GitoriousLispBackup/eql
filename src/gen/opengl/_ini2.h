@@ -6,6 +6,8 @@
 #include "../../eql.h"
 #include <QtGui>
 
+QT_BEGIN_NAMESPACE
+
 TO_QT_TYPE_PTR(QGLFormat, qglformat)
 TO_QT_TYPE_PTR(QGLFramebufferObjectFormat, qglframebufferobjectformat)
 
@@ -68,5 +70,7 @@ cl_object to_lisp_arg(int n, void* p) {
     else if(LObjects::T_QGLFormat == n)                   { l_ret = from_qglformat(*(QGLFormat*)p); }
     else if(LObjects::T_QGLFramebufferObjectFormat == n)  { l_ret = from_qglframebufferobjectformat(*(QGLFramebufferObjectFormat*)p); }
     return l_ret; }
+
+QT_END_NAMESPACE
 
 #endif

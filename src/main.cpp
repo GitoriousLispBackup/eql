@@ -1,4 +1,4 @@
-// copyright (c) 2010-2011 Polos Ruetz
+// copyright (c) 2010-2012 Polos Ruetz
 
 #include <QApplication>
 #include <QWidget>

@@ -4,6 +4,8 @@
 #include "_n_methods.h"
 #include "_ini2.h"
 
+QT_BEGIN_NAMESPACE
+
 NumList LSqlDriver::overrideIds = NumList() << 301 << 111 << 302 << 303 << 304 << 305 << 306 << 307 << 308 << 309 << 310 << 311 << 312 << 313 << 314 << 315 << 316 << 317;
 NumList LSqlQueryModel::overrideIds = NumList() << 193 << 318 << 53 << 55 << 57 << 60 << 62 << 68 << 70 << 72;
 NumList LSqlRelationalDelegate::overrideIds = NumList() << 45 << 48 << 49;
@@ -78,3 +80,5 @@ NumList* overrideFunctions(const QByteArray& name) {
             case 141: ids = &LSqlRelation::overrideIds; break;
             case 142: ids = &LSqlResult::overrideIds; break; }}
     return ids; }
+
+QT_END_NAMESPACE

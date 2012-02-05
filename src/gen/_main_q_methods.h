@@ -8,6 +8,8 @@
 #include "../extras.h"
 #include "../eql_global.h"
 
+QT_BEGIN_NAMESPACE
+
 class EQL_EXPORT Q127 : public QObject { // QObject
     Q_OBJECT
 public:
@@ -4853,5 +4855,7 @@ public:
     Q_INVOKABLE void MsetEmptyLabel(QUndoView* o, const QString& x1) { o->setEmptyLabel(x1); }
     Q_INVOKABLE QUndoStack* Mstack(QUndoView* o) const { return o->stack(); }
 };
+
+QT_END_NAMESPACE
 
 #endif

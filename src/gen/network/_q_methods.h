@@ -8,6 +8,8 @@
 #include <QtGui>
 #include <QtNetwork>
 
+QT_BEGIN_NAMESPACE
+
 class Q7 : public Q127 { // QAbstractNetworkCache
     Q_OBJECT
 public:
@@ -248,5 +250,7 @@ public:
     Q_INVOKABLE qlonglong MwriteDatagram(QUdpSocket* o, const char* x1, qint64 x2, const QHostAddress& x3, quint16 x4) { return o->writeDatagram(x1, x2, x3, x4); }
     Q_INVOKABLE qlonglong MwriteDatagram(QUdpSocket* o, const QByteArray& x1, const QHostAddress& x2, quint16 x3) { return o->writeDatagram(x1, x2, x3); }
 };
+
+QT_END_NAMESPACE
 
 #endif

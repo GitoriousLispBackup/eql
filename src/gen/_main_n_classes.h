@@ -7,6 +7,8 @@
 #include "_lobjects.h"
 #include <QtGui>
 
+QT_BEGIN_NAMESPACE
+
 class LAbstractGraphicsShapeItem : public QAbstractGraphicsShapeItem {
     friend class N1;
 public:
@@ -2012,5 +2014,7 @@ public:
     static NumList overrideIds;
     uint unique;
 };
+
+QT_END_NAMESPACE
 
 #endif

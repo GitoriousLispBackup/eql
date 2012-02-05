@@ -8,6 +8,8 @@
 #include <QtGui>
 #include <QtSql>
 
+QT_BEGIN_NAMESPACE
+
 class Q163 : public Q127 { // QSqlDriver
     Q_OBJECT
 public:
@@ -119,5 +121,7 @@ public:
     Q_INVOKABLE bool MsetData(QSqlRelationalTableModel* o, const QModelIndex& x1, const QVariant& x2, int x3 = Qt::EditRole) { return o->setData(x1, x2, x3); }
     Q_INVOKABLE void MsetTable(QSqlRelationalTableModel* o, const QString& x1) { o->setTable(x1); }
 };
+
+QT_END_NAMESPACE
 
 #endif

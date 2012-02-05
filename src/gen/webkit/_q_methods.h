@@ -8,6 +8,8 @@
 #include <QtGui>
 #include <QtWebKit>
 
+QT_BEGIN_NAMESPACE
+
 class Q214 : public Q127 { // QWebFrame
     Q_OBJECT
 public:
@@ -187,5 +189,7 @@ public:
     Q_INVOKABLE QVariant MinputMethodQuery(QWebView* o, Qt::InputMethodQuery x1) const { return o->inputMethodQuery(x1); }
     Q_INVOKABLE QSize MsizeHint(QWebView* o) const { return o->sizeHint(); }
 };
+
+QT_END_NAMESPACE
 
 #endif

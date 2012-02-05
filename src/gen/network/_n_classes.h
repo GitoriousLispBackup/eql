@@ -8,6 +8,8 @@
 #include "../_lobjects.h"
 #include <QtGui>
 
+QT_BEGIN_NAMESPACE
+
 class LAuthenticator : public QAuthenticator {
     friend class N8;
 public:
@@ -205,5 +207,7 @@ public:
     void setSymLink(bool x1) { void* fun = LObjects::overrideFun(unique, 459); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 459, args); } if(!fun || LObjects::call_default) { QUrlInfo::setSymLink(x1); }}
     void setWritable(bool x1) { void* fun = LObjects::overrideFun(unique, 460); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 460, args); } if(!fun || LObjects::call_default) { QUrlInfo::setWritable(x1); }}
 };
+
+QT_END_NAMESPACE
 
 #endif

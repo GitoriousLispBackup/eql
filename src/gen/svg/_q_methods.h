@@ -8,6 +8,8 @@
 #include <QtGui>
 #include <QtSvg>
 
+QT_BEGIN_NAMESPACE
+
 class Q78 : public Q72 { // QGraphicsSvgItem
     Q_OBJECT
 public:
@@ -52,5 +54,7 @@ public:
     Q_INVOKABLE QSvgRenderer* Mrenderer(QSvgWidget* o) const { return o->renderer(); }
     Q_INVOKABLE QSize MsizeHint(QSvgWidget* o) const { return o->sizeHint(); }
 };
+
+QT_END_NAMESPACE
 
 #endif

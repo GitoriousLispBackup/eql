@@ -6,10 +6,7 @@
 #include "gen/_lobjects.h"
 #include <QLibrary>
 
-typedef QPair<QByteArray, void*> MetaArg;
-typedef QList<MetaArg>           MetaArgList;
-typedef QListIterator<MetaArg>   MetaArgIterator;
-typedef QList<QByteArray>        StrList;
+QT_BEGIN_NAMESPACE
 
 // switches
 static bool _check_argument_types_ = true;
@@ -2316,3 +2313,5 @@ cl_object qquit() {
     cl_shutdown();
     qApp->quit();
     exit(0); }
+
+QT_END_NAMESPACE

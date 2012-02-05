@@ -8,6 +8,8 @@
 #include "../extras.h"
 #include "../eql_global.h"
 
+QT_BEGIN_NAMESPACE
+
 class EQL_EXPORT N2 : public QObject { // QAccessible
     Q_OBJECT
 public:
@@ -3944,5 +3946,7 @@ class EQL_EXPORT N25 : public N27 { // QDragEnterEvent
 public:
     Q_INVOKABLE void* C(uint u, const QPoint& x1, Qt::DropActions x2, const QMimeData* x3, Qt::MouseButtons x4, Qt::KeyboardModifiers x5) { return new LDragEnterEvent(u, x1, x2, x3, x4, x5); }
 };
+
+QT_END_NAMESPACE
 
 #endif

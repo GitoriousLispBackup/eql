@@ -79,3 +79,8 @@ Closing & re-opening the editor does not affect the local-server process.
 You may even open multiple editor instances, which will all connect to the
 same local-server.
 
+You can put an ini file ".ini-eql-editor.lisp" in your working directory,
+which will be loaded on startup, having full access to all editor variables
+and functions.
+Example: (qfun editor::*main* "showMaximized")
+

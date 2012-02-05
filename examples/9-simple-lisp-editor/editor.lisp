@@ -1,4 +1,4 @@
-;;; copyright (c) 2010-2011 Polos Ruetz
+;;; copyright (c) 2010-2012 Polos Ruetz
 ;;;
 ;;; A basic and experimental(!) Lisp editor, featuring:
 ;;;
@@ -1360,7 +1360,10 @@
     (file-open (if (and (> (length args) 2)
                         (x:ends-with ".lisp" last-arg))
                    last-arg
-                   "my.lisp"))))
+                   "my.lisp")))
+  (let ((ini ".ini-eql-editor.lisp"))
+    (when (probe-file ini)
+      (load ini))))
 
 ;;; profile
 

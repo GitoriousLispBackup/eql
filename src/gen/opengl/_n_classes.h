@@ -8,6 +8,8 @@
 #include "../_lobjects.h"
 #include <QtGui>
 
+QT_BEGIN_NAMESPACE
+
 class LGLColormap : public QGLColormap {
     friend class N40;
 public:
@@ -81,5 +83,7 @@ public:
 
     int metric(PaintDeviceMetric x1) const { void* fun = LObjects::overrideFun(unique, 44); int ret = 0; if(fun) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 44, args).toInt(); } if(!fun || LObjects::call_default) { ret = QGLPixelBuffer::metric(x1); } return ret; }
 };
+
+QT_END_NAMESPACE
 
 #endif

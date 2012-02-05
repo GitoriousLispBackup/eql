@@ -6,6 +6,8 @@
 #include "../../eql.h"
 #include <QtGui>
 
+QT_BEGIN_NAMESPACE
+
 TO_QT_TYPE_PTR(QHostAddress, qhostaddress)
 TO_QT_TYPE_PTR(QHostInfo, qhostinfo)
 TO_QT_TYPE_PTR(QNetworkCacheMetaData, qnetworkcachemetadata)
@@ -56,5 +58,7 @@ cl_object to_lisp_arg(int n, void* p) {
     else if(LObjects::T_QSslConfiguration == n)     { l_ret = from_qsslconfiguration(*(QSslConfiguration*)p); }
     else if(LObjects::T_QSslKey == n)               { l_ret = from_qsslkey(*(QSslKey*)p); }
     return l_ret; }
+
+QT_END_NAMESPACE
 
 #endif

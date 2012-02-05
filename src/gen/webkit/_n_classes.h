@@ -8,6 +8,8 @@
 #include "../_lobjects.h"
 #include <QtGui>
 
+QT_BEGIN_NAMESPACE
+
 typedef QList<int> NumList;
 
 class LWebDatabase : public QWebDatabase {
@@ -67,5 +69,7 @@ public:
     static NumList overrideIds;
     uint unique;
 };
+
+QT_END_NAMESPACE
 
 #endif

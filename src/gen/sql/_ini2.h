@@ -6,6 +6,8 @@
 #include "../../eql.h"
 #include <QtGui>
 
+QT_BEGIN_NAMESPACE
+
 TO_QT_TYPE_PTR(QSqlDatabase, qsqldatabase)
 TO_QT_TYPE_PTR(QSqlError, qsqlerror)
 TO_QT_TYPE_PTR(QSqlField, qsqlfield)
@@ -44,5 +46,7 @@ cl_object to_lisp_arg(int n, void* p) {
     else if(LObjects::T_QSqlRecord == n)   { l_ret = from_qsqlrecord(*(QSqlRecord*)p); }
     else if(LObjects::T_QSqlRelation == n) { l_ret = from_qsqlrelation(*(QSqlRelation*)p); }
     return l_ret; }
+
+QT_END_NAMESPACE
 
 #endif

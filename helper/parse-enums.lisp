@@ -1,4 +1,4 @@
-;;; copyright (c) 2011 Polos Ruetz
+;;; copyright (c) 2011-2012 Polos Ruetz
 ;;;
 ;;; customized to work with Qt 4.7
 

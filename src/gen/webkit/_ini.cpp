@@ -4,6 +4,8 @@
 #include "_n_methods.h"
 #include "_ini2.h"
 
+QT_BEGIN_NAMESPACE
+
 NumList LGraphicsWebView::overrideIds = NumList() << 23 << 222 << 210 << 211 << 228 << 242 << 213 << 214 << 215 << 216 << 217 << 14 << 34 << 15 << 220 << 221 << 36 << 16 << 17 << 223 << 224 << 225 << 226 << 241 << 230;
 NumList LWebHistoryInterface::overrideIds = NumList() << 352 << 353;
 NumList LWebInspector::overrideIds = NumList() << 25 << 35 << 40 << 41;
@@ -74,3 +76,5 @@ NumList* overrideFunctions(const QByteArray& name) {
             case 196: ids = &LWebHitTestResult::overrideIds; break;
             case 197: ids = &LWebSecurityOrigin::overrideIds; break; }}
     return ids; }
+
+QT_END_NAMESPACE

@@ -8,6 +8,8 @@
 #include <QtGui>
 #include <QtSql>
 
+QT_BEGIN_NAMESPACE
+
 class N135 : public QObject { // QSqlDatabase
     Q_OBJECT
 public:
@@ -232,5 +234,7 @@ public:
     Q_INVOKABLE void MsetDescending(QSqlIndex* o, int x1, bool x2) { o->setDescending(x1, x2); }
     Q_INVOKABLE void MsetName(QSqlIndex* o, const QString& x1) { o->setName(x1); }
 };
+
+QT_END_NAMESPACE
 
 #endif

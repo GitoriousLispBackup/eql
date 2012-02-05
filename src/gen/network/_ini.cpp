@@ -4,6 +4,8 @@
 #include "_n_methods.h"
 #include "_ini2.h"
 
+QT_BEGIN_NAMESPACE
+
 NumList LAbstractSocket::overrideIds = NumList() << 107 << 108 << 109 << 110 << 111 << 112 << 113 << 114 << 115 << 116 << 117;
 NumList LFtp::overrideIds = NumList();
 NumList LLocalServer::overrideIds = NumList() << 274 << 275 << 276;
@@ -138,3 +140,5 @@ NumList* overrideFunctions(const QByteArray& name) {
             case 147: ids = &LSslKey::overrideIds; break;
             case 186: ids = &LUrlInfo::overrideIds; break; }}
     return ids; }
+
+QT_END_NAMESPACE

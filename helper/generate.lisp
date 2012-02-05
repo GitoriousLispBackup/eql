@@ -1,4 +1,4 @@
-;;; copyright (c) 2010-2011 Polos Ruetz
+;;; copyright (c) 2010-2012 Polos Ruetz
 
 (load "../src/lisp/x")
 (load "load-modules")
@@ -433,7 +433,9 @@
                    ~%~A~
                    ~%#include \"../~Aecl_fun.h\"~
                    ~%#include \"~A_lobjects.h\"~
-                   ~%#include <QtGui>~%"
+                   ~%#include <QtGui>~
+                   ~%~
+                   ~%QT_BEGIN_NAMESPACE~%"
                 +message-generated+
                 (if gui "MAIN_" "")
                 type
@@ -564,7 +566,7 @@
           (if (eql :q type) *q-override* *n-override*))
     (dolist (module *all-modules*)
       (change-file-stream module :classes type)
-      (format s "~%#endif~%")))
+      (format s "~%QT_END_NAMESPACE~%~%#endif~%")))
   (when (eql :n type)
     (setf *override-functions*        (nreverse *override-functions*)
           *override-arguments*        (nreverse *override-arguments*)
@@ -581,7 +583,9 @@
                    ~%#define ~A~A_METHODS_H~
                    ~%~
                    ~%#include \"_~A~(~A~)_classes.h\"~A~
-                   ~%#include <QtGui>~A~%"
+                   ~%#include <QtGui>~A~
+                   ~%~
+                   ~%QT_BEGIN_NAMESPACE~%"
                 +message-generated+
                 (if gui "MAIN_" "")
                 type
@@ -699,7 +703,7 @@
           (setf 1st nil))))
     (dolist (module *all-modules*)
       (change-file-stream module :methods type)
-      (format s "~%#endif~%"))))
+      (format s "~%QT_END_NAMESPACE~%~%#endif~%"))))
 
 (defun add-extras (type class s)
   (if (eql :q type)
@@ -788,7 +792,9 @@
       (format s "~%StaticMetaObject LObjects::staticMetaObject_~(~A~) = 0;" module)
       (format (module-stream module :ini) "~A~%~%#include \"_q_methods.h\"~
                                            ~%#include \"_n_methods.h\"~
-                                           ~%#include \"_ini2.h\"~%~%"
+                                           ~%#include \"_ini2.h\"~
+                                           ~%~
+                                           ~%QT_BEGIN_NAMESPACE~%~%"
               +message-generated+))
     (dolist (module *modules*)
       (format s "~%DeleteNObject LObjects::deleteNObject_~(~A~) = 0;" module))
@@ -1028,7 +1034,7 @@
                ~%                .arg(QString(override_function_ids.key(id))).toAscii(); }~
                ~%    return funs; }~%")
     (dolist (module *modules*)
-      (format (module-stream module :ini) " }}~%    return ids; }~%"))))
+      (format (module-stream module :ini) " }}~%    return ids; }~%~%QT_END_NAMESPACE~%"))))
 
 (defun missing-types ()
   (let ((skip (list "bool"

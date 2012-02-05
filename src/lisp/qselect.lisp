@@ -1,4 +1,4 @@
-;;; copyright (c) 2010-2011 Polos Ruetz
+;;; copyright (c) 2010-2012 Polos Ruetz
 ;;;
 ;;; Allows to visually select any (child) widget.
 ;;; On selecting, the widget will be highlighted and bound to the variable qsel:*q* 

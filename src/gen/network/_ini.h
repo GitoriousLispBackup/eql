@@ -14,6 +14,8 @@ Q_DECLARE_METATYPE(QList<QNetworkProxy>)
 #define LIB_EXPORT
 #endif
 
+QT_BEGIN_NAMESPACE
+
 typedef QList<int> NumList;
 
 extern "C" {
@@ -23,5 +25,7 @@ extern "C" {
     LIB_EXPORT NumList* overrideFunctions(const QByteArray&);
     LIB_EXPORT void* toMetaArg(int, cl_object);
     LIB_EXPORT cl_object to_lisp_arg(int, void*); }
+
+QT_END_NAMESPACE
 
 #endif

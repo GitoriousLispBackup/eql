@@ -8,6 +8,8 @@
 #include <QtGui>
 #include <QtOpenGL>
 
+QT_BEGIN_NAMESPACE
+
 class N40 : public QObject { // QGLColormap
     Q_OBJECT
 public:
@@ -179,5 +181,7 @@ public:
     Q_INVOKABLE void MupdateDynamicTexture(QGLPixelBuffer* o, GLuint x1) const { o->updateDynamicTexture(x1); }
     Q_INVOKABLE bool ShasOpenGLPbuffers() { return QGLPixelBuffer::hasOpenGLPbuffers(); }
 };
+
+QT_END_NAMESPACE
 
 #endif

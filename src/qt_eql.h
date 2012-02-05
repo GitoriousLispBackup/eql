@@ -1,4 +1,4 @@
-// copyright (c) 2011 Polos Ruetz
+// copyright (c) 2011-2012 Polos Ruetz
 // see Qt_EQL example
 
 #ifndef QT_EQL_H
@@ -7,6 +7,8 @@
 #include <QGenericArgument>
 #include <QVariant>
 #include "eql_global.h"
+
+QT_BEGIN_NAMESPACE
 
 EQL_EXPORT void
 eql_fun(const QByteArray&,
@@ -34,5 +36,7 @@ eql_fun(const QByteArray&,
         QGenericArgument = QGenericArgument(),
         QGenericArgument = QGenericArgument(),
         QGenericArgument = QGenericArgument());
+
+QT_END_NAMESPACE
 
 #endif

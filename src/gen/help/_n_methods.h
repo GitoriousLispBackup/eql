@@ -8,6 +8,8 @@
 #include <QtGui>
 #include <QtHelp>
 
+QT_BEGIN_NAMESPACE
+
 class N71 : public QObject { // QHelpContentItem
     Q_OBJECT
 public:
@@ -26,5 +28,7 @@ public:
     Q_INVOKABLE void* C(uint u) { return new LHelpSearchQuery(u); }
     Q_INVOKABLE void* C(uint u, QHelpSearchQuery::FieldName x1, const QStringList& x2) { return new LHelpSearchQuery(u, x1, x2); }
 };
+
+QT_END_NAMESPACE
 
 #endif

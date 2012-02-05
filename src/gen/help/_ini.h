@@ -9,6 +9,8 @@
 #define LIB_EXPORT
 #endif
 
+QT_BEGIN_NAMESPACE
+
 typedef QList<int> NumList;
 
 extern "C" {
@@ -16,5 +18,7 @@ extern "C" {
     LIB_EXPORT const QMetaObject* staticMetaObject(int);
     LIB_EXPORT void deleteNObject(int, void*, int);
     LIB_EXPORT NumList* overrideFunctions(const QByteArray&); }
+
+QT_END_NAMESPACE
 
 #endif

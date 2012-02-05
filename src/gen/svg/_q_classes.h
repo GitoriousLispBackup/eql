@@ -8,6 +8,8 @@
 #include "../_lobjects.h"
 #include <QtGui>
 
+QT_BEGIN_NAMESPACE
+
 class LGraphicsSvgItem : public QGraphicsSvgItem {
     Q_OBJECT
     friend class Q78;
@@ -94,5 +96,7 @@ public:
     void disconnectNotify(const char* x1) { void* fun = LObjects::overrideFun(unique, 8); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 8, args); } if(!fun || LObjects::call_default) { QSvgWidget::disconnectNotify(x1); }}
     void timerEvent(QTimerEvent* x1) { void* fun = LObjects::overrideFun(unique, 9); if(fun) { const void* args[] = { &x1 }; callOverrideFun(fun, 9, args); } if(!fun || LObjects::call_default) { QSvgWidget::timerEvent(x1); }}
 };
+
+QT_END_NAMESPACE
 
 #endif

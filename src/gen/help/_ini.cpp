@@ -4,6 +4,8 @@
 #include "_n_methods.h"
 #include "_ini2.h"
 
+QT_BEGIN_NAMESPACE
+
 NumList LHelpContentModel::overrideIds = NumList() << 54 << 55 << 61 << 67 << 70;
 NumList LHelpContentWidget::overrideIds = NumList();
 NumList LHelpEngineCore::overrideIds = NumList();
@@ -64,3 +66,5 @@ NumList* overrideFunctions(const QByteArray& name) {
             case 71: ids = &LHelpContentItem::overrideIds; break;
             case 73: ids = &LHelpSearchQuery::overrideIds; break; }}
     return ids; }
+
+QT_END_NAMESPACE

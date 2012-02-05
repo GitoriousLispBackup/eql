@@ -3,6 +3,10 @@
 
 #include <QtGui>
 
+QT_BEGIN_NAMESPACE
+
 void ini2() {}
+
+QT_END_NAMESPACE
 
 #endif

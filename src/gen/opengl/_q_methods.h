@@ -8,6 +8,8 @@
 #include <QtGui>
 #include <QtOpenGL>
 
+QT_BEGIN_NAMESPACE
+
 class Q63 : public Q127 { // QGLShader
     Q_OBJECT
 public:
@@ -190,5 +192,7 @@ public:
     Q_INVOKABLE void MsetAutoBufferSwap(QGLWidget* o, bool x1) { ((LGLWidget*)o)->setAutoBufferSwap(x1); }
     Q_INVOKABLE QImage SconvertToGLFormat(const QImage& x1) { return QGLWidget::convertToGLFormat(x1); }
 };
+
+QT_END_NAMESPACE
 
 #endif

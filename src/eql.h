@@ -1,4 +1,4 @@
-// copyright (c) 2010-2011 Polos Ruetz
+// copyright (c) 2010-2012 Polos Ruetz
 
 #ifndef EQL_H
 #define EQL_H
@@ -9,6 +9,8 @@
 #include <QCoreApplication>
 #include <ecl/ecl.h>
 #include "eql_global.h"
+
+QT_BEGIN_NAMESPACE
 
 #define QSLOT(x)   "1"#x
 #define QSIGNAL(x) "2"#x
@@ -37,5 +39,7 @@ public Q_SLOTS:
     void singleShot();
     void exitEventLoop() { eventLoop->exit(); }
 };
+
+QT_END_NAMESPACE
 
 #endif
