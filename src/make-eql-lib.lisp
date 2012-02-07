@@ -8,6 +8,9 @@
 (unless (find-package :c)
   (make-package :c))
 
+#+msvc
+(setf c::*compile-in-constants* t)
+
 (defparameter *lisp-files* (list #-win32 "serve-event" "x" "package" "ini" "enums1" "enums2"))
 
 (dolist (f *lisp-files*)

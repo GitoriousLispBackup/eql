@@ -543,7 +543,7 @@ TO_QT_TYPE_PTR2(QIcon, qicon)
 TO_QT_TYPE_PTR2(QImage, qimage)
 TO_QT_TYPE_PTR2(QKeySequence, qkeysequence)
 TO_QT_TYPE_PTR2(QLocale, qlocale)
-TO_QT_TYPE_PTR(QMatrix, qmatrix)
+TO_QT_TYPE_PTR2(QMatrix, qmatrix)
 TO_QT_TYPE_PTR(QModelIndex, qmodelindex)
 TO_QT_TYPE_PTR(QPainterPath, qpainterpath)
 TO_QT_TYPE_PTR2(QPalette, qpalette)
@@ -560,7 +560,7 @@ TO_QT_TYPE_PTR2(QTextLength, qtextlength)
 TO_QT_TYPE_PTR(QTextLine, qtextline)
 TO_QT_TYPE_PTR(QTextOption, qtextoption)
 TO_QT_TYPE_PTR2(QTime, qtime)
-TO_QT_TYPE_PTR(QTransform, qtransform)
+TO_QT_TYPE_PTR2(QTransform, qtransform)
 TO_QT_TYPE_PTR2(QUrl, qurl)
 TO_QT_TYPE_PTR(QVariant, qvariant)
 
@@ -636,6 +636,7 @@ QVariant toQVariant(cl_object l_obj, const char* s_type, int type) {
         case QVariant::LineF:       var = toQLineF(l_obj); break;
         case QVariant::Locale:      var = toQLocale(l_obj); break;
         case QVariant::LongLong:    var = toInt<qlonglong>(l_obj); break;
+        case QVariant::Matrix:      var = toQMatrix(l_obj); break;
         case QVariant::Palette:     var = toQPalette(l_obj); break;
         case QVariant::Pen:         var = toQPen(l_obj); break;
         case QVariant::Pixmap:      var = toQPixmap(l_obj); break;
@@ -652,6 +653,7 @@ QVariant toQVariant(cl_object l_obj, const char* s_type, int type) {
         case QVariant::TextFormat:  var = toQTextFormat(l_obj); break;
         case QVariant::TextLength:  var = toQTextLength(l_obj); break;
         case QVariant::Time:        var = toQTime(l_obj); break;
+        case QVariant::Transform:   var = toQTransform(l_obj); break;
         case QVariant::Url:         var = toQUrl(l_obj); break;
         case QVariant::UInt:        var = toUInt(l_obj); break;
         case QVariant::ULongLong:   var = toUInt<qulonglong>(l_obj); break; }
