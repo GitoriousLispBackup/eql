@@ -294,15 +294,16 @@
             all))
     (sort all 'string<)))
 
-(let (pkg)
+(let (package)
   (defun show-package-name ()
-    (unless pkg
+    (unless package
       (in-package :gui))
     (let ((name (package-name *package*)))
       (qset *package-name* "text" (format nil "~A>" name))
-      (when (string/= name pkg)
-        (setf pkg name)
-        (qfun *completer-list* "setStringList" (all-symbols))))))
+      (when (string/= name package)
+        (let ((*standard-output* nil)) ; suppress output to console (slow on Windows)
+          (qfun *completer-list* "setStringList" (all-symbols)))
+        (setf package name)))))
 
 (defun eval-edit ()
   (let ((color "darkorange"))

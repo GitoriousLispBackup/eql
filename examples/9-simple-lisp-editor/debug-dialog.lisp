@@ -37,7 +37,7 @@
         ":exit")))
 
 (defun set-color (widget role color)
-  (let ((pal (qget widget "palette")))
+  (qlet ((pal (qget widget "palette")))
     (qfun pal "setColor(QPalette::ColorRole,QColor)" role color)
     (qset widget "palette" pal)))
 

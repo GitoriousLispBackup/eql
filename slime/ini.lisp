@@ -1,3 +1,5 @@
+;;; Please delete *.fas file after upgrading ECL
+
 (let ((file (eql::in-slime-ini "process-qt-events")))
   (flet ((file* (x)
            (format nil "~A.~A" file x)))

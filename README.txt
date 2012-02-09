@@ -8,7 +8,7 @@
 TESTED WITH
 ===========
 
-* ECL from CVS (2010-10-29), ECL 11.1.1
+* ECL from CVS (2010-10-29), ECL 11.1.1, ECL 12.2.1
 * Qt4.6, Qt4.7
 * Linux, OSX 10.4, Windows XP & 7 (MSVC)
 
@@ -20,6 +20,10 @@ REQUIREMENTS
 * ECL >= 10.4 Unicode (./configure --enable-unicode)
 * Qt  >= 4.6 http://qt.nokia.com/
 * Slime from CVS (e.g. 2010-06-01)
+
+Slime note: in my experience, latest ECL and latest Slime sometimes don't
+work together; Slime version from 2010-06-01 has been tested with both
+ECL 11.11.1 and ECL 12.2.1
 
 
 
@@ -129,12 +133,3 @@ LICENSE
 =======
 
 LGPL
-
-
-
-SUPPORT
-=======
-
-For eventual professional support, please see SUPPORT.txt.
-
-
