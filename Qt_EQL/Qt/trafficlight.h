@@ -10,8 +10,6 @@
 
 #include "eql_fun.h" // [EQL]
 
-QT_BEGIN_NAMESPACE
-
 class LightWidget : public QWidget
 {
     Q_OBJECT
@@ -134,7 +132,5 @@ private:
     QStateMachine *machine;
 
 };
-
-QT_END_NAMESPACE
 
 #endif

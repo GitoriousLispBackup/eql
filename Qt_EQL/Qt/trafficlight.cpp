@@ -34,3 +34,4 @@ void LightWidget::paintEvent(QPaintEvent *)
     painter.drawEllipse(0, 0, width(), height());
     */
 }
+

@@ -7,6 +7,8 @@
 #include "ecl_fun.h"
 #include "eql.h"
 
+QT_BEGIN_NAMESPACE
+
 #define PUSH_ARG(x, list) list = CONS(to_lisp_arg(qMakePair(QByteArray(x.name()), x.data())), list)
 
 static QHash<QByteArray, void*> lisp_functions;
@@ -65,3 +67,6 @@ QVariant eql_fun(const QByteArray& fun,
                  QGenericArgument a1, QGenericArgument a2, QGenericArgument a3, QGenericArgument a4, QGenericArgument a5,
                  QGenericArgument a6, QGenericArgument a7, QGenericArgument a8, QGenericArgument a9, QGenericArgument a10) {
     return eql_fun2(fun, ret_type, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10); }
+
+QT_END_NAMESPACE
+
