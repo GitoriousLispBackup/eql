@@ -64,7 +64,11 @@ void EQL::exec(const QStringList& args) {
         forms << "(si::qtop-level)"; }
 #endif
     if(arguments.count() > 1) {
-        forms.prepend(QString("(load \"%1\")").arg(arguments.at(1))); }
+        QString fileName(arguments.at(1));
+#ifdef Q_OS_WIN
+        fileName.replace('/', '\\');
+#endif
+        forms.prepend(QString("(load \"%1\")").arg(fileName)); }
     QString code;
     if(forms.length() == 1) {
         code = forms.first(); }
