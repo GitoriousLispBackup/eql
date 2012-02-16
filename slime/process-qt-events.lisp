@@ -1,10 +1,7 @@
-;;; N.B: Works only with Slime versions <= 2011-11-01
-;;; (because it's a hack, well working, but still a hack)
+;;; Please see ../doc/Slime.htm
 ;;;
-;;; Get latest working Slime with:
-;;; cvs -d :pserver:anonymous:anonymous@common-lisp.net:/project/slime/cvsroot co -D 2011-11-01 slime
-;;;
-;;; Code taken from "swank-backend.lisp"
+;;; Original code taken from "swank-backend.lisp"
+;;; (this is a hack, well working, but still a hack)
 
 (in-package :swank-backend)
 

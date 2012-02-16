@@ -12,6 +12,9 @@ code, pre { color: mediumblue; }
 </head>
 <body>
 <h2>Windows Easy Guide</h2>
+<p><i>Please note: my Windows + ECL + <b>Slime</b> experience is a bit
+    frustrating: the only versions I got to work with EQL are:
+<br>ECL 11.1.1, Slime 2010-06-01, Windows XP (MSVC)</i></p>
 <p>
 <i>
 Please see <a href="http://password-taxi.at/wcms/ftp//p/password-taxi.at/uploads/eql-win32.zip">eql-win32.zip</a> for a simple, ready-to-use environment.<br>
@@ -70,9 +73,9 @@ Make sure all of the following are in your <code>Path</code> environment variabl
 </ul>
 <p>Get <a href="http://common-lisp.net/project/slime/">Slime</a>. Use the
   following command to get a working/tested version (you'll need a cvs client):
-<br><code>cvs -d :pserver:anonymous:anonymous@common-lisp.net:/project/slime/cvsroot co -D 2011-11-01 slime</code>
+<br><code>cvs -d :pserver:anonymous:anonymous@common-lisp.net:/project/slime/cvsroot co -D 2010-06-01 slime</code>
 <ul>
-<li>Unpack it to <code>C:\emacs\slime</code>.
+<li>Put it here: <code>C:\emacs\slime</code>.
 <li>Open your <code>C:\emacs\slime\swank-loader.lisp</code>, and insert the following lines at the top of the file (important: choose a path with <b>no spaces</b>). 
 <pre>
 (make-package :swank-loader)

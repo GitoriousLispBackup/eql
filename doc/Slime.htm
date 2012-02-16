@@ -6,7 +6,10 @@
 <ul>
 <li>Please get this version from CVS (as later versions don't currently work
   with the integration provided by EQL):
-<br><code>cvs -d :pserver:anonymous:anonymous@common-lisp.net:/project/slime/cvsroot co -D 2011-11-01 slime</code>
+<br><b>Unix, OSX</b>: <code>cvs -d :pserver:anonymous:anonymous@common-lisp.net:/project/slime/cvsroot co -D 2011-11-01 slime</code>
+<br><b>Windows:</b><code>   cvs -d :pserver:anonymous:anonymous@common-lisp.net:/project/slime/cvsroot co -D 2010-06-01 slime</code>
+<br>On Windows my experience is a bit frustrating: the only working solution for me is:
+<br>ECL 11.1.1 + Slime 2010-06-01 + Windows XP (MSVC)
 <li>In your <code>.emacs</code> file, point your Lisp implementation to
   the <code>eql</code> executable, adding the command line
   option <code>-slime</code>:
