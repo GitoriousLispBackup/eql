@@ -28,7 +28,7 @@ Included you find ECL, EQL, Qt (except sources), and a compiled Slime.
 <tr><td>Slime</td><td><code>C:\emacs\slime</code></td></tr>
 <tr><td>EQL</td><td><code>C:\eql</code></td></tr>
 </table>
-<p>Install the free <a href="http://www.microsoft.com/express/Downloads/#Visual_Studio_2008_Express_Downloads">Visual C++ 2008 Express Edition</a> (you may uncheck both of SQL Server and .NET, as you probably don't need them).</p>
+<p>Install the free <a href="http://www.microsoft.com/express/Downloads/#Visual_Studio_2008_Express_Downloads">Visual C++ 2008 Express Edition</a></p>
 <p>Get the latest <a href="http://sourceforge.net/projects/ecls/">ECL</a> (or try ECL HEAD, will probably work too).
 <ul>
 <li>After unpacking it to <code>C:\ecl</code>, edit the <code>C:\ecl\msvc\Makefile</code> (not needed for ECL >= 12.2.1)
@@ -68,10 +68,9 @@ Make sure all of the following are in your <code>Path</code> environment variabl
 <li>Unpack it to <code>C:\emacs</code>.
 <li>To launch it, run <code>C:\emacs\bin\runemacs.exe</code>.
 </ul>
-<p>Get <a href="http://common-lisp.net/project/slime/">Slime</a>. Choose
-  the <b>cvs snapshot</b> (slime-current.tgz)</a>.
-<br><b>Note:</b> If the current version doesn't work: Slime from 2010-06-01 is known to
-  work with both ECL 11.1.1 and ECL 12.2.1
+<p>Get <a href="http://common-lisp.net/project/slime/">Slime</a>. Use the
+  following command to get a working/tested version (you'll need a cvs client):
+<br><code>cvs -d :pserver:anonymous:anonymous@common-lisp.net:/project/slime/cvsroot co -D 2011-11-01 slime</code>
 <ul>
 <li>Unpack it to <code>C:\emacs\slime</code>.
 <li>Open your <code>C:\emacs\slime\swank-loader.lisp</code>, and insert the following lines at the top of the file (important: choose a path with <b>no spaces</b>). 

@@ -19,11 +19,12 @@ REQUIREMENTS
 
 * ECL >= 10.4 Unicode (./configure --enable-unicode)
 * Qt  >= 4.6 http://qt.nokia.com/
-* Slime from CVS (e.g. 2010-06-01)
+* Slime from CVS (2010-06-01, 2011-11-01)
 
-Slime note: in my experience, latest ECL and latest Slime sometimes don't
-work together; Slime version from 2010-06-01 has been tested with both
-ECL 11.11.1 and ECL 12.2.1
+N.B. Slime: if you want to use the Slime integration provided by EQL,
+please get this Slime version from CVS (later versions don't currently work):
+
+cvs -d :pserver:anonymous:anonymous@common-lisp.net:/project/slime/cvsroot co -D 2011-11-01 slime
 
 
 

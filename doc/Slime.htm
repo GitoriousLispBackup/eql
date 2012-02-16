@@ -4,6 +4,9 @@
 </head>
 <h2>Slime</h2>
 <ul>
+<li>Please get this version from CVS (as later versions don't currently work
+  with the integration provided by EQL):
+<br><code>cvs -d :pserver:anonymous:anonymous@common-lisp.net:/project/slime/cvsroot co -D 2011-11-01 slime</code>
 <li>In your <code>.emacs</code> file, point your Lisp implementation to
   the <code>eql</code> executable, adding the command line
   option <code>-slime</code>:
@@ -13,17 +16,4 @@
 <li>For help in Slime mode, see the <code>qapropos</code> and <code>qgui</code> functions.
 <li>Qt event processing is near-to-native, see <code>eql/slime/process-qt-events.lisp</code>.
 </ul>
-<hr>
-<p><b>Known problem</b> (experienced in <b>OSX</b> only)</p>
-<p>
-Since there may (at least on some OS) happen situations where Emacs/Slime
-freeze (experienced randomly after hitting the <code>Tab</code> key), you'll find an
-"Emergency Hook" window (minimized on startup).
-</p>
-<p>
-So, if freezing happens, bring back the minimized window, and take some
-action, e.g. click on the <code>(break)</code> button: this will cause
-Emacs/Slime to respond again.
-</p>
-<small>It would be nice if someone could help me track down this issue...</small>
 </html>

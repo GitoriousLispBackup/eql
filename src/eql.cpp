@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "12.2.1"; // 2012-02-06
+const char EQL::version[] = "12.2.2"; // 2012-02-16
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
@@ -66,7 +66,7 @@ void EQL::exec(const QStringList& args) {
     if(arguments.count() > 1) {
         QString fileName(arguments.at(1));
 #ifdef Q_OS_WIN
-        fileName.replace('/', '\\');
+        fileName.replace('\\', '/');
 #endif
         forms.prepend(QString("(load \"%1\")").arg(fileName)); }
     QString code;

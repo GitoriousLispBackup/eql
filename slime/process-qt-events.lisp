@@ -1,34 +1,27 @@
-;;; Code taken from "swank-ecl.lisp"; see [EQL] for modifications
+;;; N.B: Works only with Slime versions <= 2011-11-01
+;;; (because it's a hack, well working, but still a hack)
+;;;
+;;; Get latest working Slime with:
+;;; cvs -d :pserver:anonymous:anonymous@common-lisp.net:/project/slime/cvsroot co -D 2011-11-01 slime
+;;;
+;;; Code taken from "swank-backend.lisp"
 
 (in-package :swank-backend)
 
-;;; Instead of busy waiting with communication-style NIL, use select()
-;;; on the sockets' streams.
-#+serve-event
-(progn
-  (defun poll-streams (streams timeout)
-    (let* ((serve-event::*descriptor-handlers*
-            (copy-list serve-event::*descriptor-handlers*))
-           (active-fds '())
-           (fd-stream-alist
-            (loop for s in streams
-                  for fd = (socket-fd s)
-                  collect (cons fd s)
-                  do (serve-event:add-fd-handler fd :input
-                                                 #'(lambda (fd)
-                                                     (push fd active-fds))))))
-      (serve-event:serve-event timeout)
-      (loop for fd in active-fds collect (cdr (assoc fd fd-stream-alist)))))
+(defimplementation wait-for-input (streams &optional timeout)
+  (if (null (cdr streams)) 
+      (wait-for-one-stream (car streams) timeout)
+      (wait-for-streams streams timeout)))
 
-  (defimplementation wait-for-input (streams &optional timeout)
-    (assert (member timeout '(nil t)))
-    (loop
-      (cond ((check-slime-interrupts) (return :interrupt))
-            (timeout (return (poll-streams streams 0)))
-            (t
-             (eql:qexec 200) ;                            [EQL]
-             (when-let (ready (poll-streams streams 0)) ; [EQL] (0 instead of 0.2)
-               (return ready))))))  
+(defun wait-for-streams (streams timeout)
+  (loop
+   (when (check-slime-interrupts) (return :interrupt))
+   (let ((ready (remove-if-not #'stream-readable-p streams)))
+     (when ready (return ready)))
+   (when timeout (return nil))
+   (eql:qexec 100))) ; instead of (sleep 0.1)
 
-) ; #+serve-event (progn ...
+;; optional: emergency hook to Emacs/Slime: in case they freeze, we still can send (break) etc.
+;;#+darwin
+;;(load (eql::in-slime-ini "hook"))
 

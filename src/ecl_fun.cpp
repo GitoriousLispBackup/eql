@@ -95,6 +95,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object((char*)"qenum"),                (cl_objectfn_fixed)qenum,                    2);
     cl_def_c_function(c_string_to_object((char*)"qescape"),              (cl_objectfn_fixed)qescape,                  1);
     cl_def_c_function(c_string_to_object((char*)"%qexec"),               (cl_objectfn_fixed)qexec2,                   1);
+    cl_def_c_function(c_string_to_object((char*)"qexit"),                (cl_objectfn_fixed)qexit,                    0);
     cl_def_c_function(c_string_to_object((char*)"qfind-child"),          (cl_objectfn_fixed)qfind_child,              2);
     cl_def_c_function(c_string_to_object((char*)"qfrom-utf8"),           (cl_objectfn_fixed)qfrom_utf8,               1);
     cl_def_c_function(c_string_to_object((char*)"qid"),                  (cl_objectfn_fixed)qid,                      1);
@@ -2126,6 +2127,16 @@ cl_object qexec2(cl_object l_milliseconds) {
         return l_milliseconds; }
     QApplication::exec();
     return Ct; }
+
+cl_object qexit() {
+    /// args: ()
+    /// Calls <code>QEventLoop::exit()</code>, in order to exit event processing after a call to <code>qexec</code> with a timeout.<br>Returns <code>T</code> if the event loop has effectively been exited.
+    ecl_process_env()->nvalues = 1;
+    if(EQL::eventLoop) {
+        if(EQL::eventLoop->isRunning()) {
+            EQL::eventLoop->exit();
+            return Ct; }}
+    return Cnil; }
 
 cl_object qstatic_meta_object(cl_object l_class) {
     /// args: (class-name)

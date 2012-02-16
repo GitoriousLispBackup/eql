@@ -23,6 +23,7 @@
    #:qescape
    #:qevents
    #:qexec
+   #:qexit
    #:qfind-child
    #:qfrom-utf8
    #:qfun
