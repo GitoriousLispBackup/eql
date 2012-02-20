@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "12.2.2"; // 2012-02-16
+const char EQL::version[] = "12.2.3"; // 2012-02-20
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
@@ -17,6 +17,7 @@ static void eval(const char* lisp_code) {
 extern "C" void ini_EQL(cl_object);
 
 EQL::EQL() : QObject(), single_shot_fun(0) {
+    cl_boot(1, QCoreApplication::argv());
     iniCLFunctions();
     LObjects::ini(this);
     read_VV(OBJNULL, ini_EQL); } // see src/make-eql-lib.lisp
@@ -89,7 +90,7 @@ void EQL::exec(QWidget* widget, const QString& lispFile, const QString& slimeIni
     // see Qt_EQL example
     eval("(progn"
          "  (in-package :eql)"
-         "  (defvar *slime-mode* nil)"
+         "  (defparameter *slime-mode* nil)"
          "  (export '*slime-mode*))");
     QStringList forms;
     if(!slimeIniPath.isEmpty()) {
@@ -97,7 +98,7 @@ void EQL::exec(QWidget* widget, const QString& lispFile, const QString& slimeIni
         forms << QString("(eql::set-slime-ini \"%1\")").arg(slimeIniPath)
               << QString("(setf eql:*slime-mode* t)"); }
     forms << QString("(set-home \"%1\")").arg(home())
-          << QString("(defvar *qt-main* (qt-object %1 0 (qid \"%2\")))")
+          << QString("(defparameter *qt-main* (qt-object %1 0 (qid \"%2\")))")
                      .arg((ulong)widget)
                      .arg(QString(LObjects::vanillaQtSuperClassName(widget->metaObject())))
           << QString("(export '*qt-main*)")

@@ -7,7 +7,7 @@
 
 (in-package :wiggly-widget)
 
-(defconstant +sinus+ #(0 38 71 92 100 92 71 38 0 -38 -71 -92 -100 -92 -71 -38))
+(defvar *sinus* #(0 38 71 92 100 92 71 38 0 -38 -71 -92 -100 -92 -71 -38))
 
 (defvar *wiggly* (qnew "QWidget" "autoFillBackground" t))
 (defvar *edit*   (qnew "QLineEdit" "alignment" |Qt.AlignCenter|))
@@ -30,7 +30,7 @@
     (x:do-with (qoverride *wiggly*)
       ("paintEvent(QPaintEvent*)" 'paint)
       ("timerEvent(QTimerEvent*)" 'timeout))
-    (qset *edit* "text" "EQL - Embedded Qt Lisp")
+    (qset *edit* "text" "= AMOR = ROMA =")
     (x:do-with (qfun dlg)
       "show" "raise")))
 
@@ -53,7 +53,7 @@
           (x:do-with (qfun painter)
             ("setPen(QPen)" pen)
             ("drawText(QPoint,QString)" (list (floor x)
-                                              (floor (- y (/ (* h (svref +sinus+ ix)) 400))))
+                                              (floor (- y (/ (* h (svref *sinus* ix)) 400))))
                                         (string ch)))
           (incf x (qfun metrics "width(QChar)" ch)))))))
 

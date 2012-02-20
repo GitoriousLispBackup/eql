@@ -90,6 +90,10 @@
 <p>Convenience function to call <code>QApplication::exec()</code>.<br>Optionally pass the time in milliseconds after which <code>QEventLoop::exit()</code> will be called.</p>
 </p><br>
 <p>
+<b>QEXIT ()</b>
+<p>Calls <code>QEventLoop::exit()</code>, in order to exit event processing after a call to <code>qexec</code> with a timeout.<br>Returns <code>T</code> if the event loop has effectively been exited.</p>
+</p><br>
+<p>
 <b>QFIND-CHILD (object name)</b>
 <p>Calls <code>qFindChild&lt;QObject*&gt;()</code>.<br>Can be used to get the child objects of any Qt object (typically from a UI, see <code>qload-ui</code>), identified by <code>objectName</code>.</p>
 <pre>

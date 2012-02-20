@@ -7,7 +7,6 @@
 
 int main(int argc, char** argv) {
 
-    cl_boot(1, argv);
     QApplication qapp(argc, argv);
 
     QTextCodec* utf8 = QTextCodec::codecForName("UTF-8");

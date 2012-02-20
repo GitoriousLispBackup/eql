@@ -81,7 +81,8 @@ static const int T_QVector_qreal =                    qRegisterMetaType<QVector<
 
 void iniCLFunctions() {
     cl_object eql(make_simple_base_string((char*)"EQL"));
-    cl_make_package(1, eql);
+    if(cl_find_package(eql) == Cnil) {
+        cl_make_package(1, eql); }
     si_select_package(eql);
     cl_def_c_function(c_string_to_object((char*)"qadd-event-filter"),    (cl_objectfn_fixed)qadd_event_filter,        3);
     cl_def_c_function(c_string_to_object((char*)"%qapropos"),            (cl_objectfn_fixed)qapropos2,                3);

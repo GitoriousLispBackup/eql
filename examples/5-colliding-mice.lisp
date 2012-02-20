@@ -1,6 +1,11 @@
 ;;; This is a port of the Qt Example "Colliding Mice"
 ;;;
-;;; Note: seldom crashes (OSX 10.4, Qt 4.6.2) are not related to this tool, as they happen even in the original Qt example.
+;;; Note (OSX only):
+;;;
+;;; Seldom crashes (OSX 10.4, Qt 4.6.2) are not related to this tool, as they happen even in the original Qt example.
+;;;
+;;; The good news: if a seg.fault happens (in C++), just choose the restart option "Abort" (below "Continue"),
+;;; and the application will continue to run.
 
 (defpackage :colliding-mice
   (:use :common-lisp :eql)
