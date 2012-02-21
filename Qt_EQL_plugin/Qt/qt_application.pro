@@ -1,6 +1,5 @@
 TEMPLATE     = app
 CONFIG      += release
-LIBS        += -LQt
 TARGET       = qt_application
 DESTDIR      = ../
 OBJECTS_DIR  = ./tmp/

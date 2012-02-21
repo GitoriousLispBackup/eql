@@ -15,8 +15,8 @@ class QWidget;
 
 extern "C"
 {
-    LIB_EXPORT void onLoadPlugin(QWidget*);
-    LIB_EXPORT void onUnloadPlugin();
+    LIB_EXPORT void onShowPlugin(QWidget*);
+    LIB_EXPORT void onHidePlugin();
 }
 
 QT_END_NAMESPACE

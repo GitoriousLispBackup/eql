@@ -79,6 +79,7 @@ public:
     static QHash<quint64, void*> override_lisp_functions;
 
     static void ini(EQL*);
+    static void cleanUp();
     static uint unique() { return ++i_unique; }
     static void deleteNObject(int, void*, int = 0);
     static const QMetaObject* staticMetaObject(const QByteArray&, int n = -1);

@@ -2,7 +2,6 @@
 #define QT_APPLICATION_H
 
 #include <QMainWindow>
-#include <QLibrary>
 
 QT_BEGIN_NAMESPACE
 
@@ -13,12 +12,11 @@ class MainWindow : public QMainWindow
 public:
     MainWindow();
 
-    QLibrary plugin;
     QDockWidget* pluginWidget;
 
 public slots:
-    void loadPlugin();
-    void unloadPlugin();
+    void showPlugin();
+    void hidePlugin();
 };
 
 QT_END_NAMESPACE

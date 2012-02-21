@@ -1,9 +1,7 @@
 (in-package :eql)
 
-;;; N.B: Don't use DEFVAR, only use DEFPARAMETER (otherwise problems when re-loading the plugin)
-
-(defparameter *label* (qnew "QLabel" "text" "Enter Lisp expression and hit Return:"))
-(defparameter *edit*  (qnew "QLineEdit"))
+(defvar *label* (qnew "QLabel" "text" "Enter Lisp expression and hit Return:"))
+(defvar *edit*  (qnew "QLineEdit"))
 
 (defun ini ()
   (let* ((widget (qnew "QWidget"))
@@ -11,8 +9,7 @@
     (dolist (w (list *label* *edit*))
       (qfun layout "addWidget" w))
     (qfun *qt-main* "setWidget" widget)
-    (qconnect *edit* "returnPressed()" 'eval-edit)
-    (qfun *qt-main* "show")))
+    (qconnect *edit* "returnPressed()" 'eval-edit)))
 
 (defun eval-edit ()
   (qset *label* "text"

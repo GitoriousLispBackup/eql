@@ -844,45 +844,57 @@
                             class
                             n)))))
             (list "Q" "N")
-            (list *q-methods* *n-methods*)))
-    (dolist (module *modules*)
-      (format (module-stream module :ini) " }~%"))
-    (mapc (lambda (methods type)
-            (let ((i 0))
-              (dolist (obj methods)
-                (format s "~%        ~A_names[~S] = ~D;" type (class-name* obj) (incf i)))))
-          (list *q-methods* *n-methods*)
-          (list "q" "n"))
-    (let ((i 0))
-      (dolist (fun *override-functions*)
-        (incf i)
-        (format s "~%        override_function_ids[~S] = ~D;" fun i)))
-    (format s "~%        override_arg_types = new const char** [~D];" (length *override-arguments*))
-    (let ((i -1))
-      (mapc (lambda (args ret)
-              (incf i)
-              (format s "~%        { static const char* s[] = { ~S, ~A }; override_arg_types[~D] = s; }"
-                      ret
-                      (if args (format nil "~{~S, ~}0" args) "0")
-                      i))
-            *override-arguments*
-            *override-return-arguments*))
-    (let ((max (length *override-functions*)))
-      (format s "~%        qNames = q_names.keys();~
-                 ~%        nNames = n_names.keys(); }}~
-                 ~%~
-                 ~%void* LObjects::overrideFun(uint unique, int id) {~
-                 ~%    return override_lisp_functions.value(~D * (quint64)unique + id, 0); }~
-                 ~%~
-                 ~%void LObjects::setOverrideFun(uint unique, int id, void* fun) {~
-                 ~%    override_lisp_functions[~D * (quint64)unique + id] = fun; }~
-                 ~%~
-                 ~%const QMetaObject* LObjects::staticMetaObject(const QByteArray& name, int n) {~
-                 ~%    if(n == -1) {~
-                 ~%        n = LObjects::q_names.value(name); }~
-                 ~%    const QMetaObject* m = 0;~
-                 ~%    switch(n) {"
-              max max))
+            (list *q-methods* *n-methods*))
+      (dolist (module *modules*)
+        (format (module-stream module :ini) " }~%"))
+      (mapc (lambda (methods type)
+              (let ((i 0))
+                (dolist (obj methods)
+                  (format s "~%        ~A_names[~S] = ~D;" type (class-name* obj) (incf i)))))
+            (list *q-methods* *n-methods*)
+            (list "q" "n"))
+      (let ((i 0))
+        (dolist (fun *override-functions*)
+          (incf i)
+          (format s "~%        override_function_ids[~S] = ~D;" fun i)))
+      (format s "~%        override_arg_types = new const char** [~D];" (length *override-arguments*))
+      (let ((i -1))
+        (mapc (lambda (args ret)
+                (incf i)
+                (format s "~%        { static const char* s[] = { ~S, ~A }; override_arg_types[~D] = s; }"
+                        ret
+                        (if args (format nil "~{~S, ~}0" args) "0")
+                        i))
+              *override-arguments*
+              *override-return-arguments*))
+      (let ((max (length *override-functions*)))
+        (format s "~%        qNames = q_names.keys();~
+                   ~%        nNames = n_names.keys(); }}~
+                   ~%~
+                   ~%void LObjects::cleanUp() {~
+                   ~%    delete EQL::eventLoop;~
+                   ~%    delete[] override_arg_types;~
+                   ~%    for(int i = ~D; i + 1; --i) { delete N[i]; }~
+                   ~%    for(int i = ~D; i + 1; --i) { delete Q[i]; }~
+                   ~%    delete[] N;~
+                   ~%    delete[] Q;~
+                   ~%    delete dynObject; }~
+                   ~%~
+                   ~%void* LObjects::overrideFun(uint unique, int id) {~
+                   ~%    return override_lisp_functions.value(~D * (quint64)unique + id, 0); }~
+                   ~%~
+                   ~%void LObjects::setOverrideFun(uint unique, int id, void* fun) {~
+                   ~%    override_lisp_functions[~D * (quint64)unique + id] = fun; }~
+                   ~%~
+                   ~%const QMetaObject* LObjects::staticMetaObject(const QByteArray& name, int n) {~
+                   ~%    if(n == -1) {~
+                   ~%        n = LObjects::q_names.value(name); }~
+                   ~%    const QMetaObject* m = 0;~
+                   ~%    switch(n) {"
+                (1- len-n)
+                (1- len-q)
+                max
+                max)))
     (dolist (module *modules*)
       (format (module-stream module :ini) "~%const QMetaObject* staticMetaObject(int n) {~
                                            ~%    const QMetaObject* m = 0;~

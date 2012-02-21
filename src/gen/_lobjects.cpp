@@ -2126,6 +2126,15 @@ void LObjects::ini(EQL* e) {
         qNames = q_names.keys();
         nNames = n_names.keys(); }}
 
+void LObjects::cleanUp() {
+    delete EQL::eventLoop;
+    delete[] override_arg_types;
+    for(int i = 203; i + 1; --i) { delete N[i]; }
+    for(int i = 223; i + 1; --i) { delete Q[i]; }
+    delete[] N;
+    delete[] Q;
+    delete dynObject; }
+
 void* LObjects::overrideFun(uint unique, int id) {
     return override_lisp_functions.value(460 * (quint64)unique + id, 0); }
 

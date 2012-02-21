@@ -3,20 +3,17 @@
 
 QT_BEGIN_NAMESPACE
 
-static EQL* eql = 0;
-
-// Both function names are self-exlpaining
-
-void onLoadPlugin(QWidget* widget)
+void onShowPlugin(QWidget* widget)
 {
-    eql = new EQL;
-    eql->exec(widget, "ini.lisp");
+    static EQL* eql = 0;
+    if(!eql) {
+        eql = new EQL;
+        eql->exec(widget, "ini.lisp");
+    }
 }
 
-void onUnloadPlugin()
+void onHidePlugin()
 {
-    delete eql;
 }
 
 QT_END_NAMESPACE
-

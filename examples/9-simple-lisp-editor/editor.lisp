@@ -1086,7 +1086,7 @@
           nil))))
 
 (defun restart-server ()
-  (run-on-server "(qquit)" :restart)
+  (run-on-server "(eql:qq)" :restart)
   (qprocess-events)
   (sleep 1)
   (run-on-server ":reset" :restart))
