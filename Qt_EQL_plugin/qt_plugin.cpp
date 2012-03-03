@@ -8,7 +8,11 @@ QT_BEGIN_NAMESPACE
 
 void onShowPlugin(QWidget* widget)
 {
-    (new EQL)->exec(widget, "ini.lisp");
+    static EQL* eql = 0;
+    if(!eql) {
+        eql = new EQL;
+        eql->exec(widget, "ini.lisp");
+    }
 }
 
 void onHidePlugin()

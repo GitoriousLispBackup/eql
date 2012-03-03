@@ -1123,7 +1123,7 @@
          ("setTextColor" (case type
                            (:output "saddlebrown")
                            (:values "blue")
-                           (:trace  "dimgray")
+                           (:trace  "darkmagenta")
                            (:error  "red")
                            (t       "black")))
          ("insertPlainText" str))
