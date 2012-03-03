@@ -247,9 +247,10 @@
 </p><br>
 <p>
 <b>QSINGLE-SHOT (milliseconds function)</b>
-<p>Convenience function: a single shot timer for Lisp functions (using <code>QTimer::singleShot</code>). You can use only 1 at a time, so if you need real timers, use <code>QTimer</code> directly.</p>
+<p>A single shot timer similar to <code>QTimer::singleShot</code>.</p>
 <pre>
   (qsingle-shot 0 'on-qt-idle)
+  (let ((ms 500)) (qsingle-shot ms (lambda () (qmsg ms))))
 </pre>
 </p><br>
 <p>

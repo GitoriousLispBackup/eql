@@ -20,6 +20,7 @@ HEADERS += gen/_lobjects.h \
            eql_fun.h \
            qt_eql.h \
            dyn_object.h \
+           single_shot.h \
            eql_global.h \
            ecl_fun.h \
            extras.h \
@@ -28,6 +29,7 @@ HEADERS += gen/_lobjects.h \
 SOURCES += gen/_lobjects.cpp \
            qt_eql.cpp \
            dyn_object.cpp \
+           single_shot.cpp \
            ecl_fun.cpp \
            extras.cpp \
            eql.cpp

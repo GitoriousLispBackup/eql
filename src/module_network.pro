@@ -1,7 +1,7 @@
 QT          += network
 TEMPLATE    = lib
 CONFIG      += dll no_keywords uitools release
-LIBS        += -lecl -L.. -leql
+LIBS        += -L.. -leql
 TARGET      = eql_network
 DESTDIR     = ../
 OBJECTS_DIR = ./tmp/network/

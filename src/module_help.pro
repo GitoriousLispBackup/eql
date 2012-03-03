@@ -1,6 +1,6 @@
 TEMPLATE    = lib
 CONFIG      += help dll no_keywords uitools release
-LIBS        += -lecl -L.. -leql
+LIBS        += -L.. -leql
 TARGET      = eql_help
 DESTDIR     = ../
 OBJECTS_DIR = ./tmp/help/

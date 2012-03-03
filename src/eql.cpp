@@ -16,8 +16,9 @@ static void eval(const char* lisp_code) {
 
 extern "C" void ini_EQL(cl_object);
 
-EQL::EQL() : QObject(), single_shot_fun(0) {
-    cl_boot(1, QCoreApplication::argv());
+EQL::EQL() : QObject() {
+    if(!cl_booted) {
+        cl_boot(1, QCoreApplication::argv()); }
     iniCLFunctions();
     LObjects::ini(this);
     read_VV(OBJNULL, ini_EQL); } // see src/make-eql-lib.lisp
@@ -25,6 +26,10 @@ EQL::EQL() : QObject(), single_shot_fun(0) {
 EQL::~EQL() {
     LObjects::cleanUp();
     cl_shutdown(); }
+
+void EQL::ini(char** argv) {
+    cl_booted = true;
+    cl_boot(1, argv); }
 
 QString EQL::home() {
     static QString path;
@@ -35,13 +40,6 @@ QString EQL::home() {
 #endif
         path.append('/'); }
     return path; }
-
-void EQL::singleShot() {
-    if(single_shot_fun) {
-        CL_CATCH_ALL_BEGIN(ecl_process_env()) {
-            cl_funcall(1, (cl_object)single_shot_fun); }
-        CL_CATCH_ALL_END;
-        single_shot_fun = 0; }}
 
 void EQL::exec(const QStringList& args) {
     QStringList arguments(args);
@@ -113,6 +111,7 @@ void EQL::iniSlime() {
     initialize_slime = false;
     eval("(load (eql::in-slime-ini \"ini\"))"); }
 
+bool EQL::cl_booted = false;
 bool EQL::is_arg_return_value = false;
 bool EQL::initialize_slime = false;
 QEventLoop* EQL::eventLoop = 0;

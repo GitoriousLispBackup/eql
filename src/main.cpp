@@ -17,6 +17,8 @@ int catch_all_qexec() {
 
 int main(int argc, char** argv) {
 
+    EQL::ini(argv);
+
     QApplication qapp(argc, argv);
     QStringList args(QCoreApplication::arguments());
     if(args.contains("-h") || (args.contains("--help"))) {

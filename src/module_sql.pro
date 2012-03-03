@@ -1,7 +1,7 @@
 QT          += sql
 TEMPLATE    = lib
 CONFIG      += dll no_keywords uitools release
-LIBS        += -lecl -L.. -leql
+LIBS        += -L.. -leql
 TARGET      = eql_sql
 DESTDIR     = ../
 OBJECTS_DIR = ./tmp/sql/

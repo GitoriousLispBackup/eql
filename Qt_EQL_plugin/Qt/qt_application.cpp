@@ -38,14 +38,7 @@ void MainWindow::showPlugin()
     static bool loaded = false;
     if(!loaded) {
         loaded = true;
-        QString prefix, postfix;
-    #ifdef Q_OS_LINUX
-        prefix = "lib"; postfix = ".so.1";
-    #endif
-    #ifdef Q_OS_DARWIN
-        prefix = "lib"; postfix = ".1.dylib";
-    #endif
-        QLibrary plugin("./" + prefix + "qt_plugin" + postfix);
+        QLibrary plugin("./qt_plugin");
         onShowPlugin = (OnShowPlugin)plugin.resolve("onShowPlugin");
         onHidePlugin = (OnHidePlugin)plugin.resolve("onHidePlugin");
         pluginWidget = new QDockWidget(this);

@@ -1,7 +1,7 @@
 QT          += my
 TEMPLATE    = lib
 CONFIG      += dll no_keywords uitools release
-LIBS        += -lecl -L.. -leql
+LIBS        += -L.. -leql
 TARGET      = eql_my
 DESTDIR     = ../
 OBJECTS_DIR = ./tmp/my/

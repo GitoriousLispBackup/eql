@@ -3,6 +3,7 @@
 #include "ecl_fun.h"
 #include "eql.h"
 #include "dyn_object.h"
+#include "single_shot.h"
 #include "gen/_lobjects.h"
 #include <QLibrary>
 
@@ -2285,12 +2286,16 @@ cl_object qsuper_class_name(cl_object l_name) {
 
 cl_object qsingle_shot(cl_object l_msec, cl_object l_fun) {
     /// args: (milliseconds function)
-    /// Convenience function: a single shot timer for Lisp functions (using <code>QTimer::singleShot</code>). You can use only 1 at a time, so if you need real timers, use <code>QTimer</code> directly.
+    /// A single shot timer similar to <code>QTimer::singleShot</code>.
     ///     (qsingle-shot 0 'on-qt-idle)
+    ///     (let ((ms 500)) (qsingle-shot ms (lambda () (qmsg ms))))
     ecl_process_env()->nvalues = 1;
-    LObjects::eql->single_shot_fun = getLispFun(l_fun);
-    QTimer::singleShot(toInt(l_msec), LObjects::eql, QSLOT(singleShot()));
-    return Ct; }
+    void* fun = getLispFun(l_fun);
+    if(fun) {
+        SingleShot::start(toInt(l_msec), fun);
+        return l_msec; }
+    error_msg("QSINGLE-SHOT", LIST2(l_msec, l_fun));
+    return Cnil; }
 
 cl_object qok() {
     /// args: ()

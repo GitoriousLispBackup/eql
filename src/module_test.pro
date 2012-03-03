@@ -1,6 +1,6 @@
 TEMPLATE    = lib
 CONFIG      += dll no_keywords uitools release qtestlib
-LIBS        += -lecl -L.. -leql
+LIBS        += -L.. -leql
 TARGET      = eql_test
 DESTDIR     = ../
 OBJECTS_DIR = ./tmp/test/

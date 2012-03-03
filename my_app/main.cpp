@@ -16,6 +16,8 @@ int catch_all_qexec() {
 
 int main(int argc, char** argv) {
 
+    EQL::ini(argv);
+
     QApplication qapp(argc, argv);
 
     QTextCodec* utf8 = QTextCodec::codecForName("UTF-8");

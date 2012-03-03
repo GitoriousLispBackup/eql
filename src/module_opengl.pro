@@ -1,7 +1,7 @@
 QT          += opengl
 TEMPLATE    = lib
 CONFIG      += dll no_keywords uitools release
-LIBS        += -lecl -L.. -leql
+LIBS        += -L.. -leql
 TARGET      = eql_opengl
 DESTDIR     = ../
 OBJECTS_DIR = ./tmp/opengl/

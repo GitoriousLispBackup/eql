@@ -13,8 +13,7 @@ QT_BEGIN_NAMESPACE
 
 class QWidget;
 
-extern "C"
-{
+extern "C" {
     LIB_EXPORT void onShowPlugin(QWidget*);
     LIB_EXPORT void onHidePlugin();
 }

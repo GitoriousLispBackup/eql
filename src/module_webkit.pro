@@ -1,7 +1,7 @@
 QT          += webkit
 TEMPLATE    = lib
 CONFIG      += dll no_keywords uitools release
-LIBS        += -lecl -L.. -leql
+LIBS        += -L.. -leql
 TARGET      = eql_webkit
 DESTDIR     = ../
 OBJECTS_DIR = ./tmp/webkit/

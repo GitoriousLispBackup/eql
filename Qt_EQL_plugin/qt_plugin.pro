@@ -1,7 +1,7 @@
 TEMPLATE     = lib
-CONFIG      += dll no_keywords release
+CONFIG      += dll no_keywords uitools release
 INCLUDEPATH += ../src
-LIBS        += -lecl -L.. -leql
+LIBS        += -L.. -leql
 TARGET       = qt_plugin
 DESTDIR      = ./
 OBJECTS_DIR  = ./tmp/
