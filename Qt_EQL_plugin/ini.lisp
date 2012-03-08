@@ -37,7 +37,7 @@
     (unless loaded
       (setf loaded t)
       (load "../src/lisp/qselect.lisp"))
-    (%qselect (lambda (widget) (qset *label* "text" (format nil "~A (see qsel:*q*)" widget))))))
+    (%qselect (lambda (widget) (qset *label* "text" (format nil "~A ; see qsel:*q*" widget))))))
 
 (defun set-data (data)
   "Example of using dynamic Qt properties for simple data exchange."

@@ -1,39 +1,24 @@
-// Copyright of "qtimer.h":
-
-/****************************************************************************
-** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
-** All rights reserved.
-** Contact: Nokia Corporation (qt-info@nokia.com)
-**
-** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 as published by the Free Software
-** Foundation and appearing in the file LICENSE.LGPL included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU Lesser General Public License version 2.1 requirements
-** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-****************************************************************************/
-
-// modified 2012 Polos Ruetz
+// copyright (c) 2012 Polos Ruetz ; idea from QTimer::singleShot()
 
 #ifndef SINGLE_SHOT_H
 #define SINGLE_SHOT_H
 
 #include <QObject>
+#include <ecl/ecl.h>
 
 QT_BEGIN_NAMESPACE
 
-class SingleShot : public QObject {
-    Q_OBJECT
-public:
-    SingleShot(int, void*);
-    ~SingleShot();
-
-    static void start(int, void*);
-
-    int timerId;
+struct SingleShot : public QObject { // C++ is simple an concise ;)
+    int id;
     void* function;
-    void timerEvent(QTimerEvent*);
+
+    SingleShot(int msec, void* fun) : id(startTimer(msec)), function(fun) {}
+
+    void timerEvent(QTimerEvent*) {
+        killTimer(id);
+        CL_CATCH_ALL_BEGIN(ecl_process_env()) {
+	    cl_funcall(1, (cl_object)function); } CL_CATCH_ALL_END;
+        delete this; }
 };
 
 QT_END_NAMESPACE

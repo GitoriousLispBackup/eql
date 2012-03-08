@@ -16,7 +16,7 @@ int catch_all_qexec() {
 
 int main(int argc, char** argv) {
 
-    EQL::ini(argv);
+    EQL::ini(argv); // best initialized here
 
     QApplication qapp(argc, argv);
 

@@ -54,7 +54,9 @@ void MainWindow::showPlugin()
 
 void MainWindow::hidePlugin()
 {
-    pluginWidget->hide();
+    if(pluginWidget) {
+        pluginWidget->hide();
+    }
 
     if(onHidePlugin) {
         onHidePlugin();

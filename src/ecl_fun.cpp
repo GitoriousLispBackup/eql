@@ -3,8 +3,9 @@
 #include "ecl_fun.h"
 #include "eql.h"
 #include "dyn_object.h"
-#include "single_shot.h"
 #include "gen/_lobjects.h"
+#include "ui_loader.h"
+#include "single_shot.h"
 #include <QLibrary>
 
 QT_BEGIN_NAMESPACE
@@ -126,45 +127,13 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object((char*)"qutf8"),                (cl_objectfn_fixed)qutf8,                    1);
     cl_def_c_function(c_string_to_object((char*)"qversion"),             (cl_objectfn_fixed)qversion,                 0); }
 
-
-
-// QtObject, QUiLoader methods
+// QtObject methods
 
 QByteArray QtObject::idToClassName(int id) {
     return (id > 0) ? LObjects::qNames.at(id - 1) : LObjects::nNames.at(-id - 1); }
 
 QByteArray QtObject::className() const {
     return id ? idToClassName(id) : QByteArray("?"); }
-
-class LUiLoader : public QUiLoader {
-public:
-    QWidget* createWidget(const QString& name, QWidget* par, const QString& objName) {
-        QWidget* w = 0;
-        int id = LObjects::q_names.value(name.toAscii(), -1);
-        if(id != -1) {
-            // qt_metacall to base constructor "C(uint)"
-            QObject* caller = LObjects::Q[id - 1];
-            const QMetaObject* mo = caller->metaObject();
-            int n = mo->indexOfMethod("C(uint)");
-            if(n != -1) {
-                QMetaMethod mm(mo->method(n));
-                void* args[] = { 0, 0 };
-                void* pointer = 0;
-                args[0] = &pointer; // return value
-                uint unique = LObjects::unique();
-                args[1] = &unique;
-                caller->qt_metacall(QMetaObject::InvokeMetaMethod, n, args);
-                if(pointer) {
-                    w = (QWidget*)pointer;
-                    if(par) {
-                        w->setParent(par); }
-                    w->setProperty("EQL.unique", unique);
-                    w->setObjectName(objName); }}
-            else {
-                // fallback
-                w = QUiLoader::createWidget(name, par, objName); }}
-        return w; }
-};
 
 
 
@@ -2162,7 +2131,7 @@ cl_object qload_ui(cl_object l_ui) {
     if(!ui.isEmpty()) {
         if(!ui.endsWith(".ui")) {
             ui.append(".ui"); }
-        LUiLoader loader;
+        UiLoader loader;
         QFile file(ui);
         if(file.open(QFile::ReadOnly)) {
             QWidget* w = loader.load(&file);
@@ -2292,7 +2261,7 @@ cl_object qsingle_shot(cl_object l_msec, cl_object l_fun) {
     ecl_process_env()->nvalues = 1;
     void* fun = getLispFun(l_fun);
     if(fun) {
-        SingleShot::start(toInt(l_msec), fun);
+        new SingleShot(toInt(l_msec), fun);
         return l_msec; }
     error_msg("QSINGLE-SHOT", LIST2(l_msec, l_fun));
     return Cnil; }
