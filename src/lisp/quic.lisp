@@ -55,7 +55,9 @@
                (when arg
                  (setf arg (coerce (nreverse arg) 'string))
                  (let ((dot (char= #\. (char arg 0))))
-                   (if (and (find #\. arg) (not (every 'digit-char-p (remove #\. arg))))
+                   (if (and (not string-p)
+                            (find #\. arg)
+                            (not (every 'digit-char-p (remove #\. arg))))
                        (progn
                          (setf special-fun (if dot :dot :fun))
                          (if dot
