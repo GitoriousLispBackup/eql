@@ -266,9 +266,9 @@ typedef QPair<QByteArray, void*> MetaArg;
 void iniCLFunctions();
 void callConnectFun(void*, const QList<QByteArray>&, void**);
 bool callEventFun(void*, QObject*, QEvent*);
-cl_object to_lisp_arg(const MetaArg&);
-QVariant toQVariant(cl_object, const char*, int = -1);
 void error_msg(const char*, cl_object);
+QVariant toQVariant(cl_object, const char*, int = -1);
+cl_object to_lisp_arg(const MetaArg&);
 
 EQL_EXPORT QVariant callOverrideFun(void*, int, const void**);
 EQL_EXPORT cl_object qt_object_from_name(const QByteArray&, void*, uint = 0, bool = false);

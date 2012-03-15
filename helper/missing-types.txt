@@ -38,5 +38,4 @@ quint8
 quintptr
 short
 sockaddr
-uchar
 ushort

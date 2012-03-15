@@ -33,7 +33,7 @@
       ("setBrush(QBrush)" brush)
       ;;("drawRect(QRect)" (list 5 5 (- width 10) (- height 10))) ; square
       ("drawEllipse(QRect)" (list 5 5 (- width 10) (- height 10))) ; circle
-      "end")))
+      ("end"))))
 
 (defun run ()
   (qfun *qt-main* "resize" '(110 300))

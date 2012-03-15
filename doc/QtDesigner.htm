@@ -8,5 +8,12 @@
 <li>In Lisp, load the <code>*.ui</code> file using <code>qload-ui</code> (which will return the main widget of the UI).
 <li>To get the single widgets from the UI, use <code>qfind-child</code>.
 </ul>
-For an example, see <code>examples/3-main-window.lisp</code>.
+<p>For an example, see <code>examples/3-main-window.lisp</code>.</p>
+<p>
+If you want to translate your UI files to the corresponding EQL code, do the following
+at the command line:
+<br><code>eql -quic file.ui</code>
+<br>which will generate a file named <code>ui-file.lisp</code>. See also the
+function <code>quic</code>.
+</p>
 </html>

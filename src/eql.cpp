@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "12.2.3"; // 2012-02-21
+const char EQL::version[] = "12.3.1"; // 2012-03-15
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
@@ -45,14 +45,14 @@ void EQL::exec(const QStringList& args) {
     QStringList arguments(args);
     si_select_package(make_simple_base_string((char*)"EQL"));
     eval(QString("(set-home \"%1\")").arg(home()).toAscii().constData());
-    bool tpl = false;
+    bool quit = false;
     QStringList forms;
     if(arguments.contains("-slime")) {
         arguments.removeAll("-slime");
         initialize_slime = true;
         forms << "(eql::set-slime-ini (in-home \"slime/\"))"; }
     if(arguments.count() == 1) {
-        tpl = true;
+        quit = true;
         forms << "(si:top-level)"; }
     if(arguments.contains("-qgui")) {
         arguments.removeAll("-qgui");
@@ -60,14 +60,27 @@ void EQL::exec(const QStringList& args) {
 #ifndef Q_OS_WIN
     if(arguments.contains("-qtpl")) {
         arguments.removeAll("-qtpl");
-        tpl = true;
+        quit = true;
         forms << "(si::qtop-level)"; }
 #endif
-    if(arguments.count() > 1) {
-        QString fileName(arguments.at(1));
-#ifdef Q_OS_WIN
-        fileName.replace('\\', '/');
-#endif
+    if(arguments.contains("-quic")) {
+        arguments.removeAll("-quic");
+        if(arguments.size() == 2) {
+            quit = true;
+            QString uiFile(QDir::fromNativeSeparators(arguments.at(1)));
+            int sep = uiFile.lastIndexOf('/');
+	    if(sep == -1) {
+              sep = 0; }
+            QProcess::execute("uic -o ui.h " + uiFile);
+            forms << QString("(eql:quic \"ui.h\" \"%1ui-%2.lisp\")")
+                    .arg(sep ? uiFile.left(sep + 1) : QString())
+                    .arg(uiFile.mid(sep + 1, uiFile.length() - sep - 4))
+                  << QString("(delete-file \"ui.h\")"); }
+        else {
+            qDebug() << "Please pass a file.ui (Qt Designer)";
+            exit(-1); }}
+    else if(arguments.count() > 1) {
+        QString fileName(QDir::fromNativeSeparators(arguments.at(1)));
         forms.prepend(QString("(load \"%1\")").arg(fileName)); }
     QString code;
     if(forms.length() == 1) {
@@ -75,7 +88,7 @@ void EQL::exec(const QStringList& args) {
     else {
         code = "(progn " + forms.join(" ") + ")"; }
     eval(code.toAscii().constData());
-    if(tpl) {
+    if(quit) {
         qquit(); }}
 
 void EQL::exec(lisp_ini ini, const QByteArray& expression, const QByteArray& package) {

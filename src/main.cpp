@@ -22,11 +22,12 @@ int main(int argc, char** argv) {
     QApplication qapp(argc, argv);
     QStringList args(QCoreApplication::arguments());
     if(args.contains("-h") || (args.contains("--help"))) {
-#ifdef Q_OS_WIN
-        std::cout << "Usage: eql [-qgui] [-slime] [file]" << std::endl;
-#else
-        std::cout << "Usage: eql [-qgui] [-qtpl] [-slime] [file]" << std::endl;
+        std::cout
+                << "Usage: eql [file] "
+#ifndef Q_OS_WIN
+                << "[-qtpl] "
 #endif
+                << "[-qgui] [-quic file.ui] [-slime]" << std::endl;
         exit(0); }
     if(args.contains("-v") || args.contains("--version")) {
         std::cout << "EQL " << EQL::version << std::endl;

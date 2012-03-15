@@ -66,6 +66,7 @@
    #:qt-object-pointer
    #:qt-object-unique
    #:qtranslate
+   #:quic
    #:qui-class
    #:qui-names
    #:qutf8

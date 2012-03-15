@@ -1059,6 +1059,7 @@
                     "qlonglong"
                     "qreal"
                     "qulonglong"
+                    "uchar"
                     "uint"
                     "ulong"
                     "GLenum"

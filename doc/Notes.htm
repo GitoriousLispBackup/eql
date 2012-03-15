@@ -28,8 +28,8 @@
 <ul>
 <li>So, always use <code>qlet</code> (instead of <code>qnew</code>) if you only
   need a local Qt object inside a function (e.g. <code>QDialog</code>, <code>QRegExp</code>).
-<li><b>GC</b> is implemented for Qt objects returned by the functions
- <code>qget</code> and <code>qfun</code>.
+<li><b>GC</b> is implemented (using the ECL finalizer) for Qt value types (like <code>QFont</code>) returned by the functions
+ <code>qget</code> and <code>qfun</code>.<br>These types are printed adding <b>GC</b>: <code>#&lt;QFont 0x9243840 GC&gt;</code>.
 </ul>
 </p>
 <p>Enumeration example: <code>|Qt.AlignCenter|</code>.<br>So, all enumerations

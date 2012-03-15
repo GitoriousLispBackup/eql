@@ -813,6 +813,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case QMetaType::Int:                     p = new int(toInt(l_arg)); break;
         case QMetaType::Long:                    p = new int(toInt<long>(l_arg)); break;
         case QMetaType::LongLong:                p = new qlonglong(toInt<qlonglong>(l_arg)); break;
+        case QMetaType::UChar:                   p = new uchar(toUInt(l_arg)); break;
         case QMetaType::UInt:                    p = new uint(toUInt(l_arg)); break;
         case QMetaType::ULong:                   p = new ulong(toUInt<ulong>(l_arg)); break;
         case QMetaType::ULongLong:               p = new qulonglong(toUInt<qulonglong>(l_arg)); break;
@@ -835,6 +836,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case QMetaType::QRectF:                  p = new QRectF(toQRectF(l_arg)); break;
         case QMetaType::QSize:                   p = new QSize(toQSize(l_arg)); break;
         case QMetaType::QSizeF:                  p = new QSizeF(toQSizeF(l_arg)); break;
+        case QMetaType::QSizePolicy:             p = new QSizePolicy(*toQSizePolicyPointer(l_arg)); break;
         case QMetaType::QString:                 p = new QString(toQString(l_arg)); break;
         case QMetaType::QStringList:             p = new QStringList(toQStringList(l_arg)); break;
         case QMetaType::QBrush:                  p = new QBrush(*toQBrushPointer(l_arg)); break;
@@ -977,6 +979,7 @@ cl_object to_lisp_arg(const MetaArg& arg) {
             case QMetaType::Int:                     l_ret = MAKE_FIXNUM(*(int*)p); break;
             case QMetaType::Long:                    l_ret = MAKE_FIXNUM(*(long*)p); break;
             case QMetaType::LongLong:                l_ret = MAKE_FIXNUM(*(qlonglong*)p); break;
+            case QMetaType::UChar:                   l_ret = MAKE_FIXNUM(*(uchar*)p); break;
             case QMetaType::UInt:                    l_ret = MAKE_FIXNUM(*(uint*)p); break;
             case QMetaType::ULong:                   l_ret = MAKE_FIXNUM(*(ulong*)p); break;
             case QMetaType::ULongLong:               l_ret = MAKE_FIXNUM(*(qulonglong*)p); break;
@@ -1003,6 +1006,7 @@ cl_object to_lisp_arg(const MetaArg& arg) {
             case QMetaType::QRect:                   l_ret = from_qrect(*(QRect*)p); break;
             case QMetaType::QRectF:                  l_ret = from_qrectf(*(QRectF*)p); break;
             case QMetaType::QSize:                   l_ret = from_qsize(*(QSize*)p); break;
+            case QMetaType::QSizePolicy:             l_ret = from_qsizepolicy(*(QSizePolicy*)p); break;
             case QMetaType::QSizeF:                  l_ret = from_qsizef(*(QSizeF*)p); break;
             case QMetaType::QString:                 l_ret = from_qstring(*(QString*)p); break;
             case QMetaType::QStringList:             l_ret = from_qstringlist(*(QStringList*)p); break;
