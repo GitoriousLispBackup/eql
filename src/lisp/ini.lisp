@@ -13,12 +13,14 @@
    Similar to <code>let*</code>. Creates temporary Qt objects, deleting them at the end of the <code>qlet</code> body. If <code>exp</code> is a string, it will be substituted with <code>(qnew exp)</code>, optionally including constructor arguments.
        (qlet ((painter \"QPainter\")) ...)
        (qlet ((reg-exp \"QRegExp(QString)\" \"^\\\\S+$\")) ...)"
-  (let ((vars (mapcar 'first pairs))
+  (let ((vars (mapcar (lambda (x) (if (consp x) (first x) x)) pairs))
         (exps (mapcar (lambda (x)
-                        (let ((exp (rest x)))
-                          (if (stringp (first exp))
-                              (apply 'list 'qnew exp)
-                              (first exp))))
+                        (if (consp x)
+                            (let ((exp (rest x)))
+                              (if (stringp (first exp))
+                                  (apply 'list 'qnew exp)
+                                  (first exp)))
+                            nil))
                       pairs)))
     `(let* ,(mapcar 'list vars exps)
        (unwind-protect

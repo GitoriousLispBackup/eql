@@ -9,10 +9,18 @@
 
 (in-package :quic)
 
-(defvar *vars*)
+(defvar *global-vars*)
+(defvar *local-vars*)
+(defvar *main-var*)
+(defvar *main-class*)
+(defvar *code*)
 
 (defun run (&optional (ui.h "ui.h") (ui.lisp "ui.lisp"))
-  (setf *vars* (make-hash-table :test 'equal))
+  (setf *global-vars* (make-hash-table :test 'equal)
+        *local-vars*  nil
+        *main-var*    nil
+        *main-class*  nil
+        *code*        nil)
   (with-open-file (in ui.h :direction :input)
     (with-open-file (out ui.lisp :direction :output :if-exists :supersede)
       (format out "(defpackage :ui~
@@ -24,13 +32,40 @@
         (let ((line (read-line in nil :eof)))
           (when (eql :eof line)
             (return))
-          (x:when-it (c-to-lisp line out)
-            (write-string x:it out))))
-      (format out ")~%~%(ini)~%")))
-  (setf *vars* nil))
+          (x:when-it (c-to-lisp line)
+            (push x:it *code*))))
+      (format out "~%(defvar *~A*) ; main widget~
+                   ~{~%(defvar *~A*)~}~
+                   ~%~
+                   ~%(defun ini ()~
+                   ~%  (qlet (~{~A~^ ~})~
+                   ~%    (setf *~A* (qnew ~S))"
+              *main-var*
+              (sort (remove *main-var* (loop for var being the hash-keys in *global-vars* collect var) :test 'string=)
+                    'string<)
+              (nreverse *local-vars*)
+              *main-var*
+              *main-class*)
+      (dolist (line (nreverse *code*))
+        (write-string line out))
+      (format out "~%    (qfun *~A* \"show\")))~
+                   ~%~
+                   ~%(ini)~%"
+              *main-var*)))
+  (setf *global-vars* nil
+        *local-vars*  nil
+        *main-var*    nil
+        *main-class*  nil
+        *code*        nil))
 
 (defun trim (string)
   (string-trim " .;*" string))
+
+(defun var-name (name)
+  (let ((name* (trim name)))
+    (if (gethash name* *global-vars*)
+        (format nil "*~A*" name*)
+        name*)))
 
 (defun constructor-arg (class)
   (dolist (arg '("(QWidget*)"
@@ -42,10 +77,10 @@
       (return arg))))
 
 (defun prepare-args (args)
-  (cond ((and (string= "QColor" (first args)) (= 5 (length args)))
+  (cond ((and (string= "QColor" (first args)) (find (length args) '(4 5)))
          (list (format nil "(qfun \"QColor\" \"fromRgb\"~{ ~A~})" (rest args))))
         (t
-         args)))
+         (mapcar 'var-name args))))
 
 (let (special-fun)
   (defun split (line)
@@ -101,9 +136,7 @@
       (dotimes (n (- (length line) 2))
         (let ((arg (nth (+ 2 n) line)))
           (setf (nth (+ 2 n) line)
-                (cond ((gethash arg *vars*)
-                       (format nil "*~A*" arg))
-                      ((search "::" arg)
+                (cond ((search "::" arg)
                        (format nil "|~A|" (x:string-substitute "." "::" arg)))
                       ((string= "true" arg)
                        "t")
@@ -113,58 +146,46 @@
                        arg)))))
       (when (eql :new-local type)
         (rotatef (first line) (second line))
-        (setf (gethash (first line) *vars*) (second line)))
+        (push (first line) *local-vars*))
       (cond ((eql :dot (special-fun))
              (if (= 5 (length line))
-                 (format nil "~%  (qfun *~A* \"~A\" (qfun (qfun *~A* \"~A\") \"~A\"))"
-                         (first line)
+                 (format nil "~%    (qfun ~A \"~A\" (qfun (qfun ~A \"~A\") \"~A\"))"
+                         (var-name (first line))
                          (resolve-ambiguous (second line))
-                         (trim (third line))
+                         (var-name (third line))
                          (resolve-ambiguous (trim (fourth line)))
                          (resolve-ambiguous (trim (fifth line))))
                  (error "Not implemented: ~S" line)))
             ((eql :fun type)
-             (format nil "~%  (qfun *~A* \"~A\"~{ ~A~})"
-                     (first line)
+             (format nil "~%    (qfun ~A \"~A\"~{ ~A~})"
+                     (var-name (first line))
                      (resolve-ambiguous (second line))
                      (if tr
                          (list (format nil "(tr ~A)" (x:if-it (fifth line) x:it "\"\"")))
-                         (nthcdr 2 line))))
+                         (prepare-args (nthcdr 2 line)))))
             ((find type '(:new :new-local))
-             (format nil "~%  (~A *~A* (qnew \"~A~A\"~{ ~A~}))"
-                     (case type
-                       (:new       "setf")
-                       (:new-local "defparameter"))
-                     (first line)
+             (format nil "~%    (setf ~A (qnew \"~A~A\"~{ ~A~}))"
+                     (var-name (first line))
                      (second line)
                      (if (third line) (constructor-arg (second line)) "")
                      (prepare-args (nthcdr 2 line))))
             (t (error "Not implemented."))))))
 
 (let (section)
-  (defun c-to-lisp (c-line out)
+  (defun c-to-lisp (c-line)
     (let ((line (string-trim '(#\Space #\Tab) c-line)))
       (when (and (not (x:empty-string line))
                  (not (find (char line 0) "/*#{"))
                  (not (cond ((x:starts-with "public:" line)
                              (setf section :defvar))
                             ((x:starts-with "void setupUi" line)
-                             (let* ((main  (x:split (subseq line (1+ (position #\( line)) (position #\) line))))
-                                    (var   (trim (second main)))
-                                    (class (first main)))
-                               (format out "~%(defvar *~A*) ; main widget~
-                                            ~{~%(defvar *~A*)~}~
-                                            ~%~
-                                            ~%(defun ini ()~
-                                            ~%  (setf *~A* (qnew ~S \"visible\" t))"
-                                       var
-                                       (sort (loop for var being the hash-keys in *vars* collect var) 'string<)
-                                       var
-                                       class)
-                               (setf (gethash var *vars*) class))
+                             (let ((main  (x:split (subseq line (1+ (position #\( line)) (position #\) line)))))
+                               (setf *main-var*   (trim (second main))
+                                     *main-class* (first main)))
+                             (setf (gethash *main-var* *global-vars*) *main-class*)
                              (setf section :ini))
                             ((x:starts-with "void retranslateUi" line)
-                             (format out "~%  ;; texts")
+                             (push (format nil "~%    ;; texts") *code*)
                              (setf section :tr))
                             ((x:starts-with "}" line)
                              (setf section :end))
@@ -173,7 +194,7 @@
                                  (return :skip)))))))
         (case section
           (:defvar
-           (setf (gethash (trim (subseq line (position #\* line))) *vars*)
+           (setf (gethash (trim (subseq line (position #\* line))) *global-vars*)
                  (subseq line 0 (position #\Space line)))
            nil)
           (:ini

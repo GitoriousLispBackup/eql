@@ -68,13 +68,11 @@ void EQL::exec(const QStringList& args) {
         if(arguments.size() == 2) {
             quit = true;
             QString uiFile(QDir::fromNativeSeparators(arguments.at(1)));
-            int sep = uiFile.lastIndexOf('/');
-	    if(sep == -1) {
-              sep = 0; }
+            int sep = uiFile.lastIndexOf('/') + 1;
             QProcess::execute("uic -o ui.h " + uiFile);
             forms << QString("(eql:quic \"ui.h\" \"%1ui-%2.lisp\")")
-                    .arg(sep ? uiFile.left(sep + 1) : QString())
-                    .arg(uiFile.mid(sep + 1, uiFile.length() - sep - 4))
+                    .arg(uiFile.left(sep))
+                    .arg(uiFile.mid(sep, uiFile.length() - sep - 3))
                   << QString("(delete-file \"ui.h\")"); }
         else {
             qDebug() << "Please pass a file.ui (Qt Designer)";
