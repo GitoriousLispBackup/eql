@@ -8,7 +8,7 @@
 
 QT_BEGIN_NAMESPACE
 
-struct SingleShot : public QObject { // C++ is simple an concise ;)
+struct SingleShot : public QObject { // C++ is simple and concise ;)
     int id;
     void* function;
 

@@ -11,7 +11,8 @@
 
 (defvar *defvars*)
 (defvar *qlets*)
-(defvar *lets*)
+(defvar *lets-ini*)
+(defvar *lets-tr*)
 (defvar *main-var*)
 (defvar *main-class*)
 (defvar *line-nr*)
@@ -25,16 +26,12 @@
        ,@set-nil)))
 
 (defun run (&optional (ui.h "ui.h") (ui.lisp "ui.lisp"))
-  (with-setq-reset (*defvars* *qlets* *lets* *main-var* *main-class* *line-nr* *section*)
+  (with-setq-reset (*defvars* *qlets* *lets-ini* *lets-tr* *main-var* *main-class* *line-nr* *section*)
     (setf *defvars* (make-hash-table :test 'equal)
           *line-nr* 0)
     (with-open-file (in ui.h :direction :input)
       (with-open-file (out ui.lisp :direction :output :if-exists :supersede)
-        (format out "(defpackage :ui~
-                     ~%  (:use :common-lisp :eql)~
-                     ~%  (:export))~
-                     ~%~
-                     ~%(in-package :ui)~%")
+        (format out "(defpackage :ui~%  (:use :common-lisp :eql)")
         (let (code tr)
           (loop
             (incf *line-nr*)
@@ -45,27 +42,51 @@
                 (if (eql :tr *section*)
                     (push x:it tr)
                     (push x:it code)))))
-          (format out "~%(defvar ~A) ; main widget~
-                       ~{~%(defvar ~A)~}~
-                       ~%~
-                       ~%(defun ini ()~
-                       ~%  (qlet (~{~A~^ ~})~
-                       ~%    (setf ~A (qnew ~S))"
-                  (var-name *main-var*)
-                  (mapcar 'var-name (sort (remove *main-var* (loop for var being the hash-keys in *defvars* collect var) :test 'string=)
-                                          'string<))
-                  (mapcar 'var-name (reverse *qlets*))
-                  (var-name *main-var*)
-                  *main-class*)
+          (let ((max-len 0))
+            (format out "~%  (:export~%   ;; all DEFVARs except layouts, spacers~{~%   #:~A~}~
+                         ~%   #:ini~
+                         ~%   #:retranslate-ui))~
+                         ~%~
+                         ~%(in-package :ui)~
+                         ~%~
+                         ~%(defvar ~A)~A (main widget)~
+                         ~{~%(defvar ~{~A)~A~}~}~
+                         ~%~
+                         ~%(defun ini ()~
+                         ~%  (qlet (~{~A~^ ~})~
+                         ~%    (let (~{~A~^ ~})~
+                         ~%      (setf ~A (qnew ~S))"
+                    (let (export)
+                      (maphash (lambda (var class)
+                                 (setf max-len (max (length var) max-len))
+                                 (when (notany (lambda (skip) (search skip class)) '("Layout" "Spacer"))
+                                   (push (var-name var) export)))
+                               *defvars*)
+                      (sort export 'string<))
+                    (var-name *main-var*)
+                    (format nil "~A ; ~A" (make-string (- max-len (length *main-var*))) *main-class*)
+                    (let (defvars)
+                      (maphash (lambda (var class)
+                                 (unless (string= *main-var* var)
+                                   (push (list (var-name var) (format nil "~A ; ~A"
+                                                                      (make-string (- max-len (length var)))
+                                                                      class))
+                                         defvars)))
+                               *defvars*)
+                      (sort defvars 'string< :key 'first))
+                    (mapcar 'var-name (reverse *qlets*))
+                    (mapcar 'var-name (reverse *lets-ini*))
+                    (var-name *main-var*)
+                    *main-class*))
           (dolist (line (nreverse code))
             (write-string line out))
-          (format out "~%    (retranslate-ui)~
-                       ~%    (qfun ~A \"show\")))~
+          (format out "~%      (retranslate-ui)~
+                       ~%      (qfun ~A \"show\"))))~
                        ~%~
                        ~%(defun retranslate-ui ()~
                        ~%  (let (~{~A~^ ~})"
                   (var-name *main-var*)
-                  (mapcar 'var-name (reverse *lets*)))
+                  (mapcar 'var-name (reverse *lets-tr*)))
           (dolist (line (nreverse tr))
             (write-string line out))
           (format out "))~%~%(ini)~%"))))))
@@ -76,8 +97,9 @@
 (defun var-name (name)
   (let* ((name*  (trim name))
          (global (gethash name* *defvars*))
-         (local  (or (find name* *qlets* :test 'string=)
-                     (find name* *lets*   :test 'string=))))
+         (local  (or (find name* *qlets*    :test 'string=)
+                     (find name* *lets-ini* :test 'string=)
+                     (find name* *lets-tr*  :test 'string=))))
     (when global
       (setf name* (format nil "*~A*" name*)))
     (if (or global local)
@@ -115,7 +137,8 @@
 (let (special-fun)
   (defun split (line)
     (setf special-fun nil)
-    (let (list in-string arg)
+    (let ((ex-char #\?)
+          list in-string arg)
       (flet ((add-arg ()
                (when arg
                  (setf arg (coerce (nreverse arg) 'string))
@@ -131,16 +154,18 @@
                                (push arg* list))))
                        (push arg list))
                    (setf arg nil)))))
-        (x:do-string (ch line)
+        (x:do-string (char line)
           (if (and (not in-string)
-                   (char= #\Space ch))
+                   (char= #\Space char))
               (add-arg)
               (progn
-                (push ch arg)
-                (when (char= #\" ch)
+                (push char arg)
+                (when (and (char= #\" char)
+                           (char/= #\\ ex-char))
                   (when in-string
                     (add-arg))
-                  (setf in-string (not in-string))))))
+                  (setf in-string (not in-string)))))
+          (setf ex-char char))
         (add-arg))
       (nreverse list)))
   (defun special-fun ()
@@ -172,118 +197,179 @@
             (setf in-string (not in-string))))
         (coerce (nreverse line*) 'string))))
 
-(defun qt-to-eql (qt-line &optional tr)
-  (flet ((to-list (line)
-           (remove-if (lambda (x) (find x '("QSize" "QRect" "QString::fromUtf8")
-                                        :test 'string=))
-                      (split line)))
-         (show-warning (line)
-           (format *debug-io* "~%Not implemented, see line ~D of \"ui.h\":~%~%[Qt] ~A~%[??] ~S~%" *line-nr* qt-line line)
-           (format nil "~%;;[?] ~A" qt-line)))
-    (let* ((line (trim (no #\( (no #\) (no #\, qt-line)))))
-           (type (cond ((search "->" line)
-                        :fun)
-                       ((search "= new" line)
-                        :new)
-                       ((x:starts-with "new " line)
-                        :new-item)
-                       ((qid (subseq line 0 (position #\Space line)))
-                        :new-local))))
-      (setf line (to-list (string-substitute " (qfun " "->" (no "new " (no "= new" line)))))
-      (when (special-fun)
-        (setf type :fun))
-      (when (search "::" (first line))
-        (setf type :fun-static))
-      (dotimes (n (- (length line) 2))
-        (let ((arg (nth (+ 2 n) line)))
-          (setf (nth (+ 2 n) line)
-                (cond ((search "::" arg)
-                       (format nil "|~A|" (string-substitute "." "::" arg)))
-                      ((string= "true" arg)
-                       "t")
-                      ((string= "false" arg)
-                       "nil")
-                      (t
-                       arg)))))
-      (when (eql :new-local type)
-        (rotatef (first line) (second line))
-        (push (first line) *qlets*))
-      (cond ((x:starts-with "QObject::connect" qt-line)
-             ;; qconnect
-             (let ((line* (mapcar (lambda (x) (string-trim " " x)) (x:split qt-line #\,))))
-               (format nil "~%    (qconnect ~A \"~A\" ~A \"~A\")"
-                       (var-name (subseq (first line*) 17))
-                       (subseq (second line*) 7 (- (length (second line*)) 1))
-                       (var-name (third line*))
-                       (subseq (fourth line*) 5 (- (length (fourth line*)) 3)))))
-            ((x:when-it (position "=" line :test 'string=)
-               ;; special case: helper variables
-               (let ((name (trim (nth (1- x:it) line))))
-                 (push name *lets*)
-                 (format nil "~%    (setf ~A (qfun ~A \"~A\"~{ ~A~}))"
-                         (var-name name)
-                         (var-name (nth (1+ x:it) line))
-                         (nth (+ 3 x:it) line)
-                         (prepare-args (nthcdr (+ 4 x:it) line))))))
-            ((x:starts-with "<< QApplication::translate" qt-line)
-             ;; single string of string-list
-             (format nil "~%      (tr ~A)" (fourth line)))
-            ((string= ");" qt-line)
-             ;; end string-list
-             (format nil "~%    ))"))
-            ((eql :dot (special-fun))
-             ;; multiple functions
-             (let ((line* (remove "(qfun" line :test 'string=)))
-               (if (= 5 (length line*))
-                   (format nil "~%    (qfun ~A \"~A\" (qfun (qfun ~A \"~A\") \"~A\"))"
-                           (var-name (first line*))
-                           (resolve-ambiguous (second line*))
-                           (var-name (third line*))
-                           (resolve-ambiguous (fourth line*))
-                           (resolve-ambiguous (fifth line*)))
-                   (show-warning line*))))
-            ((eql :fun type)
-             ;; function
-             (dotimes (n (length line))
-               (when (string= "(qfun" (nth n line))
-                 (rotatef (nth (1- n) line) (nth n line))))
-             (when (special-fun)
-               (setf line (cons "(qfun" line)))
-             (let ((string-list-p (x:ends-with "QStringList()" qt-line)))
-               (format nil "~%    ~A ~A \"~A\"~{ ~A~}~A"
-                       (first line)
-                       (var-name (second line))
-                       (resolve-ambiguous (third line))
-                       (if (and tr (search ".translate" (fourth line)))
-                           (list (format nil "(tr ~A)" (x:if-it (sixth line) x:it "\"\"")))
-                           (let ((args (prepare-args (nthcdr (if (eql :fun type) 3 2) line))))
-                             (if string-list-p
-                                 (append (nbutlast args 1) (list "(list")) ; start string-list
-                                 args)))
-                       (make-string (- (count "(qfun" line :test 'string=) (if string-list-p 1 0))
-                                    :initial-element #\) ))))
-            ((eql :fun-static type)
-             ;; static function
-             (let ((p (search "::" (first line))))
-               (format nil "~%    (qfun \"~A\" \"~A\"~{ ~A~})"
-                       (subseq (first line) 0 p)
-                       (resolve-ambiguous (subseq (first line) (+ 2 p)))
-                       (prepare-args (nthcdr (if (eql :fun type) 2 1) line)))))
-            ((find type '(:new :new-local))
-             ;; qnew
-             (format nil "~%    (setf ~A (qnew \"~A~A\"~{ ~A~}))"
-                     (var-name (first line))
-                     (second line)
-                     (if (third line) (constructor-arg (second line)) "")
-                     (prepare-args (nthcdr 2 line))))
-            ((eql :new-item type)
-             ;; qnew item
-             (format nil "~%    (qnew \"~A~A\"~{ ~A~})"
-                     (first line)
-                     (if (second line) (constructor-arg (first line)) "")
-                     (prepare-args (rest line))))
-            (t (show-warning line))))))
+(defun insert-tr (line string-lines-pos)
+  (let* ((pos (position-if (lambda (x) (search ".translate" x)) line))
+         (tr-string (if pos (nth (+ 2 pos) line) "\"\""))
+         line*)
+    (if pos
+        (let ((start (eql :start string-lines-pos)))
+          (dotimes (n (length line))
+            (cond ((= n pos)
+                   (when (= pos 7) ; 2 QFUN calls
+                     (push ")" line*))
+                   (push (format nil "(tr ~A~A"
+                                 (if start (string-right-trim "\"\\n" tr-string) tr-string)
+                                 (if start "" ")"))
+                         line*))
+                  ((or (< n pos)
+                       (> n (+ 4 pos)))
+                   (push (nth n line) line*))))
+          (nreverse line*))
+        line)))
 
+(let (string-lines-pos)
+  (defun qt-to-eql (qt-line &optional tr)
+    (let ((string-start (and tr (x:starts-with "\"" qt-line)))
+          (string-end   (and tr (x:ends-with   "\"" qt-line))))
+      (setf string-lines-pos (if tr
+                                 (cond ((and string-start string-end)
+                                        :mid)
+                                       (string-start
+                                        :end)
+                                       (string-end
+                                        :start))
+                                 nil)))
+    (if (eql :mid string-lines-pos)
+        (format nil "~A~%" (string-trim "\"\\n" (subseq qt-line 0 (position #\" qt-line :from-end t))))
+        (flet ((to-list (line)
+                 (remove-if (lambda (x) (find x '("QSize" "QRect" "QString::fromUtf8")
+                                              :test 'string=))
+                            (split line)))
+               (show-warning (line)
+                 (format *debug-io* "~%Not implemented, see line ~D of \"ui.h\":~%~%[Qt] ~A~%[??] ~S~%" *line-nr* qt-line line)
+                 (format nil "~%;;[?] ~A" qt-line)))
+          (let* ((line (trim (no #\( (no #\) (no #\, qt-line)))))
+                 (type (cond ((search "->" line)
+                              :fun)
+                             ((search "= new" line)
+                              :new)
+                             ((x:starts-with "new " line)
+                              :new-item)
+                             ((qid (subseq line 0 (position #\Space line)))
+                              :new-local))))
+            (setf line (to-list (string-substitute " (qfun " "->" (no "new " line))))
+            (when (special-fun)
+              (setf type :fun))
+            (when (search "::" (first line))
+              (setf type :fun-static))
+            (dotimes (n (- (length line) 2))
+              (let ((arg (nth (+ 2 n) line)))
+                (setf (nth (+ 2 n) line)
+                      (cond ((search "::" arg)
+                             (format nil "|~A|" (string-substitute "." "::" arg)))
+                            ((string= "true" arg)
+                             "t")
+                            ((string= "false" arg)
+                             "nil")
+                            (t
+                             arg)))))
+            (when (eql :new-local type)
+              (rotatef (first line) (second line))
+              (push (first line) *qlets*))
+            (let ((var-pos (x:when-it (position "=" line :test 'string=)
+                             (1- x:it))))
+              (when var-pos
+                (let ((name (trim (nth var-pos line))))
+                  (unless (gethash name *defvars*)
+                    (if tr
+                        (push name *lets-tr*)
+                        (push name *lets-ini*))))
+                (setf line (remove "=" line :test 'string=)))
+              (cond ((and var-pos
+                          (not (find type '(:new :new-local))))
+                     ;; special case: set helper variables
+                     (format nil "~%    (setf ~A (qfun ~A \"~A\"~{ ~A~}))"
+                             (var-name (nth var-pos line))
+                             (var-name (nth (1+ var-pos) line))
+                             (nth (+ 3 var-pos) line)
+                             (prepare-args (nthcdr (+ 4 var-pos) line))))
+                    ((find type '(:new :new-local))
+                     ;; qnew
+                     (when (qid (first line)) ; helper variable
+                       (setf line (rest line)))
+                     (format nil "~%~A    (setf ~A (qnew \"~A~A\"~{ ~A~}))"
+                             (if tr "" "  ")
+                             (var-name (first line))
+                             (second line)
+                             (if (third line) (constructor-arg (second line)) "")
+                             (prepare-args (nthcdr 2 line))))
+                    ((eql :new-item type)
+                     ;; qnew item
+                     (format nil "~%~A    (qnew \"~A~A\"~{ ~A~})"
+                             (if tr "" "  ")
+                             (first line)
+                             (if (second line) (constructor-arg (first line)) "")
+                             (prepare-args (rest line))))
+                    ((x:starts-with "QObject::connect" qt-line)
+                     ;; qconnect
+                     (let ((line* (mapcar (lambda (x) (string-trim " " x)) (x:split qt-line #\,))))
+                       (format nil "~%    (qconnect ~A \"~A\" ~A \"~A\")"
+                               (var-name (subseq (first line*) 17))
+                               (subseq (second line*) 7 (- (length (second line*)) 1))
+                               (var-name (third line*))
+                               (subseq (fourth line*) 5 (- (length (fourth line*)) 3)))))
+                    ((x:starts-with "<< QApplication::translate" qt-line)
+                     ;; single string of string-list
+                     (format nil "~%      (tr ~A)" (fourth line)))
+                    ((string= ");" qt-line)
+                     ;; end string-list
+                     (format nil "~%    ))"))
+                    ((eql :dot (special-fun))
+                     ;; special function call
+                     (let ((line* (remove "(qfun" line :test 'string=)))
+                       (if (= 5 (length line*))
+                           (format nil "~%~A    (qfun ~A \"~A\" (qfun (qfun ~A \"~A\") \"~A\"))"
+                                   (if tr "" "  ")
+                                   (var-name (first line*))
+                                   (resolve-ambiguous (second line*))
+                                   (var-name (third line*))
+                                   (resolve-ambiguous (fourth line*))
+                                   (resolve-ambiguous (fifth line*)))
+                           (show-warning line*))))
+                    ((or (eql :fun type) tr)
+                     (when (or tr (eql :start string-lines-pos))
+                       (setf line (insert-tr line string-lines-pos)))
+                     (if (and tr (eql :end string-lines-pos))
+                         (format nil "~A))" (subseq qt-line 1 (1+ (position #\" qt-line :from-end t))))
+                         (if (and (not tr)
+                                  (= 2 (count "(qfun" line :test 'x:starts-with))
+                                  (= 6 (length line)))
+                             (progn
+                               ;; special function call
+                               (format nil "~%~A~{    (qfun (qfun ~A \"~A\") \"~A\" ~A)~}"
+                                       (if tr "" "  ")
+                                       (prepare-args (remove "(qfun" line :test 'string=))))
+                             (progn
+                               ;; normal function
+                               (dotimes (n (length line))
+                                 (when (string= "(qfun" (nth n line))
+                                   (rotatef (nth (1- n) line) (nth n line))))
+                               (when (special-fun)
+                                 (setf line (cons "(qfun" line)))
+                               (let ((string-list-p (x:ends-with "QStringList()" qt-line)))
+                                 (format nil "~%~A    ~A ~A \"~A\"~{ ~A~}~A"
+                                         (if tr "" "  ")
+                                         (first line)
+                                         (var-name (second line))
+                                         (resolve-ambiguous (third line))
+                                         (let ((args (prepare-args (nthcdr (if (eql :fun type) 3 2) line))))
+                                           (if string-list-p
+                                               (append (nbutlast args 1) (list "(list")) ; start string-list
+                                               args))
+                                         (make-string (if (find "(tr " line :test 'x:starts-with)
+                                                          (if (eql :start string-lines-pos) 0 1)
+                                                          (- (count "(qfun" line :test 'string=) (if string-list-p 1 0)))
+                                                      :initial-element #\) )))))))
+                    ((eql :fun-static type)
+                     ;; static function
+                     (let ((p (search "::" (first line))))
+                       (format nil "~%~A    (qfun \"~A\" \"~A\"~{ ~A~})"
+                               (if tr "" "  ")
+                               (subseq (first line) 0 p)
+                               (resolve-ambiguous (subseq (first line) (+ 2 p)))
+                               (prepare-args (nthcdr (if (eql :fun type) 2 1) line)))))
+                    (t (show-warning line)))))))))
+  
 (defun c-to-lisp (c-line)
   (let ((line (string-trim '(#\Space #\Tab) c-line)))
     (when (and (not (x:empty-string line))
