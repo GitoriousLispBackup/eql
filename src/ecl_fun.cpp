@@ -2235,6 +2235,7 @@ cl_object qui_names(cl_object l_ui) {
                         QString name(reader.attributes().value("name").toString());
                         if(!name.isEmpty()) {
                             names << name; }}}}
+            names.sort();
             cl_object l_ret = from_qstringlist(names);
             return l_ret; }}
     error_msg("QUI-NAMES", LIST1(l_ui));
