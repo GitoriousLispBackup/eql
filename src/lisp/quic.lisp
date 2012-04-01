@@ -129,24 +129,21 @@
     (when (find arg (cadar (qapropos* "constructor" class)) :test 'x:ends-with)
       (return arg))))
 
-(let (method)
-  (defun find-qt-method (var name)
-    (let ((class (gethash var *classes*)))
-      (loop
-        (unless class
-          (return))
-        (x:when-it (qapropos* name class)
-          (let* ((full (second (second (first x:it))))
-                 (end  (position #\( full))
-                 (fun  (subseq full (1+ (position #\Space full :end end :from-end t)) end))
-                 ;; resolve ambiguous
-                 (fun* (assoc fun '(("addAction" . "addAction(QAction*)"))
-                              :test 'string=)))
-            (setf method (prin1-to-string (if fun* (cdr fun*) fun)))
-            (return-from find-qt-method t)))
-        (setf class (qsuper-class-name class)))))
-  (defun qt-method ()
-    method))
+(defun find-qt-method (var name)
+  (let ((class (gethash var *classes*))
+        (name* (format nil " ~A(" name)))
+    (loop
+      (unless class
+        (return))
+      (x:when-it (qapropos* name* class)
+        (let* ((full (second (second (first x:it))))
+               (end  (position #\( full))
+               (fun  (subseq full (1+ (position #\Space full :end end :from-end t)) end))
+               ;; resolve ambiguous
+               (fun* (assoc fun '(("addAction" . "addAction(QAction*)"))
+                            :test 'string=)))
+          (return-from find-qt-method (prin1-to-string (if fun* (cdr fun*) fun)))))
+      (setf class (qsuper-class-name class)))))
 
 (defun prepare-args (args)
   (remove-if (lambda (x) (search "static_cast<" x))
@@ -155,9 +152,9 @@
                    (t
                     (let ((args* (copy-list args)))
                       (dotimes (i (length args))
-                        (when (and (string= "(qfun" (nth i args))
-                                   (find-qt-method (nth (1+ i) args) (nth (+ i 2) args)))
-                          (setf (nth (+ i 2) args*) (qt-method))))
+                        (x:when-it (and (string= "(qfun" (nth i args))
+                                        (find-qt-method (nth (1+ i) args) (nth (+ i 2) args)))
+                          (setf (nth (+ i 2) args*) x:it)))
                       (mapcar (lambda (arg)
                                 (cond ((> (count #\| arg) 2)
                                        (format nil "(logior |~A|)" (string-trim " |" (string-substitute "| |" "|" arg))))
