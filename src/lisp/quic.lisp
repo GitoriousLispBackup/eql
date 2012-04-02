@@ -2,8 +2,6 @@
 ;;;
 ;;; user interface compiler
 
-;;; TODO: UTF-8 strings
-
 (defpackage :quic
   (:use :common-lisp :eql)
   (:export
@@ -104,6 +102,21 @@
 (defun remove-parens (list)
   (remove ")" list :test 'string=))
 
+(defun from-qt-utf8 (string)
+  (let ((vector (make-array 0 :adjustable t :fill-pointer t)))
+    (flet ((push* (x)
+             (vector-push-extend (if (characterp x) (char-code x) x) vector)))
+      (dotimes (i (length string))
+        (let ((ch (char string i)))
+          (if (char= #\\ ch)
+              (if (find (char string (1+ i)) '(#\" #\\))
+                  (push* ch)
+                  (progn
+                    (push* (parse-integer (subseq string (1+ i) (+ 4 i)) :radix 8))
+                    (incf i 3)))
+              (push* ch)))))
+    (qfrom-utf8 vector)))
+
 (defun var-name (name)
   (let ((name* (trim name)))
     (flet ((find-in (var)
@@ -136,13 +149,10 @@
       (unless class
         (return))
       (x:when-it (qapropos* name* class)
-        (let* ((full (second (second (first x:it))))
-               (end  (position #\( full))
-               (fun  (subseq full (1+ (position #\Space full :end end :from-end t)) end))
-               ;; resolve ambiguous
-               (fun* (assoc fun '(("addAction" . "addAction(QAction*)"))
-                            :test 'string=)))
-          (return-from find-qt-method (prin1-to-string (if fun* (cdr fun*) fun)))))
+        ;; resolve ambiguous
+        (let ((name** (assoc name '(("addAction" . "addAction(QAction*)"))
+                             :test 'string=)))
+          (return-from find-qt-method (prin1-to-string (if name** (cdr name**) name)))))
       (setf class (qsuper-class-name class)))))
 
 (defun prepare-args (args)
@@ -150,13 +160,35 @@
              (cond ((and (string= "QColor" (first args)) (find (length args) '(4 5)))
                     (list (format nil "(qfun \"QColor\" \"fromRgb\"~{ ~A~})" (rest args))))
                    (t
-                    (let ((args* (copy-list args)))
+                    (let ((args* (copy-list args))
+                          variant variant-type)
                       (dotimes (i (length args))
                         (x:when-it (and (string= "(qfun" (nth i args))
                                         (find-qt-method (nth (1+ i) args) (nth (+ i 2) args)))
                           (setf (nth (+ i 2) args*) x:it)))
                       (mapcar (lambda (arg)
-                                (cond ((> (count #\| arg) 2)
+                                (cond (variant
+                                       (setf variant nil)
+                                       (if (char= #\Q (char arg 0))
+                                           (progn
+                                             (setf variant-type arg)
+                                             "")
+                                           (let ((type (cond ((find* arg '("t" "nil"))
+                                                              "bool")
+                                                             (t (error "QVariant type not implemented for: ~A" arg)))))
+                                             (format nil "(qnew \"QVariant(~A)\" ~A)" type arg))))
+                                      (variant-type
+                                       (prog1
+                                           (format nil "(qnew \"QVariant(~A)\" ~S)"
+                                                   variant-type
+                                                   (if (string= "QChar" variant-type)
+                                                       (code-char (parse-integer arg))
+                                                       arg))
+                                         (setf variant-type nil)))
+                                      ((string= "QVariant" arg)
+                                       (setf variant t)
+                                       "")
+                                      ((> (count #\| arg) 2)
                                        (format nil "(logior |~A|)" (string-trim " |" (string-substitute "| |" "|" arg))))
                                       (t
                                        (if (string= "QString" arg)
@@ -219,16 +251,18 @@
         (coerce (nreverse line*) 'string))))
 
 (defun insert-tr (line string-lines-pos)
-  (let* ((pos (position-if (lambda (x) (search ".translate" x)) line))
+  (let* ((pos       (position-if (lambda (x) (search ".translate" x)) line))
          (tr-string (if pos (nth (+ 2 pos) line) "\"\""))
+         (shortcut  (if pos (string= "setShortcut" (nth (1- pos) line))))
          line*)
     (if pos
         (let ((start (eql :start string-lines-pos)))
           (dotimes (n (length line))
             (cond ((= n pos)
-                   (push (format nil "(tr ~A~A"
-                                 (if start (string-right-trim "\"\\n" tr-string) tr-string)
-                                 (if start "" ")"))
+                   (push (format nil "~A(tr ~A~A"
+                                 (if shortcut "(qnew \"QKeySequence\" " "")
+                                 (from-qt-utf8 (if start (string-right-trim "\"\\n" tr-string) tr-string))
+                                 (if start "" (if shortcut "))" ")")))
                          line*))
                   ((or (< n pos)
                        (> n (+ 4 pos)))
@@ -272,9 +306,9 @@
                                           nil)))
              (case string-lines-pos
                (:mid
-                (format nil "~A~%" (string-trim "\"\\n" (subseq qt-line 0 (position #\" qt-line :from-end t)))))
+                (format nil "~A~%" (from-qt-utf8 (string-trim "\"\\n" (subseq qt-line 0 (position #\" qt-line :from-end t))))))
                (:end
-                (format nil "~A))" (subseq qt-line 1 (1+ (position #\" qt-line :from-end t)))))
+                (format nil "~A))" (from-qt-utf8 (subseq qt-line 1 (1+ (position #\" qt-line :from-end t))))))
                (t
                 (let* ((line (trim (no #\, (string-substitute* '("()->"  "()."
                                                                  "->set" ".set"
