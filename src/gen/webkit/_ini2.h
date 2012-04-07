@@ -6,6 +6,8 @@
 #include "../../eql.h"
 #include <QtGui>
 
+QT_BEGIN_NAMESPACE
+
 TO_QT_TYPE_PTR(QWebElement, qwebelement)
 TO_QT_TYPE_PTR(QWebElementCollection, qwebelementcollection)
 TO_QT_TYPE_PTR(QWebHitTestResult, qwebhittestresult)
@@ -28,5 +30,7 @@ cl_object to_lisp_arg(int n, void* p) {
     else if(LObjects::T_QWebElementCollection == n) { l_ret = from_qwebelementcollection(*(QWebElementCollection*)p); }
     else if(LObjects::T_QWebHitTestResult == n)     { l_ret = from_qwebhittestresult(*(QWebHitTestResult*)p); }
     return l_ret; }
+
+QT_END_NAMESPACE
 
 #endif

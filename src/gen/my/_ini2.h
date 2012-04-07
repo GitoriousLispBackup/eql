@@ -6,6 +6,8 @@
 #include "../../eql.h"
 #include <QtGui>
 
+QT_BEGIN_NAMESPACE
+
 // TO_QT_TYPE_PTR(Q..., q...)
 
 void ini2() {
@@ -23,5 +25,7 @@ cl_object to_lisp_arg(int n, void* p) {
     // if(LObjects::T_Q... == n)      { l_ret = from_q...(*(Q...*)p); }
     // else if(LObjects::T_Q... == n) { l_ret = from_q...(*(Q...*)p); }
     return l_ret; }
+
+QT_END_NAMESPACE
 
 #endif

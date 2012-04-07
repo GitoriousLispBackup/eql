@@ -1919,11 +1919,13 @@ cl_object qrequire(cl_object l_name) {
             if("help" == name) {
                 LObjects::staticMetaObject_help = meta;
                 LObjects::deleteNObject_help = del;
-                LObjects::override_help = over; }
+                LObjects::override_help = over;
+                return l_name; }
             else if("svg" == name) {
                 LObjects::staticMetaObject_svg = meta;
                 LObjects::deleteNObject_svg = del;
-                LObjects::override_svg = over; }
+                LObjects::override_svg = over;
+                return l_name; }
             else {
                 ToMetaArg metaArg = (ToMetaArg)lib.resolve("toMetaArg");
                 To_lisp_arg lispArg = (To_lisp_arg)lib.resolve("to_lisp_arg");
@@ -1933,26 +1935,29 @@ cl_object qrequire(cl_object l_name) {
                         LObjects::deleteNObject_network = del;
                         LObjects::override_network = over;
                         LObjects::toMetaArg_network = metaArg;
-                        LObjects::to_lisp_arg_network = lispArg; }
+                        LObjects::to_lisp_arg_network = lispArg;
+                        return l_name; }
                     else if("opengl" == name) {
                         LObjects::staticMetaObject_opengl = meta;
                         LObjects::deleteNObject_opengl = del;
                         LObjects::override_opengl = over;
                         LObjects::toMetaArg_opengl = metaArg;
-                        LObjects::to_lisp_arg_opengl = lispArg; }
+                        LObjects::to_lisp_arg_opengl = lispArg;
+                        return l_name; }
                     else if("sql" == name) {
                         LObjects::staticMetaObject_sql = meta;
                         LObjects::deleteNObject_sql = del;
                         LObjects::override_sql = over;
                         LObjects::toMetaArg_sql = metaArg;
-                        LObjects::to_lisp_arg_sql = lispArg; }
+                        LObjects::to_lisp_arg_sql = lispArg;
+                        return l_name; }
                     else if("webkit" == name) {
                         LObjects::staticMetaObject_webkit = meta;
                         LObjects::deleteNObject_webkit = del;
                         LObjects::override_webkit = over;
                         LObjects::toMetaArg_webkit = metaArg;
-                        LObjects::to_lisp_arg_webkit = lispArg; }}}
-            return l_name; }}
+                        LObjects::to_lisp_arg_webkit = lispArg;
+                        return l_name; }}}}}
     error_msg("QREQUIRE", LIST1(l_name));
     return Cnil; }
 
