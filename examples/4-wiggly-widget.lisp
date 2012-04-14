@@ -26,7 +26,7 @@
     (qfun dlg "setLayout" vbox)
     (dolist (w (list *wiggly* *edit*))
       (qfun vbox "addWidget" w))
-    (qfun *timer* "start" 60 *wiggly*)
+    (qfun *timer* "start" 75 *wiggly*)
     (x:do-with (qoverride *wiggly*)
       ("paintEvent(QPaintEvent*)" 'paint)
       ("timerEvent(QTimerEvent*)" 'timeout))
