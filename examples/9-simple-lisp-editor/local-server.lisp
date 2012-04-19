@@ -23,6 +23,7 @@
    #://
    #:///
    #:*function*
+   #:*prompt*
    #:ini
    #:clear
    #:output
@@ -35,6 +36,7 @@
 (defvar *function*               'feed-top-level)
 (defvar *server*                 (qnew "QLocalServer"))
 (defvar *client*                 nil)
+(defvar *prompt*                 t)
 (defvar *standard-output-buffer* (make-string-output-stream))
 (defvar *trace-output-buffer*    (make-string-output-stream))
 (defvar *error-output-buffer*    (make-string-output-stream))
@@ -127,14 +129,16 @@
 (let ((n 0))
   (defun feed-top-level (str)
     (unless (x:empty-string str)
-      (let ((pkg (current-package-name))
-            (counter (princ-to-string (incf n))))
-        (format t "~%~A [~A] ~A~%~A"
-                pkg
-                counter
-                (make-string (- 50 (length counter) (length pkg)) :initial-element #\-)
-                str)
-        (setf si::*read-string* str))
+      (if *prompt*
+          (let ((pkg (current-package-name))
+                (counter (princ-to-string (incf n))))
+            (format t "~%~A [~A] ~A~%~A"
+                    pkg
+                    counter
+                    (make-string (- 50 (length counter) (length pkg)) :initial-element #\-)
+                    str))
+          (format t "~%~A~%~%~A" #.(make-string 50 :initial-element #\_) str))
+      (setf si::*read-string* str)
       (start-top-level))))
 
 (defun send-output (type var)

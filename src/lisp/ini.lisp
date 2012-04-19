@@ -277,6 +277,7 @@
                   (cons 'qt-object-p          '(object))
                   (cons 'qt-object-pointer    '(object))
                   (cons 'qt-object-unique     '(object))
+                  (cons 'quic                 '(&optional (file.h "ui.h") (file.lisp "ui.lisp")))
                   (cons 'qui-class            '(file-name &optional object-name))
                   (cons 'qui-names            '(file-name))
                   (cons 'qutf8                '(string))

@@ -315,8 +315,8 @@
     (qfun *current-editor* "setTextCursor" text-cursor)))
 
 (defun constructor-args (name)
-  (sort (mapcar #'(lambda (el)
-                    (subseq el (position #\( el)))
+  (sort (mapcar (lambda (el)
+                  (subseq el (position #\( el)))
                 (cdadar (qapropos* "constructor" name)))
         'string<))
 
@@ -1225,7 +1225,7 @@
                    (and (ignore-errors (symbol-function symbol))
                         (ignore-errors (ext:function-lambda-list symbol))))))
     (if args
-        (format nil "<b>~A</b> ~(~A~)" name args)
+        (format nil "<b>~A</b> ~(~S~)" name args)
         "")))
 
 (let (name*)
