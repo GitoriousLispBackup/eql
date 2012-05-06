@@ -26,7 +26,12 @@
        ,@body
        ,@set-nil)))
 
+(defun load-ui-related-qt-modules ()
+  (dolist (m (list :help :opengl :svg :webkit))
+    (ignore-errors (eql:qrequire m))))
+
 (defun run (&optional (ui.h "ui.h") (ui.lisp "ui.lisp"))
+  (load-ui-related-qt-modules)
   (with-setq-reset (*defvars* *qlets* *lets-ini* *lets-tr* *main-var* *main-class* *classes* *line-nr* *section*)
     (setf *defvars* (make-hash-table :test 'equal)
           *classes* (make-hash-table :test 'equal)
@@ -161,7 +166,7 @@
                     (list (format nil "(qfun \"QColor\" \"fromRgb\"~{ ~A~})" (rest args))))
                    (t
                     (let ((args* (copy-list args))
-                          variant variant-type)
+                          variant variant-type url)
                       (dotimes (i (length args))
                         (x:when-it (and (string= "(qfun" (nth i args))
                                         (find-qt-method (nth (1+ i) args) (nth (+ i 2) args)))
@@ -185,8 +190,14 @@
                                                        (code-char (parse-integer arg))
                                                        arg))
                                          (setf variant-type nil)))
+                                      (url
+                                        (setf url nil)
+                                        (format nil "(qnew \"QUrl(QString)\" ~A)" arg))
                                       ((string= "QVariant" arg)
                                        (setf variant t)
+                                       "")
+                                      ((string= "QUrl" arg)
+                                       (setf url t)
                                        "")
                                       ((> (count #\| arg) 2)
                                        (format nil "(logior |~A|)" (string-trim " |" (string-substitute "| |" "|" arg))))

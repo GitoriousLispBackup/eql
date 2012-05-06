@@ -138,6 +138,16 @@
 </pre>
 </p><br>
 <p>
+<b>QINVOKE-METHODS (object &rest functions)</b>
+<br>
+<b>QFUNS</b>
+<p>A simple syntax for nested <code>qfun</code> calls.</p>
+<pre>
+  (qfuns object "funA" "funB" "funC")      ; expands to: (qfun (qfun (qfun object "funA") "funB") "funC")
+  (qfuns object ("funA" 1) ("funB" a b c)) ; expands to: (qfun (qfun object "funA" 1) "funB" a b c)
+</pre>
+</p><br>
+<p>
 <b>QLET (((var exp) ...) ...)</b>
 <p>Similar to <code>let*</code>. Creates temporary Qt objects, deleting them at the end of the <code>qlet</code> body. If <code>exp</code> is a string, it will be substituted with <code>(qnew exp)</code>, optionally including constructor arguments.</p>
 <pre>

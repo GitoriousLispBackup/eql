@@ -39,7 +39,7 @@
             (push item items)))
         (qfun model "appendRow(QList<QStandardItem*>)" (nreverse items))))
     (qfun view "setModel" model)
-    (qfun (qfun view "verticalHeader") "hide")
-    (qfun (qfun view "horizontalHeader") "setStretchLastSection" t)))
+    (qfuns view "verticalHeader" "hide")
+    (qfuns view "horizontalHeader" ("setStretchLastSection" t))))
 
 (start)

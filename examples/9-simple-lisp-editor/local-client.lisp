@@ -52,7 +52,7 @@
 (defun request (str)
   (reset-data)
   (x:do-with (qfun *socket*)
-    "abort"
+    ("abort")
     ("connectToServer" *server-name*))
   (when (qfun *socket* "isWritable")
     (let ((utf8 (qutf8 str)))

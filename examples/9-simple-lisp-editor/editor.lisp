@@ -646,13 +646,12 @@
         "show"
         "setFocus")))
   (defun adjust-completer-pos (&optional ini)
-    (let* ((desktop (qfun (qfun "QApplication" "desktop") "availableGeometry"))
+    (let* ((desktop (qfuns "QApplication" "desktop" "availableGeometry"))
            (cursor (if ini
                        (setf cursor-rect (qfun *current-editor* "cursorRect"))
                        cursor-rect))
-           (pos (qfun (qfun *current-editor* "viewport") "mapToGlobal"
-                      (list (+ (first cursor) (third cursor))
-                            (+ (second cursor) (fourth cursor)))))
+           (pos (qfuns *current-editor* "viewport" ("mapToGlobal" (list (+ (first cursor) (third cursor))
+                                                                        (+ (second cursor) (fourth cursor))))))
            (size (qget *eql-completer* "size"))
            (dx (- (+ (first pos) (first size))
                   (third desktop)))
@@ -669,7 +668,7 @@
            (n-shown 0 (1+ n-shown)))
           ((or (= row (qfun *eql-completer* "count"))
                (= +max-shown-completions+ n-shown)
-               (not (x:starts-with begin (qfun (qfun *eql-completer* "item" row) "text"))))
+               (not (x:starts-with begin (qfuns *eql-completer* ("item" row) "text"))))
              (qset *eql-completer* "size" (list (qget *eql-completer* "width")
                                                 (+ 2 (* n-shown height))))
              (adjust-completer-pos))))
@@ -921,7 +920,7 @@
       (let ((max (qfun (document) "blockCount")))
         (when (< curr-n max)
           (do ((n (1+ curr-n) (1+ n))
-               (text-block (qfun (qfun text-cursor "block") "next") (qfun text-block "next")))
+               (text-block (qfuns text-cursor "block" "next") (qfun text-block "next")))
               ((>= n max))
             (try-read (qfun text-block "text"))))))))
 
@@ -978,7 +977,7 @@
       (try-read curr-line t)
       (when (plusp curr-n)
         (do ((n (1- curr-n) (1- n))
-             (text-block (qfun (qfun text-cursor "block") "previous") (qfun text-block "previous")))
+             (text-block (qfuns text-cursor "block" "previous") (qfun text-block "previous")))
             ((minusp n))
           (try-read (qfun text-block "text")))))))
 
@@ -1225,7 +1224,8 @@
                    (and (ignore-errors (symbol-function symbol))
                         (ignore-errors (ext:function-lambda-list symbol))))))
     (if args
-        (format nil "<b>~A</b> ~(~S~)" name args)
+        (let ((*package* (find-package (if (x:starts-with "q" name) :eql :sys)))) ; no package prefix with FORMAT ~S
+          (format nil "<b>~A</b> ~(~S~)" name args))
         "")))
 
 (let (name*)
@@ -1317,7 +1317,7 @@
 (defun insert-file ()
   (let ((file (qfun "QFileDialog" "getOpenFileName")))
     (unless (x:empty-string file)
-      (qfun (qfun *editor* "textCursor") "insertText" (read-file file :do-not-set)))))
+      (qfuns *editor* "textCursor" ("insertText" (read-file file :do-not-set))))))
 
 ;;; find, replace
 
@@ -1327,7 +1327,7 @@
     (qfun *editor* "moveCursor" |QTextCursor.Start|)))
 
 (defun replace-text ()
-  (qfun (qfun *editor* "textCursor") "insertText" (qget *replace* "text"))
+  (qfuns *editor* "textCursor" ("insertText" (qget *replace* "text")))
   (find-text))
 
 ;;; select

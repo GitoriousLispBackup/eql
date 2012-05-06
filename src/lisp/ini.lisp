@@ -31,6 +31,20 @@
                                  (nreverse vars)))
               `(qdelete ,(first vars)))))))
 
+(defmacro qinvoke-methods (object &rest functions)
+  "args: (object &rest functions)
+   alias: qfuns
+   A simple syntax for nested <code>qfun</code> calls.
+       (qfuns object \"funA\" \"funB\" \"funC\")      ; expands to: (qfun (qfun (qfun object \"funA\") \"funB\") \"funC\")
+       (qfuns object (\"funA\" 1) (\"funB\" a b c)) ; expands to: (qfun (qfun object \"funA\" 1) \"funB\" a b c)"
+  (let (form)
+    (dolist (fun functions)
+      (setf form (append (list 'qfun (if form form object)) (x:ensure-list fun))))
+    form))
+
+(defmacro qfuns (object &rest functions)
+  `(qinvoke-methods ,object ,@functions))
+
 (defmacro defvar-ui (main &rest names)
   "args: (main-widget &rest variables)
    This macro simplifies the definition of UI variables:
@@ -250,11 +264,13 @@
                   (cons 'qfrom-utf8           '(byte-array))
                   (cons 'qfun                 '(object function-name &rest arguments))
                   (cons 'qfun*                '(object cast-class-name function-name &rest arguments))
+                  (cons 'qfuns                '(object &rest functions))
                   (cons 'qget                 '(object name))
                   (cons 'qgui                 '(&optional process-events))
                   (cons 'qid                  '(class-name))
                   (cons 'qinvoke-method       '(object function-name &rest arguments))
                   (cons 'qinvoke-method*      '(object cast-class-name function-name &rest arguments))
+                  (cons 'qinvoke-methods      '(object &rest functions))
                   (cons 'qload-ui             '(file-name))
                   (cons 'qlocal8bit           '(string))
                   (cons 'qmessage-box         '(x))

@@ -28,11 +28,13 @@
    #:qfrom-utf8
    #:qfun
    #:qfun*
+   #:qfuns
    #:qget
    #:qgui
    #:qid
    #:qinvoke-method
    #:qinvoke-method*
+   #:qinvoke-methods
    #:qlet
    #:qload-ui
    #:qlocal8bit

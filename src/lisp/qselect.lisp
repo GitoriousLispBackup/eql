@@ -30,7 +30,7 @@
     (when listen
       (setf listen nil)
       (setf *q* object)
-      (setf (qt-object-unique object) (qfun (qfun *q* "property" "EQL.unique") "toUInt"))
+      (setf (qt-object-unique object) (qfuns *q* ("property" "EQL.unique") "toUInt"))
       (indicate)
       (qfun "QApplication" "restoreOverrideCursor")
       (when *on-selected*

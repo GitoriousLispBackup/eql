@@ -83,7 +83,7 @@
         (! "drawEllipse(QRectF)" (list (+ dir 4) -17 4 4)))
       ;; ears
       (let ((me (mouse-item mouse)))
-        (! "setBrush(QBrush)" (if (null (qfun (qfun me "scene") "collidingItems" me))
+        (! "setBrush(QBrush)" (if (null (qfuns me "scene" ("collidingItems" me)))
                                   olive
                                   red)))
       (! "drawEllipse(QRect)" '(-17 -12 16 16))
@@ -134,13 +134,11 @@
                                                 ((plusp sin) -0.25)
                                                 (t 0))))))
         ;; try not to crash with any other mice
-        (let ((danger-mice (qfun (qfun me "scene")
-                                 "items(QPolygonF,Qt::ItemSelectionMode,Qt::SortOrder)"
-                                 (append (map-to '(0 0))
-                                         (map-to '(-30 -50))
-                                         (map-to '(30 -50)))
-                                 |Qt.IntersectsItemShape|
-                                 |Qt.AscendingOrder|)))
+        (let ((danger-mice (qfuns me "scene" ("items(QPolygonF,Qt::ItemSelectionMode,Qt::SortOrder)" (append (map-to '(0 0))
+                                                                                                             (map-to '(-30 -50))
+                                                                                                             (map-to '(30 -50)))
+                                                                                                     |Qt.IntersectsItemShape|
+                                                                                                     |Qt.AscendingOrder|))))
           (dolist (danger-mouse danger-mice)
             (unless (qeql me danger-mouse)
               (let* ((line-to-mouse (append '(0 0)

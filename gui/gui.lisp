@@ -257,7 +257,7 @@
 (defun add-to-edit (item col)
   (let ((txt (prin1-to-string (qfun item "text"
                                     (min 1 (1- (qget (qfun item "treeWidget") "columnCount")))))))
-    (qfun (qfun "QApplication" "clipboard") "setText" txt)
+    (qfuns "QApplication" "clipboard" ("setText" txt))
     (let ((curr (qget *edit* "text")))
       (when (and (x:starts-with "(" curr)
                  (not (x:ends-with "\"" curr)))
