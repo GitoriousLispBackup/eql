@@ -145,6 +145,7 @@
 <pre>
   (qfuns object "funA" "funB" "funC")      ; expands to: (qfun (qfun (qfun object "funA") "funB") "funC")
   (qfuns object ("funA" 1) ("funB" a b c)) ; expands to: (qfun (qfun object "funA" 1) "funB" a b c)
+  (qfuns "QApplication" "font" "family")
 </pre>
 </p><br>
 <p>
@@ -164,7 +165,7 @@
 </p><br>
 <p>
 <b>QLOCAL8BIT (string)</b>
-<p>Returns the string converted using <code>QString::toLocal8Bit()</code> (see <code>QLocale</code> settings).<br>Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.</p>
+<p>Returns the string converted using <code>QString::toLocal8Bit()</code> (see <code>QLocale</code> settings).<br>Depending on the OS, this may be necessary if you get a filename from Qt and want to use it in Lisp.</p>
 </p><br>
 <p>
 <b>QMESSAGE-BOX (x)</b>
@@ -301,7 +302,7 @@
 </p><br>
 <p>
 <b>QUTF8 (string)</b>
-<p>Returns the string converted using <code>QString::toUtf8()</code>.<br>Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.</p>
+<p>Returns the string converted using <code>QString::toUtf8()</code>.<br>Depending on the OS, this may be necessary if you get a filename from Qt and want to use it in Lisp.</p>
 </p><br>
 <p>
 <b>QVERSION ()</b>

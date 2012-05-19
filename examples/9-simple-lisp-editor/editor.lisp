@@ -18,7 +18,7 @@
 (require :local-client (probe-file "local-client.lisp"))
 (require :settings     (probe-file "settings.lisp"))
 
-;; load all available modules for tab completions
+;; load all available modules for code completions
 (dolist (m (list :help :network :opengl :sql :svg :webkit))
   (ignore-errors (eql:qrequire m)))
 
@@ -259,8 +259,8 @@
 
 (let (size)
   (defun font-metrics-size ()
-    (if size size (qlet ((fm "QFontMetrics(QFont)" eql::*code-font*))
-                    (setf size (list (qfun fm "width(QChar)" #\Space)
+    (or size (qlet ((fm "QFontMetrics(QFont)" eql::*code-font*))
+               (setf size (list (qfun fm "width(QChar)" #\Space)
                                      (qfun fm "height")))))))
 
 (defun set-color (widget role color)
@@ -442,7 +442,7 @@
         (setf *extra-selections* nil
               *error-region* nil)
         (qfun *current-editor* "setExtraSelections" nil))
-      (setf *current-depth* 0
+      (setf *current-depth*          0
             *current-keyword-indent* 0)
       (let* ((text-cursor (qfun *current-editor* "textCursor"))
              (text-block (qfun text-cursor "block"))
@@ -769,7 +769,7 @@
 (defun auto-indent-spaces (kw)
   (when (symbolp kw)
     (let ((name (symbol-name kw)))
-      (x:when-it (position +package-char-dummy+ name :from-end t)
+      (x:when-it (position #\: name :from-end t)
         (setf name (subseq name (1+ x:it))))
       (cdr (find name *auto-indent* :test 'string= :key 'car)))))
 
@@ -787,7 +787,7 @@
   (let* ((line* (cut-comment line))
          (open (position #\( line* :from-end t))
          (space (when open (position #\Space line* :start open))))
-    (position #\Space (if space line* line) :test 'char/= :start (if space space 0))))
+    (position #\Space (if space line* line) :test 'char/= :start (or space 0))))
 
 (defun indentation (line)
   (if (x:empty-string (string-trim " " line))
@@ -796,7 +796,7 @@
             (pos-x (last-expression-indent line)))
         (if (char= #\; (char line pos-1))
             pos-1
-            (let ((spaces (+ *current-depth* *current-keyword-indent*))) ; see right paren matcher
+            (let ((spaces (+ *current-depth* *current-keyword-indent*)))
               (when (and (zerop spaces)
                          (not *extra-selections*)
                          pos-1)
@@ -890,96 +890,80 @@
 
 ;;; paren highlighting
 
+(defun code-parens-only (code &optional right)
+  "Substitute all non code related parenthesis with a space character."
+  (let ((ex #\Space)
+        (len (length code))
+        in-string)
+    (dotimes (i len)
+      (let* ((i* (if right (- len i 1) i))
+             (ch (char code i*)))
+        (cond ((char= #\\ ex)
+               (when (find ch "()")
+                 (setf (char code i*) #\Space)))
+              ((char= #\" ch)
+               (setf in-string (not in-string)))
+              (in-string
+               (when (find ch "()")
+                 (setf (char code i*) #\Space))))
+        (setf ex ch))))
+  code)
+
+(defun paren-match-index (code &optional (n 0))
+  (dotimes (i (length code))
+    (let ((ch (char code i)))
+      (case ch
+        (#\( (incf n))
+        (#\) (decf n))))
+    (when (zerop n)
+      (return-from paren-match-index i))))
+
+(defun code-region (text-cursor curr-line &optional right)
+  (let ((max (qfun (document) "blockCount")))
+    (with-output-to-string (s)
+      (write-line (if right (nreverse curr-line) curr-line) s)
+      (do* ((n (qfun text-cursor "blockNumber") (+ n (if right -1 1)))
+            (text-block (qfun (qfun text-cursor "block") (if right "previous" "next"))
+                        (qfun text-block (if right "previous" "next")))
+            (text (qfun text-block "text") (qfun text-block "text")))
+           ((or (if right (zerop n) (= n max))
+                (x:empty-string (string-trim '(" ") text))))
+        (write-line (if right (nreverse text) text) s)))))
+
+(defun left-right-paren (right text-cursor curr-line &optional pos)
+  (let ((match-index (unless right (paren-match-index (code-parens-only (copy-seq curr-line))))))
+    (if match-index
+        (values 0 (+ (or pos 0) match-index))
+        (progn
+          (setf code (code-parens-only (code-region text-cursor curr-line right) right))
+          (x:when-it (paren-match-index code)
+            (let ((pos (1- (if right
+                               (- (position #\Newline code :start x:it) x:it)
+                               (- x:it (position #\Newline code :end x:it :from-end t))))))
+              (when right
+                (update-indentations code x:it pos))
+              (values (count #\Newline code :end x:it) pos)))))))
+
 (defun left-paren (text-cursor curr-line pos)
-  (let ((curr-n (qfun text-cursor "blockNumber"))
-        (start 0)
-        lines)
-    (flet ((try-read (curr-line*)
-             (setf lines (nconc lines (list curr-line*)))
-             (let ((code (with-output-to-string (s)
-                           (dolist (line lines)
-                             (write-line line s)))))
-               ;; proceed only without EOF Lisp reader error (for performance reasons)
-               (read* code)
-               (unless (eql :end-of-file *try-read-error*)
-                 (do ((end (position #\) code :start start) (position #\) code :start (1+ end))))
-                     ((null end))
-                   (let ((code* (subseq code 0 (1+ end))))
-                     (multiple-value-bind (exp end*)
-                         (if (string= "()" code*)
-                             (values '(nil) 2)
-                             (read* code*))
-                       (when (consp exp)
-                         (let ((n-lines (1- (length lines))))
-                           (return-from left-paren (values n-lines                           ; lines down
-                                                           (1- (if (zerop n-lines)           ; characters right
-                                                                   (+ pos end*)
-                                                                   (- end* start))))))))))))
-             (incf start (1+ (length curr-line*)))))
-      (try-read curr-line)
-      (let ((max (qfun (document) "blockCount")))
-        (when (< curr-n max)
-          (do ((n (1+ curr-n) (1+ n))
-               (text-block (qfuns text-cursor "block" "next") (qfun text-block "next")))
-              ((>= n max))
-            (try-read (qfun text-block "text"))))))))
+  (left-right-paren nil text-cursor curr-line pos))
 
 (defun right-paren (text-cursor curr-line)
-  (let ((curr-n (qfun text-cursor "blockNumber"))
-        lines)
-    (flet ((try-read (curr-line* &optional first)
-             (push curr-line* lines)
-             (let ((code (with-output-to-string (s)
-                           (dolist (line lines)
-                             (write-line line s)))))
-               ;; proceed only on provoked EOF Lisp reader error (for performance reasons)
-               (read* (concatenate 'string "(" code))
-               (when (eql :end-of-file *try-read-error*) 
-                 (do ((start (position #\( code :end (length curr-line*) :from-end t) (position #\( code :end start :from-end t)))
-                     ((null start))
-                   (unless (and (plusp start)
-                                (char= #\\ (char code (1- start))))
-                     (let ((code* (subseq code (if (and (plusp start)
-                                                        (char= #\` (char code (1- start)))) ; macros etc.
-                                                   (1- start)
-                                                   start))))
-                       (multiple-value-bind (exp end)
-                           (if (x:starts-with "()" code*)
-                               (values '(nil) 2)
-                               (read* code*))
-                         (cond ((and (consp exp)
-                                     end
-                                     (= end (1- (length code*))))
-                                (setf *current-depth* start)
-                                (x:when-it (position #\( code :end start :from-end t)
-                                  (let* ((kw (read* (subseq code (1+ x:it))))
-                                         (spc (auto-indent-spaces kw)))
-                                    (when spc
-                                      (setf *current-depth* x:it
-                                            *current-keyword-indent* spc))))
-                                (when (plusp *current-depth*)
-                                  (let ((prev (char curr-line* (1- *current-depth*))))
-                                    (unless (find prev " (")
-                                      (setf  *current-depth* (x:if-it (position #\Space curr-line* :end *current-depth* :from-end t)
-                                                                 (1+ x:it)
-                                                                 0)))))
-                                (return-from right-paren (values (1- (length lines)) ; lines up
-                                                                 start)))            ; characters right
-                               ((null exp)
-                                (let* ((kw (read* (subseq code 1)))
-                                       (spc (auto-indent-spaces kw)))
-                                  (when spc
-                                    (setf *current-depth* 0
-                                          *current-keyword-indent* spc)
-                                    (return-from right-paren)))))))))))
-             (when (x:starts-with "(" curr-line*)
-               (return-from right-paren))))
-      (try-read curr-line t)
-      (when (plusp curr-n)
-        (do ((n (1- curr-n) (1- n))
-             (text-block (qfuns text-cursor "block" "previous") (qfun text-block "previous")))
-            ((minusp n))
-          (try-read (qfun text-block "text")))))))
+  (left-right-paren :right text-cursor curr-line))
+
+(defun update-indentations (code indent pos)
+  (flet ((pos-newline (start)
+           (when start
+             (or (position #\Newline code :start start) (length code)))))
+    (let* ((pos-keyword    (paren-match-index code -1))
+           (pos-local      (paren-match-index code -3))
+           (keyword-indent (x:when-it (pos-newline pos-keyword) (- x:it pos-keyword 1)))
+           (auto-indent    (auto-indent-spaces (read* (reverse (subseq code 0 pos-keyword)))))
+           (in-local       (find (read* (reverse (subseq code 0 pos-local))) '(flet labels macrolet)))
+           (local-indent   (x:when-it (and in-local (pos-newline pos-local)) (- x:it pos-local 1))))
+      (setf *current-depth*          (or local-indent (if auto-indent (or keyword-indent pos) pos))
+            *current-keyword-indent* (if local-indent
+                                         (+ 5 (length (symbol-name in-local)))
+                                         (or auto-indent 0))))))
 
 (let ((color (qnew "QBrush(QColor)" "#FFFF40"))
       (color-region (qnew "QBrush(QColor)" "#FFD0D0"))
@@ -1056,7 +1040,7 @@
       (qfun text-cursor "setPosition" end)
       (x:do-with (qfun *editor*)
         ("setTextCursor" text-cursor)
-        "ensureCursorVisible"))))
+        ("ensureCursorVisible")))))
 
 ;;; external lisp process
 

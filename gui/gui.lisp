@@ -1,5 +1,9 @@
 ;;; copyright (c) 2010-2012 Polos Ruetz
 
+;; load all available modules for documentation purposes
+(dolist (m (list :help :network :opengl :sql :svg :webkit))
+  (ignore-errors (eql:qrequire m)))
+
 (defpackage :gui
   (:use :common-lisp :eql)
   (:export

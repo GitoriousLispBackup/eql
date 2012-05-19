@@ -1979,14 +1979,14 @@ cl_object qtranslate(cl_object l_con, cl_object l_src, cl_object l_n) {
 
 cl_object qlocal8bit(cl_object l_str) {
     /// args: (string)
-    /// Returns the string converted using <code>QString::toLocal8Bit()</code> (see <code>QLocale</code> settings).<br>Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.
+    /// Returns the string converted using <code>QString::toLocal8Bit()</code> (see <code>QLocale</code> settings).<br>Depending on the OS, this may be necessary if you get a filename from Qt and want to use it in Lisp.
     ecl_process_env()->nvalues = 1;
     cl_object l_ret = from_cstring(toQString(l_str).toLocal8Bit());
     return l_ret; }
 
 cl_object qutf8(cl_object l_str) {
     /// args: (string)
-    /// Returns the string converted using <code>QString::toUtf8()</code>.<br>Depending on the OS, this can be necessary if you get a filename from Qt and want to use it in Lisp.
+    /// Returns the string converted using <code>QString::toUtf8()</code>.<br>Depending on the OS, this may be necessary if you get a filename from Qt and want to use it in Lisp.
     ecl_process_env()->nvalues = 1;
     cl_object l_ret = from_cstring(toQString(l_str).toUtf8());
     return l_ret; }
