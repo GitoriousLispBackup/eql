@@ -123,7 +123,7 @@
              (not (x:empty-string name)))
     (with-open-file (s (os-pathname name) :direction :output
                        :if-exists :supersede)
-      (write-string (qget *editor* "plainText") s)
+      (write-string (string-right-trim '(#\Space #\Tab #\Newline) (qget *editor* "plainText")) s)
       (setf *file-name* name)
       (show-file-name))))
 
@@ -326,15 +326,15 @@
 (defun call-candidates (name type &optional args (const t) static)
   (let ((types (case type
                  (:properties
-                    '("Properties:"))
+                  '("Properties:"))
                  (:functions
-                    (if static '("Methods:") '("Methods:" "Slots:" "Signals:")))
+                  (if static '("Methods:") '("Methods:" "Slots:" "Signals:")))
                  (:signals
-                    '("Signals:"))
+                  '("Signals:"))
                  (:slots
-                    '("Slots:"))
+                  '("Slots:"))
                  (:override
-                    '("Override:"))))
+                  '("Override:"))))
         candidates)
     (do ((curr name (qsuper-class-name curr)))
         ((null curr))
@@ -425,14 +425,14 @@
                 (unless (char= #\\ ex)
                   (case ch
                     ((#\( #\))
-                       (set-color i 1 *parenthesis-color*))
+                     (set-color i 1 *parenthesis-color*))
                     (#\"
-                       (x:when-it (end-position (subseq text i))
-                         (set-color i x:it *string-color*)
-                         (incf i (1- x:it))))
+                     (x:when-it (end-position (subseq text i))
+                       (set-color i x:it *string-color*)
+                       (incf i (1- x:it))))
                     (#\;
-                       (qfun highlighter "setFormat(int,int,QTextCharFormat)" i (- (length text) i) *comment-format*)
-                       (return))))
+                     (qfun highlighter "setFormat(int,int,QTextCharFormat)" i (- (length text) i) *comment-format*)
+                     (return))))
                 (setf ex ch)))))))
     (defun cursor-position-changed ()
       (setf *current-editor* (qsender))
@@ -599,13 +599,13 @@
     (x:when-it (current-completer-option)
       (case *current-completer*
         (:qnew
-           (insert-text x:it :select))
+         (insert-text x:it :select))
         (:qnew-constructor
-           (insert-text (add-quote (subseq x:it 1))))
+         (insert-text (add-quote (subseq x:it 1))))
         (:qfun
-           (insert-text (add-quote (cut-optional-type-list x:it)) :select))
+         (insert-text (add-quote (cut-optional-type-list x:it)) :select))
         ((:qget :qset :qfun-static :qfind-child :qconnect-from :qconnect-to :qoverride)
-           (insert-text (add-quote x:it) :select)))))
+         (insert-text (add-quote x:it) :select)))))
   (close-completer))
 
 (defun completer-key-pressed (key-event)
@@ -613,13 +613,13 @@
     (let ((forward t))
       (case (qfun key-event "key")
         ((#.|Qt.Key_Up| #.|Qt.Key_Down| #.|Qt.Key_PageUp| #.|Qt.Key_PageDown| #.|Qt.Key_Home| #.|Qt.Key_End|)
-           (setf forward nil))
+         (setf forward nil))
         ((#.|Qt.Key_Return| #.|Qt.Key_Enter|)
-           (insert-completer-option-text)
-           (return-from completer-key-pressed))
+         (insert-completer-option-text)
+         (return-from completer-key-pressed))
         (#.|Qt.Key_Escape|
-           (close-completer)
-           (return-from completer-key-pressed)))
+         (close-completer)
+         (return-from completer-key-pressed)))
       (if forward
           (qfun "QCoreApplication" "sendEvent" *current-editor* key-event)
           (qcall-default)))))
@@ -723,15 +723,15 @@
                                     (eql var (second el)))
                            (case (first (third el))
                              (qnew
-                                (return-from find-in-source
-                                  (class-only (second (third el)))))
+                              (return-from find-in-source
+                                (class-only (second (third el)))))
                              (qload-ui
-                                (return-from find-in-source
-                                  (if exp el (qui-class (eval (second (third el)))))))
+                              (return-from find-in-source
+                                (if exp el (qui-class (eval (second (third el)))))))
                              (qfind-child
-                                (return-from find-in-source
-                                  (qui-class (eval (second (third (find-in-source (second (third el)) code :global :exp))))
-                                             (third (third el)))))))
+                              (return-from find-in-source
+                                (qui-class (eval (second (third (find-in-source (second (third el)) code :global :exp))))
+                                           (third (third el)))))))
                          (when (< depth *cursor-code-depth*)
                            (case (first el)
                              ((let let*)
@@ -769,7 +769,7 @@
 (defun auto-indent-spaces (kw)
   (when (symbolp kw)
     (let ((name (symbol-name kw)))
-      (x:when-it (position #\: name :from-end t)
+      (x:when-it (position +package-char-dummy+ name :from-end t)
         (setf name (subseq name (1+ x:it))))
       (cdr (find name *auto-indent* :test 'string= :key 'car)))))
 
@@ -784,10 +784,14 @@
   line)
 
 (defun last-expression-indent (line)
-  (let* ((line* (cut-comment line))
-         (open (position #\( line* :from-end t))
-         (space (when open (position #\Space line* :start open))))
-    (position #\Space (if space line* line) :test 'char/= :start (or space 0))))
+  (let* ((line* (string-right-trim " " (x:string-substitute "  " "\\(" (x:string-substitute "  " "\\)" (cut-comment line)))))
+         (open  (position #\( line* :from-end t))
+         (space (when open (position #\Space line* :start open)))
+         (one   (and open (not space) (not (x:ends-with ")" line*)))))
+    (if one
+        (1+ open)
+        (or (position #\Space (if space line* line) :test 'char/= :start (or space 0))
+            0))))
 
 (defun indentation (line)
   (if (x:empty-string (string-trim " " line))
@@ -803,7 +807,7 @@
                 (setf spaces (if (and (char= #\( (char line pos-1))
                                       (find (read* (subseq line (1+ pos-1)))
                                             '(case ccase ecase defvar-ui loop prog progn prog1 prog2
-                                              typecase unless when when-it when-it* while)))
+                                              typecase ctypecase etypecase unless when when-it when-it* while)))
                                  (+ pos-1 2)
                                  pos-x)))
               spaces)))))
@@ -815,78 +819,78 @@
       (let ((ch (char line i)))
         (case ch
           (#\"
-             (unless (char= #\\ ex)
-               (setf in-string (not in-string))))
+           (unless (char= #\\ ex)
+             (setf in-string (not in-string))))
           ((#\( #\))
-             (when in-string
-               (setf (char line i) #\Space))))
+           (when in-string
+             (setf (char line i) #\Space))))
         (setf ex ch))))
   line)
 
 (defun editor-key-pressed (key-event)
   (case (qfun key-event "key")
     ((#.|Qt.Key_Return| #.|Qt.Key_Enter|)
-       (if (or (qget *file-popup* "visible")
-               (qget *symbol-popup* "visible"))
-           (insert-tab-completion)
-           (let* ((cursor (qfun *editor* "textCursor"))
-                  (curr (qfun cursor "block"))
-                  (spaces (indentation (qfun curr "text"))))
-             (if (zerop spaces)
-                 (qcall-default)
-                 (progn
-                   (qfun cursor "insertText" (format nil "~%~A" (make-string spaces)))
-                   (qfun *editor* "ensureCursorVisible"))))))
+     (if (or (qget *file-popup* "visible")
+             (qget *symbol-popup* "visible"))
+         (insert-tab-completion)
+         (let* ((cursor (qfun *editor* "textCursor"))
+                (curr (qfun cursor "block"))
+                (spaces (indentation (qfun curr "text"))))
+           (if (zerop spaces)
+               (qcall-default)
+               (progn
+                 (qfun cursor "insertText" (format nil "~%~A" (make-string spaces)))
+                 (qfun *editor* "ensureCursorVisible"))))))
     (#.|Qt.Key_Tab|
-       (if (zerop (qfun key-event "modifiers"))
-           (update-tab-completer nil :show)
-           ;; auto indent paragraph: current line -> next empty line
-           (let ((cursor* (qfun *editor* "textCursor")))
-             (qfun cursor* "movePosition" |QTextCursor.StartOfLine| |QTextCursor.MoveAnchor|)
-             (qfun *editor* "setTextCursor" cursor*)
-             (let ((orig* (qfun *editor* "textCursor")))
-               (loop
-                 (let ((spaces 0))
-                   (let ((cursor (qfun *editor* "textCursor"))  ; returns a copy
-                         (orig   (qfun *editor* "textCursor"))) ; (see above)
-                     (unless (zerop (qfun cursor "blockNumber"))
-                       (qfun cursor "movePosition" |QTextCursor.PreviousBlock| |QTextCursor.MoveAnchor|)
-                       (qfun *editor* "setTextCursor" cursor)
-                       (let ((curr (qfun cursor "block")))
-                         (let ((line (no-string-parens (qfun curr "text"))))
-                           (unless (or (x:empty-string line)
-                                       (char= #\; (find #\Space line :test 'char/=)))
-                             ;; apply right paren matcher (for indent info)
-                             (do* ((i (1- (length line)) (1- i))
-                                   (ch (char line i) (char line i)))
-                                 ((zerop i))
-                               (when (char= #\) ch)
-                                 (show-matching-parenthesis cursor (subseq line 0 (1+ i)) :right)
-                                 (when *extra-selections*
-                                   (return)))))
-                           (setf spaces (indentation line)))))
-                     (qfun *editor* "setTextCursor" orig)
-                     ;; select current indent spaces (to be substituted)
-                     (let* ((curr (qfun orig "block"))
-                            (line (qfun curr "text"))
-                            (pos (position #\Space line :test 'char/=)))
-                       (when (x:empty-string (string-trim " " line))
-                         (return))                                                                      ; exit 1
-                       (when (not (zerop pos))
-                         (x:do-with (qfun orig "movePosition")
-                           (|QTextCursor.StartOfLine| |QTextCursor.MoveAnchor|)
-                           (|QTextCursor.NextCharacter| |QTextCursor.KeepAnchor| pos))))
-                     (unless (zerop spaces)
-                       (qfun orig "insertText" (make-string spaces)))))
-                 (unless (qfun cursor* "movePosition" |QTextCursor.NextBlock| |QTextCursor.MoveAnchor|)
-                   (return))                                                                            ; exit 2
-                 (qfun *editor* "setTextCursor" cursor*))
-               (x:do-with (qfun *editor*)
-                 ("setTextCursor" orig*)
-                 "ensureCursorVisible")))))
+     (if (zerop (qfun key-event "modifiers"))
+         (update-tab-completer nil :show)
+         ;; auto indent paragraph: current line -> next empty line
+         (let ((cursor* (qfun *editor* "textCursor")))
+           (qfun cursor* "movePosition" |QTextCursor.StartOfLine| |QTextCursor.MoveAnchor|)
+           (qfun *editor* "setTextCursor" cursor*)
+           (let ((orig* (qfun *editor* "textCursor")))
+             (loop
+               (let ((spaces 0))
+                 (let ((cursor (qfun *editor* "textCursor"))  ; returns a copy
+                       (orig   (qfun *editor* "textCursor"))) ; (see above)
+                   (unless (zerop (qfun cursor "blockNumber"))
+                     (qfun cursor "movePosition" |QTextCursor.PreviousBlock| |QTextCursor.MoveAnchor|)
+                     (qfun *editor* "setTextCursor" cursor)
+                     (let ((curr (qfun cursor "block")))
+                       (let ((line (no-string-parens (qfun curr "text"))))
+                         (unless (or (x:empty-string line)
+                                     (char= #\; (find #\Space line :test 'char/=)))
+                           ;; apply right paren matcher (for indent info)
+                           (do* ((i (1- (length line)) (1- i))
+                                 (ch (char line i) (char line i)))
+                               ((zerop i))
+                             (when (char= #\) ch)
+                               (show-matching-parenthesis cursor (subseq line 0 (1+ i)) :right)
+                               (when *extra-selections*
+                                 (return)))))
+                         (setf spaces (indentation line)))))
+                   (qfun *editor* "setTextCursor" orig)
+                   ;; select current indent spaces (to be substituted)
+                   (let* ((curr (qfun orig "block"))
+                          (line (qfun curr "text"))
+                          (pos (position #\Space line :test 'char/=)))
+                     (when (x:empty-string (string-trim " " line))
+                       (return))                                                                      ; exit 1
+                     (when (not (zerop pos))
+                       (x:do-with (qfun orig "movePosition")
+                         (|QTextCursor.StartOfLine| |QTextCursor.MoveAnchor|)
+                         (|QTextCursor.NextCharacter| |QTextCursor.KeepAnchor| pos))))
+                   (unless (zerop spaces)
+                     (qfun orig "insertText" (make-string spaces)))))
+               (unless (qfun cursor* "movePosition" |QTextCursor.NextBlock| |QTextCursor.MoveAnchor|)
+                 (return))                                                                            ; exit 2
+               (qfun *editor* "setTextCursor" cursor*))
+             (x:do-with (qfun *editor*)
+               ("setTextCursor" orig*)
+               "ensureCursorVisible")))))
     (t
-       (update-tab-completer key-event)
-       (qcall-default))))
+     (update-tab-completer key-event)
+     (qcall-default))))
 
 ;;; paren highlighting
 
@@ -948,7 +952,8 @@
   (left-right-paren nil text-cursor curr-line pos))
 
 (defun right-paren (text-cursor curr-line)
-  (left-right-paren :right text-cursor curr-line))
+  (unless (x:ends-with "\\)" curr-line)
+    (left-right-paren :right text-cursor curr-line)))
 
 (defun update-indentations (code indent pos)
   (flet ((pos-newline (start)
@@ -1094,32 +1099,32 @@
 (defun data-from-server (type str)
   (case type
     ((:expression :output :values :trace :error)
-       (when (find type '(:trace :error))
-         ;; fresh line
-         (let ((nl (string #\Newline)))
-           (unless (x:starts-with nl str)
-             (let ((cur (qfun *output* "textCursor")))
-               (unless (zerop (qfun cur "columnNumber"))
-                 (qfun *output* "insertPlainText" nl))))))
-       (x:do-with (qfun *output*)
-         ("moveCursor" |QTextCursor.End|)
-         ("setTextColor" (case type
-                           (:output "saddlebrown")
-                           (:values "blue")
-                           (:trace  "darkmagenta")
-                           (:error  "red")
-                           (t       "black")))
-         ("insertPlainText" str))
-       (let ((vs (qfun *output* "verticalScrollBar")))
-         (qset vs "value" (qget vs "maximum"))))
+     (when (find type '(:trace :error))
+       ;; fresh line
+       (let ((nl (string #\Newline)))
+         (unless (x:starts-with nl str)
+           (let ((cur (qfun *output* "textCursor")))
+             (unless (zerop (qfun cur "columnNumber"))
+               (qfun *output* "insertPlainText" nl))))))
+     (x:do-with (qfun *output*)
+       ("moveCursor" |QTextCursor.End|)
+       ("setTextColor" (case type
+                         (:output "saddlebrown")
+                         (:values "blue")
+                         (:trace  "darkmagenta")
+                         (:error  "red")
+                         (t       "black")))
+       ("insertPlainText" str))
+     (let ((vs (qfun *output* "verticalScrollBar")))
+       (qset vs "value" (qget vs "maximum"))))
     (:file-position
-       (mark-error-region (read-from-string str)))
+     (mark-error-region (read-from-string str)))
     (:activate-editor
-       (x:do-with (qfun *main*)
-         "activateWindow"
-         "raise"))
+     (x:do-with (qfun *main*)
+       "activateWindow"
+       "raise"))
     (:widget-selected
-       (widget-selected str))))
+     (widget-selected str))))
 
 ;;; command line
 
@@ -1155,21 +1160,21 @@
   (defun command-key-pressed (key-event)
     (x:if-it (case (qfun key-event "key")
                (#.|Qt.Key_Up|
-                  (x:when-it (pop up)
-                    (push x:it down)))
+                (x:when-it (pop up)
+                  (push x:it down)))
                (#.|Qt.Key_Down|
-                  (x:when-it (pop down)
-                    (push x:it up)))
+                (x:when-it (pop down)
+                  (push x:it up)))
                (#.|Qt.Key_Tab|
-                  (update-tab-completer nil :show)
-                  (return-from command-key-pressed))
+                (update-tab-completer nil :show)
+                (return-from command-key-pressed))
                ((#.|Qt.Key_Return| #.|Qt.Key_Enter|)
-                  (if (or (qget *file-popup* "visible")
-                          (qget *symbol-popup* "visible"))
-                      (progn
-                        (insert-tab-completion)
-                        (return-from command-key-pressed))
-                      (command))))
+                (if (or (qget *file-popup* "visible")
+                        (qget *symbol-popup* "visible"))
+                    (progn
+                      (insert-tab-completion)
+                      (return-from command-key-pressed))
+                    (command))))
         (qset *command* "plainText" (first x:it))
         (update-tab-completer key-event))
     (qcall-default))

@@ -6,6 +6,8 @@
           ccase
           ecase
           typecase
+          ctypecase
+          etypecase
           handler-bind
           handler-case
           catch
