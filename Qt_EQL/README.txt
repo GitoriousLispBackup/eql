@@ -176,3 +176,13 @@ to include in main.cpp):
     Q_FOREACH instead of foreach
     QSLOT     instead of SLOT
     QSIGNAL   instead of SIGNAL
+
+--
+
+QVariantList note:
+
+Please see these 2 files for a convenient use of QVariantList:
+
+  Qt/trafficlight.h:     Q_INVOKABLE callQt()
+  EQL/trafficlight.lisp: defun call-qt ()
+

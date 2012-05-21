@@ -41,3 +41,17 @@
 
 (unless *slime-mode*
   (run))
+
+;;; Example using QVariantList
+;;;
+;;; Passes a QVariant list to C++ (important: use QLET here!).
+;;; Returns a QVariant list translated to Lisp objects.
+;;;
+;;; see ../Qt/trafficlight.h: callQt()
+
+(defun call-qt ()
+  (qlet ((a "QVariant(QString)" "hello from C++") ; string will be shown in C++ message box
+         (b "QVariant(int)" 42)
+         (c "QVariant(double)" pi)
+         (d "QVariant(QByteArray)" (vector -50 0 50)))
+    (qmsg (qfun* *qt-main* :qt "callQt" (list a b c d)))))

@@ -68,6 +68,7 @@ static const int T_QTextLine =                        qRegisterMetaType<QTextLin
 static const int T_QTextOption =                      qRegisterMetaType<QTextOption>("QTextOption");
 #if QT_VERSION < 0x40700
 static const int T_QVariant =                         qRegisterMetaType<QVariant>("QVariant");
+static const int T_QList_QVariant =                   qRegisterMetaType<QVariantList>("QVariantList");
 #endif
 static const int T_QVector_QGradientstop =            qRegisterMetaType<QVector<QGradientStop> >("QGradientStops");
 static const int T_QVector_QLine =                    qRegisterMetaType<QVector<QLine> >("QVector<QLine>");
@@ -498,8 +499,8 @@ static QList<QTextEdit::ExtraSelection> toQTextEditExtraSelectionList(cl_object 
             if(("QTextCursor" == q_cursor.className()) &&
                ("QTextCharFormat" == q_format.className())) {
                 QTextEdit::ExtraSelection sel;
-                sel.cursor = QTextCursor(*(QTextCursor*)q_cursor.pointer);
-                sel.format = QTextCharFormat(*(QTextCharFormat*)q_format.pointer);
+                sel.cursor = *(QTextCursor*)q_cursor.pointer;
+                sel.format = *(QTextCharFormat*)q_format.pointer;
                 l << sel; }
             l_el = cl_rest(l_el); }}
     return l; }
@@ -635,6 +636,17 @@ QVariant toQVariant(cl_object l_obj, const char* s_type, int type) {
         if(obj.pointer) {
             var = qVariantFromValue(obj.pointer); }}
     return var; }
+
+static QVariantList toQVariantList(cl_object l_lst) {
+    QVariantList l;
+    if(LISTP(l_lst)) {
+        cl_object l_el = l_lst;
+        while(l_el != Cnil) {
+            QtObject q_var = toQtObject(cl_car(l_el));
+            if("QVariant" == q_var.className()) {
+                l << *(QVariant*)q_var.pointer; }
+            l_el = cl_cdr(l_el); }}
+    return l; }
 
 static cl_object from_char(char ch) {
     return cl_code_char(MAKE_FIXNUM((int)ch)); }
@@ -802,6 +814,12 @@ static cl_object from_qvariant_value(const QVariant& var) {
         case QVariant::ULongLong:   l_obj = MAKE_FIXNUM(var.toULongLong()); }
     return l_obj; }
 
+static cl_object from_qvariantlist(const QVariantList& l) {
+    cl_object l_lst = Cnil;
+    Q_FOREACH(QVariant v, l) {
+        l_lst = CONS(from_qvariant_value(v), l_lst); }
+    return cl_nreverse(l_lst); }
+
 static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
     void* p = 0;
     const int n = QMetaType::type(sType);
@@ -852,6 +870,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case QMetaType::QUrl:                    p = new QUrl(*toQUrlPointer(l_arg)); break;
 #if QT_VERSION >= 0x40700
         case QMetaType::QVariant:                p = new QVariant(*toQVariantPointer(l_arg)); break;
+        case QMetaType::QVariantList:            p = new QVariantList(toQVariantList(l_arg)); break;
 #endif
     default:
         if(T_bool_ok_pointer == n) {
@@ -914,6 +933,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         else if(T_QTextOption == n)                      p = new QTextOption(*toQTextOptionPointer(l_arg));
 #if QT_VERSION < 0x40700
         else if(T_QVariant == n)                         p = new QVariant(*toQVariantPointer(l_arg));
+        else if(T_QList_QVariant == n)                   p = new QVariantList(toQVariantList(l_arg));
 #endif
         else if(T_QVector_QGradientstop == n)            p = new QVector<QGradientStop>(toQGradientStopVector(l_arg));
         else if(T_QVector_QLine == n)                    p = new QVector<QLine>(toQLineVector(l_arg));
@@ -1017,6 +1037,7 @@ cl_object to_lisp_arg(const MetaArg& arg) {
             case QMetaType::QUrl:                    l_ret = from_qurl(*(QUrl*)p); break;
 #if QT_VERSION >= 0x40700
             case QMetaType::QVariant:                l_ret = from_qvariant(*(QVariant*)p); break;
+            case QMetaType::QVariantList:            l_ret = from_qvariantlist(*(QVariantList*)p);
 #endif
         default:
             if(T_bool_ok_pointer == n) {
@@ -1075,6 +1096,7 @@ cl_object to_lisp_arg(const MetaArg& arg) {
             else if(T_QTextOption == n)                      l_ret = from_qtextoption(*(QTextOption*)p);
 #if QT_VERSION < 0x40700
             else if(T_QVariant)                              l_ret = from_qvariant(*(QVariant*)p);
+            else if(T_QList_QVariant)                        l_ret = from_qvariantlist(*(QVariantList*)p);
 #endif
             else if(T_QVector_QGradientstop == n)            l_ret = from_qgradientstopvector(*(QVector<QGradientStop>*)p);
             else if(T_QVector_QLine == n)                    l_ret = from_qlinevector(*(QVector<QLine>*)p);
@@ -1645,14 +1667,15 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
                                !types.at(i).endsWith('>')) {
                                 if(!strstr("QByteArray QChar QColor QGradientStop QLineF QPointF QPolygonF QRectF QRgb QSizeF QStringList", // primitives
                                            types.at(i))) {
-                                    QByteArray name1(types.at(i));
-                                    if(name1.endsWith('*')) {
-                                        name1.truncate(name1.length() - 1); }
-                                    QByteArray name2(qtObjectName(l_arg));
-                                    if(!inherits(name2, name1)) {
-                                        type_msg(name1, name2);
-                                        types_ok = false;
-                                        break; }}}}
+                                    if(types.at(i) != "QVariantList") { // special case
+                                        QByteArray name1(types.at(i));
+                                        if(name1.endsWith('*')) {
+                                            name1.truncate(name1.length() - 1); }
+                                        QByteArray name2(qtObjectName(l_arg));
+                                        if(!inherits(name2, name1)) {
+                                            type_msg(name1, name2);
+                                            types_ok = false;
+                                            break; }}}}}
                         MetaArg m_arg(toMetaArg(types.at(i), l_arg));
                         args[i + 1] = m_arg.second;
                         mArgs << m_arg;

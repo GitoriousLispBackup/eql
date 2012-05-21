@@ -806,7 +806,7 @@
                          pos-1)
                 (setf spaces (if (and (char= #\( (char line pos-1))
                                       (find (read* (subseq line (1+ pos-1)))
-                                            '(case ccase ecase defvar-ui loop prog progn prog1 prog2
+                                            '(case ccase ecase defvar-ui defstruct loop prog progn prog1 prog2
                                               typecase ctypecase etypecase unless when when-it when-it* while)))
                                  (+ pos-1 2)
                                  pos-x)))
