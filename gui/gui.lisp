@@ -93,8 +93,7 @@
     ("pos" (list 50 50))
     ("size" (list 700 500)))
   (qfun *edit* "setFocus")
-  (x:do-with (qfun *gui*)
-    "show" "raise"))
+  (x:do-with (qfun *gui*) "show" "raise"))
 
 (defun search-help (&optional txt)
   (unless (qfun *help* "find" (qget *search-help* "text"))
@@ -240,7 +239,7 @@
     (let ((item (qnew "QTreeWidgetItem")))
       (x:do-with (qfun item)
         ("setText" 0 (car type))
-        ("setText "1 (cdr type)))
+        ("setText" 1 (cdr type)))
       (qfun *primitives* "addTopLevelItem" item)))
   (x:do-with (qfun *primitives*)
     ("resizeColumnToContents" 0)
@@ -326,9 +325,7 @@
         (show-error err color)))))
 
 (defun focus-me ()
-  (x:do-with (qfun *gui*)
-    "activateWindow"
-    "raise")
+  (x:do-with (qfun *gui*) "activateWindow" "raise")
   (qfun *edit* "setFocus"))
 
 (defun widget-selected (widget)

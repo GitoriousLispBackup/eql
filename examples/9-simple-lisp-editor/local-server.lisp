@@ -68,6 +68,7 @@
           (format t "~%EQL local-server (ECL ~A, EQL ~A, Qt ~A)~@
                        Use local-client to send input.~%"
                   (si::lisp-implementation-version) eql-version qt-version))
+        (ini-system-tray)
         t)
       (progn
         (qfun "QMessageBox" "critical" nil (tr "EQL local-server")
@@ -88,6 +89,18 @@
                                             (two-way-stream-output-stream *terminal-io*))
         *gui-debug-io* (make-two-way-stream (input-hook:new 'handle-debug-io)
                                             (two-way-stream-output-stream *terminal-io*))))
+
+(defun ini-system-tray ()
+  (let* ((tray (qnew "QSystemTrayIcon(QIcon)"
+                     (qnew "QIcon(QString)"
+                           (in-home "examples/9-simple-lisp-editor/data/local_server.png"))))
+         (menu (qnew "QMenu"))
+         (quit (qnew "QAction(QObject*)" menu "text" (tr "Quit EQL server"))))
+    (qfun menu "addAction(QAction*)" quit)
+    (qconnect quit "triggered()" (lambda () (qdel tray) (qquit)))
+    (x:do-with (qfun tray)
+      ("setContextMenu" menu)
+      ("show"))))
 
 (let (size bytes-read data)
   (defun reset (&optional data-only)

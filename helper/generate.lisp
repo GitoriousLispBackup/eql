@@ -1111,6 +1111,7 @@
                     "QStringList"
                     "QTextInlineObject"
                     "QGradientStops"
+                    "QVariantList"
                     "QVector<QLine>"
                     "QVector<QLineF>"
                     "QVector<QPoint>"

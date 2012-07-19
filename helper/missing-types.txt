@@ -28,7 +28,6 @@ QMultiMap<QString,QString>
 QPair<QHostAddress,int>
 QStyleHintReturn
 QThread
-QVariantList
 QVector<QVariant>
 QWebPluginFactory
 Q_IPV6ADDR

@@ -124,6 +124,7 @@
     (with-open-file (s (os-pathname name) :direction :output
                        :if-exists :supersede)
       (write-string (string-right-trim '(#\Space #\Tab #\Newline) (qget *editor* "plainText")) s)
+      (write-char #\Newline s)
       (setf *file-name* name)
       (show-file-name))))
 
@@ -173,7 +174,7 @@
     (qset w "font" eql::*code-font*))
   (local-client:ini 'data-from-server)
   (show-status-message (format nil (tr "<b style='color:#4040E0'>Eval Region:</b> move to paren <b>(</b> or <b>)</b>, hit <b>~A</b>")
-                               (qfun (qget *action-eval-region* "shortcut") "toString" |QKeySequence.NativeText|))
+                               (qfuns *action-eval-region* "shortcut" ("toString" |QKeySequence.NativeText|)))
                        :html)
   (qfun *main* "show")
   (qsingle-shot 0 'delayed-ini))
@@ -261,7 +262,7 @@
   (defun font-metrics-size ()
     (or size (qlet ((fm "QFontMetrics(QFont)" eql::*code-font*))
                (setf size (list (qfun fm "width(QChar)" #\Space)
-                                     (qfun fm "height")))))))
+                                (qfun fm "height")))))))
 
 (defun set-color (widget role color)
   (qlet ((pal (qget widget "palette")))
@@ -632,9 +633,9 @@
     (setf *current-completer* name)
     (unless (null options)
       (x:do-with (qfun *eql-completer*)
-        "clear"
+        ("clear")
         ("addItems" options)
-        "adjustSize")
+        ("adjustSize"))
       (setf height (qfun *eql-completer* "sizeHintForRow" 0))
       (qset *eql-completer* "size"
             (list (+ 25 (* (min 80 (apply 'max (mapcar 'length options)))
@@ -642,9 +643,7 @@
                   (+ 2 (* (min +max-shown-completions+ (length options)) height))))
       (set-current-item (qfun *eql-completer* "item" 0))
       (adjust-completer-pos :ini)
-      (x:do-with (qfun *eql-completer*)
-        "show"
-        "setFocus")))
+      (x:do-with (qfun *eql-completer*) "show" "setFocus")))
   (defun adjust-completer-pos (&optional ini)
     (let* ((desktop (qfuns "QApplication" "desktop" "availableGeometry"))
            (cursor (if ini
@@ -679,9 +678,7 @@
 
 (defun close-completer (&optional event)
   (setf *current-completer* nil)
-  (x:do-with (qfun *eql-completer*)
-    "hide"
-    "clear")
+  (x:do-with (qfun *eql-completer*) "hide" "clear")
   (qfun *current-editor* "setFocus"))
 
 (defun current-source-code (text-cursor &optional curr-line all)
@@ -1120,9 +1117,7 @@
     (:file-position
      (mark-error-region (read-from-string str)))
     (:activate-editor
-     (x:do-with (qfun *main*)
-       "activateWindow"
-       "raise"))
+     (x:do-with (qfun *main*) "activateWindow" "raise"))
     (:widget-selected
      (widget-selected str))))
 

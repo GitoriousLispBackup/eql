@@ -1,8 +1,8 @@
 ;;; copyright (c) 2010-2012 Polos Ruetz
 
-(load "load-modules")
 (load "../src/lisp/x")
 (load "share")
+(load "load-modules")
 
 (use-package :x)
 
