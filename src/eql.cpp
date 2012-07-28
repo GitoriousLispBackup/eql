@@ -57,12 +57,10 @@ void EQL::exec(const QStringList& args) {
     if(arguments.contains("-qgui")) {
         arguments.removeAll("-qgui");
         forms << "(qgui)"; }
-#ifndef Q_OS_WIN
     if(arguments.contains("-qtpl")) {
         arguments.removeAll("-qtpl");
-        quit = true;
-        forms << "(si::qtop-level)"; }
-#endif
+        forms << "(eql::start-read-thread)";
+        startTopLevelTimer(); }
     if(arguments.contains("-quic")) {
         arguments.removeAll("-quic");
         if(arguments.size() == 2) {
@@ -117,6 +115,17 @@ void EQL::exec(QWidget* widget, const QString& lispFile, const QString& slimeIni
     if(initialize_slime) {
         forms << "(si:top-level)"; }
     eval(QString("(progn " + forms.join(" ") + ")").toAscii().constData()); }
+
+void EQL::startTopLevelTimer() {
+    static QTimer* timer = 0;
+    if(!timer) {
+        timer = new QTimer;
+        connect(timer, QSIGNAL(timeout()), this, QSLOT(evalTopLevel()));
+        timer->start(200); }}
+
+void EQL::evalTopLevel() {
+    STATIC_SYMBOL_PKG(s_eval_top_level, (char*)"EVAL-TOP-LEVEL", (char*)"EQL")
+    cl_funcall(1, s_eval_top_level); } // see "lisp/ini.lisp"
 
 void EQL::iniSlime() {
     initialize_slime = false;

@@ -23,5 +23,5 @@
                                    *size*))
                   ("waitForReadyRead")
                   ("readAllStandardOutput")))))))
-  (qmsg (format nil "Real time EQL / C++: ~A" (float (/ lisp c++))))
+  (qmsg (format nil "Real time EQL / C++: ~A / ~A = ~A" lisp c++ (truncate (+ 0.5 (float (/ lisp c++))))))
   (qq))

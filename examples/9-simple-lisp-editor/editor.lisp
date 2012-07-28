@@ -1344,7 +1344,9 @@
     (file-open (if (and (> (length args) 2)
                         (x:ends-with ".lisp" last-arg))
                    last-arg
-                   "my.lisp")))
+                   (progn
+                     (open "my.lisp" :if-does-not-exist :create)
+                     "my.lisp"))))
   (let ((ini ".ini-eql-editor.lisp"))
     (when (probe-file ini)
       (load ini))))

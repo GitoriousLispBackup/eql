@@ -2,8 +2,7 @@
 
 (in-package :eql)
 
-(defparameter *break-on-errors* nil
-  "Unless NIL, causes a simple (BREAK) on any EQL error.")
+(defparameter *break-on-errors* nil "Unless NIL, causes a simple (BREAK) on any EQL error.")
 
 (defmacro alias (s1 s2)
   `(setf (symbol-function ',s1) (function ,s2)))
@@ -70,6 +69,24 @@
 
 (defun %break (&rest args)
   (apply 'break args))
+
+;;; top-level processing Qt events
+
+(defparameter *top-level-form* nil)
+
+(defun eval-top-level ()
+  (when *top-level-form*
+    (si::feed-top-level)
+    (start-read-thread)))
+
+(defun start-read-thread ()
+  #+threads
+  (flet ((read* ()
+           (si::tpl-prompt)
+           (setf *top-level-form* (si::tpl-read))))
+    (mp:process-run-function 'read #'read*))
+  #-threads
+  (error "ECL threads not enabled, can't process Qt events."))
 
 ;;; qt-object
 
@@ -212,11 +229,6 @@
 (defun qexec (&optional ms)
   (%qexec ms))
 
-(defun qevents ()
-  (qexec 200)
-  #-win32
-  (serve-event:serve-all-events 0.02))
-
 (let (loaded)
   (defun qselect (&optional on-selected)
     "args: ()
@@ -301,41 +313,20 @@
                   (cons 'tr                   '(source &optional context plural-number))))
   (setf (get (car el) :function-lambda-list) (cdr el)))
 
-;;; The following is taken from "src/lsp/top.lsp" version 11.1.1
-;;; added SERVE-EVENT to TPL-READ, in order to process Qt events
-;;; (every modification is annotated with "[EQL]")
+;;; The following are modified/simplified functions taken from "src/lsp/top.lsp" (see ECL sources)
 
 (in-package :si)
 
-#-win32
-(defun qtop-level ()
-  "Args: ()
-ECL specific.
-The top-level loop of ECL. It is called by default when ECL is invoked."
+(defun feed-top-level ()
   (catch *quit-tag*
-    (let* ((*debugger-hook* nil)
-           + ++ +++ - * ** *** / // ///)
-      
-      ;;(in-package "CL-USER") [EQL]
-      (in-package "EQL") ;     [EQL]
-      
-      (unless *lisp-initialized*
-        (process-command-args)
-        (format t "ECL (Embeddable Common-Lisp) ~A" (lisp-implementation-version))
-        (format t "~%Copyright (C) 1984 Taiichi Yuasa and Masami Hagiya~@
-Copyright (C) 1993 Giuseppe Attardi~@
-Copyright (C) 2000 Juan J. Garcia-Ripoll
-ECL is free software, and you are welcome to redistribute it~@
-under certain conditions; see file 'Copyright' for details.")
-        (format *standard-output* "~%Type :h for Help.  ")
-        (setq *lisp-initialized* t))
-      
+    (let ((*debugger-hook* nil)
+          -)
+      (setq *lisp-initialized* t)
       (let ((*tpl-level* -1))
-        (qtpl)) ; [EQL]
+        (%tpl))
       0)))
 
-#-win32
-(defun qtpl (&key ((:commands *tpl-commands*) tpl-commands)
+(defun %tpl (&key ((:commands *tpl-commands*) tpl-commands)
                  ((:prompt-hook *tpl-prompt-hook*) *tpl-prompt-hook*)
                  (broken-at nil)
                  (quiet nil))
@@ -370,8 +361,9 @@ under certain conditions; see file 'Copyright' for details.")
                             ;; We are told to let the debugger handle this.
                             )
                            (t
-                            (format t "~&Debugger received error: ~A~%~
-                                         Error flushed.~%" condition)
+                            (format t "~&Debugger received error of type: ~A~%~A~%~
+                                         Error flushed.~%"
+                                    (type-of condition) condition)
                             (clear-input)
                             (return-from rep t) ;; go back into the debugger loop.
                             )
@@ -382,14 +374,17 @@ under certain conditions; see file 'Copyright' for details.")
                    (unless quiet
                      (break-where)
                      (setf quiet t))
-                 (setq - (locally (declare (notinline qtpl-read)) ; [EQL]
-                           (tpl-prompt)
-                           (qtpl-read)) ; [EQL]
-                       values (multiple-value-list
+                 (if eql::*top-level-form*
+                     (setq - eql::*top-level-form*
+                           eql::*top-level-form* nil)
+                     (setq - (locally (declare (notinline tpl-read))
+                               (tpl-prompt)
+                               (tpl-read))))
+                 (setq values (multiple-value-list
                                (eval-with-env - *break-env*))
                        /// // // / / values *** ** ** * * (car /))
                  (tpl-print values)))))
-          (loop
+          ;;(loop
            (setq +++ ++ ++ + + -)
            (when
                (catch *quit-tag*
@@ -401,58 +396,5 @@ under certain conditions; see file 'Copyright' for details.")
                     (restart-debugger "Go back to debugger level ~D." break-level)
                     (rep)))
                  nil)
-             (setf quiet nil))))))
+             (setf quiet nil)))));;)
 
-;; taken from "<ecl-dir>/contrib/serve-event/serve-event.lisp"
-#-win32
-(defmacro serve-event:with-fd-handler ((fd direction function) &rest body)
-  "Establish a handler with SYSTEM:ADD-FD-HANDLER for the duration of BODY.
-   DIRECTION should be either :INPUT or :OUTPUT, FD is the file descriptor to
-   use, and FUNCTION is the function to call whenever FD is usable."
-  (let ((handler (gensym)))
-    `(let (,handler)
-       (unwind-protect
-            (progn
-              (setf ,handler (serve-event:add-fd-handler ,fd ,direction ,function))
-              ,@body)
-         (when ,handler
-           (serve-event:remove-fd-handler ,handler))))))
-
-#-win32
-(defun qtpl-read (&aux (*read-suppress* nil))
-  (finish-output)
-  (serve-event:with-fd-handler ; [EQL]
-      (0 :input (lambda (fd)   ; [EQL]
-                  ;; (loop       [EQL]
-                  (case (peek-char nil *standard-input* nil :EOF)
-                    ((#\))
-                     (warn "Ignoring an unmatched right parenthesis.")
-                     (read-char))
-                    ((#\space #\tab)
-                     (read-char))
-                    ((#\newline #\return)
-                     (read-char)
-                     ;; avoid repeating prompt on successive empty lines:
-                       (let ((command (tpl-make-command :newline "")))
-                         (when command (return-from qtpl-read command))))                   ; [EQL]
-                    (:EOF
-                     (terpri)
-                     (return-from qtpl-read (tpl-make-command :EOF "")))                    ; [EQL]
-                    (#\:
-                     (return-from qtpl-read (tpl-make-command (read-preserving-whitespace)  ; [EQL]
-                                                              (read-line))))
-                    (#\?
-                     (read-char)
-                     (case (peek-char nil *standard-input* nil :EOF)
-                       ((#\space #\tab #\newline #\return :EOF)
-                        (return-from qtpl-read (tpl-make-command :HELP (read-line))))       ; [EQL]
-                       (t
-                        (unread-char #\?)
-                        (return-from qtpl-read (read-preserving-whitespace)))))             ; [EQL]
-                    ;; We use READ-PRESERVING-WHITESPACE because with READ, if an
-                    ;; error happens within the reader, and we perform a ":C" or
-                    ;; (CONTINUE), the reader will wait for an inexistent #\Newline.
-                    (t
-                     (return-from qtpl-read (read))))))                                     ; [EQL]
-    (loop               ; [EQL]
-       (eql:qevents)))) ; [EQL]

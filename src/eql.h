@@ -35,9 +35,11 @@ public:
     void exec(const QStringList&);
     void exec(lisp_ini, const QByteArray&, const QByteArray& = "cl-user"); // see my_app example
     void exec(QWidget*, const QString&, const QString& = QString());       // see Qt_EQL example
+    void startTopLevelTimer();
 
 public Q_SLOTS:
     void exitEventLoop() { eventLoop->exit(); }
+    void evalTopLevel();
 };
 
 QT_END_NAMESPACE

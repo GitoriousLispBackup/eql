@@ -21,7 +21,6 @@
    #:qenum
    #:qeql
    #:qescape
-   #:qevents
    #:qexec
    #:qexit
    #:qfind-child

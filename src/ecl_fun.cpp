@@ -1738,7 +1738,7 @@ cl_object qconnect2(cl_object l_caller, cl_object l_signal, cl_object l_receiver
                     if(DynObject::connect((QObject*)o1.pointer, SIG + signal, LObjects::dynObject, fun)) {
                         return Ct; }}}}}
     error_msg("QCONNECT", LIST4(l_caller, l_signal, l_receiver, l_slot));
-     return Cnil; }
+    return Cnil; }
 
 cl_object qdisconnect2(cl_object l_caller, cl_object l_signal, cl_object l_receiver, cl_object l_slot) {
     /// args: (caller &optional signal receiver/function slot)
