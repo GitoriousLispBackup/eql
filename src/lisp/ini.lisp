@@ -77,16 +77,16 @@
 (defun eval-top-level ()
   (when *top-level-form*
     (si::feed-top-level)
-    (start-read-thread)))
+    (qsingle-shot 500 'start-read-thread)))
 
 (defun start-read-thread ()
   #+threads
   (flet ((read* ()
-           (si::tpl-prompt)
+           (si::with-grabbed-console (si::tpl-prompt))
            (setf *top-level-form* (si::tpl-read))))
     (mp:process-run-function 'read #'read*))
   #-threads
-  (error "ECL threads not enabled, can't process Qt events."))
+  (error "ECL threads not enabled, can't process Qt events"))
 
 ;;; qt-object
 
@@ -384,17 +384,16 @@
                                (eval-with-env - *break-env*))
                        /// // // / / values *** ** ** * * (car /))
                  (tpl-print values)))))
-          ;;(loop
-           (setq +++ ++ ++ + + -)
-           (when
-               (catch *quit-tag*
-                 (if (zerop break-level)
-                   (with-simple-restart 
-                    (restart-toplevel "Go back to Top-Level REPL.")
-                    (rep))
-                   (with-simple-restart
-                    (restart-debugger "Go back to debugger level ~D." break-level)
-                    (rep)))
-                 nil)
-             (setf quiet nil)))));;)
+            (setq +++ ++ ++ + + -)
+            (when
+              (catch *quit-tag*
+                (if (zerop break-level)
+                    (with-simple-restart 
+                      (restart-toplevel "Go back to Top-Level REPL.")
+                      (rep))
+                    (with-simple-restart
+                      (restart-debugger "Go back to debugger level ~D." break-level)
+                      (rep)))
+                nil)
+              (setf quiet nil)))))
 

@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "12.5.1"; // 2012-05-21
+const char EQL::version[] = "12.7.1"; // 2012-07-28
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
@@ -59,6 +59,9 @@ void EQL::exec(const QStringList& args) {
         forms << "(qgui)"; }
     if(arguments.contains("-qtpl")) {
         arguments.removeAll("-qtpl");
+        QApplication::setQuitOnLastWindowClosed(false);
+        forms << "(when (directory (in-home \"src/lisp/ecl-readline.fas*\"))"
+                 "  (load (in-home \"src/lisp/ecl-readline\")))";
         forms << "(eql::start-read-thread)";
         startTopLevelTimer(); }
     if(arguments.contains("-quic")) {
