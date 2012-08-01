@@ -1,7 +1,5 @@
-;;; Please see ../doc/Slime.htm
-;;;
 ;;; Original code taken from "swank-backend.lisp"
-;;; (this is a hack, well working, but still a hack)
+;;; (this is a hack)
 
 (in-package :swank-backend)
 
@@ -17,8 +15,4 @@
      (when ready (return ready)))
    (when timeout (return nil))
    (eql:qexec 100))) ; instead of (sleep 0.1)
-
-;; optional: emergency hook to Emacs/Slime: in case they freeze, we still can send (break) etc.
-;;#+darwin
-;;(load (eql::in-slime-ini "hook"))
 

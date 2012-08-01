@@ -4,6 +4,7 @@
   (:use :common-lisp)
   (:export
    #:*break-on-errors*
+   #:*slime-mode*
    #:defvar-ui
    #:in-home
    #:new-qt-object
@@ -73,8 +74,5 @@
    #:qutf8
    #:qversion
    #:tr))
-
-#-win32
-(pushnew :serve-event *features*)
 
 (pushnew :eql *features*)

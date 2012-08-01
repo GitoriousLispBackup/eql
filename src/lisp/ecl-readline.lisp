@@ -143,7 +143,7 @@
   (setq *prompt*
         (if (zerop (current-level))
             (format nil "~A[~A]> " (current-package-name) *line-number*)
-            (format nil "** BREAK [LEVEL ~A]> " (1- (current-level))))))
+            (format nil "** BREAK [LEVEL ~A]> " (current-level)))))
 
 (defun readline ()
   (let ((line (rl-readline *prompt*)))

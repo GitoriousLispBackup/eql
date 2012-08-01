@@ -3,20 +3,35 @@
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <h2>Slime</h2>
+This should work on any platform, with any Slime version that plays together with ECL.
+<br>Requires ECL threads.
 <ul>
-<li>Please get this version from CVS (as later versions don't currently work
-  with the integration provided by EQL):
-<br><b>Unix, OSX</b>: <code>cvs -d :pserver:anonymous:anonymous@common-lisp.net:/project/slime/cvsroot co -D 2011-11-01 slime</code>
-<br><b>Windows:</b><code>   cvs -d :pserver:anonymous:anonymous@common-lisp.net:/project/slime/cvsroot co -D 2010-06-01 slime</code>
-<br>On Windows my experience is a bit frustrating: the only working solution for me is:
-<br>ECL 11.1.1 + Slime 2010-06-01 + Windows XP (MSVC)
-<li>In your <code>.emacs</code> file, point your Lisp implementation to
-  the <code>eql</code> executable, adding the command line
-  option <code>-slime</code>:
+<h3>Prepare</h3>
+<ul>
+<li>Add to your <code>~/.emacs</code> file:
 <pre>
-<code>  (setq inferior-lisp-program "/path-to-eql/eql -slime")</code>
+(add-to-list 'load-path "~/slime/")         ; slime path
+(add-to-list 'load-path "~/slime/contrib/") ; slime/contrib path
+(require 'slime)
+(slime-require 'swank-listener-hooks)       ; EQL requires a listener hook
+(slime-setup '(slime-fancy))
 </pre>
-<li>For help in Slime mode, see the <code>qapropos</code> and <code>qgui</code> functions.
-<li>Qt event processing is near-to-native, see <code>eql/slime/process-qt-events.lisp</code>.
+<li>Add to your <code>~/.swank.lisp</code> file (or copy file <code>eql/slime/.swank.lisp</code> in your home directory):
+<pre>
+(setf swank:*globally-redirect-io* t) ; show print output in Emacs
+</pre>
+<li>Copy the file <code>eql/slime/start-swank.lisp</code> in your <code>slime/</code> directory
 </ul>
+<h3>Run</h3>
+<ul>
+<li>Run the swank server:
+<pre>
+eql -slime ~/slime/start-swank.lisp
+</pre>
+<li>Fire up Emacs and do:
+<code>Meta-X slime-connect</code> (important: use <code>slime-connect</code>) and hit <code>Return</code> 2 times
+</ul>
+<h3>Notes</h3>
+<p>If all went well, you should have a Slime REPL processing Qt events.</p>
+<p>For help see the <code>qapropos</code> and <code>qgui</code> functions.</p>
 </html>

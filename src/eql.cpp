@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "12.7.1"; // 2012-07-28
+const char EQL::version[] = "12.8.1"; // 2012-08-01
 
 static void eval(const char* lisp_code) {
     CL_CATCH_ALL_BEGIN(ecl_process_env()) {
@@ -49,8 +49,9 @@ void EQL::exec(const QStringList& args) {
     QStringList forms;
     if(arguments.contains("-slime")) {
         arguments.removeAll("-slime");
-        initialize_slime = true;
-        forms << "(eql::set-slime-ini (in-home \"slime/\"))"; }
+        QApplication::setQuitOnLastWindowClosed(false);
+        forms << "(setf eql:*slime-mode* t)";
+        startTopLevelTimer(); }
     if(arguments.count() == 1) {
         quit = true;
         forms << "(si:top-level)"; }
@@ -97,17 +98,9 @@ void EQL::exec(lisp_ini ini, const QByteArray& expression, const QByteArray& pac
     si_select_package(make_simple_base_string((char*)package.toUpper().constData()));
     eval(expression.constData()); }
 
-void EQL::exec(QWidget* widget, const QString& lispFile, const QString& slimeIniPath) {
+void EQL::exec(QWidget* widget, const QString& lispFile) {
     // see Qt_EQL example
-    eval("(progn"
-         "  (in-package :eql)"
-         "  (defvar *slime-mode* nil)"
-         "  (export '*slime-mode*))");
     QStringList forms;
-    if(!slimeIniPath.isEmpty()) {
-        initialize_slime = true;
-        forms << QString("(eql::set-slime-ini \"%1\")").arg(slimeIniPath)
-              << QString("(setf eql:*slime-mode* t)"); }
     forms << QString("(set-home \"%1\")").arg(home())
           << QString("(defvar *qt-main* (qt-object %1 0 (qid \"%2\")))")
                      .arg((ulong)widget)
@@ -115,8 +108,6 @@ void EQL::exec(QWidget* widget, const QString& lispFile, const QString& slimeIni
           << QString("(export '*qt-main*)")
           << QString("(load \"%1\")").arg(lispFile)
           << QString("(in-package :cl-user)");
-    if(initialize_slime) {
-        forms << "(si:top-level)"; }
     eval(QString("(progn " + forms.join(" ") + ")").toAscii().constData()); }
 
 void EQL::startTopLevelTimer() {
@@ -130,11 +121,6 @@ void EQL::evalTopLevel() {
     STATIC_SYMBOL_PKG(s_eval_top_level, (char*)"EVAL-TOP-LEVEL", (char*)"EQL")
     cl_funcall(1, s_eval_top_level); } // see "lisp/ini.lisp"
 
-void EQL::iniSlime() {
-    initialize_slime = false;
-    eval("(load (eql::in-slime-ini \"ini\"))"); }
-
 bool EQL::cl_booted = false;
 bool EQL::is_arg_return_value = false;
-bool EQL::initialize_slime = false;
 QEventLoop* EQL::eventLoop = 0;

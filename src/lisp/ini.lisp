@@ -2,7 +2,8 @@
 
 (in-package :eql)
 
-(defparameter *break-on-errors* nil "Unless NIL, causes a simple (BREAK) on any EQL error.")
+(defvar *break-on-errors* nil "Unless NIL, causes a simple (BREAK) on any EQL error.")
+(defvar *slime-mode*      nil)
 
 (defmacro alias (s1 s2)
   `(setf (symbol-function ',s1) (function ,s2)))
@@ -70,21 +71,49 @@
 (defun %break (&rest args)
   (apply 'break args))
 
-;;; top-level processing Qt events
+;;; top-level / slime-mode processing Qt events (command line options "-qtpl" and "-slime")
 
-(defparameter *top-level-form* nil)
+(defvar *top-level-form*  nil)
+(defvar *top-level-lock*  #+threads (mp:make-lock :name 'top-level))
+(defvar *slime-values*    nil)
+(defvar *slime-package*   (find-package :eql))
+(defvar *slime-evaluated* nil)
 
-(defun eval-top-level ()
-  (when *top-level-form*
-    (si::feed-top-level)
-    (qsingle-shot 500 'start-read-thread)))
+(let (hook-loaded-p)
+  (defun eval-top-level ()
+    (when (and *slime-mode*
+               (not hook-loaded-p)
+               (find-package :swank)
+               (find-symbol "*SLIME-REPL-EVAL-HOOKS*" :swank))
+      (setf hook-loaded-p t)
+      (load (in-home "slime/repl-hook")))
+    (when *top-level-form*
+      (if *slime-mode*
+          (progn
+            (mp:with-lock (*top-level-lock*)
+              (with-simple-restart
+                (restart-toplevel "Go back to Top-Level REPL.")
+                (setf *slime-values* (multiple-value-list (eval *top-level-form*))))
+              (si::tpl-print *slime-values*)
+              (setf *top-level-form*  nil
+                    *slime-package*   *package*
+                    *slime-evaluated* t)))
+          (progn
+            (mp:with-lock (*top-level-lock*)
+              (si::feed-top-level))
+            (qsingle-shot 0 'start-read-thread))))))
+
+#+threads
+(defun %read-thread ()
+  (si::tpl-prompt)
+  (let ((form (si::tpl-read)))
+    (mp:with-lock (*top-level-lock*)
+      (setf *top-level-form* form)))
+  (values))
 
 (defun start-read-thread ()
   #+threads
-  (flet ((read* ()
-           (si::with-grabbed-console (si::tpl-prompt))
-           (setf *top-level-form* (si::tpl-read))))
-    (mp:process-run-function 'read #'read*))
+  (mp:process-run-function :read '%read-thread)
   #-threads
   (error "ECL threads not enabled, can't process Qt events"))
 
@@ -132,12 +161,6 @@
     (setf home path))
   (defun in-home (file)
     (concatenate 'string home file)))
-
-(let (slime-ini)
-  (defun set-slime-ini (path)
-    (setf slime-ini path))
-  (defun in-slime-ini (file)
-    (concatenate 'string slime-ini file)))
 
 (defun qgui (&optional ev)
   "args: (&optional process-events)
@@ -396,4 +419,3 @@
                       (rep)))
                 nil)
               (setf quiet nil)))))
-

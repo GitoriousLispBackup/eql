@@ -8,23 +8,18 @@
 TESTED WITH
 ===========
 
-* ECL from CVS (2010-10-29), ECL 11.1.1, ECL 12.2.1
-* Qt4.6, Qt4.7
-* Linux, OSX 10.4, Windows XP & 7 (MSVC)
+* ECL 11.1.1, 12.2.1, 12.7.1
+* Qt4.6, 4.7, 4.8
+* Linux / OSX 10.4 / Windows XP, 7 (MSVC 2008, 2010)
 
 
 
 REQUIREMENTS
 ============
 
-* ECL >= 10.4 Unicode (./configure --enable-unicode)
+* ECL >= 10.4 Unicode (./configure --enable-unicode); threads needed for "-qtpl" and "-slime"
 * Qt  >= 4.6 http://qt.nokia.com/
-* Slime from CVS (2010-06-01, 2011-11-01)
-
-N.B. Slime: if you want to use the Slime integration provided by EQL,
-please get this Slime version from CVS (later versions don't currently work):
-
-cvs -d :pserver:anonymous:anonymous@common-lisp.net:/project/slime/cvsroot co -D 2011-11-01 slime
+* any Slime that plays together with your ECL version
 
 
 
@@ -102,8 +97,8 @@ To quit the tool, do:
     (eql:qquit) or
     (eql:qq)
 
-  In order to run (sort of) a top-level processing Qt events, do (requires ECL threads):
-    eql -qtpl
+In order to run (sort of) a top-level processing Qt events, do (requires ECL threads):
+  eql -qtpl
 
   Note: If you want to use "ecl-readline" together with the "-qtpl" option, just compile the
   file "eql/src/lisp/ecl-readline.lisp" (which depends on the "readline" C library).
