@@ -9,11 +9,6 @@
 
 const char EQL::version[] = "12.8.1"; // 2012-08-01
 
-static void eval(const char* lisp_code) {
-    CL_CATCH_ALL_BEGIN(ecl_process_env()) {
-        si_safe_eval(2, ecl_read_from_cstring((char*)lisp_code), Cnil); }
-    CL_CATCH_ALL_END; }
-
 extern "C" void ini_EQL(cl_object);
 
 EQL::EQL() : QObject() {
@@ -31,6 +26,11 @@ void EQL::ini(char** argv) {
     cl_booted = true;
     cl_boot(1, argv); }
 
+void EQL::eval(const char* lisp_code) {
+    CL_CATCH_ALL_BEGIN(ecl_process_env()) {
+        si_safe_eval(2, ecl_read_from_cstring((char*)lisp_code), Cnil); }
+    CL_CATCH_ALL_END; }
+
 QString EQL::home() {
     static QString path;
     if(path.isEmpty()) {
@@ -47,7 +47,8 @@ void EQL::exec(const QStringList& args) {
     eval(QString("(set-home \"%1\")").arg(home()).toAscii().constData());
     bool quit = false;
     QStringList forms;
-    if(arguments.contains("-slime")) {
+    if(arguments.contains("-slime") ||
+      (arguments.indexOf(QRegExp("*start-swank*.lisp", Qt::CaseInsensitive, QRegExp::Wildcard)) != -1)) {
         arguments.removeAll("-slime");
         QApplication::setQuitOnLastWindowClosed(false);
         forms << "(setf eql:*slime-mode* t)";
@@ -98,7 +99,7 @@ void EQL::exec(lisp_ini ini, const QByteArray& expression, const QByteArray& pac
     si_select_package(make_simple_base_string((char*)package.toUpper().constData()));
     eval(expression.constData()); }
 
-void EQL::exec(QWidget* widget, const QString& lispFile) {
+void EQL::exec(QWidget* widget, const QString& lispFile, const QString& slimeHookFile) {
     // see Qt_EQL example
     QStringList forms;
     forms << QString("(set-home \"%1\")").arg(home())
@@ -108,6 +109,12 @@ void EQL::exec(QWidget* widget, const QString& lispFile) {
           << QString("(export '*qt-main*)")
           << QString("(load \"%1\")").arg(lispFile)
           << QString("(in-package :cl-user)");
+    if(!slimeHookFile.isEmpty()) {
+        forms << QString("(setf eql:*slime-mode* t)")
+              << QString("(setf eql::*slime-hook-file* \"%1\"")
+                         .arg(slimeHookFile);
+        QApplication::setQuitOnLastWindowClosed(false);
+        startTopLevelTimer(); }
     eval(QString("(progn " + forms.join(" ") + ")").toAscii().constData()); }
 
 void EQL::startTopLevelTimer() {

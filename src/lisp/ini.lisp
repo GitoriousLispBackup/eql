@@ -71,6 +71,12 @@
 (defun %break (&rest args)
   (apply 'break args))
 
+(let (home)
+  (defun set-home (path)
+    (setf home path))
+  (defun in-home (file)
+    (concatenate 'string home file)))
+
 ;;; top-level / slime-mode processing Qt events (command line options "-qtpl" and "-slime")
 
 (defvar *top-level-form*  nil)
@@ -78,7 +84,8 @@
 (defvar *slime-values*    nil)
 (defvar *slime-package*   (find-package :eql))
 (defvar *slime-evaluated* nil)
-
+(defvar *slime-hook-file* nil)
+           
 (let (hook-loaded-p)
   (defun eval-top-level ()
     (when (and *slime-mode*
@@ -86,16 +93,16 @@
                (find-package :swank)
                (find-symbol "*SLIME-REPL-EVAL-HOOKS*" :swank))
       (setf hook-loaded-p t)
-      (load (in-home "slime/repl-hook")))
+      (load (or *slime-hook-file* (in-home "slime/repl-hook"))))
     (when *top-level-form*
       (if *slime-mode*
-          (progn
+          (let ((values (multiple-value-list
+                          (with-simple-restart (restart-top-level "Go back to Top-Level.")
+                            (eval *top-level-form*)))))
+            (finish-output)
             (mp:with-lock (*top-level-lock*)
-              (with-simple-restart
-                (restart-toplevel "Go back to Top-Level REPL.")
-                (setf *slime-values* (multiple-value-list (eval *top-level-form*))))
-              (si::tpl-print *slime-values*)
               (setf *top-level-form*  nil
+                    *slime-values*    values
                     *slime-package*   *package*
                     *slime-evaluated* t)))
           (progn
@@ -155,12 +162,6 @@
    Sets the Qt object pointer to <code>0</code>. This function is called automatically after <code>qdel</code>."
   (when (qt-object-p obj)
     (setf (qt-object-pointer obj) 0)))
-
-(let (home)
-  (defun set-home (path)
-    (setf home path))
-  (defun in-home (file)
-    (concatenate 'string home file)))
 
 (defun qgui (&optional ev)
   "args: (&optional process-events)
@@ -367,6 +368,8 @@
          values)
     (set-break-env)
     (set-current-ihs)
+    (when eql::*slime-mode*
+      (return-from %tpl (multiple-value-list (eval-with-env eql::*top-level-form* *break-env*))))
     (flet ((rep ()
              ;; We let warnings pass by this way "warn" does the
              ;; work.  It is conventional not to trap anything

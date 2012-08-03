@@ -28,11 +28,12 @@ public:
     static const char version[];
     static QEventLoop* eventLoop;
     static void ini(char**);
+    static void eval(const char*);
     static QString home();
 
     void exec(const QStringList&);
     void exec(lisp_ini, const QByteArray&, const QByteArray& = "cl-user"); // see my_app example
-    void exec(QWidget*, const QString&);                                   // see Qt_EQL example
+    void exec(QWidget*, const QString&, const QString& = QString());       // see Qt_EQL example
     void startTopLevelTimer();
 
 public Q_SLOTS:

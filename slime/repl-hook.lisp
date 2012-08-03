@@ -5,9 +5,9 @@
           (when eql::*slime-evaluated*
             (setf *package* eql::*slime-package*
                   eql::*slime-evaluated* nil)
-            (return (prog1
-                      (values-list eql::*slime-values*)
-                      (setf eql::*slime-values* nil))))
+            (let ((values eql::*slime-values*))
+              (setf eql::*slime-values* nil)
+              (return (values-list values))))
           (sleep 0.1)))
       swank::*slime-repl-eval-hooks*)
 

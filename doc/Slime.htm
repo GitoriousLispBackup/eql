@@ -4,7 +4,7 @@
 </head>
 <h2>Slime</h2>
 This should work on any platform, with any Slime version that plays together with ECL.
-<br>Requires ECL threads.
+<br>Requires <b>ECL threads</b>.
 <ul>
 <h3>Prepare</h3>
 <ul>
@@ -17,21 +17,42 @@ This should work on any platform, with any Slime version that plays together wit
 (slime-setup '(slime-fancy))
 </pre>
 <li>Add to your <code>~/.swank.lisp</code> file (or copy file <code>eql/slime/.swank.lisp</code> in your home directory):
+<br>(Please note: this isn't really optional -- you <b>need</b> to set this option for a useful Slime + EQL.)
 <pre>
 (setf swank:*globally-redirect-io* t) ; show print output in Emacs
 </pre>
-<li>Copy the file <code>eql/slime/start-swank.lisp</code> in your <code>slime/</code> directory
+<li>Copy the file <code>eql/slime/eql-start-swank.lisp</code> in your <code>slime/</code> directory
 </ul>
 <h3>Run</h3>
 <ul>
-<li>Run the swank server:
+<li>Run the swank server (the command line option <code>-slime</code> can be omitted if the file name contains "start-swank"):
 <pre>
-eql -slime ~/slime/start-swank.lisp
+eql -slime ~/slime/eql-start-swank.lisp
 </pre>
-<li>Fire up Emacs and do:
-<code>Meta-X slime-connect</code> (important: use <code>slime-connect</code>) and hit <code>Return</code> 2 times
+<li>Run Emacs and do:
+<code>Meta-X slime-connect</code> (please note: use <code>slime-connect</code>) and hit <code>Return</code> 2 times (confirming the default values).
 </ul>
 <h3>Notes</h3>
-<p>If all went well, you should have a Slime REPL processing Qt events.</p>
+<h4>Eval Region</h4>
+<ul>
+<li>Open / edit your Lisp file in Emacs.
+<li><b>Load</b> your Lisp file <b>from the Slime REPL</b>: <code>(load "file.lisp")</code>
+<li>Always <b>run</b> your program <b>from the Slime REPL</b> (not using Eval Region).
+<li>Only at this point you may use Eval Region for re-defining functions etc.
+</ul>
+<p>The point here is: if you directly try to Eval Region an expression containing an
+  EQL function, your swank server <b>will crash</b>, because it will not be
+  evaluated in the GUI thread (Qt GUI methods need to be called from the GUI thread).
+</p>
+<p>So, only run EQL functions <b>directly</b> from the <b>Slime REPL</b>.
+<br>If you want to use <b>Eval Region</b> containing EQL functions, use the
+method described above.
+</p>
+<h4>Abort / Restart</h4>
+<p>
+<p>Be careful after entering the Slime debugger:
+<br>As a rule of thumb, always choose the first <code>[Abort]</code> or <code>[Restart]</code>
+  counting from the top (otherwise you might loose the connection to the swank server).</p>
+<h4>Help</h4>
 <p>For help see the <code>qapropos</code> and <code>qgui</code> functions.</p>
 </html>

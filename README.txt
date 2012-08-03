@@ -17,9 +17,9 @@ TESTED WITH
 REQUIREMENTS
 ============
 
-* ECL >= 10.4 Unicode (./configure --enable-unicode); threads needed for "-qtpl" and "-slime"
+* ECL >= 10.4 Unicode (./configure --enable-unicode); threads needed for both "-qtpl" and "-slime"
 * Qt  >= 4.6 http://qt.nokia.com/
-* any Slime that plays together with your ECL version
+* any Slime that plays together with your ECL version (requires ECL threads)
 
 
 

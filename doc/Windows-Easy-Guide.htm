@@ -12,13 +12,10 @@ code, pre { color: mediumblue; }
 </head>
 <body>
 <h2>Windows Easy Guide</h2>
-<p><i>Please note: my Windows + ECL + <b>Slime</b> experience is a bit
-    frustrating: the only versions I got to work with EQL are:
-<br>ECL 11.1.1, Slime 2010-06-01, Windows XP (MSVC)</i></p>
-<p>
 <i>
 Please see <a href="http://password-taxi.at/wcms/ftp//p/password-taxi.at/uploads/eql-win32.zip">eql-win32.zip</a> for a simple, ready-to-use environment.<br>
 Included you find ECL, EQL, Qt (except sources), and a compiled Slime.
+<br>(<b>Currently out of date; an updated version will be available within a few days.</b>)
 </i>
 <hr>
 </p>
@@ -31,26 +28,26 @@ Included you find ECL, EQL, Qt (except sources), and a compiled Slime.
 <tr><td>Slime</td><td><code>C:\emacs\slime</code></td></tr>
 <tr><td>EQL</td><td><code>C:\eql</code></td></tr>
 </table>
-<p>Install the free <a href="http://www.microsoft.com/express/Downloads/#Visual_Studio_2008_Express_Downloads">Visual C++ 2008 Express Edition</a></p>
-<p>Get the latest <a href="http://sourceforge.net/projects/ecls/">ECL</a> (or try ECL HEAD, will probably work too).
+<p>Install the free <a href="http://www.microsoft.com/express/Downloads/">Visual C++ 2008 or 2010 Express Edition</a></p>
+<p>Get the latest <a href="http://sourceforge.net/projects/ecls/">ECL</a>
 <ul>
 <li>After unpacking it to <code>C:\ecl</code>, edit the <code>C:\ecl\msvc\Makefile</code> (not needed for ECL >= 12.2.1)
 <ul>
 <li>Find the line with <code>ECL_UNICODE</code>, and change it to: <code>ECL_UNICODE = <span class="added">1</span></code>
 <li>Find the 2 lines starting with <code>CFLAGS_CONFIG</code>, and insert to both of them this option: <code><span class="added">/Zm300</span></code> (bigger heap size)
 </ul>
-<li>Open the <b>Visual Studio 2008 Command Prompt</b> from the Windows main menu, change to the <code>C:\ecl\msvc</code> directory, and run <code>nmake</code>.
+<li>Open the <b>Visual Studio Command Prompt</b> from the Windows main menu, change to the <code>C:\ecl\msvc</code> directory, and run <code>nmake</code>.
 <li>After the build, run <code>nmake install</code>. This will create a directory <code>package</code>.
 <li>Compiler note: to always use the C compiler (ECL 11.1.1 and later), put <code>(require :cmp)</code> in your <code>.eclrc</code> file.
 </ul>
 </p>
-<p>Install the latest official release of <a href="http://qt.nokia.com/downloads">Qt4</a>. Choose the version <b>Qt libraries for Windows (VS 2008)</b>.</p>
+<p>Install the latest official release of <a href="http://qt.nokia.com/downloads">Qt4</a>. Choose the version <b>Qt libraries for Windows (VS 2008 or 2010)</b>.</p>
 <p>
 Make sure all of the following are in your <code>Path</code> environment variable, see &lt;Control Panel:System:Advanced:Environment Variables&gt;.
 <br>(If you add them for your user account only, do it like so: <code>%PATH%;C:\...</code>)
 <code>
 <ul>
-<li>C:\Program Files\Microsoft Visual Studio 9.0\VC\bin
+<li>C:\Program Files\Microsoft Visual Studio 10.0\VC\bin
 <li>C:\ecl\msvc\package
 <li>C:\qt\4.x.x\bin
 <li>C:\eql
@@ -71,9 +68,7 @@ Make sure all of the following are in your <code>Path</code> environment variabl
 <li>Unpack it to <code>C:\emacs</code>.
 <li>To launch it, run <code>C:\emacs\bin\runemacs.exe</code>.
 </ul>
-<p>Get <a href="http://common-lisp.net/project/slime/">Slime</a>. Use the
-  following command to get a working/tested version (you'll need a cvs client):
-<br><code>cvs -d :pserver:anonymous:anonymous@common-lisp.net:/project/slime/cvsroot co -D 2010-06-01 slime</code>
+<p>Get <a href="http://common-lisp.net/project/slime/">Slime</a>.
 <ul>
 <li>Put it here: <code>C:\emacs\slime</code>.
 <li>Open your <code>C:\emacs\slime\swank-loader.lisp</code>, and insert the following lines at the top of the file (important: choose a path with <b>no spaces</b>). 
@@ -91,16 +86,7 @@ The last step is your <code>.emacs</code> file.
 <li>C:\Documents and Settings\&lt;username&gt;\Application Data\.emacs
 </ul>
 </code>
-(Don't try to create the file with Explorer, simply use any editor.)
-<br>The content is something like (please note <code>-slime</code>):
-<pre>
-  (setq inferior-lisp-program "C:/eql/eql.exe -slime")
-  (add-to-list 'load-path "C:/emacs/slime/") 
-  (require 'slime)
-  (slime-setup '(slime-fancy))
-</pre>
-After firing up Emacs, and hitting <code>Meta-X slime</code>, your Slime should compile and run.
-<br>As a final test, try this: <code>(eql:qgui)</code>.
+<p>Finally, see the documentation in <code>eql/doc/Slime.htm</code> for the steps needed to prepare/run the Slime integration.
 <br><br>
 </body>
 </html>

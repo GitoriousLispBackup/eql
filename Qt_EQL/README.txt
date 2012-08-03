@@ -8,18 +8,27 @@ So, after statically linking a Qt/C++ application to EQL, you can:
 
 For interactive development there are 2 alternatives:
 
-1) The simple (not really stable) Lisp editor from example 9 (native Qt event
- processing).
+1) Slime
 
-2) Slime (near-to-native Qt event processing).
+2) The simple (not really stable) Lisp editor from example 9
 
 
 
 BUILD (MSVC: nmake instead of make)
 =====
 
+    ALTERNATIVE 1: Slime
 
-    ALTERNATIVE 1: Simple Lisp Editor (example 9):
+        a) Qt/trafficlight.pro (as usual)
+
+        b) Qt_EQL.pro:
+ 
+           qmake "DEFINES+=SLIME"
+           make clean (if you change alternative)
+           make
+
+
+    ALTERNATIVE 2: Simple Lisp Editor (example 9):
 
         a) Qt/trafficlight.pro (as usual)
 
@@ -41,23 +50,23 @@ BUILD (MSVC: nmake instead of make)
            to:   eql/Qt_EQL/EQL/
 
 
-    ALTERNATIVE 2: Slime
-
-        a) Qt/trafficlight.pro (as usual)
-
-        b) Qt_EQL.pro:
- 
-           qmake "DEFINES+=SLIME"
-           make clean (if you change alternative)
-           make
-
-
 
 RUN
 ===       
 
+    ALTERNATIVE 1: Slime
 
-    ALTERNATIVE 1: Simple Lisp Editor (example 9):
+        1) start the swank server using the Qt_EQL executable (see "eql/doc/Slime.htm")
+
+           ./Qt_EQL slime/eql-start-swank.lisp
+
+        2) to run the program (manually, because Slime needs to be loaded
+           first), do:
+
+           (trafficlight:run)
+
+
+    ALTERNATIVE 2: Simple Lisp Editor (example 9):
         
         1) Qt_EQL (executable)
 
@@ -68,18 +77,6 @@ RUN
                (in-package :trafficlight)
            just play around with "eval region"...
 
-
-    ALTERNATIVE 2: Slime
-
-        1) in your ".emacs" file, point your inferior Lisp program to Qt_EQL
-           (instead of EQL):
-
-           (setq inferior-lisp-program "~/eql/Qt_EQL/Qt_EQL")
-
-        2) to run the program (manually, because Slime needs to be loaded
-           first), do:
-
-           (trafficlight:run)
 
 
 --
