@@ -86,8 +86,11 @@
 (defvar *slime-evaluated* nil)
 (defvar *slime-hook-file* nil)
            
-(let (hook-loaded-p)
+(let (hook-loaded-p timer)
   (defun eval-top-level ()
+    (unless timer
+      (setf timer (qnew "QTimer" "interval" 200 "singleShot" t))
+      (qconnect timer "timeout()" 'eval-top-level))
     (when (and *slime-mode*
                (not hook-loaded-p)
                (find-package :swank)
@@ -97,7 +100,7 @@
     (when *top-level-form*
       (if *slime-mode*
           (let ((values (multiple-value-list
-                          (with-simple-restart (restart-top-level "Go back to Top-Level.")
+                          (with-simple-restart (abort "Go back to Top-Level.")
                             (eval *top-level-form*)))))
             (finish-output)
             (mp:with-lock (*top-level-lock*)
@@ -108,11 +111,15 @@
           (progn
             (mp:with-lock (*top-level-lock*)
               (si::feed-top-level))
-            (qsingle-shot 0 'start-read-thread))))))
+            (finish-output)
+            (qsingle-shot 0 'start-read-thread))))
+    (qfun timer "start")))
 
 #+threads
 (defun %read-thread ()
   (si::tpl-prompt)
+  (unless (find-package :ecl-readline)
+    (princ "> "))
   (let ((form (si::tpl-read)))
     (mp:with-lock (*top-level-lock*)
       (setf *top-level-form* form)))

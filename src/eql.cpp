@@ -51,8 +51,8 @@ void EQL::exec(const QStringList& args) {
       (arguments.indexOf(QRegExp("*start-swank*.lisp", Qt::CaseInsensitive, QRegExp::Wildcard)) != -1)) {
         arguments.removeAll("-slime");
         QApplication::setQuitOnLastWindowClosed(false);
-        forms << "(setf eql:*slime-mode* t)";
-        startTopLevelTimer(); }
+        forms << "(setf eql:*slime-mode* t)"
+              << "(eql::eval-top-level)"; }
     if(arguments.count() == 1) {
         quit = true;
         forms << "(si:top-level)"; }
@@ -63,9 +63,9 @@ void EQL::exec(const QStringList& args) {
         arguments.removeAll("-qtpl");
         QApplication::setQuitOnLastWindowClosed(false);
         forms << "(when (directory (in-home \"src/lisp/ecl-readline.fas*\"))"
-                 "  (load (in-home \"src/lisp/ecl-readline\")))";
-        forms << "(eql::start-read-thread)";
-        startTopLevelTimer(); }
+                 "  (load (in-home \"src/lisp/ecl-readline\")))"
+              << "(eql::start-read-thread)"
+              << "(eql::eval-top-level)"; }
     if(arguments.contains("-quic")) {
         arguments.removeAll("-quic");
         if(arguments.size() == 2) {
@@ -111,18 +111,10 @@ void EQL::exec(QWidget* widget, const QString& lispFile, const QString& slimeHoo
           << QString("(in-package :cl-user)");
     if(!slimeHookFile.isEmpty()) {
         forms << QString("(setf eql:*slime-mode* t)")
-              << QString("(setf eql::*slime-hook-file* \"%1\"")
-                         .arg(slimeHookFile);
-        QApplication::setQuitOnLastWindowClosed(false);
-        startTopLevelTimer(); }
+              << QString("(setf eql::*slime-hook-file* \"%1\"").arg(slimeHookFile)
+              << QString("(eql::eval-top-level)");
+        QApplication::setQuitOnLastWindowClosed(false); }
     eval(QString("(progn " + forms.join(" ") + ")").toAscii().constData()); }
-
-void EQL::startTopLevelTimer() {
-    static QTimer* timer = 0;
-    if(!timer) {
-        timer = new QTimer;
-        connect(timer, QSIGNAL(timeout()), this, QSLOT(evalTopLevel()));
-        timer->start(200); }}
 
 void EQL::evalTopLevel() {
     STATIC_SYMBOL_PKG(s_eval_top_level, (char*)"EVAL-TOP-LEVEL", (char*)"EQL")
