@@ -3199,16 +3199,10 @@ public:
     Q_INVOKABLE void* C(uint u) { return new LImage(u); }
     Q_INVOKABLE void* C(uint u, const QSize& x1, QImage::Format x2) { return new LImage(u, x1, x2); }
     Q_INVOKABLE void* C(uint u, int x1, int x2, QImage::Format x3) { return new LImage(u, x1, x2, x3); }
-    Q_INVOKABLE void* C(uint u, uchar* x1, int x2, int x3, QImage::Format x4) { return new LImage(u, x1, x2, x3, x4); }
-    Q_INVOKABLE void* C(uint u, const uchar* x1, int x2, int x3, QImage::Format x4) { return new LImage(u, x1, x2, x3, x4); }
-    Q_INVOKABLE void* C(uint u, uchar* x1, int x2, int x3, int x4, QImage::Format x5) { return new LImage(u, x1, x2, x3, x4, x5); }
-    Q_INVOKABLE void* C(uint u, const uchar* x1, int x2, int x3, int x4, QImage::Format x5) { return new LImage(u, x1, x2, x3, x4, x5); }
     Q_INVOKABLE void* C(uint u, const QString& x1, const char* x2 = 0) { return new LImage(u, x1, x2); }
     Q_INVOKABLE void* C(uint u, const char* x1, const char* x2 = 0) { return new LImage(u, x1, x2); }
     Q_INVOKABLE void* C(uint u, const QImage& x1) { return new LImage(u, x1); }
     Q_INVOKABLE bool MallGray(QImage* o) const { return o->allGray(); }
-    Q_INVOKABLE uchar* Mbits(QImage* o) { return o->bits(); }
-    Q_INVOKABLE const uchar* Mbits(QImage* o) const { return o->bits(); }
     Q_INVOKABLE int MbyteCount(QImage* o) const { return o->byteCount(); }
     Q_INVOKABLE int MbytesPerLine(QImage* o) const { return o->bytesPerLine(); }
     Q_INVOKABLE qlonglong McacheKey(QImage* o) const { return o->cacheKey(); }
@@ -3233,7 +3227,6 @@ public:
     Q_INVOKABLE bool MisGrayscale(QImage* o) const { return o->isGrayscale(); }
     Q_INVOKABLE bool MisNull(QImage* o) const { return o->isNull(); }
     Q_INVOKABLE bool Mload(QImage* o, const QString& x1, const char* x2 = 0) { return o->load(x1, x2); }
-    Q_INVOKABLE bool MloadFromData(QImage* o, const uchar* x1, int x2, const char* x3 = 0) { return o->loadFromData(x1, x2, x3); }
     Q_INVOKABLE bool MloadFromData(QImage* o, const QByteArray& x1, const char* x2 = 0) { return o->loadFromData(x1, x2); }
     Q_INVOKABLE QImage Mmirrored(QImage* o, bool x1 = false, bool x2 = true) const { return o->mirrored(x1, x2); }
     Q_INVOKABLE QPoint Moffset(QImage* o) const { return o->offset(); }
@@ -3248,8 +3241,6 @@ public:
     Q_INVOKABLE QImage Mscaled(QImage* o, int x1, int x2, Qt::AspectRatioMode x3 = Qt::IgnoreAspectRatio, Qt::TransformationMode x4 = Qt::FastTransformation) const { return o->scaled(x1, x2, x3, x4); }
     Q_INVOKABLE QImage MscaledToHeight(QImage* o, int x1, Qt::TransformationMode x2 = Qt::FastTransformation) const { return o->scaledToHeight(x1, x2); }
     Q_INVOKABLE QImage MscaledToWidth(QImage* o, int x1, Qt::TransformationMode x2 = Qt::FastTransformation) const { return o->scaledToWidth(x1, x2); }
-    Q_INVOKABLE uchar* MscanLine(QImage* o, int x1) { return o->scanLine(x1); }
-    Q_INVOKABLE const uchar* MscanLine(QImage* o, int x1) const { return o->scanLine(x1); }
     Q_INVOKABLE void MsetColor(QImage* o, int x1, QRgb x2) { o->setColor(x1, x2); }
     Q_INVOKABLE void MsetColorCount(QImage* o, int x1) { o->setColorCount(x1); }
     Q_INVOKABLE void MsetColorTable(QImage* o, const QVector<QRgb> x1) { o->setColorTable(x1); }
@@ -3267,7 +3258,6 @@ public:
     Q_INVOKABLE bool Mvalid(QImage* o, const QPoint& x1) const { return o->valid(x1); }
     Q_INVOKABLE bool Mvalid(QImage* o, int x1, int x2) const { return o->valid(x1, x2); }
     Q_INVOKABLE int Mwidth(QImage* o) const { return o->width(); }
-    Q_INVOKABLE QImage SfromData(const uchar* x1, int x2, const char* x3 = 0) { return QImage::fromData(x1, x2, x3); }
     Q_INVOKABLE QImage SfromData(const QByteArray& x1, const char* x2 = 0) { return QImage::fromData(x1, x2); }
     Q_INVOKABLE QMatrix StrueMatrix(const QMatrix& x1, int x2, int x3) { return QImage::trueMatrix(x1, x2, x3); }
     Q_INVOKABLE QTransform StrueMatrix(const QTransform& x1, int x2, int x3) { return QImage::trueMatrix(x1, x2, x3); }
@@ -3396,7 +3386,6 @@ public:
     Q_INVOKABLE bool MisNull(QPixmap* o) const { return o->isNull(); }
     Q_INVOKABLE bool MisQBitmap(QPixmap* o) const { return o->isQBitmap(); }
     Q_INVOKABLE bool Mload(QPixmap* o, const QString& x1, const char* x2 = 0, Qt::ImageConversionFlags x3 = Qt::AutoColor) { return o->load(x1, x2, x3); }
-    Q_INVOKABLE bool MloadFromData(QPixmap* o, const uchar* x1, uint x2, const char* x3 = 0, Qt::ImageConversionFlags x4 = Qt::AutoColor) { return o->loadFromData(x1, x2, x3, x4); }
     Q_INVOKABLE bool MloadFromData(QPixmap* o, const QByteArray& x1, const char* x2 = 0, Qt::ImageConversionFlags x3 = Qt::AutoColor) { return o->loadFromData(x1, x2, x3); }
     Q_INVOKABLE QBitmap Mmask(QPixmap* o) const { return o->mask(); }
     Q_INVOKABLE QRect Mrect(QPixmap* o) const { return o->rect(); }
@@ -3814,7 +3803,6 @@ public:
     Q_INVOKABLE void* C(uint u, const QString& x1, const char* x2 = 0) { return new LBitmap(u, x1, x2); }
     Q_INVOKABLE void Mclear(QBitmap* o) { o->clear(); }
     Q_INVOKABLE QBitmap Mtransformed(QBitmap* o, const QTransform& x1) const { return o->transformed(x1); }
-    Q_INVOKABLE QBitmap SfromData(const QSize& x1, const uchar* x2, QImage::Format x3 = QImage::Format_MonoLSB) { return QBitmap::fromData(x1, x2, x3); }
     Q_INVOKABLE QBitmap SfromImage(const QImage& x1, Qt::ImageConversionFlags x2 = Qt::AutoColor) { return QBitmap::fromImage(x1, x2); }
 };
 

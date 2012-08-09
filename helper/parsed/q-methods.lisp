@@ -1103,7 +1103,6 @@
    "bool flush ()"
    "int handle () const"
    "bool link ( const QString & )"
-   "uchar * map ( qint64 , qint64 , MemoryMapFlags = NoOptions )"
    "bool open ( int , OpenMode )"
    "Permissions permissions () const"
    "bool remove ()"
@@ -1112,7 +1111,6 @@
    "void setFileName ( const QString & )"
    "bool setPermissions ( Permissions )"
    "QString symLinkTarget () const"
-   "bool unmap ( uchar * )"
    "void unsetError ()"
    "virtual bool atEnd () const"
    "virtual void close ()"
@@ -4206,7 +4204,6 @@
    "new QTranslator ( QObject * = 0 )"
    "virtual bool isEmpty () const"
    "bool load ( const QString & , const QString & = QString(), const QString & = QString(), const QString & = QString() )"
-   "bool load ( const uchar * , int )"
    "virtual QString translate ( const char * , const char * , const char * = 0 ) const"
    "QString translate ( const char * , const char * , const char * , int ) const")
   (("QTreeView" . "QAbstractItemView")

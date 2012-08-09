@@ -939,10 +939,6 @@ public:
     LImage(uint u) : unique(u) {}
     LImage(uint u, const QSize& x1, Format x2) : QImage(x1, x2), unique(u) {}
     LImage(uint u, int x1, int x2, Format x3) : QImage(x1, x2, x3), unique(u) {}
-    LImage(uint u, uchar* x1, int x2, int x3, Format x4) : QImage(x1, x2, x3, x4), unique(u) {}
-    LImage(uint u, const uchar* x1, int x2, int x3, Format x4) : QImage(x1, x2, x3, x4), unique(u) {}
-    LImage(uint u, uchar* x1, int x2, int x3, int x4, Format x5) : QImage(x1, x2, x3, x4, x5), unique(u) {}
-    LImage(uint u, const uchar* x1, int x2, int x3, int x4, Format x5) : QImage(x1, x2, x3, x4, x5), unique(u) {}
     LImage(uint u, const QString& x1, const char* x2 = 0) : QImage(x1, x2), unique(u) {}
     LImage(uint u, const char* x1, const char* x2 = 0) : QImage(x1, x2), unique(u) {}
     LImage(uint u, const QImage& x1) : QImage(x1), unique(u) {}

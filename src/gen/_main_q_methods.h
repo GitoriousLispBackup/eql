@@ -1748,7 +1748,6 @@ public:
     Q_INVOKABLE void* C(uint u, QObject* x1 = 0) { return new LTranslator(u, x1); }
     Q_INVOKABLE bool MisEmpty(QTranslator* o) const { return o->isEmpty(); }
     Q_INVOKABLE bool Mload(QTranslator* o, const QString& x1, const QString& x2 = QString(), const QString& x3 = QString(), const QString& x4 = QString()) { return o->load(x1, x2, x3, x4); }
-    Q_INVOKABLE bool Mload(QTranslator* o, const uchar* x1, int x2) { return o->load(x1, x2); }
     Q_INVOKABLE QString Mtranslate(QTranslator* o, const char* x1, const char* x2, const char* x3 = 0) const { return o->translate(x1, x2, x3); }
     Q_INVOKABLE QString Mtranslate(QTranslator* o, const char* x1, const char* x2, const char* x3, int x4) const { return o->translate(x1, x2, x3, x4); }
 };
@@ -2660,7 +2659,6 @@ public:
     Q_INVOKABLE bool Mflush(QFile* o) { return o->flush(); }
     Q_INVOKABLE int Mhandle(QFile* o) const { return o->handle(); }
     Q_INVOKABLE bool Mlink(QFile* o, const QString& x1) { return o->link(x1); }
-    Q_INVOKABLE uchar* Mmap(QFile* o, qint64 x1, qint64 x2, QFile::MemoryMapFlags x3 = QFile::NoOptions) { return o->map(x1, x2, x3); }
     Q_INVOKABLE bool Mopen(QFile* o, int x1, QFile::OpenMode x2) { return o->open(x1, x2); }
     Q_INVOKABLE int Mpermissions(QFile* o) const { return o->permissions(); }
     Q_INVOKABLE bool Mremove(QFile* o) { return o->remove(); }
@@ -2669,7 +2667,6 @@ public:
     Q_INVOKABLE void MsetFileName(QFile* o, const QString& x1) { o->setFileName(x1); }
     Q_INVOKABLE bool MsetPermissions(QFile* o, QFile::Permissions x1) { return o->setPermissions(x1); }
     Q_INVOKABLE QString MsymLinkTarget(QFile* o) const { return o->symLinkTarget(); }
-    Q_INVOKABLE bool Munmap(QFile* o, uchar* x1) { return o->unmap(x1); }
     Q_INVOKABLE void MunsetError(QFile* o) { o->unsetError(); }
     Q_INVOKABLE bool MatEnd(QFile* o) const { return o->atEnd(); }
     Q_INVOKABLE void Mclose(QFile* o) { o->close(); }

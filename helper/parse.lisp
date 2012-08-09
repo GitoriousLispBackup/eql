@@ -29,6 +29,7 @@
         "singleShot"
         "quint32"
         "qwsSet"
+        "uchar *"
         "void *"
         "winPage"
         "x11"

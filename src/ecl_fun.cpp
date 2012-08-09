@@ -87,46 +87,47 @@ void iniCLFunctions() {
     if(cl_find_package(eql) == Cnil) {
         cl_make_package(1, eql); }
     si_select_package(eql);
-    cl_def_c_function(c_string_to_object((char*)"qadd-event-filter"),    (cl_objectfn_fixed)qadd_event_filter,        3);
-    cl_def_c_function(c_string_to_object((char*)"%qapropos"),            (cl_objectfn_fixed)qapropos2,                3);
-    cl_def_c_function(c_string_to_object((char*)"qapp"),                 (cl_objectfn_fixed)qapp,                     0);
-    cl_def_c_function(c_string_to_object((char*)"qcall-default"),        (cl_objectfn_fixed)qcall_default,            0);
-    cl_def_c_function(c_string_to_object((char*)"qclear-event-filters"), (cl_objectfn_fixed)qclear_event_filters,     0);
-    cl_def_c_function(c_string_to_object((char*)"%qconnect"),            (cl_objectfn_fixed)qconnect2,                4);
-    cl_def_c_function(c_string_to_object((char*)"qcopy"),                (cl_objectfn_fixed)qcopy,                    1);
-    cl_def_c_function(c_string_to_object((char*)"%qdelete"),             (cl_objectfn_fixed)qdelete2,                 2);
-    cl_def_c_function(c_string_to_object((char*)"%qdisconnect"),         (cl_objectfn_fixed)qdisconnect2,             4);
-    cl_def_c_function(c_string_to_object((char*)"qenum"),                (cl_objectfn_fixed)qenum,                    2);
-    cl_def_c_function(c_string_to_object((char*)"qescape"),              (cl_objectfn_fixed)qescape,                  1);
-    cl_def_c_function(c_string_to_object((char*)"%qexec"),               (cl_objectfn_fixed)qexec2,                   1);
-    cl_def_c_function(c_string_to_object((char*)"qexit"),                (cl_objectfn_fixed)qexit,                    0);
-    cl_def_c_function(c_string_to_object((char*)"qfind-child"),          (cl_objectfn_fixed)qfind_child,              2);
-    cl_def_c_function(c_string_to_object((char*)"qfrom-utf8"),           (cl_objectfn_fixed)qfrom_utf8,               1);
-    cl_def_c_function(c_string_to_object((char*)"qid"),                  (cl_objectfn_fixed)qid,                      1);
-    cl_def_c_function(c_string_to_object((char*)"%qinvoke-method"),      (cl_objectfn_fixed)qinvoke_method2,          4);
-    cl_def_c_function(c_string_to_object((char*)"qload-ui"),             (cl_objectfn_fixed)qload_ui,                 1);
-    cl_def_c_function(c_string_to_object((char*)"qlocal8bit"),           (cl_objectfn_fixed)qlocal8bit,               1);
-    cl_def_c_function(c_string_to_object((char*)"qmeta-enums"),          (cl_objectfn_fixed)qmeta_enums,              0);
-    cl_def_c_function(c_string_to_object((char*)"%qnew-instance"),       (cl_objectfn_fixed)qnew_instance2,           2);
-    cl_def_c_function(c_string_to_object((char*)"%qobject-names"),       (cl_objectfn_fixed)qobject_names2,           1);
-    cl_def_c_function(c_string_to_object((char*)"qok"),                  (cl_objectfn_fixed)qok,                      0);
-    cl_def_c_function(c_string_to_object((char*)"qoverride"),            (cl_objectfn_fixed)qoverride,                3);
-    cl_def_c_function(c_string_to_object((char*)"qprocess-events"),      (cl_objectfn_fixed)qprocess_events,          0);
-    cl_def_c_function(c_string_to_object((char*)"qproperty"),            (cl_objectfn_fixed)qproperty,                2);
-    cl_def_c_function(c_string_to_object((char*)"qquit"),                (cl_objectfn_fixed)qquit,                    0);
-    cl_def_c_function(c_string_to_object((char*)"qrequire"),             (cl_objectfn_fixed)qrequire,                 1);
-    cl_def_c_function(c_string_to_object((char*)"qsender"),              (cl_objectfn_fixed)qsender,                  0);
-    cl_def_c_function(c_string_to_object((char*)"%qset-gc"),             (cl_objectfn_fixed)qset_gc,                  1);
-    cl_def_c_function(c_string_to_object((char*)"qset-property"),        (cl_objectfn_fixed)qset_property,            3);
-    cl_def_c_function(c_string_to_object((char*)"qsingle-shot"),         (cl_objectfn_fixed)qsingle_shot,             2);
-    cl_def_c_function(c_string_to_object((char*)"qstatic-meta-object"),  (cl_objectfn_fixed)qstatic_meta_object,      1);
-    cl_def_c_function(c_string_to_object((char*)"qsuper-class-name"),    (cl_objectfn_fixed)qsuper_class_name,        1);
-    cl_def_c_function(c_string_to_object((char*)"qtranslate"),           (cl_objectfn_fixed)qtranslate,               3);
-    cl_def_c_function(c_string_to_object((char*)"qt-object-name"),       (cl_objectfn_fixed)qt_object_name,           1);
-    cl_def_c_function(c_string_to_object((char*)"%qui-class"),           (cl_objectfn_fixed)qui_class2,               2);
-    cl_def_c_function(c_string_to_object((char*)"qui-names"),            (cl_objectfn_fixed)qui_names,                1);
-    cl_def_c_function(c_string_to_object((char*)"qutf8"),                (cl_objectfn_fixed)qutf8,                    1);
-    cl_def_c_function(c_string_to_object((char*)"qversion"),             (cl_objectfn_fixed)qversion,                 0); }
+    cl_def_c_function(c_string_to_object((char*)"make-qimage/dangerous"), (cl_objectfn_fixed)make_qimage_dangerous, 4);
+    cl_def_c_function(c_string_to_object((char*)"qadd-event-filter"),     (cl_objectfn_fixed)qadd_event_filter,     3);
+    cl_def_c_function(c_string_to_object((char*)"%qapropos"),             (cl_objectfn_fixed)qapropos2,             3);
+    cl_def_c_function(c_string_to_object((char*)"qapp"),                  (cl_objectfn_fixed)qapp,                  0);
+    cl_def_c_function(c_string_to_object((char*)"qcall-default"),         (cl_objectfn_fixed)qcall_default,         0);
+    cl_def_c_function(c_string_to_object((char*)"qclear-event-filters"),  (cl_objectfn_fixed)qclear_event_filters,  0);
+    cl_def_c_function(c_string_to_object((char*)"%qconnect"),             (cl_objectfn_fixed)qconnect2,             4);
+    cl_def_c_function(c_string_to_object((char*)"qcopy"),                 (cl_objectfn_fixed)qcopy,                 1);
+    cl_def_c_function(c_string_to_object((char*)"%qdelete"),              (cl_objectfn_fixed)qdelete2,              2);
+    cl_def_c_function(c_string_to_object((char*)"%qdisconnect"),          (cl_objectfn_fixed)qdisconnect2,          4);
+    cl_def_c_function(c_string_to_object((char*)"qenum"),                 (cl_objectfn_fixed)qenum,                 2);
+    cl_def_c_function(c_string_to_object((char*)"qescape"),               (cl_objectfn_fixed)qescape,               1);
+    cl_def_c_function(c_string_to_object((char*)"%qexec"),                (cl_objectfn_fixed)qexec2,                1);
+    cl_def_c_function(c_string_to_object((char*)"qexit"),                 (cl_objectfn_fixed)qexit,                 0);
+    cl_def_c_function(c_string_to_object((char*)"qfind-child"),           (cl_objectfn_fixed)qfind_child,           2);
+    cl_def_c_function(c_string_to_object((char*)"qfrom-utf8"),            (cl_objectfn_fixed)qfrom_utf8,            1);
+    cl_def_c_function(c_string_to_object((char*)"qid"),                   (cl_objectfn_fixed)qid,                   1);
+    cl_def_c_function(c_string_to_object((char*)"%qinvoke-method"),       (cl_objectfn_fixed)qinvoke_method2,       4);
+    cl_def_c_function(c_string_to_object((char*)"qload-ui"),              (cl_objectfn_fixed)qload_ui,              1);
+    cl_def_c_function(c_string_to_object((char*)"qlocal8bit"),            (cl_objectfn_fixed)qlocal8bit,            1);
+    cl_def_c_function(c_string_to_object((char*)"qmeta-enums"),           (cl_objectfn_fixed)qmeta_enums,           0);
+    cl_def_c_function(c_string_to_object((char*)"%qnew-instance"),        (cl_objectfn_fixed)qnew_instance2,        2);
+    cl_def_c_function(c_string_to_object((char*)"%qobject-names"),        (cl_objectfn_fixed)qobject_names2,        1);
+    cl_def_c_function(c_string_to_object((char*)"qok"),                   (cl_objectfn_fixed)qok,                   0);
+    cl_def_c_function(c_string_to_object((char*)"qoverride"),             (cl_objectfn_fixed)qoverride,             3);
+    cl_def_c_function(c_string_to_object((char*)"qprocess-events"),       (cl_objectfn_fixed)qprocess_events,       0);
+    cl_def_c_function(c_string_to_object((char*)"qproperty"),             (cl_objectfn_fixed)qproperty,             2);
+    cl_def_c_function(c_string_to_object((char*)"qquit"),                 (cl_objectfn_fixed)qquit,                 0);
+    cl_def_c_function(c_string_to_object((char*)"qrequire"),              (cl_objectfn_fixed)qrequire,              1);
+    cl_def_c_function(c_string_to_object((char*)"qsender"),               (cl_objectfn_fixed)qsender,               0);
+    cl_def_c_function(c_string_to_object((char*)"%qset-gc"),              (cl_objectfn_fixed)qset_gc,               1);
+    cl_def_c_function(c_string_to_object((char*)"qset-property"),         (cl_objectfn_fixed)qset_property,         3);
+    cl_def_c_function(c_string_to_object((char*)"qsingle-shot"),          (cl_objectfn_fixed)qsingle_shot,          2);
+    cl_def_c_function(c_string_to_object((char*)"qstatic-meta-object"),   (cl_objectfn_fixed)qstatic_meta_object,   1);
+    cl_def_c_function(c_string_to_object((char*)"qsuper-class-name"),     (cl_objectfn_fixed)qsuper_class_name,     1);
+    cl_def_c_function(c_string_to_object((char*)"qtranslate"),            (cl_objectfn_fixed)qtranslate,            3);
+    cl_def_c_function(c_string_to_object((char*)"qt-object-name"),        (cl_objectfn_fixed)qt_object_name,        1);
+    cl_def_c_function(c_string_to_object((char*)"%qui-class"),            (cl_objectfn_fixed)qui_class2,            2);
+    cl_def_c_function(c_string_to_object((char*)"qui-names"),             (cl_objectfn_fixed)qui_names,             1);
+    cl_def_c_function(c_string_to_object((char*)"qutf8"),                 (cl_objectfn_fixed)qutf8,                 1);
+    cl_def_c_function(c_string_to_object((char*)"qversion"),              (cl_objectfn_fixed)qversion,              0); }
 
 // QtObject methods
 
@@ -2332,5 +2333,19 @@ cl_object qquit() {
     cl_shutdown();
     qApp->quit();
     exit(0); }
+
+
+
+// *** special extensions ***
+
+cl_object make_qimage_dangerous(cl_object l_vector, cl_object l_width, cl_object l_height, cl_object l_format) {
+    ecl_process_env()->nvalues = 1;
+    QImage* image = 0;
+
+    // image = new QImage(...);
+
+    return qt_object_from_name("QImage", (void*)image); }
+
+
 
 QT_END_NAMESPACE
