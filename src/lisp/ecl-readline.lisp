@@ -128,7 +128,12 @@
     (setq *current-package* *package*)
     (let ((entries (make-array 0 :adjustable t :fill-pointer t)))
       (do-symbols (s (find-package *current-package*))
-        (vector-push-extend (string-downcase (string s)) entries))
+        (let ((name (symbol-name s)))
+          (vector-push-extend (if (and (char= #\Q (char name 0))
+                                       (find #\. name))
+                                  name ; Qt enum
+                                  (string-downcase name))
+                              entries)))
       (sort entries #'string<)
       (rl-delete-completions)
       (rl-allocate-completions (length entries))

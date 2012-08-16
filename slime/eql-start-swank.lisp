@@ -1,6 +1,6 @@
 ;;; This file is intended to be loaded by an implementation to
 ;;; get a running swank server
-;;; e.g. eql -slime start-swank.lisp
+;;; e.g. ecl -load start-swank.lisp
 ;;;
 ;;; Default port is 4005
 
@@ -14,5 +14,8 @@
  :reload nil         ; reload SWANK, even if the SWANK package already exists
  :load-contribs nil) ; load all contribs
 
-(mp:process-run-function :swank (lambda () (swank:create-server :port 4005 :dont-close nil)))
+(mp:process-run-function :swank (lambda ()
+                                  (swank:create-server
+                                    :port 4005
+                                    :dont-close t))) ; allow to quit/restart Emacs without affecting running EQL programs
 

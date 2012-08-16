@@ -28,12 +28,18 @@ This should work with any Slime version that plays together with ECL.
 </ul>
 <h3>Run</h3>
 <ul>
-<li>Run the swank server (the command line option <code>-slime</code> can be omitted if the file name contains "start-swank"):
+<li>Run the Swank server (the command line option <code>-slime</code> can be omitted if the file name contains "start-swank"):
 <pre>
 eql -slime ~/slime/eql-start-swank.lisp
 </pre>
 <li>Run Emacs and do:
-<code>Meta-X slime-connect</code> (please note: use <code>slime-connect</code>) and hit <code>Return</code> 2 times (confirming the default values).
+<code>Meta-X slime-connect</code> (please note:
+use <code>slime-connect</code>) and hit <code>Return</code> 2 times
+(confirming the default values).
+<p>Please note: if <code>:dont-close</code> is set to <code>T</code>
+    in <code>eql-start-swank.lisp</code>, quitting/restarting Emacs will not
+    affect a running EQL program, that is: if you quit/restart Emacs, you can
+    connect to the same Swank/EQL you left when quitting Emacs.</p>
 </ul>
 <h3>Notes</h3>
 <h4>Eval Region</h4>
@@ -51,6 +57,9 @@ eql -slime ~/slime/eql-start-swank.lisp
 <br>If you want to use <b>Eval Region</b> containing EQL functions, use the
 method described above.
 </p>
+<p>The advantage using Eval Region is that error conditions will not stop/pause your EQL program (that is, Qt event processing will continue).
+<br>Instead, if there is an error in code you enter in the Slime REPL, the
+program will pause (Qt event processing will be stopped until you take some action).</p>
 <h4>Abort / Restart</h4>
 <p>
 <p>Be careful after entering the Slime debugger:

@@ -11,17 +11,24 @@
 
 (compile 'test)
 
-(let ((lisp (test))
-      (c++  (let ((proc (qnew "QProcess")))
-              (parse-integer
-               (x:bytes-to-string
-                (x:do-with (qfun proc)
-                  ("start" (format nil
-                                   #+darwin "./test.app/Contents/MacOS/test ~A"
-                                   #+linux  "./test ~A"
-                                   #+win32  "test.exe ~A"
-                                   *size*))
-                  ("waitForReadyRead")
-                  ("readAllStandardOutput")))))))
-  (qmsg (format nil "Real time EQL / C++: ~A / ~A = ~A" lisp c++ (truncate (+ 0.5 (float (/ lisp c++))))))
+(let ((lisp (progn
+              (format t "~%~%-> Running EQL... (may take a minute or two)")
+              (test)))
+      (c++  (progn
+              (format t "~%-> Running C++...")
+              (let ((proc (qnew "QProcess")))
+                (parse-integer
+                 (x:bytes-to-string
+                  (x:do-with (qfun proc)
+                    ("start" (format nil
+                                     #+darwin "./test.app/Contents/MacOS/test ~A"
+                                     #+linux  "./test ~A"
+                                     #+win32  "test.exe ~A"
+                                     *size*))
+                    ("waitForReadyRead")
+                    ("readAllStandardOutput"))))))))
+  (qmsg (princ (format nil "~%~%Real time EQL / C++: ~A / ~A = ~A~%~%"
+                       lisp
+                       c++
+                       (truncate (+ 0.5 (float (/ lisp c++)))))))
   (qq))

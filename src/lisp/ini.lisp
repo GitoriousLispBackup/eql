@@ -351,11 +351,8 @@
 (defun feed-top-level ()
   (catch *quit-tag*
     (let ((*debugger-hook* nil)
-          -)
-      (setq *lisp-initialized* t)
-      (let ((*tpl-level* -1))
-        (%tpl))
-      0)))
+          (*tpl-level* -1))
+      (%tpl))))
 
 (defun %tpl (&key ((:commands *tpl-commands*) tpl-commands)
                  ((:prompt-hook *tpl-prompt-hook*) *tpl-prompt-hook*)
@@ -372,11 +369,9 @@
          (*quit-tag* *quit-tags*)       ; any unique new value
          (*tpl-level* (1+ *tpl-level*))
          (break-level *break-level*)
-         values)
+         values -)
     (set-break-env)
     (set-current-ihs)
-    (when eql::*slime-mode*
-      (return-from %tpl (multiple-value-list (eval-with-env eql::*top-level-form* *break-env*))))
     (flet ((rep ()
              ;; We let warnings pass by this way "warn" does the
              ;; work.  It is conventional not to trap anything
@@ -402,7 +397,7 @@
                             )
                            )
                      )))
-
+               
                (with-grabbed-console
                    (unless quiet
                      (break-where)
@@ -415,17 +410,16 @@
                                (tpl-read))))
                  (setq values (multiple-value-list
                                (eval-with-env - *break-env*))
-                       /// // // / / values *** ** ** * * (car /))
+                       /// // // / / values *** ** ** * * (car /) +++ ++ ++ + + -)
                  (tpl-print values)))))
-            (setq +++ ++ ++ + + -)
-            (when
-              (catch *quit-tag*
-                (if (zerop break-level)
-                    (with-simple-restart 
-                      (restart-toplevel "Go back to Top-Level REPL.")
-                      (rep))
-                    (with-simple-restart
-                      (restart-debugger "Go back to debugger level ~D." break-level)
-                      (rep)))
-                nil)
-              (setf quiet nil)))))
+      (when
+          (catch *quit-tag*
+            (if (zerop break-level)
+                (with-simple-restart 
+                    (restart-toplevel "Go back to Top-Level REPL.")
+                  (rep))
+                (with-simple-restart
+                    (restart-debugger "Go back to debugger level ~D." break-level)
+                  (rep)))
+            nil)
+        (setf quiet nil)))))
