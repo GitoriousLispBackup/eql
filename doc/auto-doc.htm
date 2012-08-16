@@ -86,6 +86,10 @@
 <p>Calls <code>Qt::escape()</code>.</p>
 </p><br>
 <p>
+<b>QEVAL (&rest forms)</b>
+<p>Slime mode only: evaluate forms in GUI thread. Defaults to a simple <code>progn</code> outside of Slime.</p>
+</p><br>
+<p>
 <b>QEXEC (&optional milliseconds)</b>
 <p>Convenience function to call <code>QApplication::exec()</code>.<br>Optionally pass the time in milliseconds after which <code>QEventLoop::exit()</code> will be called.</p>
 </p><br>

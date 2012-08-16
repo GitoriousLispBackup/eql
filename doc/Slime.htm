@@ -4,8 +4,8 @@
 </head>
 <h2>Slime</h2>
 <p><i style="color:red">Currently working on <b>Linux, OSX only</b>, sorry
-    (tested with ECL 12.7.1 and Slime from 2012-08-01). Current ECL and
-    current Slime don't work together on Windows.</i></p>
+    (tested with ECL 12.7.1 and Slime from 2012-08-01).
+<br>Current ECL and current Slime don't work together on <b>Windows</b>.</i></p>
 This should work with any Slime version that plays together with ECL.
 <br>Requires <b>ECL threads</b>.
 <ul>
@@ -26,6 +26,7 @@ This should work with any Slime version that plays together with ECL.
 </pre>
 <li>Copy the file <code>eql/slime/eql-start-swank.lisp</code> in your <code>slime/</code> directory
 </ul>
+<br>
 <h3>Run</h3>
 <ul>
 <li>Run the Swank server (the command line option <code>-slime</code> can be omitted if the file name contains "start-swank"):
@@ -41,6 +42,7 @@ use <code>slime-connect</code>) and hit <code>Return</code> 2 times
     affect a running EQL program, that is: if you quit/restart Emacs, you can
     connect to the same Swank/EQL you left when quitting Emacs.</p>
 </ul>
+<br>
 <h3>Notes</h3>
 <h4>Eval Region</h4>
 <ul>
@@ -57,14 +59,36 @@ use <code>slime-connect</code>) and hit <code>Return</code> 2 times
 <br>If you want to use <b>Eval Region</b> containing EQL functions, use the
 method described above.
 </p>
-<p>The advantage using Eval Region is that error conditions will not stop/pause your EQL program (that is, Qt event processing will continue).
-<br>Instead, if there is an error in code you enter in the Slime REPL, the
-program will pause (Qt event processing will be stopped until you take some action).</p>
+<hr>
+<p>You may use the macro <code>qeval</code> if you want to ensure evaluation
+  in the GUI thread (this is meant to be used together with Eval Region only).
+<br>It behaves like a <code>progn</code>, so you can do something like this:
+<pre>
+(qeval
+  (defvar *label* (qnew "QLabel"))
+  (defvar *edit*  (qnew "QLineEdit")))
+</pre>
+Wrapping forms in <code>qeval</code> will have no effect if you
+run your code outside of Slime (so there's no need to
+remove <code>qeval</code> in your final program).</p>
+<hr>
+<p>But note: the advantage using <b>Eval Region</b>
+  (<i>without</i> <code>qeval</code>), e.g. by re-defining a function, is that
+  error conditions will not stop/pause your EQL program (that is, Qt event
+  processing will continue).</p>
+<p>Instead, if there is an error in code you either enter in the Slime REPL, or
+  run with Eval Region wrapped in <code>qeval</code>, the
+program will pause (Qt event processing will be stopped until you take some
+  action).</p>
+<br>
 <h4>Abort / Restart</h4>
 <p>
 <p>Be careful after entering the Slime debugger:
 <br>As a rule of thumb, always choose the first <code>[Abort]</code> or <code>[Restart]</code>
-  counting from the top (otherwise you might loose the connection to the swank server).</p>
+  counting from the top (otherwise you might loose the connection to the swank
+  server).</p>
+<br>
 <h4>Help</h4>
 <p>For help see the <code>qapropos</code> and <code>qgui</code> functions.</p>
+<br>
 </html>

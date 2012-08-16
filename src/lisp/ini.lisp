@@ -131,6 +131,14 @@
   #-threads
   (error "ECL threads not enabled, can't process Qt events"))
 
+(defmacro qeval (&rest forms)
+  ;; this macro will be redefined in Slime mode (see "../../slime/repl-hook.lisp")
+  "args: (&rest forms)
+   Slime mode only: evaluate forms in GUI thread. Defaults to a simple <code>progn</code> outside of Slime."
+  (if (second forms)
+      (cons 'progn forms)
+      (first forms)))
+
 ;;; qt-object
 
 (defstruct (qt-object (:constructor qt-object (pointer unique id &optional finalize)))

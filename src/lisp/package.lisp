@@ -23,6 +23,7 @@
    #:qenum
    #:qeql
    #:qescape
+   #:qeval
    #:qexec
    #:qexit
    #:qfind-child
