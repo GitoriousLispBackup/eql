@@ -8,7 +8,7 @@
 TESTED WITH
 ===========
 
-* ECL 11.1.1, 12.2.1, 12.7.1
+* ECL 11.1.1, 12.2.1, 12.7.1 (for Slime, see note below)
 * Qt4.6, 4.7, 4.8
 * Linux / OSX 10.4 / Windows XP, 7 (MSVC 2008, 2010)
 
@@ -17,9 +17,12 @@ TESTED WITH
 REQUIREMENTS
 ============
 
-* ECL >= 10.4 Unicode (./configure --enable-unicode); threads needed for both "-qtpl" and "-slime"
+* ECL >= 10.4 unicode; threads needed for both "-qtpl" and "-slime"
 * Qt  >= 4.6 http://qt.nokia.com/
-* any Slime that plays together with your ECL version (requires ECL threads)
+
+* Slime: any version that plays together with your ECL version (requires ECL threads)
+  NB: - the new Slime integration has been tested with ECL 12.7.1 only (new thread mode)
+      - on Windows you'll need the latest ECL version from git
 
 
 

@@ -7,7 +7,6 @@
    #:*slime-mode*
    #:defvar-ui
    #:in-home
-   ;;#:make-qimage
    #:new-qt-object
    #:qadd-event-filter
    #:qapp

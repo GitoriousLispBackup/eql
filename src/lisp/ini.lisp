@@ -86,6 +86,7 @@
 (defvar *slime-evaluated* nil)
 (defvar *slime-hook-file* nil)
            
+#+threads
 (let (hook-loaded-p timer)
   (defun eval-top-level ()
     (unless timer

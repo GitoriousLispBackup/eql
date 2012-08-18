@@ -87,7 +87,6 @@ void iniCLFunctions() {
     if(cl_find_package(eql) == Cnil) {
         cl_make_package(1, eql); }
     si_select_package(eql);
-    cl_def_c_function(c_string_to_object((char*)"%make-qimage/dangerous"), (cl_objectfn_fixed)make_qimage_dangerous, 4);
     cl_def_c_function(c_string_to_object((char*)"qadd-event-filter"),      (cl_objectfn_fixed)qadd_event_filter,     3);
     cl_def_c_function(c_string_to_object((char*)"%qapropos"),              (cl_objectfn_fixed)qapropos2,             3);
     cl_def_c_function(c_string_to_object((char*)"qapp"),                   (cl_objectfn_fixed)qapp,                  0);
@@ -2333,19 +2332,5 @@ cl_object qquit() {
     cl_shutdown();
     qApp->quit();
     exit(0); }
-
-
-
-// *** special extensions ***
-
-cl_object make_qimage_dangerous(cl_object l_vector, cl_object l_width, cl_object l_height, cl_object l_format) {
-    ecl_process_env()->nvalues = 1;
-    QImage* image = 0;
-
-    // image = new QImage(...);
-
-    return qt_object_from_name("QImage", (void*)image); }
-
-
 
 QT_END_NAMESPACE
