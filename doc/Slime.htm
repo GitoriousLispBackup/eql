@@ -47,9 +47,8 @@ use <code>slime-connect</code>) and hit <code>Return</code> 2 times
 <h3>Notes</h3>
 <h4>Eval Region</h4>
 <ul>
-<li>Open / edit your Lisp file in Emacs.
 <li><b>Load</b> your Lisp file <b>from the Slime REPL</b>: <code>(load "file.lisp")</code>
-<li>Always <b>run</b> your program <b>from the Slime REPL</b> (not using Eval Region).
+<li><b>Run</b> your program <b>from the Slime REPL</b> (not using Eval Region).
 <li>Only at this point you may use Eval Region for re-defining functions etc.
 </ul>
 <p>The point here is: if you directly try to Eval Region an expression containing an
@@ -74,20 +73,22 @@ run your code outside of Slime (so there's no need to
 remove <code>qeval</code> in your final program).</p>
 <hr>
 <p>But note: the advantage using <b>Eval Region</b>
-  (<i>without</i> <code>qeval</code>), e.g. by re-defining a function, is that
-  error conditions will not stop/pause your EQL program (that is, Qt event
+  (<i>without</i> <code>qeval</code>) is that Lisp error conditions (not
+  driven by Qt events) will not stop/pause your EQL program (that is, Qt event
   processing will continue).</p>
 <p>Instead, if there is an error in code you either enter in the Slime REPL, or
   run with Eval Region wrapped in <code>qeval</code>, the
-program will pause (Qt event processing will be stopped until you take some
+program will always pause (Qt event processing will be stopped until you take some
   action).</p>
 <br>
 <h4>Abort / Restart</h4>
 <p>
 <p>Be careful after entering the Slime debugger:
-<br>As a rule of thumb, always choose the first <code>[Abort]</code> or <code>[Restart]</code>
+<br>As a rule of thumb, always choose the first <code>[ABORT]</code> or <code>[RESTART]</code>
   counting from the top (otherwise you might loose the connection to the swank
   server).</p>
+<p>Special attention is needed for <code>[RESTART-QT]</code>: you should
+  choose it only if there is no other restart available.</p>
 <br>
 <h4>Help</h4>
 <p>For help see the <code>qapropos</code> and <code>qgui</code> functions.</p>

@@ -2126,6 +2126,7 @@ cl_object qexec2(cl_object l_milliseconds) {
         timer->start(toInt(l_milliseconds));
         EQL::eventLoop->exec();
         return l_milliseconds; }
+    QCoreApplication::exit(); // prevent "The event loop is already running"
     QApplication::exec();
     return Ct; }
 
@@ -2332,5 +2333,19 @@ cl_object qquit() {
     cl_shutdown();
     qApp->quit();
     exit(0); }
+
+
+
+// *** special extensions ***
+
+cl_object make_qimage_dangerous(cl_object l_vector, cl_object l_width, cl_object l_height, cl_object l_format) {
+    ecl_process_env()->nvalues = 1;
+    QImage* image = 0;
+
+    // image = new QImage(x, toInt(l_width), toInt(l_height), (QImage::Format)toInt(l_format));
+
+    return qt_object_from_name("QImage", (void*)image); }
+
+
 
 QT_END_NAMESPACE

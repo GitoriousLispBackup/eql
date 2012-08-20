@@ -32,7 +32,7 @@
   (do-external-symbols (sym (find-package :eql))
     (let ((name (symbol-name sym)))
       (when (or (char= #\Q (char name 0))
-                (find name '("DEFVAR-UI" "TR") :test 'string=))
+                (find name '("DEFVAR-UI" "MAKE-QIMAGE" "TR") :test 'string=))
         (x:when-it (documentation sym 'function)
           (let ((fun  (string-downcase (symbol-name sym)))
                 (docu (mapcar #'(lambda (s) (string-trim " " s)) (x:split x:it #\Newline))))

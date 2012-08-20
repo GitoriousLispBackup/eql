@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "12.8.2"; // 2012-08-18
+const char EQL::version[] = "12.8.2"; // 2012-08-20
 
 extern "C" void ini_EQL(cl_object);
 
@@ -50,9 +50,13 @@ void EQL::exec(const QStringList& args) {
     if(arguments.contains("-slime") ||
       (arguments.indexOf(QRegExp("*start-swank*.lisp", Qt::CaseInsensitive, QRegExp::Wildcard)) != -1)) {
         arguments.removeAll("-slime");
+        quit = true;
         QApplication::setQuitOnLastWindowClosed(false);
         forms << "(setf eql:*slime-mode* t)"
-              << "(eql::eval-top-level)"; }
+              << "(eql::eval-top-level)"
+	      << "(loop"
+                 "  (with-simple-restart (restart-qt \"Restart Qt event processing.\")"
+                 "    (qexec)))"; }
     if(arguments.count() == 1) {
         quit = true;
         forms << "(si:top-level)"; }
