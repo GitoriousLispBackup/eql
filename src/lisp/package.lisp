@@ -7,7 +7,7 @@
    #:*slime-mode*
    #:defvar-ui
    #:in-home
-   ;;#:make-qimage
+   #:make-qimage
    #:new-qt-object
    #:qadd-event-filter
    #:qapp
@@ -54,6 +54,7 @@
    #:qq
    #:qquit
    #:qrequire
+   #:qrgb
    #:qsel
    #:qselect
    #:qsender

@@ -87,6 +87,7 @@ void iniCLFunctions() {
     if(cl_find_package(eql) == Cnil) {
         cl_make_package(1, eql); }
     si_select_package(eql);
+    cl_def_c_function(c_string_to_object((char*)"%make-qimage/dangerous"), (cl_objectfn_fixed)make_qimage_dangerous, 5);
     cl_def_c_function(c_string_to_object((char*)"qadd-event-filter"),      (cl_objectfn_fixed)qadd_event_filter,     3);
     cl_def_c_function(c_string_to_object((char*)"%qapropos"),              (cl_objectfn_fixed)qapropos2,             3);
     cl_def_c_function(c_string_to_object((char*)"qapp"),                   (cl_objectfn_fixed)qapp,                  0);
@@ -2338,14 +2339,44 @@ cl_object qquit() {
 
 // *** special extensions ***
 
-cl_object make_qimage_dangerous(cl_object l_vector, cl_object l_width, cl_object l_height, cl_object l_format) {
-    ecl_process_env()->nvalues = 1;
-    QImage* image = 0;
+//
+// Contributed by Mark Cox, please see LICENSE-MAKE-QIMAGE.txt
+//
 
-    // image = new QImage(x, toInt(l_width), toInt(l_height), (QImage::Format)toInt(l_format));
+cl_object make_qimage_dangerous(cl_object l_vector, cl_object l_width, cl_object l_height, cl_object l_bytes_per_line, cl_object l_format) {
+     ecl_process_env()->nvalues = 1;
 
-    return qt_object_from_name("QImage", (void*)image); }
+    // make sure all the input data is of the correct type.
+    if (!ECL_VECTORP(l_vector) || !ECL_FIXNUMP(l_width) || !ECL_FIXNUMP(l_height) || !ECL_FIXNUMP(l_bytes_per_line) || !ECL_FIXNUMP(l_format)) {
+      error_msg("%MAKE-QIMAGE/DANGEROUS", LIST5(l_vector, l_width, l_height, l_bytes_per_line, l_format));
+      return Cnil; }
 
+    ecl_vector *v = &l_vector->vector;
+    switch (v->elttype) {
+    case ecl_aet_bit:
+    case ecl_aet_b8:
+    case ecl_aet_b16:
+    case ecl_aet_b32:
+      break;
+    default:
+      error_msg("%MAKE-QIMAGE/DANGEROUS", LIST5(l_vector, l_width, l_height, l_bytes_per_line, l_format));
+      return Cnil; }
 
+    int width                   = toInt<int>(l_width);
+    int height                  = toInt<int>(l_height);
+    int bytes_per_line          = toInt<int>(l_bytes_per_line);
+    QImage::Format image_format = (QImage::Format)toInt<int>(l_format);
+
+    QImage *image = new QImage(width, height, image_format);
+    Q_ASSERT(image->bytesPerLine() >= bytes_per_line);
+
+    uint8_t *current = v->self.b8;
+    for (int row = 0; row < height; row++) {
+      uint8_t *destination = (uint8_t *)image->scanLine(row);
+      std::copy(current, current + bytes_per_line, destination);
+      current += bytes_per_line; }
+
+    cl_object l_image = qt_object_from_name("QImage", (void*)image);
+    return l_image; }
 
 QT_END_NAMESPACE

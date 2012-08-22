@@ -136,3 +136,6 @@ LICENSE
 =======
 
 LGPL
+
+for MAKE-QIMAGE (contributed by Mark Cox), please see LICENSE-MAKE-QIMAGE.txt
+

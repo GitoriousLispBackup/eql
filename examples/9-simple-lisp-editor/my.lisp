@@ -1,7 +1,5 @@
 (in-package :eql)
 
-(setf *break-on-errors* t) ; see (documentation 'eql:*break-on-errors* 'variable)
-
 (defvar *window*    (qnew "QDialog"))
 (defvar *label*     (qnew "QLabel"))
 (defvar *line-edit* (qnew "QLineEdit"))
