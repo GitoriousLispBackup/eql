@@ -48,8 +48,7 @@
   (qconnect *reset-color* "clicked()" (lambda () (qset *opacity* "value" 0)))
   (qoverride *display* "paintEvent(QPaintEvent*)" 'paint)
   (reset)
-  (x:do-with (qfun *main*)
-    "show" "raise"))
+  (x:do-with (qfun *main*) "show" "raise"))
 
 (let ((pnt (qnew "QPainter")))
   (defun paint (ev)

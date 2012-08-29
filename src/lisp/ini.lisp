@@ -101,7 +101,7 @@
     (when *top-level-form*
       (if *slime-mode*
           (let ((values (multiple-value-list
-                          (with-simple-restart (abort "Go back to Top-Level.")
+                          (with-simple-restart (restart-top-level "Go back to REPL.")
                             (eval *top-level-form*)))))
             (finish-output)
             (mp:with-lock (*top-level-lock*)

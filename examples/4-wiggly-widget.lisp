@@ -31,8 +31,7 @@
       ("paintEvent(QPaintEvent*)" 'paint)
       ("timerEvent(QTimerEvent*)" 'timeout))
     (qset *edit* "text" "= AMOR = ROMA =")
-    (x:do-with (qfun dlg)
-      "show" "raise")))
+    (x:do-with (qfun dlg) "show" "raise")))
 
 (defun paint (ev)
   (qlet ((painter "QPainter(QWidget*)" *wiggly*) ; local QPainter variable: no need to call "begin", "end"

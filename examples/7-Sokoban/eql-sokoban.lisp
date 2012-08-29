@@ -74,8 +74,7 @@
     (qconnect zoom-in  "clicked()" (lambda () (zoom :in)))
     (qconnect zoom-out "clicked()" (lambda () (zoom :out)))
     (qadd-event-filter nil |QEvent.KeyPress| 'key-pressed)
-    (x:do-with (qfun main)
-      "show" "raise")))
+    (x:do-with (qfun main) "show" "raise")))
 
 (defun set-maze ()
   (setf *maze* (nth (qget *level* "value") *my-mazes*))

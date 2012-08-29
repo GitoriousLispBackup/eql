@@ -55,7 +55,7 @@ void EQL::exec(const QStringList& args) {
         forms << "(setf eql:*slime-mode* t)"
               << "(eql::eval-top-level)"
 	      << "(loop"
-                 "  (with-simple-restart (restart-qt \"Restart Qt event processing.\")"
+                 "  (with-simple-restart (restart-qt-events \"Restart Qt event processing.\")"
                  "    (qexec)))"; }
     if(arguments.count() == 1) {
         quit = true;

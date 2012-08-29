@@ -302,7 +302,7 @@ static cl_object make_vector() {
 template<typename T>
 static T toInt(cl_object l_num) {
     T i = 0;
-    if(FIXNUMP(l_num)) {
+    if(cl_numberp(l_num)) { // don't use FIXNUMP (too restrictive for edge cases)
         i = fixint(l_num); }
     return i; }
 
@@ -312,7 +312,7 @@ static int toInt(cl_object l_num) {
 template<typename T>
 static T toUInt(cl_object l_num) {
     T i = 0;
-    if(FIXNUMP(l_num)) {
+    if(cl_numberp(l_num)) { // don't use FIXNUMP (too restrictive for edge cases)
         i = fixnnint(l_num); }
     return i; }
 

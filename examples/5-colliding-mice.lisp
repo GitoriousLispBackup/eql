@@ -198,8 +198,7 @@
             (qfun *graphics-scene* "addItem" item)))))
     (qconnect *timer* "timeout()" *graphics-scene* "advance()")
     (qfun *timer* "start" 30)
-    (x:do-with (qfun view)
-      "show" "raise")))
+    (x:do-with (qfun view) "show" "raise")))
 
 ;;; for playing around interactively
 

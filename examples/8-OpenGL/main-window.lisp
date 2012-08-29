@@ -141,5 +141,4 @@
 
 (defun start ()
   (ini)
-  (x:do-with (qfun *me*)
-    "show" "raise"))
+  (x:do-with (qfun *me*) "show" "raise"))

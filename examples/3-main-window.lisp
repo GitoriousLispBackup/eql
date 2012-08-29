@@ -38,8 +38,7 @@
   (qconnect *action-open* "triggered()" 'file-open)
   (qconnect *action-save* "triggered()" 'file-save)
   (qset *editor* "html" (read-file (in-home "examples/data/utf8.htm")))
-  (x:do-with (qfun *main*)
-    "show" "raise"))
+  (x:do-with (qfun *main*) "show" "raise"))
 
 (defun file-open ()
   (let ((file (qfun "QFileDialog" "getOpenFileName")))
