@@ -302,7 +302,7 @@ static cl_object make_vector() {
 template<typename T>
 static T toInt(cl_object l_num) {
     T i = 0;
-    if(cl_numberp(l_num)) { // don't use FIXNUMP (too restrictive for edge cases)
+    if(cl_integerp(l_num) == Ct) {
         i = fixint(l_num); }
     return i; }
 
@@ -312,7 +312,7 @@ static int toInt(cl_object l_num) {
 template<typename T>
 static T toUInt(cl_object l_num) {
     T i = 0;
-    if(cl_numberp(l_num)) { // don't use FIXNUMP (too restrictive for edge cases)
+    if(cl_integerp(l_num) == Ct) {
         i = fixnnint(l_num); }
     return i; }
 
@@ -330,7 +330,7 @@ static T toFloat(cl_object l_num) {
     else if(ECL_LONG_FLOAT_P(l_num)) {
         f = ecl_long_float(l_num); }
 #endif
-    else if(FIXNUMP(l_num)) {
+    else if(cl_integerp(l_num) == Ct) {
         f = fixint(l_num); }
     else {
         cl_object l_f = cl_float(1, l_num);
@@ -677,7 +677,7 @@ static cl_object from_qstringlist(const QStringList& l) {
 static cl_object from_intlist(const QList<int>& l) {
     cl_object l_lst = Cnil;
     Q_FOREACH(int i, l) {
-        l_lst = CONS(MAKE_FIXNUM(i), l_lst); }
+        l_lst = CONS(ecl_make_integer(i), l_lst); }
     return cl_nreverse(l_lst); }
 
 static cl_object from_qreallist(const QList<qreal>& l) {
@@ -694,7 +694,7 @@ static cl_object from_qpolygon(const QPolygon& p) {
     for(int i = 0; i < p.size(); ++i) {
         int x, y;
         p.point(i, &x, &y);
-        l_lst = CONS(MAKE_FIXNUM(y), CONS(MAKE_FIXNUM(x), l_lst)); }
+        l_lst = CONS(ecl_make_integer(y), CONS(ecl_make_integer(x), l_lst)); }
     return cl_nreverse(l_lst); }
 
 static cl_object from_qpolygonf(const QPolygonF& pol) {
@@ -787,13 +787,13 @@ static cl_object from_qvariant_value(const QVariant& var) {
         case QVariant::Double:      l_obj = ecl_make_doublefloat(var.toDouble()); break;
         case QVariant::Font:        l_obj = from_qfont(qVariantValue<QFont>(var)); break;
         case QVariant::Icon:        l_obj = from_qicon(qVariantValue<QIcon>(var)); break;
-        case QVariant::Int:         l_obj = MAKE_FIXNUM(var.toInt()); break;
+        case QVariant::Int:         l_obj = ecl_make_integer(var.toInt()); break;
         case QVariant::Image:       l_obj = from_qimage(qVariantValue<QImage>(var)); break;
         case QVariant::KeySequence: l_obj = from_qkeysequence(qVariantValue<QKeySequence>(var)); break;
         case QVariant::Line:        l_obj = from_qline(var.toLine()); break;
         case QVariant::LineF:       l_obj = from_qlinef(var.toLineF()); break;
         case QVariant::Locale:      l_obj = from_qlocale(var.toLocale()); break;
-        case QVariant::LongLong:    l_obj = MAKE_FIXNUM(var.toLongLong());
+        case QVariant::LongLong:    l_obj = ecl_make_integer(var.toLongLong());
         case QVariant::Palette:     l_obj = from_qpalette(qVariantValue<QPalette>(var)); break;
         case QVariant::Pen:         l_obj = from_qpen(qVariantValue<QPen>(var)); break;
         case QVariant::Pixmap:      l_obj = from_qpixmap(qVariantValue<QPixmap>(var)); break;
@@ -811,8 +811,8 @@ static cl_object from_qvariant_value(const QVariant& var) {
         case QVariant::TextLength:  l_obj = from_qtextlength(qVariantValue<QTextLength>(var)); break;
         case QVariant::Time:        l_obj = from_qtime(var.toTime()); break;
         case QVariant::Url:         l_obj = from_qurl(var.toUrl()); break;
-        case QVariant::UInt:        l_obj = MAKE_FIXNUM(var.toUInt()); break;
-        case QVariant::ULongLong:   l_obj = MAKE_FIXNUM(var.toULongLong()); }
+        case QVariant::UInt:        l_obj = ecl_make_unsigned_integer(var.toUInt()); break;
+        case QVariant::ULongLong:   l_obj = ecl_make_unsigned_integer(var.toULongLong()); }
     return l_obj; }
 
 static cl_object from_qvariantlist(const QVariantList& l) {
@@ -997,13 +997,13 @@ cl_object to_lisp_arg(const MetaArg& arg) {
             case QMetaType::Char:                    l_ret = from_char(*(char*)p); break;
             case QMetaType::Double:                  l_ret = ecl_make_doublefloat(*(double*)p); break;
             case QMetaType::Float:                   l_ret = ecl_make_singlefloat(*(float*)p); break;
-            case QMetaType::Int:                     l_ret = MAKE_FIXNUM(*(int*)p); break;
-            case QMetaType::Long:                    l_ret = MAKE_FIXNUM(*(long*)p); break;
-            case QMetaType::LongLong:                l_ret = MAKE_FIXNUM(*(qlonglong*)p); break;
+            case QMetaType::Int:                     l_ret = ecl_make_integer(*(int*)p); break;
+            case QMetaType::Long:                    l_ret = ecl_make_integer(*(long*)p); break;
+            case QMetaType::LongLong:                l_ret = ecl_make_integer(*(qlonglong*)p); break;
             case QMetaType::UChar:                   l_ret = MAKE_FIXNUM(*(uchar*)p); break;
-            case QMetaType::UInt:                    l_ret = MAKE_FIXNUM(*(uint*)p); break;
-            case QMetaType::ULong:                   l_ret = MAKE_FIXNUM(*(ulong*)p); break;
-            case QMetaType::ULongLong:               l_ret = MAKE_FIXNUM(*(qulonglong*)p); break;
+            case QMetaType::UInt:                    l_ret = ecl_make_unsigned_integer(*(uint*)p); break;
+            case QMetaType::ULong:                   l_ret = ecl_make_unsigned_integer(*(ulong*)p); break;
+            case QMetaType::ULongLong:               l_ret = ecl_make_unsigned_integer(*(qulonglong*)p); break;
             case QMetaType::QBrush:                  l_ret = from_qbrush(*(QBrush*)p); break;
             case QMetaType::QByteArray:              l_ret = from_qbytearray(*(QByteArray*)p); break;
             case QMetaType::QChar:                   l_ret = from_qchar(*(QChar*)p); break;
@@ -1127,24 +1127,8 @@ cl_object to_lisp_arg(const MetaArg& arg) {
                     (n <= LObjects::T_QWebHitTestResult)) {
                 if(LObjects::toMetaArg_webkit) {
                     l_ret = LObjects::to_lisp_arg_webkit(n, p); }}
-            else {
-                int i_enum = sType.indexOf("::");
-                if(i_enum != -1) {
-                    int* i = (int*)p;
-                    const QMetaObject* mo = 0;
-                    if(sType.startsWith("Qt")) {
-                        mo = staticQtMetaObject; }
-                    else {
-                        mo = LObjects::staticMetaObject(sType.left(i_enum)); }
-                    int n = -1;
-                    if(mo) {
-                        n = mo->indexOfEnumerator(sType.mid(i_enum + 2));
-                        if(n != -1) {
-                            QMetaEnum me = mo->enumerator(n);
-                            QByteArray ba = (me.isFlag() ? me.valueToKeys(*i) : QByteArray(me.valueToKey(*i)));
-                            l_ret = make_base_string_copy(ba.constData()); }}
-                    if(-1 == n) {
-                        l_ret = MAKE_FIXNUM(*i); }}}}}
+            else if(!sType.endsWith('>') && sType.contains(':')) { // enum
+                l_ret = ecl_make_integer(*(int*)p); }}}
     return l_ret; }
 
 static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
@@ -2070,7 +2054,7 @@ cl_object qenum(cl_object l_name, cl_object l_key) { // for internal use only
                 if(n != -1) {
                     QMetaEnum me = mo->enumerator(n);
                     int val = (me.isFlag() ? me.keysToValue(key) : me.keyToValue(key));
-                    cl_object l_ret = MAKE_FIXNUM(val);
+                    cl_object l_ret = ecl_make_integer(val);
                     return l_ret; }}}}
     error_msg("QENUM", LIST2(l_name, l_key));
     return Cnil; }
