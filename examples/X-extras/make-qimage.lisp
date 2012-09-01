@@ -360,7 +360,7 @@ DOUBLE-SLIDER changes."
         (maximum-value self) (max (value self) (maximum-value self)))
 
   (with-slots (slider) self
-    (setf slider (qnew "QSlider(Qt::Orientation,QWidget*)" orientation 0))
+    (setf slider (qnew "QSlider(Qt::Orientation,QWidget*)" orientation nil))
     (qfun slider "setMinimum" 0)
     (qfun slider "setMaximum" number-of-steps)
     (qfun slider "setValue" 0)

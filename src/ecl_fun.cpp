@@ -398,29 +398,32 @@ static int classId(cl_object l_class) {
     return id; }
 
 static QByteArray qtObjectName(cl_object l_obj) {
-    STATIC_SYMBOL_PKG(s_qt_object_p,  (char*)"QT-OBJECT-P",  (char*)"EQL")
-    STATIC_SYMBOL_PKG(s_qt_object_id, (char*)"QT-OBJECT-ID", (char*)"EQL")
-    if(cl_funcall(2, s_qt_object_p, l_obj) == Ct) {
+    STATIC_SYMBOL_PKG(s_ensure_qt_object, (char*)"ENSURE-QT-OBJECT", (char*)"EQL")
+    STATIC_SYMBOL_PKG(s_qt_object_id,     (char*)"QT-OBJECT-ID",     (char*)"EQL")
+    l_obj = cl_funcall(2, s_ensure_qt_object, l_obj);
+    if(l_obj != Cnil) {
         return QtObject::idToClassName(toInt(cl_funcall(2, s_qt_object_id, l_obj))); }
     return QByteArray(); }
 
 QtObject toQtObject(cl_object l_obj, cl_object l_cast, bool* qobject_align) {
-    STATIC_SYMBOL_PKG(s_qt_object_p,       (char*)"QT-OBJECT-P",       (char*)"EQL")
+    STATIC_SYMBOL_PKG(s_ensure_qt_object,  (char*)"ENSURE-QT-OBJECT",  (char*)"EQL")
     STATIC_SYMBOL_PKG(s_qt_object_pointer, (char*)"QT-OBJECT-POINTER", (char*)"EQL")
     STATIC_SYMBOL_PKG(s_qt_object_unique,  (char*)"QT-OBJECT-UNIQUE",  (char*)"EQL")
     STATIC_SYMBOL_PKG(s_qt_object_id,      (char*)"QT-OBJECT-ID",      (char*)"EQL")
     QtObject o;
-    if(cl_funcall(2, s_qt_object_p, l_obj) == Ct) {
-        o.pointer = (void*)fixnnint(cl_funcall(2, s_qt_object_pointer, l_obj));
-        o.unique = fixnnint(cl_funcall(2, s_qt_object_unique, l_obj));
-        o.id = toInt(cl_funcall(2, s_qt_object_id, l_obj));
-        if(l_cast != Cnil) {
-            int id_orig = o.id;
-            o.id = classId(l_cast);
-            if((id_orig > 0) && (o.id < 0)) {
-                *qobject_align = true; }}}
-    else { // string name, for static methods
+    if(ECL_STRINGP(l_obj)) { // string name, for static methods
         o.id = classId(l_obj); }
+    else {
+        l_obj = cl_funcall(2, s_ensure_qt_object, l_obj);
+        if(l_obj != Cnil) {
+            o.pointer = (void*)fixnnint(cl_funcall(2, s_qt_object_pointer, l_obj));
+            o.unique = fixnnint(cl_funcall(2, s_qt_object_unique, l_obj));
+            o.id = toInt(cl_funcall(2, s_qt_object_id, l_obj));
+            if(l_cast != Cnil) {
+                int id_orig = o.id;
+                o.id = classId(l_cast);
+                if((id_orig > 0) && (o.id < 0)) {
+                    *qobject_align = true; }}}}
     return o; }
 
 static cl_object new_qt_object(void* pointer, uint unique, int id, bool finalize = false) {
@@ -1811,6 +1814,8 @@ cl_object qcall_default() {
     return Ct; }
 
 QVariant callOverrideFun(void* fun, int id, const void** args) {
+    STATIC_SYMBOL_PKG(s_qt_object_p,       (char*)"QT-OBJECT-P",       (char*)"EQL")
+    STATIC_SYMBOL_PKG(s_qt_object_pointer, (char*)"QT-OBJECT-POINTER", (char*)"EQL")
     int n = id - 1;
     int i = 0;
     const char* type = 0;
@@ -1824,44 +1829,46 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
     const char* ret_type = LObjects::override_arg_types[n][0];
     if(ret_type) {
         QByteArray type(ret_type);
-        QtObject o = toQtObject(l_ret);
+        void* pointer = 0;
         if(type.startsWith('Q') && type.endsWith('*')) {
-            ret = qVariantFromValue((void*)o.pointer); }
+            if(cl_funcall(2, s_qt_object_p, l_ret)) {
+                pointer = (void*)fixnnint(cl_funcall(2, s_qt_object_pointer, l_ret)); }
+            ret = qVariantFromValue(pointer); }
         else {
             const int type = QMetaType::type(ret_type);
             switch(type) {
                 // implicit pointer types
-                case QMetaType::QBrush:       ret = qVariantFromValue(*(QBrush*)o.pointer); break;
-                case QMetaType::QCursor:      ret = qVariantFromValue(*(QCursor*)o.pointer); break;
-                case QMetaType::QDate:        ret = qVariantFromValue(*(QDate*)o.pointer); break;
-                case QMetaType::QDateTime:    ret = qVariantFromValue(*(QDateTime*)o.pointer); break;
-                case QMetaType::QFont:        ret = qVariantFromValue(*(QFont*)o.pointer); break;
-                case QMetaType::QIcon:        ret = qVariantFromValue(*(QIcon*)o.pointer); break;
-                case QMetaType::QImage:       ret = qVariantFromValue(*(QImage*)o.pointer); break;
-                case QMetaType::QKeySequence: ret = qVariantFromValue(*(QKeySequence*)o.pointer); break;
-                case QMetaType::QLocale:      ret = qVariantFromValue(*(QLocale*)o.pointer); break;
-                case QMetaType::QPalette:     ret = qVariantFromValue(*(QPalette*)o.pointer); break;
-                case QMetaType::QPen:         ret = qVariantFromValue(*(QPen*)o.pointer); break;
-                case QMetaType::QPixmap:      ret = qVariantFromValue(*(QPixmap*)o.pointer); break;
-                case QMetaType::QTextFormat:  ret = qVariantFromValue(*(QTextFormat*)o.pointer); break;
-                case QMetaType::QTextLength:  ret = qVariantFromValue(*(QTextLength*)o.pointer); break;
-                case QMetaType::QTime:        ret = qVariantFromValue(*(QTime*)o.pointer); break;
-                case QMetaType::QUrl:         ret = qVariantFromValue(*(QUrl*)o.pointer); break;
+                case QMetaType::QBrush:       ret = qVariantFromValue(*(QBrush*)pointer); break;
+                case QMetaType::QCursor:      ret = qVariantFromValue(*(QCursor*)pointer); break;
+                case QMetaType::QDate:        ret = qVariantFromValue(*(QDate*)pointer); break;
+                case QMetaType::QDateTime:    ret = qVariantFromValue(*(QDateTime*)pointer); break;
+                case QMetaType::QFont:        ret = qVariantFromValue(*(QFont*)pointer); break;
+                case QMetaType::QIcon:        ret = qVariantFromValue(*(QIcon*)pointer); break;
+                case QMetaType::QImage:       ret = qVariantFromValue(*(QImage*)pointer); break;
+                case QMetaType::QKeySequence: ret = qVariantFromValue(*(QKeySequence*)pointer); break;
+                case QMetaType::QLocale:      ret = qVariantFromValue(*(QLocale*)pointer); break;
+                case QMetaType::QPalette:     ret = qVariantFromValue(*(QPalette*)pointer); break;
+                case QMetaType::QPen:         ret = qVariantFromValue(*(QPen*)pointer); break;
+                case QMetaType::QPixmap:      ret = qVariantFromValue(*(QPixmap*)pointer); break;
+                case QMetaType::QTextFormat:  ret = qVariantFromValue(*(QTextFormat*)pointer); break;
+                case QMetaType::QTextLength:  ret = qVariantFromValue(*(QTextLength*)pointer); break;
+                case QMetaType::QTime:        ret = qVariantFromValue(*(QTime*)pointer); break;
+                case QMetaType::QUrl:         ret = qVariantFromValue(*(QUrl*)pointer); break;
 #if QT_VERSION >= 0x40700
-                case QMetaType::QVariant:     ret = qVariantFromValue(*(QVariant*)o.pointer); break;
+                case QMetaType::QVariant:     ret = qVariantFromValue(*(QVariant*)pointer); break;
 #endif
             default:
-                if(type == T_QFileInfo)                       ret = qVariantFromValue(*(QFileInfo*)o.pointer);
-                else if(type == T_QModelIndex)                ret = qVariantFromValue(*(QModelIndex*)o.pointer);
-                else if(type == T_QPainterPath)               ret = qVariantFromValue(*(QPainterPath*)o.pointer);
-                else if(type == T_QTableWidgetSelectionRange) ret = qVariantFromValue(*(QTableWidgetSelectionRange*)o.pointer);
-                else if(type == T_QTextBlock)                 ret = qVariantFromValue(*(QTextBlock*)o.pointer);
-                else if(type == T_QTextCharFormat)            ret = qVariantFromValue(*(QTextCharFormat*)o.pointer);
-                else if(type == T_QTextCursor)                ret = qVariantFromValue(*(QTextCursor*)o.pointer);
-                else if(type == T_QTextDocumentFragment)      ret = qVariantFromValue(*(QTextDocumentFragment*)o.pointer);
-                else if(type == T_QTextOption)                ret = qVariantFromValue(*(QTextOption*)o.pointer);
+                if(type == T_QFileInfo)                       ret = qVariantFromValue(*(QFileInfo*)pointer);
+                else if(type == T_QModelIndex)                ret = qVariantFromValue(*(QModelIndex*)pointer);
+                else if(type == T_QPainterPath)               ret = qVariantFromValue(*(QPainterPath*)pointer);
+                else if(type == T_QTableWidgetSelectionRange) ret = qVariantFromValue(*(QTableWidgetSelectionRange*)pointer);
+                else if(type == T_QTextBlock)                 ret = qVariantFromValue(*(QTextBlock*)pointer);
+                else if(type == T_QTextCharFormat)            ret = qVariantFromValue(*(QTextCharFormat*)pointer);
+                else if(type == T_QTextCursor)                ret = qVariantFromValue(*(QTextCursor*)pointer);
+                else if(type == T_QTextDocumentFragment)      ret = qVariantFromValue(*(QTextDocumentFragment*)pointer);
+                else if(type == T_QTextOption)                ret = qVariantFromValue(*(QTextOption*)pointer);
 #if QT_VERSION < 0x40700
-                else if(type == T_QVariant)                   ret = qVariantFromValue(*(QVariant*)o.pointer);
+                else if(type == T_QVariant)                   ret = qVariantFromValue(*(QVariant*)pointer);
 #endif
                 else                                          ret = toQVariant(l_ret, ret_type); }}}
     return ret; }

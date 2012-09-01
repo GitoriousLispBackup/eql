@@ -101,7 +101,7 @@
     (when *top-level-form*
       (if *slime-mode*
           (let ((values (multiple-value-list
-                          (with-simple-restart (restart-top-level "Go back to REPL.")
+                          (with-simple-restart (abort "Return to SLIME's top level.")
                             (eval *top-level-form*)))))
             (finish-output)
             (mp:with-lock (*top-level-lock*)
@@ -232,17 +232,17 @@
 (defun qnew-instance (name &rest args)
   (%qnew-instance name args))
 
-(defun qinvoke-method (obj slot &rest args)
-  (%qinvoke-method obj nil slot args))
+(defun qinvoke-method (object function-name &rest arguments)
+  (%qinvoke-method object nil function-name arguments))
 
-(defun qinvoke-method* (obj name slot &rest args)
+(defun qinvoke-method* (object cast-class-name function-name &rest arguments)
   "args: (object cast-class-name function-name &rest arguments)
    alias: qfun*
    Similar to <code>qinvoke-method</code>, additionally passing a class name, enforcing a cast to that class.
        (qfun* event \"QKeyEvent\" \"key\")
        (qfun* graphics-text-item \"QGraphicsItem\" \"setPos\" (list x y)) ; multiple inheritance problem
        (qfun* *qt-main* :qt \"foo\") ; embedded Qt/C++ (see Qt_EQL)"
-  (%qinvoke-method obj name slot args))
+  (%qinvoke-method object cast-class-name function-name arguments))
 
 (defun qconnect (from signal to &optional slot)
   (%qconnect from signal to slot))
@@ -287,6 +287,20 @@
       (setf loaded t)
       (load (in-home "src/lisp/quic")))
     (funcall (intern "RUN" :quic) ui.h ui.lisp)))
+
+;; simplify using CLOS; see example "X-extras/CLOS-encapsulation.lisp"
+
+(defgeneric the-qt-object (object)
+  (:documentation "Return the QT-OBJECT to be used whenever OBJECT is used as argument to any EQL function."))
+
+(defun ensure-qt-object (object)
+  (cond ((null object) ; e.g. passing NIL as parent widget: (qnew "QWidget(QWidget*)" nil)
+         nil)
+        ((qt-object-p object)
+         object)
+        ((ignore-errors (the-qt-object object)))
+        (t
+         (error "EQL is unable to use object ~A. Consider specializing THE-QT-OBJECT." object))))
 
 (alias qnew  qnew-instance)
 (alias qdel  qdelete)

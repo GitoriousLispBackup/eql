@@ -76,6 +76,7 @@
    #:qui-names
    #:qutf8
    #:qversion
+   #:the-qt-object
    #:tr))
 
 (pushnew :eql *features*)
