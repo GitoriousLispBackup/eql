@@ -19,8 +19,8 @@
 (require :settings     (probe-file "settings.lisp"))
 
 ;; load all available modules for code completions
-(dolist (m (list :help :network :opengl :sql :svg :webkit))
-  (ignore-errors (eql:qrequire m)))
+(dolist (module (list :help :network :opengl :sql :svg :webkit))
+  (eql:qrequire module :quiet))
 
 (defpackage :editor
   (:use :common-lisp :eql)

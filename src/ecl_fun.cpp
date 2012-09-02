@@ -114,8 +114,8 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object((char*)"qoverride"),              (cl_objectfn_fixed)qoverride,             3);
     cl_def_c_function(c_string_to_object((char*)"qprocess-events"),        (cl_objectfn_fixed)qprocess_events,       0);
     cl_def_c_function(c_string_to_object((char*)"qproperty"),              (cl_objectfn_fixed)qproperty,             2);
-    cl_def_c_function(c_string_to_object((char*)"qquit"),                  (cl_objectfn_fixed)qquit,                 0);
-    cl_def_c_function(c_string_to_object((char*)"qrequire"),               (cl_objectfn_fixed)qrequire,              1);
+    cl_def_c_function(c_string_to_object((char*)"%qquit"),                 (cl_objectfn_fixed)qquit2,                2);
+    cl_def_c_function(c_string_to_object((char*)"%qrequire"),              (cl_objectfn_fixed)qrequire2,             2);
     cl_def_c_function(c_string_to_object((char*)"qsender"),                (cl_objectfn_fixed)qsender,               0);
     cl_def_c_function(c_string_to_object((char*)"%qset-gc"),               (cl_objectfn_fixed)qset_gc,               1);
     cl_def_c_function(c_string_to_object((char*)"qset-property"),          (cl_objectfn_fixed)qset_property,         3);
@@ -1907,10 +1907,7 @@ cl_object qclear_event_filters() {
     LObjects::dynObject->clearEventFilters();
     return Ct; }
 
-cl_object qrequire(cl_object l_name) {
-    /// args: (module)
-    /// Loads an EQL module, corresponding to a Qt module. Returns the module name if both loading and initializing have been successful.<br>Available modules: <code>:help :network :opengl :sql :svg :webkit</code>
-    ///     (qrequire :network)
+cl_object qrequire2(cl_object l_name, cl_object l_quiet) {
     ecl_process_env()->nvalues = 1;
     QString name = symbolName(l_name).toLower();
     QString prefix, postfix;
@@ -1971,7 +1968,8 @@ cl_object qrequire(cl_object l_name) {
                         LObjects::toMetaArg_webkit = metaArg;
                         LObjects::to_lisp_arg_webkit = lispArg;
                         return l_name; }}}}}
-    error_msg("QREQUIRE", LIST1(l_name));
+    if(l_quiet == Cnil) {
+        error_msg("QREQUIRE", LIST1(l_name)); }
     return Cnil; }
 
 
@@ -2318,13 +2316,11 @@ cl_object qversion() {
     l_env->values[1] = from_cstring(qVersion());
     return l_env->values[0]; }
 
-cl_object qquit() {
-    /// args: ()
-    /// alias: qq
-    /// Quits both Qt and ECL.
+cl_object qquit2(cl_object l_exit_status, cl_object /* l_kill_all_threads */) {
+    int exit_status = toInt(l_exit_status);
     cl_shutdown();
     qApp->quit();
-    exit(0); }
+    exit(exit_status); }
 
 
 

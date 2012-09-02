@@ -109,8 +109,9 @@ a vector, then WIDTH and HEIGHT must be non NIL."
          (make-qimage/worker (wrap-array) format :width width :height height))))))
 
 (defun qrgb (r g b &optional (a 255))
-  "Construct a (UNSIGNED-BYTE 32) value that represents a 32 bit pixel
-colour specified by the red, green, blue and alpha values."
+  ;; documentation adapted to EQL (see "doc/auto-doc.lisp")
+  "args: (red green blue &optional (alpha 255))
+   Constructs a <code>(unsigned-byte 32)</code> value that represents a 32 bit pixel colour specified by the red, green, blue and alpha values."
   (declare (type (unsigned-byte 8) r g b a))
   (let ((rv 0))
     (setf (ldb (byte 8 24) rv) a

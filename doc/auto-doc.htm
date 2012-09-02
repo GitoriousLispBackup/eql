@@ -225,17 +225,21 @@
 </pre>
 </p><br>
 <p>
-<b>QQUIT ()</b>
+<b>QQUIT (&optional (exit-status 0) (kill-all-threads t))</b>
 <br>
-<b>QQ</b>
-<p>Quits both Qt and ECL.</p>
+<b>QQ</b>
+<p>Terminates EQL with the given <code>exit-status</code>. The argument <code>kill-all-threads</code> is provided to be consistent with the ECL quit function.</p>
 </p><br>
 <p>
-<b>QREQUIRE (module)</b>
-<p>Loads an EQL module, corresponding to a Qt module. Returns the module name if both loading and initializing have been successful.<br>Available modules: <code>:help :network :opengl :sql :svg :webkit</code></p>
+<b>QREQUIRE (module &optional quiet)</b>
+<p>Loads an EQL module, corresponding to a Qt module. Returns the module name if both loading and initializing have been successful.<br>If the <code>quiet</code> argument is not <code>NIL</code>, no error message will be shown on failure.<br>Available modules: <code>:help :network :opengl :sql :svg :webkit</code></p>
 <pre>
   (qrequire :network)
 </pre>
+</p><br>
+<p>
+<b>QRGB (red green blue &optional (alpha 255))</b>
+<p>Constructs a <code>(unsigned-byte 32)</code> value that represents a 32 bit pixel colour specified by the red, green, blue and alpha values.</p>
 </p><br>
 <p>
 <b>QSELECT ()</b>

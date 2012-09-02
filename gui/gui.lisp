@@ -1,8 +1,8 @@
 ;;; copyright (c) 2010-2012 Polos Ruetz
 
 ;; load all available modules for documentation purposes
-(dolist (m (list :help :network :opengl :sql :svg :webkit))
-  (ignore-errors (eql:qrequire m)))
+(dolist (module (list :help :network :opengl :sql :svg :webkit))
+  (eql:qrequire module :quiet))
 
 (defpackage :gui
   (:use :common-lisp :eql)
@@ -300,7 +300,7 @@
 (let (package)
   (defun show-package-name ()
     (unless package
-      (in-package :gui))
+      (in-package :eql))
     (let ((name (package-name *package*)))
       (qset *package-name* "text" (format nil "~A>" name))
       (when (string/= name package)

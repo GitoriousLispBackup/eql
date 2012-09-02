@@ -288,6 +288,20 @@
       (load (in-home "src/lisp/quic")))
     (funcall (intern "RUN" :quic) ui.h ui.lisp)))
 
+(defun qrequire (module &optional quiet)
+  "args: (module &optional quiet)
+   Loads an EQL module, corresponding to a Qt module. Returns the module name if both loading and initializing have been successful.<br>If the <code>quiet</code> argument is not <code>NIL</code>, no error message will be shown on failure.<br>Available modules: <code>:help :network :opengl :sql :svg :webkit</code>
+       (qrequire :network)"
+  (%qrequire module quiet))
+
+(defun qquit (&optional (exit-status 0) (kill-all-threads t))
+  "args: (&optional (exit-status 0) (kill-all-threads t))
+   alias: qq
+   Terminates EQL with the given <code>exit-status</code>. The argument <code>kill-all-threads</code> is provided to be consistent with the ECL quit function."
+  (declare (type fixnum exit-status))
+  (assert (typep exit-status 'fixnum))
+  (%qquit exit-status kill-all-threads))
+
 ;; simplify using CLOS; see example "X-extras/CLOS-encapsulation.lisp"
 
 (defgeneric the-qt-object (object)
@@ -298,9 +312,7 @@
          nil)
         ((qt-object-p object)
          object)
-        ((ignore-errors (the-qt-object object)))
-        (t
-         (error "EQL is unable to use object ~A. Consider specializing THE-QT-OBJECT." object))))
+        ((the-qt-object object))))
 
 (alias qnew  qnew-instance)
 (alias qdel  qdelete)

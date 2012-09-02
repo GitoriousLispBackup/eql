@@ -94,7 +94,7 @@ void EQL::exec(const QStringList& args) {
         code = "(progn " + forms.join(" ") + ")"; }
     eval(code.toAscii().constData());
     if(quit) {
-        qquit(); }}
+        qquit2(MAKE_FIXNUM(0), Ct); }}
 
 void EQL::exec(lisp_ini ini, const QByteArray& expression, const QByteArray& package) {
     // see my_app example

@@ -1,8 +1,6 @@
-(defpackage :encapsulation-example
-  (:use :common-lisp :eql)
-  (:export))
+(in-package :cl-user)
 
-(in-package :encapsulation-example)
+(use-package :eql)
 
 ;; define a Lisp class
 
@@ -16,14 +14,18 @@
 
 ;; the Lisp object can now be used the same as a QT-OBJECT
 
-(let* ((dialog (qnew "QDialog"))
-       (edit-1 (make-instance 'my-edit)) ; Lisp object
-       (edit-2 (qnew "QLineEdit"))       ; vanilla Qt object
-       (layout (qnew "QVBoxLayout(QWidget*)" dialog)))
-  (x:do-with (qfun layout "addWidget")
-    edit-1 edit-2)
-  (qfun edit-1 "setText" (princ-to-string edit-1))
-  (qfun edit-2 "setText" (princ-to-string edit-2))
-  (print (qget edit-1 "text"))
-  (print (qget edit-2 "text"))
-  (qfun dialog "show"))
+(defvar *edit-1* (make-instance 'my-edit)) ; Lisp object
+(defvar *edit-2* (qnew "QLineEdit"))       ; vanilla Qt object
+
+(defun run ()
+  (let* ((dialog (qnew "QDialog"))
+         (layout (qnew "QVBoxLayout(QWidget*)" dialog)))
+    (x:do-with (qfun layout "addWidget")
+      *edit-1* *edit-2*)
+    (qset *edit-1* "text" (princ-to-string *edit-1*))
+    (qset *edit-2* "text" (princ-to-string *edit-2*))
+    (print (qget *edit-1* "text"))
+    (print (qget *edit-2* "text"))
+    (qfun dialog "show")))
+
+(run)
