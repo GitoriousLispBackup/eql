@@ -1,4 +1,4 @@
-(in-package :eql)
+(in-package :eql-user)
 
 (qfun (qnew "QLabel"
             "text" "<h1>hello world"

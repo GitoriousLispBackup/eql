@@ -312,7 +312,10 @@
          nil)
         ((qt-object-p object)
          object)
-        ((the-qt-object object))))
+        ((let ((object* (the-qt-object object)))
+           (if (qt-object-p object*)
+               object*
+               (error "THE-QT-OBJECT returned ~S for class ~A, which is not of required type QT-OBJECT." object* object))))))
 
 (alias qnew  qnew-instance)
 (alias qdel  qdelete)

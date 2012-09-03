@@ -33,7 +33,9 @@
   (catch *quit-tag*
     (let ((*debugger-hook* nil)
           -)
-      (setq *lisp-initialized* t)
+      (unless *lisp-initialized*
+        (setq *lisp-initialized* t)
+        (in-package :eql-user))
       (let ((*tpl-level* -1))
         (%tpl))
       0)))

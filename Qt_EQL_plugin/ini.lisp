@@ -1,4 +1,4 @@
-(in-package :eql)
+(in-package :eql-user)
 
 (defvar *label* (qnew "QLabel"))
 (defvar *edit*  (qnew "QLineEdit"))
@@ -18,7 +18,7 @@
     (qsingle-shot 0 'delayed-ini)))
 
 (defun delayed-ini ()
-  (qset *edit* "text" "(in-package :eql)")
+  (qset *edit* "text" "(in-package :eql-user)")
   (eval-edit)
   (qset *label* "text" "Enter Lisp expression and hit Return:"))
 

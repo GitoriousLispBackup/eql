@@ -1,6 +1,6 @@
 (require :profile)
 
-(in-package :eql)
+(in-package :eql-user)
 
 (use-package :profile)
 

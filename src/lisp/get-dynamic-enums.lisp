@@ -1,4 +1,4 @@
-(in-package :eql)
+(in-package :eql-user)
 
 ;;; dynamically accessible enums (see Q_ENUMS, Q_FLAGS)
 

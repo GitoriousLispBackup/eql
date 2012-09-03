@@ -1,6 +1,6 @@
 ;;; Ported Qt Widgets Tutorial - Using Layouts
 
-(in-package :eql)
+(in-package :eql-user)
 
 (let ((window    (qnew "QWidget"
                        "windowTitle" "Window layout"))

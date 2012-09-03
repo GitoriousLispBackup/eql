@@ -1,6 +1,4 @@
-(in-package :cl-user)
-
-(use-package :eql)
+(in-package :eql-user)
 
 ;; define a Lisp class
 

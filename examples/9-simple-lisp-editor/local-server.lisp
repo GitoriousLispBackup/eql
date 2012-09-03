@@ -143,7 +143,7 @@
   (defun feed-top-level (str)
     (unless (x:empty-string str)
       (if *prompt*
-          (let ((pkg (current-package-name))
+          (let ((pkg (if (zerop n) "EQL-USER" (current-package-name)))
                 (counter (princ-to-string (incf n))))
             (format t "~%~A [~A] ~A~%~A"
                     pkg

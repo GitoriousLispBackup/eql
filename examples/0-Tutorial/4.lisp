@@ -1,6 +1,6 @@
 ;;; Ported Qt Widgets Tutorial - Nested Layouts
 
-(in-package :eql)
+(in-package :eql-user)
 
 (defun start ()
   (let ((window       (qnew "QWidget"

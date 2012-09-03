@@ -1,4 +1,4 @@
-(in-package :eql)
+(in-package :eql-user)
 
 (defvar *window*    (qnew "QDialog"))
 (defvar *label*     (qnew "QLabel"))

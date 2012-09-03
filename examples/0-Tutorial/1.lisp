@@ -1,6 +1,6 @@
 ;;; Ported Qt Widgets Tutorial - Creating a Window
 
-(in-package :eql)
+(in-package :eql-user)
 
 (let ((window (qnew "QWidget"
                     "size" (list 320 240)

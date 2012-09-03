@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "12.8.4"; // 2012-08-30
+const char EQL::version[] = "12.9.1"; // 2012-09-03
 
 extern "C" void ini_EQL(cl_object);
 
@@ -52,7 +52,8 @@ void EQL::exec(const QStringList& args) {
         arguments.removeAll("-slime");
         quit = true;
         QApplication::setQuitOnLastWindowClosed(false);
-        forms << "(setf eql:*slime-mode* t)"
+        forms << "(in-package :eql-user)"
+              << "(setf eql:*slime-mode* t)"
               << "(eql::eval-top-level)"
 	      << "(loop"
                  "  (with-simple-restart (restart-qt-events \"Restart Qt event processing.\")"
@@ -68,6 +69,7 @@ void EQL::exec(const QStringList& args) {
         QApplication::setQuitOnLastWindowClosed(false);
         forms << "(when (directory (in-home \"src/lisp/ecl-readline.fas*\"))"
                  "  (load (in-home \"src/lisp/ecl-readline\")))"
+              << "(in-package :eql-user)"
               << "(eql::start-read-thread)"
               << "(eql::eval-top-level)"; }
     if(arguments.contains("-quic")) {
@@ -112,7 +114,7 @@ void EQL::exec(QWidget* widget, const QString& lispFile, const QString& slimeHoo
                      .arg(QString(LObjects::vanillaQtSuperClassName(widget->metaObject())))
           << QString("(export '*qt-main*)")
           << QString("(load \"%1\")").arg(lispFile)
-          << QString("(in-package :cl-user)");
+          << QString("(in-package :eql-user)");
     if(!slimeHookFile.isEmpty()) {
         forms << QString("(setf eql:*slime-mode* t)")
               << QString("(setf eql::*slime-hook-file* \"%1\"").arg(slimeHookFile)

@@ -300,7 +300,7 @@
 (let (package)
   (defun show-package-name ()
     (unless package
-      (in-package :eql))
+      (in-package :eql-user))
     (let ((name (package-name *package*)))
       (qset *package-name* "text" (format nil "~A>" name))
       (when (string/= name package)

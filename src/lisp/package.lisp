@@ -79,4 +79,7 @@
    #:the-qt-object
    #:tr))
 
+(defpackage :eql-user
+  (:use :common-lisp :eql))
+
 (pushnew :eql *features*)

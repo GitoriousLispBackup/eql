@@ -1,4 +1,4 @@
-(in-package :eql)
+(in-package :eql-user)
 
 (setf *break-on-errors* t)
 
