@@ -297,10 +297,14 @@
 (defun qquit (&optional (exit-status 0) (kill-all-threads t))
   "args: (&optional (exit-status 0) (kill-all-threads t))
    alias: qq
-   Terminates EQL with the given <code>exit-status</code>. The argument <code>kill-all-threads</code> is provided to be consistent with the ECL quit function."
+   Terminates EQL with the given <code>exit-status</code>. The argument <code>kill-all-threads</code> is provided to be consistent with the ECL <code>ext:quit</code> function."
   (declare (type fixnum exit-status))
   (assert (typep exit-status 'fixnum))
-  (%qquit exit-status kill-all-threads))
+  (qprocess-events)
+  (qfun (qapp) "aboutToQuit")
+  (qdisconnect (qapp) "aboutToQuit()")
+  (qsingle-shot 100 (lambda () (ext:exit exit-status))) ; EXT:QUIT may hang...
+  (ext:quit exit-status kill-all-threads))
 
 ;; simplify using CLOS; see example "X-extras/CLOS-encapsulation.lisp"
 

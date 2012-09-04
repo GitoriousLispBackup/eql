@@ -114,7 +114,6 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object((char*)"qoverride"),              (cl_objectfn_fixed)qoverride,             3);
     cl_def_c_function(c_string_to_object((char*)"qprocess-events"),        (cl_objectfn_fixed)qprocess_events,       0);
     cl_def_c_function(c_string_to_object((char*)"qproperty"),              (cl_objectfn_fixed)qproperty,             2);
-    cl_def_c_function(c_string_to_object((char*)"%qquit"),                 (cl_objectfn_fixed)qquit2,                2);
     cl_def_c_function(c_string_to_object((char*)"%qrequire"),              (cl_objectfn_fixed)qrequire2,             2);
     cl_def_c_function(c_string_to_object((char*)"qsender"),                (cl_objectfn_fixed)qsender,               0);
     cl_def_c_function(c_string_to_object((char*)"%qset-gc"),               (cl_objectfn_fixed)qset_gc,               1);
@@ -1728,7 +1727,7 @@ cl_object qconnect2(cl_object l_caller, cl_object l_signal, cl_object l_receiver
 
 cl_object qdisconnect2(cl_object l_caller, cl_object l_signal, cl_object l_receiver, cl_object l_slot) {
     /// args: (caller &optional signal receiver/function slot)
-    /// Disconnects signals to either Qt slots or Lisp functions. Anything but the caller can be either <code>NIL</code> or omitted.
+    /// Disconnects signals to either Qt slots or Lisp functions. Anything but the caller can be either <code>NIL</code> or omitted.<br>Returns <code>T</code> if something has effectively been disconnected.
     ///     (qdisconnect edit "textChanged(QString)" label "setText(QString)")
     ///     (qdisconnect edit "textChanged(QString)")
     ///     (qdisconnect edit nil label)
@@ -1747,21 +1746,20 @@ cl_object qdisconnect2(cl_object l_caller, cl_object l_signal, cl_object l_recei
             slot.prepend(SLO); }
         bool lisp = (l_receiver != Cnil) && !o2.pointer;
         void* lisp_fun = lisp ? getLispFun(l_receiver) : 0;
-        bool ok = false;
+        bool disconnected = false;
         if(!lisp) {
             if(QObject::disconnect((QObject*)o1.pointer,
                                    signal.isEmpty() ? 0: signal.constData(),
                                    o2.isQObject() ? (QObject*)o2.pointer : 0,
                                    slot.isEmpty() ? 0 : slot.constData())) {
-                ok = true; }}
+                disconnected = true; }}
         if(lisp_fun) {
             if(DynObject::disconnect((QObject*)o1.pointer,
                                      signal.isEmpty() ? 0 : signal.constData(),
                                      LObjects::dynObject,
                                      lisp_fun)) {
-                ok = true; }}
-        if(ok) {
-            return Ct; }}
+                disconnected = true; }}
+        return disconnected ? Ct : Cnil; }
     error_msg("QDISCONNECT", LIST4(l_caller, l_signal, l_receiver, l_slot));
     return Cnil; }
 
@@ -2315,12 +2313,6 @@ cl_object qversion() {
     l_env->values[0] = from_cstring(EQL::version);
     l_env->values[1] = from_cstring(qVersion());
     return l_env->values[0]; }
-
-cl_object qquit2(cl_object l_exit_status, cl_object /* l_kill_all_threads */) {
-    int exit_status = toInt(l_exit_status);
-    cl_shutdown();
-    qApp->quit();
-    exit(exit_status); }
 
 
 

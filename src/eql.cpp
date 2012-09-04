@@ -45,12 +45,10 @@ void EQL::exec(const QStringList& args) {
     QStringList arguments(args);
     si_select_package(make_simple_base_string((char*)"EQL"));
     eval(QString("(set-home \"%1\")").arg(home()).toAscii().constData());
-    bool quit = false;
     QStringList forms;
     if(arguments.contains("-slime") ||
       (arguments.indexOf(QRegExp("*start-swank*.lisp", Qt::CaseInsensitive, QRegExp::Wildcard)) != -1)) {
         arguments.removeAll("-slime");
-        quit = true;
         QApplication::setQuitOnLastWindowClosed(false);
         forms << "(in-package :eql-user)"
               << "(setf eql:*slime-mode* t)"
@@ -59,7 +57,6 @@ void EQL::exec(const QStringList& args) {
                  "  (with-simple-restart (restart-qt-events \"Restart Qt event processing.\")"
                  "    (qexec)))"; }
     if(arguments.count() == 1) {
-        quit = true;
         forms << "(si:top-level)"; }
     if(arguments.contains("-qgui")) {
         arguments.removeAll("-qgui");
@@ -75,14 +72,14 @@ void EQL::exec(const QStringList& args) {
     if(arguments.contains("-quic")) {
         arguments.removeAll("-quic");
         if(arguments.size() == 2) {
-            quit = true;
             QString uiFile(QDir::fromNativeSeparators(arguments.at(1)));
             int sep = uiFile.lastIndexOf('/') + 1;
             QProcess::execute("uic -o ui.h " + uiFile);
             forms << QString("(eql:quic \"ui.h\" \"%1ui-%2.lisp\")")
                     .arg(uiFile.left(sep))
                     .arg(uiFile.mid(sep, uiFile.length() - sep - 3))
-                  << QString("(delete-file \"ui.h\")"); }
+                  << QString("(delete-file \"ui.h\")")
+                  << QString("(eql:qq)"); }
         else {
             qDebug() << "Please pass a file.ui (Qt Designer)";
             exit(-1); }}
@@ -94,9 +91,7 @@ void EQL::exec(const QStringList& args) {
         code = forms.first(); }
     else {
         code = "(progn " + forms.join(" ") + ")"; }
-    eval(code.toAscii().constData());
-    if(quit) {
-        qquit2(MAKE_FIXNUM(0), Ct); }}
+    eval(code.toAscii().constData()); }
 
 void EQL::exec(lisp_ini ini, const QByteArray& expression, const QByteArray& package) {
     // see my_app example

@@ -66,7 +66,7 @@
 </p><br>
 <p>
 <b>QDISCONNECT (caller &optional signal receiver/function slot)</b>
-<p>Disconnects signals to either Qt slots or Lisp functions. Anything but the caller can be either <code>NIL</code> or omitted.</p>
+<p>Disconnects signals to either Qt slots or Lisp functions. Anything but the caller can be either <code>NIL</code> or omitted.<br>Returns <code>T</code> if something has effectively been disconnected.</p>
 <pre>
   (qdisconnect edit "textChanged(QString)" label "setText(QString)")
   (qdisconnect edit "textChanged(QString)")
@@ -228,7 +228,7 @@
 <b>QQUIT (&optional (exit-status 0) (kill-all-threads t))</b>
 <br>
 <b>QQ</b>
-<p>Terminates EQL with the given <code>exit-status</code>. The argument <code>kill-all-threads</code> is provided to be consistent with the ECL quit function.</p>
+<p>Terminates EQL with the given <code>exit-status</code>. The argument <code>kill-all-threads</code> is provided to be consistent with the ECL <code>ext:quit</code> function.</p>
 </p><br>
 <p>
 <b>QREQUIRE (module &optional quiet)</b>
