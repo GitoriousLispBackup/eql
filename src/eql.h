@@ -24,7 +24,7 @@ public:
     ~EQL();
 
     static bool cl_booted;
-    static bool is_arg_return_value;
+    static bool return_value_p;
     static const char version[];
     static QEventLoop* eventLoop;
     static void ini(char**);

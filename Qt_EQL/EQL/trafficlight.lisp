@@ -39,8 +39,7 @@
   (qfun *qt-main* "resize" '(110 300))
   (qfun *qt-main* "show"))
 
-(unless *slime-mode*
-  (run))
+(run)
 
 ;;; Example using QVariantList
 ;;;

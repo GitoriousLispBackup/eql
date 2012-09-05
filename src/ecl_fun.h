@@ -81,7 +81,7 @@ static cap_name* to##cap_name##Pointer(cl_object x) { \
         p = (cap_name*)o.pointer; } \
     return p; } \
 static cl_object from_##name(const cap_name& x) { \
-    if(EQL::is_arg_return_value) { \
+    if(EQL::return_value_p) { \
         return qt_object_from_name(#cap_name, new cap_name(x), 0, true); } \
     return qt_object_from_name(#cap_name, (void*)&x); }
 

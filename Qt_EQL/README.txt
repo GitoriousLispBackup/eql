@@ -19,24 +19,16 @@ BUILD (MSVC: nmake instead of make)
 
     ALTERNATIVE 1: Slime
 
-        a) Qt/trafficlight.pro (as usual)
+        a) Qt/trafficlight.pro
 
-        b) Qt_EQL.pro:
- 
-           qmake "DEFINES+=SLIME"
-           make clean (if you change alternative)
-           make
+        b) Qt_EQL_Slime.pro:
 
 
     ALTERNATIVE 2: Simple Lisp Editor (example 9):
 
-        a) Qt/trafficlight.pro (as usual)
+        a) Qt/trafficlight.pro
 
         b) Qt_EQL.pro:
-
-           qmake
-           make clean (if you change alternative)
-           make
 
         c) in eql/examples/9-simple-lisp-editor/:
 
@@ -54,27 +46,24 @@ BUILD (MSVC: nmake instead of make)
 RUN
 ===       
 
-    ALTERNATIVE 1: Slime
+    ALTERNATIVE 1: Slime (see "eql/doc/Slime.htm")
 
-        1) start the swank server using the Qt_EQL executable (see "eql/doc/Slime.htm")
+        start the swank server using the Qt_EQL (instead of the EQL) executable
 
-           ./Qt_EQL slime/eql-start-swank.lisp
-
-        2) to run the program (manually, because Slime needs to be loaded
-           first), do:
-
-           (trafficlight:run)
+           ./Qt_EQL ~/slime/eql-start-swank.lisp
 
 
     ALTERNATIVE 2: Simple Lisp Editor (example 9):
         
-        1) Qt_EQL (executable)
+        1) ./Qt_EQL
 
         2) in EQL/:
 
            $ eql eql-editor.fas trafficlight.lisp
-           eval the line:
-               (in-package :trafficlight)
+
+           eval the form:
+           (in-package :trafficlight)
+
            just play around with "eval region"...
 
 

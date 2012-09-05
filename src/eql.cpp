@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "12.9.1"; // 2012-09-03
+const char EQL::version[] = "12.9.2"; // 2012-09-05
 
 extern "C" void ini_EQL(cl_object);
 
@@ -43,17 +43,16 @@ QString EQL::home() {
 
 void EQL::exec(const QStringList& args) {
     QStringList arguments(args);
-    si_select_package(make_simple_base_string((char*)"EQL"));
-    eval(QString("(set-home \"%1\")").arg(home()).toAscii().constData());
+    si_select_package(make_simple_base_string((char*)"EQL-USER"));
+    eval(QString("(eql::set-home \"%1\")").arg(home()).toAscii().constData());
     QStringList forms;
     if(arguments.contains("-slime") ||
       (arguments.indexOf(QRegExp("*start-swank*.lisp", Qt::CaseInsensitive, QRegExp::Wildcard)) != -1)) {
         arguments.removeAll("-slime");
         QApplication::setQuitOnLastWindowClosed(false);
-        forms << "(in-package :eql-user)"
-              << "(setf eql:*slime-mode* t)"
+        forms << "(setf eql:*slime-mode* t)"
               << "(eql::eval-top-level)"
-	      << "(loop"
+              << "(loop"
                  "  (with-simple-restart (restart-qt-events \"Restart Qt event processing.\")"
                  "    (qexec)))"; }
     if(arguments.count() == 1) {
@@ -66,7 +65,6 @@ void EQL::exec(const QStringList& args) {
         QApplication::setQuitOnLastWindowClosed(false);
         forms << "(when (directory (in-home \"src/lisp/ecl-readline.fas*\"))"
                  "  (load (in-home \"src/lisp/ecl-readline\")))"
-              << "(in-package :eql-user)"
               << "(eql::start-read-thread)"
               << "(eql::eval-top-level)"; }
     if(arguments.contains("-quic")) {
@@ -81,7 +79,7 @@ void EQL::exec(const QStringList& args) {
                   << QString("(delete-file \"ui.h\")")
                   << QString("(eql:qq)"); }
         else {
-            qDebug() << "Please pass a file.ui (Qt Designer)";
+            qDebug() << "Please pass a file.ui (Qt Designer).";
             exit(-1); }}
     else if(arguments.count() > 1) {
         QString fileName(QDir::fromNativeSeparators(arguments.at(1)));
@@ -103,18 +101,27 @@ void EQL::exec(lisp_ini ini, const QByteArray& expression, const QByteArray& pac
 void EQL::exec(QWidget* widget, const QString& lispFile, const QString& slimeHookFile) {
     // see Qt_EQL example
     QStringList forms;
-    forms << QString("(set-home \"%1\")").arg(home())
+    forms << QString("(in-package :eql)")
+          << QString("(set-home \"%1\")").arg(home())
           << QString("(defvar *qt-main* (qt-object %1 0 (qid \"%2\")))")
                      .arg((ulong)widget)
                      .arg(QString(LObjects::vanillaQtSuperClassName(widget->metaObject())))
           << QString("(export '*qt-main*)")
-          << QString("(load \"%1\")").arg(lispFile)
-          << QString("(in-package :eql-user)");
+          << QString("(in-package :eql-user)")
+          << QString("(load \"%1\")").arg(lispFile);
     if(!slimeHookFile.isEmpty()) {
-        forms << QString("(setf eql:*slime-mode* t)")
-              << QString("(setf eql::*slime-hook-file* \"%1\"").arg(slimeHookFile)
-              << QString("(eql::eval-top-level)");
-        QApplication::setQuitOnLastWindowClosed(false); }
+        QString startSwankFile(QCoreApplication::arguments().last());
+	if(startSwankFile.indexOf(QRegExp("*start-swank*.lisp", Qt::CaseInsensitive, QRegExp::Wildcard)) == -1) {
+            qDebug() << "Please pass the \"eql-start-swank.lisp\" file.";
+            exit(-1); }
+        QApplication::setQuitOnLastWindowClosed(false);
+        forms << QString("(load \"%1\")").arg(startSwankFile)
+              << QString("(setf eql::*slime-hook-file* \"%1\")").arg(slimeHookFile)
+              << QString("(setf eql:*slime-mode* t)")
+              << QString("(eql::eval-top-level)")
+              << "(loop"
+                 "  (with-simple-restart (restart-qt-events \"Restart Qt event processing.\")"
+                 "    (qexec)))"; }
     eval(QString("(progn " + forms.join(" ") + ")").toAscii().constData()); }
 
 void EQL::evalTopLevel() {
@@ -122,5 +129,5 @@ void EQL::evalTopLevel() {
     cl_funcall(1, s_eval_top_level); } // see "lisp/ini.lisp"
 
 bool EQL::cl_booted = false;
-bool EQL::is_arg_return_value = false;
+bool EQL::return_value_p = false;
 QEventLoop* EQL::eventLoop = 0;

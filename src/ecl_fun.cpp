@@ -1489,9 +1489,9 @@ cl_object qproperty(cl_object l_obj, cl_object l_name) {
                 QVariant var(mp.read((QObject*)o.pointer));
                 const cl_env_ptr l_env = ecl_process_env();
                 l_env->nvalues = 2;
-                EQL::is_arg_return_value = true;
+                EQL::return_value_p = true;
                 l_env->values[0] = from_qvariant_value(var);
-                EQL::is_arg_return_value = false;
+                EQL::return_value_p = false;
                 l_env->values[1] = Ct;
                 return l_env->values[0]; }}}
     ecl_process_env()->nvalues = 1;
@@ -1676,9 +1676,9 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
                             clearMetaArgList(mArgs);
                             cl_object l_ret = Cnil;
                             if(ret.second) {
-                                EQL::is_arg_return_value = true;
+                                EQL::return_value_p = true;
                                 l_ret = to_lisp_arg(ret);
-                                EQL::is_arg_return_value = false;
+                                EQL::return_value_p = false;
                                 clearMetaArg(ret, true); }
                             const cl_env_ptr l_env = ecl_process_env();
                             l_env->nvalues = 2;
