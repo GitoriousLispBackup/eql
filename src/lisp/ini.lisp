@@ -176,8 +176,9 @@
 (defun qset-null (obj)
   "args: (object)
    Sets the Qt object pointer to <code>0</code>. This function is called automatically after <code>qdel</code>."
-  (when (qt-object-p obj)
-    (setf (qt-object-pointer obj) 0)))
+  (let ((obj* (ensure-qt-object obj)))
+    (when (qt-object-p obj*)
+      (setf (qt-object-pointer obj*) 0))))
 
 (defun qgui (&optional ev)
   "args: (&optional process-events)
@@ -193,18 +194,21 @@
   "args: (object1 object2)
    Returns <code>T</code> for same instances of a Qt class.<br>To test for same Qt classes only, do:
        (= (qt-object-id object1) (qt-object-id object2))"
-  (and (qt-object-p obj1)
-       (qt-object-p obj2)
-       (= (qt-object-id obj1)
-          (qt-object-id obj2))
-       (= (qt-object-pointer obj1)
-          (qt-object-pointer obj2))))
+  (let ((obj1* (ensure-qt-object obj1))
+        (obj2* (ensure-qt-object obj2)))
+    (and (qt-object-p obj1*)
+         (qt-object-p obj2*)
+         (= (qt-object-id obj1*)
+            (qt-object-id obj2*))
+         (= (qt-object-pointer obj1*)
+            (qt-object-pointer obj2*)))))
 
 (defun qnull-object (obj)
   "args: (object)
    Checks for a <code>0</code> Qt object pointer."
-  (when (qt-object-p obj)
-    (zerop (qt-object-pointer obj))))
+  (let ((obj* (ensure-qt-object obj)))
+    (when (qt-object-p obj*)
+      (zerop (qt-object-pointer obj*)))))
 
 (defun qdelete (obj &optional later)
   (%qdelete obj later))

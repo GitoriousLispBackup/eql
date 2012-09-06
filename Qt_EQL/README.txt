@@ -21,14 +21,14 @@ BUILD (MSVC: nmake instead of make)
 
         a) Qt/trafficlight.pro
 
-        b) Qt_EQL_Slime.pro:
+        b) Qt_EQL_Slime.pro
 
 
     ALTERNATIVE 2: Simple Lisp Editor (example 9):
 
         a) Qt/trafficlight.pro
 
-        b) Qt_EQL.pro:
+        b) Qt_EQL.pro
 
         c) in eql/examples/9-simple-lisp-editor/:
 

@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "12.9.2"; // 2012-09-05
+const char EQL::version[] = "12.9.3"; // 2012-09-06 (new version number because of bug fix)
 
 extern "C" void ini_EQL(cl_object);
 
@@ -98,6 +98,8 @@ void EQL::exec(lisp_ini ini, const QByteArray& expression, const QByteArray& pac
     si_select_package(make_simple_base_string((char*)package.toUpper().constData()));
     eval(expression.constData()); }
 
+enum { NotFound = -1 };
+
 void EQL::exec(QWidget* widget, const QString& lispFile, const QString& slimeHookFile) {
     // see Qt_EQL example
     QStringList forms;
@@ -111,7 +113,7 @@ void EQL::exec(QWidget* widget, const QString& lispFile, const QString& slimeHoo
           << QString("(load \"%1\")").arg(lispFile);
     if(!slimeHookFile.isEmpty()) {
         QString startSwankFile(QCoreApplication::arguments().last());
-	if(startSwankFile.indexOf(QRegExp("*start-swank*.lisp", Qt::CaseInsensitive, QRegExp::Wildcard)) == -1) {
+        if(NotFound == startSwankFile.indexOf(QRegExp("*start-swank*.lisp", Qt::CaseInsensitive, QRegExp::Wildcard))) {
             qDebug() << "Please pass the \"eql-start-swank.lisp\" file.";
             exit(-1); }
         QApplication::setQuitOnLastWindowClosed(false);
@@ -123,10 +125,6 @@ void EQL::exec(QWidget* widget, const QString& lispFile, const QString& slimeHoo
                  "  (with-simple-restart (restart-qt-events \"Restart Qt event processing.\")"
                  "    (qexec)))"; }
     eval(QString("(progn " + forms.join(" ") + ")").toAscii().constData()); }
-
-void EQL::evalTopLevel() {
-    STATIC_SYMBOL_PKG(s_eval_top_level, (char*)"EVAL-TOP-LEVEL", (char*)"EQL")
-    cl_funcall(1, s_eval_top_level); } // see "lisp/ini.lisp"
 
 bool EQL::cl_booted = false;
 bool EQL::return_value_p = false;

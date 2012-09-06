@@ -21,30 +21,32 @@
 (defvar *timer*          (qnew "QTimer"))
 (defvar *mouse-count*    0)
 
-(defstruct mouse
-  (item (qnew "QGraphicsItem"))
-  (brush (brush (qfun "QColor" "fromRgb" (random 256) (random 256) (random 256))))
-  (angle 0)
-  (speed 0)
+(defstruct mouse ; DEFSTRUCT (instead of DEFCLASS) is simpler in this case
+  (item          (qnew "QGraphicsItem"))
+  (brush         (brush (qfun "QColor" "fromRgb" (random 256) (random 256) (random 256))))
+  (angle         0)
+  (speed         0)
   (eye-direction 0))
+
+(defmethod the-qt-object ((object mouse)) ; see example "X-extras/CLOS-encapsulation.lisp"
+  (mouse-item object))
 
 (let ((shape (let ((p (qnew "QPainterPath")))
                (qfun p "addRect" (list -10 -20 20 40))
                p)))
   (defun new-mouse ()
     (incf *mouse-count*)
-    (let* ((mouse (make-mouse))
-           (item (mouse-item mouse)))
-      (qfun item "setRotation" (random (* 360 16)))
-      (qoverride item "boundingRect()"
+    (let ((mouse (make-mouse)))
+      (qfun mouse "setRotation" (random (* 360 16)))
+      (qoverride mouse "boundingRect()"
                  (lambda () '(-18.5 -22.5 36.5 60.5)))
-      (qoverride item "shape()"
+      (qoverride mouse "shape()"
                  (lambda () shape))
-      (qoverride item "paint(QPainter*,QStyleOptionGraphicsItem*,QWidget*)"
+      (qoverride mouse "paint(QPainter*,QStyleOptionGraphicsItem*,QWidget*)"
                  (lambda (painter s w) (paint mouse painter)))
-      (qoverride item "advance(int)"
+      (qoverride mouse "advance(int)"
                  (lambda (step) (advance mouse step)))
-      item)))
+      mouse)))
 
 (defun brush (color &optional (style |Qt.SolidPattern|))
   (let ((b (qnew "QBrush")))
@@ -82,10 +84,9 @@
         (! "drawEllipse(QRectF)" (list (- dir 8) -17 4 4))
         (! "drawEllipse(QRectF)" (list (+ dir 4) -17 4 4)))
       ;; ears
-      (let ((me (mouse-item mouse)))
-        (! "setBrush(QBrush)" (if (null (qfuns me "scene" ("collidingItems" me)))
-                                  olive
-                                  red)))
+      (! "setBrush(QBrush)" (if (null (qfuns mouse "scene" ("collidingItems" mouse)))
+                                olive
+                                red))
       (! "drawEllipse(QRect)" '(-17 -12 16 16))
       (! "drawEllipse(QRect)" '(1 -12 16 16))
       ;; tail
@@ -94,85 +95,85 @@
 
 (defun advance (mouse step)
   (unless (zerop step)
-    (let ((me (mouse-item mouse)))
-      (labels ((normalize-angle (a)
-                 (x:while (minusp a)
-                   (incf a +2pi+))
-                 (x:while (> a +2pi+)
-                   (decf a +2pi+))
-                 a)
-               (dx (line)
-                 (- (third line) (first line)))
-               (dy (line)
-                 (- (fourth line) (second line)))
-               (len (line)
-                 (let ((x (dx line))
-                       (y (dy line)))
-                   (sqrt (+ (* x x) (* y y)))))
-               (map-from (p)
-                 (qfun me "mapFromScene(QPointF)" p))
-               (map-to (p)
-                 (qfun me "mapToScene(QPointF)" p)))
-        (let ((line-to-center (append '(0 0) (map-from '(0 0)))))
-          (if (> (len line-to-center) 150)
-              (let ((angle-to-center (acos (/ (dx line-to-center) (len line-to-center)))))
-                (when (minusp (dy line-to-center))
-                  (setf angle-to-center (- +2pi+ angle-to-center)))
-                (setf angle-to-center (normalize-angle (+ (- pi angle-to-center)
-                                                          (/ pi 2))))
-                (cond ((< (/ pi 4) angle-to-center pi)
-                       ;; rotate left
-                       (incf (mouse-angle mouse)
-                             (if (< (mouse-angle mouse) (/ (- pi) 2)) 0.25 -0.25)))
-                      ((and (>= angle-to-center pi)
-                            (< angle-to-center (+ pi (/ pi 2) (/ pi 4))))
-                       ;; rotate right
-                       (incf (mouse-angle mouse)
-                             (if (< (mouse-angle mouse) (/ pi 2)) 0.25 -0.25)))))
-              (let ((sin (sin (mouse-angle mouse))))
-                (incf (mouse-angle mouse) (cond ((minusp sin) 0.25)
-                                                ((plusp sin) -0.25)
-                                                (t 0))))))
-        ;; try not to crash with any other mice
-        (let ((danger-mice (qfuns me "scene" ("items(QPolygonF,Qt::ItemSelectionMode,Qt::SortOrder)" (append (map-to '(0 0))
-                                                                                                             (map-to '(-30 -50))
-                                                                                                             (map-to '(30 -50)))
-                                                                                                     |Qt.IntersectsItemShape|
-                                                                                                     |Qt.AscendingOrder|))))
-          (dolist (danger-mouse danger-mice)
-            (unless (qeql me danger-mouse)
-              (let* ((line-to-mouse (append '(0 0)
-                                            (qfun me "mapFromItem(const QGraphicsItem*,QPointF)"
-                                                  danger-mouse '(0 0))))
-                     (angle-to-mouse (acos (/ (dx line-to-mouse) (len line-to-mouse)))))
-                (when (minusp (dy line-to-mouse))
-                  (setf angle-to-mouse (- +2pi+ angle-to-mouse)))
-                (setf angle-to-mouse (normalize-angle (+ (- pi angle-to-mouse)
-                                                         (/ pi 2))))
-                (cond ((and (>= angle-to-mouse 0)
-                            (< angle-to-mouse (/ pi 2)))
-                       ;; rotate right
-                       (incf (mouse-angle mouse) 0.5))
-                      ((and (<= angle-to-mouse +2pi+)
-                            (> angle-to-mouse (- +2pi+ (/ pi 2))))
-                       ;; rotate left
-                       (decf (mouse-angle mouse) 0.5))))))
-          ;; add some random movement
-          (when (and (> (length danger-mice) 1)
-                     (zerop (random 10)))
-            (let ((rnd (/ (random 100) 500))
-                  (angle (mouse-angle mouse)))
-              (setf (mouse-angle mouse)
-                    (if (zerop (random 2)) (+ angle rnd) (- angle rnd)))))
-          (incf (mouse-speed mouse) (/ (- (random 100) 50) 100))
-          (let ((dx (* 10 (sin (mouse-angle mouse)))))
-            (setf (mouse-eye-direction mouse)
-                  (if (< (abs (/ dx 5)) 1) 0 (/ dx 5)))
-            (qfun me "setRotation"
-                  (+ dx (qfun me "rotation")))
-            (qfun me "setPos"
-                  (qfun me "mapToParent(QPointF)"
-                        (list 0 (- (+ 3 (* 3 (sin (mouse-speed mouse))))))))))))))
+    (labels ((normalize-angle (a)
+               (x:while (minusp a)
+                 (incf a +2pi+))
+               (x:while (> a +2pi+)
+                 (decf a +2pi+))
+               a)
+             (dx (line)
+               (- (third line) (first line)))
+             (dy (line)
+               (- (fourth line) (second line)))
+             (len (line)
+               (let ((x (dx line))
+                     (y (dy line)))
+                 (sqrt (+ (* x x) (* y y)))))
+             (map-from (p)
+               (qfun mouse "mapFromScene(QPointF)" p))
+             (map-to (p)
+               (qfun mouse "mapToScene(QPointF)" p)))
+      (let ((line-to-center (append '(0 0) (map-from '(0 0)))))
+        (if (> (len line-to-center) 150)
+            (let ((angle-to-center (acos (/ (dx line-to-center) (len line-to-center)))))
+              (when (minusp (dy line-to-center))
+                (setf angle-to-center (- +2pi+ angle-to-center)))
+              (setf angle-to-center (normalize-angle (+ (- pi angle-to-center)
+                                                        (/ pi 2))))
+              (cond ((< (/ pi 4) angle-to-center pi)
+                     ;; rotate left
+                     (incf (mouse-angle mouse)
+                           (if (< (mouse-angle mouse) (/ (- pi) 2)) 0.25 -0.25)))
+                    ((and (>= angle-to-center pi)
+                          (< angle-to-center (+ pi (/ pi 2) (/ pi 4))))
+                     ;; rotate right
+                     (incf (mouse-angle mouse)
+                           (if (< (mouse-angle mouse) (/ pi 2)) 0.25 -0.25)))))
+            (let ((sin (sin (mouse-angle mouse))))
+              (incf (mouse-angle mouse) (cond ((minusp sin) 0.25)
+                                              ((plusp sin) -0.25)
+                                              (t 0))))))
+      ;; try not to crash with any other mice
+      (let ((danger-mice (qfuns mouse "scene"
+                                ("items(QPolygonF,Qt::ItemSelectionMode,Qt::SortOrder)" (append (map-to '(0 0))
+                                                                                                (map-to '(-30 -50))
+                                                                                                (map-to '(30 -50)))
+                                                                                        |Qt.IntersectsItemShape|
+                                                                                        |Qt.AscendingOrder|))))
+        (dolist (danger-mouse danger-mice)
+          (unless (qeql mouse danger-mouse)
+            (let* ((line-to-mouse (append '(0 0)
+                                          (qfun mouse "mapFromItem(const QGraphicsItem*,QPointF)"
+                                                danger-mouse '(0 0))))
+                   (angle-to-mouse (acos (/ (dx line-to-mouse) (len line-to-mouse)))))
+              (when (minusp (dy line-to-mouse))
+                (setf angle-to-mouse (- +2pi+ angle-to-mouse)))
+              (setf angle-to-mouse (normalize-angle (+ (- pi angle-to-mouse)
+                                                       (/ pi 2))))
+              (cond ((and (>= angle-to-mouse 0)
+                          (< angle-to-mouse (/ pi 2)))
+                     ;; rotate right
+                     (incf (mouse-angle mouse) 0.5))
+                    ((and (<= angle-to-mouse +2pi+)
+                          (> angle-to-mouse (- +2pi+ (/ pi 2))))
+                     ;; rotate left
+                     (decf (mouse-angle mouse) 0.5))))))
+        ;; add some random movement
+        (when (and (> (length danger-mice) 1)
+                   (zerop (random 10)))
+          (let ((rnd (/ (random 100) 500))
+                (angle (mouse-angle mouse)))
+            (setf (mouse-angle mouse)
+                  (if (zerop (random 2)) (+ angle rnd) (- angle rnd)))))
+        (incf (mouse-speed mouse) (/ (- (random 100) 50) 100))
+        (let ((dx (* 10 (sin (mouse-angle mouse)))))
+          (setf (mouse-eye-direction mouse)
+                (if (< (abs (/ dx 5)) 1) 0 (/ dx 5)))
+          (qfun mouse "setRotation"
+                (+ dx (qfun mouse "rotation")))
+          (qfun mouse "setPos"
+                (qfun mouse "mapToParent(QPointF)"
+                      (list 0 (- (+ 3 (* 3 (sin (mouse-speed mouse)))))))))))))
 
 (defun start ()
   (setf *random-state* (make-random-state t))

@@ -1,5 +1,7 @@
 ;;; EQL is about 10 times (depending on the OS) slower than C++
 
+(in-package :eql-user)
+
 (defvar *size* (* 500 1000)) ; choose a number so that C++ runs at least several seconds
 
 (defun test ()

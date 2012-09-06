@@ -81,9 +81,12 @@ static cap_name* to##cap_name##Pointer(cl_object x) { \
         p = (cap_name*)o.pointer; } \
     return p; } \
 static cl_object from_##name(const cap_name& x) { \
+    cl_object l_ret = Cnil; \
     if(EQL::return_value_p) { \
-        return qt_object_from_name(#cap_name, new cap_name(x), 0, true); } \
-    return qt_object_from_name(#cap_name, (void*)&x); }
+        l_ret = qt_object_from_name(#cap_name, new cap_name(x), 0, true); } \
+    else { \
+        l_ret = qt_object_from_name(#cap_name, (void*)&x); } \
+    return l_ret; }
 
 #define TO_QT_TYPE_PTR2(cap_name, name) \
     TO_QT_TYPE_PTR(cap_name, name) \
@@ -95,68 +98,75 @@ static cap_name to##cap_name(cl_object l_x) { \
 
 #define TO_CL_TYPE(cap_name, name, x1, x2) \
     static cl_object from_##name(const cap_name& q) { \
-        return LIST2(MAKE_FIXNUM(q.x1()), MAKE_FIXNUM(q.x2())); }
+        cl_object l_ret =  LIST2(MAKE_FIXNUM(q.x1()), MAKE_FIXNUM(q.x2())); \
+        return l_ret; }
 
 #define TO_CL_TYPEF(cap_name, name, x1, x2) \
     TO_CL_TYPE(cap_name, name, x1, x2) \
     static cl_object from_##name##f(const cap_name##F& q) { \
-        return LIST2(ecl_make_doublefloat(q.x1()), ecl_make_doublefloat(q.x2())); }
+        cl_object l_ret = LIST2(ecl_make_doublefloat(q.x1()), ecl_make_doublefloat(q.x2())); \
+        return l_ret; }
 
 #define TO_CL_TYPE2(cap_name, name, x1, x2, x3, x4) \
     static cl_object from_##name(const cap_name& q) { \
-        return LIST4(MAKE_FIXNUM(q.x1()), MAKE_FIXNUM(q.x2()), MAKE_FIXNUM(q.x3()), MAKE_FIXNUM(q.x4())); }
+        cl_object l_ret = LIST4(MAKE_FIXNUM(q.x1()), MAKE_FIXNUM(q.x2()), MAKE_FIXNUM(q.x3()), MAKE_FIXNUM(q.x4())); \
+        return l_ret; }
 
 #define TO_CL_TYPEF2(cap_name, name, x1, x2, x3, x4) \
     TO_CL_TYPE2(cap_name, name, x1, x2, x3, x4) \
     static cl_object from_##name##f(const cap_name##F& q) { \
-        return LIST4(ecl_make_doublefloat(q.x1()), ecl_make_doublefloat(q.x2()), ecl_make_doublefloat(q.x3()), ecl_make_doublefloat(q.x4())); }
+        cl_object l_ret = LIST4(ecl_make_doublefloat(q.x1()), ecl_make_doublefloat(q.x2()), ecl_make_doublefloat(q.x3()), ecl_make_doublefloat(q.x4())); \
+        return l_ret; }
 
 #define TO_CL_LIST_PTR(cap_type, type) \
     static cl_object from_##type##list(const QList<cap_type*>& l) { \
-        cl_object l_lst = Cnil; \
+        cl_object l_list = Cnil; \
         Q_FOREACH(cap_type* x, l) { \
-            l_lst = CONS(qt_object_from_name(#cap_type, x), l_lst); } \
-        return cl_nreverse(l_lst); }
+            l_list = CONS(qt_object_from_name(#cap_type, x), l_list); } \
+        l_list = cl_nreverse(l_list); \
+        return l_list; }
 
 #define TO_CL_LIST_VAL(cap_type, type) \
     static cl_object from_##type##list(const QList<cap_type>& l) { \
-        cl_object l_lst = Cnil; \
+        cl_object l_list = Cnil; \
         Q_FOREACH(cap_type x, l) { \
-            l_lst = CONS(from_##type(x), l_lst); } \
-        return cl_nreverse(l_lst); }
+            l_list = CONS(from_##type(x), l_list); } \
+        l_list = cl_nreverse(l_list); \
+        return l_list; }
 
 #define TO_CL_LIST_VAL2(cap_type, fun) \
     static cl_object from_##type##list(const QList<cap_type*>& l) { \
-        cl_object l_lst = Cnil; \
+        cl_object l_list = Cnil; \
         Q_FOREACH(cap_type* x, l) { \
-            l_lst = CONS(fun(*x), l_lst); } \
-        return cl_nreverse(l_lst); }
+            l_list = CONS(fun(*x), l_list); } \
+        l_list = cl_nreverse(l_list); \
+        return l_list; }
 
 #define TO_QT_LIST_PTR(type) \
-    static QList<type*> to##type##List(cl_object l_lst) { \
+    static QList<type*> to##type##List(cl_object l_list) { \
         QList<type*> l; \
-        if(LISTP(l_lst)) { \
-            cl_object l_el = l_lst; \
+        if(LISTP(l_list)) { \
+            cl_object l_el = l_list; \
             while(l_el != Cnil) { \
                 l << (type*)toQtObject(cl_car(l_el)).pointer; \
                 l_el = cl_cdr(l_el); }} \
         return l; }
 
 #define TO_QT_LIST_VAL(type) \
-    static QList<type> to##type##List(cl_object l_lst) { \
+    static QList<type> to##type##List(cl_object l_list) { \
         QList<type> l; \
-        if(LISTP(l_lst)) { \
-            cl_object l_el = l_lst; \
+        if(LISTP(l_list)) { \
+            cl_object l_el = l_list; \
             while(l_el != Cnil) { \
                 l << to##type(cl_car(l_el)); \
                 l_el = cl_cdr(l_el); }} \
         return l; }
 
 #define TO_QT_LIST_VAL2(type, fun) \
-    static QList<type> to##fun##List(cl_object l_lst) { \
+    static QList<type> to##fun##List(cl_object l_list) { \
         QList<type> l; \
-        if(LISTP(l_lst)) { \
-            cl_object l_el = l_lst; \
+        if(LISTP(l_list)) { \
+            cl_object l_el = l_list; \
             while(l_el != Cnil) { \
                 l << to##fun(cl_car(l_el)); \
                 l_el = cl_cdr(l_el); }} \

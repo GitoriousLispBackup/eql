@@ -37,7 +37,6 @@ public:
 
 public Q_SLOTS:
     void exitEventLoop() { eventLoop->exit(); }
-    void evalTopLevel();
 };
 
 QT_END_NAMESPACE

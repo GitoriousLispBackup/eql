@@ -44,9 +44,11 @@
 The available <b>Qt Modules</b> (see <code>qrequire</code>) are:
 <br><code>:help :network :opengl :sql :svg :webkit</code>
 </p> 
-<p>There is no CLOS integration planned. Closures may be good enough
-  sometimes <i>(understatement)</i>, see <code>mouse</code>
-  in <code>examples/5-colliding-mice.lisp</code>.</p>
+<p>There is <b>no</b> CLOS integration planned.<br>See
+  examples <code>X-extras/CLOS-encapsulation.lisp</code>
+  and <code>5-colliding-mice.lisp</code> if you want to
+  use <code>defclass</code> or <code>defstruct</code> together
+  with <code>qt-object</code> instances.</p>
 <p>If you're interested in <b>embedding</b> EQL in existing Qt/C++ projects,
   see the example in directory <code>Qt_EQL/</code>.
 <p>See also the <b>plugin</b> example in directory <code>Qt_EQL_plugin/</code>.
