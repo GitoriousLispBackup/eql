@@ -1,6 +1,6 @@
 #+unix (si::trap-fpe t nil)
 
-(require :asdf)
+(load "~/.eclrc") ; for Quicklisp
 
 (asdf:operate 'asdf:load-op :cl-opengl)
 

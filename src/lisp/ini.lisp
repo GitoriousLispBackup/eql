@@ -302,12 +302,12 @@
   "args: (&optional (exit-status 0) (kill-all-threads t))
    alias: qq
    Terminates EQL, passing the given arguments to the ECL function <code>ext:quit</code>."
-  (declare (type fixnum exit-status))
   (assert (typep exit-status 'fixnum))
   (qprocess-events)
   (qfun (qapp) "aboutToQuit")
   (qdisconnect (qapp) "aboutToQuit()")
-  (qsingle-shot 100 (lambda () (ext:exit exit-status))) ; EXT:QUIT hangs in EQL (doesn't happen in pure ECL)
+  ;; EXT:QUIT hangs in EQL (doesn't happen in pure ECL)
+  (qsingle-shot 100 (lambda () (ffi:c-inline (exit-status) (:int) :void "exit(#0)" :one-liner t :side-effects t)))
   (ext:quit exit-status kill-all-threads))
 
 ;; simplify using CLOS; see example "X-extras/CLOS-encapsulation.lisp"

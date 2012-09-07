@@ -8,6 +8,7 @@
 ;;; and the application will continue to run.
 
 (defpackage :colliding-mice
+  (:nicknames :mice)
   (:use :common-lisp :eql)
   (:export
    #:start))

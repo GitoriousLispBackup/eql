@@ -1,29 +1,47 @@
 (in-package :eql-user)
 
-;; define a Lisp class
+;; define class or struct
 
-(defclass my-edit ()
-  ((line-edit :initform (qnew "QLineEdit"))))
+(defclass my-label-1 ()
+  ((label :initform (qnew "QLabel"))))
 
-;; define the QT-OBJECT of the class
+(defstruct my-label-2
+  (label (qnew "QLabel")))
 
-(defmethod the-qt-object ((object my-edit))
-  (slot-value object 'line-edit))
+;; specialize THE-QT-OBJECT
 
-;; the Lisp object can now be used the same as a QT-OBJECT
+(defmethod the-qt-object ((object my-label-1))
+  (slot-value object 'label))
 
-(defvar *edit-1* (make-instance 'my-edit)) ; Lisp object
-(defvar *edit-2* (qnew "QLineEdit"))       ; vanilla Qt object
+(defmethod the-qt-object ((object my-label-2))
+  (my-label-2-label object))
+
+;;; The Lisp objects can now be used the same as a QT-OBJECT,
+;;; that is: they can be passed as arguments to any EQL function
+
+(defvar *label-1* (make-instance 'my-label-1))
+(defvar *label-2* (make-my-label-2))
+(defvar *label-3* (qnew "QLabel"))
+
+(defun set-color (widget role color)
+  (qlet ((pal (qget widget "palette")))
+    (qfun pal "setColor(QPalette::ColorRole,QColor)" role color)
+    (qset widget "palette" pal)))
 
 (defun run ()
   (let* ((dialog (qnew "QDialog"))
          (layout (qnew "QVBoxLayout(QWidget*)" dialog)))
     (x:do-with (qfun layout "addWidget")
-      *edit-1* *edit-2*)
-    (qset *edit-1* "text" (princ-to-string *edit-1*))
-    (qset *edit-2* "text" (princ-to-string *edit-2*))
-    (print (qget *edit-1* "text"))
-    (print (qget *edit-2* "text"))
+      *label-1* *label-2* *label-3*)
+    (flet ((print-me (label color)
+             (qset (symbol-value label) "text" (format nil "<h3 style='color: ~A'>~A ... ~A"
+                                                       color
+                                                       label
+                                                       (qescape (princ-to-string (symbol-value label)))))))
+      (set-color dialog |QPalette.Window| "white")
+      (print-me '*label-1* "red")
+      (print-me '*label-2* "green")
+      (print-me '*label-3* "blue"))
     (qfun dialog "show")))
 
 (run)
