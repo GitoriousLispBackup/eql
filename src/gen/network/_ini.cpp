@@ -6,14 +6,14 @@
 
 QT_BEGIN_NAMESPACE
 
-NumList LAbstractSocket::overrideIds = NumList() << 107 << 108 << 109 << 110 << 111 << 112 << 113 << 114 << 115 << 116 << 117;
+NumList LAbstractSocket::overrideIds = NumList() << 108 << 109 << 110 << 111 << 112 << 113 << 114 << 115 << 116 << 117 << 118;
 NumList LFtp::overrideIds = NumList();
-NumList LLocalServer::overrideIds = NumList() << 274 << 275 << 276;
-NumList LLocalSocket::overrideIds = NumList() << 108 << 109 << 110 << 111 << 112 << 113 << 114 << 115 << 117;
+NumList LLocalServer::overrideIds = NumList() << 275 << 276 << 277;
+NumList LLocalSocket::overrideIds = NumList() << 109 << 110 << 111 << 112 << 113 << 114 << 115 << 116 << 118;
 NumList LNetworkAccessManager::overrideIds = NumList();
-NumList LNetworkCookieJar::overrideIds = NumList() << 281 << 282;
-NumList LNetworkDiskCache::overrideIds = NumList() << 283 << 284 << 285 << 286 << 287;
-NumList LTcpServer::overrideIds = NumList() << 274 << 275 << 341;
+NumList LNetworkCookieJar::overrideIds = NumList() << 282 << 283;
+NumList LNetworkDiskCache::overrideIds = NumList() << 284 << 285 << 286 << 287 << 288;
+NumList LTcpServer::overrideIds = NumList() << 275 << 276 << 342;
 NumList LTcpSocket::overrideIds = NumList();
 NumList LUdpSocket::overrideIds = NumList();
 NumList LAuthenticator::overrideIds = NumList();
@@ -24,7 +24,7 @@ NumList LNetworkCacheMetaData::overrideIds = NumList();
 NumList LNetworkCookie::overrideIds = NumList();
 NumList LNetworkInterface::overrideIds = NumList();
 NumList LNetworkProxy::overrideIds = NumList();
-NumList LNetworkProxyFactory::overrideIds = NumList() << 415;
+NumList LNetworkProxyFactory::overrideIds = NumList() << 416;
 NumList LNetworkProxyQuery::overrideIds = NumList();
 NumList LNetworkRequest::overrideIds = NumList();
 NumList LSslCertificate::overrideIds = NumList();
@@ -32,7 +32,7 @@ NumList LSslCipher::overrideIds = NumList();
 NumList LSslConfiguration::overrideIds = NumList();
 NumList LSslError::overrideIds = NumList();
 NumList LSslKey::overrideIds = NumList();
-NumList LUrlInfo::overrideIds = NumList() << 450 << 451 << 452 << 453 << 454 << 455 << 456 << 457 << 458 << 459 << 460;
+NumList LUrlInfo::overrideIds = NumList() << 451 << 452 << 453 << 454 << 455 << 456 << 457 << 458 << 459 << 460 << 461;
 
 void ini() {
     static bool _ = false; if(_) return; _ = true;

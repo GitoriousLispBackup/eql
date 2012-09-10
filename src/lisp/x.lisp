@@ -102,15 +102,15 @@
 
 (defun split (str &optional (sep #\Space))
   (unless (zerop (length str))
-    (let (lst)
+    (let (list)
       (do ((e (position sep str) (position sep str :start (1+ e)))
            (b 0 (1+ e)))
-          ((not e) (push (subseq str b) lst))
-        (push (subseq str b e) lst))
-      (nreverse lst))))
+          ((not e) (push (subseq str b) list))
+        (push (subseq str b e) list))
+      (nreverse list))))
 
-(defun join (lst &optional (sep #\Space))
-  (format nil (format nil "~~{~~A~~^~A~~}" sep) lst))
+(defun join (list &optional (sep #\Space))
+  (format nil (format nil "~~{~~A~~^~A~~}" sep) list))
 
 (defun bytes-to-string (b)
   (map 'string 'code-char b))

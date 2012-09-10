@@ -7,14 +7,14 @@
 QT_BEGIN_NAMESPACE
 
 NumList LGLShader::overrideIds = NumList();
-NumList LGLShaderProgram::overrideIds = NumList() << 198;
-NumList LGLWidget::overrideIds = NumList() << 199 << 200 << 201 << 202 << 203 << 204 << 205 << 206 << 21 << 40;
+NumList LGLShaderProgram::overrideIds = NumList() << 199;
+NumList LGLWidget::overrideIds = NumList() << 200 << 201 << 202 << 203 << 204 << 205 << 206 << 207 << 22 << 41;
 NumList LGLColormap::overrideIds = NumList();
-NumList LGLContext::overrideIds = NumList() << 401 << 402 << 403 << 404 << 405;
+NumList LGLContext::overrideIds = NumList() << 402 << 403 << 404 << 405 << 406;
 NumList LGLFormat::overrideIds = NumList();
-NumList LGLFramebufferObject::overrideIds = NumList() << 44;
+NumList LGLFramebufferObject::overrideIds = NumList() << 45;
 NumList LGLFramebufferObjectFormat::overrideIds = NumList();
-NumList LGLPixelBuffer::overrideIds = NumList() << 44;
+NumList LGLPixelBuffer::overrideIds = NumList() << 45;
 
 void ini() {
     static bool _ = false; if(_) return; _ = true;

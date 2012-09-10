@@ -42,6 +42,6 @@
       (print-me '*label-1* "red")
       (print-me '*label-2* "green")
       (print-me '*label-3* "blue"))
-    (qfun dialog "show")))
+    (x:do-with (qfun dialog) "show" "raise")))
 
 (run)

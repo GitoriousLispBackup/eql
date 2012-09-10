@@ -277,7 +277,7 @@
   (defun qselect (&optional on-selected)
     "args: ()
      alias: qsel
-     Allows to select (by clicking) any (child) widget. The variable <code>qsel:*q*</code> is bound to the latest selected widget."
+     Allows to select (by clicking) any (child) widget. The variable <code>qsel:*q*</code> is set to the latest selected widget."
     (unless loaded
       (setf loaded t)
       (load (in-home "src/lisp/qselect")))

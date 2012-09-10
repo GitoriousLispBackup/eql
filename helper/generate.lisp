@@ -86,8 +86,8 @@
 (defun no-spaces (s)
   (remove #\Space s))
 
-(defun find* (x lst &optional (key 'identity))
-  (find x lst :test 'string= :key key))
+(defun find* (x list &optional (key 'identity))
+  (find x list :test 'string= :key key))
 
 (defun split-args (args)
   (let ((s (copy-seq args))
@@ -496,6 +496,8 @@
                                         (find* fun-name '("columnCount"
                                                           "hasChildren"
                                                           "parent")))
+                                   (and (string= "QFontDialog" class)
+                                        (find* fun-name '("eventFilter")))
                                    (and (string= "QHelpSearchResultWidget" class)
                                         (find* fun-name '("changeEvent")))
                                    (and (string= "QHelpSearchQueryWidget" class)
@@ -507,7 +509,6 @@
                                                           "parent")))
                                    ;; exclude some very low-level ones
                                    (find* fun-name '("event"
-                                                     "eventFilter"
                                                      "metaObject")))
                             (let* ((ret (return-arg fun))
                                    (void (void-p ret))

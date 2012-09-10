@@ -1891,7 +1891,7 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
 
 cl_object qadd_event_filter(cl_object l_obj, cl_object l_ev, cl_object l_fun) {
     /// args: (object event function)
-    /// Adds a Lisp function to be called on a given event type.<br>If the object argument is <code>NIL</code>, the event will be captured for any object.<br>If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.
+    /// Adds a Lisp function to be called on a given event type.<br>If the object argument is <code>NIL</code>, the event will be captured for any object.<br>If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.<br><br>See also <code>qoverride</code> for <code>QObject::eventFilter(QObject*,QEvent*)</code> and <code>QObject::installEventFilter(QObject*)</code>.
     ///     (qadd-event-filter nil |QEvent.MouseButtonPress| (lambda (obj ev) (print obj) nil))
     ecl_process_env()->nvalues = 1;
     void* fun = getLispFun(l_fun);
@@ -2052,10 +2052,10 @@ cl_object qobject_names2(cl_object l_type) {
         qSort(names.begin(), names.end()); }
     else {
         names = (Ct == cl_eql(q_keyword(), l_type)) ? LObjects::qNames : LObjects::nNames; }
-    QStringList lst;
+    QStringList list;
     Q_FOREACH(QByteArray name, names) {
-        lst << QString(name); }
-    cl_object l_ret = from_qstringlist(lst);
+        list << QString(name); }
+    cl_object l_ret = from_qstringlist(list);
     return l_ret; }
 
 cl_object qenum(cl_object l_name, cl_object l_key) { // for internal use only
