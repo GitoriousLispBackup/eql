@@ -130,7 +130,7 @@
   #+threads
   (mp:process-run-function :read '%read-thread)
   #-threads
-  (error "ECL threads not enabled, can't process Qt events"))
+  (error "ECL threads not enabled, can't process Qt events."))
 
 (defmacro qeval (&rest forms)
   ;; this macro will be redefined in Slime mode (see "../../slime/repl-hook.lisp")
@@ -143,9 +143,9 @@
 ;;; qt-object
 
 (defstruct (qt-object (:constructor qt-object (pointer unique id &optional finalize)))
-  (pointer 0 :type integer)
-  (unique 0 :type integer)
-  (id 0 :type fixnum)
+  (pointer  0   :type integer)
+  (unique   0   :type integer)
+  (id       0   :type fixnum)
   (finalize nil :type boolean))
 
 (defun new-qt-object (pointer unique id finalize)
@@ -187,8 +187,8 @@
   (load (in-home "gui/gui"))
   (when ev
     (loop
-       (qprocess-events)
-       (sleep 0.05))))
+      (qprocess-events)
+      (sleep 0.05))))
 
 (defun qeql (obj1 obj2)
   "args: (object1 object2)

@@ -72,10 +72,10 @@ void EQL::exec(const QStringList& args) {
         if(arguments.size() == 2) {
             QString uiFile(QDir::fromNativeSeparators(arguments.at(1)));
             int sep = uiFile.lastIndexOf('/') + 1;
-            QProcess::execute("uic -o ui.h " + uiFile);
-            forms << QString("(eql:quic \"ui.h\" \"%1ui-%2.lisp\")")
-                    .arg(uiFile.left(sep))
-                    .arg(uiFile.mid(sep, uiFile.length() - sep - 3))
+            forms << QString("(ext:run-program \"uic\" (list \"-o\" \"ui.h\" \"%1\"))").arg(uiFile)  
+                  << QString("(eql:quic \"ui.h\" \"%1ui-%2.lisp\")")
+                             .arg(uiFile.left(sep))
+                             .arg(uiFile.mid(sep, uiFile.length() - sep - 3))
                   << QString("(delete-file \"ui.h\")")
                   << QString("(eql:qq)"); }
         else {
@@ -114,7 +114,7 @@ void EQL::exec(QWidget* widget, const QString& lispFile, const QString& slimeHoo
     if(!slimeHookFile.isEmpty()) {
         QString startSwankFile(QCoreApplication::arguments().last());
         if(NotFound == startSwankFile.indexOf(QRegExp("*start-swank*.lisp", Qt::CaseInsensitive, QRegExp::Wildcard))) {
-            qDebug() << "Please pass the \"eql-start-swank.lisp\" file.";
+            qDebug() << "Please pass the pathname for \"eql-start-swank.lisp\".";
             exit(-1); }
         QApplication::setQuitOnLastWindowClosed(false);
         forms << QString("(load \"%1\")").arg(startSwankFile)

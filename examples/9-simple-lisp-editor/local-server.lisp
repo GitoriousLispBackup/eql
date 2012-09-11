@@ -67,7 +67,7 @@
             (qversion)
           (format t "~%EQL local-server (ECL ~A, EQL ~A, Qt ~A)~@
                        Use local-client to send input.~%"
-                  (si::lisp-implementation-version) eql-version qt-version))
+                  (ext::lisp-implementation-version) eql-version qt-version))
         (ini-system-tray)
         t)
       (progn

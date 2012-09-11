@@ -28,7 +28,7 @@
 
 (defun load-ui-related-qt-modules ()
   (dolist (module (list :help :opengl :svg :webkit))
-    (ignore-errors (eql:qrequire module :quiet))))
+    (eql:qrequire module :quiet)))
 
 (defun run (&optional (ui.h "ui.h") (ui.lisp "ui.lisp"))
   (load-ui-related-qt-modules)

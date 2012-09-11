@@ -91,7 +91,7 @@
         ("addAction(QAction*)" (action :render-into-pixmap))
         ("addAction(QAction*)" (action :grab-frame-buffer))
         ("addAction(QAction*)" (action :clear-pixmap))
-        "addSeparator"
+        ("addSeparator")
         ("addAction(QAction*)" (action :exit)))
       (x:do-with (qfun help-menu)
         ("addAction(QAction*)" (action :about))

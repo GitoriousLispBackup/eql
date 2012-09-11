@@ -1891,7 +1891,7 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
 
 cl_object qadd_event_filter(cl_object l_obj, cl_object l_ev, cl_object l_fun) {
     /// args: (object event function)
-    /// Adds a Lisp function to be called on a given event type.<br>If the object argument is <code>NIL</code>, the event will be captured for any object.<br>If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.<br><br>See also <code>qoverride</code> for <code>QObject::eventFilter(QObject*,QEvent*)</code> and <code>QObject::installEventFilter(QObject*)</code>.
+    /// Adds a Lisp function to be called on a given event type.<br>If the object argument is <code>NIL</code>, the event will be captured for the whole application.<br>If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.<br><br>See also <code>qoverride</code> for <code>QObject::eventFilter(QObject*,QEvent*)</code> and <code>QObject::installEventFilter(QObject*)</code>, <code>QObject::removeEventFilter(QObject*)</code>.
     ///     (qadd-event-filter nil |QEvent.MouseButtonPress| (lambda (obj ev) (print obj) nil))
     ecl_process_env()->nvalues = 1;
     void* fun = getLispFun(l_fun);
