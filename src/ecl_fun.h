@@ -238,6 +238,7 @@ cl_object qok                   ();
 cl_object qoverride             (cl_object, cl_object, cl_object);
 cl_object qprocess_events       ();
 cl_object qproperty             (cl_object, cl_object);
+cl_object qremove_event_filter  (cl_object);
 cl_object qrequire2             (cl_object, cl_object);
 cl_object qsender               ();
 cl_object qset_gc               (cl_object);

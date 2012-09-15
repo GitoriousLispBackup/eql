@@ -93,7 +93,6 @@
         "void setNativeArguments ( const QString & )"
         ))
 
-
 (defparameter *check* nil)
 
 (defun text (str)

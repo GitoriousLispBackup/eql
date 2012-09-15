@@ -16,7 +16,7 @@
 (defmethod the-qt-object ((object my-label-2))
   (my-label-2-label object))
 
-;;; The Lisp objects can now be used the same as a QT-OBJECT,
+;;; The Lisp objects can now be used the same as QT-OBJECT,
 ;;; that is: they can be passed as arguments to any EQL function
 
 (defvar *label-1* (make-instance 'my-label-1))

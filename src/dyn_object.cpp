@@ -6,6 +6,7 @@
 #include <QEvent>
 #include <QApplication>
 
+int DynObject::event_filter_id = 0;
 QObject* DynObject::currentSender = 0;
 
 DynObject::DynObject(QObject* par) : QObject(par), filters(false) {
@@ -41,14 +42,27 @@ bool DynObject::disconnect(QObject* from, const char* signal, DynObject* dyn, vo
                 ok = true; }}}
     return ok; }
 
-void DynObject::addEventFilter(QObject* obj, int type, void* fun) {
+int DynObject::addEventFilter(QObject* obj, int type, void* fun) {
     filters = true;
+    ev_ids << ++event_filter_id;
     ev_types << type;
     ev_funs << fun;
-    ev_objects << obj; }
+    ev_objects << obj;
+    return event_filter_id; }
+
+bool DynObject::removeEventFilter(int id) {
+    int i = ev_ids.indexOf(id);
+    if(i != -1) {
+        ev_ids.remove(i);
+	ev_types.remove(i);
+	ev_funs.remove(i);
+	ev_objects.remove(i);
+	return true; }
+    return false; }
 
 void DynObject::clearEventFilters() {
     filters = false;
+    event_filter_id = 0;
     ev_types.clear();
     ev_funs.clear();
     ev_objects.clear(); }

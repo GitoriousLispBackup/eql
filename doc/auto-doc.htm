@@ -8,7 +8,7 @@
 </p><br>
 <p>
 <b>QADD-EVENT-FILTER (object event function)</b>
-<p>Adds a Lisp function to be called on a given event type.<br>If the object argument is <code>NIL</code>, the event will be captured for the whole application.<br>If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.<br><br>See also <code>qoverride</code> for <code>QObject::eventFilter(QObject*,QEvent*)</code> and <code>QObject::installEventFilter(QObject*)</code>, <code>QObject::removeEventFilter(QObject*)</code>.</p>
+<p>Convenience function. Adds a Lisp function to be called on a given event type.<br>If the object argument is <code>NIL</code>, the event will be captured for the whole application.<br>If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.<br>Returns an ID which can be used to remove the filter, see <code>qremove-event-filter</code>.<br><br>See also <code>qoverride</code> for <code>QObject::eventFilter(QObject*,QEvent*)</code> and <code>QObject::installEventFilter(QObject*)</code>, <code>QObject::removeEventFilter(QObject*)</code>.</p>
 <pre>
   (qadd-event-filter nil |QEvent.MouseButtonPress| (lambda (obj ev) (print obj) nil))
 </pre>
@@ -229,6 +229,10 @@
 <br>
 <b>QQ</b>
 <p>Terminates EQL, passing the given arguments to the ECL function <code>ext:quit</code>.</p>
+</p><br>
+<p>
+<b>QREMOVE-EVENT-FILTER (id)</b>
+<p>Removes the event filter identified by <code>id</code>, which is the return value of <code>qadd-event-filter</code>.<br>Returns the <code>id</code> if the event filter has effectively been removed.<br>See also <code>qclear-event-filters</code>.</p>
 </p><br>
 <p>
 <b>QREQUIRE (module &optional quiet)</b>

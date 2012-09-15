@@ -53,6 +53,7 @@
    #:qproperty
    #:qq
    #:qquit
+   #:qremove-event-filter
    #:qrequire
    #:qrgb
    #:qsel

@@ -115,6 +115,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object((char*)"qprocess-events"),        (cl_objectfn_fixed)qprocess_events,       0);
     cl_def_c_function(c_string_to_object((char*)"qproperty"),              (cl_objectfn_fixed)qproperty,             2);
     cl_def_c_function(c_string_to_object((char*)"%qrequire"),              (cl_objectfn_fixed)qrequire2,             2);
+    cl_def_c_function(c_string_to_object((char*)"qremove-event-filter"),   (cl_objectfn_fixed)qremove_event_filter,  1);
     cl_def_c_function(c_string_to_object((char*)"qsender"),                (cl_objectfn_fixed)qsender,               0);
     cl_def_c_function(c_string_to_object((char*)"%qset-gc"),               (cl_objectfn_fixed)qset_gc,               1);
     cl_def_c_function(c_string_to_object((char*)"qset-property"),          (cl_objectfn_fixed)qset_property,         3);
@@ -739,8 +740,8 @@ static cl_object from_qtexteditextraselectionlist(const QList<QTextEdit::ExtraSe
     cl_object l_list = Cnil;
     Q_FOREACH(QTextEdit::ExtraSelection sel, l) {
         l_list = CONS(LIST2(qt_object_from_name("QTextCursor", new QTextCursor(sel.cursor)),
-                           qt_object_from_name("QTextCharFormat", new QTextCharFormat(sel.format))),
-                     l_list); }
+                            qt_object_from_name("QTextCharFormat", new QTextCharFormat(sel.format))),
+                      l_list); }
     l_list = cl_nreverse(l_list);
     return l_list; }
 
@@ -1891,7 +1892,7 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
 
 cl_object qadd_event_filter(cl_object l_obj, cl_object l_ev, cl_object l_fun) {
     /// args: (object event function)
-    /// Adds a Lisp function to be called on a given event type.<br>If the object argument is <code>NIL</code>, the event will be captured for the whole application.<br>If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.<br><br>See also <code>qoverride</code> for <code>QObject::eventFilter(QObject*,QEvent*)</code> and <code>QObject::installEventFilter(QObject*)</code>, <code>QObject::removeEventFilter(QObject*)</code>.
+    /// Convenience function. Adds a Lisp function to be called on a given event type.<br>If the object argument is <code>NIL</code>, the event will be captured for the whole application.<br>If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.<br>Returns an ID which can be used to remove the filter, see <code>qremove-event-filter</code>.<br><br>See also <code>qoverride</code> for <code>QObject::eventFilter(QObject*,QEvent*)</code> and <code>QObject::installEventFilter(QObject*)</code>, <code>QObject::removeEventFilter(QObject*)</code>.
     ///     (qadd-event-filter nil |QEvent.MouseButtonPress| (lambda (obj ev) (print obj) nil))
     ecl_process_env()->nvalues = 1;
     void* fun = getLispFun(l_fun);
@@ -1901,9 +1902,19 @@ cl_object qadd_event_filter(cl_object l_obj, cl_object l_ev, cl_object l_fun) {
             QtObject o = toQtObject(l_obj);
             if(o.isQObject()) {
                 obj = (QObject*)o.pointer; }}
-        LObjects::dynObject->addEventFilter(obj, toInt(l_ev), fun);
-        return l_ev; }
+        int id = LObjects::dynObject->addEventFilter(obj, toInt(l_ev), fun);
+	cl_object l_id = ecl_make_integer(id);
+        return l_id; }
     error_msg("QADD-EVENT-FILTER", LIST3(l_obj, l_ev, l_fun));
+    return Cnil; }
+
+cl_object qremove_event_filter(cl_object l_id) {
+    /// args: (id)
+    /// Removes the event filter identified by <code>id</code>, which is the return value of <code>qadd-event-filter</code>.<br>Returns the <code>id</code> if the event filter has effectively been removed.<br>See also <code>qclear-event-filters</code>.
+    ecl_process_env()->nvalues = 1;
+    if(cl_integerp(l_id) == Ct) {
+        return LObjects::dynObject->removeEventFilter(toInt(l_id)) ? l_id : Cnil; }
+    error_msg("QREMOVE-EVENT-FILTER", LIST1(l_id));
     return Cnil; }
 
 bool callEventFun(void* fun, QObject* obj, QEvent* ev) {

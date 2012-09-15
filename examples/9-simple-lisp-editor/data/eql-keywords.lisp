@@ -45,6 +45,7 @@
   "qproperty"
   "qq"
   "qquit"
+  "qremove-event-filter"
   "qrequire"
   "qsel"
   "qselect"
