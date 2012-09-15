@@ -371,6 +371,7 @@
                   (cons 'qobject-names        '(&optional type))
                   (cons 'qoverride            '(object name function))
                   (cons 'qproperty            '(object name))
+                  (cons 'qremove-event-filter '(id))
                   (cons 'qrequire             '(module))
                   (cons 'qset-null            '(object))
                   (cons 'qset                 '(object name value))
