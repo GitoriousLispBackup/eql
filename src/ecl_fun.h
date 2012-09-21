@@ -226,6 +226,7 @@ cl_object qescape               (cl_object);
 cl_object qexec2                (cl_object);
 cl_object qexit                 ();
 cl_object qfind_child           (cl_object, cl_object);
+cl_object qfind_children2       (cl_object, cl_object, cl_object);
 cl_object qfrom_utf8            (cl_object);
 cl_object qid                   (cl_object);
 cl_object qinvoke_method2       (cl_object, cl_object, cl_object, cl_object);

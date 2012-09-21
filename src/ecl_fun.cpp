@@ -102,6 +102,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object((char*)"%qexec"),                 (cl_objectfn_fixed)qexec2,                1);
     cl_def_c_function(c_string_to_object((char*)"qexit"),                  (cl_objectfn_fixed)qexit,                 0);
     cl_def_c_function(c_string_to_object((char*)"qfind-child"),            (cl_objectfn_fixed)qfind_child,           2);
+    cl_def_c_function(c_string_to_object((char*)"%qfind-children"),        (cl_objectfn_fixed)qfind_children2,       3);
     cl_def_c_function(c_string_to_object((char*)"qfrom-utf8"),             (cl_objectfn_fixed)qfrom_utf8,            1);
     cl_def_c_function(c_string_to_object((char*)"qid"),                    (cl_objectfn_fixed)qid,                   1);
     cl_def_c_function(c_string_to_object((char*)"%qinvoke-method"),        (cl_objectfn_fixed)qinvoke_method2,       4);
@@ -1289,7 +1290,7 @@ cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
     ///     (qapropos "html" "QTextEdit")
     ///     (qapropos nil "QWidget")
     ///     (qapropos)
-    ///     (qapropos nil *qt-main*) ; embedded C++ (see Qt_EQL)
+    ///     (qapropos nil *qt-main*) ; embedded C++ (see Qt_EQL example)
     ecl_process_env()->nvalues = 1;    
     QByteArray search;
     if(ECL_STRINGP(l_search)) {
@@ -1543,7 +1544,7 @@ cl_object qset_property(cl_object l_obj, cl_object l_name, cl_object l_val) {
 cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, cl_object l_args) {
     /// args: (object function-name &rest arguments)
     /// alias: qfun
-    /// Calls any of Qt methods, slots, signals ("emit" in jargon). Static methods can be called by passing the string name of an object.<br>For overloaded Qt methods you may need to pass the argument types (as for <code>qconnect</code> and <code>qoverride</code>). In these (very few) ambiguous cases you will see a runtime error message, together with a list of all possible candidates.
+    /// Calls any of Qt methods, slots, signals. Static methods can be called by passing the string name of an object.<br>For overloaded Qt methods you may need to pass the argument types (as for <code>qconnect</code> and <code>qoverride</code>). In these (very few) ambiguous cases you will see a runtime error message, together with a list of all possible candidates.
     ///     (qfun item "setText" 0 "Some objects are EQL.")
     ///     (qfun "QDateTime" "currentDateTime") ; static method
     ///     (qfun slider "valueChanged" 10) ; emit signal
@@ -1892,7 +1893,7 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
 
 cl_object qadd_event_filter(cl_object l_obj, cl_object l_ev, cl_object l_fun) {
     /// args: (object event function)
-    /// Convenience function. Adds a Lisp function to be called on a given event type.<br>If the object argument is <code>NIL</code>, the event will be captured for the whole application.<br>If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.<br>Returns an ID which can be used to remove the filter, see <code>qremove-event-filter</code>.<br><br>See also <code>qoverride</code> for <code>QObject::eventFilter(QObject*,QEvent*)</code> and <code>QObject::installEventFilter(QObject*)</code>, <code>QObject::removeEventFilter(QObject*)</code>.
+    /// Convenience function. Adds a Lisp function to be called on a given event type.<br>If the object argument is <code>NIL</code>, the event will be captured for the whole application.<br>If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.<br><br>Returns a handle which can be used to remove the filter, see <code>qremove-event-filter</code>.<br><br>See also <code>qoverride</code> for <code>QObject::eventFilter(QObject*,QEvent*)</code> and <br><code>QObject::installEventFilter(QObject*)</code>,<br><code>QObject::removeEventFilter(QObject*)</code>.
     ///     (qadd-event-filter nil |QEvent.MouseButtonPress| (lambda (obj ev) (print obj) nil))
     ecl_process_env()->nvalues = 1;
     void* fun = getLispFun(l_fun);
@@ -1903,18 +1904,18 @@ cl_object qadd_event_filter(cl_object l_obj, cl_object l_ev, cl_object l_fun) {
             if(o.isQObject()) {
                 obj = (QObject*)o.pointer; }}
         int id = LObjects::dynObject->addEventFilter(obj, toInt(l_ev), fun);
-	cl_object l_id = ecl_make_integer(id);
+        cl_object l_id = ecl_make_integer(id);
         return l_id; }
     error_msg("QADD-EVENT-FILTER", LIST3(l_obj, l_ev, l_fun));
     return Cnil; }
 
-cl_object qremove_event_filter(cl_object l_id) {
-    /// args: (id)
-    /// Removes the event filter identified by <code>id</code>, which is the return value of <code>qadd-event-filter</code>.<br>Returns the <code>id</code> if the event filter has effectively been removed.<br>See also <code>qclear-event-filters</code>.
+cl_object qremove_event_filter(cl_object l_handle) {
+    /// args: (handle)
+    /// Removes the event filter corresponding to <code>handle</code>, which is the return value of <code>qadd-event-filter</code>.<br>Returns <code>handle</code> if the event filter has effectively been removed.<br>See also <code>qclear-event-filters</code>.
     ecl_process_env()->nvalues = 1;
-    if(cl_integerp(l_id) == Ct) {
-        return LObjects::dynObject->removeEventFilter(toInt(l_id)) ? l_id : Cnil; }
-    error_msg("QREMOVE-EVENT-FILTER", LIST1(l_id));
+    if(cl_integerp(l_handle) == Ct) {
+        return LObjects::dynObject->removeEventFilter(toInt(l_handle)) ? l_handle : Cnil; }
+    error_msg("QREMOVE-EVENT-FILTER", LIST1(l_handle));
     return Cnil; }
 
 bool callEventFun(void* fun, QObject* obj, QEvent* ev) {
@@ -2194,8 +2195,8 @@ cl_object qload_ui(cl_object l_ui) {
     return Cnil; }
 
 cl_object qfind_child(cl_object l_obj, cl_object l_name) {
-    /// args: (object name)
-    /// Calls <code>qFindChild&lt;QObject*&gt;()</code>.<br>Can be used to get the child objects of any Qt object (typically from a UI, see <code>qload-ui</code>), identified by <code>objectName</code>.
+    /// args: (object object-name)
+    /// Calls <code>qFindChild&lt;QObject*&gt;()</code>.<br>Can be used to get the child objects of any Qt object (typically from a UI, see <code>qload-ui</code>), identified by <code>QObject::objectName</code>.
     ///     (qfind-child *main* "editor")
     ecl_process_env()->nvalues = 1;
     QString name(toQString(l_name));
@@ -2209,6 +2210,30 @@ cl_object qfind_child(cl_object l_obj, cl_object l_name) {
                                                       obj->property("EQL.unique").toUInt());
                 return l_ret; }}}
     error_msg("QFIND-CHILD", LIST2(l_obj, l_name));
+    return Cnil; }
+
+cl_object qfind_children2(cl_object l_obj, cl_object l_name, cl_object l_class) {
+    /// args: (object &optional object-name class-name)
+    /// Calls <code>qFindChildren&lt;QObject*&gt;()</code>, returning a list of all child objects matching <code>object-name</code> and <code>class-name</code>.<br>Omitting the <code>&optional</code> arguments will find all children, recursively.
+    ///     (qfind-children *qt-main* nil "LightWidget") ; see Qt_EQL example
+    ecl_process_env()->nvalues = 1;
+    QString objectName(toQString(l_name));
+    QByteArray className(toCString(l_class));
+    QtObject o = toQtObject(l_obj);
+    if(o.isQObject()) {
+        QObjectList children = qFindChildren<QObject*>((QObject*)o.pointer, objectName);
+        cl_object l_children = Cnil;
+        Q_FOREACH(QObject* child, children) {
+            QByteArray className2(child->metaObject()->className());
+            QByteArray className3(LObjects::vanillaQtSuperClassName(child->metaObject()));
+            if(className.isEmpty()      ||
+              (className == className2) ||
+              (className == className3)) {
+                l_children = CONS(qt_object_from_name(className3, child, child->property("EQL.unique").toUInt()),
+                                  l_children); }}
+        l_children = cl_nreverse(l_children);
+        return l_children; }
+    error_msg("QFIND-CHILDREN", LIST3(l_obj, l_name, l_class));
     return Cnil; }
 
 cl_object qui_class2(cl_object l_ui, cl_object l_name) {

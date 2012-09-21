@@ -82,7 +82,7 @@
 (defvar *top-level-form*  nil)
 (defvar *top-level-lock*  #+threads (mp:make-lock :name 'top-level))
 (defvar *slime-values*    nil)
-(defvar *slime-package*   (find-package :eql))
+(defvar *slime-package*   (find-package :eql-user))
 (defvar *slime-evaluated* nil)
 (defvar *slime-hook-file* nil)
            
@@ -273,6 +273,9 @@
 (defun qexec (&optional ms)
   (%qexec ms))
 
+(defun qfind-children (object &optional object-name class-name)
+  (%qfind-children object object-name class-name))
+
 (let (loaded)
   (defun qselect (&optional on-selected)
     "args: ()
@@ -351,6 +354,7 @@
                   (cons 'qescape              '(string))
                   (cons 'qexec                '(&optional milliseconds))
                   (cons 'qfind-child          '(object name))
+                  (cons 'qfind-children       '(object &optional name))
                   (cons 'qfrom-utf8           '(byte-array))
                   (cons 'qfun                 '(object function-name &rest arguments))
                   (cons 'qfun*                '(object cast-class-name function-name &rest arguments))

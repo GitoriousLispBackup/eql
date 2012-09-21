@@ -8,7 +8,7 @@
 </p><br>
 <p>
 <b>QADD-EVENT-FILTER (object event function)</b>
-<p>Convenience function. Adds a Lisp function to be called on a given event type.<br>If the object argument is <code>NIL</code>, the event will be captured for the whole application.<br>If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.<br>Returns an ID which can be used to remove the filter, see <code>qremove-event-filter</code>.<br><br>See also <code>qoverride</code> for <code>QObject::eventFilter(QObject*,QEvent*)</code> and <code>QObject::installEventFilter(QObject*)</code>, <code>QObject::removeEventFilter(QObject*)</code>.</p>
+<p>Convenience function. Adds a Lisp function to be called on a given event type.<br>If the object argument is <code>NIL</code>, the event will be captured for the whole application.<br>If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.<br><br>Returns a handle which can be used to remove the filter, see <code>qremove-event-filter</code>.<br><br>See also <code>qoverride</code> for <code>QObject::eventFilter(QObject*,QEvent*)</code> and <br><code>QObject::installEventFilter(QObject*)</code>,<br><code>QObject::removeEventFilter(QObject*)</code>.</p>
 <pre>
   (qadd-event-filter nil |QEvent.MouseButtonPress| (lambda (obj ev) (print obj) nil))
 </pre>
@@ -24,7 +24,7 @@
   (qapropos "html" "QTextEdit")
   (qapropos nil "QWidget")
   (qapropos)
-  (qapropos nil *qt-main*) ; embedded C++ (see Qt_EQL)
+  (qapropos nil *qt-main*) ; embedded C++ (see Qt_EQL example)
 </pre>
 </p><br>
 <p>
@@ -98,10 +98,17 @@
 <p>Calls <code>QEventLoop::exit()</code>, in order to exit event processing after a call to <code>qexec</code> with a timeout.<br>Returns <code>T</code> if the event loop has effectively been exited.</p>
 </p><br>
 <p>
-<b>QFIND-CHILD (object name)</b>
-<p>Calls <code>qFindChild&lt;QObject*&gt;()</code>.<br>Can be used to get the child objects of any Qt object (typically from a UI, see <code>qload-ui</code>), identified by <code>objectName</code>.</p>
+<b>QFIND-CHILD (object object-name)</b>
+<p>Calls <code>qFindChild&lt;QObject*&gt;()</code>.<br>Can be used to get the child objects of any Qt object (typically from a UI, see <code>qload-ui</code>), identified by <code>QObject::objectName</code>.</p>
 <pre>
   (qfind-child *main* "editor")
+</pre>
+</p><br>
+<p>
+<b>QFIND-CHILDREN (object &optional object-name class-name)</b>
+<p>Calls <code>qFindChildren&lt;QObject*&gt;()</code>, returning a list of all child objects matching <code>object-name</code> and <code>class-name</code>.<br>Omitting the <code>&optional</code> arguments will find all children, recursively.</p>
+<pre>
+  (qfind-children *qt-main* nil "LightWidget") ; see Qt_EQL example
 </pre>
 </p><br>
 <p>
@@ -123,7 +130,7 @@
 <b>QINVOKE-METHOD (object function-name &rest arguments)</b>
 <br>
 <b>QFUN</b>
-<p>Calls any of Qt methods, slots, signals ("emit" in jargon). Static methods can be called by passing the string name of an object.<br>For overloaded Qt methods you may need to pass the argument types (as for <code>qconnect</code> and <code>qoverride</code>). In these (very few) ambiguous cases you will see a runtime error message, together with a list of all possible candidates.</p>
+<p>Calls any of Qt methods, slots, signals. Static methods can be called by passing the string name of an object.<br>For overloaded Qt methods you may need to pass the argument types (as for <code>qconnect</code> and <code>qoverride</code>). In these (very few) ambiguous cases you will see a runtime error message, together with a list of all possible candidates.</p>
 <pre>
   (qfun item "setText" 0 "Some objects are EQL.")
   (qfun "QDateTime" "currentDateTime") ; static method
@@ -231,8 +238,8 @@
 <p>Terminates EQL, passing the given arguments to the ECL function <code>ext:quit</code>.</p>
 </p><br>
 <p>
-<b>QREMOVE-EVENT-FILTER (id)</b>
-<p>Removes the event filter identified by <code>id</code>, which is the return value of <code>qadd-event-filter</code>.<br>Returns the <code>id</code> if the event filter has effectively been removed.<br>See also <code>qclear-event-filters</code>.</p>
+<b>QREMOVE-EVENT-FILTER (handle)</b>
+<p>Removes the event filter corresponding to <code>handle</code>, which is the return value of <code>qadd-event-filter</code>.<br>Returns <code>handle</code> if the event filter has effectively been removed.<br>See also <code>qclear-event-filters</code>.</p>
 </p><br>
 <p>
 <b>QREQUIRE (module &optional quiet)</b>

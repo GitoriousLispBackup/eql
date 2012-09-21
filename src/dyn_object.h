@@ -16,7 +16,7 @@ class DynObject: public QObject {
 public:
     DynObject(QObject* par = 0);
 
-    static int event_filter_id;
+    static int event_filter_handle;
     static QObject* currentSender;
 
     bool filters;

@@ -19,6 +19,7 @@
   "qexec"
   "qexit"
   "qfind-child"
+  "qfind-children"
   "qfrom-utf8"
   "qfun"
   "qfun*"

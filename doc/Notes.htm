@@ -8,7 +8,7 @@
 <a href="http://gitorious.org/eql/eql/blobs/master/src/eql.cpp"
    target="_blank"><code>EQL::version</code></a> at line 10.</p>
 <p>To run a Lisp file directly, do e.g. <code>eql
-    examples/5-colliding-mice.lisp</code>.</p>
+    examples/5-colliding-mice.lisp -qtpl</code>.</p>
 <p>See the EQL UI (command <code>eql -qgui</code>) for a complete list of all
   supported classes and functions.</p>
 <p>In the above mentioned UI you find a "<b>Select</b>" button, allowing you
@@ -38,19 +38,24 @@
   convenient tab completion in Emacs).
 </p>
 <p>Errors in EQL functions don't break into the debugger; if you want them to
-  do so, set the variable <code>eql:*break-on-errors*</code> to <code>T</code>.
+  do so, set the variable <code>eql:*break-on-errors*</code>
+  to <code>T</code>.
+<br>(So the choice is left to you: depending on the situation, either option
+may be more convenient than the other.)
 </p>
 <p>
 The available <b>Qt Modules</b> (see <code>qrequire</code>) are:
 <br><code>:help :network :opengl :sql :svg :webkit</code>
 </p> 
-<p>There is <b>no</b> CLOS integration planned.<br>See
+<p>If you want to use CLOS together with <code>qt-object</code> instances
+  (which are of type <code>struct</code>), see
   examples <code>X-extras/CLOS-encapsulation.lisp</code>
-  and <code>5-colliding-mice.lisp</code> if you want to
-  use <code>defclass</code> or <code>defstruct</code> together
-  with <code>qt-object</code> instances.</p>
+  and <code>5-colliding-mice.lisp</code>.<br>So there's a simple way to
+  use either <code>defclass</code> or <code>defstruct</code> to
+  encapsulate a <code>qt-object</code>.</p>
 <p>If you're interested in <b>embedding</b> EQL in existing Qt/C++ projects,
-  see the example in directory <code>Qt_EQL/</code>.
+  see the example in directory <code>Qt_EQL/</code> (which of course can be
+  used together with Slime).
 <p>See also the <b>plugin</b> example in directory <code>Qt_EQL_plugin/</code>.
 <hr>
 <p>The necessary parsing for generating the <code>src/gen/*</code> files is

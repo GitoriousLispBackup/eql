@@ -6,8 +6,8 @@
 #include <QEvent>
 #include <QApplication>
 
-int DynObject::event_filter_id = 0;
-QObject* DynObject::currentSender = 0;
+int DynObject::event_filter_handle = 0; // will never be reset to 0 to avoid subtle bugs
+QObject* DynObject::currentSender  = 0;
 
 DynObject::DynObject(QObject* par) : QObject(par), filters(false) {
     qApp->installEventFilter(this); }
@@ -44,11 +44,11 @@ bool DynObject::disconnect(QObject* from, const char* signal, DynObject* dyn, vo
 
 int DynObject::addEventFilter(QObject* obj, int type, void* fun) {
     filters = true;
-    ev_ids << ++event_filter_id;
+    ev_ids << ++event_filter_handle;
     ev_types << type;
     ev_funs << fun;
     ev_objects << obj;
-    return event_filter_id; }
+    return event_filter_handle; }
 
 bool DynObject::removeEventFilter(int id) {
     int i = ev_ids.indexOf(id);
@@ -57,12 +57,13 @@ bool DynObject::removeEventFilter(int id) {
         ev_types.remove(i);
         ev_funs.remove(i);
         ev_objects.remove(i);
+	if(!ev_ids.size()) {
+            filters = false; }
         return true; }
     return false; }
 
 void DynObject::clearEventFilters() {
     filters = false;
-    event_filter_id = 0;
     ev_ids.clear();
     ev_types.clear();
     ev_funs.clear();
