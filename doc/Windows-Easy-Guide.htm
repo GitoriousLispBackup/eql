@@ -70,7 +70,9 @@ Make sure all of the following are in your <code>Path</code> environment variabl
 <p>Get <a href="http://common-lisp.net/project/slime/">Slime</a>.
 <ul>
 <li>Put it here: <code>C:\emacs\slime</code>.
-<li>Open your <code>C:\emacs\slime\swank-loader.lisp</code>, and insert the following lines at the top of the file (important: choose a path with <b>no spaces</b>). 
+<li>Open your <code>C:\emacs\slime\swank-loader.lisp</code>, and insert the
+  following lines at the top of the file (or simply follow the instructions
+  in the mentioned file):
 <pre>
 (make-package :swank-loader)
 (defparameter swank-loader::*fasl-directory* "C:/emacs/slime/fasl/")

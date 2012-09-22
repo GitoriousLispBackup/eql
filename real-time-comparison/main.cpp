@@ -9,7 +9,7 @@ int main(int argc, char** argv)
         QTime start = QTime::currentTime();
         QTableWidget* table = new QTableWidget(size, 1);
         for(int i = 0; i < size; ++i) {
-            table->setItem(i, 0, new QTableWidgetItem(QString::number(i + 1))); }
+            table->setItem(i, 0, new QTableWidgetItem("X")); }
         std::cout << start.msecsTo(QTime::currentTime()) << std::endl; }
     else {
         std::cout << "Please pass a number." << std::endl; }

@@ -2196,7 +2196,7 @@ cl_object qload_ui(cl_object l_ui) {
 
 cl_object qfind_child(cl_object l_obj, cl_object l_name) {
     /// args: (object object-name)
-    /// Calls <code>qFindChild&lt;QObject*&gt;()</code>.<br>Can be used to get the child objects of any Qt object (typically from a UI, see <code>qload-ui</code>), identified by <code>QObject::objectName</code>.
+    /// Calls <code>qFindChild&lt;QObject*&gt;()</code>.<br>Can be used to get the child objects of any Qt object (typically from a UI, see <code>qload-ui</code>), identified by <code>QObject::objectName()</code>.
     ///     (qfind-child *main* "editor")
     ecl_process_env()->nvalues = 1;
     QString name(toQString(l_name));

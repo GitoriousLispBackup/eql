@@ -1,6 +1,3 @@
-In short: EQL is about 10 times (depending on the OS) slower than C++.
-
-
 BUILD / RUN
 ===========
 
@@ -10,12 +7,18 @@ make
 eql test.lisp
 
 
-NOTES
-=====
 
-CommonQt versus EQL (on OSX):
+SIMPLIFIED SUMMARY
+==================
 
-ECL  + CommonQt: 20 times *slower* than EQL
-SBCL + CommonQt:  2 times *faster* than EQL
+EQL function calls are about 10 times slower than direct C++ function calls.
 
-(CommonQt + dependencies need some hacks to run with ECL 12.7.1)
+
+
+...AND PROFILING ?
+==================
+
+For a profiling example (comparing CommonQt/SBCL and EQL) see "profiling.lisp".
+
+It shows that CommonQt/SBCL and EQL have similar performance, and both feel
+responsive on Unix (on Windows, CommonQt/SBCL was much slower in my tests).

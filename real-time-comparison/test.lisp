@@ -1,14 +1,16 @@
-;;; EQL is about 10 times (depending on the OS) slower than C++
+;;; This measures the function call time in EQL and in C++.
+;;;
+;;; (EQL calls are about 10 times slower than direct C++ calls.)
 
 (in-package :eql-user)
 
-(defvar *size* (* 500 1000)) ; choose a number so that C++ runs at least several seconds
+(defvar *size* (expt 10 6)) ; choose a number so that C++ will run at least several seconds
 
 (defun test ()
   (let ((table (qnew "QTableWidget(int,int)" *size* 1))
         (start (get-internal-real-time)))
     (dotimes (i *size*)
-      (qfun table "setItem" i 0 (qnew "QTableWidgetItem(QString)" (princ-to-string (1+ i)))))
+      (qfun table "setItem" i 0 (qnew "QTableWidgetItem(QString)" "X")))
     (- (get-internal-real-time) start)))
 
 (compile 'test)
