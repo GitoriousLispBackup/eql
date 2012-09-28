@@ -2,37 +2,19 @@
 ;;; This is a ported wiggly-widget example which can be run with
 ;;; both CommonQt/SBCL and EQL.
 ;;;
-;;; It will run half a minute and output a profiling report:
+;;; It will run a few seconds and output a profiling report.
 ;;;
 ;;;     sbcl --load profiling.lisp
 ;;;     eql profiling.lisp
-;;; 
-;;; Here an example report on OSX:
 ;;;
-;;;
-;;; CommonQt/SBCL
-;;;
-;;;   seconds  |     gc     |   consed   | calls |  sec/call  |  name  
-;;; --------------------------------------------------------
-;;;      2.357 |      0.000 | 14,062,984 |   300 |   0.007858 | PAINT
-;;;      0.067 |      0.000 |    687,224 |   300 |   0.000225 | TIMEOUT
-;;; --------------------------------------------------------
-;;;      2.425 |      0.000 | 14,750,208 |   600 |            | Total
-;;;
-;;;
-;;; EQL (compiled)
-;;;
-;;;   seconds  |     --     |    consed  | calls |  sec/call  |  name  
-;;; --------------------------------------------------------
-;;;      2.043 |            |  1,167,904 |   301 |   0.006788 | PAINT
-;;;      0.022 |            |          0 |   300 |   0.000074 | TIMEOUT
-;;; --------------------------------------------------------
-;;;      2.065 |            |  1,167,904 |   601 |            | Total
+;;; In my tests CommonQt/SBCL was slightely faster on Linux,
+;;; and EQL was slightely faster on OSX.
 ;;;
 
 #+ecl
 (when (x:ends-with ".lisp" (file-namestring *load-pathname*))
   (require :profile)
+  (require :cmp)
   (compile-file *load-pathname*)
   (format t "~%Please run the compiled file \"profiling.fas\".~%~%")
   (eql:qq))
@@ -98,7 +80,7 @@
       (#_addWidget vbox w))
     (#_resize dlg 600 200)
     (#_setText *edit* "1234567890987654321")
-    (#_start *timer* 75 *wiggly*)
+    (#_start *timer* 10 *wiggly*)
     (#_show dlg)
     (#_raise dlg)
     (#_exec *qapp*)))
@@ -127,7 +109,7 @@
     (dolist (w (list *wiggly* *edit*))
       (qfun vbox "addWidget" w))
     (qset *edit* "text" "1234567890987654321")
-    (qfun *timer* "start" 75 *wiggly*)
+    (qfun *timer* "start" 10 *wiggly*)
     (x:do-with (qfun dlg) "show" "raise")))
 
 #+sbcl
@@ -185,7 +167,7 @@
       (qfun painter "end"))))
 
 (defvar *count* 0)
-(defvar *max*   300)
+(defvar *max*   1000)
 
 #+sbcl
 (defmethod timeout ((this wiggly) event)

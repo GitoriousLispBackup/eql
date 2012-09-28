@@ -21,8 +21,8 @@ REQUIREMENTS
 * Qt  >= 4.6 http://qt.nokia.com/
 
 * Slime: any version that plays together with your ECL version (requires ECL threads)
-  NB: - the new Slime integration has been tested with ECL 12.7.1 only (new thread mode)
-      - on Windows you'll need the latest ECL version from git
+  N.B: - the new Slime integration has been tested with ECL 12.7.1 only (new thread mode)
+       - on Windows you'll need the latest ECL version from git (e.g. from 2012-09-01)
 
 
 
@@ -36,10 +36,6 @@ BUILD (see also: "Windows Easy Guide" in doc/)
     
   [MSVC]
     substitute make with nmake
-
-  [GCC]
-    If you experience long compile times (file src/gen/_lobject.cpp), uncomment this line in src/eql_lib.pro:
-        QMAKE_CXXFLAGS += -fno-var-tracking-assignments 
 
   [OSX]
     To force creation of a Makefile (instead of an Xcode project), use this flag:

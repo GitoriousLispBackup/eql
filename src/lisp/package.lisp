@@ -6,6 +6,7 @@
    #:*break-on-errors*
    #:*slime-mode*
    #:defvar-ui
+   #:ensure-qt-object
    #:in-home
    #:make-qimage
    #:new-qt-object

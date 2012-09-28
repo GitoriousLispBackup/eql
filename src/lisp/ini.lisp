@@ -183,7 +183,7 @@
 (defun qgui (&optional ev)
   "args: (&optional process-events)
    Launches the <code>EQL</code> convenience GUI.<br>If you don't have an interactive environment, you can pass <code>T</code> to run a pseudo Qt event loop. A better option is to start the tool like so:<br><code>eql -qgui</code>, in order to run the Qt event loop natively."
-  (in-package :eql)
+  (in-package :eql-user)
   (load (in-home "gui/gui"))
   (when ev
     (loop
@@ -319,6 +319,8 @@
   (:documentation "Return the QT-OBJECT to be used whenever OBJECT is used as argument to any EQL function."))
 
 (defun ensure-qt-object (object)
+  "args: (object)
+   Returns the <code>qt-object</code> of the given class/struct/qt-object (see example <code>X-extras/CLOS-encapsulation.lisp</code>)."
   (cond ((null object) ; e.g. passing NIL as parent widget: (qnew "QWidget(QWidget*)" nil)
          nil)
         ((qt-object-p object)
@@ -341,6 +343,7 @@
 ;; add property :function-lambda-list to plist of EQL functions (inspired by ext:function-lambda-list)
 
 (dolist (el (list (cons 'defvar-ui            '(main-widget &rest variables))
+                  (cons 'ensure-qt-object     '(object))
                   (cons 'in-home              '(file-name))
                   (cons 'qadd-event-filter    '(object event function))
                   (cons 'qapropos             '(&optional search-string class-name))

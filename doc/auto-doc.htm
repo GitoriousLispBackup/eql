@@ -7,6 +7,10 @@
 </pre>
 </p><br>
 <p>
+<b>ENSURE-QT-OBJECT (object)</b>
+<p>Returns the <code>qt-object</code> of the given class/struct/qt-object (see example <code>X-extras/CLOS-encapsulation.lisp</code>).</p>
+</p><br>
+<p>
 <b>QADD-EVENT-FILTER (object event function)</b>
 <p>Convenience function. Adds a Lisp function to be called on a given event type.<br>If the object argument is <code>NIL</code>, the event will be captured for the whole application.<br>If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.<br><br>Returns a handle which can be used to remove the filter, see <code>qremove-event-filter</code>.<br><br>See also <code>qoverride</code> for <code>QObject::eventFilter(QObject*,QEvent*)</code> and <br><code>QObject::installEventFilter(QObject*)</code>,<br><code>QObject::removeEventFilter(QObject*)</code>.</p>
 <pre>

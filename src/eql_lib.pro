@@ -1,6 +1,3 @@
-# GCC: if you experience a very long compile time for file gen/_lobjects.cpp, try to uncomment this:
-#QMAKE_CXXFLAGS += -fno-var-tracking-assignments
-
 TEMPLATE    = lib
 CONFIG      += dll no_keywords uitools release
 DEFINES     += EQL_LIBRARY

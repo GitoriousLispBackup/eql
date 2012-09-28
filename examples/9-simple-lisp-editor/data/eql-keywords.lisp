@@ -1,4 +1,5 @@
 '("defvar-ui"
+  "ensure-qt-object"
   "in-home"
   "new-qt-object"
   "qadd-event-filter"
