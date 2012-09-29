@@ -320,7 +320,8 @@
 
 (defun ensure-qt-object (object)
   "args: (object)
-   Returns the <code>qt-object</code> of the given class/struct/qt-object (see example <code>X-extras/CLOS-encapsulation.lisp</code>)."
+   Returns the <code>qt-object</code> of the given class/struct/qt-object (see example <code>X-extras/CLOS-encapsulation.lisp</code>).<br>This function is used internally whenever a <code>qt-object</code> argument is expected.
+       (print (ensure-qt-object object))"
   (cond ((null object) ; e.g. passing NIL as parent widget: (qnew "QWidget(QWidget*)" nil)
          nil)
         ((qt-object-p object)

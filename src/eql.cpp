@@ -79,7 +79,7 @@ void EQL::exec(const QStringList& args) {
                   << QString("(delete-file \"ui.h\")")
                   << QString("(eql:qq)"); }
         else {
-            qDebug() << "Please pass a file.ui (Qt Designer).";
+            qDebug() << "\nPlease pass a file.ui (Qt Designer).\n";
             exit(-1); }}
     else if(arguments.count() > 1) {
         QString fileName(QDir::fromNativeSeparators(arguments.at(1)));
@@ -114,7 +114,7 @@ void EQL::exec(QWidget* widget, const QString& lispFile, const QString& slimeHoo
     if(!slimeHookFile.isEmpty()) {
         QString startSwankFile(QCoreApplication::arguments().last());
         if(NotFound == startSwankFile.indexOf(QRegExp("*start-swank*.lisp", Qt::CaseInsensitive, QRegExp::Wildcard))) {
-            qDebug() << "Please pass the pathname for \"eql-start-swank.lisp\".";
+            qDebug() << "\nPlease pass the pathname for \"eql-start-swank.lisp\".\n";
             exit(-1); }
         QApplication::setQuitOnLastWindowClosed(false);
         forms << QString("(load \"%1\")").arg(startSwankFile)

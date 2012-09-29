@@ -2,7 +2,7 @@
 ;;; This is a ported wiggly-widget example which can be run with
 ;;; both CommonQt/SBCL and EQL.
 ;;;
-;;; It will run a few seconds and output a profiling report.
+;;; It will run 10 seconds and output a profiling report.
 ;;;
 ;;;     sbcl --load profiling.lisp
 ;;;     eql profiling.lisp
@@ -12,7 +12,7 @@
 ;;;
 
 #+ecl
-(when (x:ends-with ".lisp" (file-namestring *load-pathname*))
+(when (string= "lisp" (pathname-type *load-pathname*))
   (require :profile)
   (require :cmp)
   (compile-file *load-pathname*)
@@ -41,11 +41,11 @@
 #+sbcl
 (named-readtables:in-readtable :qt)
 
-#+sbcl
-(defvar *qapp*  (make-qapplication))
 (defvar *sinus* #(0 38 71 92 100 92 71 38 0 -38 -71 -92 -100 -92 -71 -38))
 (defvar *step*  0)
 
+#+sbcl
+(defvar *qapp*)
 (defvar *wiggly*)
 (defvar *edit*)
 (defvar *timer*)
@@ -69,7 +69,8 @@
 
 #+sbcl
 (defun start ()
-  (setf *wiggly* (make-instance 'wiggly)
+  (setf *qapp*   (make-qapplication) 
+        *wiggly* (make-instance 'wiggly)
         *edit*   (#_new QLineEdit)
         *timer*  (#_new QBasicTimer))
   (#_setAlignment *edit* (#_Qt::AlignCenter))
@@ -171,20 +172,20 @@
 
 #+sbcl
 (defmethod timeout ((this wiggly) event)
-  (when (= *max* (incf *count*))
-    (report)
-    (sb-ext:quit))
   (when (= (#_timerId event) (#_timerId *timer*))
+    (when (= *max* (incf *count*))
+      (report)
+      (sb-ext:quit))
     (incf *step*)
     (#_update *wiggly*))
   (call-next-qmethod))
 
 #+ecl
 (defun timeout (event)
-  (when (= *max* (incf *count*))
-    (report)
-    (qq))
   (when (= (qfun event "timerId") (qfun *timer* "timerId"))
+    (when (= *max* (incf *count*))
+      (report)
+      (qq))
     (incf *step*)
     (qfun *wiggly* "update"))
   (qcall-default))

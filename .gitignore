@@ -2,7 +2,7 @@
 *.dll
 *.dylib
 *.exe
-*.fas
+*.fas*
 *.*history
 *.lib
 *.o
