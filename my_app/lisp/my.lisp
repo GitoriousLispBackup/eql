@@ -17,16 +17,23 @@
               "margin" 10)
         "show"))
 
-;;; example of a custom Qt/C++ library (e.g. for performace reasons)
+;;; Example of a custom Qt/C++ library (e.g. for performace reasons)
+;;; (uncomment the following after compiling the library in "../cpp/")
+
+#|
 
 (in-package :eql-user)
 
 (defvar *c++*)
 
-(qload-c++ "eql_cpp" '*c++*) ; see directory "cpp/"
+(qload-c++ "eql_cpp" '*c++*) ; see "../cpp/"
+
+;; a simple test
 
 (qlet ((var "QVariant(int)" 42))
   (assert (= 42
              (qfun (qfun* *c++* :qt "returnMe" var) ; note "qfun*" and ":qt"
                    "toInt"))))
+
+|#
 

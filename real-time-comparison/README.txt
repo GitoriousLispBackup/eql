@@ -28,6 +28,6 @@ My tests using "oprofile" showed that the EQL functions are never the
 bottleneck (as expected), and that Qt has done a good job with Q_INVOKABLE,
 which is really fast.
 
-The (obvious) conclusion is to use either embedded C (ECL) or custom Qt/C++
-libraries (see function QLOAD-C++ and example in "my_app") for your bottlenecks.
+(See function QLOAD-C++ and the simple template in "my_app/cpp/" if you want
+to use Qt/C++ code for your bottlenecks.)
 

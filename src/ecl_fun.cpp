@@ -2005,7 +2005,7 @@ cl_object qrequire2(cl_object l_name, cl_object l_quiet) {
 
 cl_object qload_cpp(cl_object l_lib_name, cl_object l_var_name) { /// qload-c++
     /// args: (library-name variable-name)
-    /// Loads a dynamic library containing Qt/C++ code to be called from Lisp (using <code>Q_INVOKABLE</code> in C++).<br>This is provided to enable easy extending with Qt/C++ code, typically for a bottleneck found in EQL code.<br>Please see example in "my_app/cpp" for a simple template.<br><br>After loading the library you can search for callable functions and call them like so:
+    /// Loads a dynamic library containing Qt/C++ code to be called from Lisp (using <code>Q_INVOKABLE</code> in C++).<br>This is provided to enable easy extending with Qt/C++ code, typically for a bottleneck found in EQL code.<br>Please see example in <code>"my_app/cpp/"</code> for a simple template.<br><br>After loading the library you can search for callable functions and call them like so:
     ///     (in-package :eql-user)
     ///     (defvar *c++*)
     ///     (qload-c++ "&lt;local-path-to-lib&gt;/eql_cpp" '*c++*)

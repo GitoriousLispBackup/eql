@@ -10,6 +10,9 @@
 (unless (find-package :c)
   (make-package :c))
 
+#+msvc
+(setf c::*compile-in-constants* t)
+
 (defparameter *lisp-files*
   (list "my")
   "All Lisp files of the application.")
