@@ -53,10 +53,14 @@ The available <b>Qt Modules</b> (see <code>qrequire</code>) are:
   and <code>5-colliding-mice.lisp</code>.<br>So there's a simple way to
   use either <code>defclass</code> or <code>defstruct</code> to
   encapsulate a <code>qt-object</code>.</p>
+<hr>
 <p>If you're interested in <b>embedding</b> EQL in existing Qt/C++ projects,
   see the example in directory <code>Qt_EQL/</code> (which of course can be
   used together with Slime).
 <p>See also the <b>plugin</b> example in directory <code>Qt_EQL_plugin/</code>.
+<p>If you want to add Qt/C++ functions which are callable from Lisp, see
+function <code>qload-c++</code> and the simple library template in
+<code>my_app/cpp/</code>.
 <hr>
 <p>The necessary parsing for generating the <code>src/gen/*</code> files is
   done by parsing the Qt Html documentation. See <code>helper/</code>

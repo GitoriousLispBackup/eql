@@ -175,6 +175,17 @@
 </pre>
 </p><br>
 <p>
+<b>QLOAD-C++ (library-name variable-name)</b>
+<p>Loads a dynamic library containing Qt/C++ code to be called from Lisp (using <code>Q_INVOKABLE</code> in C++).<br>This is provided to enable easy extending with Qt/C++ code, typically for a bottleneck found in EQL code.<br>Please see example in "my_app/cpp" for a simple template.<br><br>After loading the library you can search for callable functions and call them like so:</p>
+<pre>
+  (in-package :eql-user)
+  (defvar *c++*)
+  (qload-c++ "&lt;local-path-to-lib&gt;/eql_cpp" '*c++*)
+  (qapropos nil *c++*)
+  (qfun* *c++* :qt "mySpeedyQtFunction") ; note "qfun*" and ":qt"
+</pre>
+</p><br>
+<p>
 <b>QLOAD-UI (file-name)</b>
 <p>Calls a custom <code>QUiLoader::load()</code> function, loading a UI file created by Qt Designer. Returns the top level widget of the UI.<br>Use <code>qfind-child</code> to retrieve the child widgets.</p>
 <pre>

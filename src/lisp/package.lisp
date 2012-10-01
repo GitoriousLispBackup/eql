@@ -40,6 +40,7 @@
    #:qinvoke-method*
    #:qinvoke-methods
    #:qlet
+   #:qload-c++
    #:qload-ui
    #:qlocal8bit
    #:qmessage-box

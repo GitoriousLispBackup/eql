@@ -24,7 +24,9 @@ int main(int argc, char** argv) {
     QTextCodec::setCodecForCStrings(utf8);
     QTextCodec::setCodecForTr(utf8);
 
-    // hint: use QSettings or similar to store your language settings
+    // Hint: use QSettings or similar to store your language settings.
+    // It is put here because it must load _before_ the Lisp code is executed.
+    // You'll probably find a more elegant solution by yourself.
     QString language("es"); // example: spanish
     QTranslator tr, trQt;
     if(tr.load("eql_" + language)) {

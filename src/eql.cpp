@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "12.9.4"; // 2012-09-10
+const char EQL::version[] = "12.10.1"; // 2012-10-01
 
 extern "C" void ini_EQL(cl_object);
 
@@ -43,7 +43,7 @@ QString EQL::home() {
 
 void EQL::exec(const QStringList& args) {
     QStringList arguments(args);
-    si_select_package(make_simple_base_string((char*)"EQL-USER"));
+    eval("(in-package :eql-user)");
     eval(QString("(eql::set-home \"%1\")").arg(home()).toAscii().constData());
     QStringList forms;
     if(arguments.contains("-slime") ||
@@ -95,7 +95,7 @@ void EQL::exec(lisp_ini ini, const QByteArray& expression, const QByteArray& pac
     // see my_app example
     eval(QString("(eql::set-home \"%1\")").arg(home()).toAscii().constData());
     read_VV(OBJNULL, ini);
-    si_select_package(make_simple_base_string((char*)package.toUpper().constData()));
+    eval(QString("(in-package :%1)").arg(QString(package)).toAscii().constData());
     eval(expression.constData()); }
 
 enum { NotFound = -1 };
@@ -103,8 +103,8 @@ enum { NotFound = -1 };
 void EQL::exec(QWidget* widget, const QString& lispFile, const QString& slimeHookFile) {
     // see Qt_EQL example
     QStringList forms;
-    forms << QString("(in-package :eql)")
-          << QString("(set-home \"%1\")").arg(home())
+    eval("(in-package :eql)");
+    forms << QString("(set-home \"%1\")").arg(home())
           << QString("(defvar *qt-main* (qt-object %1 0 (qid \"%2\")))")
                      .arg((ulong)widget)
                      .arg(QString(LObjects::vanillaQtSuperClassName(widget->metaObject())))

@@ -1,6 +1,6 @@
 ;;; copyright (c) 2010-2012 Polos Ruetz
 
-(require :x)
+(in-package :eql-user)
 
 (defparameter *help* nil)
 
@@ -21,8 +21,13 @@
              (when (x:starts-with "///" line)
                (when (x:starts-with "cl_object " ex)
                  (add-curr)
-                 (let ((fun (trim (subseq ex 10))))
-                   (push (substitute #\- #\_ (string-trim "2" (subseq fun 0 (position #\( fun))))
+                 (let* ((pos (search "///" ex :start2 3)) ; exception: Lisp name at end of line
+                        (fun (if pos
+                                 (trim (subseq ex (+ 3 pos)))
+                                 (trim (subseq ex 10)))))
+                   (push (if pos
+                             fun
+                             (substitute #\- #\_ (string-trim "2" (subseq fun 0 (position #\( fun)))))
                          curr)))
                (push (trim line) curr))
              (setf ex line)))

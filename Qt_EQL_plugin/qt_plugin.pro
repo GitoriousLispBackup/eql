@@ -1,5 +1,5 @@
 TEMPLATE     = lib
-CONFIG      += dll no_keywords uitools release
+CONFIG      += dll no_keywords release
 INCLUDEPATH += ../src
 LIBS        += -L.. -leql
 TARGET       = qt_plugin
