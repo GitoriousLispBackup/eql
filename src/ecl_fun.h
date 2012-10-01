@@ -230,7 +230,7 @@ cl_object qfind_children2       (cl_object, cl_object, cl_object);
 cl_object qfrom_utf8            (cl_object);
 cl_object qid                   (cl_object);
 cl_object qinvoke_method2       (cl_object, cl_object, cl_object, cl_object);
-cl_object qload_cpp             (cl_object, cl_object);
+cl_object qload_cpp             (cl_object);
 cl_object qload_ui              (cl_object);
 cl_object qlocal8bit            (cl_object);
 cl_object qmeta_enums           ();

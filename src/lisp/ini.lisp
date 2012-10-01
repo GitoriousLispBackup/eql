@@ -369,7 +369,7 @@
                   (cons 'qinvoke-method       '(object function-name &rest arguments))
                   (cons 'qinvoke-method*      '(object cast-class-name function-name &rest arguments))
                   (cons 'qinvoke-methods      '(object &rest functions))
-                  (cons 'qload-c++            '(library-name variable-name))
+                  (cons 'qload-c++            '(library-name))
                   (cons 'qload-ui             '(file-name))
                   (cons 'qlocal8bit           '(string))
                   (cons 'qmessage-box         '(x))

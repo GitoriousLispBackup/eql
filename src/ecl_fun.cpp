@@ -106,7 +106,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object((char*)"qfrom-utf8"),             (cl_objectfn_fixed)qfrom_utf8,            1);
     cl_def_c_function(c_string_to_object((char*)"qid"),                    (cl_objectfn_fixed)qid,                   1);
     cl_def_c_function(c_string_to_object((char*)"%qinvoke-method"),        (cl_objectfn_fixed)qinvoke_method2,       4);
-    cl_def_c_function(c_string_to_object((char*)"qload-c++"),              (cl_objectfn_fixed)qload_cpp,             2);
+    cl_def_c_function(c_string_to_object((char*)"qload-c++"),              (cl_objectfn_fixed)qload_cpp,             1);
     cl_def_c_function(c_string_to_object((char*)"qload-ui"),               (cl_objectfn_fixed)qload_ui,              1);
     cl_def_c_function(c_string_to_object((char*)"qlocal8bit"),             (cl_objectfn_fixed)qlocal8bit,            1);
     cl_def_c_function(c_string_to_object((char*)"qmeta-enums"),            (cl_objectfn_fixed)qmeta_enums,           0);
@@ -2003,33 +2003,25 @@ cl_object qrequire2(cl_object l_name, cl_object l_quiet) {
         error_msg("QREQUIRE", LIST1(l_name)); }
     return Cnil; }
 
-cl_object qload_cpp(cl_object l_lib_name, cl_object l_var_name) { /// qload-c++
-    /// args: (library-name variable-name)
-    /// Loads a dynamic library containing Qt/C++ code to be called from Lisp (using <code>Q_INVOKABLE</code> in C++).<br>This is provided to enable easy extending with Qt/C++ code, typically for a bottleneck found in EQL code.<br>Please see example in <code>"my_app/cpp/"</code> for a simple template.<br><br>After loading the library you can search for callable functions and call them like so:
-    ///     (in-package :eql-user)
-    ///     (defvar *c++*)
-    ///     (qload-c++ "&lt;local-path-to-lib&gt;/eql_cpp" '*c++*)
+cl_object qload_cpp(cl_object l_lib_name) { /// qload-c++
+    /// args: (library-name)
+    /// Loads a local dynamic library containing Qt/C++ code to be called from Lisp (using <code>Q_INVOKABLE</code> in C++) and returns a <code>QObject</code> to be able to access the library functions.<br>This is provided to enable easy extending with Qt/C++ code, typically for a bottleneck found in EQL code.<br>See the simple template in <code>"Qt_EQL_dynamic/"</code>.<br><br>Load, search, call like so:
+    ///     (defvar *c++* (qload-c++ "&lt;local-path-to-lib&gt;/eql_cpp"))
     ///     (qapropos nil *c++*)
     ///     (qfun* *c++* :qt "mySpeedyQtFunction") ; note "qfun*" and ":qt"
+    ecl_process_env()->nvalues = 1;
     QString libName = toQString(l_lib_name);
-    QString varName = symbolName(l_var_name);
-    const cl_env_ptr l_env = ecl_process_env();
-    if(!libName.isEmpty() && !varName.isEmpty()) {
+    if(!libName.isEmpty()) {
+        Q_ASSERT(QLibrary::isLibrary(libName));
         QLibrary lib(QString("./%1").arg(libName)); // local library
         typedef QObject* (*Ini)();
         Ini ini = (Ini)lib.resolve("ini");
         if(ini) {
             QObject* main = ini();
             if(main) {
-                EQL::eval("(in-package :eql-user)");
-                QString form = QString("(setf %1 (eql:qt-object %2 0 (qid \"QObject\")))").arg(varName).arg((ulong)main);
-                EQL::eval(form.toAscii().constData());
-                l_env->nvalues = 2;
-                l_env->values[0] = l_lib_name;
-                l_env->values[1] = l_var_name;
-                return l_env->values[0]; }}}
-    l_env->nvalues = 1;
-    error_msg("QLOAD-C++", LIST2(l_lib_name, l_var_name));
+                cl_object l_ret = qt_object_from_name("QObject", (void*)main);
+                return l_ret; }}}
+    error_msg("QLOAD-C++", LIST1(l_lib_name));
     return Cnil; }
 
 
