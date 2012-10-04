@@ -6,6 +6,7 @@
   "qapp"
   "qapropos"
   "qapropos*"
+  "qauto-reload-c++"
   "qcall-default"
   "qclear-event-filters"
   "qconnect"

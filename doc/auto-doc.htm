@@ -39,6 +39,14 @@
 <p>Similar to <code>qapropos</code>, returning the results as nested list.</p>
 </p><br>
 <p>
+<b>QAUTO-RELOAD-C++ (variable library-name)</b>
+<p>Similar to <code>qload-c++</code> (see <code>Qt_EQL_dynamic/</code>).<br>Defines a global variable (see return value of <code>qload-c++</code>), which will be updated on every change of the C++ library.<br>This allows for a dynamic workflow for your Qt/C++ plugins: after e.g. recompiling of C++, the library will automatically be reloaded, and the <code>variable</code> will be set to its new value.<br>If you want to be notified on a library change, set <code>*&lt;variable&gt;-reloaded*</code>, which will be called after reloading, passing both the variable name and the library name.<br>See <code>qload-c++</code> for an example how to call library functions.</p>
+<pre>
+  (qauto-reload-c++ *c++* "eql_cpp")
+  (setf *c++-reloaded* (lambda (var lib) (qapropos nil (symbol-value var)))) ; optional: set a notifier
+</pre>
+</p><br>
+<p>
 <b>QCALL-DEFAULT ()</b>
 <p>To use inside an overridden function (see <code>qoverride</code>).<br>Calls the base implementation of the virtual Qt method.</p>
 </p><br>
@@ -176,11 +184,11 @@
 </p><br>
 <p>
 <b>QLOAD-C++ (library-name)</b>
-<p>Loads a local dynamic library containing Qt/C++ code to be called from Lisp (using <code>Q_INVOKABLE</code> in C++) and returns a <code>QObject</code> to be able to access the library functions.<br>This is provided to enable easy extending with Qt/C++ code, typically for a bottleneck found in EQL code.<br>See the simple template in <code>"Qt_EQL_dynamic/"</code>.<br><br>Load, search, call like so:</p>
+<p>Loads a custom Qt/C++ extension library (see <code>Qt_EQL_dynamic/</code>).<br>The <code>library-name</code> has to be passed as <b>local</b> path to the plugin, without file ending.<br>This offers a simple way to extend your application with your own Qt/C++ functions. The library will be reloaded every time you call this function (see also <code>qauto-reload-c++</code>).<br>The <code>QObject*</code> returned by the library's <code>ini()</code> function can be any <code>QObject</code> inherited class. In Lisp, the class name shown is the first vanilla Qt class encountered walking up the super classes.</p>
 <pre>
-  (defvar *c++* (qload-c++ "&lt;local-path-to-lib&gt;/eql_cpp"))
-  (qapropos nil *c++*)
-  (qfun* *c++* :qt "mySpeedyQtFunction") ; note "qfun*" and ":qt"
+  (defparameter *c++* (qload-c++ "eql_cpp")) ; load/reload (see also QAUTO-RELOAD-C++)
+  (qapropos nil *c++*)                       ; documentation
+  (qfun* *c++* :qt "mySpeedyQtFunction")     ; call library function (note "qfun*" and ":qt")
 </pre>
 </p><br>
 <p>

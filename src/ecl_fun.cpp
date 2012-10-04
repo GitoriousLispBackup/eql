@@ -2005,22 +2005,34 @@ cl_object qrequire2(cl_object l_name, cl_object l_quiet) {
 
 cl_object qload_cpp(cl_object l_lib_name) { /// qload-c++
     /// args: (library-name)
-    /// Loads a local dynamic library containing Qt/C++ code to be called from Lisp (using <code>Q_INVOKABLE</code> in C++) and returns a <code>QObject</code> to be able to access the library functions.<br>This is provided to enable easy extending with Qt/C++ code, typically for a bottleneck found in EQL code.<br>See the simple template in <code>"Qt_EQL_dynamic/"</code>.<br><br>Load, search, call like so:
-    ///     (defvar *c++* (qload-c++ "&lt;local-path-to-lib&gt;/eql_cpp"))
-    ///     (qapropos nil *c++*)
-    ///     (qfun* *c++* :qt "mySpeedyQtFunction") ; note "qfun*" and ":qt"
-    ecl_process_env()->nvalues = 1;
+    /// Loads a custom Qt/C++ extension library (see <code>Qt_EQL_dynamic/</code>).<br>The <code>library-name</code> has to be passed as <b>local</b> path to the plugin, without file ending.<br>This offers a simple way to extend your application with your own Qt/C++ functions. The library will be reloaded every time you call this function (see also <code>qauto-reload-c++</code>).<br>The <code>QObject*</code> returned by the library's <code>ini()</code> function can be any <code>QObject</code> inherited class. In Lisp, the class name shown is the first vanilla Qt class encountered walking up the super classes.
+    ///     (defparameter *c++* (qload-c++ "eql_cpp")) ; load/reload (see also QAUTO-RELOAD-C++)
+    ///     (qapropos nil *c++*)                       ; documentation
+    ///     (qfun* *c++* :qt "mySpeedyQtFunction")     ; call library function (note "qfun*" and ":qt")
+    static QHash<QString, QLibrary*> libraries;
     QString libName = toQString(l_lib_name);
     if(!libName.isEmpty()) {
         Q_ASSERT(QLibrary::isLibrary(libName));
-        QLibrary lib(QString("./%1").arg(libName)); // local library
+        if(libraries.contains(libName)) {
+            libraries.value(libName)->unload(); // for reloading
+            cl_sleep(ecl_make_singlefloat(0.5)); }
+        else {
+            libraries[libName] = new QLibrary(QString("./%1").arg(libName)); } // local library
+        QLibrary* lib = libraries.value(libName);
         typedef QObject* (*Ini)();
-        Ini ini = (Ini)lib.resolve("ini");
+        Ini ini = (Ini)lib->resolve("ini");
         if(ini) {
             QObject* main = ini();
             if(main) {
-                cl_object l_ret = qt_object_from_name("QObject", (void*)main);
+                cl_object l_ret = qt_object_from_name(LObjects::vanillaQtSuperClassName(main->metaObject()),
+                                                      main,
+                                                      main->property("EQL.unique").toUInt());
+                const cl_env_ptr l_env = ecl_process_env();
+                l_env->nvalues = 2;
+                l_env->values[0] = l_ret;
+                l_env->values[1] = from_qstring(QDir::currentPath() + "/" + lib->fileName()); // for QFileSystemWatcher
                 return l_ret; }}}
+    ecl_process_env()->nvalues = 1;
     error_msg("QLOAD-C++", LIST1(l_lib_name));
     return Cnil; }
 

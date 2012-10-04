@@ -2,14 +2,16 @@
 
 (defparameter *c++* (qload-c++ "eql_cpp"))
 
-(qapropos nil *c++*)
+(when *c++*
+  (qapropos nil *c++*))
 
 ;; test
 
-(qlet ((var "QVariant(int)" 42))
-  (assert (= 42
-             (qfun (qfun* *c++* :qt "returnMe" var) ; note "qfun*" and ":qt"
-                   "toInt"))))
+(when *c++*
+  (qlet ((var "QVariant(int)" 42))
+    (assert (= 42
+               (qfun (qfun* *c++* :qt "returnMe" var) ; note "qfun*" and ":qt"
+                     "toInt")))))
 
 (qq)
 

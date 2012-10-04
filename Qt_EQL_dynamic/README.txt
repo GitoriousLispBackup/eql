@@ -1,22 +1,32 @@
 BUILD / RUN
 ===========
 
-  1) build lib in "cpp/"
-  2) eql test.lisp
+Build the plugin in "cpp/" before running the examples.
+See also description in "auto-reload.lisp".
 
 
 
-NOTES / SUGGESTIONS
-===================
+NOTES
+=====
 
-This is meant to offer an easy way to dynamically integrate Qt/C++ code.
+This offers an easy way to dynamically integrate Qt/C++ code.
 
-Of course this could be extended to use all functionality of "Qt_EQL" (calling
-Lisp from C++, adding Qt properties, signals, slots...).
+QAUTO-RELOAD-C++ can be used to have a really dynamic workflow (as in Lisp),
+extended to your Qt/C++ plugin methods/signals/slots/properties.
 
-A very nice feature to have would be automatic reloading of a re-compiled C++
-library (using QFileSystemWatcher), in order to have a really dynamic workflow,
-even for C++ extensions.
+The above means: if you recompile a plugin (e.g. after adding a new function),
+it will be immediately available in Lisp.
 
-So: to be continued...
+Please note that the "QObject*" returned by the "ini()" function can be any
+"QObject" inherited class.
+
+So, this offers the same possibilities as found in the "Qt_EQL/" example,
+(e.g. calling Lisp from C++), but with a better, really dynamic workflow.
+
+
+
+TODO
+====
+
+- port the "Qt_EQL/" example to "Qt_EQL_dynamic/"
 

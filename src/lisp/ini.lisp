@@ -301,6 +301,34 @@
        (qrequire :network)"
   (%qrequire module quiet))
 
+(defun %ini-auto-reload (library-name watcher on-file-change)
+  (multiple-value-bind (object file-name)
+      (qload-c++ library-name)
+    (when file-name
+      (qfun watcher "addPath" file-name)
+      (qconnect watcher "fileChanged(QString)" on-file-change))
+    object))
+
+(defmacro qauto-reload-c++ (variable library-name)
+  "args: (variable library-name)
+   Similar to <code>qload-c++</code> (see <code>Qt_EQL_dynamic/</code>).<br>Defines a global variable (see return value of <code>qload-c++</code>), which will be updated on every change of the C++ library.<br>This allows for a dynamic workflow for your Qt/C++ plugins: after e.g. recompiling of C++, the library will automatically be reloaded, and the <code>variable</code> will be set to its new value.<br>If you want to be notified on a library change, set <code>*&lt;variable&gt;-reloaded*</code>, which will be called after reloading, passing both the variable name and the library name.<br>See <code>qload-c++</code> for an example how to call library functions.
+       (qauto-reload-c++ *c++* \"eql_cpp\")
+       (setf *c++-reloaded* (lambda (var lib) (qapropos nil (symbol-value var)))) ; optional: set a notifier"
+  (let* ((name     (string-trim "*" (symbol-name variable)))
+         (reloaded (intern (format nil "*~A-RELOADED*" name)))
+         (watcher  (intern (format nil "*~A-WATCHER*" name))))
+    `(progn
+       (defvar ,watcher  (qnew "QFileSystemWatcher"))
+       (defvar ,variable (%ini-auto-reload ,library-name ,watcher 
+                                           (lambda (name)
+                                             (let ((file-name (first (qfun ,watcher "files"))))
+                                               (qfun ,watcher "removePath" file-name)
+                                               (setf ,variable (qload-c++ ,library-name))
+                                               (qfun ,watcher "addPath" file-name))
+                                             (when ,reloaded
+                                               (funcall ,reloaded ',variable ,library-name)))))
+       (defvar ,reloaded nil))))
+
 (defun qquit (&optional (exit-status 0) (kill-all-threads t))
   "args: (&optional (exit-status 0) (kill-all-threads t))
    alias: qq
@@ -349,6 +377,7 @@
                   (cons 'qadd-event-filter    '(object event function))
                   (cons 'qapropos             '(&optional search-string class-name))
                   (cons 'qapropos*            '(&optional search-string class-name))
+                  (cons 'qauto-reload-c++     '(variable library-name))
                   (cons 'qconnect             '(caller signal receiver/function &optional slot))
                   (cons 'qcopy                '(object))
                   (cons 'qdelete              '(object))

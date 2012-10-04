@@ -4,10 +4,7 @@ QT_BEGIN_NAMESPACE
 
 QObject* ini()
 {
-    static QObject* cpp = 0;
-    if(!cpp) {
-        cpp = new CPP;
-    }
+    static QObject* cpp = 0; if(!cpp) cpp = new CPP;
     return cpp;
 }
 
