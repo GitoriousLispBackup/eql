@@ -106,7 +106,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object((char*)"qfrom-utf8"),             (cl_objectfn_fixed)qfrom_utf8,            1);
     cl_def_c_function(c_string_to_object((char*)"qid"),                    (cl_objectfn_fixed)qid,                   1);
     cl_def_c_function(c_string_to_object((char*)"%qinvoke-method"),        (cl_objectfn_fixed)qinvoke_method2,       4);
-    cl_def_c_function(c_string_to_object((char*)"qload-c++"),              (cl_objectfn_fixed)qload_cpp,             1);
+    cl_def_c_function(c_string_to_object((char*)"%qload-c++"),             (cl_objectfn_fixed)qload_cpp,             3);
     cl_def_c_function(c_string_to_object((char*)"qload-ui"),               (cl_objectfn_fixed)qload_ui,              1);
     cl_def_c_function(c_string_to_object((char*)"qlocal8bit"),             (cl_objectfn_fixed)qlocal8bit,            1);
     cl_def_c_function(c_string_to_object((char*)"qmeta-enums"),            (cl_objectfn_fixed)qmeta_enums,           0);
@@ -1938,15 +1938,18 @@ cl_object qclear_event_filters() {
     LObjects::dynObject->clearEventFilters();
     return Ct; }
 
-cl_object qrequire2(cl_object l_name, cl_object l_quiet) {
+cl_object qrequire2(cl_object l_name, cl_object l_quiet) { /// qrequire
+   /// args: (module &optional quiet)
+   /// Loads an EQL module, corresponding to a Qt module. Returns the module name if both loading and initializing have been successful.<br>If the <code>quiet</code> argument is not <code>NIL</code>, no error message will be shown on failure.<br>Available modules: <code>:help :network :opengl :sql :svg :webkit</code>
+   ///     (qrequire :network)
     ecl_process_env()->nvalues = 1;
     QString name = symbolName(l_name);
     QString prefix, postfix;
-#ifdef Q_OS_LINUX
-    prefix = "lib"; postfix = ".so.1";
-#endif
 #ifdef Q_OS_DARWIN
     prefix = "lib"; postfix = ".1.dylib";
+#endif
+#ifdef Q_OS_LINUX
+    prefix = "lib"; postfix = ".so.1";
 #endif
     QLibrary lib(prefix + "eql_" + name + postfix); // global library
     typedef void (*Ini)();
@@ -2003,18 +2006,39 @@ cl_object qrequire2(cl_object l_name, cl_object l_quiet) {
         error_msg("QREQUIRE", LIST1(l_name)); }
     return Cnil; }
 
-cl_object qload_cpp(cl_object l_lib_name) { /// qload-c++
-    /// args: (library-name)
-    /// Loads a custom Qt/C++ extension library (see <code>Qt_EQL_dynamic/</code>).<br>The <code>library-name</code> has to be passed as <b>local</b> path to the plugin, without file ending.<br>This offers a simple way to extend your application with your own Qt/C++ functions. The library will be reloaded every time you call this function (see also <code>qauto-reload-c++</code>).<br>The <code>QObject*</code> returned by the library's <code>ini()</code> function can be any <code>QObject</code> inherited class. In Lisp, the class name shown is the first vanilla Qt class encountered walking up the super classes.
+cl_object qload_cpp(cl_object l_lib_name, cl_object l_unload, cl_object l_copy /* for interal use only */) {
+    /// args: (library-name &optional unload)
+    /// Loads a custom Qt/C++ extension library (see <code>Qt_EQL_dynamic/</code>).<br>The <code>library-name</code> has to be passed as <b>local</b> path to the plugin, without file ending.<br>This offers a simple way to extend your application with your own Qt/C++ functions. The library will be reloaded every time you call this function (see also <code>qauto-reload-c++</code>).<br>The <code>QObject*</code> returned by the library's <code>ini()</code> function can be any <code>QObject</code> inherited class. In Lisp, the class name shown is the first vanilla Qt class encountered walking up the super classes.<br><br>If the <code>unload</code> argument is not <code>NIL</code>, the plugin will be unloaded.
     ///     (defparameter *c++* (qload-c++ "eql_cpp")) ; load/reload (see also QAUTO-RELOAD-C++)
     ///     (qapropos nil *c++*)                       ; documentation
     ///     (qfun* *c++* :qt "mySpeedyQtFunction")     ; call library function (note "qfun*" and ":qt")
     static QHash<QString, QLibrary*> libraries;
     QString libName = toQString(l_lib_name);
+    bool copy = (l_copy != Cnil);
+    const QString _copy("_copy");
     if(!libName.isEmpty()) {
-        Q_ASSERT(QLibrary::isLibrary(libName));
+        if(copy) {
+            QString prefix, postfix;
+#ifdef Q_OS_DARWIN
+            prefix = "lib"; postfix = ".dylib";
+#endif
+#ifdef Q_OS_LINUX
+            prefix = "lib"; postfix = ".so";
+#endif
+#ifdef Q_OS_WIN32
+            postfix = ".dll";
+#endif
+            QString libNameCopy = QDir::currentPath() + "/" + prefix + libName + _copy + postfix;
+            QFile::remove(libNameCopy);
+            QFile::copy(QDir::currentPath() + "/" + prefix + libName + postfix, libNameCopy);
+            libName += _copy; }
         if(libraries.contains(libName)) {
-            libraries.value(libName)->unload(); // for reloading
+            libraries.value(libName)->unload(); // for both unload/reload
+            if(l_unload != Cnil) {
+                delete libraries.value(libName);
+                libraries.remove(libName);
+                ecl_process_env()->nvalues = 1;
+                return l_lib_name; }
             cl_sleep(ecl_make_singlefloat(0.5)); }
         else {
             libraries[libName] = new QLibrary(QString("./%1").arg(libName)); } // local library
@@ -2030,7 +2054,8 @@ cl_object qload_cpp(cl_object l_lib_name) { /// qload-c++
                 const cl_env_ptr l_env = ecl_process_env();
                 l_env->nvalues = 2;
                 l_env->values[0] = l_ret;
-                l_env->values[1] = from_qstring(QDir::currentPath() + "/" + lib->fileName()); // for QFileSystemWatcher
+                // for QFileSystemWatcher (QAUTO-RELOAD-C++)
+                l_env->values[1] = from_qstring(QDir::currentPath() + "/" + lib->fileName().remove(_copy));
                 return l_ret; }}}
     ecl_process_env()->nvalues = 1;
     error_msg("QLOAD-C++", LIST1(l_lib_name));

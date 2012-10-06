@@ -23,10 +23,3 @@ Please note that the "QObject*" returned by the "ini()" function can be any
 So, this offers the same possibilities as found in the "Qt_EQL/" example,
 (e.g. calling Lisp from C++), but with a better, really dynamic workflow.
 
-
-
-TODO
-====
-
-- port the "Qt_EQL/" example to "Qt_EQL_dynamic/"
-

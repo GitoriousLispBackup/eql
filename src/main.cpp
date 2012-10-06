@@ -32,11 +32,6 @@ int main(int argc, char** argv) {
     QTextCodec::setCodecForCStrings(utf8);
     QTextCodec::setCodecForTr(utf8);
 
-#ifdef Q_OS_WIN
-    // necessary when using Slime
-    { QWidget ini; ini.setGeometry(0, 0, 0, 0); ini.show(); ini.close(); }
-#endif
-
     EQL eql;
     std::cout << "*** EQL " << EQL::version << ", Qt " << qVersion() << " ***" << std::endl;
     eql.exec(args);

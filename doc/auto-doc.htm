@@ -40,7 +40,7 @@
 </p><br>
 <p>
 <b>QAUTO-RELOAD-C++ (variable library-name)</b>
-<p>Similar to <code>qload-c++</code> (see <code>Qt_EQL_dynamic/</code>).<br>Defines a global variable (see return value of <code>qload-c++</code>), which will be updated on every change of the C++ library.<br>This allows for a dynamic workflow for your Qt/C++ plugins: after e.g. recompiling of C++, the library will automatically be reloaded, and the <code>variable</code> will be set to its new value.<br>If you want to be notified on a library change, set <code>*&lt;variable&gt;-reloaded*</code>, which will be called after reloading, passing both the variable name and the library name.<br>See <code>qload-c++</code> for an example how to call library functions.</p>
+<p>Similar to <code>qload-c++</code> (see <code>Qt_EQL_dynamic/</code>).<br>Defines a global variable (see return value of <code>qload-c++</code>), which will be updated on every change of the C++ library.<br>This allows for a dynamic workflow for your Qt/C++ plugins: after e.g. recompiling of C++, the library will automatically be reloaded, and the <code>variable</code> will be set to its new value.<br>If you want to be notified on a library change, set <code>*&lt;variable&gt;-reloaded*</code>, which will be called after reloading, passing both the variable name and the library name (it might be called twice: on removal of old and creation of new file).<br>See <code>qload-c++</code> for an example how to call library functions.</p>
 <pre>
   (qauto-reload-c++ *c++* "eql_cpp")
   (setf *c++-reloaded* (lambda (var lib) (qapropos nil (symbol-value var)))) ; optional: set a notifier
@@ -183,8 +183,8 @@
 </pre>
 </p><br>
 <p>
-<b>QLOAD-C++ (library-name)</b>
-<p>Loads a custom Qt/C++ extension library (see <code>Qt_EQL_dynamic/</code>).<br>The <code>library-name</code> has to be passed as <b>local</b> path to the plugin, without file ending.<br>This offers a simple way to extend your application with your own Qt/C++ functions. The library will be reloaded every time you call this function (see also <code>qauto-reload-c++</code>).<br>The <code>QObject*</code> returned by the library's <code>ini()</code> function can be any <code>QObject</code> inherited class. In Lisp, the class name shown is the first vanilla Qt class encountered walking up the super classes.</p>
+<b>QLOAD-CPP (library-name &optional unload)</b>
+<p>Loads a custom Qt/C++ extension library (see <code>Qt_EQL_dynamic/</code>).<br>The <code>library-name</code> has to be passed as <b>local</b> path to the plugin, without file ending.<br>This offers a simple way to extend your application with your own Qt/C++ functions. The library will be reloaded every time you call this function (see also <code>qauto-reload-c++</code>).<br>The <code>QObject*</code> returned by the library's <code>ini()</code> function can be any <code>QObject</code> inherited class. In Lisp, the class name shown is the first vanilla Qt class encountered walking up the super classes.<br><br>If the <code>unload</code> argument is not <code>NIL</code>, the plugin will be unloaded.</p>
 <pre>
   (defparameter *c++* (qload-c++ "eql_cpp")) ; load/reload (see also QAUTO-RELOAD-C++)
   (qapropos nil *c++*)                       ; documentation
@@ -266,8 +266,8 @@
 <p>Removes the event filter corresponding to <code>handle</code>, which is the return value of <code>qadd-event-filter</code>.<br>Returns <code>handle</code> if the event filter has effectively been removed.<br>See also <code>qclear-event-filters</code>.</p>
 </p><br>
 <p>
-<b>QREQUIRE (module &optional quiet)</b>
-<p>Loads an EQL module, corresponding to a Qt module. Returns the module name if both loading and initializing have been successful.<br>If the <code>quiet</code> argument is not <code>NIL</code>, no error message will be shown on failure.<br>Available modules: <code>:help :network :opengl :sql :svg :webkit</code></p>
+<b>QREQUIRE (module &optional quiet)</b>
+<p>Loads an EQL module, corresponding to a Qt module. Returns the module name if both loading and initializing have been successful.<br>If the <code>quiet</code> argument is not <code>NIL</code>, no error message will be shown on failure.<br>Available modules: <code>:help :network :opengl :sql :svg :webkit</code></p>
 <pre>
   (qrequire :network)
 </pre>

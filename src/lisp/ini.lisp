@@ -296,37 +296,47 @@
     (funcall (intern "RUN" :quic) ui.h ui.lisp)))
 
 (defun qrequire (module &optional quiet)
-  "args: (module &optional quiet)
-   Loads an EQL module, corresponding to a Qt module. Returns the module name if both loading and initializing have been successful.<br>If the <code>quiet</code> argument is not <code>NIL</code>, no error message will be shown on failure.<br>Available modules: <code>:help :network :opengl :sql :svg :webkit</code>
-       (qrequire :network)"
   (%qrequire module quiet))
 
-(defun %ini-auto-reload (library-name watcher on-file-change)
+(defun qload-c++ (library-name &optional unload copy) ; "copy": for internal use only (see QAUTO-RELOAD-C++)
+  (%qload-c++ library-name unload copy))
+
+(defun %ini-auto-reload (library-name var-file-name watcher on-file-change)
   (multiple-value-bind (object file-name)
-      (qload-c++ library-name)
+      (qload-c++ library-name nil :copy)
     (when file-name
+      (setf (symbol-value var-file-name) file-name)
       (qfun watcher "addPath" file-name)
       (qconnect watcher "fileChanged(QString)" on-file-change))
     object))
 
 (defmacro qauto-reload-c++ (variable library-name)
   "args: (variable library-name)
-   Similar to <code>qload-c++</code> (see <code>Qt_EQL_dynamic/</code>).<br>Defines a global variable (see return value of <code>qload-c++</code>), which will be updated on every change of the C++ library.<br>This allows for a dynamic workflow for your Qt/C++ plugins: after e.g. recompiling of C++, the library will automatically be reloaded, and the <code>variable</code> will be set to its new value.<br>If you want to be notified on a library change, set <code>*&lt;variable&gt;-reloaded*</code>, which will be called after reloading, passing both the variable name and the library name.<br>See <code>qload-c++</code> for an example how to call library functions.
+   Similar to <code>qload-c++</code> (see <code>Qt_EQL_dynamic/</code>).<br>Defines a global variable (see return value of <code>qload-c++</code>), which will be updated on every change of the C++ library.<br>This allows for a dynamic workflow for your Qt/C++ plugins: after e.g. recompiling of C++, the library will automatically be reloaded, and the <code>variable</code> will be set to its new value.<br>If you want to be notified on a library change, set <code>*&lt;variable&gt;-reloaded*</code>, which will be called after reloading, passing both the variable name and the library name (it might be called twice: on removal of old and creation of new file).<br>See <code>qload-c++</code> for an example how to call library functions.
        (qauto-reload-c++ *c++* \"eql_cpp\")
        (setf *c++-reloaded* (lambda (var lib) (qapropos nil (symbol-value var)))) ; optional: set a notifier"
-  (let* ((name     (string-trim "*" (symbol-name variable)))
-         (reloaded (intern (format nil "*~A-RELOADED*" name)))
-         (watcher  (intern (format nil "*~A-WATCHER*" name))))
+  (let* ((name      (string-trim "*" (symbol-name variable)))
+         (file-name (intern (format nil "*~A-FILE-NAME*" name)))
+         (watcher   (intern (format nil "*~A-WATCHER*" name)))
+         (reloaded  (intern (format nil "*~A-RELOADED*" name))))
     `(progn
+       (defvar ,file-name)
        (defvar ,watcher  (qnew "QFileSystemWatcher"))
-       (defvar ,variable (%ini-auto-reload ,library-name ,watcher 
+       (defvar ,variable (%ini-auto-reload ,library-name ',file-name ,watcher
                                            (lambda (name)
-                                             (let ((file-name (first (qfun ,watcher "files"))))
-                                               (qfun ,watcher "removePath" file-name)
-                                               (setf ,variable (qload-c++ ,library-name))
-                                               (qfun ,watcher "addPath" file-name))
+                                             ;; We get here because of substitution or removal of old library version.
+                                             ;; Recompilation of library means temporary removal, so we need to wait
+                                             ;; until creation of new version.
+                                             (dotimes (i 50) ; max. 10 seconds
+                                               (sleep 0.2)
+                                               (qprocess-events)
+                                               (when (probe-file ,file-name)
+                                                 (return)))
+                                             (setf ,variable (qload-c++ ,library-name nil :copy))
                                              (when ,reloaded
-                                               (funcall ,reloaded ',variable ,library-name)))))
+                                               (funcall ,reloaded ',variable ,library-name))
+                                             (unless (qfun ,watcher "files")
+                                               (qfun ,watcher "addPath" ,file-name)))))
        (defvar ,reloaded nil))))
 
 (defun qquit (&optional (exit-status 0) (kill-all-threads t))
@@ -398,7 +408,7 @@
                   (cons 'qinvoke-method       '(object function-name &rest arguments))
                   (cons 'qinvoke-method*      '(object cast-class-name function-name &rest arguments))
                   (cons 'qinvoke-methods      '(object &rest functions))
-                  (cons 'qload-c++            '(library-name))
+                  (cons 'qload-c++            '(library-name &optional unload))
                   (cons 'qload-ui             '(file-name))
                   (cons 'qlocal8bit           '(string))
                   (cons 'qmessage-box         '(x))
