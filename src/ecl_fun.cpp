@@ -106,7 +106,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object((char*)"qfrom-utf8"),             (cl_objectfn_fixed)qfrom_utf8,            1);
     cl_def_c_function(c_string_to_object((char*)"qid"),                    (cl_objectfn_fixed)qid,                   1);
     cl_def_c_function(c_string_to_object((char*)"%qinvoke-method"),        (cl_objectfn_fixed)qinvoke_method2,       4);
-    cl_def_c_function(c_string_to_object((char*)"%qload-c++"),             (cl_objectfn_fixed)qload_cpp,             3);
+    cl_def_c_function(c_string_to_object((char*)"%qload-c++"),             (cl_objectfn_fixed)qload_cpp,             2);
     cl_def_c_function(c_string_to_object((char*)"qload-ui"),               (cl_objectfn_fixed)qload_ui,              1);
     cl_def_c_function(c_string_to_object((char*)"qlocal8bit"),             (cl_objectfn_fixed)qlocal8bit,            1);
     cl_def_c_function(c_string_to_object((char*)"qmeta-enums"),            (cl_objectfn_fixed)qmeta_enums,           0);
@@ -2006,32 +2006,15 @@ cl_object qrequire2(cl_object l_name, cl_object l_quiet) { /// qrequire
         error_msg("QREQUIRE", LIST1(l_name)); }
     return Cnil; }
 
-cl_object qload_cpp(cl_object l_lib_name, cl_object l_unload, cl_object l_copy /* for interal use only */) {
+cl_object qload_cpp(cl_object l_lib_name, cl_object l_unload) { /// qload-c++
     /// args: (library-name &optional unload)
-    /// Loads a custom Qt/C++ extension library (see <code>Qt_EQL_dynamic/</code>).<br>The <code>library-name</code> has to be passed as <b>local</b> path to the plugin, without file ending.<br>This offers a simple way to extend your application with your own Qt/C++ functions. The library will be reloaded every time you call this function (see also <code>qauto-reload-c++</code>).<br>The <code>QObject*</code> returned by the library's <code>ini()</code> function can be any <code>QObject</code> inherited class. In Lisp, the class name shown is the first vanilla Qt class encountered walking up the super classes.<br><br>If the <code>unload</code> argument is not <code>NIL</code>, the plugin will be unloaded.
-    ///     (defparameter *c++* (qload-c++ "eql_cpp")) ; load/reload (see also QAUTO-RELOAD-C++)
+    /// Loads a custom Qt/C++ plugin (see <code>Qt_EQL_dynamic/</code>).<br>The <code>library-name</code> has to be passed as <b>local</b> path to the plugin, without file ending.<br>This offers a simple way to extend your application with your own Qt/C++ functions. The plugin will be reloaded (if supported by the OS) every time you call this function (Linux: see also <code>qauto-reload-c++</code>).<br>If the <code>unload</code> argument is not <code>NIL</code>, the plugin will be unloaded (if supported by the OS).
+    ///     (defparameter *c++* (qload-c++ "eql_cpp")) ; load/reload (Linux: see also QAUTO-RELOAD-C++)
     ///     (qapropos nil *c++*)                       ; documentation
     ///     (qfun* *c++* :qt "mySpeedyQtFunction")     ; call library function (note "qfun*" and ":qt")
     static QHash<QString, QLibrary*> libraries;
     QString libName = toQString(l_lib_name);
-    bool copy = (l_copy != Cnil);
-    const QString _copy("_copy");
     if(!libName.isEmpty()) {
-        if(copy) {
-            QString prefix, postfix;
-#ifdef Q_OS_DARWIN
-            prefix = "lib"; postfix = ".dylib";
-#endif
-#ifdef Q_OS_LINUX
-            prefix = "lib"; postfix = ".so";
-#endif
-#ifdef Q_OS_WIN32
-            postfix = ".dll";
-#endif
-            QString libNameCopy = QDir::currentPath() + "/" + prefix + libName + _copy + postfix;
-            QFile::remove(libNameCopy);
-            QFile::copy(QDir::currentPath() + "/" + prefix + libName + postfix, libNameCopy);
-            libName += _copy; }
         if(libraries.contains(libName)) {
             libraries.value(libName)->unload(); // for both unload/reload
             if(l_unload != Cnil) {
@@ -2055,10 +2038,10 @@ cl_object qload_cpp(cl_object l_lib_name, cl_object l_unload, cl_object l_copy /
                 l_env->nvalues = 2;
                 l_env->values[0] = l_ret;
                 // for QFileSystemWatcher (QAUTO-RELOAD-C++)
-                l_env->values[1] = from_qstring(QDir::currentPath() + "/" + lib->fileName().remove(_copy));
+                l_env->values[1] = from_qstring(QDir::currentPath() + "/" + lib->fileName());
                 return l_ret; }}}
     ecl_process_env()->nvalues = 1;
-    error_msg("QLOAD-C++", LIST1(l_lib_name));
+    error_msg("QLOAD-C++", LIST2(l_lib_name, l_unload));
     return Cnil; }
 
 

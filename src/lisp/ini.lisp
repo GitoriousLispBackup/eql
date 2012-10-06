@@ -298,45 +298,37 @@
 (defun qrequire (module &optional quiet)
   (%qrequire module quiet))
 
-(defun qload-c++ (library-name &optional unload copy) ; "copy": for internal use only (see QAUTO-RELOAD-C++)
-  (%qload-c++ library-name unload copy))
+(defun qload-c++ (library-name &optional unload)
+  (%qload-c++ library-name unload))
 
-(defun %ini-auto-reload (library-name var-file-name watcher on-file-change)
+#+linux
+(defun %ini-auto-reload (library-name watcher on-file-change)
   (multiple-value-bind (object file-name)
-      (qload-c++ library-name nil :copy)
+      (qload-c++ library-name)
     (when file-name
-      (setf (symbol-value var-file-name) file-name)
       (qfun watcher "addPath" file-name)
       (qconnect watcher "fileChanged(QString)" on-file-change))
     object))
 
+#+linux
 (defmacro qauto-reload-c++ (variable library-name)
   "args: (variable library-name)
-   Similar to <code>qload-c++</code> (see <code>Qt_EQL_dynamic/</code>).<br>Defines a global variable (see return value of <code>qload-c++</code>), which will be updated on every change of the C++ library.<br>This allows for a dynamic workflow for your Qt/C++ plugins: after e.g. recompiling of C++, the library will automatically be reloaded, and the <code>variable</code> will be set to its new value.<br>If you want to be notified on a library change, set <code>*&lt;variable&gt;-reloaded*</code>, which will be called after reloading, passing both the variable name and the library name (it might be called twice: on removal of old and creation of new file).<br>See <code>qload-c++</code> for an example how to call library functions.
+   <b>Linux only.</b><br>Extends <code>qload-c++</code> (see <code>Qt_EQL_dynamic/</code>).<br>Defines a global variable (see return value of <code>qload-c++</code>), which will be updated on every change of the C++ plugin (e.g. after recompiling, the plugin will automatically be reloaded, and the <code>variable</code> will be set to its new value.<br>If you want to be notified on every change of the plugin, set <code>*&lt;variable&gt;-reloaded*</code>. It will then be called after reloading, passing both the variable name and the plugin name.<br>See <code>qload-c++</code> for an example how to call plugin functions.
        (qauto-reload-c++ *c++* \"eql_cpp\")
        (setf *c++-reloaded* (lambda (var lib) (qapropos nil (symbol-value var)))) ; optional: set a notifier"
-  (let* ((name      (string-trim "*" (symbol-name variable)))
-         (file-name (intern (format nil "*~A-FILE-NAME*" name)))
-         (watcher   (intern (format nil "*~A-WATCHER*" name)))
-         (reloaded  (intern (format nil "*~A-RELOADED*" name))))
+  (let* ((name     (string-trim "*" (symbol-name variable)))
+         (reloaded (intern (format nil "*~A-RELOADED*" name)))
+         (watcher  (intern (format nil "*~A-WATCHER*" name))))
     `(progn
-       (defvar ,file-name)
        (defvar ,watcher  (qnew "QFileSystemWatcher"))
-       (defvar ,variable (%ini-auto-reload ,library-name ',file-name ,watcher
+       (defvar ,variable (%ini-auto-reload ,library-name ,watcher 
                                            (lambda (name)
-                                             ;; We get here because of substitution or removal of old library version.
-                                             ;; Recompilation of library means temporary removal, so we need to wait
-                                             ;; until creation of new version.
-                                             (dotimes (i 50) ; max. 10 seconds
-                                               (sleep 0.2)
-                                               (qprocess-events)
-                                               (when (probe-file ,file-name)
-                                                 (return)))
-                                             (setf ,variable (qload-c++ ,library-name nil :copy))
+                                             (let ((file-name (first (qfun ,watcher "files"))))
+                                               (qfun ,watcher "removePath" file-name)
+                                               (setf ,variable (qload-c++ ,library-name))
+                                               (qfun ,watcher "addPath" file-name))
                                              (when ,reloaded
-                                               (funcall ,reloaded ',variable ,library-name))
-                                             (unless (qfun ,watcher "files")
-                                               (qfun ,watcher "addPath" ,file-name)))))
+                                               (funcall ,reloaded ',variable ,library-name)))))
        (defvar ,reloaded nil))))
 
 (defun qquit (&optional (exit-status 0) (kill-all-threads t))

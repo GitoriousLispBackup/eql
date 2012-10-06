@@ -14,6 +14,7 @@
    #:qapp
    #:qapropos
    #:qapropos*
+   #+linux
    #:qauto-reload-c++
    #:qcall-default
    #:qclear-event-filters
