@@ -1,6 +1,4 @@
 #include "lib.h"
-// optional (for calling Lisp functions, see "Qt_EQL/")
-// #include "../../src/eql_fun.h"
 
 QT_BEGIN_NAMESPACE
 
