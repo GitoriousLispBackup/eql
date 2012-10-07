@@ -1,4 +1,6 @@
 ;;; Lisp calling C++ calling Lisp
+;;;
+;;; (see "cpp_calling_lisp/")
 
 (in-package :eql-user)
 

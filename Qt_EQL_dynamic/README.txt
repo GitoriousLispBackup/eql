@@ -1,7 +1,7 @@
 BUILD / RUN
 ===========
 
-Build the plugin in "cpp/" before running the examples.
+Build the plugins in "cpp/", "cpp_calling_lisp/" before running the examples.
 
 
 
