@@ -1,5 +1,5 @@
 ;;;
-;;; N.B: LINUX ONLY! (OSX: unloading may not work; Windows MSVC: you need to substitute "make -C cpp/")
+;;; OSX note: unloading may not work!
 ;;;
 ;;; Simple demo:
 ;;;
@@ -20,5 +20,7 @@
 
 (defun recompile-c++ ()
   (qload-c++ "eql_cpp" :unload)
-  (ext:run-program "make" '("-C" "cpp/") :output t) ; Unix "make"
+  (ext:run-program #+msvc "make.bat" #-msvc "make"
+                   #+msvc nil        #-msvc '("-C" "cpp/")
+                   :output t)
   (qapropos nil (setf *c++* (qload-c++ "eql_cpp"))))
