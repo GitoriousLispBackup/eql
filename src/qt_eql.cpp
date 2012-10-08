@@ -26,10 +26,9 @@ static QVariant eql_fun2(const QByteArray& pkgFun,
                          const QGenericArgument& a6, const QGenericArgument& a7, const QGenericArgument& a8, const QGenericArgument& a9, const QGenericArgument& a10) {
     void* symbol = lisp_functions.value(pkgFun);
     if(!symbol) {
-        int p1 = pkgFun.indexOf(':');
-        int p2 = pkgFun.lastIndexOf(':');
-        QByteArray pkg = (p1 == -1) ? "cl-user" : pkgFun.left(p1);
-        QByteArray fun = pkgFun.mid((p2 == -1) ? pkgFun.length() : (p2 + 1));
+        int p = pkgFun.indexOf(':');
+        QByteArray pkg = (p == -1) ? "cl-user" : pkgFun.left(p);
+        QByteArray fun = pkgFun.mid(pkgFun.lastIndexOf(':') + 1);
         cl_object l_sym = cl_find_symbol(2,
                                          make_constant_base_string(fun.toUpper().constData()),
                                          cl_find_package(make_constant_base_string(pkg.toUpper().constData())));
