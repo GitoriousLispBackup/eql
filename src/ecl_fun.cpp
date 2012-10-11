@@ -2014,18 +2014,24 @@ cl_object qload_cpp(cl_object l_lib_name, cl_object l_unload) { /// qload-c++
     ///     (qfun* *c++* :qt "mySpeedyQtFunction")     ; call library function (note "qfun*" and ":qt")
     static QHash<QString, QLibrary*> libraries;
     QString libName = toQString(l_lib_name);
+    bool unload = (l_unload != Cnil);
     if(!libName.isEmpty()) {
-        if(libraries.contains(libName)) {
-            libraries.value(libName)->unload(); // for both unload/reload
-            if(l_unload != Cnil) {
-                delete libraries.value(libName);
+        QLibrary* lib = libraries.value(libName, 0);
+        if(lib) {
+            if(lib->isLoaded()) {
+                lib->unload(); // for both unload/reload
+                if(!unload) {
+                    cl_sleep(ecl_make_singlefloat(0.5)); }}}
+        if(unload) {
+            ecl_process_env()->nvalues = 1;
+            if(lib) {
+                delete lib;
                 libraries.remove(libName);
-                ecl_process_env()->nvalues = 1;
                 return l_lib_name; }
-            cl_sleep(ecl_make_singlefloat(0.5)); }
-        else {
-            libraries[libName] = new QLibrary(QString("./%1").arg(libName)); } // local library
-        QLibrary* lib = libraries.value(libName);
+            return Cnil; }
+        if(!lib) {
+            lib = new QLibrary(QString("./%1").arg(libName)); // local library
+            libraries[libName] = lib; }
         typedef QObject* (*Ini)();
         Ini ini = (Ini)lib->resolve("ini");
         if(ini) {

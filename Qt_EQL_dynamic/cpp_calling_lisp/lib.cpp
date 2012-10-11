@@ -14,7 +14,7 @@ QObject* ini()
 
 void CPP::sayNumber(ulong n)
 {
-    // see "Qt_EQL/" for "eql_fun" documentation
+    // see "Qt_EQL/" for "eql_fun()" documentation
 
     // (1) call user defined function
     QVariant ret = eql_fun("eql-user:say-number", QVariant::String,

@@ -1,4 +1,4 @@
-*** N.B: Currently not working on Win XP, Vista (Win 7 works though) ***
+*** N.B: Not working on Win XP, Vista (Win 7 works though) ***
 
 
 INTRO / DESCRIPTION

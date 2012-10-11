@@ -23,4 +23,6 @@
   (ext:run-program #+msvc "make.bat" #-msvc "make"
                    #+msvc nil        #-msvc '("-C" "cpp/")
                    :output t)
-  (qapropos nil (setf *c++* (qload-c++ "eql_cpp"))))
+  (setf *c++* (qload-c++ "eql_cpp"))
+  (assert (qt-object-p *c++*))
+  (qapropos nil *c++*))
