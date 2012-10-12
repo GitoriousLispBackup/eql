@@ -166,7 +166,7 @@
 <b>QINVOKE-METHOD+ (object function-name &rest arguments)</b>
 <br>
 <b>QFUN+</b>
-<p>For calling external/embedded C++ functions declared <code>Q_INVOKABLE</code> in C++.<br>Use this variant to call user defined functions, slots, signals from external C++ classes.<br>In order to call ordinary functions, slots, signals from external C++ classes, just use the ordinary <code>qfun</code>.</p>
+<p>Use this variant to call user defined functions (declared <code>Q_INVOKABLE</code>), slots, signals from external C++ classes.<br><br>In order to call ordinary functions, slots, signals from external C++ classes, just use the ordinary <code>qfun</code>.</p>
 <pre>
   (qfun+ *qt-main* "foo") ; see Qt_EQL, Qt_EQL_dynamic
 </pre>
