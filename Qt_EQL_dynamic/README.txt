@@ -14,9 +14,9 @@ but with a better, more dynamic workflow, and without the restriction of
 
 So, integrating any existing Qt/C++ project is straightforward, since you can
 call any property/method/slot/signal of any Qt class (see QFIND-CHILD,
-QFIND-CHILDREN).
+QFIND-CHILDREN, QFUN+).
 
-Calling Lisp from C++ through "eql_fun()" is convenient, because you can use
-any Qt class/type supported by EQL, see examples in "cpp_calling_lisp/lib.cpp".
+Calling Lisp from C++ through "eql_fun()" is easy, and you can use any Qt
+class/type supported by EQL, see examples in "cpp_calling_lisp/lib.cpp".
 
 Linux only: see also function QAUTO-RELOAD-C++.

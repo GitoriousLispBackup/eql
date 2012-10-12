@@ -43,7 +43,7 @@
       (setf form (append (list 'qfun (or form object)) (x:ensure-list fun))))
     form))
 
-(defmacro qfuns (object &rest functions)
+(defmacro qfuns (object &rest functions) ; alias
   `(qinvoke-methods ,object ,@functions))
 
 (defmacro defvar-ui (main &rest names)
@@ -244,9 +244,15 @@
    alias: qfun*
    Similar to <code>qinvoke-method</code>, additionally passing a class name, enforcing a cast to that class.
        (qfun* event \"QKeyEvent\" \"key\")
-       (qfun* graphics-text-item \"QGraphicsItem\" \"setPos\" (list x y)) ; multiple inheritance problem
-       (qfun* *qt-main* :qt \"foo\") ; embedded Qt/C++ (see Qt_EQL)"
+       (qfun* graphics-text-item \"QGraphicsItem\" \"setPos\" (list x y)) ; multiple inheritance problem"
   (%qinvoke-method object cast-class-name function-name arguments))
+
+(defun qinvoke-method+ (object function-name &rest arguments)
+  "args: (object function-name &rest arguments)
+   alias: qfun+
+   Use this variant to call user defined functions (declared <code>Q_INVOKABLE</code>), slots, signals from external C++ classes.<br><br>In order to call ordinary functions, slots, signals from external C++ classes, just use the ordinary <code>qfun</code>.
+       (qfun+ *qt-main* \"foo\") ; see Qt_EQL, Qt_EQL_dynamic"
+   (%qinvoke-method object :qt function-name arguments))
 
 (defun qconnect (from signal to &optional slot)
   (%qconnect from signal to slot))
@@ -313,7 +319,7 @@
 #+linux
 (defmacro qauto-reload-c++ (variable library-name)
   "args: (variable library-name)
-   <b>Linux only.</b><br>Extends <code>qload-c++</code> (see <code>Qt_EQL_dynamic/</code>).<br>Defines a global variable (see return value of <code>qload-c++</code>), which will be updated on every change of the C++ plugin (e.g. after recompiling, the plugin will automatically be reloaded, and the <code>variable</code> will be set to its new value.<br>If you want to be notified on every change of the plugin, set <code>*&lt;variable&gt;-reloaded*</code>. It will then be called after reloading, passing both the variable name and the plugin name.<br>See <code>qload-c++</code> for an example how to call plugin functions.
+   <b>Linux only.</b><br>Extends <code>qload-c++</code> (see <code>Qt_EQL_dynamic/</code>).<br>Defines a global variable (see return value of <code>qload-c++</code>), which will be updated on every change of the C++ plugin (e.g. after recompiling, the plugin will automatically be reloaded, and the <code>variable</code> will be set to its new value).<br>If you want to be notified on every change of the plugin, set <code>*&lt;variable&gt;-reloaded*</code>. It will then be called after reloading, passing both the variable name and the plugin name.<br>See <code>qload-c++</code> for an example how to call plugin functions.
        (qauto-reload-c++ *c++* \"eql_cpp\")
        (setf *c++-reloaded* (lambda (var lib) (qapropos nil (symbol-value var)))) ; optional: set a notifier"
   (let* ((name     (string-trim "*" (symbol-name variable)))
@@ -367,6 +373,7 @@
 (alias qset  qset-property)
 (alias qfun  qinvoke-method)
 (alias qfun* qinvoke-method*)
+(alias qfun+ qinvoke-method+)
 (alias qmsg  qmessage-box)
 (alias qsel  qselect)
 (alias qq    qquit)
@@ -393,12 +400,14 @@
                   (cons 'qfrom-utf8           '(byte-array))
                   (cons 'qfun                 '(object function-name &rest arguments))
                   (cons 'qfun*                '(object cast-class-name function-name &rest arguments))
+                  (cons 'qfun+                '(object function-name &rest arguments))
                   (cons 'qfuns                '(object &rest functions))
                   (cons 'qget                 '(object name))
                   (cons 'qgui                 '(&optional process-events))
                   (cons 'qid                  '(class-name))
                   (cons 'qinvoke-method       '(object function-name &rest arguments))
                   (cons 'qinvoke-method*      '(object cast-class-name function-name &rest arguments))
+                  (cons 'qinvoke-method+      '(object function-name &rest arguments))
                   (cons 'qinvoke-methods      '(object &rest functions))
                   (cons 'qload-c++            '(library-name &optional unload))
                   (cons 'qload-ui             '(file-name))

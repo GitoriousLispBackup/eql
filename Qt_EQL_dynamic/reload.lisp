@@ -9,9 +9,9 @@
 ;;;    2) do: (recompile-c++)
 ;;;    3) goto 1)
 ;;;
-;;; Call plugin functions like this:
+;;; Call plugin functions using QFUN+:
 ;;;
-;;;     (qfun* *c++* :qt "myFunction")
+;;;     (qfun+ *c++* "myFunction")
 ;;;
 
 (in-package :eql-user)

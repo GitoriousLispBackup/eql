@@ -9,6 +9,6 @@
 (defun say-number (n)
   (format nil "~R" n))
 
-(qfun* *c++* :qt "sayNumber" 123456789)
+(qfun+ *c++* "sayNumber" 123456789) ; note QFUN+
 
 (qq)

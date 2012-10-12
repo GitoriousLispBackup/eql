@@ -103,15 +103,14 @@ To get the 3 child widgets, identified by QObject::objectName(), do:
 
 From Lisp you can call: (note "qfun*" and ":qt")
 
-    (qfun* *qt-main* :qt "stop")
-    (qfun* *qt-main* :qt "start")
+    (qfun+ *qt-main* "stop")
+    (qfun+ *qt-main* "start")
 
 This is possible because these 2 methods are declared Q_INVOKABLE
 in Qt/trafficlight.h.
 
 So, in order to call either methods declared Q_INVOKABLE, or user defined
-signals/slots, use qfun* with :qt as second argument (to avoid name clashes with
-ordinary Qt methods).
+signals/slots, use qfun+ (to avoid name clashes with ordinary Qt methods).
 
 To list all user defined properties, methods, signals, slots of a class
 defined in C++, see the special usage of qapropos (passing an object instead

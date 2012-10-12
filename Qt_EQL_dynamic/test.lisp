@@ -10,7 +10,7 @@
 (when *c++*
   (qlet ((var "QVariant(int)" 42))
     (assert (= 42
-               (qfun (qfun* *c++* :qt "returnMe" var) ; note "qfun*" and ":qt"
+               (qfun (qfun+ *c++* "returnMe" var) ; note QFUN+
                      "toInt")))))
 
 (qq)

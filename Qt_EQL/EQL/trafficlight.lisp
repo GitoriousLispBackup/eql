@@ -53,4 +53,4 @@
          (b "QVariant(int)" 42)
          (c "QVariant(double)" pi)
          (d "QVariant(QByteArray)" (vector -50 0 50)))
-    (qmsg (qfun* *qt-main* :qt "callQt" (list a b c d)))))
+    (qmsg (qfun+ *qt-main* "callQt" (list a b c d)))))
