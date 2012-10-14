@@ -6,6 +6,7 @@
 #include "qt_eql.h"
 #include "ecl_fun.h"
 #include "eql.h"
+#include "gen/_lobjects.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -66,6 +67,8 @@ QVariant eql_fun(const QByteArray& fun,
                  QGenericArgument a1, QGenericArgument a2, QGenericArgument a3, QGenericArgument a4, QGenericArgument a5,
                  QGenericArgument a6, QGenericArgument a7, QGenericArgument a8, QGenericArgument a9, QGenericArgument a10) {
     return eql_fun2(fun, ret_type, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10); }
+
+bool checkType(int id, const QByteArray& name) { return LObjects::checkType(id, name); }
 
 QT_END_NAMESPACE
 

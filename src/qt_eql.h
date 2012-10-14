@@ -37,6 +37,8 @@ eql_fun(const QByteArray&,
         QGenericArgument = QGenericArgument(),
         QGenericArgument = QGenericArgument());
 
+EQL_EXPORT bool checkType(int, const QByteArray&);
+
 QT_END_NAMESPACE
 
 #endif

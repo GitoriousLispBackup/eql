@@ -18,7 +18,7 @@ class CPP : public QObject
     Q_OBJECT
 public:
     // insert here your function declarations, prepended by Q_INVOKABLE
-    Q_INVOKABLE void sayNumber(ulong);
+    Q_INVOKABLE void runExamples(ulong);
 };
 
 QT_END_NAMESPACE

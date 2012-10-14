@@ -269,6 +269,15 @@ struct EQL_EXPORT QtObject {
     static QByteArray idToClassName(int);
 };
 
+// for Qt_EQL
+struct MetaPointer {
+    MetaPointer()               : pointer(0), id(0) {}
+    MetaPointer(void* v, int i) : pointer(v), id(i) {}
+
+    void* pointer;
+    int id;
+};
+
 struct QtMetaObject : private QObject {
     // commonly used trick to access staticQtMetaObject
     static const QMetaObject* get() { return &static_cast<QtMetaObject*>(0)->staticQtMetaObject; }
@@ -288,5 +297,7 @@ EQL_EXPORT cl_object qt_object_from_name(const QByteArray&, void*, uint = 0, boo
 EQL_EXPORT QtObject toQtObject(cl_object, cl_object = Cnil, bool* = 0);
 
 QT_END_NAMESPACE
+
+Q_DECLARE_METATYPE(MetaPointer)
 
 #endif

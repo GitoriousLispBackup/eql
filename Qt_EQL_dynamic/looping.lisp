@@ -1,6 +1,4 @@
 ;;; Lisp calling C++ calling Lisp
-;;;
-;;; (see "cpp_calling_lisp/")
 
 (in-package :eql-user)
 
@@ -9,6 +7,12 @@
 (defun say-number (n)
   (format nil "~R" n))
 
-(qfun+ *c++* "sayNumber" 123456789) ; note QFUN+
+(defun new-widget (name)
+  (qnew name))
+
+;; see examples in "cpp_calling_lisp/lib.cpp"
+
+(qfun+ *c++* "runExamples" 123456789) ; note QFUN+
 
 (qq)
+

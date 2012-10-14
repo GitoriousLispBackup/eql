@@ -12,21 +12,38 @@ QObject* ini()
 
 // insert here your function implementations
 
-void CPP::sayNumber(ulong n)
+void CPP::runExamples(ulong n)
 {
     // (1) call user defined function
-    QVariant ret = eql_fun("eql-user:say-number", QVariant::String, // see: ecl_fun.cpp:toQVariant()
-                           Q_ARG(ulong, n));                        // see: ecl_fun.cpp:to_lisp_arg()
+    {
+        QVariant ret = eql_fun("eql-user:say-number", QVariant::String, // see: ecl_fun.cpp:toQVariant()
+                               Q_ARG(ulong, n));                        // see: ecl_fun.cpp:to_lisp_arg()
 
-/*
+        QMessageBox::information(0, "Example 1", ret.toString());
+    }
+
     // (2) call FORMAT directly
-    QVariant ret = eql_fun("format", QVariant::String, // pointer: QMetaType::VoidStar / QWidget* w = Q_PTR(QWidget*, ret);
-                           Q_ARG(bool, false),         // max. 10 arguments
-                           Q_ARG(QString, "~R"),
-                           Q_ARG(ulong, n));
-*/
+    {
+        QVariant ret = eql_fun("format", QVariant::String,
+                               Q_ARG(bool, false),   // max. 10 Q_ARG()
+                               Q_ARG(QString, "~R"),
+                               Q_ARG(ulong, n));
 
-    QMessageBox::information(0, QString::number(n), ret.toString());
+        QMessageBox::information(0, "Example 2", ret.toString());
+    }
+
+    // (3) EQL pointer type return value
+    {
+        QVariant ret = eql_fun("eql-user:new-widget", QMetaType::VoidStar,
+                               Q_ARG(QString, "QLabel"));
+
+        QLabel* widget = Q_PTR(QLabel*, ret); // Q_PTR: see "eql_fun.h"
+
+        QString msg;
+        QDebug out(&msg);
+        out << "<p>Q_PTR returned:<b>" << widget << "</b></p><p>(type checked at run time)</p>";
+        QMessageBox::information(0, "Example 3", msg);
+    }
 }
 
 QT_END_NAMESPACE

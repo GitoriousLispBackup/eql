@@ -2,6 +2,7 @@
 #define LOBJECTS_H
 
 #include "../eql_global.h"
+#include "../ecl_fun.h"
 #include <QtGui>
 #include <ecl/ecl.h>
 
@@ -96,6 +97,17 @@ public:
                 break; }
             className = mo->className(); }
         return className; }
+
+    static bool checkType(int id, const QByteArray& name) {
+        QByteArray name2(name.left(qMax(0, name.length() - 1)));
+        if(name.endsWith('*') && ((id > 0) ? (id == q_names.value(name2)) : (-id == n_names.value(name2)))) {
+            return true; }
+        error_msg(QString("eql_fun(): Q_PTR: wanted <%1>, got <%2>")
+                          .arg(QString((id > 0) ? q_names.key(id) : n_names.key(-id)))
+                          .arg(QString(name2))
+                          .toAscii().constData(),
+                  Cnil);
+        return false; }
 
     static StaticMetaObject staticMetaObject_help;
     static StaticMetaObject staticMetaObject_network;

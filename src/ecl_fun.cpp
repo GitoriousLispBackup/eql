@@ -641,11 +641,11 @@ QVariant toQVariant(cl_object l_obj, const char* s_type, int type) {
         case QVariant::Url:         var = toQUrl(l_obj); break;
         case QVariant::UInt:        var = toUInt(l_obj); break;
         case QVariant::ULongLong:   var = toUInt<qulonglong>(l_obj); break; }
-    // for Qt_EQL (object pointer)
+    // Qt_EQL: a type safe object pointer (checked at run-time)
     if(QMetaType::VoidStar == type) {
         QtObject obj = toQtObject(l_obj);
         if(obj.pointer) {
-            var = qVariantFromValue(obj.pointer); }}
+            qVariantSetValue(var, MetaPointer(obj.pointer, obj.id)); }}
     return var; }
 
 static QVariantList toQVariantList(cl_object l_list) {
