@@ -1,17 +1,18 @@
 (in-package :eql-user)
 
-(defparameter *c++* (qload-c++ "eql_cpp"))
+(defvar *c++* (qload-c++ "eql_cpp"))
 
-(when *c++*
-  (qapropos nil *c++*))
+(assert (qt-object-p *c++*))
 
-;; test
+(qapropos nil *c++*)
 
-(when *c++*
-  (qlet ((var "QVariant(int)" 42))
-    (assert (= 42
-               (qfun (qfun+ *c++* "returnMe" var) ; note QFUN+
-                     "toInt")))))
+;; test call
+
+(qlet ((a "QVariant(QString)" "hello from C++")
+       (b "QVariant(int)" 42)
+       (c "QVariant(double)" pi)
+       (d "QVariant(QByteArray)" (vector -50 0 50)))
+  (qmsg (qfun+ *c++* "hello" (list a b c d)))) ; note QFUN+
 
 (qq)
 

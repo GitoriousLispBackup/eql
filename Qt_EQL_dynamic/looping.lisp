@@ -12,7 +12,7 @@
 
 ;; see examples in "cpp_calling_lisp/lib.cpp"
 
-(qfun+ *c++* "runExamples" 123456789) ; note QFUN+
+(qfun+ *c++* "runExamples") ; note QFUN+
 
 (qq)
 

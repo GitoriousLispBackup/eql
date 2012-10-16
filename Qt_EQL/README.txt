@@ -101,7 +101,7 @@ To get the 3 child widgets, identified by QObject::objectName(), do:
     (qfind-child *qt-main* "yellow")
     (qfind-child *qt-main* "green")
 
-From Lisp you can call: (note "qfun*" and ":qt")
+From Lisp you can call: (note QFUN+)
 
     (qfun+ *qt-main* "stop")
     (qfun+ *qt-main* "start")
@@ -161,13 +161,3 @@ to include in main.cpp):
     Q_FOREACH instead of foreach
     QSLOT     instead of SLOT
     QSIGNAL   instead of SIGNAL
-
---
-
-QVariantList note:
-
-Please see these 2 files for a convenient use of QVariantList:
-
-  Qt/trafficlight.h:     Q_INVOKABLE callQt()
-  EQL/trafficlight.lisp: defun call-qt ()
-

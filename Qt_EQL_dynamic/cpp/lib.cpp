@@ -11,9 +11,17 @@ QObject* ini()
 
 // insert here your function implementations
 
-QVariant CPP::returnMe(const QVariant& var)
+QVariantList CPP::hello(const QVariantList& list)
 {
-    return var;
+    QString msg;
+    QDebug debug(&msg);
+    debug << list;
+    QMessageBox::information(0, "QVariantList", msg);
+
+    QVariantList ret(list);
+    if(!ret.isEmpty()) {
+        ret[0] = "hello from Lisp"; }
+    return ret;
 }
 
 QT_END_NAMESPACE

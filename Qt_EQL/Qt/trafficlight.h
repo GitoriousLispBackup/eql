@@ -128,21 +128,6 @@ public:
     Q_INVOKABLE void start() { machine->start(); }
     Q_INVOKABLE void stop() { machine->stop(); }
 
-    // example of conveniently passing and returning a QVariantList
-    // (see ../EQL/trafficlight.lisp)
-    //
-    Q_INVOKABLE QVariantList callQt(const QVariantList& list)
-    {
-        QString msg;
-        QDebug debug(&msg);
-        debug << list;
-        QMessageBox::information(0, "QVariantList callQt(const QVariantList&)", msg);
-
-        QVariantList ret(list);
-        ret[0] = "hello from Lisp"; // string will be shown in Lisp message box
-        return ret;
-    }
-
 private:
     QStateMachine *machine;
 

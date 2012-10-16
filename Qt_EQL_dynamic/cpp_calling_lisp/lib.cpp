@@ -1,5 +1,5 @@
 #include "lib.h"
-#include "../../src/eql_fun.h"
+#include "../../src/eql_fun.h" // for eql_fun()
 
 QT_BEGIN_NAMESPACE
 
@@ -12,8 +12,10 @@ QObject* ini()
 
 // insert here your function implementations
 
-void CPP::runExamples(ulong n)
+void CPP::runExamples()
 {
+    ulong n = 123456789;
+
     // (1) call user defined function
     {
         QVariant ret = eql_fun("eql-user:say-number", QVariant::String, // see: ecl_fun.cpp:toQVariant()
@@ -37,11 +39,14 @@ void CPP::runExamples(ulong n)
         QVariant ret = eql_fun("eql-user:new-widget", QMetaType::VoidStar,
                                Q_ARG(QString, "QLabel"));
 
-        QLabel* widget = Q_PTR(QLabel*, ret); // Q_PTR: see "eql_fun.h"
+        QLabel* object = Q_PTR(QLabel*, ret); // type checked at run time
+        if(object) {
+            // ...
+        }
 
         QString msg;
         QDebug out(&msg);
-        out << "<p>Q_PTR returned:<b>" << widget << "</b></p><p>(type checked at run time)</p>";
+        out << "<p>Q_PTR returned:<b>" << object << "</b></p><p>(type checked at run time)</p>";
         QMessageBox::information(0, "Example 3", msg);
     }
 }

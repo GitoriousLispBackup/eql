@@ -98,13 +98,15 @@ public:
             className = mo->className(); }
         return className; }
 
+    // for Qt_EQL, see "eql_fun.h"
     static bool checkType(int id, const QByteArray& name) {
         QByteArray name2(name.left(qMax(0, name.length() - 1)));
-        if(name.endsWith('*') && ((id > 0) ? (id == q_names.value(name2)) : (-id == n_names.value(name2)))) {
+        if(name.endsWith('*')
+        && ((id > 0) ? (id == q_names.value(name2)) : (-id == n_names.value(name2)))) {
             return true; }
-        error_msg(QString("eql_fun(): Q_PTR: wanted <%1>, got <%2>")
+        error_msg(QString("eql_fun(): wanted Q_PTR(%1*, x), found Q_PTR(%2, x)")
                           .arg(QString((id > 0) ? q_names.key(id) : n_names.key(-id)))
-                          .arg(QString(name2))
+                          .arg(QString(name))
                           .toAscii().constData(),
                   Cnil);
         return false; }

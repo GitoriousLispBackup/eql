@@ -18,7 +18,7 @@ class CPP : public QObject
     Q_OBJECT
 public:
     // insert here your function declarations, prepended by Q_INVOKABLE
-    Q_INVOKABLE QVariant returnMe(const QVariant&);
+    Q_INVOKABLE QVariantList hello(const QVariantList&);
 };
 
 QT_END_NAMESPACE
