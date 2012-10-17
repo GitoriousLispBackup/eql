@@ -14,14 +14,14 @@ QObject* ini()
 
 void CPP::runExamples()
 {
-    ulong n = 123456789;
+    ulong n = 123;
 
     // (1) call user defined function
     {
         QVariant ret = eql_fun("eql-user:say-number", QVariant::String, // see: ecl_fun.cpp:toQVariant()
                                Q_ARG(ulong, n));                        // see: ecl_fun.cpp:to_lisp_arg()
 
-        QMessageBox::information(0, "Example 1", ret.toString());
+        QMessageBox::information(0, "Example 1", "<pre><b>eql_fun(\"eql-user:say-number\"...);</b><br><br>" + ret.toString());
     }
 
     // (2) call FORMAT directly
@@ -31,15 +31,15 @@ void CPP::runExamples()
                                Q_ARG(QString, "~R"),
                                Q_ARG(ulong, n));
 
-        QMessageBox::information(0, "Example 2", ret.toString());
+        QMessageBox::information(0, "Example 2", "<pre><b>eql_fun(\"format\"...);</b><br><br>" + ret.toString());
     }
 
-    // (3) EQL pointer type return value
+    // (3) returning a pointer
     {
         QVariant ret = eql_fun("eql-user:new-widget", QMetaType::VoidStar,
                                Q_ARG(QString, "QLabel"));
 
-        QLabel* object = Q_PTR(QLabel*, ret); // type checked at run time
+        QLabel* object = Q_PTR(QLabel*, ret); // type checked at run time; 0 if check fails
         if(object) {
             // ...
         }
@@ -47,7 +47,7 @@ void CPP::runExamples()
         QString msg;
         QDebug out(&msg);
         out << "<p>Q_PTR returned:<b>" << object << "</b></p><p>(type checked at run time)</p>";
-        QMessageBox::information(0, "Example 3", msg);
+        QMessageBox::information(0, "Example 3", "<pre><b>eql_fun(\"eql-user:new-widget\"...);</b>" + msg);
     }
 }
 
