@@ -221,27 +221,18 @@
                                  "verticalScrollBarPolicy"   |Qt.ScrollBarAlwaysOff|)
         *symbol-completer* (qnew "QCompleter"
                                  "maxVisibleItems" 10)
-        *file-completer*   (qnew "QCompleter"
-                                 "maxVisibleItems" 10)
         *symbol-model*     (qnew "QStringListModel")
-        *file-model*       (qnew "QFileSystemModel")
-        *symbol-popup*     (qfun *symbol-completer* "popup")
-        *file-popup*       (qfun *file-completer*   "popup"))
+        *symbol-popup*     (qfun *symbol-completer* "popup"))
   (x:do-with (qset *eql-completer*)
     ("frameShape" |QFrame.Box|)
     ("frameShadow" |QFrame.Plain|)
     ("lineWidth" 1))
   (qfun *eql-completer* "setWindowFlags" |Qt.Popup|)
   (qfun *symbol-completer* "setWidget" *command*)
-  (qfun *file-completer*   "setWidget" *command*)
   (qfun *symbol-completer* "setModel" *symbol-model*)
-  (qfun *file-completer*   "setModel" *file-model*)
-  (qfun *file-model* "setRootPath" "")
   (set-color *symbol-popup* |QPalette.Base| "palegreen")
   (qconnect *eql-completer* "itemDoubleClicked(QListWidgetItem*)" 'insert-completer-option-text)
   (qconnect *symbol-completer* "highlighted(QString)" 'item-highlighted)
-  (qconnect *file-completer*   "highlighted(QString)" (lambda (str) (item-highlighted str :file)))
-  (qconnect *file-model* "directoryLoaded(QString)" (lambda (arg) (update-tab-completer-2 :file)))
   (qoverride *eql-completer* "keyPressEvent(QKeyEvent*)" 'completer-key-pressed)
   (qoverride *eql-completer* "focusOutEvent(QFocusEvent*)" 'close-completer)
   (update-completer-symbols))
@@ -827,7 +818,7 @@
 (defun editor-key-pressed (key-event)
   (case (qfun key-event "key")
     ((#.|Qt.Key_Return| #.|Qt.Key_Enter|)
-     (if (or (qget *file-popup* "visible")
+     (if (or (and *file-popup* (qget *file-popup* "visible"))
              (qget *symbol-popup* "visible"))
          (insert-tab-completion)
          (let* ((cursor (qfun *editor* "textCursor"))
@@ -1164,7 +1155,7 @@
                 (update-tab-completer nil :show)
                 (return-from command-key-pressed))
                ((#.|Qt.Key_Return| #.|Qt.Key_Enter|)
-                (if (or (qget *file-popup* "visible")
+                (if (or (and *file-popup* (qget *file-popup* "visible"))
                         (qget *symbol-popup* "visible"))
                     (progn
                       (insert-tab-completion)
@@ -1234,7 +1225,7 @@
     (when (and (or (not key-event)
                    (not (= |Qt.Key_Escape| (qfun key-event "key"))))
                (or show
-                   (qget *file-popup* "visible")
+                   (and *file-popup* (qget *file-popup* "visible"))
                    (qget *symbol-popup* "visible")))
       (let* ((cursor (qfun *current-editor* "textCursor"))
              (text (concatenate 'string
@@ -1260,13 +1251,15 @@
                              (if (and p1 p2)
                                  (max p1 (1+ p2))
                                  (or p1 (1+ p2))))))))
-        (setf completer (if file *file-completer* *symbol-completer*))
+        (setf completer (if file (new-file-completer) *symbol-completer*))
         (when show
           (unless (qeql *current-editor* (qfun completer "widget"))
             (qfun completer "setWidget" *current-editor*)))
         (qset completer "completionPrefix" (setf prefix (subseq text start)))
+        (when file
+          (qfun *file-model* "setRootPath" prefix))
         (update-tab-completer-2 file))))
-  (defun update-tab-completer-2 (&optional file) ; see "directoryLoaded(QString)" from *file-model*
+  (defun update-tab-completer-2 (&optional file) ; see "directoryLoaded(QString)" from file-model
     (qfun completer "complete")
     (let ((popup (if file *file-popup* *symbol-popup*)))
       (qfun popup "resize" (list (qget *current-editor* "width")
@@ -1295,14 +1288,36 @@
       (show-status-message (function-lambda-list* current) :html))
     (close-tab-popups))
   (defun close-tab-popups ()
-    (qfun *file-popup* "hide")
     (qfun *symbol-popup* "hide")
+    (delete-file-completer)
     (setf current nil)))
 
 (defun insert-file ()
   (let ((file (qfun "QFileDialog" "getOpenFileName")))
     (unless (x:empty-string file)
       (qfuns *editor* "textCursor" ("insertText" (read-file file :do-not-set))))))
+
+;;; file completer
+
+(defun new-file-completer ()
+  (or *file-completer*
+      (prog1
+          (setf *file-completer* (qnew "QCompleter" "maxVisibleItems" 10))
+        (setf *file-model* (qnew "QFileSystemModel"))
+        (setf *file-popup* (qfun *file-completer* "popup"))
+        (qfun *file-completer* "setWidget" *command*)
+        (qfun *file-completer* "setModel" *file-model*)
+        (qconnect *file-completer* "highlighted(QString)" (lambda (str) (item-highlighted str :file)))
+        (qconnect *file-model* "directoryLoaded(QString)" (lambda (arg) (update-tab-completer-2 :file))))))
+
+(defun delete-file-completer ()
+  (when *file-completer*
+    (qdisconnect *file-completer*)
+    (qdisconnect *file-model*)
+    (qdel *file-completer*)
+    (qdel *file-model*)
+    (setf *file-completer* nil
+          *file-popup*     nil)))
 
 ;;; find, replace
 

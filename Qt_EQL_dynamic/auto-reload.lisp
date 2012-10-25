@@ -10,9 +10,9 @@
 (qauto-reload-c++ *c++* "eql_cpp")
 
 #+linux
-(setf *c++-reloaded* 'show-current-documentation)
+(setf *c++-reloaded* 'show-current-apropos)
 
-(defun show-current-documentation (variable plugin)
+(defun show-current-apropos (variable plugin)
   (qset (qapp) "quitOnLastWindowClosed" nil) 
   (let ((obj (symbol-value variable)))
     (assert (qt-object-p obj))

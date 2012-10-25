@@ -28,7 +28,7 @@ static QVariant eql_fun2(const QByteArray& pkgFun,
     void* symbol = lisp_functions.value(pkgFun);
     if(!symbol) {
         int p = pkgFun.indexOf(':');
-        QByteArray pkg = (p == -1) ? "cl-user" : pkgFun.left(p);
+        QByteArray pkg = (p == -1) ? "eql-user" : pkgFun.left(p);
         QByteArray fun = pkgFun.mid(pkgFun.lastIndexOf(':') + 1);
         cl_object l_sym = cl_find_symbol(2,
                                          make_constant_base_string(fun.toUpper().constData()),

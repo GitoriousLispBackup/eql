@@ -36,7 +36,7 @@ void CPP::runExamples()
 
     // (3) returning a pointer
     {
-        QVariant ret = eql_fun("eql-user:new-widget", QMetaType::VoidStar,
+        QVariant ret = eql_fun("qnew", QMetaType::VoidStar,
                                Q_ARG(QString, "QLabel"));
 
         QLabel* object = Q_PTR(QLabel*, ret); // type checked at run time; 0 if check fails
@@ -47,7 +47,7 @@ void CPP::runExamples()
         QString msg;
         QDebug out(&msg);
         out << "<p>Q_PTR returned:<b>" << object << "</b></p><p>(type checked at run time)</p>";
-        QMessageBox::information(0, "Example 3", "<pre><b>eql_fun(\"eql-user:new-widget\"...);</b>" + msg);
+        QMessageBox::information(0, "Example 3", "<pre><b>eql_fun(\"qnew\"...);</b>" + msg);
     }
 }
 
