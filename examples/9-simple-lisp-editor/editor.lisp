@@ -1290,7 +1290,8 @@
   (defun close-tab-popups ()
     (qfun *symbol-popup* "hide")
     (delete-file-completer)
-    (setf current nil)))
+    (setf current nil)
+    (qsingle-shot 0 (lambda () (qfun *current-editor* "setFocus")))))
 
 (defun insert-file ()
   (let ((file (qfun "QFileDialog" "getOpenFileName")))
@@ -1314,8 +1315,8 @@
   (when *file-completer*
     (qdisconnect *file-completer*)
     (qdisconnect *file-model*)
-    (qdel *file-completer*)
-    (qdel *file-model*)
+    (qdel *file-completer* :later)
+    (qdel *file-model*     :later)
     (setf *file-completer* nil
           *file-popup*     nil)))
 
