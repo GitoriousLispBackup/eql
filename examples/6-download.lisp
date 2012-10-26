@@ -47,6 +47,6 @@
           (setf msg (format nil (tr "Download error: <span style='color:red; font-weight:bold;'>~A</span>")
                             (subseq name (1+ (position #\. name)) (- (length name) #.(length "Error")))))
           (return))))
-    (qfun "QMessageBox" "critical" nil "EQL" (if msg msg (tr "Unknown download error.")))))
+    (qfun "QMessageBox" "critical" nil "EQL" (or msg (tr "Unknown download error.")))))
 
 (download "http://planet.lisp.org/")

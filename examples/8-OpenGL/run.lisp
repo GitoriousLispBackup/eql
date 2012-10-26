@@ -2,7 +2,7 @@
 
 (load "~/.eclrc") ; for Quicklisp
 
-(asdf:operate 'asdf:load-op :cl-opengl)
+(asdf:load-system :cl-opengl)
 
 (unless (eql:qrequire :opengl)
   (error "EQL module :opengl could not be found/loaded")

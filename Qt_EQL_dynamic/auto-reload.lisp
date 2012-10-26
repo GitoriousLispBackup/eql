@@ -7,7 +7,7 @@
 (in-package :eql-user)
 
 #+linux
-(qauto-reload-c++ *c++* "eql_cpp")
+(qauto-reload-c++ *c++* (in-home "Qt_EQL_dynamic/eql_cpp"))
 
 #+linux
 (setf *c++-reloaded* 'show-current-apropos)
