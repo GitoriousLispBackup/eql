@@ -2016,6 +2016,8 @@ cl_object qload_cpp(cl_object l_lib_name, cl_object l_unload) { /// qload-c++
     QString libName = toQString(l_lib_name);
     bool unload = (l_unload != Cnil);
     if(!libName.isEmpty()) {
+        if(!libName.contains('/')) {
+            libName.prepend("./"); }
         QLibrary* lib = libraries.value(libName, 0);
         if(lib) {
             if(lib->isLoaded()) {
@@ -2030,8 +2032,6 @@ cl_object qload_cpp(cl_object l_lib_name, cl_object l_unload) { /// qload-c++
                 return l_lib_name; }
             return Cnil; }
         if(!lib) {
-            if(!libName.contains('/')) {
-                libName.prepend("./"); }
             lib = new QLibrary(libName);
             libraries[libName] = lib; }
         typedef QObject* (*Ini)();
