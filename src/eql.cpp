@@ -69,13 +69,14 @@ void EQL::exec(const QStringList& args) {
               << "(eql::eval-top-level)"; }
     if(arguments.contains("-quic")) {
         arguments.removeAll("-quic");
-        if(arguments.size() == 2) {
+        if(arguments.size() >= 2) {
             QString uiFile(QDir::fromNativeSeparators(arguments.at(1)));
             int sep = uiFile.lastIndexOf('/') + 1;
             forms << QString("(ext:run-program \"uic\" (list \"-o\" \"ui.h\" \"%1\"))").arg(uiFile)  
-                  << QString("(eql:quic \"ui.h\" \"%1ui-%2.lisp\")")
+                  << QString("(eql:quic \"ui.h\" \"%1ui-%2.lisp\" %3)")
                              .arg(uiFile.left(sep))
                              .arg(uiFile.mid(sep, uiFile.length() - sep - 3))
+                             .arg((arguments.size() == 2) ? ":ui" : arguments.at(2))
                   << QString("(delete-file \"ui.h\")")
                   << QString("(eql:qq)"); }
         else {

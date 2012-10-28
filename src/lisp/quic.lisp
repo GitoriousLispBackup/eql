@@ -30,7 +30,7 @@
   (dolist (module (list :help :opengl :svg :webkit))
     (eql:qrequire module :quiet)))
 
-(defun run (&optional (ui.h "ui.h") (ui.lisp "ui.lisp"))
+(defun run (&optional (ui.h "ui.h") (ui.lisp "ui.lisp") (ui-package :ui))
   (load-ui-related-qt-modules)
   (with-setq-reset (*defvars* *qlets* *lets-ini* *lets-tr* *main-var* *main-class* *classes* *line-nr* *section*)
     (setf *defvars* (make-hash-table :test 'equal)
@@ -38,7 +38,7 @@
           *line-nr* 0)
     (with-open-file (in ui.h :direction :input)
       (with-open-file (out ui.lisp :direction :output :if-exists :supersede)
-        (format out "(defpackage :ui~%  (:use :common-lisp :eql)")
+        (format out "(defpackage ~(~S~)~%  (:use :common-lisp :eql)" ui-package)
         (let (code tr)
           (loop
             (incf *line-nr*)
@@ -54,7 +54,7 @@
                          ~%   #:ini~
                          ~%   #:retranslate-ui))~
                          ~%~
-                         ~%(in-package :ui)~
+                         ~%(in-package ~(~S~))~
                          ~%~
                          ~%(defvar ~A)~A (main widget)~
                          ~{~%(defvar ~{~A)~A~}~}~
@@ -70,6 +70,7 @@
                                    (push (var-name var) export)))
                                *defvars*)
                       (sort export 'string<))
+		    ui-package
                     (var-name *main-var*)
                     (format nil "~A ; ~A" (make-string (- max-len (length *main-var*))) *main-class*)
                     (let (defvars)
