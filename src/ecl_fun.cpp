@@ -987,26 +987,9 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
                 (n <= LObjects::T_QWebHitTestResult)) {
             if(LObjects::toMetaArg_webkit) {
                 p = LObjects::toMetaArg_webkit(n, l_arg); }}
-        else {
-            int i_enum = -1;
-            if(!sType.endsWith('>')) {
-                i_enum = sType.indexOf("::"); }
-            if(i_enum != -1) {
-                const QMetaObject* mo = 0;
-                if(sType.startsWith("Qt")) {
-                    mo = staticQtMetaObject; }
-                else {
-                    mo = LObjects::staticMetaObject(sType.left(i_enum)); }
-                int n = -1;
-                if(mo) {
-                    n = mo->indexOfEnumerator(sType.mid(i_enum + 2));
-                    if(n != -1) {
-                        QMetaEnum me = mo->enumerator(n);
-                        int* i = new int(toInt(l_arg));
-                        p = i; }}
-                if(-1 == n) {
-                    int* i = new int(toInt(l_arg));
-                    p = i; }}}}
+        else if(!sType.endsWith('>') && sType.contains(':')) { // enum
+            int* i = new int(toInt(l_arg));
+            p = i; }}
     return MetaArg(sType, p); }
 
 cl_object to_lisp_arg(const MetaArg& arg) {

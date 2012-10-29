@@ -70,7 +70,7 @@
                                    (push (var-name var) export)))
                                *defvars*)
                       (sort export 'string<))
-		    ui-package
+                    ui-package
                     (var-name *main-var*)
                     (format nil "~A ; ~A" (make-string (- max-len (length *main-var*))) *main-class*)
                     (let (defvars)
