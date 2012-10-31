@@ -19,7 +19,8 @@
 (defvar *c++* (qload-c++ (in-home "Qt_EQL_dynamic/eql_cpp")))
 
 (defun recompile-c++ ()
-  (qload-c++ "eql_cpp" :unload)
+  (qload-c++ (in-home "Qt_EQL_dynamic/eql_cpp")
+             :unload)
   (ext:run-program #+msvc "make.bat" #-msvc "make"
                    #+msvc nil        #-msvc '("-C" "cpp/")
                    :output t)

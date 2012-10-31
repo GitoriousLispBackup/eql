@@ -2368,7 +2368,7 @@ cl_object qsuper_class_name(cl_object l_name) {
 
 cl_object qsingle_shot(cl_object l_msec, cl_object l_fun) {
     /// args: (milliseconds function)
-    /// A single shot timer similar to <code>QTimer::singleShot</code>.
+    /// A single shot timer similar to <code>QTimer::singleShot()</code>.
     ///     (qsingle-shot 0 'on-qt-idle)
     ///     (let ((ms 500)) (qsingle-shot ms (lambda () (qmsg ms))))
     ecl_process_env()->nvalues = 1;
@@ -2426,10 +2426,10 @@ cl_object make_qimage_dangerous(cl_object l_vector, cl_object l_width, cl_object
 
     ecl_vector *v = &l_vector->vector;
     switch (v->elttype) {
-    case ecl_aet_bit:
-    case ecl_aet_b8:
-    case ecl_aet_b16:
-    case ecl_aet_b32:
+    case aet_bit:
+    case aet_b8:
+    case aet_b16:
+    case aet_b32:
       break;
     default:
       error_msg("%MAKE-QIMAGE/DANGEROUS", LIST5(l_vector, l_width, l_height, l_bytes_per_line, l_format));
