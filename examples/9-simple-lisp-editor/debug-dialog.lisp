@@ -26,7 +26,7 @@
       |QDialogButtonBox.Cancel|)
     (x:do-with (qfun lay "addWidget")
       msg lb cmd btn)
-    (set-color msg |QPalette.Base| "lightyellow")
+    (qset-color msg |QPalette.Base| "lightyellow")
     (qconnect btn "accepted()" dlg "accept()")
     (qconnect btn "rejected()" dlg "reject()")
     (qfun cmd "setFocus")
@@ -35,11 +35,6 @@
     (if (= |QDialog.Accepted| (qfun dlg "exec"))
         (qget cmd "text")
         ":exit")))
-
-(defun set-color (widget role color)
-  (qlet ((pal (qget widget "palette")))
-    (qfun pal "setColor(QPalette::ColorRole,QColor)" role color)
-    (qset widget "palette" pal)))
 
 (defun add-messages (text-edit messages)
   (dolist (msg messages)

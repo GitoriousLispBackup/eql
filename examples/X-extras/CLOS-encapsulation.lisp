@@ -23,11 +23,6 @@
 (defvar *label-2* (make-my-label-2))
 (defvar *label-3* (qnew "QLabel"))
 
-(defun set-color (widget role color)
-  (qlet ((pal (qget widget "palette")))
-    (qfun pal "setColor(QPalette::ColorRole,QColor)" role color)
-    (qset widget "palette" pal)))
-
 (defun run ()
   (let* ((dialog (qnew "QDialog"))
          (layout (qnew "QVBoxLayout(QWidget*)" dialog)))
@@ -38,7 +33,7 @@
                                                        color
                                                        label
                                                        (qescape (princ-to-string (symbol-value label)))))))
-      (set-color dialog |QPalette.Window| "white")
+      (qset-color dialog |QPalette.Window| "white")
       (print-me '*label-1* "red")
       (print-me '*label-2* "green")
       (print-me '*label-3* "blue"))

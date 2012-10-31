@@ -67,6 +67,7 @@
    #:qselect
    #:qsender
    #:qset
+   #:qset-color
    #:qset-null
    #:qset-property
    #:qsingle-shot

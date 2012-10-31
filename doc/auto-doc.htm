@@ -295,6 +295,13 @@
 <p>Corresponding to <code>QObject::sender()</code>. To use inside a Lisp function connected to a Qt signal.</p>
 </p><br>
 <p>
+<b>QSET-COLOR (widget color-role color)</b>
+<p>Convenience function (no <code>QPalette</code> boilerplate).</p>
+<pre>
+  (qset-color widget |QPalette.Window| "white")
+</pre>
+</p><br>
+<p>
 <b>QSET-NULL (object)</b>
 <p>Sets the Qt object pointer to <code>0</code>. This function is called automatically after <code>qdel</code>.</p>
 </p><br>

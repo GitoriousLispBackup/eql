@@ -58,6 +58,7 @@
   "qselect"
   "qsender"
   "qset"
+  "qset-color"
   "qset-ini"
   "qset-null"
   "qset-property"

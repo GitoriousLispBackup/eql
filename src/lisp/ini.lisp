@@ -276,6 +276,14 @@
     (dolist (fun '("show" "raise" "exec")) ; "raise" needed in some situations
       (qfun msg fun))))
 
+(defun qset-color (widget role color)
+  "args: (widget color-role color)
+   Convenience function (no <code>QPalette</code> boilerplate).
+       (qset-color widget |QPalette.Window| \"white\")"
+  (qlet ((pal (qget widget "palette"))) ; QLET: safer than GC for very frequent calls
+    (qfun pal "setColor(QPalette::ColorRole,QColor)" role color)
+    (qset widget "palette" pal)))
+
 (defun qexec (&optional ms)
   (%qexec ms))
 
@@ -424,6 +432,7 @@
                   (cons 'qrequire             '(module &optional quiet))
                   (cons 'qset-null            '(object))
                   (cons 'qset                 '(object name value))
+                  (cons 'qset-color           '(widget color-role color))
                   (cons 'qset-property        '(object name value))
                   (cons 'qsingle-shot         '(milliseconds function))
                   (cons 'qstatic-meta-object  '(class-name))
