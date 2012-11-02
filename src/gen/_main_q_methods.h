@@ -4454,7 +4454,9 @@ public:
     Q_INVOKABLE void MscheduleDelayedItemsLayout(QAbstractItemView* o) { ((LAbstractItemView*)o)->scheduleDelayedItemsLayout(); }
     Q_INVOKABLE void MscrollDirtyRegion(QAbstractItemView* o, int x1, int x2) { ((LAbstractItemView*)o)->scrollDirtyRegion(x1, x2); }
     Q_INVOKABLE void MsetDirtyRegion(QAbstractItemView* o, const QRegion& x1) { ((LAbstractItemView*)o)->setDirtyRegion(x1); }
+#if QT_VERSION < 0x040803
     Q_INVOKABLE void MsetState(QAbstractItemView* o, QAbstractItemView::State x1) { ((LAbstractItemView*)o)->setState(x1); }
+#endif
     Q_INVOKABLE int Mstate(QAbstractItemView* o) const { return ((LAbstractItemView*)o)->state(); }
     Q_INVOKABLE QVariant MinputMethodQuery(QAbstractItemView* o, Qt::InputMethodQuery x1) const { return o->inputMethodQuery(x1); }
 };

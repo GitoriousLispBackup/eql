@@ -3,6 +3,8 @@ BUILD / RUN
 
 Build the plugins in "cpp/", "cpp_calling_lisp/" before running the examples.
 
+See "trafficlight/" for an example of integrating a Qt/C++ application.
+
 
 
 NOTES
