@@ -4,5 +4,6 @@
 
 (assert (qt-object-p *qt-main*))
 
+(qapropos nil (first (qfind-children *qt-main* nil "LightWidget")))
 (qapropos nil *qt-main*)
 

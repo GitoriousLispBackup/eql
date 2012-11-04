@@ -1,7 +1,7 @@
 ;;; copyright (c) 2010-2012 Polos Ruetz
 ;;;
-;;; Allows to visually select any (child) widget.
-;;; On selecting, the widget will be highlighted and bound to the variable qsel:*q* 
+;;; Allows to visually select (mouse click) any (child) widget.
+;;; On selecting, the widget will be highlighted, and qsel:*q* will be set to the latest selected widget. 
 
 (defpackage :qselect
   (:nicknames :qsel)
