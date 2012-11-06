@@ -38,5 +38,4 @@ Qt_EQL/EQL/data/*
 Qt_EQL_plugin/qt_application
 real-time-comparison/test
 eql_profile*
-gmon.out
 send
