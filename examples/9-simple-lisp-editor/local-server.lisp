@@ -205,6 +205,7 @@
 (defun handle-query-io ()
   (let ((txt (query-dialog:get-text (get-output-stream-string *terminal-out-buffer*))))
     (send-to-client :activate-editor)
+    (send-to-client :values)
     (format nil "~A~%" txt)))
 
 (defun handle-debug-io ()
@@ -212,6 +213,7 @@
                                          (cons (get-output-stream-string *terminal-out-buffer*) "black"))
                                    eql::*code-font*)))
     (send-to-client :activate-editor)
+    (send-to-client :values)
     (format nil "~A~%" (if (x:empty-string cmd) ":exit" cmd))))
 
 (defun set-debugger-hook ()

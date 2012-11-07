@@ -24,22 +24,22 @@
 (set-dispatch-macro-character #\# #\q (lambda (s c n) (%read-q s)))
 
 (defun %read-q (in)
-  (list '%q (with-output-to-string (out)
-              (let ((ex #\Space)
-                    parens in-string)
-                (loop
-                  (let ((ch (read-char in)))
-                    (write-char ch out)
-                    (when (and (char=  #\" ch)
-                               (char/= #\\ ex))
-                      (setf in-string (not in-string)))
-                    (unless in-string
-                      (case ch
-                        (#\( (if parens (incf parens) (setf parens 1)))
-                        (#\) (decf parens)))
-                      (when (and parens (zerop parens))
-                        (return)))
-                    (setf ex ch)))))))
+  (list '%send-q (with-output-to-string (out)
+                   (let ((ex #\Space)
+                         parens in-string)
+                     (loop
+                       (let ((ch (read-char in)))
+                         (write-char ch out)
+                         (when (and (char=  #\" ch)
+                                    (char/= #\\ ex))
+                           (setf in-string (not in-string)))
+                         (unless in-string
+                           (case ch
+                             (#\( (if parens (incf parens) (setf parens 1)))
+                             (#\) (decf parens)))
+                           (when (and parens (zerop parens))
+                             (return)))
+                         (setf ex ch)))))))
 
 (defmacro while-it (exp &body body)
   `(let (it)
@@ -47,19 +47,19 @@
        ((not ,(list 'setf 'it exp)))
        ,@body)))
 
-(defun insert-data (string)
+(defun %send-q (string)
   (while-it (search "#." string)
     (multiple-value-bind (exp end)
-      (read-from-string (subseq string (+ it 2)))
+        (read-from-string (subseq string (+ it 2)))
       (setf string (concatenate 'string
                                 (subseq string 0 it)
                                 (prin1-to-string (eval exp))
                                 " "
                                 (subseq string (+ it 2 end))))))
-  string)
-
-(defun %q (string)
-  (#+ecl  ext:run-program
-   #+sbcl sb-ext:run-program
-   "send/send" (list (insert-data string))))
+  (#+ecl    ext:run-program
+   #+sbcl   sb-ext:run-program
+   #+darwin "./send/send.app/Contents/MacOS/send"
+   #+linux  "./send/send"
+   #+win32  "send/send.exe"
+   (list string)))
 

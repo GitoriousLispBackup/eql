@@ -11,14 +11,20 @@ int main(int argc, char** argv) {
     if(socket.isWritable()) {
         QString data(QString::number(exp.size()) + " " + exp);
         socket.write(data.toAscii());
+        qapp.processEvents();
         socket.waitForBytesWritten();
         while(true) {
+            qapp.processEvents();
             socket.waitForReadyRead();
             QString data(socket.readAll());
-            qDebug() << data.section(' ', 2);
-            if(":VALUES" == data.section(' ', 1, 1)) {
-                break; }}}
+            QString type(data.section(' ', 1, 1));
+            if(!(":EXPRESSION" == type)) {
+                QString print(data.section(' ', 2).trimmed());
+                if(!print.isEmpty()) {
+                    qDebug("%s", qPrintable(print)); }
+                if(":VALUES" == type) {
+                    return 0; }}}}
     else {
         qWarning() << "[send] error:" << exp; }
-    return 0; }
+    return -1; }
 
