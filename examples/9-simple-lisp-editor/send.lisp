@@ -1,9 +1,6 @@
 ;;; copyright (c) 2012 Polos Ruetz
 ;;;
-;;; N.B: This is both trivial and experimental!
-;;;
-;;; Send EQL code to "local-server".
-;;; Allows a (very limited) use of EQL from any Common Lisp.
+;;; Send EQL code to "local-server": a trivial one-way use of EQL from any CL.
 ;;;
 ;;; Build:
 ;;;
@@ -13,7 +10,7 @@
 ;;; Run:
 ;;;
 ;;;   eql eql-local-server.fas
-;;;   ecl -load send.lisp / sbcl --load send.lisp
+;;;   ecl -load send.lisp / sbcl --load send.lisp (tested with SBCL + Slime)
 ;;;
 ;;; Examples:
 ;;;
