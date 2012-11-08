@@ -2,15 +2,10 @@
 ;;;
 ;;; Send EQL code to "local-server": a trivial one-way use of EQL from any CL.
 ;;;
-;;; Build:
+;;; Run: (after building the executable in "send/")
 ;;;
-;;;   in "send/" do: qmake && make
-;;;   eql make-local-server-fasl.lisp
-;;;
-;;; Run:
-;;;
-;;;   eql eql-local-server.fas
-;;;   ecl -load send.lisp / sbcl --load send.lisp (tested with SBCL + Slime)
+;;;   eql local-server.lisp
+;;;   ecl -load send.lisp / sbcl --load send.lisp (SBCL + Slime works too)
 ;;;
 ;;; Examples:
 ;;;
@@ -21,7 +16,7 @@
 ;;;   #q (load "../2-clock.lisp")
 ;;;   #q (qfun clock::*clock* "showMaximized")
 
-(set-dispatch-macro-character #\# #\q (lambda (s c n) (%read-q s)))
+(set-dispatch-macro-character #\# #\q (lambda (stream c n) (%read-q stream)))
 
 (defun %read-q (in)
   (list '%send-q (with-output-to-string (out)

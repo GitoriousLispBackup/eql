@@ -7,6 +7,7 @@ int main(int argc, char** argv) {
     QLocalSocket socket;
     socket.connectToServer("EQL:simple-lisp-editor");
     socket.waitForConnected();
+    qapp.processEvents();
     QString exp(QCoreApplication::arguments().at(1));
     if(socket.isWritable()) {
         QString data(QString::number(exp.size()) + " " + exp);
@@ -14,8 +15,8 @@ int main(int argc, char** argv) {
         qapp.processEvents();
         socket.waitForBytesWritten();
         while(true) {
-            qapp.processEvents();
             socket.waitForReadyRead();
+            qapp.processEvents();
             QString data(socket.readAll());
             QString type(data.section(' ', 1, 1));
             if(!(":EXPRESSION" == type)) {
@@ -24,7 +25,6 @@ int main(int argc, char** argv) {
                     qDebug("%s", qPrintable(print)); }
                 if(":VALUES" == type) {
                     return 0; }}}}
-    else {
-        qWarning() << "[send] error:" << exp; }
+    qWarning() << "[send] error:" << exp;
     return -1; }
 
