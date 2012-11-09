@@ -760,6 +760,7 @@
                 "when-it"
                 "when-it*"
                 "while"
+                "while-it"
                 "with-gensyms"))
     (setf (gethash kw hash) t))
   hash)

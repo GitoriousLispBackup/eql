@@ -22,6 +22,7 @@
    #:when-it
    #:when-it*
    #:while
+   #:while-it
    #:with-gensyms))
 
 (provide :x)
@@ -53,6 +54,11 @@
 (defmacro while (exp &body body)
   `(do ()
        ((not ,exp))
+     ,@body))
+
+(defmacro while-it (exp &body body)
+  `(do ((it))
+     ((not ,(list 'setf 'it exp)))
      ,@body))
 
 (defmacro do-string ((var str) &body body)
