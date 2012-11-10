@@ -6,16 +6,21 @@
 ;;; Run: (after building the executable in "send/")
 ;;;
 ;;;   eql local-server.lisp
-;;;   ecl -load send.lisp / sbcl --load send.lisp (SBCL + Slime works too)
+;;;   ecl -load send.lisp / clisp -i send.lisp / sbcl --load send.lisp
 ;;;
 ;;;
 ;;; Examples: (note #!, which evaluates the following expression at run-time)
 ;;;
 ;;;   #q (qmsg (package-name *package*))
 ;;;
-;;;   #q (qmsg #!(package-name *package*)) ; pass data
+;;;   #q (qmsg #!(package-name *package*))
 ;;;
-;;;   (defun msg (x) #q (qmsg #!x))        ; embed
+;;;   (let ((a 1)
+;;;         (b 2))
+;;;     #q (qmsg (list #!a #!b)))
+;;;
+;;;   (defun msg (x)
+;;;     #q (qmsg #!x))
 ;;;
 ;;;   #q (load "../2-clock.lisp")
 ;;;   #q (qfun clock:*clock* "showMaximized")
@@ -48,17 +53,24 @@
     (while-it (search "#!" string-q)
       (multiple-value-bind (exp end)
           (read-from-string (subseq string-q (+ it 2)))
-        (push (subseq string-q 0 it) list-q)
+        (unless (zerop it)
+          (push (subseq string-q 0 it) list-q))
         (push (list 'prin1-to-string exp) list-q)
         (setf string-q (subseq string-q (+ it 2 end)))))
     (push string-q list-q)
-    (list '%send-q (append '(concatenate 'string) (reverse list-q)))))
+    `(send-q (list ,@(reverse list-q)))))
 
-(defun %send-q (string)
-  (#+ecl    ext:run-program
-   #+sbcl   sb-ext:run-program
-   #+darwin "./send/send.app/Contents/MacOS/send"
-   #+linux  "./send/send"
-   #+win32  "send/send.exe"
-   (list string)))
+(defun send-q (data)
+  (#+ecl                     ext:run-program
+   #+clisp                   run-program
+   #+sbcl                    sb-ext:run-program
+   #+darwin                  "./send/send.app/Contents/MacOS/send"
+   #+(and unix (not darwin)) "./send/send"
+   #+win32                   "send/send.exe"
+   #+clisp                   :arguments
+   (list (etypecase data
+           (string
+             data)
+           (list
+             (format nil "~{~A~^ ~}" (mapcar (lambda (x) (string-trim " " x)) data)))))))
 
