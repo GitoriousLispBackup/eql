@@ -61,9 +61,9 @@
     `(send-q (list ,@(reverse list-q)))))
 
 (defun send-q (data)
-  (#+ecl                     ext:run-program
+  (#+ecl                 ext:run-program
    #+clisp                   run-program
-   #+sbcl                    sb-ext:run-program
+   #+sbcl             sb-ext:run-program
    #+darwin                  "./send/send.app/Contents/MacOS/send"
    #+(and unix (not darwin)) "./send/send"
    #+win32                   "send/send.exe"

@@ -1018,6 +1018,7 @@ cl_object to_lisp_arg(const MetaArg& arg) {
             case QMetaType::QDate:                   l_ret = from_qdate(*(QDate*)p); break;
             case QMetaType::QDateTime:               l_ret = from_qdatetime(*(QDateTime*)p); break;
             case QMetaType::QFont:                   l_ret = from_qfont(*(QFont*)p); break;
+            case QMetaType::QIcon:                   l_ret = from_qicon(*(QIcon*)p); break;
             case QMetaType::QImage:                  l_ret = from_qimage(*(QImage*)p); break;
             case QMetaType::QKeySequence:            l_ret = from_qkeysequence(*(QKeySequence*)p); break;
             case QMetaType::QLine:                   l_ret = from_qline(*(QLine*)p); break;
@@ -1994,7 +1995,7 @@ cl_object qload_cpp(cl_object l_lib_name, cl_object l_unload) { /// qload-c++
     /// Loads a custom Qt/C++ plugin (see <code>Qt_EQL_dynamic/</code>).<br>The <code>library-name</code> has to be passed as path to the plugin, without file ending.<br>This offers a simple way to extend your application with your own Qt/C++ functions. The plugin will be reloaded (if supported by the OS) every time you call this function (Linux: see also <code>qauto-reload-c++</code>).<br>If the <code>unload</code> argument is not <code>NIL</code>, the plugin will be unloaded (if supported by the OS).
     ///     (defparameter *c++* (qload-c++ "eql_cpp")) ; load (Linux: see also QAUTO-RELOAD-C++)
     ///     (qapropos nil *c++*)                       ; documentation
-    ///     (qfun+ *c++* "mySpeedyQtFunction           ; call library function (note QFUN+)
+    ///     (qfun+ *c++* "mySpeedyQtFunction"          ; call library function (note QFUN+)
     static QHash<QString, QLibrary*> libraries;
     QString libName = toQString(l_lib_name);
     bool unload = (l_unload != Cnil);

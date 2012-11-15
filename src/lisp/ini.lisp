@@ -282,7 +282,8 @@
        (qset-color widget |QPalette.Window| \"white\")"
   (qlet ((pal (qget widget "palette"))) ; QLET: safer than GC for very frequent calls
     (qfun pal "setColor(QPalette::ColorRole,QColor)" role color)
-    (qset widget "palette" pal)))
+    (qset widget "palette" pal))
+  color)
 
 (defun qexec (&optional ms)
   (%qexec ms))
