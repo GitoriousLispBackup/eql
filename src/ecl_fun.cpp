@@ -23,6 +23,7 @@ static const QMetaObject* staticQtMetaObject = QtMetaObject::get();
 static const int T_bool_ok_pointer =                  qRegisterMetaType<bool*>("bool*");
 static const int T_QFileInfo =                        qRegisterMetaType<QFileInfo>("QFileInfo");
 static const int T_QFileInfoList =                    qRegisterMetaType<QFileInfoList>("QFileInfoList");
+static const int T_QGradient =                        qRegisterMetaType<QGradient>("QGradient");
 static const int T_QGradientStop =                    qRegisterMetaType<QGradientStop>("QGradientStop");
 static const int T_QList_QAbstractAnimation =         qRegisterMetaType<QList<QAbstractAnimation*> >("QList<QAbstractAnimation*>");
 static const int T_QList_QAbstractButton =            qRegisterMetaType<QList<QAbstractButton*> >("QList<QAbstractButton*>");
@@ -493,6 +494,13 @@ static QColor toQColor(cl_object l_c) {
         return QColor(); }
     return QColor(toQString(l_c)); }
 
+static QGradient toQGradient(cl_object l_g) {
+    QtObject o = toQtObject(l_g);
+    if(inherits(o.className(), "QGradient")) {
+        QGradient* p = (QGradient*)o.pointer;
+        return *p; }
+    return QGradient(); }
+
 static QGradientStop toQGradientStop(cl_object l_gs) {
     QGradientStop gs;
     if(cl_consp(l_gs)) {
@@ -912,6 +920,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
                 p = to_cstring_ptr(l_arg); }}
         else if(T_QFileInfo == n)                        p = new QFileInfo(toQFileInfo(l_arg));
         else if(T_QFileInfoList == n)                    p = new QFileInfoList(toQFileInfoList(l_arg));
+        else if(T_QGradient == n)                        p = new QGradient(toQGradient(l_arg));
         else if(T_QGradientStop == n)                    p = new QGradientStop(toQGradientStop(l_arg));
         else if(T_QList_QAbstractAnimation == n)         p = new QList<QAbstractAnimation*>(toQAbstractAnimationList(l_arg));
         else if(T_QList_QAbstractButton == n)            p = new QList<QAbstractButton*>(toQAbstractButtonList(l_arg));

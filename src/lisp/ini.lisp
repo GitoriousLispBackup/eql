@@ -274,7 +274,8 @@
               "icon" |QMessageBox.Information|
               "text" (if (stringp x) x (prin1-to-string x))))
     (dolist (fun '("show" "raise" "exec")) ; "raise" needed in some situations
-      (qfun msg fun))))
+      (qfun msg fun)))
+  x)
 
 (defun qset-color (widget role color)
   "args: (widget color-role color)

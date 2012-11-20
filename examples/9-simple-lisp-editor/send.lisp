@@ -72,5 +72,6 @@
            (string
              data)
            (list
-             (format nil "~{~A~^ ~}" (mapcar (lambda (x) (string-trim " " x)) data)))))))
+             (format nil "~{~A~^ ~}" (mapcar (lambda (x) (string-trim " " x)) data)))))
+   #+ecl :error #+ecl nil))
 
