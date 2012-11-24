@@ -1,6 +1,7 @@
 #include <QtCore>
 #include <QtNetwork>
 #include <QtDebug>
+#include <iostream>
 
 int main(int argc, char** argv) {
     QCoreApplication qapp(argc, argv);
@@ -22,9 +23,9 @@ int main(int argc, char** argv) {
             if(!(":EXPRESSION" == type)) {
                 QString print(data.section(' ', 2).trimmed());
                 if(!print.isEmpty()) {
-                    qDebug("%s", qPrintable(print)); }
+                    std::cout << qPrintable(print) << std::endl; }
                 if(":VALUES" == type) {
-                    return 0; }}}}
-    qWarning() << "[send] error:" << exp;
+                    exit(0); }}}}
+    qCritical() << "[send] error:" << exp;
     return -1; }
 

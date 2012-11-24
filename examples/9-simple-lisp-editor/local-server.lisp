@@ -41,7 +41,8 @@
 (defvar *trace-output-buffer*    (make-string-output-stream))
 (defvar *error-output-buffer*    (make-string-output-stream))
 (defvar *terminal-out-buffer*    (make-string-output-stream))
-(defvar *gui-debug-io*)
+(defvar *gui-debug-io*           nil)
+(defvar *sharp-q*                nil) ; see "CL_EQL/"
 
 ;; REPL variables
 (defvar +   nil)
@@ -127,8 +128,15 @@
                   end)
               (multiple-value-setq (size end)
                 (read-from-string head))
-              (push (subseq all end) data)
-              (setf bytes-read (length (first data)))))
+              (let ((data* (subseq all end)))
+                (setf bytes-read (length data*))
+                (if (and (= #.(char-code #\#) (svref data* 0))
+                         (= #.(char-code #\q) (svref data* 1)))
+                    (setf *sharp-q* t
+                          *print-pretty* nil ; for "CL_EQL/" return values
+                          data* (subseq data* 2))
+                    (setf *sharp-q* nil))
+                (push data* data))))
         (when (= size bytes-read)
           (funcall *function* (qfrom-utf8 (apply 'concatenate 'vector (nreverse data))))
           (reset :data-only))))))
@@ -164,13 +172,16 @@
       (send-to-client type str))))
 
 (defun start-top-level ()
-  (send-output :expression *standard-output-buffer*)
+  (if *sharp-q*
+      (clear)
+      (send-output :expression *standard-output-buffer*))
   (setf *debug-io* *gui-debug-io*)
   (clear-gui-debug-buffers)
   (si::%top-level)
-  (send-output :error  *error-output-buffer*)
-  (send-output :trace  *trace-output-buffer*)
-  (send-output :output *standard-output-buffer*)
+  (unless *sharp-q*
+    (send-output :error  *error-output-buffer*)
+    (send-output :trace  *trace-output-buffer*)
+    (send-output :output *standard-output-buffer*))
   (send-to-client :values (format nil "~{~%~S~}" si::*latest-values*)))
 
 (defun clear-gui-debug-buffers ()
@@ -205,7 +216,7 @@
 (defun handle-query-io ()
   (let ((txt (query-dialog:get-text (get-output-stream-string *terminal-out-buffer*))))
     (send-to-client :activate-editor)
-    (send-to-client :values)
+    (send-to-client :values txt)
     (format nil "~A~%" txt)))
 
 (defun handle-debug-io ()
@@ -213,7 +224,7 @@
                                          (cons (get-output-stream-string *terminal-out-buffer*) "black"))
                                    eql::*code-font*)))
     (send-to-client :activate-editor)
-    (send-to-client :values)
+    (send-to-client :values ":error")
     (format nil "~A~%" (if (x:empty-string cmd) ":exit" cmd))))
 
 (defun set-debugger-hook ()
@@ -226,5 +237,9 @@
 
 (defun widget-selected (widget)
   (send-to-client :widget-selected (princ-to-string widget)))
+
+(defun %get-value (exp)
+  (send-to-client :get-value (princ-to-string exp)))
+;; TODO (add wait loop etc.)
 
 (ini)

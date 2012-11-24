@@ -1,15 +1,12 @@
 ;;; copyright (c) 2012 Polos Ruetz
 ;;;
-;;; Send EQL code to "local-server": a trivial one-way use of EQL from any CL.
+;;; Run: (after building the plugin in "cpp/")
+;;;
+;;;   eql local-server.lisp (see example 9)
+;;;   ecl -load q.lisp / clisp -i q.lisp / sbcl --load q.lisp (requires cffi)
 ;;;
 ;;;
-;;; Run: (after building the executable in "send/")
-;;;
-;;;   eql local-server.lisp
-;;;   ecl -load send.lisp / clisp -i send.lisp / sbcl --load send.lisp
-;;;
-;;;
-;;; Examples: (note #!, which evaluates the following expression at run-time)
+;;; Examples: (use #! to pass data to EQL)
 ;;;
 ;;;   #q (qmsg (package-name *package*))
 ;;;
@@ -22,15 +19,40 @@
 ;;;   (defun msg (x)
 ;;;     #q (qmsg #!x))
 ;;;
+;;;   (* 3 #q (+ 2 1))
+;;;
 ;;;   #q (load "../2-clock.lisp")
 ;;;   #q (qfun clock:*clock* "showMaximized")
 
-(set-dispatch-macro-character #\# #\q (lambda (stream c n) (%read-q stream)))
+;;; cffi
+
+(cffi:load-foreign-library
+  (merge-pathnames *default-pathname-defaults*
+                   #+darwin                  "libeql_client.dylib"
+                   #+(and unix (not darwin)) "libeql_client.so"
+                   #+win32                   "eql_client.dll"))
+
+(cffi:defcfun ("send" send-q) :string (str :string))
+
+;;; utils
 
 (defmacro while-it (exp &body body)
   `(do ((it))
      ((not (setf it ,exp)))
      ,@body))
+
+(defun split (str &optional (sep #\Newline))
+  (unless (zerop (length str))
+    (let (list)
+      (do ((e (position sep str) (position sep str :start (1+ e)))
+           (b 0 (1+ e)))
+          ((not e) (push (subseq str b) list))
+        (push (subseq str b e) list))
+      (nreverse list))))
+
+;;; main
+
+(set-dispatch-macro-character #\# #\q (lambda (stream c n) (%read-q stream)))
 
 (defun %read-q (in)
   (let ((string-q (with-output-to-string (out)
@@ -58,20 +80,11 @@
         (push (list 'prin1-to-string exp) list-q)
         (setf string-q (subseq string-q (+ it 2 end)))))
     (push string-q list-q)
-    `(send-q (list ,@(reverse list-q)))))
+    `(%send-q (list ,@(reverse list-q)))))
 
-(defun send-q (data)
-  (#+ecl                 ext:run-program
-   #+clisp                   run-program
-   #+sbcl             sb-ext:run-program
-   #+darwin                  "./send/send.app/Contents/MacOS/send"
-   #+(and unix (not darwin)) "./send/send"
-   #+win32                   "send/send.exe"
-   #+clisp                   :arguments
-   (list (etypecase data
-           (string
-             data)
-           (list
-             (format nil "~{~A~^ ~}" (mapcar (lambda (x) (string-trim " " x)) data)))))
-   #+ecl :error #+ecl nil))
+(defun %send-q (data)
+  (values-list
+    (mapcar 'read-from-string
+            (split (send-q (format nil "#q~{~A~^ ~}"
+                                   (mapcar (lambda (x) (string-trim " " x)) (if (stringp data) (list data) data))))))))
 

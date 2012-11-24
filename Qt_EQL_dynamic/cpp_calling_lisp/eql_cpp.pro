@@ -1,5 +1,5 @@
 TEMPLATE    = lib
-CONFIG      += dll release
+CONFIG      += plugin release
 LIBS        += -L../.. -leql
 DESTDIR     = ../
 TARGET      = eql_fun_cpp

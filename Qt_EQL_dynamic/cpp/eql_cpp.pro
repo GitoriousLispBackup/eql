@@ -1,5 +1,5 @@
 TEMPLATE    = lib
-CONFIG      += dll release
+CONFIG      += plugin release
 DESTDIR     = ../
 TARGET      = eql_cpp
 OBJECTS_DIR = ./tmp/
