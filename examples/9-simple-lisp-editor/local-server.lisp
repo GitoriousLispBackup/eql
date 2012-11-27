@@ -242,8 +242,6 @@
 
 (defvar *eval-socket* nil)
 
-(defvar +one-hour+ (* 60 60 1000))
-
 (defun %ini-remote-eval ()
   (setf *eval-socket* (qnew "QLocalSocket"))
   (qfun *eval-socket* "connectToServer" "EQL:eval-server")
@@ -255,8 +253,8 @@
   (when (qfun *eval-socket* "isWritable")
     (let ((utf8 (qutf8 (prin1-to-string exp))))
       (qfun *eval-socket* "write(QByteArray)" (x:string-to-bytes (format nil "~D ~A" (length utf8) utf8))))
-    (qfun *eval-socket* "waitForBytesWritten" +one-hour+)
-    (qfun *eval-socket* "waitForReadyRead"    +one-hour+)
+    (qfun *eval-socket* "waitForBytesWritten")
+    (qfun *eval-socket* "waitForReadyRead")
     (let ((str (qfrom-utf8 (qfun *eval-socket* "readAll"))))
       (multiple-value-bind (size end)
           (read-from-string str)

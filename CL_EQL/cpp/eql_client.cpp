@@ -40,12 +40,18 @@ void EvalServer::readEvalWrite() {
         socket->write(ba);
         clearBytes(); }}
 
-void ev() {
+void ev(bool no_button) {
     if(!_run_) {
         _run_ = new Run; }
-    QRect rect = QApplication::desktop()->availableGeometry();
-    _run_->move(rect.x() + ((rect.width() / 2) - (_run_->width() / 2)), rect.y() + 5);
-    _run_->show();
-    _run_->loop.exec(); }
+    if(!no_button) {
+        QRect rect = QApplication::desktop()->availableGeometry();
+        _run_->move(rect.x() + ((rect.width() / 2) - (_run_->width() / 2)), rect.y() + 5);
+        _run_->show(); }
+    _run_->loop = new QEventLoop;
+    _run_->loop->exec(); }
+
+void ev_exit() {
+    _run_->hide();
+    _run_->exit(); }
 
 QT_END_NAMESPACE

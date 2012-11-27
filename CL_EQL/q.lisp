@@ -35,11 +35,17 @@
 (cffi:defcallback eval_q :string ((str :string))
   (prin1-to-string (eval (read-from-string str))))
 
-(cffi:defcfun "send_q" :string (str :string))
-(cffi:defcfun "ini_q"  :void (fun :pointer))
-(cffi:defcfun "ev"     :void)
+(cffi:defcfun "send_q"   :string (str :string))
+(cffi:defcfun "ini_q"    :void (fun :pointer))
+(cffi:defcfun ("ev" %ev) :void (no_button :boolean))
+(cffi:defcfun "ev_exit"  :void)
 
 (ini-q (cffi:callback eval_q))
+
+(defun ev (&optional no-button)
+  "Needed if #? is used, in order to have a running event loop."
+  (unwind-protect (%ev no-button)
+    (ev-exit)))
 
 ;;; utils
 

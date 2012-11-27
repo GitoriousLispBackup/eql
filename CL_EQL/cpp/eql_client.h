@@ -16,7 +16,8 @@ QT_BEGIN_NAMESPACE
 extern "C" {
     LIB_EXPORT void ini_q(void*);
     LIB_EXPORT const char* send_q(const char*);
-    LIB_EXPORT void ev();
+    LIB_EXPORT void ev(bool);
+    LIB_EXPORT void ev_exit();
 }
 
 class Main : public QLocalSocket {
@@ -103,7 +104,7 @@ class Run : public QPushButton {
     Q_OBJECT
 
 public:
-    QEventLoop loop;
+    QEventLoop* loop;
 
     Run() {
         setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool);
@@ -121,7 +122,10 @@ public:
 public Q_SLOTS:
     void exit() {
         hide();
-        loop.exit(); }
+        if(loop) {
+            loop->exit();
+            delete loop;
+            loop = 0; }}
 };
 
 QT_END_NAMESPACE
