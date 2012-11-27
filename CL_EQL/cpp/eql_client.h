@@ -1,7 +1,7 @@
 #ifndef EQL_CLIENT_H
 #define EQL_CLIENT_H
 
-#include <QtCore>
+#include <QtGui>
 #include <QtNetwork>
 #include <QtDebug>
 
@@ -14,55 +14,114 @@
 QT_BEGIN_NAMESPACE
 
 extern "C" {
-    LIB_EXPORT const char* send(const char*);
+    LIB_EXPORT void ini_q(void*);
+    LIB_EXPORT const char* send_q(const char*);
+    LIB_EXPORT void ev();
 }
 
-class Main : public QObject {
+class Main : public QLocalSocket {
     Q_OBJECT
 
 public:
     int size, bytes_read;
-    QStringList data;
+    QStringList list;
     QByteArray values;
-    QLocalSocket socket;
+    QEventLoop loop;
 
-    Main() {
-        clearValues();
-        connect(&socket, SIGNAL(readyRead()), SLOT(readValues())); }
+    void ensureConnected() {
+        if(state() == QLocalSocket::UnconnectedState) {
+            connectToServer("EQL:local-server");
+            connect(this, SIGNAL(readyRead()), SLOT(readBytes()));
+            waitForConnected(); }}
 
     const char* send(const char* str) {
-        clearValues();
-        socket.abort();
-        socket.connectToServer("EQL:simple-lisp-editor");
-        if(socket.isWritable()) {
-            QByteArray data(str);
-            data.prepend(QString::number(data.size()).toAscii() + ' ');
-            socket.write(data);
-            QCoreApplication::exec(); // see QCoreApplication::exit() in readValues()
+        ensureConnected();
+        clearBytes();
+        if(isWritable()) {
+            QByteArray ba(str);
+            ba.prepend(QString::number(ba.size()).toAscii() + ' ');
+            write(ba);
+            loop.exec();
             return values.constData(); }
+        QMessageBox::critical(0, "Error", "EQL server not reachable.");
         return 0; }
 
-    void clearValues() {
+    void clearBytes() {
         size = -1;
         bytes_read = 0;
-        data.clear();
+        list.clear();
         values.clear(); }
 
 public Q_SLOTS:
-    void readValues() {
-        QString str(socket.readAll());
+    void readBytes() {
+        QString str(readAll());
         if(size == -1) {
             size = str.section(' ', 0, 0).toInt();
             bytes_read = str.length() - str.section(' ', 0, 1).length() - 1;
-            data << str.section(' ', 2); }
+            list << str.section(' ', 2); }
         else if(bytes_read < size) {
-            data << str;
+            list << str;
             bytes_read += str.length(); }
         if(size == bytes_read) {
-            values = data.join("").trimmed().toAscii();
-            data.clear();
+            values = list.join("").trimmed().toAscii();
+            list.clear();
             size = -1;
-            QCoreApplication::exit(); }}
+            loop.exit(); }}
+};
+
+class EvalServer : public QLocalServer {
+    Q_OBJECT
+
+public:
+    int size, bytes_read;
+    QStringList list;
+    QByteArray expression, result;
+    QLocalSocket* socket;
+
+    EvalServer() : socket(0) {
+        clearBytes();
+        QString name("EQL:eval-server");
+        QLocalServer::removeServer(name);
+        listen(name),
+        connect(this, SIGNAL(newConnection()), SLOT(newConnection())); }
+
+    void clearBytes() {
+        size = -1;
+        bytes_read = 0;
+        list.clear();
+        expression.clear(); }
+
+public Q_SLOTS:
+    void newConnection() {
+        socket = nextPendingConnection();
+        connect(socket, SIGNAL(readyRead()), SLOT(readEvalWrite())); }
+
+    void readEvalWrite();
+};
+
+class Run : public QPushButton {
+    Q_OBJECT
+
+public:
+    QEventLoop loop;
+
+    Run() {
+        setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool);
+        setAttribute(Qt::WA_MacAlwaysShowToolWindow, true);
+        setText("Back to REPL");
+        QFont f(font());
+        f.setBold(true);
+        setFont(f);
+        QPalette pal(palette());
+        pal.setColor(QPalette::Button, QColor("peachpuff"));
+        setPalette(pal);
+        adjustSize();
+        connect(this, SIGNAL(clicked()), SLOT(exit())); }
+
+public Q_SLOTS:
+    void exit() {
+        hide();
+        loop.exit(); }
 };
 
 QT_END_NAMESPACE

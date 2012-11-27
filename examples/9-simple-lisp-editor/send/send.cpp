@@ -6,7 +6,7 @@
 int main(int argc, char** argv) {
     QCoreApplication qapp(argc, argv);
     QLocalSocket socket;
-    socket.connectToServer("EQL:simple-lisp-editor");
+    socket.connectToServer("EQL:local-server");
     socket.waitForConnected();
     qapp.processEvents();
     QString exp(QCoreApplication::arguments().at(1));

@@ -6,7 +6,7 @@
 ;;;   ecl -load q.lisp / clisp -i q.lisp / sbcl --load q.lisp (requires cffi)
 ;;;
 ;;;
-;;; Examples: (use #! to pass data to EQL)
+;;; Examples: (use #! to pass immediate data to EQL, use #? to pass eventual data to EQL)
 ;;;
 ;;;   #q (qmsg (package-name *package*))
 ;;;
@@ -32,7 +32,14 @@
                    #+(and unix (not darwin)) "libeql_client.so"
                    #+win32                   "eql_client.dll"))
 
-(cffi:defcfun ("send" send-q) :string (str :string))
+(cffi:defcallback eval_q :string ((str :string))
+  (prin1-to-string (eval (read-from-string str))))
+
+(cffi:defcfun "send_q" :string (str :string))
+(cffi:defcfun "ini_q"  :void (fun :pointer))
+(cffi:defcfun "ev"     :void)
+
+(ini-q (cffi:callback eval_q))
 
 ;;; utils
 
@@ -72,12 +79,16 @@
                                     (return)))))
                           (setf ex ch))))))
         list-q)
-    (while-it (search "#!" string-q)
+    (while-it (or (search "#!" string-q)
+                  (search "#?" string-q))
       (multiple-value-bind (exp end)
           (read-from-string (subseq string-q (+ it 2)))
         (unless (zerop it)
           (push (subseq string-q 0 it) list-q))
-        (push (list 'prin1-to-string exp) list-q)
+        (push (if (char= #\! (char string-q (1+ it)))
+                  (list 'prin1-to-string exp)
+                  (format nil "(local-server::%remote-eval '~S)" exp))
+              list-q)
         (setf string-q (subseq string-q (+ it 2 end)))))
     (push string-q list-q)
     `(%send-q (list ,@(reverse list-q)))))

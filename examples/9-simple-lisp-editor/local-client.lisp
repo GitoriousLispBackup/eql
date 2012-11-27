@@ -18,7 +18,7 @@
 
 (defvar *function*    nil)
 (defvar *socket*      (qnew "QLocalSocket"))
-(defvar *server-name* "EQL:simple-lisp-editor")
+(defvar *server-name* "EQL:local-server")
 
 (defun ini (&optional fun)
   (setf *function* fun)

@@ -55,7 +55,7 @@
 (defvar //  nil)
 (defvar /// nil)
 
-(defun ini (&optional (name "EQL:simple-lisp-editor"))
+(defun ini (&optional (name "EQL:local-server"))
   (qfun "QLocalServer" "removeServer" name)
   (if (qfun *server* "listen" name)
       (progn
@@ -238,8 +238,30 @@
 (defun widget-selected (widget)
   (send-to-client :widget-selected (princ-to-string widget)))
 
-(defun %get-value (exp)
-  (send-to-client :get-value (princ-to-string exp)))
-;; TODO (add wait loop etc.)
+;;; see #? form "CL_EQL/"
+
+(defvar *eval-socket* nil)
+
+(defvar +one-hour+ (* 60 60 1000))
+
+(defun %ini-remote-eval ()
+  (setf *eval-socket* (qnew "QLocalSocket"))
+  (qfun *eval-socket* "connectToServer" "EQL:eval-server")
+  (qfun *eval-socket* "waitForConnected"))
+
+(defun %remote-eval (exp)
+  (unless *eval-socket*
+    (%ini-remote-eval))
+  (when (qfun *eval-socket* "isWritable")
+    (let ((utf8 (qutf8 (prin1-to-string exp))))
+      (qfun *eval-socket* "write(QByteArray)" (x:string-to-bytes (format nil "~D ~A" (length utf8) utf8))))
+    (qfun *eval-socket* "waitForBytesWritten" +one-hour+)
+    (qfun *eval-socket* "waitForReadyRead"    +one-hour+)
+    (let ((str (qfrom-utf8 (qfun *eval-socket* "readAll"))))
+      (multiple-value-bind (size end)
+          (read-from-string str)
+        (let ((str* (subseq str end)))
+          (assert (= size (length str*))) ; TODO
+          (read-from-string str*))))))
 
 (ini)
