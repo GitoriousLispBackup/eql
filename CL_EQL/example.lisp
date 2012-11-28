@@ -22,31 +22,32 @@
 (defparameter *button-text*     "Click for words of wisdom.")
 
 (let (seq)
-  (defun reset ()
+  (defun %reset ()
     (dotimes (i (length *words-of-wisdom*))
       (push i seq)))
   (defun words-of-wisdom ()
     (unless seq
-      (reset))
+      (%reset))
     (let ((n (nth (random (length seq)) seq)))
       (setf seq (remove n seq))
       (nth n *words-of-wisdom*))))
 
 ;;; #q ---------------------------------------------------------------------------------------
 
-;; passing a CL value: #!
+;;; #! pass a CL value to EQL
+;;; #? EQL will ask for evaluation in CL at execution time
 
-#q (defvar *button* (qnew "QPushButton"
-                          "text"        #!*button-text*
-                          "minimumSize" '(200 50)))
+#q (progn
 
-#q (qfun *button* "show")
+(defvar *button* (qnew "QPushButton"
+                       "text"        #!*button-text*
+                       "minimumSize" '(200 50)))
 
-;; event driven eval request: #?
+(qfun *button* "show")
 
-#q (qconnect *button* "clicked()" (lambda () (qmsg #?(words-of-wisdom))))
+(qconnect *button* "clicked()" (lambda () (qmsg #?(words-of-wisdom))))
 
-;; needed for #? only (see "Back to REPL" at the top of the desktop)
+) ; #q progn
 
-(ev)
+(ev) ; needed for #? only (see "Back to REPL" at the top of the desktop)
 
