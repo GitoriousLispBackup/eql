@@ -4,8 +4,8 @@ PREAMBLE
 This is just an experimental idea: please don't expect too much from it!
 
 
-SO, WHAT'S IT?
-==============
+SO, WHAT IS IT?
+===============
 
 A simple client for EQL local-server, usable from any CL + CFFI.
 

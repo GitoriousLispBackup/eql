@@ -14,10 +14,10 @@
 QT_BEGIN_NAMESPACE
 
 extern "C" {
-    LIB_EXPORT void ini_q(void*);
+    LIB_EXPORT void        ini_q(void*);
     LIB_EXPORT const char* send_q(const char*);
-    LIB_EXPORT void ev(bool);
-    LIB_EXPORT void ev_exit();
+    LIB_EXPORT void        ev(bool);
+    LIB_EXPORT void        ev_exit();
 }
 
 class Main : public QLocalSocket {
@@ -27,7 +27,9 @@ public:
     int size, bytes_read;
     QStringList list;
     QByteArray values;
-    QEventLoop loop;
+    QEventLoop* loop;
+
+    Main() : loop(0) {}
 
     void ensureConnected() {
         if(state() == QLocalSocket::UnconnectedState) {
@@ -42,7 +44,9 @@ public:
             QByteArray ba(str);
             ba.prepend(QString::number(ba.size()).toAscii() + ' ');
             write(ba);
-            loop.exec();
+            delete loop; // force reset on eventual Lisp errors
+            loop = new QEventLoop;
+            loop->exec();
             return values.constData(); }
         QMessageBox::critical(0, "Error", "EQL server not reachable.");
         return 0; }
@@ -64,10 +68,14 @@ public Q_SLOTS:
             list << str;
             bytes_read += str.length(); }
         if(size == bytes_read) {
+            if(!size) {
+                abort(); } // reset connection on Lisp errors
             values = list.join("").trimmed().toAscii();
             list.clear();
             size = -1;
-            loop.exit(); }}
+            loop->exit();
+            delete loop; // force reset on eventual Lisp errors
+            loop = 0; }}
 };
 
 class EvalServer : public QLocalServer {
@@ -106,7 +114,7 @@ class Run : public QPushButton {
 public:
     QEventLoop* loop;
 
-    Run() {
+    Run() : loop(0) {
         setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool);
         setAttribute(Qt::WA_MacAlwaysShowToolWindow, true);
         setText("Back to REPL");
@@ -124,7 +132,7 @@ public Q_SLOTS:
         hide();
         if(loop) {
             loop->exit();
-            delete loop;
+            delete loop; // force reset on Lisp errors
             loop = 0; }}
 };
 

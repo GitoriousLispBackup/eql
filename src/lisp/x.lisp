@@ -17,6 +17,7 @@
    #:join
    #:split
    #:starts-with
+   #:string-split
    #:string-substitute
    #:string-to-bytes
    #:when-it
@@ -94,13 +95,22 @@
 (defun ends-with (sub str)
   (str-with sub str nil))
 
-(defun string-substitute (new old str)
-  (let ((l (length old)))
+(defun string-split (string separator)
+  (let ((len (length separator))
+        list)
+    (do ((e (search separator string) (search separator string :start2 (+ e len)))
+         (b 0 (+ e len)))
+        ((not e) (push (subseq string b) list))
+      (push (subseq string b e) list))
+    (nreverse list)))
+
+(defun string-substitute (new old string)
+  (let ((len (length old)))
     (with-output-to-string (s)
-      (do ((e (search old str) (search old str :start2 (+ e l)))
-           (b 0 (+ e l)))
-          ((not e) (write-string (subseq str b) s))
-        (write-string (subseq str b e) s)
+      (do ((e (search old string) (search old string :start2 (+ e len)))
+           (b 0 (+ e len)))
+          ((not e) (write-string (subseq string b) s))
+        (write-string (subseq string b e) s)
         (write-string new s)))))
 
 (defun ensure-list (x)

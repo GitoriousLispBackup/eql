@@ -32,13 +32,15 @@
                    #+(and unix (not darwin)) "libeql_client.so"
                    #+win32                   "eql_client.dll"))
 
-(cffi:defcallback eval_q :string ((str :string))
-  (prin1-to-string (eval (read-from-string str))))
-
 (cffi:defcfun "send_q"   :string (str :string))
 (cffi:defcfun "ini_q"    :void (fun :pointer))
 (cffi:defcfun ("ev" %ev) :void (no_button :boolean))
 (cffi:defcfun "ev_exit"  :void)
+
+(cffi:defcallback eval_q :string ((str :string))
+  (if (zerop (length str))
+      ":eval-error"
+      (prin1-to-string (eval (read-from-string str)))))
 
 (ini-q (cffi:callback eval_q))
 
@@ -54,13 +56,17 @@
      ((not (setf it ,exp)))
      ,@body))
 
-(defun split (str &optional (sep #\Newline))
-  (unless (zerop (length str))
-    (let (list)
-      (do ((e (position sep str) (position sep str :start (1+ e)))
-           (b 0 (1+ e)))
-          ((not e) (push (subseq str b) list))
-        (push (subseq str b e) list))
+(defun string-split (string separator)
+  (let ((len (length separator))
+        list)
+    (flet ((push* (b &optional e)
+             (when (or (not e)
+                       (/= b e))
+               (push (subseq string b e) list))))
+      (do ((e (search separator string) (search separator string :start2 (+ e len)))
+           (b 0 (+ e len)))
+          ((not e) (push* b))
+        (push* b e))
       (nreverse list))))
 
 ;;; main
@@ -101,7 +107,9 @@
 
 (defun %send-q (data)
   (values-list
-    (mapcar 'read-from-string
-            (split (send-q (format nil "#q~{~A~^ ~}"
-                                   (mapcar (lambda (x) (string-trim " " x)) (if (stringp data) (list data) data))))))))
+    (mapcar (lambda (str) (unless (zerop (length str)) (read-from-string str)))
+            (string-split (send-q (format nil "#q~{~A~^ ~}"
+                                          (mapcar (lambda (x) (string-trim " " x))
+                                                  (if (stringp data) (list data) data))))
+                          "#||#")))) ; used as value separator
 

@@ -755,6 +755,7 @@
                 "join"
                 "split"
                 "starts-with"
+                "string-split"
                 "string-substitute"
                 "string-to-bytes"
                 "when-it"

@@ -21,8 +21,16 @@
 
 (defparameter *button-text*     "Click for words of wisdom.")
 
-(defun words-of-wisdom ()
-  (nth (random (length *words-of-wisdom*)) *words-of-wisdom*))
+(let (seq)
+  (defun reset ()
+    (dotimes (i (length *words-of-wisdom*))
+      (push i seq)))
+  (defun words-of-wisdom ()
+    (unless seq
+      (reset))
+    (let ((n (nth (random (length seq)) seq)))
+      (setf seq (remove n seq))
+      (nth n *words-of-wisdom*))))
 
 ;;; #q ---------------------------------------------------------------------------------------
 

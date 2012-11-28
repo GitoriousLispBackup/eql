@@ -1097,7 +1097,9 @@
                          (:trace  "darkmagenta")
                          (:error  "red")
                          (t       "black")))
-       ("insertPlainText" str))
+       ("insertPlainText" (if (eql :values type)
+                              (x:string-substitute (string #\Newline) "#||#" str)
+                              str)))
      (let ((vs (qfun *output* "verticalScrollBar")))
        (qset vs "value" (qget vs "maximum"))))
     (:file-position
