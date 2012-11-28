@@ -16,7 +16,8 @@ BUILD / RUN
 ===========
 
 - build plugin in "cpp/"
-- run: 'eql local-server.lisp' (in example 9)
+- run: 'eql local-server.lisp' (example 9)
+       (optionally build/run executable in "<example 9>/exe/")
 - load "q.lisp" (requires CFFI)
 
 

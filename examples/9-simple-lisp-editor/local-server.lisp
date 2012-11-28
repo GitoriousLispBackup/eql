@@ -93,8 +93,7 @@
 
 (defun ini-system-tray ()
   (let* ((tray (qnew "QSystemTrayIcon(QIcon)"
-                     (qnew "QIcon(QString)"
-                           (in-home "examples/9-simple-lisp-editor/data/local_server.png"))))
+                     (qnew "QIcon(QString)" "data/local_server.png")))
          (menu (qnew "QMenu"))
          (quit (qnew "QAction(QObject*)" menu "text" (tr "Quit EQL server"))))
     (qfun menu "addAction(QAction*)" quit)

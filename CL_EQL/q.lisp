@@ -2,8 +2,8 @@
 ;;;
 ;;; Run: (after building the plugin in "cpp/")
 ;;;
-;;;   eql local-server.lisp (see example 9)
-;;;   ecl -load q.lisp / clisp -i q.lisp / sbcl --load q.lisp (requires cffi)
+;;;   eql local-server.lisp (in example 9, see also "<example 9>/exe/")
+;;;   ecl -load q.lisp / clisp -i q.lisp / sbcl --load q.lisp (any CL + CFFI)
 ;;;
 ;;;
 ;;; Examples: (use #! to pass immediate data to EQL, use #? to pass eventual data to EQL)
