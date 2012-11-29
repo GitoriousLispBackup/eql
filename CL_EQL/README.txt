@@ -24,11 +24,11 @@ BUILD / RUN
 WHY?
 ====
 
-Say you have a non threaded CL, and want to use a GUI from Slime without
-any setup/run/crash hassle.
+Say you have a non threaded CL, and want to use a GUI in Slime without any
+setup/run/crash hassle.
 
 
-THE #q READER MACRO
+THE '#q' READER MACRO
 ===================
 
 This reader macro executes the following expression remotely in EQL,
@@ -39,17 +39,35 @@ Example:
 
   (* 3 #q (qmsg (+ 2 1)))
 
+Optionally you can use 'q', which is a macro version of '#q' adding a PROGN:
 
-(ev): EVENT DRIVEN EVAL REQUESTS FROM EQL
-=========================================
+  (q (defvar *label* (qnew "QLabel" "text" "<h1>A rocking GUI!"))
+     (qfun *label* "show"))
 
-See "#?" in "example.lisp" for passing data to EQL functions at execution time.
 
-The function "(ev)" is needed in such cases, because we need a server listening
+SLIME NOTES
+===========
+
+Since '#q' doesn't work with "eval region", use the 'q' macro instead
+(see above).
+
+If your CL has threads enabled, you need to set your Swank communication
+style to either :sigio or :fd-handler in your ".swank.lisp" file
+(style :spawn uses threads, and would crash together with 'q' / '#q').
+
+  (setf swank:*communication-style* :sigio)
+
+
+'(ev)': EVENT DRIVEN EVAL REQUESTS FROM EQL
+===========================================
+
+See '?' in "example.lisp" for passing data to EQL functions at execution time.
+
+The function '(ev)' is needed in such cases, because we need a server listening
 to requests from EQL (see "cpp/*").
-In order to gracefully stop "(ev)", use the Qt button "Back to REPL" shown at
-the top of the desktop while "(ev)" is running.
+In order to gracefully stop '(ev)', use the Qt button "Back to REPL" shown at
+the top of the desktop while '(ev)' is running.
 
-If you don't need to pass data at execution time, you can forget about "(ev)"
+If you don't need to pass data at execution time, you can forget about '(ev)'
 (that is, you will never need to block your REPL).
 

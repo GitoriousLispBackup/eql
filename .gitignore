@@ -39,3 +39,4 @@ Qt_EQL_plugin/qt_application
 real-time-comparison/test
 eql_profile*
 send
+eql_local_server

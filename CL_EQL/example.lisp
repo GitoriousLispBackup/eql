@@ -1,9 +1,9 @@
 ;;;
-;;; A simple example showing how to use all of: #q #! #?
+;;; A simple example showing how to use all of: 'q' '!' '?'
 ;;;
 ;;; Usage:
 ;;;
-;;;   eql local-server.lisp  (see example 9)
+;;;   eql local-server.lisp  (see example 9; optionally see "<example 9>/exe/")
 ;;;   ecl -load example.lisp (any CL + CFFI will do)
 ;;;
 
@@ -32,22 +32,16 @@
       (setf seq (remove n seq))
       (nth n *words-of-wisdom*))))
 
-;;; #q ---------------------------------------------------------------------------------------
+;;; q ----------------------------------------------------------------------------------------
 
-;;; #! pass a CL value to EQL
-;;; #? EQL will ask for evaluation in CL at execution time
+;;; ! pass a CL value to EQL
+;;; ? EQL will ask for evaluation in CL at execution time
 
-#q (progn
+(q (defvar *button* (qnew "QPushButton"
+                          "text"        !*button-text*                    ; note '!'
+                          "minimumSize" '(200 50)))
+   (qfun *button* "show")
+   (qconnect *button* "clicked()" (lambda () (qmsg ?(words-of-wisdom))))) ; note '?'
 
-(defvar *button* (qnew "QPushButton"
-                       "text"        #!*button-text*
-                       "minimumSize" '(200 50)))
-
-(qfun *button* "show")
-
-(qconnect *button* "clicked()" (lambda () (qmsg #?(words-of-wisdom))))
-
-) ; #q progn
-
-(ev) ; needed for #? only (see "Back to REPL" at the top of the desktop)
+(ev) ; needed for '?' only (see "Back to REPL" at the top of the desktop)
 

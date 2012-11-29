@@ -6,23 +6,28 @@
 ;;;   ecl -load q.lisp / clisp -i q.lisp / sbcl --load q.lisp (any CL + CFFI)
 ;;;
 ;;;
-;;; Examples: (use #! to pass immediate data to EQL, use #? to pass eventual data to EQL)
+;;; Examples: (use '!' to pass immediate data to EQL, use '?' to pass eventual data to EQL)
 ;;;
 ;;;   #q (qmsg (package-name *package*))
 ;;;
-;;;   #q (qmsg #!(package-name *package*))
+;;;   #q (qmsg !(package-name *package*))
 ;;;
 ;;;   (let ((a 1)
 ;;;         (b 2))
-;;;     #q (qmsg (list #!a #!b)))
+;;;     #q (qmsg (list !a !b)))
 ;;;
 ;;;   (defun msg (x)
-;;;     #q (qmsg #!x))
+;;;     #q (qmsg !x))
 ;;;
 ;;;   (* 3 #q (+ 2 1))
 ;;;
 ;;;   #q (load "../2-clock.lisp")
 ;;;   #q (qfun clock:*clock* "showMaximized")
+;;;
+;;; Instead of '#q' you can use the 'q' macro (more convenient in e.g. Slime):
+;;;
+;;;   (q (defvar *label* (qnew "QLabel" "text" "<h1>Desktop GUIs rock!"))
+;;;      (qfun *label* "show"))
 
 ;;; cffi
 
@@ -45,7 +50,7 @@
 (ini-q (cffi:callback eval_q))
 
 (defun ev (&optional no-button)
-  "Needed if #? is used, in order to have a running event loop."
+  "Needed if '?' is used, in order to have a running event loop."
   (unwind-protect (%ev no-button)
     (ev-exit)))
 
@@ -76,34 +81,45 @@
 (defun %read-q (in)
   (let ((string-q (with-output-to-string (out)
                     (let ((ex #\Space)
-                          parens in-string)
+                          parens in-string comment)
                       (loop
                         (let ((ch (read-char in)))
-                          (write-char ch out)
-                          (unless (char= #\\ ex)
-                            (if (char=  #\" ch)
-                                (setf in-string (not in-string))
-                                (unless in-string
-                                  (case ch
-                                    (#\( (if parens (incf parens) (setf parens 1)))
-                                    (#\) (decf parens)))
-                                  (when (and parens (zerop parens))
-                                    (return)))))
+                          (if comment
+                              (when (char= #\Newline ch)
+                                (setf comment nil))
+                              (unless (char= #\\ ex)
+                                (if (char= #\" ch)
+                                    (setf in-string (not in-string))
+                                    (unless in-string
+                                      (case ch
+                                        (#\( (if parens (incf parens) (setf parens 1)))
+                                        (#\) (decf parens))
+                                        (#\; (setf comment t)))))))
+                          (unless comment
+                            (write-char ch out))
+                          (when (and parens (zerop parens))
+                            (return))
                           (setf ex ch))))))
         list-q)
-    (while-it (or (search "#!" string-q)
-                  (search "#?" string-q))
+    (while-it (or (position #\! string-q)
+                  (position #\? string-q))
       (multiple-value-bind (exp end)
-          (read-from-string (subseq string-q (+ it 2)))
+          (read-from-string (subseq string-q (1+ it)))
         (unless (zerop it)
           (push (subseq string-q 0 it) list-q))
-        (push (if (char= #\! (char string-q (1+ it)))
+        (push (if (char= #\! (char string-q it))
                   (list 'prin1-to-string exp)
                   (format nil "(local-server::%remote-eval '~S)" exp))
               list-q)
-        (setf string-q (subseq string-q (+ it 2 end)))))
+        (setf string-q (subseq string-q (+ it 1 end)))))
     (push string-q list-q)
     `(%send-q (list ,@(reverse list-q)))))
+
+(defmacro q (&body body)
+  "Similar to #Q, but including a PROGN, and allowing 'eval region' in Slime."
+  (let ((*print-pretty* nil))
+    (with-input-from-string (s (prin1-to-string (if (second body) `(progn ,@body) (first body))))
+      (%read-q s))))
 
 (defun %send-q (data)
   (values-list
