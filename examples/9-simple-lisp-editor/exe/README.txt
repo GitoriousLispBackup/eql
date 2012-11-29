@@ -5,3 +5,9 @@ BUILD
   qmake
   make
 
+
+QUIT
+====
+
+See menu of the "Q" system tray icon.
+

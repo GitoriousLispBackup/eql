@@ -29,7 +29,7 @@ setup/run/crash hassle.
 
 
 THE '#q' READER MACRO
-===================
+=====================
 
 This reader macro executes the following expression remotely in EQL,
 passing back any return value(s).

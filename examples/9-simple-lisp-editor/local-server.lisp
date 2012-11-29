@@ -133,6 +133,7 @@
                          (= #.(char-code #\q) (svref data* 1)))
                     (setf *sharp-q* t
                           *print-pretty* nil ; for "CL_EQL/" return values
+                          eql:*break-on-errors* t
                           data* (subseq data* 2))
                     (setf *sharp-q* nil))
                 (push data* data))))
