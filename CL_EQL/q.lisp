@@ -74,6 +74,11 @@
         (push* b e))
       (nreverse list))))
 
+;;; load all EQL symbols (for symbol completion)
+
+(with-open-file (in "EQL-symbols.lisp" :direction :input)
+  (while-it (read in nil nil)))
+
 ;;; main
 
 (set-dispatch-macro-character #\# #\q (lambda (stream c n) (%read-q stream)))

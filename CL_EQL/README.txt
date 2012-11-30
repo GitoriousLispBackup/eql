@@ -57,6 +57,9 @@ style to either :sigio or :fd-handler in your ".swank.lisp" file
 
   (setf swank:*communication-style* :sigio)
 
+Symbol completion works for all EQL symbols (including enums), because they
+are read in in "q.lisp".
+
 
 '(ev)': EVENT DRIVEN EVAL REQUESTS FROM EQL
 ===========================================
