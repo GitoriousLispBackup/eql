@@ -1,4 +1,4 @@
-;;; write all exported EQL symbols in a file
+;;; write all external EQL symbols in a file
 
 (in-package :eql)
 

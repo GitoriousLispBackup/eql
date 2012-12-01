@@ -29,6 +29,8 @@
 ;;;   (q (defvar *label* (qnew "QLabel" "text" "<h1>Desktop GUIs rock!"))
 ;;;      (qfun *label* "show"))
 
+(defparameter *load-eql-symbols* t)
+
 ;;; cffi
 
 (cffi:load-foreign-library
@@ -48,11 +50,6 @@
       (prin1-to-string (eval (read-from-string str)))))
 
 (ini-q (cffi:callback eval_q))
-
-(defun ev (&optional no-button)
-  "Needed if '?' is used, in order to have a running event loop."
-  (unwind-protect (%ev no-button)
-    (ev-exit)))
 
 ;;; utils
 
@@ -74,10 +71,11 @@
         (push* b e))
       (nreverse list))))
 
-;;; load all EQL symbols (for symbol completion)
+;;; load all exported EQL symbols (for symbol completion)
 
-(with-open-file (in "EQL-symbols.lisp" :direction :input)
-  (while-it (read in nil nil)))
+(when *load-eql-symbols*
+  (with-open-file (in "EQL-symbols.lisp" :direction :input)
+    (while-it (read in nil nil))))
 
 ;;; main
 
@@ -122,15 +120,23 @@
 
 (defmacro q (&body body)
   "Similar to #Q, but including a PROGN, and allowing 'eval region' in Slime."
-  (let ((*print-pretty* nil))
-    (with-input-from-string (s (prin1-to-string (if (second body) `(progn ,@body) (first body))))
-      (%read-q s))))
+  (with-input-from-string (s (prin1-to-string (if (second body) `(progn ,@body) (first body))))
+    (%read-q s)))
 
 (defun %send-q (data)
   (values-list
-    (mapcar (lambda (str) (unless (zerop (length str)) (read-from-string str)))
+    (mapcar (lambda (str)
+              (unless (zerop (length str))
+                (if (eql (search "#<" str) 0)
+                    str ; return unreadable objects as strings
+                    (read-from-string str))))
             (string-split (send-q (format nil "#q~{~A~^ ~}"
                                           (mapcar (lambda (x) (string-trim " " x))
                                                   (if (stringp data) (list data) data))))
                           "#||#")))) ; used as value separator
+
+(defun ev (&optional no-button)
+  "Needed if '?' is used, in order to have a running event loop."
+  (unwind-protect (%ev no-button)
+    (ev-exit)))
 

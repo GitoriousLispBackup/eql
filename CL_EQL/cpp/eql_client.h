@@ -29,12 +29,12 @@ public:
     QByteArray values;
     QEventLoop* loop;
 
-    Main() : loop(0) {}
+    Main() : loop(0) { 
+        connect(this, SIGNAL(readyRead()), SLOT(readBytes())); }
 
     void ensureConnected() {
         if(state() == QLocalSocket::UnconnectedState) {
             connectToServer("EQL:local-server");
-            connect(this, SIGNAL(readyRead()), SLOT(readBytes()));
             waitForConnected(); }}
 
     const char* send(const char* str) {
@@ -132,7 +132,7 @@ public Q_SLOTS:
         hide();
         if(loop) {
             loop->exit();
-            delete loop; // force reset on Lisp errors
+            delete loop; // force reset on eventual Lisp errors
             loop = 0; }}
 };
 
