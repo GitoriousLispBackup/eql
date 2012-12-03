@@ -1,11 +1,21 @@
-;;; This is a port of the Qt Example "Wiggly Widget"
+;;; "Wiggly Widget" example, directly loadable into any CL + CFFI.
+;;; 
+;;; 2 separate Q macro regions are needed because of IN-PACKAGE.
 
-(defpackage :wiggly-widget
-  (:use :common-lisp :eql)
-  (:export
-   #:start))
+(load "q.lisp")
 
-(in-package :wiggly-widget)
+(q (defpackage :wiggly
+     (:use :common-lisp :eql)
+     (:export
+      *sinus*
+      *wiggly*
+      *edit*
+      *timer*
+      #:start))
+
+   (in-package :wiggly))
+
+(q ; begin
 
 (defvar *sinus* #(0 38 71 92 100 92 71 38 0 -38 -71 -92 -100 -92 -71 -38))
 
@@ -18,20 +28,20 @@
 (defun start ()
   (qset *wiggly* "font" (let ((font (qnew "QFont(QFont)" (qfun "QApplication" "font"))))
                           (qfun font "setPointSize"
-                                (+ 20 (qfun font "pointSize")))
+                                (+ 10 (qfun font "pointSize")))
                           font))
   (qfun *wiggly* "setBackgroundRole" |QPalette.Light|)
-  (let ((dlg (qnew "QDialog" "size" (list 600 200)))
+  (let ((dlg (qnew "QDialog" "size" (list 700 200)))
         (vbox (qnew "QVBoxLayout")))
     (qfun dlg "setLayout" vbox)
     (dolist (w (list *wiggly* *edit*))
       (qfun vbox "addWidget" w))
-    (qfun *timer* "start" 75 *wiggly*)
-    (x:do-with (qoverride *wiggly*)
-      ("paintEvent(QPaintEvent*)" 'paint)
-      ("timerEvent(QTimerEvent*)" 'timeout))
-    (qset *edit* "text" "= AMOR = ROMA =")
-    (x:do-with (qfun dlg) "show" "raise")))
+    (qfun *timer* "start" 42 *wiggly*)
+    (qoverride *wiggly* "paintEvent(QPaintEvent*)" 'paint)
+    (qoverride *wiggly* "timerEvent(QTimerEvent*)" 'timeout)
+    (qset *edit* "text" "Some Lisps are more Common than others.")
+    (qfun dlg "show")
+    (qfun dlg "raise")))
 
 (defun paint (ev)
   (qlet ((painter "QPainter(QWidget*)" *wiggly*) ; local QPainter variable: no need to call "begin", "end"
@@ -49,11 +59,10 @@
         (let ((ix (mod (+ i *step*) 16))
               (ch (char txt i)))
           (qfun pen "setColor" (qfun "QColor" "fromHsv" (* 16 (- 15 ix)) 255 191))
-          (x:do-with (qfun painter)
-            ("setPen(QPen)" pen)
-            ("drawText(QPoint,QString)" (list (floor x)
-                                              (floor (- y (/ (* h (svref *sinus* ix)) 400))))
-                                        (string ch)))
+          (qfun painter "setPen(QPen)" pen)
+          (qfun painter "drawText(QPoint,QString)" (list (floor x)
+                                                         (floor (- y (/ (* h (svref *sinus* ix)) 400))))
+                                                         (string ch))
           (incf x (qfun metrics "width(QChar)" ch)))))))
 
 (defun timeout (ev)
@@ -63,3 +72,5 @@
   (qcall-default))
 
 (start)
+
+) ; end q

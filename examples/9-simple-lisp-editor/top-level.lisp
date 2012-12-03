@@ -115,13 +115,11 @@
   (finish-output)
   (when *read-string*
     (prog1
-        (multiple-value-bind (exp err)
-            (ignore-errors (read-from-string *read-string*))
-          (if exp
-              (progn
-                (setf +++ ++ ++ + + *latest-form*
-                      *** ** ** * * (first *latest-values*)
-                      /// // // / / *latest-values*)
-                exp)
-              err))
+       (handler-case (let ((exp (read-from-string *read-string*)))
+                       (setf +++ ++ ++ + + *latest-form*
+                             *** ** ** * * (first *latest-values*)
+                             /// // // / / *latest-values*)
+                       exp)
+         (error (condition)
+           (format nil "[EQL: read error] ~A" condition)))
       (setf *read-string* :eof))))

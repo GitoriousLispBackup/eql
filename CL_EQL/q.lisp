@@ -39,8 +39,8 @@
                    #+(and unix (not darwin)) "libeql_client.so"
                    #+win32                   "eql_client.dll"))
 
-(cffi:defcfun "send_q"   :string (str :string))
 (cffi:defcfun "ini_q"    :void (fun :pointer))
+(cffi:defcfun "send_q"   :string (str :string))
 (cffi:defcfun ("ev" %ev) :void (no_button :boolean))
 (cffi:defcfun "ev_exit"  :void)
 
@@ -71,7 +71,7 @@
         (push* b e))
       (nreverse list))))
 
-;;; load all exported EQL symbols (for symbol completion)
+;;; load all external EQL symbols (for symbol completion)
 
 (when *load-eql-symbols*
   (with-open-file (in "EQL-symbols.lisp" :direction :input)
@@ -127,9 +127,11 @@
   (values-list
     (mapcar (lambda (str)
               (unless (zerop (length str))
-                (if (eql (search "#<" str) 0)
-                    str ; return unreadable objects as strings
-                    (read-from-string str))))
+                (multiple-value-bind (exp x)
+                    (ignore-errors (read-from-string str))
+                  (if (numberp x)
+                      exp
+                      (format nil "~A ; unreadable object" str))))) ; on read errors, return string instead
             (string-split (send-q (format nil "#q~{~A~^ ~}"
                                           (mapcar (lambda (x) (string-trim " " x))
                                                   (if (stringp data) (list data) data))))
