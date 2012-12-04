@@ -76,6 +76,14 @@ If you don't need to pass data at execution time, you can forget about '(ev)'
 (that is, you will never need to block your REPL).
 
 
+QAPROPOS / QHELP
+================
+
+See function QHELP in "q.lisp": it returns the output of QAPROPOS as string:
+
+  (qhelp "changed" "QLineEdit")
+
+
 NOTES
 =====
 

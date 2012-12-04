@@ -28,6 +28,8 @@
 ;;;
 ;;;   (q (defvar *label* (qnew "QLabel" "text" "<h1>Desktop GUIs rock!"))
 ;;;      (qfun *label* "show"))
+;;;
+;;;   (q *package*) ; atom
 
 (defparameter *load-eql-symbols* t)
 
@@ -120,8 +122,11 @@
 
 (defmacro q (&body body)
   "Similar to #Q, but including a PROGN, and allowing 'eval region' in Slime."
-  (with-input-from-string (s (prin1-to-string (if (second body) `(progn ,@body) (first body))))
-    (%read-q s)))
+  (let ((string (prin1-to-string (if (second body) `(progn ,@body) (first body)))))
+    (if (char= #\( (char string 0))
+        (with-input-from-string (in string)
+          (%read-q in))
+        `(%send-q ,string)))) ; atom
 
 (defun %send-q (data)
   (values-list
@@ -141,4 +146,9 @@
   "Needed if '?' is used, in order to have a running event loop."
   (unwind-protect (%ev no-button)
     (ev-exit)))
+
+(defun qhelp (&optional search class-name)
+  "Return output of QAPROPOS as string."
+  (q (with-output-to-string (*standard-output*)
+       (qapropos !search !class-name))))
 
