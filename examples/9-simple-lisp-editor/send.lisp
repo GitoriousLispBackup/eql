@@ -9,7 +9,7 @@
 ;;;   ecl -load send.lisp / clisp -i send.lisp / sbcl --load send.lisp
 ;;;
 ;;;
-;;; Examples: (note #!, which evaluates the following expression at run-time)
+;;; Examples: (note #!)
 ;;;
 ;;;   #q (qmsg (package-name *package*))
 ;;;

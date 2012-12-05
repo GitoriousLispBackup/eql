@@ -84,35 +84,39 @@
 (set-dispatch-macro-character #\# #\q (lambda (stream c n) (%read-q stream)))
 
 (defun %read-q (in)
-  (let ((string-q (with-output-to-string (out)
-                    (let ((ex #\Space)
-                          parens in-string comment)
-                      (loop
-                        (let ((ch (read-char in)))
-                          (if comment
-                              (when (char= #\Newline ch)
-                                (setf comment nil))
-                              (unless (char= #\\ ex)
-                                (if (char= #\" ch)
-                                    (setf in-string (not in-string))
-                                    (unless in-string
-                                      (case ch
-                                        (#\( (if parens (incf parens) (setf parens 1)))
-                                        (#\) (decf parens))
-                                        (#\; (setf comment t)))))))
-                          (unless comment
-                            (write-char ch out))
-                          (when (and parens (zerop parens))
-                            (return))
-                          (setf ex ch))))))
+  (let* ((!x (code-char 1))
+         (?x (code-char 2))
+         (string-q (with-output-to-string (out)
+                     (let ((ex #\Space)
+                           parens in-string comment)
+                       (loop
+                         (let ((ch (read-char in)))
+                           (if comment
+                               (when (char= #\Newline ch)
+                                 (setf comment nil))
+                               (unless (char= #\\ ex)
+                                 (if (char= #\" ch)
+                                     (setf in-string (not in-string))
+                                     (unless in-string
+                                       (case ch
+                                         (#\( (if parens (incf parens) (setf parens 1)))
+                                         (#\) (decf parens))
+                                         (#\! (setf ch !x))
+                                         (#\? (setf ch ?x))
+                                         (#\; (setf comment t)))))))
+                           (unless comment
+                             (write-char ch out))
+                           (when (and parens (zerop parens))
+                             (return))
+                           (setf ex ch))))))
         list-q)
-    (while-it (or (position #\! string-q)
-                  (position #\? string-q))
+    (while-it (or (position !x string-q)
+                  (position ?x string-q))
       (multiple-value-bind (exp end)
           (read-from-string (subseq string-q (1+ it)))
         (unless (zerop it)
           (push (subseq string-q 0 it) list-q))
-        (push (if (char= #\! (char string-q it))
+        (push (if (char= !x (char string-q it))
                   (list 'prin1-to-string exp)
                   (format nil "(local-server::%remote-eval '~S)" exp))
               list-q)
