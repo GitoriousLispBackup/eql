@@ -24,12 +24,7 @@
 ;;;   #q (load "../2-clock.lisp")
 ;;;   #q (qfun clock:*clock* "showMaximized")
 ;;;
-;;; Instead of '#q' you can use the 'q' macro (more convenient in e.g. Slime):
-;;;
-;;;   (q (defvar *label* (qnew "QLabel" "text" "<h1>Desktop GUIs rock!"))
-;;;      (qfun *label* "show"))
-;;;
-;;;   (q *package*) ; atom
+;;;   #q *package* ; atom
 
 (defparameter *load-eql-symbols* t)
 
@@ -99,6 +94,11 @@
                                      (setf in-string (not in-string))
                                      (unless in-string
                                        (case ch
+                                         ((#\Space #\Tab #\Newline #\Return)
+                                          (when (and (not (find ex '(#\Space #\Tab #\Newline #\Return)))
+                                                     (not parens))
+                                            (unread-char ch in)
+                                            (return))) ; atom
                                          (#\( (if parens (incf parens) (setf parens 1)))
                                          (#\) (decf parens))
                                          (#\! (setf ch !x))
@@ -109,7 +109,7 @@
                            (when (and parens (zerop parens))
                              (return))
                            (setf ex ch))))))
-        list-q)
+         list-q)
     (while-it (or (position !x string-q)
                   (position ?x string-q))
       (multiple-value-bind (exp end)
@@ -117,20 +117,12 @@
         (unless (zerop it)
           (push (subseq string-q 0 it) list-q))
         (push (if (char= !x (char string-q it))
-                  (list 'prin1-to-string exp)
+                  `(format nil "'~S" ,exp)
                   (format nil "(local-server::%remote-eval '~S)" exp))
               list-q)
         (setf string-q (subseq string-q (+ it 1 end)))))
-    (push string-q list-q)
+     (push string-q list-q)
     `(%send-q (list ,@(reverse list-q)))))
-
-(defmacro q (&body body)
-  "Similar to #Q, but including a PROGN, and allowing 'eval region' in Slime."
-  (let ((string (prin1-to-string (if (second body) `(progn ,@body) (first body)))))
-    (if (char= #\( (char string 0))
-        (with-input-from-string (in string)
-          (%read-q in))
-        `(%send-q ,string)))) ; atom
 
 (defun %send-q (data)
   (values-list
@@ -153,6 +145,6 @@
 
 (defun qhelp (&optional search class-name)
   "Return output of QAPROPOS as string."
-  (q (with-output-to-string (*standard-output*)
-       (qapropos !search !class-name))))
+  #q (with-output-to-string (*standard-output*)
+       (qapropos !search !class-name)))
 

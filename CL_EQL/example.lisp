@@ -1,5 +1,5 @@
 ;;;
-;;; A simple example showing how to use all of: 'q' '!' '?'
+;;; A simple example showing how to use all of: '#q' '!' '?'
 ;;;
 ;;; Usage:
 ;;;
@@ -32,15 +32,20 @@
       (setf seq (remove n seq))
       (nth n *words-of-wisdom*))))
 
-;;; q ----------------------------------------------------------------------------------------
+;;; #q ---------------------------------------------------------------------------------------
 
 ;;; ! pass a CL value to EQL
 ;;; ? EQL will ask for evaluation in CL at execution time
 
-(q (defvar *button* (qnew "QPushButton"
-                          "text"        !*button-text*                    ; note '!'
-                          "minimumSize" '(200 50)))
-   (qfun *button* "show")
-   (qconnect *button* "clicked()" (lambda () (qmsg ?(words-of-wisdom))))) ; note '?'
+#q
+(defvar *button* (qnew "QPushButton"
+                       "text"        !*button-text*                      ; note '!'
+                       "minimumSize" '(200 50)))
+
+#q
+(progn
+  (qfun *button* "show")
+  (qconnect *button* "clicked()" (lambda () (qmsg ?(words-of-wisdom))))) ; note '?'
 
 (ev) ; needed for '?' only (see "Back to REPL" at the top of the desktop)
+

@@ -39,17 +39,20 @@ Example:
 
   (* 3 #q (qmsg (+ 2 1)))
 
-Optionally you can use 'q', which is a macro version of '#q' adding a PROGN:
-
-  (q (defvar *label* (qnew "QLabel" "text" "<h1>A rocking GUI!"))
-     (qfun *label* "show"))
+It has to be a reader macro, because we don't want EQL code to be read in CL
+(packages, symbols).
 
 
 SLIME NOTES
 ===========
 
-Since '#q' doesn't work with "eval region", use the 'q' macro instead
-(see above).
+To enable "eval region" for '#q', wrap it like so:
+
+  (progn
+    #q
+    ...
+
+(The following is required for e.g. SBCL, but not for e.g. ECL.)
 
 If your CL has threads enabled, you need to set your Swank communication
 style to either :sigio or :fd-handler in your ".swank.lisp" file
@@ -60,9 +63,15 @@ style to either :sigio or :fd-handler in your ".swank.lisp" file
 Symbol completion works for all EQL symbols (including enums), because they
 are read in in "q.lisp".
 
+'QTimer' note:
 
-'(ev)': EVENT DRIVEN EVAL REQUESTS FROM EQL
-===========================================
+In order to avoid recursive debug loops, all timers with a parent will be
+stopped before showing the debug dialog.
+After sending the next command to EQL, the timers will be restarted.
+
+
+'(ev &optional no-button)': EVENT DRIVEN EVAL REQUESTS FROM EQL
+===============================================================
 
 See '?' in "example.lisp" for passing data to EQL functions at execution time.
 
@@ -70,7 +79,8 @@ The function '(ev)' is needed in such cases, because we need a server listening
 to requests from EQL (see "cpp/*").
 
 In order to gracefully stop '(ev)', use the Qt button "Back to REPL" shown at
-the top of the desktop while '(ev)' is running.
+the top of the desktop while '(ev)' is running (note also the 'no-button'
+argument).
 
 If you don't need to pass data at execution time, you can forget about '(ev)'
 (that is, you will never need to block your REPL).
@@ -89,6 +99,6 @@ NOTES
 
 Tested in CLISP, ECL, SBCL.
 
-See notes in "q-clock.lisp" and "q-wiggly.lisp" if you want to run existing
+See examples "q-clock.lisp" and "q-wiggly.lisp" if you want to run existing
 EQL programs.
 

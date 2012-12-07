@@ -117,6 +117,7 @@
     (qconnect *client* "disconnected()" (lambda () (qdel *client* :later))))
   (defun read-from-client ()
     (when *function*
+      (restart-all-timers) ; see (stop-all-timers)
       (let ((all (qfun *client* "readAll")))
         ;; data may arrive splitted in more blocks
         (if size
@@ -215,15 +216,18 @@
 
 (defun handle-query-io ()
   (let ((txt (query-dialog:get-text (get-output-stream-string *terminal-out-buffer*))))
-    (send-to-client :activate-editor)
+    (unless *sharp-q*
+      (send-to-client :activate-editor))
     (send-to-client :values txt)
     (format nil "~A~%" txt)))
 
 (defun handle-debug-io ()
+  (stop-all-timers) ; see (restart-all-timers)
   (let ((cmd (debug-dialog:command (list (cons (get-output-stream-string *error-output-buffer*) "red")
                                          (cons (get-output-stream-string *terminal-out-buffer*) "black"))
                                    eql::*code-font*)))
-    (send-to-client :activate-editor)
+    (unless *sharp-q*
+      (send-to-client :activate-editor))
     (send-to-client :values "")
     (format nil "~A~%" (if (x:empty-string cmd) ":exit" cmd))))
 
@@ -232,6 +236,21 @@
                           ;; allow terminal input after console interrupts
                           (when (eql 'si:interactive-interrupt (type-of cond))
                             (setf *debug-io* *terminal-io*)))))
+
+(let (timers)
+  (defun stop-all-timers ()
+    "Stop all timers (which need to have a parent) on errors, in order to avoid recursive debug loops. The timers will be restarted on next command from client."
+    (setf timers nil)
+    (dolist (w (cons (qapp) (qfun "QApplication" "allWidgets")))
+      (dolist (o (qfun w "children"))
+        (when (and (= #.(qid "QTimer") (qt-object-id o))
+                   (qfun o "isActive"))
+          (qfun o "stop")
+          (push o timers)))))
+  (defun restart-all-timers ()
+    (dolist (timer timers)
+      (qfun timer "start"))
+    (setf timers nil)))
 
 ;;; extensions
 
