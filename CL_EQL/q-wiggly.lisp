@@ -1,6 +1,6 @@
 ;;; "Wiggly Widget" example, directly loadable into any CL + CFFI.
 ;;;
-;;; Slime note: for 'eval region', wrap #Q in PROGN (see function PAINT).
+;;; Slime note: for 'eval region', wrap #Q in PROGN (see *SINUS*, PAINT).
 
 (load "q.lisp")
 
@@ -17,8 +17,8 @@
 #q 
 (in-package :wiggly)
 
-#q
-(defvar *sinus* #(0 38 71 92 100 92 71 38 0 -38 -71 -92 -100 -92 -71 -38))
+(progn ; for 'eval region' in Slime
+  #q (defparameter *sinus* #(0 38 71 92 100 92 71 38 0 -38 -71 -92 -100 -92 -71 -38)))
    
 #q
 (progn

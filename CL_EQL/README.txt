@@ -86,12 +86,13 @@ If you don't need to pass data at execution time, you can forget about '(ev)'
 (that is, you will never need to block your REPL).
 
 
-QAPROPOS / QHELP
-================
+QHELP / QMSG
+============
 
-See function QHELP in "q.lisp": it returns the output of QAPROPOS as string:
+These are simple convenience functions, see "q.lisp".
 
-  (qhelp "changed" "QLineEdit")
+  (qhelp "changed" "QLineEdit")                          ; see QAPROPOS
+  (qmsg "To make me go away,<br>you need to click, OK?") ; any (readable) Lisp object
 
 
 NOTES

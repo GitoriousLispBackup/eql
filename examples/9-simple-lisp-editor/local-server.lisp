@@ -227,8 +227,8 @@
                                          (cons (get-output-stream-string *terminal-out-buffer*) "black"))
                                    eql::*code-font*)))
     (unless *sharp-q*
-      (send-to-client :activate-editor))
-    (send-to-client :values "")
+      (send-to-client :activate-editor)
+      (send-to-client :values ""))
     (format nil "~A~%" (if (x:empty-string cmd) ":exit" cmd))))
 
 (defun set-debugger-hook ()

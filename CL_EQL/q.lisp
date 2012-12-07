@@ -16,9 +16,6 @@
 ;;;         (b 2))
 ;;;     #q (qmsg (list !a !b)))
 ;;;
-;;;   (defun msg (x)
-;;;     #q (qmsg !x))
-;;;
 ;;;   (* 3 #q (+ 2 1))
 ;;;
 ;;;   #q (load "../2-clock.lisp")
@@ -79,50 +76,51 @@
 (set-dispatch-macro-character #\# #\q (lambda (stream c n) (%read-q stream)))
 
 (defun %read-q (in)
-  (let* ((!x (code-char 1))
-         (?x (code-char 2))
-         (string-q (with-output-to-string (out)
-                     (let ((ex #\Space)
-                           parens in-string comment)
-                       (loop
-                         (let ((ch (read-char in)))
-                           (if comment
-                               (when (char= #\Newline ch)
-                                 (setf comment nil))
-                               (unless (char= #\\ ex)
-                                 (if (char= #\" ch)
-                                     (setf in-string (not in-string))
-                                     (unless in-string
-                                       (case ch
-                                         ((#\Space #\Tab #\Newline #\Return)
-                                          (when (and (not (find ex '(#\Space #\Tab #\Newline #\Return)))
-                                                     (not parens))
-                                            (unread-char ch in)
-                                            (return))) ; atom
-                                         (#\( (if parens (incf parens) (setf parens 1)))
-                                         (#\) (decf parens))
-                                         (#\! (setf ch !x))
-                                         (#\? (setf ch ?x))
-                                         (#\; (setf comment t)))))))
-                           (unless comment
-                             (write-char ch out))
-                           (when (and parens (zerop parens))
-                             (return))
-                           (setf ex ch))))))
-         list-q)
-    (while-it (or (position !x string-q)
-                  (position ?x string-q))
-      (multiple-value-bind (exp end)
-          (read-from-string (subseq string-q (1+ it)))
-        (unless (zerop it)
-          (push (subseq string-q 0 it) list-q))
-        (push (if (char= !x (char string-q it))
-                  `(format nil "'~S" ,exp)
-                  (format nil "(local-server::%remote-eval '~S)" exp))
-              list-q)
-        (setf string-q (subseq string-q (+ it 1 end)))))
-     (push string-q list-q)
-    `(%send-q (list ,@(reverse list-q)))))
+  (flet ((white-space (ch)
+           (find ch '(#\Space #\Tab #\Newline #\Return))))
+    (let* ((!x (code-char 1))
+           (?x (code-char 2))
+           (string-q (with-output-to-string (out)
+                       (let ((ex #\Space)
+                             parens in-string comment)
+                         (loop
+                           (let ((ch (read-char in)))
+                             (if comment
+                                 (when (char= #\Newline ch)
+                                   (setf comment nil))
+                                 (unless (char= #\\ ex)
+                                   (if (char= #\" ch)
+                                       (setf in-string (not in-string))
+                                       (unless in-string
+                                         (case ch
+                                           ((#\Space #\Tab #\Newline #\Return)
+                                            (unless (or parens (white-space ex))
+                                              (unread-char ch in)
+                                              (return))) ; atom
+                                           (#\( (if parens (incf parens) (setf parens 1)))
+                                           (#\) (decf parens))
+                                           (#\! (when (white-space ex) (setf ch !x)))
+                                           (#\? (when (white-space ex) (setf ch ?x)))
+                                           (#\; (setf comment t)))))))
+                             (unless comment
+                               (write-char ch out))
+                             (when (and parens (zerop parens))
+                               (return))
+                             (setf ex ch))))))
+           list-q)
+      (while-it (or (position !x string-q)
+                    (position ?x string-q))
+        (multiple-value-bind (exp end)
+            (read-from-string (subseq string-q (1+ it)))
+          (unless (zerop it)
+            (push (subseq string-q 0 it) list-q))
+          (push (if (char= !x (char string-q it))
+                    `(format nil "'~S" ,exp)
+                    (format nil "(local-server::%remote-eval '~S)" exp))
+                list-q)
+          (setf string-q (subseq string-q (+ it 1 end)))))
+       (push string-q list-q)
+      `(%send-q (list ,@(reverse list-q))))))
 
 (defun %send-q (data)
   (values-list
@@ -143,8 +141,14 @@
   (unwind-protect (%ev no-button)
     (ev-exit)))
 
+;;; convenience fucntions
+
 (defun qhelp (&optional search class-name)
   "Return output of QAPROPOS as string."
   #q (with-output-to-string (*standard-output*)
        (qapropos !search !class-name)))
+
+(defun qmsg (x)
+  "A simple message box for any readable Lisp object."
+  #q (qmsg !x))
 
