@@ -69,7 +69,7 @@ public Q_SLOTS:
             bytes_read += str.length(); }
         if(size == bytes_read) {
             if(!size) {
-                abort(); } // reset connection on Lisp errors
+                abort(); }
             values = list.join("").trimmed().toAscii();
             list.clear();
             size = -1;
