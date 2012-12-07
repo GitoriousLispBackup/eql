@@ -68,9 +68,9 @@ public Q_SLOTS:
             list << str;
             bytes_read += str.length(); }
         if(size == bytes_read) {
-            if(!size) {
-                abort(); }
             values = list.join("").trimmed().toAscii();
+            if(!size) {
+                abort(); } // reset on Lisp errors
             list.clear();
             size = -1;
             loop->exit();

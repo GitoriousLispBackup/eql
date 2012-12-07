@@ -69,6 +69,11 @@ In order to avoid recursive debug loops, all timers with a parent will be
 stopped before showing the debug dialog.
 After sending the next command to EQL, the timers will be restarted.
 
+EQL debug dialog note (important):
+
+You need to do "eval region" twice after the debug dialog has been shown,
+otherwise it will have no effect (don't ask me why...). 
+
 
 '(ev &optional no-button)': EVENT DRIVEN EVAL REQUESTS FROM EQL
 ===============================================================

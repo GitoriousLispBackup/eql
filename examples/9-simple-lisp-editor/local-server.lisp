@@ -228,7 +228,7 @@
                                    eql::*code-font*)))
     (unless *sharp-q*
       (send-to-client :activate-editor))
-    (send-to-client :values (if *sharp-q* "[EQL: eval error]" ""))
+    (send-to-client :values "")
     (format nil "~A~%" (if (x:empty-string cmd) ":exit" cmd))))
 
 (defun set-debugger-hook ()

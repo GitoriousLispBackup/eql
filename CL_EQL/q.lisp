@@ -141,7 +141,7 @@
   (unwind-protect (%ev no-button)
     (ev-exit)))
 
-;;; convenience fucntions
+;;; convenience functions
 
 (defun qhelp (&optional search class-name)
   "Return output of QAPROPOS as string."
