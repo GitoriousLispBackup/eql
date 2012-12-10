@@ -52,6 +52,12 @@ To enable "eval region" for '#q', wrap it like so:
     #q
     ...
 
+Important "eval region" note:
+
+On errors in EQL code, a debug dialog will be shown; after correcting
+the error, you sometimes will need to do "eval region" twice to take effect
+(in these cases, "eval region" will return NIL the first time).
+
 (The following is required for e.g. SBCL, but not for e.g. ECL.)
 
 If your CL has threads enabled, you need to set your Swank communication

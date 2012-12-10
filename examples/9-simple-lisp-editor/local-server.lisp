@@ -43,7 +43,6 @@
 (defvar *terminal-out-buffer*    (make-string-output-stream))
 (defvar *gui-debug-io*           nil)
 (defvar *sharp-q*                nil) ; see "CL_EQL/"
-(defvar *sharp-q-slime*          nil)
 
 ;; REPL variables
 (defvar +   nil)
@@ -136,8 +135,7 @@
                     (setf *sharp-q* t
                           *print-pretty* nil ; for "CL_EQL/" return values
                           eql:*break-on-errors* t
-                          *sharp-q-slime* (= #.(char-code #\s) (svref data* 2))
-                          data* (subseq data* (+ 2 (if *sharp-q-slime* 1 0))))
+                          data* (subseq data* 2))
                     (setf *sharp-q* nil))
                 (push data* data))))
         (when (= size bytes-read)
@@ -230,8 +228,7 @@
                                    eql::*code-font*)))
     (unless *sharp-q*
       (send-to-client :activate-editor))
-    (unless *sharp-q-slime*
-      (send-to-client :values ""))
+    (send-to-client :values "")
     (format nil "~A~%" (if (x:empty-string cmd) ":exit" cmd))))
 
 (defun set-debugger-hook ()

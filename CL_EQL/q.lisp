@@ -138,8 +138,7 @@
                   (if (numberp x)
                       exp
                       (format nil "~A ; unreadable object" str))))) ; on read errors, return string instead
-            (string-split (send-q (format nil "#q~A~{~A~^ ~}" ; "#q" / "#qs" (Slime): see local-server::*sharp-q*
-                                          (if (find-package :swank) "s" "")
+            (string-split (send-q (format nil "#q~{~A~^ ~}"         ; "#q": see local-server::*sharp-q*
                                           (mapcar (lambda (x) (string-trim " " x))
                                                   (if (stringp data) (list data) data))))
                           "#||#")))) ; value separator
