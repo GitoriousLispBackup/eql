@@ -1,5 +1,5 @@
 TEMPLATE    = lib
-CONFIG      += dll release
+CONFIG      += plugin release
 DESTDIR     = ./
 TARGET      = trafficlight
 OBJECTS_DIR = ./tmp/

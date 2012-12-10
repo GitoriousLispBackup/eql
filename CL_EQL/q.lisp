@@ -3,7 +3,7 @@
 ;;; Run: (after building the plugin in "cpp/")
 ;;;
 ;;;   eql local-server.lisp (in example 9, see also "<example 9>/exe/")
-;;;   ecl -load q.lisp / clisp -i q.lisp / sbcl --load q.lisp (any CL + CFFI)
+;;;   ecl -load q / clisp -i q / sbcl --load q (any CL + CFFI)
 ;;;
 ;;;
 ;;; Examples: (use '!' to pass immediate data to EQL, use '?' to pass eventual data to EQL)
@@ -73,7 +73,8 @@
 
 ;;; main
 
-(set-dispatch-macro-character #\# #\q (lambda (stream c n) (%read-q stream)))
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (set-dispatch-macro-character #\# #\q (lambda (stream c n) (%read-q stream))))
 
 (defun %read-q (in)
   (flet ((white-space (ch)
@@ -97,14 +98,20 @@
                                             (unless (or parens (white-space ex))
                                               (unread-char ch in)
                                               (return))) ; atom
-                                           (#\( (if parens (incf parens) (setf parens 1)))
-                                           (#\) (decf parens))
+                                           (#\( (if parens
+                                                    (incf parens)
+                                                    (setf parens 1)))
+                                           (#\) (if parens
+                                                    (decf parens)
+                                                    (progn
+                                                      (unread-char ch in)
+                                                      (return)))) ; atom, e.g. (foo #q *x*)
                                            (#\! (when (white-space ex) (setf ch !x)))
                                            (#\? (when (white-space ex) (setf ch ?x)))
                                            (#\; (setf comment t)))))))
                              (unless comment
                                (write-char ch out))
-                             (when (and parens (zerop parens))
+                             (when (eql 0 parens)
                                (return))
                              (setf ex ch))))))
            list-q)
@@ -119,7 +126,7 @@
                     (format nil "(local-server::%remote-eval '~S)" exp))
                 list-q)
           (setf string-q (subseq string-q (+ it 1 end)))))
-       (push string-q list-q)
+      (push string-q list-q)
       `(%send-q (list ,@(reverse list-q))))))
 
 (defun %send-q (data)
@@ -131,10 +138,11 @@
                   (if (numberp x)
                       exp
                       (format nil "~A ; unreadable object" str))))) ; on read errors, return string instead
-            (string-split (send-q (format nil "#q~{~A~^ ~}"
+            (string-split (send-q (format nil "#q~A~{~A~^ ~}" ; "#q" / "#qs" (Slime): see local-server::*sharp-q*
+                                          (if (find-package :swank) "s" "")
                                           (mapcar (lambda (x) (string-trim " " x))
                                                   (if (stringp data) (list data) data))))
-                          "#||#")))) ; used as value separator
+                          "#||#")))) ; value separator
 
 (defun ev (&optional no-button)
   "Needed if '?' is used, in order to have a running event loop."

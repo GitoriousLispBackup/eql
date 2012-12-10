@@ -9,6 +9,15 @@ static EvalServer* _server_ = 0;
 static Run*        _run_ = 0;
 static Eval        _eval_ = 0;
 
+/*
+void _log(const QString& s) {
+    QFile f("/tmp/log.txt");
+    f.open(QIODevice::WriteOnly | QIODevice::Append);
+    f.write("### ");
+    f.write(qPrintable(s.left(80)));
+    f.write("\n"); }
+*/
+
 void ini_q(void* eval_callback) {
     if(!_main_) {
         _eval_ = (Eval)eval_callback;

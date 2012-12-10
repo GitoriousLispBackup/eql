@@ -2,7 +2,7 @@
 ;;;
 ;;; Slime note: for 'eval region', wrap #Q in PROGN (see function PAINT).
 
-(load "q.lisp")
+(load "q")
 
 #q
 (defpackage :clock

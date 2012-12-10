@@ -43,6 +43,7 @@
 (defvar *terminal-out-buffer*    (make-string-output-stream))
 (defvar *gui-debug-io*           nil)
 (defvar *sharp-q*                nil) ; see "CL_EQL/"
+(defvar *sharp-q-slime*          nil)
 
 ;; REPL variables
 (defvar +   nil)
@@ -135,7 +136,8 @@
                     (setf *sharp-q* t
                           *print-pretty* nil ; for "CL_EQL/" return values
                           eql:*break-on-errors* t
-                          data* (subseq data* 2))
+                          *sharp-q-slime* (= #.(char-code #\s) (svref data* 2))
+                          data* (subseq data* (+ 2 (if *sharp-q-slime* 1 0))))
                     (setf *sharp-q* nil))
                 (push data* data))))
         (when (= size bytes-read)
@@ -228,7 +230,8 @@
                                    eql::*code-font*)))
     (unless *sharp-q*
       (send-to-client :activate-editor))
-    (send-to-client :values "")
+    (unless *sharp-q-slime*
+      (send-to-client :values ""))
     (format nil "~A~%" (if (x:empty-string cmd) ":exit" cmd))))
 
 (defun set-debugger-hook ()
@@ -281,5 +284,15 @@
           (let ((str* (subseq str end)))
             (assert (= size (length str*))) ; TODO
             (read-from-string str*)))))))
+
+#|
+(defun %log (s)
+  (qlet ((f "QFile(QString)" "/tmp/log.txt"))
+    (x:do-with (qfun f)
+      ("open" (logior |QIODevice.WriteOnly| |QIODevice.Append|))
+      ("write(const char*)" "### ")
+      ("write(QByteArray)"  (x:string-to-bytes (subseq s 0 (min (length s) 80))))
+      ("write(QByteArray)"  (x:string-to-bytes (format nil "~%"))))))
+|#
 
 (ini)

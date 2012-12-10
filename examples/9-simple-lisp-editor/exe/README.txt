@@ -9,5 +9,5 @@ BUILD
 QUIT
 ====
 
-See menu of the "Q" system tray icon.
+See menu of "Q" system tray icon.
 

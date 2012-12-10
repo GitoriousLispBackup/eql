@@ -20,6 +20,8 @@ extern "C" {
     LIB_EXPORT void        ev_exit();
 }
 
+// void _log(const QString&);
+
 class Main : public QLocalSocket {
     Q_OBJECT
 
