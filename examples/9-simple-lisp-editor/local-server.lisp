@@ -274,14 +274,22 @@
       (qfun *eval-socket* "write(QByteArray)" (x:string-to-bytes (format nil "~D ~A" (length utf8) utf8))))
     (qfun *eval-socket* "waitForBytesWritten")
     (qfun *eval-socket* "waitForReadyRead")
-    (let ((str (qfrom-utf8 (qfun *eval-socket* "readAll"))))
-      (unless (x:empty-string str)
-        (multiple-value-bind (size end)
-            (read-from-string str)
-          (let ((str* (subseq str end)))
-            (assert (= size (length str*))) ; TODO
-            (read-from-string str*)))))))
-
+    ;; data may arrive splitted in more blocks
+    (let* ((block-1 (qfun *eval-socket* "readAll"))
+           (head (x:bytes-to-string (subseq block-1 0 (1+ (position (char-code #\Space) block-1)))))
+           data size bytes-read end)
+      (multiple-value-setq (size end)
+        (read-from-string head))
+      (push (subseq block-1 end) data)
+      (setf bytes-read (length (first data)))
+      (x:while (< bytes-read size)
+        (qfun *eval-socket* "waitForReadyRead")
+        (let ((block (qfun *eval-socket* "readAll")))
+          (incf bytes-read (length block))
+          (push block data)))
+      (unless (zerop size)
+        (read-from-string (qfrom-utf8 (apply 'concatenate 'vector (nreverse data))))))))
+  
 #|
 (defun %log (str)
   (with-open-file (out "/tmp/log.txt" :direction :output :if-does-not-exist :create :if-exists :append)
