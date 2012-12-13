@@ -8,7 +8,7 @@
 TESTED WITH
 ===========
 
-* ECL 11.1.1 / 12.7.1 (threads + unicode)
+* ECL 11.1.1 / 12.7.1 /12.12.1 (threads + unicode)
 * Qt4.6, 4.7, 4.8
 * Linux / OSX 10.4 / Windows XP, 7 (MSVC 2008, 2010)
 
@@ -21,8 +21,7 @@ REQUIREMENTS
 * Qt4 >= 4.6 http://qt-project.org/downloads
 
 * Slime: any version that plays together with your ECL version (requires ECL threads)
-    - the new Slime integration has been tested with ECL 12.7.1 only (new thread mode)
-    - on Windows you'll need ECL from git 2012-09-01 or newer
+         (on Windows you'll need ECL >= 12.12.1 / git >= 2012-09-01)
 
 
 

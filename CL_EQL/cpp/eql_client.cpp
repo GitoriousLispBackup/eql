@@ -10,12 +10,11 @@ static Run*        _run_ = 0;
 static Eval        _eval_ = 0;
 
 /*
-void _log(const QString& s) {
+void _log(const QString& str) {
     QFile f("/tmp/log.txt");
     f.open(QIODevice::WriteOnly | QIODevice::Append);
-    f.write("### ");
-    f.write(qPrintable(s.left(80)));
-    f.write("\n"); }
+    QTextStream ts(&f);
+    ts << QString("### %1\n").arg(str.left(80)); }
 */
 
 void ini_q(void* eval_callback) {

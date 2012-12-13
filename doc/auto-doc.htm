@@ -258,7 +258,7 @@
 <b>QPROPERTY (object name)</b>
 <br>
 <b>QGET</b>
-<p>Gets a Qt property. Enumerator values are returned as <code>int</code> values.</p>
+<p>Gets a Qt property. Enumerator values are returned as <code>int</code> values.<br>Returns <code>T</code> as second return value for successful calls.</p>
 <pre>
   (qget label "text")
 </pre>
@@ -309,7 +309,7 @@
 <b>QSET-PROPERTY (object name value)</b>
 <br>
 <b>QSET</b>
-<p>Sets a Qt property. Enumerators have to be passed as <code>int</code> values.</p>
+<p>Sets a Qt property. Enumerators have to be passed as <code>int</code> values.<br>Returns <code>T</code> as second return value for successful calls.</p>
 <pre>
   (qset label "alignment" |Qt.AlignCenter|)
 </pre>

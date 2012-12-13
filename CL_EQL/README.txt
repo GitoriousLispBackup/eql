@@ -1,7 +1,7 @@
 PREAMBLE
 ========
 
-This is just an experimental idea: please don't expect too much from it!
+This is an experimental idea: please don't expect too much from it!
 
 
 SO, WHAT IS IT?
@@ -33,6 +33,8 @@ THE '#q' READER MACRO
 
 This reader macro executes the following expression remotely in EQL,
 passing back any return value(s).
+Unreadable objects (such as QT-OBJECT instances) are returned as strings.
+
 So, in most cases you won't even notice that the code is executed remotely.
 
 Example:
@@ -46,7 +48,7 @@ It has to be a reader macro, because we don't want EQL code to be read in CL
 SLIME NOTES
 ===========
 
-To enable "eval region" for '#q', wrap it like so:
+To enable "eval defun" / "eval region" for '#q', wrap it like so:
 
   (progn
     #q
@@ -62,7 +64,7 @@ the error, you sometimes will need to do "eval region" twice to take effect
 
 If your CL has threads enabled, you need to set your Swank communication
 style to either :sigio or :fd-handler in your ".swank.lisp" file
-(style :spawn uses threads, and would crash together with 'q' / '#q').
+(style :spawn uses threads, and would crash together with '#q').
 
   (setf swank:*communication-style* :sigio)
 

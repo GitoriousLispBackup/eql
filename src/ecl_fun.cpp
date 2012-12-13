@@ -1493,7 +1493,7 @@ cl_object qdelete2(cl_object l_obj, cl_object l_later) {
 cl_object qproperty(cl_object l_obj, cl_object l_name) {
     /// args: (object name)
     /// alias: qget
-    /// Gets a Qt property. Enumerator values are returned as <code>int</code> values.
+    /// Gets a Qt property. Enumerator values are returned as <code>int</code> values.<br>Returns <code>T</code> as second return value for successful calls.
     ///     (qget label "text")
     QtObject o = toQtObject(l_obj);
     if(ECL_STRINGP(l_name)) {
@@ -1517,7 +1517,7 @@ cl_object qproperty(cl_object l_obj, cl_object l_name) {
 cl_object qset_property(cl_object l_obj, cl_object l_name, cl_object l_val) {
     /// args: (object name value)
     /// alias: qset
-    /// Sets a Qt property. Enumerators have to be passed as <code>int</code> values.
+    /// Sets a Qt property. Enumerators have to be passed as <code>int</code> values.<br>Returns <code>T</code> as second return value for successful calls.
     ///     (qset label "alignment" |Qt.AlignCenter|)
     ecl_process_env()->nvalues = 1;
     QtObject o = toQtObject(l_obj);
@@ -1533,7 +1533,11 @@ cl_object qset_property(cl_object l_obj, cl_object l_name, cl_object l_val) {
                 else {
                     var = toQVariant(l_val, mp.typeName()); }
                 if(mp.write((QObject*)o.pointer, var)) {
-                    return l_val; }}}}
+                    const cl_env_ptr l_env = ecl_process_env();
+                    l_env->nvalues = 2;
+                    l_env->values[0] = l_val;
+                    l_env->values[1] = Ct;
+                    return l_env->values[0]; }}}}
     error_msg("QSET-PROPERTY", LIST3(l_obj, l_name, l_val));
     return Cnil; }
 

@@ -283,13 +283,9 @@
             (read-from-string str*)))))))
 
 #|
-(defun %log (s)
-  (qlet ((f "QFile(QString)" "/tmp/log.txt"))
-    (x:do-with (qfun f)
-      ("open" (logior |QIODevice.WriteOnly| |QIODevice.Append|))
-      ("write(const char*)" "### ")
-      ("write(QByteArray)"  (x:string-to-bytes (subseq s 0 (min (length s) 80))))
-      ("write(QByteArray)"  (x:string-to-bytes (format nil "~%"))))))
+(defun %log (str)
+  (with-open-file (out "/tmp/log.txt" :direction :output :if-does-not-exist :create :if-exists :append)
+    (format out "### ~A~%" (subseq str 0 (min (length str) 80)))))
 |#
 
 (ini)

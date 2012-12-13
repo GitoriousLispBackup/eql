@@ -18,9 +18,6 @@
 ;;;
 ;;;   (* 3 #q (+ 2 1))
 ;;;
-;;;   #q (load "../2-clock.lisp")
-;;;   #q (qfun clock:*clock* "showMaximized")
-;;;
 ;;;   #q *package* ; atom
 
 (defparameter *load-eql-symbols* t)

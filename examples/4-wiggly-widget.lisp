@@ -26,11 +26,11 @@
     (qfun dlg "setLayout" vbox)
     (dolist (w (list *wiggly* *edit*))
       (qfun vbox "addWidget" w))
-    (qfun *timer* "start" 75 *wiggly*)
+    (qfun *timer* "start" 50 *wiggly*)
     (x:do-with (qoverride *wiggly*)
       ("paintEvent(QPaintEvent*)" 'paint)
       ("timerEvent(QTimerEvent*)" 'timeout))
-    (qset *edit* "text" "= AMOR = ROMA =")
+    (qset *edit* "text" "= never odd or even =")
     (x:do-with (qfun dlg) "show" "raise")))
 
 (defun paint (ev)
