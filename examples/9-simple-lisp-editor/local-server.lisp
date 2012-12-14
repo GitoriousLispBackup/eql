@@ -257,18 +257,19 @@
 (defun widget-selected (widget)
   (send-to-client :widget-selected (princ-to-string widget)))
 
-;;; see #? form "CL_EQL/"
+;;; see '?' in "CL_EQL/"
 
 (defvar *eval-socket* nil)
 
 (defun %ini-remote-eval ()
-  (setf *eval-socket* (qnew "QLocalSocket"))
-  (qfun *eval-socket* "connectToServer" "EQL:eval-server")
-  (qfun *eval-socket* "waitForConnected"))
+  (unless *eval-socket*
+    (setf *eval-socket* (qnew "QLocalSocket")))
+  (when (= |QLocalSocket.UnconnectedState| (qfun *eval-socket* "state"))
+    (qfun *eval-socket* "connectToServer" "EQL:eval-server")
+    (qfun *eval-socket* "waitForConnected")))
 
 (defun %remote-eval (exp)
-  (unless *eval-socket*
-    (%ini-remote-eval))
+  (%ini-remote-eval)
   (when (qfun *eval-socket* "isWritable")
     (let ((utf8 (qutf8 (prin1-to-string exp))))
       (qfun *eval-socket* "write(QByteArray)" (x:string-to-bytes (format nil "~D ~A" (length utf8) utf8))))
@@ -277,18 +278,19 @@
     ;; data may arrive splitted in more blocks
     (let* ((block-1 (qfun *eval-socket* "readAll"))
            (head (x:bytes-to-string (subseq block-1 0 (1+ (position (char-code #\Space) block-1)))))
-           data size bytes-read end)
-      (multiple-value-setq (size end)
-        (read-from-string head))
-      (push (subseq block-1 end) data)
-      (setf bytes-read (length (first data)))
-      (x:while (< bytes-read size)
-        (qfun *eval-socket* "waitForReadyRead")
-        (let ((block (qfun *eval-socket* "readAll")))
-          (incf bytes-read (length block))
-          (push block data)))
-      (unless (zerop size)
-        (read-from-string (qfrom-utf8 (apply 'concatenate 'vector (nreverse data))))))))
+           data bytes-read)
+      (multiple-value-bind (size end)
+          (read-from-string head)
+        (push (subseq block-1 end) data)
+        (setf bytes-read (length (first data)))
+        (x:while (< bytes-read size)
+          (qprocess-events)
+          (qfun *eval-socket* "waitForReadyRead")
+          (let ((block (qfun *eval-socket* "readAll")))
+            (incf bytes-read (length block))
+            (push block data)))
+        (unless (zerop size)
+          (values (read-from-string (qfrom-utf8 (apply 'concatenate 'vector (nreverse data))))))))))
   
 #|
 (defun %log (str)

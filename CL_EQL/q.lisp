@@ -1,4 +1,5 @@
 ;;; copyright (c) 2012 Polos Ruetz
+;;; 
 ;;;
 ;;; Run: (after building the plugin in "cpp/")
 ;;;
@@ -73,58 +74,68 @@
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (set-dispatch-macro-character #\# #\q (lambda (stream c n) (%read-q stream))))
 
-(defun %read-q (in)
+(defun %stream-string (in)
+  "Read Lisp expression from stream and return it as string."
   (flet ((white-space (ch)
            (find ch '(#\Space #\Tab #\Newline #\Return))))
-    (let* ((!x (code-char 1))
-           (?x (code-char 2))
-           (string-q (with-output-to-string (out)
-                       (let ((ex #\Space)
-                             parens in-string comment)
-                         (loop
-                           (let ((ch (read-char in)))
-                             (if comment
-                                 (when (char= #\Newline ch)
-                                   (setf comment nil))
-                                 (unless (char= #\\ ex)
-                                   (if (char= #\" ch)
-                                       (setf in-string (not in-string))
-                                       (unless in-string
-                                         (case ch
-                                           ((#\Space #\Tab #\Newline #\Return)
-                                            (unless (or parens (white-space ex))
-                                              (unread-char ch in)
-                                              (return))) ; atom
-                                           (#\( (if parens
-                                                    (incf parens)
-                                                    (setf parens 1)))
-                                           (#\) (if parens
-                                                    (decf parens)
-                                                    (progn
-                                                      (unread-char ch in)
-                                                      (return)))) ; atom, e.g. (foo #q *x*)
-                                           (#\! (when (white-space ex) (setf ch !x)))
-                                           (#\? (when (white-space ex) (setf ch ?x)))
-                                           (#\; (setf comment t)))))))
-                             (unless comment
-                               (write-char ch out))
-                             (when (eql 0 parens)
-                               (return))
-                             (setf ex ch))))))
-           list-q)
-      (while-it (or (position !x string-q)
-                    (position ?x string-q))
-        (multiple-value-bind (exp end)
-            (read-from-string (subseq string-q (1+ it)))
-          (unless (zerop it)
-            (push (subseq string-q 0 it) list-q))
-          (push (if (char= !x (char string-q it))
-                    `(format nil "'~S" ,exp)
-                    (format nil "(local-server::%remote-eval '~S)" exp))
-                list-q)
-          (setf string-q (subseq string-q (+ it 1 end)))))
-      (push string-q list-q)
-      `(%send-q (list ,@(reverse list-q))))))
+    (with-output-to-string (out)
+      (let ((ex #\Space)
+            parens in-string comment)
+        (loop
+          (let ((ch (read-char in)))
+            (if comment
+                (when (char= #\Newline ch)
+                  (setf comment nil))
+                (unless (char= #\\ ex)
+                  (if (char= #\" ch)
+                      (setf in-string (not in-string))
+                      (unless in-string
+                        (case ch
+                          ((#\Space #\Tab #\Newline #\Return)
+                           (unless (or parens (white-space ex))
+                             (unread-char ch in)
+                             (return))) ; atom
+                          (#\( (if parens
+                                   (incf parens)
+                                   (setf parens 1)))
+                          (#\) (if parens
+                                   (decf parens)
+                                   (progn
+                                     (unread-char ch in)
+                                     (return)))) ; atom, e.g. (foo #q *x*)
+                          (#\! (when (white-space ex) (setf ch !x)))
+                          (#\? (when (white-space ex) (setf ch ?x)))
+                          (#\; (setf comment t)))))))
+            (unless comment
+              (write-char ch out))
+            (when (eql 0 parens)
+              (return))
+            (setf ex ch)))))))
+
+(defun %read-q (stream)
+  (let ((!x (code-char 1))
+        (?x (code-char 2)))
+    (declare (special !x ?x))
+    (let ((string-q (%stream-string stream))
+          list-q)
+      (let (pos! pos?)
+        (while-it (or (setf pos! (position !x string-q))
+                      (setf pos? (position ?x string-q)))
+          (multiple-value-bind (exp end)
+              (if pos!
+                  (read-from-string (subseq string-q (1+ pos!)))
+                  (let ((str (with-input-from-string (s (subseq string-q (1+ pos?)))
+                               (%stream-string s))))
+                    (values str (length str))))
+            (unless (zerop it)
+              (push (subseq string-q 0 it) list-q))
+            (push (if pos!
+                      `(format nil "'~S" ,exp)
+                      (format nil "(local-server::%remote-eval `~A)" exp)) ; note backquote
+                  list-q)
+            (setf string-q (subseq string-q (+ it 1 end)))))
+        (push string-q list-q)
+        `(%send-q (list ,@(reverse list-q)))))))
 
 (defun %send-q (data)
   (values-list

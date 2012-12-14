@@ -35,7 +35,10 @@
 ;;; #q ---------------------------------------------------------------------------------------
 
 ;;; ! pass a CL value to EQL
-;;; ? EQL will ask for evaluation in CL at execution time
+;;;
+;;; ? EQL will ask for evaluation in CL at execution time; use ',' to eval arguments in EQL:
+;;;
+;;;     #q ... (lambda () ?(cl-function ,eql-var))
 
 #q
 (defvar *button* (qnew "QPushButton"
