@@ -38,7 +38,7 @@
 ;;;
 ;;; ? EQL will ask for evaluation in CL at execution time; use ',' to eval arguments in EQL:
 ;;;
-;;;     #q ... (lambda () ?(cl-function ,eql-var))
+;;;     #q ... (lambda () ?(cl-function ,eql-var)) ; see "nitpick note"
 
 #q
 (defvar *button* (qnew "QPushButton"
@@ -51,4 +51,19 @@
   (qconnect *button* "clicked()" (lambda () (qmsg ?(words-of-wisdom))))) ; note '?'
 
 (ev) ; needed for '?' only (see "Back to REPL" at the top of the desktop)
+
+
+
+;;; nitpick note
+;;;
+;;; you probably noticed the missing backquote in the syntax ?(foo ,x)
+;;; but if you look closely, it's there:
+;;;
+;;;   ____
+;;;  /    \  <-- surprise, a question mark visually includes a backquote!
+;;;       /
+;;;      /
+;;;     |
+;;;
+;;;     @
 

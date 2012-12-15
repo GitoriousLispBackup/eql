@@ -1,6 +1,6 @@
 ;;; "Wiggly Widget" example, directly loadable into any CL + CFFI.
 ;;;
-;;; Slime note: for 'eval region', wrap #Q in PROGN (see *SINUS*, PAINT).
+;;; Slime note: for 'eval region', wrap #Q in PROGN (see *SINUS*).
 
 (load "q")
 
@@ -47,29 +47,28 @@
     (qfun dlg "show")
     (qfun dlg "raise")))
 
-(progn ; for 'eval region' in Slime
-  #q
-  (defun paint (ev)
-    (qlet ((painter "QPainter(QWidget*)" *wiggly*) ; local QPainter variable: no need to call "begin", "end"
-           (pen "QPen")
-           (metrics "QFontMetrics(QFont)" (qget *wiggly* "font")))
-      (let* ((txt (qget *edit* "text"))
-             (x (/ (- (qget *wiggly* "width")
-                      (qfun metrics "width(QString)" txt))
-                   2))
-             (y (/ (- (+ (qget *wiggly* "height") (qfun metrics "ascent"))
-                      (qfun metrics "descent"))
-                   2))
-             (h (qfun metrics "height")))
-        (dotimes (i (length txt))
-          (let ((ix (mod (+ i *step*) 16))
-                (ch (char txt i)))
-            (qfun pen "setColor" (qfun "QColor" "fromHsv" (* 16 (- 15 ix)) 255 191))
-            (qfun painter "setPen(QPen)" pen)
-            (qfun painter "drawText(QPoint,QString)" (list (floor x)
-                                                           (floor (- y (/ (* h (svref *sinus* ix)) 400))))
-                  (string ch))
-            (incf x (qfun metrics "width(QChar)" ch))))))))
+#q
+(defun paint (ev)
+  (qlet ((painter "QPainter(QWidget*)" *wiggly*) ; local QPainter variable: no need to call "begin", "end"
+         (pen "QPen")
+         (metrics "QFontMetrics(QFont)" (qget *wiggly* "font")))
+    (let* ((txt (qget *edit* "text"))
+           (x (/ (- (qget *wiggly* "width")
+                    (qfun metrics "width(QString)" txt))
+                 2))
+           (y (/ (- (+ (qget *wiggly* "height") (qfun metrics "ascent"))
+                    (qfun metrics "descent"))
+                 2))
+           (h (qfun metrics "height")))
+      (dotimes (i (length txt))
+        (let ((ix (mod (+ i *step*) 16))
+              (ch (char txt i)))
+          (qfun pen "setColor" (qfun "QColor" "fromHsv" (* 16 (- 15 ix)) 255 191))
+          (qfun painter "setPen(QPen)" pen)
+          (qfun painter "drawText(QPoint,QString)" (list (floor x)
+                                                         (floor (- y (/ (* h (svref *sinus* ix)) 400))))
+                (string ch))
+          (incf x (qfun metrics "width(QChar)" ch)))))))
 
 #q 
 (defun timeout (ev)

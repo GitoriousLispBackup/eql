@@ -90,6 +90,11 @@ In order to gracefully stop '(ev)', use the Qt button "Back to REPL" shown at
 the top of the desktop while '(ev)' is running (note also the 'no-button'
 argument).
 
+Inside of a '?' expression you can use commas (as with backquote) in order to
+evaluate any argument, including the function symbol:
+
+  ?(cl-function ,eql-var cl-var)
+
 If you don't need to pass data at execution time, you can forget about '(ev)'
 (that is, you will never need to block your REPL).
 

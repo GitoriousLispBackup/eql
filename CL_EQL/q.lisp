@@ -33,7 +33,7 @@
 
 (cffi:defcfun "ini_q"    :void (fun :pointer))
 (cffi:defcfun "send_q"   :string (str :string))
-(cffi:defcfun ("ev" %ev) :void (no_button :boolean))
+(cffi:defcfun ("ev" %ev) :void (no-button :boolean))
 (cffi:defcfun "ev_exit"  :void)
 
 (cffi:defcallback eval_q :string ((str :string))
