@@ -66,7 +66,7 @@ If your CL has threads enabled, you need to set your Swank communication
 style to either :sigio or :fd-handler in your ".swank.lisp" file
 (style :spawn uses threads, and would crash together with '#q').
 
-  (setf swank:*communication-style* :sigio)
+  #+sbcl (setf swank:*communication-style* :sigio)
 
 Symbol completion works for all EQL symbols (including enums), because they
 are read in in "q.lisp".
@@ -75,7 +75,7 @@ are read in in "q.lisp".
 
 In order to avoid recursive debug loops, all timers with a parent will be
 stopped before showing the debug dialog.
-After sending the next command to EQL, the timers will be restarted.
+On sending the next command to EQL, the timers will be restarted.
 
 
 '(ev &optional no-button)': EVENT DRIVEN EVAL REQUESTS FROM EQL

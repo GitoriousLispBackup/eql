@@ -26,7 +26,7 @@
 ;;; cffi
 
 (cffi:load-foreign-library
-  (merge-pathnames *default-pathname-defaults*
+  (merge-pathnames ; insert here your library path, which defaults to *DEFAULT-PATHNAME-DEFAULTS*
                    #+darwin                  "libeql_client.dylib"
                    #+(and unix (not darwin)) "libeql_client.so"
                    #+win32                   "eql_client.dll"))
@@ -38,8 +38,9 @@
 
 (cffi:defcallback eval_q :string ((str :string))
   (if (zerop (length str))
-      ":eval-error"
-      (prin1-to-string (eval (read-from-string str)))))
+      ""
+      (let ((*print-pretty* nil))
+        (prin1-to-string (eval (read-from-string str))))))
 
 (ini-q (cffi:callback eval_q))
 
