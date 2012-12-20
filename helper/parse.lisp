@@ -196,10 +196,7 @@
                                 (return t)))
                             ;; template problem
                             (and (string= "QVariant" class)
-                                 (string= "bool canConvert () const" fun))
-                            ;; primitives
-                            (and (string= "QColor" class)
-                                 (not static)))
+                                 (string= "bool canConvert () const" fun)))
                   (when virtual
                     (format so "~%   \"~A\"" fun))
                   (unless (and virtual protected)

@@ -1,6 +1,7 @@
 ;;; copyright (c) 2012 Polos Ruetz
 ;;;
-;;; Send EQL code to "local-server": a trivial one-way use of EQL from any CL.
+;;; Send EQL code to "local-server": a trivial one-way use of EQL from any CL
+;;; (see also ../../CL_EQL/")
 ;;;
 ;;;
 ;;; Run: (after building the executable in "send/")

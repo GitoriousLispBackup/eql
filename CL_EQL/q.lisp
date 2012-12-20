@@ -7,7 +7,7 @@
 ;;;   ecl -load q / clisp -i q / sbcl --load q (any CL + CFFI)
 ;;;
 ;;;
-;;; Examples: (use '!' to pass immediate data to EQL, use '?' to pass eventual data to EQL)
+;;; Examples: (use '!' to pass immediate data to EQL, use '?' to pass eventual data to EQL, see "example.lisp")
 ;;;
 ;;;   #q (qmsg (package-name *package*))
 ;;;
@@ -36,13 +36,13 @@
 (cffi:defcfun ("ev" %ev) :void (no-button :boolean))
 (cffi:defcfun "ev_exit"  :void)
 
-(cffi:defcallback eval_q :string ((str :string))
+(cffi:defcallback eval-q :string ((str :string))
   (if (zerop (length str))
       ""
       (let ((*print-pretty* nil))
         (prin1-to-string (eval (read-from-string str))))))
 
-(ini-q (cffi:callback eval_q))
+(ini-q (cffi:callback eval-q))
 
 ;;; utils
 

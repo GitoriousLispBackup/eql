@@ -269,6 +269,7 @@ NumList LBitmap::overrideIds = NumList();
 NumList LBrush::overrideIds = NumList();
 NumList LChildEvent::overrideIds = NumList();
 NumList LCloseEvent::overrideIds = NumList();
+NumList LColor::overrideIds = NumList();
 NumList LConicalGradient::overrideIds = NumList();
 NumList LContextMenuEvent::overrideIds = NumList();
 NumList LCryptographicHash::overrideIds = NumList();
@@ -2406,6 +2407,7 @@ void LObjects::deleteNObject(int n, void* p, int gc) {
         case 12: if(gc) delete (QBrush*)p; else delete (LBrush*)p; break;
         case 13: if(gc) delete (QChildEvent*)p; else delete (LChildEvent*)p; break;
         case 14: if(gc) delete (QCloseEvent*)p; else delete (LCloseEvent*)p; break;
+        case 15: if(gc) delete (QColor*)p; else delete (LColor*)p; break;
         case 16: if(gc) delete (QConicalGradient*)p; else delete (LConicalGradient*)p; break;
         case 17: if(gc) delete (QContextMenuEvent*)p; else delete (LContextMenuEvent*)p; break;
         case 18: if(gc) delete (QCryptographicHash*)p; else delete (LCryptographicHash*)p; break;
@@ -2966,6 +2968,7 @@ StrList LObjects::overrideFunctions(const QByteArray& name) {
             case 12: ids = LBrush::overrideIds; break;
             case 13: ids = LChildEvent::overrideIds; break;
             case 14: ids = LCloseEvent::overrideIds; break;
+            case 15: ids = LColor::overrideIds; break;
             case 16: ids = LConicalGradient::overrideIds; break;
             case 17: ids = LContextMenuEvent::overrideIds; break;
             case 18: ids = LCryptographicHash::overrideIds; break;

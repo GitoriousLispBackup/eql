@@ -490,13 +490,17 @@ static QPolygonF toQPolygonF(cl_object l_list) {
     return p; }
 
 static QColor toQColor(cl_object l_c) {
-    if(Cnil == l_c) {
-        return QColor(); }
-    return QColor(toQString(l_c)); }
+    if(ECL_STRINGP(l_c)) {
+        return QColor(toQString(l_c)); }
+    QtObject o = toQtObject(l_c);
+    if("QColor" == o.className() && o.pointer) {
+        QColor* p = (QColor*)o.pointer;
+        return *p; }
+    return QColor(); }
 
 static QGradient toQGradient(cl_object l_g) {
     QtObject o = toQtObject(l_g);
-    if(inherits(o.className(), "QGradient")) {
+    if(inherits(o.className(), "QGradient") && o.pointer) {
         QGradient* p = (QGradient*)o.pointer;
         return *p; }
     return QGradient(); }
@@ -710,8 +714,13 @@ static cl_object from_qreallist(const QList<qreal>& l) {
     return l_list; }
 
 static cl_object from_qcolor(const QColor& col) {
-    cl_object l_color = col.isValid() ? from_qstring(col.name()) : Cnil;
-    return l_color; }
+    cl_object l_ret = Cnil;
+    if(col.isValid()) { // return NIL for invalid QColors
+        if(EQL::return_value_p) {
+            l_ret = qt_object_from_name("QColor", new QColor(col), 0, true); }
+        else {
+            l_ret = qt_object_from_name("QColor", (void*)&col); }}
+    return l_ret; }
 
 static cl_object from_qpolygon(const QPolygon& p) {
     cl_object l_list = Cnil;

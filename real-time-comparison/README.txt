@@ -19,7 +19,8 @@ EQL function calls are about 10 times slower than direct C++ function calls.
 ==================
 
 For a profiling example (comparing CommonQt/SBCL and EQL) see "profiling.lisp".
-It shows that CommonQt/SBCL and EQL have similar performance, and both feel
+It shows that CommonQt/SBCL and EQL have similar performance (I mean the GUI
+part only, of course SBCL is _much_ faster than ECL), and both feel
 responsive on Unix (on Windows, CommonQt/SBCL was much slower in my tests).
 
 If you want to fully profile EQL/ECL, simply use a decent C profiler like

@@ -193,6 +193,21 @@ public:
     uint unique;
 };
 
+class LColor : public QColor {
+    friend class N15;
+public:
+    LColor(uint u) : unique(u) {}
+    LColor(uint u, int x1, int x2, int x3, int x4 = 255) : QColor(x1, x2, x3, x4), unique(u) {}
+    LColor(uint u, QRgb x1) : QColor(x1), unique(u) {}
+    LColor(uint u, const QString& x1) : QColor(x1), unique(u) {}
+    LColor(uint u, const char* x1) : QColor(x1), unique(u) {}
+    LColor(uint u, const QColor& x1) : QColor(x1), unique(u) {}
+    LColor(uint u, Qt::GlobalColor x1) : QColor(x1), unique(u) {}
+
+    static NumList overrideIds;
+    uint unique;
+};
+
 class LConicalGradient : public QConicalGradient {
     friend class N16;
 public:

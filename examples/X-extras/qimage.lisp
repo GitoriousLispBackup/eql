@@ -84,6 +84,6 @@
 
 (defun color-dialog ()
   (x:when-it (qfun "QColorDialog" "getColor")
-    (qset *color* "text" x:it)))
+    (qset *color* "text" (qfun x:it "name"))))
 
 (start)

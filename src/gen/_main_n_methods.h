@@ -88,6 +88,76 @@ public:
 class EQL_EXPORT N15 : public QObject { // QColor
     Q_OBJECT
 public:
+    Q_INVOKABLE void* C(uint u) { return new LColor(u); }
+    Q_INVOKABLE void* C(uint u, int x1, int x2, int x3, int x4 = 255) { return new LColor(u, x1, x2, x3, x4); }
+    Q_INVOKABLE void* C(uint u, QRgb x1) { return new LColor(u, x1); }
+    Q_INVOKABLE void* C(uint u, const QString& x1) { return new LColor(u, x1); }
+    Q_INVOKABLE void* C(uint u, const char* x1) { return new LColor(u, x1); }
+    Q_INVOKABLE void* C(uint u, const QColor& x1) { return new LColor(u, x1); }
+    Q_INVOKABLE void* C(uint u, Qt::GlobalColor x1) { return new LColor(u, x1); }
+    Q_INVOKABLE int Malpha(QColor* o) const { return o->alpha(); }
+    Q_INVOKABLE qreal MalphaF(QColor* o) const { return o->alphaF(); }
+    Q_INVOKABLE int Mblack(QColor* o) const { return o->black(); }
+    Q_INVOKABLE qreal MblackF(QColor* o) const { return o->blackF(); }
+    Q_INVOKABLE int Mblue(QColor* o) const { return o->blue(); }
+    Q_INVOKABLE qreal MblueF(QColor* o) const { return o->blueF(); }
+    Q_INVOKABLE QColor MconvertTo(QColor* o, QColor::Spec x1) const { return o->convertTo(x1); }
+    Q_INVOKABLE int Mcyan(QColor* o) const { return o->cyan(); }
+    Q_INVOKABLE qreal McyanF(QColor* o) const { return o->cyanF(); }
+    Q_INVOKABLE QColor Mdarker(QColor* o, int x1 = 200) const { return o->darker(x1); }
+    Q_INVOKABLE int Mgreen(QColor* o) const { return o->green(); }
+    Q_INVOKABLE qreal MgreenF(QColor* o) const { return o->greenF(); }
+    Q_INVOKABLE int MhslHue(QColor* o) const { return o->hslHue(); }
+    Q_INVOKABLE qreal MhslHueF(QColor* o) const { return o->hslHueF(); }
+    Q_INVOKABLE int MhslSaturation(QColor* o) const { return o->hslSaturation(); }
+    Q_INVOKABLE qreal MhslSaturationF(QColor* o) const { return o->hslSaturationF(); }
+    Q_INVOKABLE int MhsvHue(QColor* o) const { return o->hsvHue(); }
+    Q_INVOKABLE qreal MhsvHueF(QColor* o) const { return o->hsvHueF(); }
+    Q_INVOKABLE int MhsvSaturation(QColor* o) const { return o->hsvSaturation(); }
+    Q_INVOKABLE qreal MhsvSaturationF(QColor* o) const { return o->hsvSaturationF(); }
+    Q_INVOKABLE int Mhue(QColor* o) const { return o->hue(); }
+    Q_INVOKABLE qreal MhueF(QColor* o) const { return o->hueF(); }
+    Q_INVOKABLE bool MisValid(QColor* o) const { return o->isValid(); }
+    Q_INVOKABLE QColor Mlighter(QColor* o, int x1 = 150) const { return o->lighter(x1); }
+    Q_INVOKABLE int Mlightness(QColor* o) const { return o->lightness(); }
+    Q_INVOKABLE qreal MlightnessF(QColor* o) const { return o->lightnessF(); }
+    Q_INVOKABLE int Mmagenta(QColor* o) const { return o->magenta(); }
+    Q_INVOKABLE qreal MmagentaF(QColor* o) const { return o->magentaF(); }
+    Q_INVOKABLE QString Mname(QColor* o) const { return o->name(); }
+    Q_INVOKABLE int Mred(QColor* o) const { return o->red(); }
+    Q_INVOKABLE qreal MredF(QColor* o) const { return o->redF(); }
+    Q_INVOKABLE QRgb Mrgb(QColor* o) const { return o->rgb(); }
+    Q_INVOKABLE QRgb Mrgba(QColor* o) const { return o->rgba(); }
+    Q_INVOKABLE int Msaturation(QColor* o) const { return o->saturation(); }
+    Q_INVOKABLE qreal MsaturationF(QColor* o) const { return o->saturationF(); }
+    Q_INVOKABLE void MsetAlpha(QColor* o, int x1) { o->setAlpha(x1); }
+    Q_INVOKABLE void MsetAlphaF(QColor* o, qreal x1) { o->setAlphaF(x1); }
+    Q_INVOKABLE void MsetBlue(QColor* o, int x1) { o->setBlue(x1); }
+    Q_INVOKABLE void MsetBlueF(QColor* o, qreal x1) { o->setBlueF(x1); }
+    Q_INVOKABLE void MsetCmyk(QColor* o, int x1, int x2, int x3, int x4, int x5 = 255) { o->setCmyk(x1, x2, x3, x4, x5); }
+    Q_INVOKABLE void MsetCmykF(QColor* o, qreal x1, qreal x2, qreal x3, qreal x4, qreal x5 = 1.0) { o->setCmykF(x1, x2, x3, x4, x5); }
+    Q_INVOKABLE void MsetGreen(QColor* o, int x1) { o->setGreen(x1); }
+    Q_INVOKABLE void MsetGreenF(QColor* o, qreal x1) { o->setGreenF(x1); }
+    Q_INVOKABLE void MsetHsl(QColor* o, int x1, int x2, int x3, int x4 = 255) { o->setHsl(x1, x2, x3, x4); }
+    Q_INVOKABLE void MsetHslF(QColor* o, qreal x1, qreal x2, qreal x3, qreal x4 = 1.0) { o->setHslF(x1, x2, x3, x4); }
+    Q_INVOKABLE void MsetHsv(QColor* o, int x1, int x2, int x3, int x4 = 255) { o->setHsv(x1, x2, x3, x4); }
+    Q_INVOKABLE void MsetHsvF(QColor* o, qreal x1, qreal x2, qreal x3, qreal x4 = 1.0) { o->setHsvF(x1, x2, x3, x4); }
+    Q_INVOKABLE void MsetNamedColor(QColor* o, const QString& x1) { o->setNamedColor(x1); }
+    Q_INVOKABLE void MsetRed(QColor* o, int x1) { o->setRed(x1); }
+    Q_INVOKABLE void MsetRedF(QColor* o, qreal x1) { o->setRedF(x1); }
+    Q_INVOKABLE void MsetRgb(QColor* o, int x1, int x2, int x3, int x4 = 255) { o->setRgb(x1, x2, x3, x4); }
+    Q_INVOKABLE void MsetRgb(QColor* o, QRgb x1) { o->setRgb(x1); }
+    Q_INVOKABLE void MsetRgbF(QColor* o, qreal x1, qreal x2, qreal x3, qreal x4 = 1.0) { o->setRgbF(x1, x2, x3, x4); }
+    Q_INVOKABLE void MsetRgba(QColor* o, QRgb x1) { o->setRgba(x1); }
+    Q_INVOKABLE int Mspec(QColor* o) const { return o->spec(); }
+    Q_INVOKABLE QColor MtoCmyk(QColor* o) const { return o->toCmyk(); }
+    Q_INVOKABLE QColor MtoHsl(QColor* o) const { return o->toHsl(); }
+    Q_INVOKABLE QColor MtoHsv(QColor* o) const { return o->toHsv(); }
+    Q_INVOKABLE QColor MtoRgb(QColor* o) const { return o->toRgb(); }
+    Q_INVOKABLE int Mvalue(QColor* o) const { return o->value(); }
+    Q_INVOKABLE qreal MvalueF(QColor* o) const { return o->valueF(); }
+    Q_INVOKABLE int Myellow(QColor* o) const { return o->yellow(); }
+    Q_INVOKABLE qreal MyellowF(QColor* o) const { return o->yellowF(); }
     Q_INVOKABLE QStringList ScolorNames() { return QColor::colorNames(); }
     Q_INVOKABLE QColor SfromCmyk(int x1, int x2, int x3, int x4, int x5 = 255) { return QColor::fromCmyk(x1, x2, x3, x4, x5); }
     Q_INVOKABLE QColor SfromCmykF(qreal x1, qreal x2, qreal x3, qreal x4, qreal x5 = 1.0) { return QColor::fromCmykF(x1, x2, x3, x4, x5); }

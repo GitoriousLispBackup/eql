@@ -18,7 +18,7 @@
         "QBrush"
         "QChildEvent"
         "QCloseEvent"
-        "//QColor"
+        "QColor"
         "QConicalGradient"
         "QContextMenuEvent"
         "QCryptographicHash"

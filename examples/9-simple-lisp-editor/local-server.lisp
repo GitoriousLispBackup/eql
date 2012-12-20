@@ -289,10 +289,10 @@
               (qprocess-events)
               (qfun *eval-socket* "waitForReadyRead")
               (let ((block (qfun *eval-socket* "readAll")))
-                    (incf bytes-read (length block))
-                    (push block data)))
-                (unless (zerop size)
-                  (values (read-from-string (qfrom-utf8 (apply 'concatenate 'vector (nreverse data))))))))))))
+                (incf bytes-read (length block))
+                (push block data)))
+            (unless (zerop size)
+              (values (read-from-string (qfrom-utf8 (apply 'concatenate 'vector (nreverse data))))))))))))
   
 #|
 (defun %log (str)

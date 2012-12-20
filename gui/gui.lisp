@@ -58,7 +58,7 @@
 
 (defun gui ()
   (qset *gui* "windowTitle" "EQL - Embedded Qt Lisp")
-  (qset *select* "toolTip" (tr "Select any (child) widget (see variable *q*)"))
+  (qset *select* "toolTip" (tr "Select any (child) widget (see qsel:*q*)"))
   (qset *help* "source" (qnew "QUrl(QString)" (concatenate 'string "file:///" (in-home "doc/auto-doc.htm"))))
   (set-tree *q-override*)
   (set-tree *q-signals*)
@@ -226,7 +226,7 @@
 (defun populate-primitives ()
   (dolist (type (list (cons "QByteArray"    "(vector -50 0 50)")
                       (cons "QChar"         "#\\a")
-                      (cons "QColor"        "\"#FF0000\" or \"red\"")
+                      (cons "QColor"        "either name or object: \"#FF0000\" / \"red\" / (qnew \"QColor\")")
                       (cons "QGradientStop" "(cons 0 \"orange\")")
                       (cons "QLine"         "(list x1 y1 x2 y2)")
                       (cons "QPoint"        "(list x y)")
