@@ -16,7 +16,7 @@ Run it:
 The main motivation behind this editor is the need for a popup completer
 for the (huge) Qt library.
 
-The completer currently works for:
+The completer works for:
 
   qnew
   qlet

@@ -54,6 +54,7 @@
   "qquit"
   "qremove-event-filter"
   "qrequire"
+  "qrgb"
   "qsel"
   "qselect"
   "qsender"

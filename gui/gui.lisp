@@ -232,7 +232,7 @@
                       (cons "QPoint"        "(list x y)")
                       (cons "QPolygon"      "(list x1 y1 x2 y2 x3 y3 ...)")
                       (cons "QRect"         "(list x y width height)")
-                      (cons "QRgb"          "65280")
+                      (cons "QRgb"          "65280 / (qrgb r g b)")
                       (cons "QSize"         "(list width height)")
                       (cons "QString"       "\"a Unicode string\"")
                       (cons "QStringList"   "(list \"one\" \"two\" \"three\")")))

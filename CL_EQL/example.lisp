@@ -54,16 +54,12 @@
 
 
 
-;;; nitpick note
-;;;
-;;; you probably noticed the missing backquote in the syntax ?(foo ,x)
-;;; but if you look closely, it's there:
-;;;
-;;;   ____
-;;;  /    \  <-- surprise, a question mark visually includes a backquote!
+;;; nitpick note: the backquote in ?(cl-function ,eql-var) is here:
+;;;    ____
+;;;   /    \  <---
+;;;        /
 ;;;       /
-;;;      /
-;;;     |
+;;;      |
 ;;;
-;;;     @
+;;;      @
 

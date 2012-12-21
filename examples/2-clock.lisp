@@ -13,7 +13,7 @@
                       "pos" (list 50 50)))
 
 (defun start ()
-  (let ((timer (qnew "QTimer")))
+  (let ((timer (qnew "QTimer(QObject*)" *clock*)))
     (qconnect timer "timeout()" (lambda () (qfun *clock* "update")))
     (qoverride *clock* "paintEvent(QPaintEvent*)" 'paint)
     (qfun timer "start" 500)

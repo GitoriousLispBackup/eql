@@ -16,8 +16,12 @@ static QHash<QByteArray, void*> lisp_functions;
 
 static cl_object eql_fun(cl_object l_fun, cl_object l_args) {
     cl_object l_ret = Cnil;
-    CL_CATCH_ALL_BEGIN(ecl_process_env()) {
-        l_ret = cl_apply(2, l_fun, l_args); }
+    const cl_env_ptr l_env = ecl_process_env();
+    CL_CATCH_ALL_BEGIN(l_env) {
+        CL_UNWIND_PROTECT_BEGIN(l_env) {
+            l_ret = cl_apply(2, l_fun, l_args); }
+        CL_UNWIND_PROTECT_EXIT {}
+        CL_UNWIND_PROTECT_END; }
     CL_CATCH_ALL_END;
     return l_ret; }
 
