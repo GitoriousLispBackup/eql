@@ -48,7 +48,7 @@
 </p><br>
 <p>
 <b>QCALL-DEFAULT ()</b>
-<p>To use inside an overridden function (see <code>qoverride</code>).<br>Calls the base implementation of the virtual Qt method.</p>
+<p>To use anywhere inside an overridden function (see <code>qoverride</code>).<br>Calls the base implementation of the virtual Qt method <b>after</b> leaving the function body.<br><br>Optionally call the base implementation directly (if you want to do post-processing of the return value).</p>
 </p><br>
 <p>
 <b>QCLEAR-EVENT-FILTERS ()</b>
@@ -245,7 +245,7 @@
 </p><br>
 <p>
 <b>QOVERRIDE (object name function)</b>
-<p>Sets a Lisp function to be called on a virtual Qt method.<br>To remove a function, pass <code>NIL</code> instead of the function argument.<br>Use <code>qcall-default</code> inside your function to call the base implementation.</p>
+<p>Sets a Lisp function to be called on a virtual Qt method.<br>To remove a function, pass <code>NIL</code> instead of the function argument.<br><br>If you call <code>qcall-default</code> anywhere inside your overridden function, the base implementation will be called <b>afterwards</b>.<br>Instead of <code>qcall-default</code> you can directly call the base implementation, which is useful if you want to do post-processing of the returned value.</p>
 <pre>
   (qoverride edit "keyPressEvent(QKeyEvent*)" (lambda (ev) (print (qfun ev "key")) (qcall-default)))
 </pre>

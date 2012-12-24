@@ -246,7 +246,8 @@
 
 (defun qt-class-p (class)
   (and (char= #\Q (char class 0))
-       (string/= "QueryType" class)))
+       (string/= "QueryType" class)
+       (not (position #\: class))))
 
 (defun void-p (arg)
   (string= "void" (first arg)))
@@ -361,16 +362,23 @@
 
 (let (pure-virtuals)
   (defun pure-virtual-p (fun class super)
-    (when-it (find :pure fun :key (lambda (x) (when (consp x) (car x))))
-      (let* ((fun* (function-name fun))
-             (class* (cdr it))
-             (fun-class (cons fun* class*)))
-        (cond ((find fun-class pure-virtuals :test 'equal))
-              ((push fun-class pure-virtuals))
-              (when (or (string= class class*)
-                        (and (string= super class*)
-                             (find (cons fun* super) pure-virtuals :test 'equal)))
-                (push (cons fun* class) pure-virtuals)))))))
+    (when (or (not super)
+              (string= "QObject" super)
+              (string= class super))
+      (when-it (find :pure fun :key (lambda (x) (when (consp x) (car x))))
+        (let* ((fun* (function-name fun))
+               (class* (cdr it))
+               (fun-class (cons fun* class*)))
+          (cond ((find fun-class pure-virtuals :test 'equal))
+                ((push fun-class pure-virtuals))
+                (when (or (string= class class*)
+                          (and (string= super class*)
+                               (find (cons fun* super) pure-virtuals :test 'equal)))
+                  (push (cons fun* class) pure-virtuals))))))))
+
+(defun find-function (class fun-name q)
+  (when-it (find class (if q *q-methods* *n-methods*) :test 'string= :key 'caaar)
+    (find (format nil " ~A " fun-name) (rest it) :test 'search)))
 
 (defun virtual-p (x)
   (find :virtual x))
@@ -527,12 +535,36 @@
                                    (call (format nil "callOverrideFun(fun, ~D, ~A)"
                                                  sig-id
                                                  (if (function-args fun) "args" "0")))
-                                   (pure-virtual (pure-virtual-p fun class super)))
+                                   (pure-virtual (or (pure-virtual-p fun class super)
+                                                     ;; avoid calling pure virtual methods from inherited classes
+                                                     (and (string= "QAnimationGroup" class)
+                                                          (find* fun-name '("duration"
+                                                                            "updateCurrentTime")))
+                                                     (and (string= "QAbstractProxyModel" class)
+                                                          (find* fun-name '("columnCount"
+                                                                            "data"
+                                                                            "index"
+                                                                            "parent"
+                                                                            "rowCount")))
+                                                     (and (string= "QAbstractListModel" class)
+                                                          (find* fun-name '("data"
+                                                                            "rowCount")))
+                                                     (and (string= "QAbstractTableModel" class)
+                                                          (find* fun-name '("data"
+                                                                            "rowCount")))
+                                                     (and (string= "QAbstractGraphicsShapeItem" class)
+                                                          (find* fun-name '("boundingRect"
+                                                                            "paint")))
+                                                     (and (string= "QGraphicsObject" class)
+                                                          (find* fun-name '("boundingRect"
+                                                                            "paint")))
+                                                     (and (string= "QGraphicsLayout" class)
+                                                          (find* fun-name '("sizeHint"))))))
                               (when 1st
                                 (push sig-id sig-ids))
                               (unless (find* fun-name fun-names)
                                 (push fun-name fun-names)
-                                (format s "~%    ~A ~A(~A)~A { void* fun = LObjects::overrideFun(unique, ~D); ~Aif(fun) { ~A~A; }~A~A~A~A~A}"
+                                (format s "~%    ~A ~A(~A)~A { void* fun = LObjects::overrideFun(unique, ~D); ~Aif(fun && !LObjects::calling) { ~A~A; }~A~A~A~A~A}"
                                         (arg-to-c ret)
                                         fun-name
                                         (add-var-names args)
@@ -543,11 +575,11 @@
                                             (format nil "~A ret~A; "
                                                     (arg-to-c ret)
                                                     (x:if-it (arg-to-c-null-value ret)
-                                                        (format nil " = ~A" x:it)
-                                                        "")))
+                                                          (format nil " = ~A" x:it)
+                                                          "")))
                                         (if args (format nil "const void* args[] = { ~{&~A~^, ~} }; " (n-var-names (length args))) "")
                                         (if void call (format nil "ret = ~A" (from-qvariant ret call)))
-                                        (if pure-virtual "" " if(!fun || LObjects::call_default) {")
+                                        (if pure-virtual "" " if(!fun || LObjects::call_default || LObjects::calling) {")
                                         (if (or void pure-virtual) "" " ret =")
                                         (if pure-virtual
                                             ""
@@ -604,18 +636,19 @@
            (classes (mapcar (lambda (obj)
                               (with-output-to-string (s)
                                 (let ((class (class-name* obj))
+                                      (super (super-class obj))
                                       (sub-class (sub-class-name obj)))
                                   (format s "~%class ~A~D : public ~A { // ~A~
                                              ~%    Q_OBJECT~
                                              ~%public:~%"
                                           type
                                           (incf n)
-                                          (if-it (super-class obj)
+                                          (if super
                                               (format nil "~A~D"
                                                       type
-                                                      (1+ (if-it* (position it methods :test 'string= :key 'class-name*)
-                                                              it*
-                                                              (error (format t "~%Class missing: ~S~%~%" it)))))
+                                                      (1+ (if-it (position super methods :test 'string= :key 'class-name*)
+                                                              it
+                                                              (error (format t "~%Class missing: ~S~%~%" super)))))
                                               "QObject")
                                           class)
                                   (when (copy-p obj)
@@ -641,7 +674,9 @@
                                                 (when (and c-ret-arg
                                                            (every (lambda (x)
                                                                     (not (search x c-args)))
-                                                                  +special-typedefs-and-classes+))
+                                                                  +special-typedefs-and-classes+)
+                                                           (or (not (pure-virtual-p fun class super))
+                                                               (new-p obj)))
                                                   (format s "    Q_INVOKABLE ~A ~A~A(~A~A~A)~A { ~A~A~A~A; }~%"
                                                           c-ret-arg
                                                           (if (static-p fun) "S" "M")
@@ -780,6 +815,7 @@
                ~%QObject** LObjects::Q = 0;~
                ~%QObject** LObjects::N = 0;~
                ~%bool LObjects::call_default = false;~
+               ~%bool LObjects::calling = false;~
                ~%uint LObjects::i_unique = 0;~
                ~%const char*** LObjects::override_arg_types = 0;~
                ~%QList<QByteArray> LObjects::qNames;~

@@ -47,12 +47,13 @@ BUILD (see also: "Windows Easy Guide" in doc/)
 2) Do:
 
     qmake eql_lib.pro
-    make 
+    make
 
     qmake eql_exe.pro
-    make 
+    make
 
    This will build both the EQL executable and shared library.
+   (The compiler warning "'ret' may be used uninitialized" can safely be ignored.)
 
 3) cd ..
 

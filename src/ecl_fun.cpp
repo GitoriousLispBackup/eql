@@ -1823,7 +1823,7 @@ void callConnectFun(void* fun, const StrList& types, void** args) {
 
 cl_object qoverride(cl_object l_obj, cl_object l_name, cl_object l_fun) {
     /// args: (object name function)
-    /// Sets a Lisp function to be called on a virtual Qt method.<br>To remove a function, pass <code>NIL</code> instead of the function argument.<br>Use <code>qcall-default</code> inside your function to call the base implementation.
+    /// Sets a Lisp function to be called on a virtual Qt method.<br>To remove a function, pass <code>NIL</code> instead of the function argument.<br><br>If you call <code>qcall-default</code> anywhere inside your overridden function, the base implementation will be called <b>afterwards</b>.<br>Instead of <code>qcall-default</code> you can directly call the base implementation, which is useful if you want to do post-processing of the returned value.
     ///     (qoverride edit "keyPressEvent(QKeyEvent*)" (lambda (ev) (print (qfun ev "key")) (qcall-default)))
     ecl_process_env()->nvalues = 1;
     QtObject o = toQtObject(l_obj);
@@ -1839,7 +1839,7 @@ cl_object qoverride(cl_object l_obj, cl_object l_name, cl_object l_fun) {
 
 cl_object qcall_default() {
     /// args: ()
-    /// To use inside an overridden function (see <code>qoverride</code>).<br>Calls the base implementation of the virtual Qt method.
+    /// To use anywhere inside an overridden function (see <code>qoverride</code>).<br>Calls the base implementation of the virtual Qt method <b>after</b> leaving the function body.<br><br>Optionally call the base implementation directly (if you want to do post-processing of the return value).
     ecl_process_env()->nvalues = 1;
     LObjects::call_default = true;
     return Ct; }
@@ -1855,6 +1855,7 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
         l_args = CONS(to_lisp_arg(MetaArg(type, (void*)args[i])), l_args);
         ++i; }
     LObjects::call_default = false; // see qcall_default()
+    LObjects::calling = true;
     cl_object l_ret = call_lisp_fun((cl_object)fun, cl_nreverse(l_args));
     QVariant ret;
     const char* ret_type = LObjects::override_arg_types[n][0];
@@ -1902,6 +1903,7 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
                 else if(type == T_QVariant)                   ret = qVariantFromValue(*(QVariant*)pointer);
 #endif
                 else                                          ret = toQVariant(l_ret, ret_type); }}}
+    LObjects::calling = false;
     return ret; }
 
 cl_object qadd_event_filter(cl_object l_obj, cl_object l_ev, cl_object l_fun) {

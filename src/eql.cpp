@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "12.12.3"; // 2012-12-21
+const char EQL::version[] = "12.12.4"; // 2012-12-24
 
 extern "C" void ini_EQL(cl_object);
 

@@ -1,7 +1,7 @@
 TEMPLATE     = app
 CONFIG       += no_keywords uitools release
 INCLUDEPATH  += ../src
-LIBS         += -lecl -L.. -leql
+LIBS         = -lecl -L.. -leql
 TARGET       = eql
 DESTDIR      = ../
 OBJECTS_DIR  = ./tmp/
