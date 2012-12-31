@@ -227,7 +227,7 @@
   (dolist (type (list (cons "QByteArray"    "(vector -50 0 50)")
                       (cons "QChar"         "#\\a")
                       (cons "QColor"        "either name or object: \"#FF0000\" / \"red\" / (qnew \"QColor\")")
-                      (cons "QGradientStop" "(cons 0 \"orange\")")
+                      (cons "QGradientStop" "(cons 0 color)")
                       (cons "QLine"         "(list x1 y1 x2 y2)")
                       (cons "QPoint"        "(list x y)")
                       (cons "QPolygon"      "(list x1 y1 x2 y2 x3 y3 ...)")

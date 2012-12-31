@@ -2,20 +2,20 @@ HOWTO
 =====
 
 
-1) This example/template consists of a single Lisp file (lisp/my.lisp).
+Prepare:
 
-  a) add all of your lisp files to the variable *lisp-files* in make-my-lib.lisp
-    (assuming that all of your lisp files are in lisp/)
+  - in "make.lisp", add all of your lisp files to *lisp-files* (see "lisp/")
 
-  b) do: (that is, use your EQL executable to build your library)
-    eql make-my-lib.lisp
+  - adapt main.cpp (translations, initial Lisp form to evaluate, package name).
 
-2) Adapt the main.cpp (translations, initial Lisp form to evaluate, package name).
 
-3) Do:
+Build:
   
-  remove the directory tmp/ (if present)
+  remove "tmp/" (if present)
+
+  eql make.lisp
   qmake
   make (MSVC: nmake)
 
-Now you should find a my_app executable.
+
+Now you should find a "my_app" executable.

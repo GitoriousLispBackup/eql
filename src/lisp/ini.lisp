@@ -10,7 +10,7 @@
 
 (defmacro qlet ((&rest pairs) &body body)
   "args: (((var exp) ...) ...)
-   Similar to <code>let*</code>. Creates temporary Qt objects, deleting them at the end of the <code>qlet</code> body. If <code>exp</code> is a string, it will be substituted with <code>(qnew exp)</code>, optionally including constructor arguments.
+   Similar to <code>let*</code>. Creates temporary Qt objects, deleting them at the end of the <code>qlet</code> body.<br>If <code>exp</code> is a string, it will be substituted with <code>(qnew exp)</code>, optionally including constructor arguments.
        (qlet ((painter \"QPainter\")) ...)
        (qlet ((reg-exp \"QRegExp(QString)\" \"^\\\\S+$\")) ...)"
   (let ((vars (mapcar (lambda (x) (if (consp x) (first x) x)) pairs))
@@ -269,7 +269,7 @@
 (defun qmessage-box (x)
   "args: (x)
    alias: qmsg
-   Convenience function: a simple message box, converting x to a string if necessary."
+   Convenience function: a simple message box, converting <code>x</code> to a string if necessary.<br>Returns its argument (just like <code>print</code>)."
   (qlet ((msg "QMessageBox"
               "icon" |QMessageBox.Information|
               "text" (if (stringp x) x (prin1-to-string x))))
@@ -279,7 +279,7 @@
 
 (defun qset-color (widget role color)
   "args: (widget color-role color)
-   Convenience function (no <code>QPalette</code> boilerplate).
+   Convenience function for simple color settings (avoiding <code>QPalette</code> boilerplate).<br>Use <code>QPalette</code> directly for anything more involved.
        (qset-color widget |QPalette.Window| \"white\")"
   (qlet ((pal (qget widget "palette"))) ; QLET: safer than GC for very frequent calls
     (qfun pal "setColor(QPalette::ColorRole,QColor)" role color)
@@ -296,7 +296,7 @@
   (defun qselect (&optional on-selected)
     "args: ()
      alias: qsel
-     Allows to select (by clicking) any (child) widget. The variable <code>qsel:*q*</code> is set to the latest selected widget."
+     Allows to select (by clicking) any (child) widget.<br>The variable <code>qsel:*q*</code> is set to the latest selected widget."
     (unless loaded
       (setf loaded t)
       (load (in-home "src/lisp/qselect")))

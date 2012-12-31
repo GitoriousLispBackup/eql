@@ -8,7 +8,7 @@
 TESTED WITH
 ===========
 
-* ECL 11.1.1 / 12.7.1 /12.12.1 (threads + unicode)
+* ECL 11.1.1 / 12.7.1 / 12.12.1 (threads + unicode)
 * Qt4.6, 4.7, 4.8
 * Linux / OSX 10.4 / Windows XP, 7 (MSVC 2008, 2010)
 
@@ -53,7 +53,6 @@ BUILD (see also: "Windows Easy Guide" in doc/)
     make
 
    This will build both the EQL executable and shared library.
-   (The compiler warning "'ret' may be used uninitialized" can safely be ignored.)
 
 3) cd ..
 

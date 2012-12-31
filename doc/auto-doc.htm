@@ -184,7 +184,7 @@
 </p><br>
 <p>
 <b>QLET (((var exp) ...) ...)</b>
-<p>Similar to <code>let*</code>. Creates temporary Qt objects, deleting them at the end of the <code>qlet</code> body. If <code>exp</code> is a string, it will be substituted with <code>(qnew exp)</code>, optionally including constructor arguments.</p>
+<p>Similar to <code>let*</code>. Creates temporary Qt objects, deleting them at the end of the <code>qlet</code> body.<br>If <code>exp</code> is a string, it will be substituted with <code>(qnew exp)</code>, optionally including constructor arguments.</p>
 <pre>
   (qlet ((painter "QPainter")) ...)
   (qlet ((reg-exp "QRegExp(QString)" "^\\S+$")) ...)
@@ -192,7 +192,7 @@
 </p><br>
 <p>
 <b>QLOAD-C++ (library-name &optional unload)</b>
-<p>Loads a custom Qt/C++ plugin (see <code>Qt_EQL_dynamic/</code>).<br>The <code>library-name</code> has to be passed as path to the plugin, without file ending.<br>This offers a simple way to extend your application with your own Qt/C++ functions. The plugin will be reloaded (if supported by the OS) every time you call this function (Linux: see also <code>qauto-reload-c++</code>).<br>If the <code>unload</code> argument is not <code>NIL</code>, the plugin will be unloaded (if supported by the OS).</p>
+<p>Loads a custom Qt/C++ plugin (see <code>Qt_EQL_dynamic/</code>).<br>The <code>library-name</code> has to be passed as path to the plugin, without file ending.<br><br>This offers a simple way to extend your application with your own Qt/C++ functions. The plugin will be reloaded (if supported by the OS) every time you call this function (Linux: see also <code>qauto-reload-c++</code>).<br>If the <code>unload</code> argument is not <code>NIL</code>, the plugin will be unloaded (if supported by the OS).</p>
 <pre>
   (defparameter *c++* (qload-c++ "eql_cpp")) ; load (Linux: see also QAUTO-RELOAD-C++)
   (qapropos nil *c++*)                       ; documentation
@@ -214,7 +214,7 @@
 <b>QMESSAGE-BOX (x)</b>
 <br>
 <b>QMSG</b>
-<p>Convenience function: a simple message box, converting x to a string if necessary.</p>
+<p>Convenience function: a simple message box, converting <code>x</code> to a string if necessary.<br>Returns its argument (just like <code>print</code>).</p>
 </p><br>
 <p>
 <b>QNEW-INSTANCE (class-name &rest arguments/properties)</b>
@@ -224,7 +224,7 @@
 <pre>
   (qnew "QWidget")
   (qnew "QPixmap(int,int)" 50 50) ; constructor
-  (qnew "QLabel" "text" "I love me.") ; set property
+  (qnew "QLabel" "text" "Readme") ; set property
   (qnew "QMatrix4x4(qreal...)" 1 2 3 4 1 2 3 4 1 2 3 4 1 2 3 4)
 </pre>
 </p><br>
@@ -275,7 +275,7 @@
 </p><br>
 <p>
 <b>QREQUIRE (module &optional quiet)</b>
-<p>Loads an EQL module, corresponding to a Qt module. Returns the module name if both loading and initializing have been successful.<br>If the <code>quiet</code> argument is not <code>NIL</code>, no error message will be shown on failure.<br>Available modules: <code>:help :network :opengl :sql :svg :webkit</code></p>
+<p>Loads an EQL module, corresponding to a Qt module. Returns the module name if both loading and initializing have been successful.<br>If the <code>quiet</code> argument is not <code>NIL</code>, no error message will be shown on failure.<br><br>Available modules: <code>:help :network :opengl :sql :svg :webkit</code></p>
 <pre>
   (qrequire :network)
 </pre>
@@ -288,7 +288,7 @@
 <b>QSELECT ()</b>
 <br>
 <b>QSEL</b>
-<p>Allows to select (by clicking) any (child) widget. The variable <code>qsel:*q*</code> is set to the latest selected widget.</p>
+<p>Allows to select (by clicking) any (child) widget.<br>The variable <code>qsel:*q*</code> is set to the latest selected widget.</p>
 </p><br>
 <p>
 <b>QSENDER ()</b>
@@ -296,7 +296,7 @@
 </p><br>
 <p>
 <b>QSET-COLOR (widget color-role color)</b>
-<p>Convenience function (no <code>QPalette</code> boilerplate).</p>
+<p>Convenience function for simple color settings (avoiding <code>QPalette</code> boilerplate).<br>Use <code>QPalette</code> directly for anything more involved.</p>
 <pre>
   (qset-color widget |QPalette.Window| "white")
 </pre>

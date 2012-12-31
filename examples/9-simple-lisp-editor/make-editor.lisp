@@ -1,14 +1,13 @@
-(unless (find-package :eql)
-  (error "Please use the EQL executable"))
+#-eql
+(error "Please use the EQL executable")
 
 (require :cmp)
 
 (setf *break-on-signals* 'error)
 
-(unless (find-package :c)
-  (make-package :c))
-
-(defparameter *lisp-files* '("local-client" "settings" "editor"))
+(defparameter *lisp-files* '("local-client"
+                             "settings"
+                             "editor"))
 
 (dolist (f *lisp-files*)
   (let ((file (format nil "~A.lisp" f)))

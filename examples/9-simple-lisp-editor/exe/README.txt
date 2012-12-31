@@ -1,7 +1,7 @@
 BUILD
 =====
 
-  eql make-local-server-lib.lisp
+  eql make.lisp
   qmake
   make
 

@@ -23,6 +23,6 @@ int main(int argc, char** argv) {
     QTextCodec::setCodecForTr(utf8);
 
     EQL eql;
-    eql.exec(ini_app, "nil");
+    eql.exec(ini_app);
 
     return catch_all_qexec(); }
