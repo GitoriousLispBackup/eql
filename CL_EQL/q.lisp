@@ -136,7 +136,7 @@
                   list-q)
             (setf string-q (subseq string-q (+ it 1 end)))))
         (push string-q list-q)
-        `(%send-q (list ,@(reverse list-q)))))))
+        `(%send-q (list ,@(nreverse list-q)))))))
 
 (defun %send-q (data)
   (values-list

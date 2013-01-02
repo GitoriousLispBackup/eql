@@ -192,7 +192,7 @@
 </p><br>
 <p>
 <b>QLOAD-C++ (library-name &optional unload)</b>
-<p>Loads a custom Qt/C++ plugin (see <code>Qt_EQL_dynamic/</code>).<br>The <code>library-name</code> has to be passed as path to the plugin, without file ending.<br><br>This offers a simple way to extend your application with your own Qt/C++ functions. The plugin will be reloaded (if supported by the OS) every time you call this function (Linux: see also <code>qauto-reload-c++</code>).<br>If the <code>unload</code> argument is not <code>NIL</code>, the plugin will be unloaded (if supported by the OS).</p>
+<p>Loads a custom Qt/C++ plugin (see <code>Qt_EQL_dynamic/</code>).<br>The <code>library-name</code> has to be passed as path to the plugin, without file ending.<br><br>This offers a simple way to extend your application with your own Qt/C++ functions.<br>The plugin will be reloaded (if supported by the OS) every time you call this function (Linux: see also <code>qauto-reload-c++</code>).<br>If the <code>unload</code> argument is not <code>NIL</code>, the plugin will be unloaded (if supported by the OS).</p>
 <pre>
   (defparameter *c++* (qload-c++ "eql_cpp")) ; load (Linux: see also QAUTO-RELOAD-C++)
   (qapropos nil *c++*)                       ; documentation
@@ -220,7 +220,7 @@
 <b>QNEW-INSTANCE (class-name &rest arguments/properties)</b>
 <br>
 <b>QNEW</b>
-<p>Creates a new Qt object, optionally passing the given arguments to the constructor. Additionally you can pass any number of property/value pairs.<br>Please note how you can abbreviate long type lists.</p>
+<p>Creates a new Qt object, optionally passing the given arguments to the constructor.<br>Additionally you can pass any number of property/value pairs.<br>Please note how you can abbreviate long type lists.</p>
 <pre>
   (qnew "QWidget")
   (qnew "QPixmap(int,int)" 50 50) ; constructor
@@ -275,14 +275,14 @@
 </p><br>
 <p>
 <b>QREQUIRE (module &optional quiet)</b>
-<p>Loads an EQL module, corresponding to a Qt module. Returns the module name if both loading and initializing have been successful.<br>If the <code>quiet</code> argument is not <code>NIL</code>, no error message will be shown on failure.<br><br>Available modules: <code>:help :network :opengl :sql :svg :webkit</code></p>
+<p>Loads an EQL module, corresponding to a Qt module.<br>Returns the module name if both loading and initializing have been successful.<br>If the <code>quiet</code> argument is not <code>NIL</code>, no error message will be shown on failure.<br><br>Available modules: <code>:help :network :opengl :sql :svg :webkit</code></p>
 <pre>
   (qrequire :network)
 </pre>
 </p><br>
 <p>
 <b>QRGB (red green blue &optional (alpha 255))</b>
-<p>Constructs a <code>(unsigned-byte 32)</code> value that represents a 32 bit pixel colour specified by the red, green, blue and alpha values.</p>
+<p>Constructs a <code>(unsigned-byte 32)</code> value that represents a 32 bit pixel color specified by the red, green, blue and alpha values.</p>
 </p><br>
 <p>
 <b>QSELECT ()</b>
@@ -368,6 +368,6 @@
 </p><br>
 <p>
 <b>TR (source &optional context plural-number)</b>
-<p>Macro expanding to <code>qtranslate</code>, which calls <code>QCoreApplication::translate()</code>. Both <code>source</code> and <code>context</code> can be Lisp forms evaluating to constant strings (at compile time).<br>The <code>context</code> argument defaults to the Lisp file name. For the <code>plural-number</code>, see Qt Assistant.</p>
+<p>Macro expanding to <code>qtranslate</code>, which calls <code>QCoreApplication::translate()</code>.<br>Both <code>source</code> and <code>context</code> can be Lisp forms evaluating to constant strings (at compile time).<br>The <code>context</code> argument defaults to the Lisp file name. For the <code>plural-number</code>, see Qt Assistant.</p>
 </p><br>
 </body></html>

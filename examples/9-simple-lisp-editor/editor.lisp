@@ -10,7 +10,6 @@
 ;;;   - simple syntax highlighter
 ;;;
 ;;;   - an independent local Lisp server process for evaluation
-;;;   - native Qt event processing through QApplication::exec()
 ;;;   - eval region
 ;;;
 ;;; N.B: requires Qt 4.7 for signal QFileSystemModel::directoryLoaded(QString)
@@ -376,13 +375,14 @@
         (or (enclosed "*")
             (enclosed "+"))))))
 
-(let (qt-matches cache-matches)
+(let (qt-matches cache-matches latest)
   (flet ((qt-fun (pos)
            (cdr (assoc (- pos 2) qt-matches)))
          (qt-pos (fun)
            (car (find fun qt-matches :key 'cdr))))
     (defun highlight-block (highlighter text)
       (unless (x:empty-string text)
+        (setf latest highlighter)
         (when cache-matches
           (setf qt-matches nil))
         (let ((i (qfun *lisp-match-rule* "indexIn" text)))
@@ -421,6 +421,10 @@
                      (qfun highlighter "setFormat(int,int,QTextCharFormat)" i (- (length text) i) *comment-format*)
                      (return))))
                 (setf ex ch)))))))
+    (defun rehighlight-block ()
+      (when latest
+        (qsingle-shot 0 (lambda ()
+                          (qfun latest "rehighlightBlock" (qfuns *current-editor* "textCursor" "block"))))))
     (defun cursor-position-changed ()
       (setf *current-editor* (qsender))
       (setf cache-matches t)
@@ -593,7 +597,8 @@
          (insert-text (add-quote (cut-optional-type-list x:it)) :select))
         ((:qget :qset :qfun-static :qfind-child :qconnect-from :qconnect-to :qoverride)
          (insert-text (add-quote x:it) :select)))))
-  (close-completer))
+  (close-completer)
+  (rehighlight-block))
 
 (defun completer-key-pressed (key-event)
   (when *current-completer*
@@ -608,7 +613,9 @@
          (close-completer)
          (return-from completer-key-pressed)))
       (if forward
-          (qfun "QCoreApplication" "sendEvent" *current-editor* key-event)
+          (progn
+            (qfun "QCoreApplication" "sendEvent" *current-editor* key-event)
+            (rehighlight-block))
           (qcall-default)))))
 
 (defun current-completer-option ()
@@ -821,9 +828,9 @@
                 (spaces (indentation (qfun curr "text"))))
            (if (zerop spaces)
                (qcall-default)
-               (progn
-                 (qfun cursor "insertText" (format nil "~%~A" (make-string spaces)))
-                 (qfun *editor* "ensureCursorVisible"))))))
+               (qsingle-shot 0 (lambda ()
+                                 (qfun cursor "insertText" (format nil "~%~A" (make-string spaces)))
+                                 (qfun *editor* "ensureCursorVisible")))))))
     (#.|Qt.Key_Tab|
      (if (zerop (qfun key-event "modifiers"))
          (update-tab-completer nil :show)
@@ -870,7 +877,7 @@
                (qfun *editor* "setTextCursor" cursor*))
              (x:do-with (qfun *editor*)
                ("setTextCursor" orig*)
-               "ensureCursorVisible")))))
+               ("ensureCursorVisible"))))))
     (t
      (update-tab-completer key-event)
      (qcall-default))))
@@ -1283,7 +1290,8 @@
         (qfun *current-editor* "insertPlainText" txt)))
     (unless file*
       (show-status-message (function-lambda-list* current) :html))
-    (close-tab-popups))
+    (close-tab-popups)
+    (rehighlight-block))
   (defun close-tab-popups ()
     (qfun *symbol-popup* "hide")
     (delete-file-completer)

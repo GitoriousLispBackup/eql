@@ -1365,7 +1365,7 @@ cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
 cl_object qnew_instance2(cl_object l_name, cl_object l_args) {
     /// args: (class-name &rest arguments/properties)
     /// alias: qnew
-    /// Creates a new Qt object, optionally passing the given arguments to the constructor. Additionally you can pass any number of property/value pairs.<br>Please note how you can abbreviate long type lists.
+    /// Creates a new Qt object, optionally passing the given arguments to the constructor.<br>Additionally you can pass any number of property/value pairs.<br>Please note how you can abbreviate long type lists.
     ///     (qnew "QWidget")
     ///     (qnew "QPixmap(int,int)" 50 50) ; constructor
     ///     (qnew "QLabel" "text" "Readme") ; set property
@@ -1952,7 +1952,7 @@ cl_object qclear_event_filters() {
 
 cl_object qrequire2(cl_object l_name, cl_object l_quiet) { /// qrequire
    /// args: (module &optional quiet)
-   /// Loads an EQL module, corresponding to a Qt module. Returns the module name if both loading and initializing have been successful.<br>If the <code>quiet</code> argument is not <code>NIL</code>, no error message will be shown on failure.<br><br>Available modules: <code>:help :network :opengl :sql :svg :webkit</code>
+   /// Loads an EQL module, corresponding to a Qt module.<br>Returns the module name if both loading and initializing have been successful.<br>If the <code>quiet</code> argument is not <code>NIL</code>, no error message will be shown on failure.<br><br>Available modules: <code>:help :network :opengl :sql :svg :webkit</code>
    ///     (qrequire :network)
     ecl_process_env()->nvalues = 1;
     QString name = symbolName(l_name);
@@ -2020,7 +2020,7 @@ cl_object qrequire2(cl_object l_name, cl_object l_quiet) { /// qrequire
 
 cl_object qload_cpp(cl_object l_lib_name, cl_object l_unload) { /// qload-c++
     /// args: (library-name &optional unload)
-    /// Loads a custom Qt/C++ plugin (see <code>Qt_EQL_dynamic/</code>).<br>The <code>library-name</code> has to be passed as path to the plugin, without file ending.<br><br>This offers a simple way to extend your application with your own Qt/C++ functions. The plugin will be reloaded (if supported by the OS) every time you call this function (Linux: see also <code>qauto-reload-c++</code>).<br>If the <code>unload</code> argument is not <code>NIL</code>, the plugin will be unloaded (if supported by the OS).
+    /// Loads a custom Qt/C++ plugin (see <code>Qt_EQL_dynamic/</code>).<br>The <code>library-name</code> has to be passed as path to the plugin, without file ending.<br><br>This offers a simple way to extend your application with your own Qt/C++ functions.<br>The plugin will be reloaded (if supported by the OS) every time you call this function (Linux: see also <code>qauto-reload-c++</code>).<br>If the <code>unload</code> argument is not <code>NIL</code>, the plugin will be unloaded (if supported by the OS).
     ///     (defparameter *c++* (qload-c++ "eql_cpp")) ; load (Linux: see also QAUTO-RELOAD-C++)
     ///     (qapropos nil *c++*)                       ; documentation
     ///     (qfun+ *c++* "mySpeedyQtFunction")         ; call library function (note QFUN+)
