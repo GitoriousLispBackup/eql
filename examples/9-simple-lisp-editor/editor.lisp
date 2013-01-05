@@ -108,6 +108,8 @@
 (defparameter *symbol-model          nil)
 (defparameter *file-popup*           nil)
 (defparameter *symbol-popup*         nil)
+(defparameter *editor-highlighter*   nil)
+(defparameter *command-highlighter*  nil)
 
 (defun file-open (&optional name)
   (unless name
@@ -207,12 +209,12 @@
   (x:do-with (qfun *comment-format*)
     ("setForeground" (qnew "QBrush(QColor)" "#80A080"))
     ("setFontItalic" t))
-  (let ((syntax-editor  (qnew "QSyntaxHighlighter(QTextDocument*)" (qfun *editor* "document")))
-        (syntax-command (qnew "QSyntaxHighlighter(QTextDocument*)" (qfun *command* "document"))))
-    (qoverride syntax-editor "highlightBlock(QString)"
-               (lambda (str) (highlight-block syntax-editor str)))
-    (qoverride syntax-command "highlightBlock(QString)"
-               (lambda (str) (highlight-block syntax-command str)))))
+  (setf *editor-highlighter*  (qnew "QSyntaxHighlighter(QTextDocument*)" (qfun *editor* "document"))
+        *command-highlighter* (qnew "QSyntaxHighlighter(QTextDocument*)" (qfun *command* "document")))
+  (qoverride *editor-highlighter*  "highlightBlock(QString)"
+             (lambda (str) (highlight-block *editor-highlighter* str)))
+  (qoverride *command-highlighter* "highlightBlock(QString)"
+             (lambda (str) (highlight-block *command-highlighter* str))))
 
 (defun ini-completer ()
   (setf *eql-completer*    (qnew "QListWidget"
@@ -425,6 +427,9 @@
       (when latest
         (qsingle-shot 0 (lambda ()
                           (qfun latest "rehighlightBlock" (qfuns *current-editor* "textCursor" "block"))))))
+    (defun rehighlight-all (&optional command)
+      (x:when-it (if command *command-highlighter* latest)
+        (qsingle-shot 0 (lambda () (qfun x:it "rehighlight")))))
     (defun cursor-position-changed ()
       (setf *current-editor* (qsender))
       (setf cache-matches t)
@@ -877,7 +882,8 @@
                (qfun *editor* "setTextCursor" cursor*))
              (x:do-with (qfun *editor*)
                ("setTextCursor" orig*)
-               ("ensureCursorVisible"))))))
+               ("ensureCursorVisible"))
+             (rehighlight-all)))))
     (t
      (update-tab-completer key-event)
      (qcall-default))))
@@ -1129,12 +1135,9 @@
         history)
     (when (probe-file +history-file+)
       (with-open-file (s +history-file+ :direction :input)
-        (loop
-           (let ((cmd (read-line s nil :eof)))
-             (when (eql :eof cmd)
-               (return))
-             (unless (string= ex cmd)
-               (push (setf ex cmd) history)))))
+        (x:while-it (read-line s nil nil)
+          (unless (string= ex x:it)
+            (push (setf ex x:it) history))))
       (setf history (nthcdr (max 0 (- (length history) +max-history+)) (reverse history)))
       (ignore-errors (delete-file +history-file+))
       (with-open-file (s +history-file+ :direction :output
@@ -1151,9 +1154,11 @@
     (x:if-it (case (qfun key-event "key")
                (#.|Qt.Key_Up|
                 (x:when-it (pop up)
+                  (rehighlight-all :command)
                   (push x:it down)))
                (#.|Qt.Key_Down|
                 (x:when-it (pop down)
+                  (rehighlight-all :command)
                   (push x:it up)))
                (#.|Qt.Key_Tab|
                 (update-tab-completer nil :show)

@@ -40,15 +40,12 @@
       (with-open-file (out ui.lisp :direction :output :if-exists :supersede)
         (format out "(defpackage ~(~S~)~%  (:use :common-lisp :eql)" ui-package)
         (let (code tr)
-          (loop
+          (x:while-it (read-line in nil nil)
             (incf *line-nr*)
-            (let ((line (read-line in nil :eof)))
-              (when (eql :eof line)
-                (return))
-              (x:when-it (c-to-lisp line)
-                (if (eql :tr *section*)
-                    (push x:it tr)
-                    (push x:it code)))))
+            (x:when-it* (c-to-lisp x:it)
+              (if (eql :tr *section*)
+                  (push x:it* tr)
+                  (push x:it* code))))
           (let ((max-len 0))
             (format out "~%  (:export~%   ;; all DEFVARs except layouts, spacers~{~%   #:~A~}~
                          ~%   #:ini~

@@ -13,24 +13,21 @@
                  (setf curr nil)))
              (trim (str)
                (string-trim '(#\/ #\Space) str)))
-        (loop
-           (let ((line (read-line s nil :eof)))
-             (when (eql :eof line)
-               (return))
-             (setf line (string-trim " " line))
-             (when (x:starts-with "///" line)
-               (when (x:starts-with "cl_object " ex)
-                 (add-curr)
-                 (let* ((pos (search "///" ex :start2 3)) ; exception: Lisp name at end of line
-                        (fun (if pos
-                                 (trim (subseq ex (+ 3 pos)))
-                                 (trim (subseq ex 10)))))
-                   (push (if pos
-                             fun
-                             (substitute #\- #\_ (string-trim "2" (subseq fun 0 (position #\( fun)))))
-                         curr)))
-               (push (trim line) curr))
-             (setf ex line)))
+        (x:while-it (read-line s nil nil)
+          (let ((line (string-trim " " x:it)))
+            (when (x:starts-with "///" line)
+              (when (x:starts-with "cl_object " ex)
+                (add-curr)
+                (let* ((pos (search "///" ex :start2 3)) ; exception: Lisp name at end of line
+                       (fun (if pos
+                                (trim (subseq ex (+ 3 pos)))
+                                (trim (subseq ex 10)))))
+                  (push (if pos
+                            fun
+                            (substitute #\- #\_ (string-trim "2" (subseq fun 0 (position #\( fun)))))
+                        curr)))
+              (push (trim line) curr))
+            (setf ex line)))
         (add-curr)))))
 
 (defun add-lisp-docu ()

@@ -46,11 +46,11 @@ eql_fun(const QByteArray&,
 extern bool checkType(int, const QByteArray&);
 
 struct MetaPointer {
-    MetaPointer()               : pointer(0), id(0) {}
-    MetaPointer(void* v, int i) : pointer(v), id(i) {}
-
     void* pointer;
     int id;
+
+    MetaPointer()               : pointer(0), id(0) {}
+    MetaPointer(void* v, int i) : pointer(v), id(i) {}
 };
 
 QT_END_NAMESPACE

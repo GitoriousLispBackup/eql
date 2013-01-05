@@ -271,11 +271,11 @@ struct EQL_EXPORT QtObject {
 
 // for Qt_EQL
 struct MetaPointer {
-    MetaPointer()               : pointer(0), id(0) {}
-    MetaPointer(void* v, int i) : pointer(v), id(i) {}
-
     void* pointer;
     int id;
+
+    MetaPointer()               : pointer(0), id(0) {}
+    MetaPointer(void* v, int i) : pointer(v), id(i) {}
 };
 
 struct QtMetaObject : private QObject {

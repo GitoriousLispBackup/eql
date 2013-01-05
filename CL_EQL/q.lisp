@@ -3,7 +3,7 @@
 ;;;
 ;;; Run: (after building the plugin in "cpp/")
 ;;;
-;;;   eql local-server.lisp (in example 9, see also "<example 9>/exe/")
+;;;   eql local-server.lisp (in example 9; see also "<example 9>/exe/")
 ;;;   ecl -load q / clisp -i q / sbcl --load q (any CL + CFFI)
 ;;;
 ;;;
