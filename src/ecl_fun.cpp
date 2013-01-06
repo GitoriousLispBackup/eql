@@ -1844,7 +1844,7 @@ cl_object qcall_default() {
     LObjects::call_default = true;
     return Ct; }
 
-QVariant callOverrideFun(void* fun, int id, const void** args) {
+QVariant callOverrideFun(void* fun, int id, const void** args, uint unique) {
     STATIC_SYMBOL_PKG(s_qt_object_p,       (char*)"QT-OBJECT-P",       (char*)"EQL")
     STATIC_SYMBOL_PKG(s_qt_object_pointer, (char*)"QT-OBJECT-POINTER", (char*)"EQL")
     int n = id - 1;
@@ -1855,9 +1855,9 @@ QVariant callOverrideFun(void* fun, int id, const void** args) {
         l_args = CONS(to_lisp_arg(MetaArg(type, (void*)args[i])), l_args);
         ++i; }
     LObjects::call_default = false; // see qcall_default()
-    LObjects::calling = true;
+    LObjects::calling = unique;
     cl_object l_ret = call_lisp_fun((cl_object)fun, cl_nreverse(l_args));
-    LObjects::calling = false;
+    LObjects::calling = 0;
     QVariant ret;
     const char* ret_type = LObjects::override_arg_types[n][0];
     if(ret_type) {

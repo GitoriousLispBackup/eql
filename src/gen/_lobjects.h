@@ -68,7 +68,7 @@ public:
     static QObject** Q;
     static QObject** N;
     static bool call_default;
-    static bool calling;
+    static uint calling;
     static uint i_unique;
     static const char*** override_arg_types;
     static DynObject* dynObject;

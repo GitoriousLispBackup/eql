@@ -18,7 +18,7 @@ public:
     static NumList overrideIds;
     uint unique;
 
-    int metric(QPaintDevice::PaintDeviceMetric x1) const { void* fun = LObjects::overrideFun(unique, 439); int ret = 0; if(fun && !LObjects::calling) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 439, args).toInt(); } if(!fun || LObjects::call_default || LObjects::calling) { ret = QSvgGenerator::metric(x1); } return ret; }
+    int metric(QPaintDevice::PaintDeviceMetric x1) const { void* fun = LObjects::overrideFun(unique, 439); int ret = 0; if(fun && (LObjects::calling != unique)) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 439, args, unique).toInt(); } if(!fun || LObjects::call_default || (LObjects::calling == unique)) { ret = QSvgGenerator::metric(x1); } return ret; }
 };
 
 QT_END_NAMESPACE

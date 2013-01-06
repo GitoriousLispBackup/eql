@@ -532,7 +532,7 @@
                                                (push arg-names *override-arguments*)
                                                (push (if (void-p ret) 0 ret-name) *override-return-arguments*))
                                              id))
-                                   (call (format nil "callOverrideFun(fun, ~D, ~A)"
+                                   (call (format nil "callOverrideFun(fun, ~D, ~A, unique)"
                                                  sig-id
                                                  (if (function-args fun) "args" "0")))
                                    (pure-virtual (or (pure-virtual-p fun class super)
@@ -564,7 +564,7 @@
                                 (push sig-id sig-ids))
                               (unless (find* fun-name fun-names)
                                 (push fun-name fun-names)
-                                (format s "~%    ~A ~A(~A)~A { void* fun = LObjects::overrideFun(unique, ~D); ~Aif(fun && !LObjects::calling) { ~A~A; }~A~A~A~A~A}"
+                                (format s "~%    ~A ~A(~A)~A { void* fun = LObjects::overrideFun(unique, ~D); ~Aif(fun && (LObjects::calling != unique)) { ~A~A; }~A~A~A~A~A}"
                                         (arg-to-c ret)
                                         fun-name
                                         (add-var-names args)
@@ -579,7 +579,7 @@
                                                           "")))
                                         (if args (format nil "const void* args[] = { ~{&~A~^, ~} }; " (n-var-names (length args))) "")
                                         (if void call (format nil "ret = ~A" (from-qvariant ret call)))
-                                        (if pure-virtual "" " if(!fun || LObjects::call_default || LObjects::calling) {")
+                                        (if pure-virtual "" " if(!fun || LObjects::call_default || (LObjects::calling == unique)) {")
                                         (if (or void pure-virtual) "" " ret =")
                                         (if pure-virtual
                                             ""
@@ -815,7 +815,7 @@
                ~%QObject** LObjects::Q = 0;~
                ~%QObject** LObjects::N = 0;~
                ~%bool LObjects::call_default = false;~
-               ~%bool LObjects::calling = false;~
+               ~%uint LObjects::calling = 0;~
                ~%uint LObjects::i_unique = 0;~
                ~%const char*** LObjects::override_arg_types = 0;~
                ~%QList<QByteArray> LObjects::qNames;~

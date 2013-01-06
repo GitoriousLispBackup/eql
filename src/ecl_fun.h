@@ -292,7 +292,7 @@ void error_msg(const char*, cl_object);
 QVariant toQVariant(cl_object, const char*, int = -1);
 cl_object to_lisp_arg(const MetaArg&);
 
-EQL_EXPORT QVariant callOverrideFun(void*, int, const void**);
+EQL_EXPORT QVariant callOverrideFun(void*, int, const void**, uint);
 EQL_EXPORT cl_object qt_object_from_name(const QByteArray&, void*, uint = 0, bool = false);
 EQL_EXPORT QtObject toQtObject(cl_object, cl_object = Cnil, bool* = 0);
 

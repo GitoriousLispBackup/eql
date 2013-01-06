@@ -377,7 +377,7 @@
         (or (enclosed "*")
             (enclosed "+"))))))
 
-(let (qt-matches cache-matches latest)
+(let (qt-matches cache-matches)
   (flet ((qt-fun (pos)
            (cdr (assoc (- pos 2) qt-matches)))
          (qt-pos (fun)
@@ -423,13 +423,6 @@
                      (qfun highlighter "setFormat(int,int,QTextCharFormat)" i (- (length text) i) *comment-format*)
                      (return))))
                 (setf ex ch)))))))
-    (defun rehighlight-block ()
-      (when latest
-        (qsingle-shot 0 (lambda ()
-                          (qfun latest "rehighlightBlock" (qfuns *current-editor* "textCursor" "block"))))))
-    (defun rehighlight-all (&optional command)
-      (x:when-it (if command *command-highlighter* latest)
-        (qsingle-shot 0 (lambda () (qfun x:it "rehighlight")))))
     (defun cursor-position-changed ()
       (setf *current-editor* (qsender))
       (setf cache-matches t)
@@ -602,8 +595,7 @@
          (insert-text (add-quote (cut-optional-type-list x:it)) :select))
         ((:qget :qset :qfun-static :qfind-child :qconnect-from :qconnect-to :qoverride)
          (insert-text (add-quote x:it) :select)))))
-  (close-completer)
-  (rehighlight-block))
+  (close-completer))
 
 (defun completer-key-pressed (key-event)
   (when *current-completer*
@@ -618,9 +610,7 @@
          (close-completer)
          (return-from completer-key-pressed)))
       (if forward
-          (progn
-            (qfun "QCoreApplication" "sendEvent" *current-editor* key-event)
-            (rehighlight-block))
+          (qfun "QCoreApplication" "sendEvent" *current-editor* key-event)
           (qcall-default)))))
 
 (defun current-completer-option ()
@@ -882,8 +872,7 @@
                (qfun *editor* "setTextCursor" cursor*))
              (x:do-with (qfun *editor*)
                ("setTextCursor" orig*)
-               ("ensureCursorVisible"))
-             (rehighlight-all)))))
+               ("ensureCursorVisible"))))))
     (t
      (update-tab-completer key-event)
      (qcall-default))))
@@ -1154,11 +1143,9 @@
     (x:if-it (case (qfun key-event "key")
                (#.|Qt.Key_Up|
                 (x:when-it (pop up)
-                  (rehighlight-all :command)
                   (push x:it down)))
                (#.|Qt.Key_Down|
                 (x:when-it (pop down)
-                  (rehighlight-all :command)
                   (push x:it up)))
                (#.|Qt.Key_Tab|
                 (update-tab-completer nil :show)
@@ -1295,8 +1282,7 @@
         (qfun *current-editor* "insertPlainText" txt)))
     (unless file*
       (show-status-message (function-lambda-list* current) :html))
-    (close-tab-popups)
-    (rehighlight-block))
+    (close-tab-popups))
   (defun close-tab-popups ()
     (qfun *symbol-popup* "hide")
     (delete-file-completer)
