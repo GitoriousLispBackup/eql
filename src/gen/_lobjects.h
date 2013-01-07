@@ -68,7 +68,8 @@ public:
     static QObject** Q;
     static QObject** N;
     static bool call_default;
-    static uint calling;
+    static quint64 calling;
+    static QList<quint64> callingList;
     static uint i_unique;
     static const char*** override_arg_types;
     static DynObject* dynObject;
@@ -87,8 +88,9 @@ public:
     static const QMetaObject* staticMetaObject(const QByteArray&, int n = -1);
     static const char* nObjectSuperClass(const QByteArray&);
     static StrList overrideFunctions(const QByteArray&);
-    static void* overrideFun(uint, int);
-    static void setOverrideFun(uint, int, void*);
+    static quint64 override_id(uint, int);
+    static void* overrideFun(quint64);
+    static void setOverrideFun(quint64, void*);
 
     static QByteArray vanillaQtSuperClassName(const QMetaObject* mo) {
         QByteArray className(mo->className());

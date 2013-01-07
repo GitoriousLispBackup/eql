@@ -532,7 +532,7 @@
                                                (push arg-names *override-arguments*)
                                                (push (if (void-p ret) 0 ret-name) *override-return-arguments*))
                                              id))
-                                   (call (format nil "callOverrideFun(fun, ~D, ~A, unique)"
+                                   (call (format nil "callOverrideFun(fun, ~D, ~A, id)"
                                                  sig-id
                                                  (if (function-args fun) "args" "0")))
                                    (pure-virtual (or (pure-virtual-p fun class super)
@@ -564,7 +564,7 @@
                                 (push sig-id sig-ids))
                               (unless (find* fun-name fun-names)
                                 (push fun-name fun-names)
-                                (format s "~%    ~A ~A(~A)~A { void* fun = LObjects::overrideFun(unique, ~D); ~Aif(fun && (LObjects::calling != unique)) { ~A~A; }~A~A~A~A~A}"
+                                (format s "~%    ~A ~A(~A)~A { quint64 id = LObjects::override_id(unique, ~D); void* fun = LObjects::overrideFun(id); ~Aif(fun && (LObjects::calling != id)) { ~A~A; }~A~A~A~A~A}"
                                         (arg-to-c ret)
                                         fun-name
                                         (add-var-names args)
@@ -579,7 +579,7 @@
                                                           "")))
                                         (if args (format nil "const void* args[] = { ~{&~A~^, ~} }; " (n-var-names (length args))) "")
                                         (if void call (format nil "ret = ~A" (from-qvariant ret call)))
-                                        (if pure-virtual "" " if(!fun || LObjects::call_default || (LObjects::calling == unique)) {")
+                                        (if pure-virtual "" " if(!fun || LObjects::call_default || (LObjects::calling == id)) {")
                                         (if (or void pure-virtual) "" " ret =")
                                         (if pure-virtual
                                             ""
@@ -815,7 +815,8 @@
                ~%QObject** LObjects::Q = 0;~
                ~%QObject** LObjects::N = 0;~
                ~%bool LObjects::call_default = false;~
-               ~%uint LObjects::calling = 0;~
+               ~%quint64 LObjects::calling = 0;~
+               ~%QList<quint64> LObjects::callingList;~
                ~%uint LObjects::i_unique = 0;~
                ~%const char*** LObjects::override_arg_types = 0;~
                ~%QList<QByteArray> LObjects::qNames;~
@@ -917,11 +918,14 @@
                    ~%    delete[] Q;~
                    ~%    delete dynObject; }~
                    ~%~
-                   ~%void* LObjects::overrideFun(uint unique, int id) {~
-                   ~%    return override_lisp_functions.value(~D * (quint64)unique + id, 0); }~
+                   ~%quint64 LObjects::override_id(uint unique, int id) {~
+                   ~%    return (~D * (quint64)unique + id); }~
                    ~%~
-                   ~%void LObjects::setOverrideFun(uint unique, int id, void* fun) {~
-                   ~%    override_lisp_functions[~D * (quint64)unique + id] = fun; }~
+                   ~%void* LObjects::overrideFun(quint64 id) {~
+                   ~%    return override_lisp_functions.value(id, 0); }~
+                   ~%~
+                   ~%void LObjects::setOverrideFun(quint64 id, void* fun) {~
+                   ~%    override_lisp_functions[id] = fun; }~
                    ~%~
                    ~%const QMetaObject* LObjects::staticMetaObject(const QByteArray& name, int n) {~
                    ~%    if(n == -1) {~
@@ -930,7 +934,6 @@
                    ~%    switch(n) {"
                 (1- len-n)
                 (1- len-q)
-                max
                 max)))
     (dolist (module *modules*)
       (format (module-stream module :ini) "~%const QMetaObject* staticMetaObject(int n) {~

@@ -1803,13 +1803,19 @@ cl_object qsender() {
     error_msg("QSENDER", Cnil);
     return Cnil; }
 
-static cl_object call_lisp_fun(cl_object l_fun, cl_object l_args) {
+static cl_object call_lisp_fun(cl_object l_fun, cl_object l_args, quint64 override_id = 0) {
     cl_object l_ret = Cnil;
     const cl_env_ptr l_env = ecl_process_env();
+    if(override_id) {
+        LObjects::callingList.append(override_id);
+        LObjects::calling = override_id; }
     CL_CATCH_ALL_BEGIN(l_env) {
         CL_UNWIND_PROTECT_BEGIN(l_env) {
             l_ret = cl_apply(2, l_fun, l_args); }
-        CL_UNWIND_PROTECT_EXIT {}
+        CL_UNWIND_PROTECT_EXIT {
+            if(override_id) {
+                LObjects::callingList.removeLast();
+                LObjects::calling = LObjects::callingList.isEmpty() ? 0 : LObjects::callingList.last(); }}
         CL_UNWIND_PROTECT_END; }
     CL_CATCH_ALL_END;
     return l_ret; }
@@ -1832,7 +1838,7 @@ cl_object qoverride(cl_object l_obj, cl_object l_name, cl_object l_fun) {
         QByteArray name(QMetaObject::normalizedSignature(toCString(l_name)));
         uint id = LObjects::override_function_ids.value(name, 0);
         if(id) {
-            LObjects::setOverrideFun(o.unique, id, fun);
+            LObjects::setOverrideFun(LObjects::override_id(o.unique, id), fun);
             return Ct; }}
     error_msg("QOVERRIDE", LIST3(l_obj, l_name, l_fun));
     return Cnil; }
@@ -1844,7 +1850,7 @@ cl_object qcall_default() {
     LObjects::call_default = true;
     return Ct; }
 
-QVariant callOverrideFun(void* fun, int id, const void** args, uint unique) {
+QVariant callOverrideFun(void* fun, int id, const void** args, quint64 override_id) {
     STATIC_SYMBOL_PKG(s_qt_object_p,       (char*)"QT-OBJECT-P",       (char*)"EQL")
     STATIC_SYMBOL_PKG(s_qt_object_pointer, (char*)"QT-OBJECT-POINTER", (char*)"EQL")
     int n = id - 1;
@@ -1855,9 +1861,7 @@ QVariant callOverrideFun(void* fun, int id, const void** args, uint unique) {
         l_args = CONS(to_lisp_arg(MetaArg(type, (void*)args[i])), l_args);
         ++i; }
     LObjects::call_default = false; // see qcall_default()
-    LObjects::calling = unique;
-    cl_object l_ret = call_lisp_fun((cl_object)fun, cl_nreverse(l_args));
-    LObjects::calling = 0;
+    cl_object l_ret = call_lisp_fun((cl_object)fun, cl_nreverse(l_args), override_id);
     QVariant ret;
     const char* ret_type = LObjects::override_arg_types[n][0];
     if(ret_type) {

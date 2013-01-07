@@ -40,7 +40,8 @@ DynObject* LObjects::dynObject = 0;
 QObject** LObjects::Q = 0;
 QObject** LObjects::N = 0;
 bool LObjects::call_default = false;
-uint LObjects::calling = 0;
+quint64 LObjects::calling = 0;
+QList<quint64> LObjects::callingList;
 uint LObjects::i_unique = 0;
 const char*** LObjects::override_arg_types = 0;
 QList<QByteArray> LObjects::qNames;
@@ -2139,11 +2140,14 @@ void LObjects::cleanUp() {
     delete[] Q;
     delete dynObject; }
 
-void* LObjects::overrideFun(uint unique, int id) {
-    return override_lisp_functions.value(461 * (quint64)unique + id, 0); }
+quint64 LObjects::override_id(uint unique, int id) {
+    return (461 * (quint64)unique + id); }
 
-void LObjects::setOverrideFun(uint unique, int id, void* fun) {
-    override_lisp_functions[461 * (quint64)unique + id] = fun; }
+void* LObjects::overrideFun(quint64 id) {
+    return override_lisp_functions.value(id, 0); }
+
+void LObjects::setOverrideFun(quint64 id, void* fun) {
+    override_lisp_functions[id] = fun; }
 
 const QMetaObject* LObjects::staticMetaObject(const QByteArray& name, int n) {
     if(n == -1) {

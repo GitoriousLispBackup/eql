@@ -28,11 +28,11 @@ public:
     static NumList overrideIds;
     uint unique;
 
-    bool create(const QGLContext* x1 = 0) { void* fun = LObjects::overrideFun(unique, 402); bool ret = false; if(fun && (LObjects::calling != unique)) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 402, args, unique).toBool(); } if(!fun || LObjects::call_default || (LObjects::calling == unique)) { ret = QGLContext::create(x1); } return ret; }
-    void doneCurrent() { void* fun = LObjects::overrideFun(unique, 403); if(fun && (LObjects::calling != unique)) { callOverrideFun(fun, 403, 0, unique); } if(!fun || LObjects::call_default || (LObjects::calling == unique)) { QGLContext::doneCurrent(); }}
-    void makeCurrent() { void* fun = LObjects::overrideFun(unique, 404); if(fun && (LObjects::calling != unique)) { callOverrideFun(fun, 404, 0, unique); } if(!fun || LObjects::call_default || (LObjects::calling == unique)) { QGLContext::makeCurrent(); }}
-    void swapBuffers() const { void* fun = LObjects::overrideFun(unique, 405); if(fun && (LObjects::calling != unique)) { callOverrideFun(fun, 405, 0, unique); } if(!fun || LObjects::call_default || (LObjects::calling == unique)) { QGLContext::swapBuffers(); }}
-    bool chooseContext(const QGLContext* x1 = 0) { void* fun = LObjects::overrideFun(unique, 406); bool ret = false; if(fun && (LObjects::calling != unique)) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 406, args, unique).toBool(); } if(!fun || LObjects::call_default || (LObjects::calling == unique)) { ret = QGLContext::chooseContext(x1); } return ret; }
+    bool create(const QGLContext* x1 = 0) { quint64 id = LObjects::override_id(unique, 402); void* fun = LObjects::overrideFun(id); bool ret = false; if(fun && (LObjects::calling != id)) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 402, args, id).toBool(); } if(!fun || LObjects::call_default || (LObjects::calling == id)) { ret = QGLContext::create(x1); } return ret; }
+    void doneCurrent() { quint64 id = LObjects::override_id(unique, 403); void* fun = LObjects::overrideFun(id); if(fun && (LObjects::calling != id)) { callOverrideFun(fun, 403, 0, id); } if(!fun || LObjects::call_default || (LObjects::calling == id)) { QGLContext::doneCurrent(); }}
+    void makeCurrent() { quint64 id = LObjects::override_id(unique, 404); void* fun = LObjects::overrideFun(id); if(fun && (LObjects::calling != id)) { callOverrideFun(fun, 404, 0, id); } if(!fun || LObjects::call_default || (LObjects::calling == id)) { QGLContext::makeCurrent(); }}
+    void swapBuffers() const { quint64 id = LObjects::override_id(unique, 405); void* fun = LObjects::overrideFun(id); if(fun && (LObjects::calling != id)) { callOverrideFun(fun, 405, 0, id); } if(!fun || LObjects::call_default || (LObjects::calling == id)) { QGLContext::swapBuffers(); }}
+    bool chooseContext(const QGLContext* x1 = 0) { quint64 id = LObjects::override_id(unique, 406); void* fun = LObjects::overrideFun(id); bool ret = false; if(fun && (LObjects::calling != id)) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 406, args, id).toBool(); } if(!fun || LObjects::call_default || (LObjects::calling == id)) { ret = QGLContext::chooseContext(x1); } return ret; }
 };
 
 class LGLFormat : public QGLFormat {
@@ -59,7 +59,7 @@ public:
     static NumList overrideIds;
     uint unique;
 
-    int metric(PaintDeviceMetric x1) const { void* fun = LObjects::overrideFun(unique, 45); int ret = 0; if(fun && (LObjects::calling != unique)) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 45, args, unique).toInt(); } if(!fun || LObjects::call_default || (LObjects::calling == unique)) { ret = QGLFramebufferObject::metric(x1); } return ret; }
+    int metric(PaintDeviceMetric x1) const { quint64 id = LObjects::override_id(unique, 45); void* fun = LObjects::overrideFun(id); int ret = 0; if(fun && (LObjects::calling != id)) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 45, args, id).toInt(); } if(!fun || LObjects::call_default || (LObjects::calling == id)) { ret = QGLFramebufferObject::metric(x1); } return ret; }
 };
 
 class LGLFramebufferObjectFormat : public QGLFramebufferObjectFormat {
@@ -81,7 +81,7 @@ public:
     static NumList overrideIds;
     uint unique;
 
-    int metric(PaintDeviceMetric x1) const { void* fun = LObjects::overrideFun(unique, 45); int ret = 0; if(fun && (LObjects::calling != unique)) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 45, args, unique).toInt(); } if(!fun || LObjects::call_default || (LObjects::calling == unique)) { ret = QGLPixelBuffer::metric(x1); } return ret; }
+    int metric(PaintDeviceMetric x1) const { quint64 id = LObjects::override_id(unique, 45); void* fun = LObjects::overrideFun(id); int ret = 0; if(fun && (LObjects::calling != id)) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 45, args, id).toInt(); } if(!fun || LObjects::call_default || (LObjects::calling == id)) { ret = QGLPixelBuffer::metric(x1); } return ret; }
 };
 
 QT_END_NAMESPACE
