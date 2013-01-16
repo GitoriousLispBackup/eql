@@ -11,7 +11,10 @@
 ;;; and EQL was slightely faster on OSX.
 ;;;
 
-#+ecl
+#-eql
+(pushnew :common-qt *features*)
+
+#+eql
 (when (string= "lisp" (pathname-type *load-pathname*))
   (require :profile)
   (require :cmp)
@@ -19,38 +22,39 @@
   (format t "~%Please run the compiled file \"profiling.fas\".~%~%")
   (eql:qq))
 
-#+sbcl
+#+common-qt
 (ql:quickload :qt)
 
-#+ecl
+#+eql
 (require :profile)
 
-#+ecl
+#+eql
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (set-dispatch-macro-character #\# #\_ (lambda (&rest args)))) ; ignore #_
 
 (defpackage :wiggly-widget
   (:use :common-lisp
-        #+sbcl :qt #+ecl :eql
-        #+sbcl :sb-profile #+ecl :profile)
+        #+common-qt :qt #+eql :eql
+        #+common-qt :sb-profile #+eql :profile)
   (:export
    #:start))
 
 (in-package :wiggly-widget)
 
-#+sbcl
+#+common-qt
 (named-readtables:in-readtable :qt)
 
 (defvar *sinus* #(0 38 71 92 100 92 71 38 0 -38 -71 -92 -100 -92 -71 -38))
 (defvar *step*  0)
 
-#+sbcl
+#+common-qt
 (defvar *qapp*)
+
 (defvar *wiggly*)
 (defvar *edit*)
 (defvar *timer*)
 
-#+sbcl
+#+common-qt
 (defclass wiggly ()
   ()
   (:metaclass qt-class)
@@ -58,7 +62,7 @@
   (:override ("paintEvent" paint)
              ("timerEvent" timeout)))
 
-#+sbcl
+#+common-qt
 (defmethod initialize-instance :after ((instance wiggly) &key parent)
   (new instance)
   (#_setFont instance (let ((font (#_QApplication::font)))
@@ -67,7 +71,7 @@
   (#_setBackgroundRole instance (#_QPalette::Light))
   (#_setAutoFillBackground instance t))
 
-#+sbcl
+#+common-qt
 (defun start ()
   (setf *qapp*   (make-qapplication) 
         *wiggly* (make-instance 'wiggly)
@@ -86,7 +90,7 @@
     (#_raise dlg)
     (#_exec *qapp*)))
 
-#+ecl
+#+eql
 (defun new-wiggly ()
   (let ((w (qnew "QWidget"
                  "font" (let ((font (qfun "QApplication" "font")))
@@ -99,7 +103,7 @@
       ("timerEvent(QTimerEvent*)" 'timeout))
     w))
 
-#+ecl
+#+eql
 (defun start ()
   (setf *wiggly* (new-wiggly)
         *edit*   (qnew "QLineEdit" "alignment" |Qt.AlignCenter|)
@@ -113,7 +117,7 @@
     (qfun *timer* "start" 10 *wiggly*)
     (x:do-with (qfun dlg) "show" "raise")))
 
-#+sbcl
+#+common-qt
 (let (painter pen metrics)
   (defmethod paint ((this wiggly) event)
     (unless painter
@@ -140,7 +144,7 @@
           (incf x (#_width metrics (#_new QChar (char-code ch))))))
       (#_end painter))))
 
-#+ecl
+#+eql
 (let (painter pen metrics)
   (defun paint (event)
     (unless painter
@@ -170,7 +174,7 @@
 (defvar *count* 0)
 (defvar *max*   1000)
 
-#+sbcl
+#+common-qt
 (defmethod timeout ((this wiggly) event)
   (when (= (#_timerId event) (#_timerId *timer*))
     (when (= *max* (incf *count*))
@@ -180,7 +184,7 @@
     (#_update *wiggly*))
   (call-next-qmethod))
 
-#+ecl
+#+eql
 (defun timeout (event)
   (when (= (qfun event "timerId") (qfun *timer* "timerId"))
     (when (= *max* (incf *count*))

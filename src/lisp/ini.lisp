@@ -431,7 +431,7 @@
                   (cons 'qoverride            '(object name function))
                   (cons 'qproperty            '(object name))
                   (cons 'qquit                '(&optional (exit-status 0) (kill-all-threads t)))
-                  (cons 'qremove-event-filter '(id))
+                  (cons 'qremove-event-filter '(handle))
                   (cons 'qrequire             '(module &optional quiet))
                   (cons 'qrgb                 '(red green blue &optional (alpha 255)))
                   (cons 'qset-null            '(object))

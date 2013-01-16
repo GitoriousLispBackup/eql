@@ -91,9 +91,22 @@
         *gui-debug-io* (make-two-way-stream (input-hook:new 'handle-debug-io)
                                             (two-way-stream-output-stream *terminal-io*))))
 
+
+(defun file-data (file)
+  (with-open-file (s file :direction :input :element-type '(signed-byte 8))
+    (let ((data (make-array (file-length s))))
+      (read-sequence data s)
+      data)))
+
 (defun ini-system-tray ()
   (let* ((tray (qnew "QSystemTrayIcon(QIcon)"
-                     (qnew "QIcon(QString)" "data/local_server.png")))
+                     (qnew "QIcon(QPixmap)"
+                           (let ((pix (qnew "QPixmap")))
+                             (qfun pix "loadFromData"
+                                   ;; embed data (in compiled file)
+                                   #.(file-data (in-home "examples/9-simple-lisp-editor/data/local_server.png"))
+                                   "PNG")
+                             pix))))
          (menu (qnew "QMenu"))
          (quit (qnew "QAction(QObject*)" menu "text" (tr "Quit EQL server"))))
     (qfun menu "addAction(QAction*)" quit)

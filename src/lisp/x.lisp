@@ -59,7 +59,7 @@
 
 (defmacro while-it (exp &body body)
   `(do ((it))
-     ((not ,(list 'setf 'it exp)))
+     ((not (setf it ,exp)))
      ,@body))
 
 (defmacro do-string ((var str) &body body)
@@ -83,17 +83,17 @@
 (defun empty-string (s)
   (zerop (length s)))
 
-(defun str-with (sub str starts)
+(defun %str-with (sub str starts)
   (let ((l1 (length str))
         (l2 (length sub)))
     (when (>= l1 l2)
       (string= sub (subseq str (if starts 0 (- l1 l2)) (when starts l2))))))
 
 (defun starts-with (sub str)
-  (str-with sub str t))
+  (%str-with sub str t))
 
 (defun ends-with (sub str)
-  (str-with sub str nil))
+  (%str-with sub str nil))
 
 (defun string-split (string separator)
   (let ((len (length separator))

@@ -1047,7 +1047,7 @@
                          ("setText" (tr "<p>The <code><b style='color: blue'>local-server</b></code> seems not running.</p><p>Start it now?</p>"))
                          ("setStandardButtons" (logior |QMessageBox.Yes| |QMessageBox.No|))
                          ("setDefaultButton(QMessageBox::StandardButton)" |QMessageBox.No|)
-                         "exec"))))
+                         ("exec")))))
           (qfun "QProcess" "startDetached" "eql" (list (or (path-to-server "eql-local-server.fas")
                                                            (path-to-server "local-server.lisp"))))
           ;; wait max. 15 seconds
