@@ -318,7 +318,7 @@ public:
     Q_INVOKABLE int Mtype(QSslKey* o) const { return o->type(); }
 };
 
-class N186 : public QObject { // QUrlInfo
+class N188 : public QObject { // QUrlInfo
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LUrlInfo(u); }

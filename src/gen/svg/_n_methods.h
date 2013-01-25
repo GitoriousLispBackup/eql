@@ -10,7 +10,7 @@
 
 QT_BEGIN_NAMESPACE
 
-class N150 : public N108 { // QSvgGenerator
+class N152 : public N108 { // QSvgGenerator
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u) { return new LSvgGenerator(u); }

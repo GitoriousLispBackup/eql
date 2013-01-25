@@ -371,6 +371,7 @@ public:
 class LEvent : public QEvent {
     friend class N31;
 public:
+    LEvent(uint u, Type x1) : QEvent(x1), unique(u) {}
 
     static NumList overrideIds;
     uint unique;
@@ -1502,8 +1503,28 @@ public:
     uint unique;
 };
 
-class LSystemSemaphore : public QSystemSemaphore {
+class LStyleOption : public QStyleOption {
+    friend class N150;
+public:
+    LStyleOption(uint u, int x1 = QStyleOption::Version, int x2 = SO_Default) : QStyleOption(x1, x2), unique(u) {}
+    LStyleOption(uint u, const QStyleOption& x1) : QStyleOption(x1), unique(u) {}
+
+    static NumList overrideIds;
+    uint unique;
+};
+
+class LStyleOptionGraphicsItem : public QStyleOptionGraphicsItem {
     friend class N151;
+public:
+    LStyleOptionGraphicsItem(uint u) : unique(u) {}
+    LStyleOptionGraphicsItem(uint u, const QStyleOptionGraphicsItem& x1) : QStyleOptionGraphicsItem(x1), unique(u) {}
+
+    static NumList overrideIds;
+    uint unique;
+};
+
+class LSystemSemaphore : public QSystemSemaphore {
+    friend class N153;
 public:
     LSystemSemaphore(uint u, const QString& x1, int x2 = 0, AccessMode x3 = Open) : QSystemSemaphore(x1, x2, x3), unique(u) {}
 
@@ -1512,7 +1533,7 @@ public:
 };
 
 class LTableWidgetItem : public QTableWidgetItem {
-    friend class N152;
+    friend class N154;
 public:
     LTableWidgetItem(uint u, int x1 = Type) : QTableWidgetItem(x1), unique(u) {}
     LTableWidgetItem(uint u, const QString& x1, int x2 = Type) : QTableWidgetItem(x1, x2), unique(u) {}
@@ -1528,7 +1549,7 @@ public:
 };
 
 class LTableWidgetSelectionRange : public QTableWidgetSelectionRange {
-    friend class N153;
+    friend class N155;
 public:
     LTableWidgetSelectionRange(uint u) : unique(u) {}
     LTableWidgetSelectionRange(uint u, int x1, int x2, int x3, int x4) : QTableWidgetSelectionRange(x1, x2, x3, x4), unique(u) {}
@@ -1539,7 +1560,7 @@ public:
 };
 
 class LTabletEvent : public QTabletEvent {
-    friend class N154;
+    friend class N156;
 public:
     LTabletEvent(uint u, Type x1, const QPoint& x2, const QPoint& x3, const QPointF& x4, int x5, int x6, qreal x7, int x8, int x9, qreal x10, qreal x11, int x12, Qt::KeyboardModifiers x13, qint64 x14) : QTabletEvent(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14), unique(u) {}
 
@@ -1548,7 +1569,7 @@ public:
 };
 
 class LTextBlock : public QTextBlock {
-    friend class N155;
+    friend class N157;
 public:
     LTextBlock(uint u, const QTextBlock& x1) : QTextBlock(x1), unique(u) {}
 
@@ -1557,7 +1578,7 @@ public:
 };
 
 class LTextBlockFormat : public QTextBlockFormat {
-    friend class N156;
+    friend class N158;
 public:
     LTextBlockFormat(uint u) : unique(u) {}
 
@@ -1566,7 +1587,7 @@ public:
 };
 
 class LTextBlockUserData : public QTextBlockUserData {
-    friend class N157;
+    friend class N159;
 public:
 
     static NumList overrideIds;
@@ -1574,7 +1595,7 @@ public:
 };
 
 class LTextBoundaryFinder : public QTextBoundaryFinder {
-    friend class N158;
+    friend class N160;
 public:
     LTextBoundaryFinder(uint u) : unique(u) {}
     LTextBoundaryFinder(uint u, const QTextBoundaryFinder& x1) : QTextBoundaryFinder(x1), unique(u) {}
@@ -1586,7 +1607,7 @@ public:
 };
 
 class LTextCharFormat : public QTextCharFormat {
-    friend class N159;
+    friend class N161;
 public:
     LTextCharFormat(uint u) : unique(u) {}
 
@@ -1595,7 +1616,7 @@ public:
 };
 
 class LTextCodec : public QTextCodec {
-    friend class N160;
+    friend class N162;
 public:
 
     static NumList overrideIds;
@@ -1609,7 +1630,7 @@ public:
 };
 
 class LTextCursor : public QTextCursor {
-    friend class N161;
+    friend class N163;
 public:
     LTextCursor(uint u) : unique(u) {}
     LTextCursor(uint u, QTextDocument* x1) : QTextCursor(x1), unique(u) {}
@@ -1622,7 +1643,7 @@ public:
 };
 
 class LTextDecoder : public QTextDecoder {
-    friend class N162;
+    friend class N164;
 public:
     LTextDecoder(uint u, const QTextCodec* x1) : QTextDecoder(x1), unique(u) {}
 
@@ -1631,7 +1652,7 @@ public:
 };
 
 class LTextDocumentFragment : public QTextDocumentFragment {
-    friend class N163;
+    friend class N165;
 public:
     LTextDocumentFragment(uint u) : unique(u) {}
     LTextDocumentFragment(uint u, const QTextDocument* x1) : QTextDocumentFragment(x1), unique(u) {}
@@ -1643,7 +1664,7 @@ public:
 };
 
 class LTextDocumentWriter : public QTextDocumentWriter {
-    friend class N164;
+    friend class N166;
 public:
     LTextDocumentWriter(uint u) : unique(u) {}
     LTextDocumentWriter(uint u, const QString& x1, const QByteArray& x2 = QByteArray()) : QTextDocumentWriter(x1, x2), unique(u) {}
@@ -1653,7 +1674,7 @@ public:
 };
 
 class LTextEncoder : public QTextEncoder {
-    friend class N165;
+    friend class N167;
 public:
     LTextEncoder(uint u, const QTextCodec* x1) : QTextEncoder(x1), unique(u) {}
 
@@ -1662,7 +1683,7 @@ public:
 };
 
 class LTextFormat : public QTextFormat {
-    friend class N166;
+    friend class N168;
 public:
     LTextFormat(uint u) : unique(u) {}
     LTextFormat(uint u, int x1) : QTextFormat(x1), unique(u) {}
@@ -1673,7 +1694,7 @@ public:
 };
 
 class LTextFragment : public QTextFragment {
-    friend class N167;
+    friend class N169;
 public:
     LTextFragment(uint u) : unique(u) {}
     LTextFragment(uint u, const QTextFragment& x1) : QTextFragment(x1), unique(u) {}
@@ -1683,7 +1704,7 @@ public:
 };
 
 class LTextFrameFormat : public QTextFrameFormat {
-    friend class N168;
+    friend class N170;
 public:
     LTextFrameFormat(uint u) : unique(u) {}
 
@@ -1692,7 +1713,7 @@ public:
 };
 
 class LTextImageFormat : public QTextImageFormat {
-    friend class N169;
+    friend class N171;
 public:
     LTextImageFormat(uint u) : unique(u) {}
 
@@ -1701,7 +1722,7 @@ public:
 };
 
 class LTextLayout : public QTextLayout {
-    friend class N170;
+    friend class N172;
 public:
     LTextLayout(uint u) : unique(u) {}
     LTextLayout(uint u, const QString& x1) : QTextLayout(x1), unique(u) {}
@@ -1712,7 +1733,7 @@ public:
 };
 
 class LTextLength : public QTextLength {
-    friend class N171;
+    friend class N173;
 public:
     LTextLength(uint u) : unique(u) {}
     LTextLength(uint u, Type x1, qreal x2) : QTextLength(x1, x2), unique(u) {}
@@ -1722,7 +1743,7 @@ public:
 };
 
 class LTextLine : public QTextLine {
-    friend class N172;
+    friend class N174;
 public:
     LTextLine(uint u) : unique(u) {}
 
@@ -1731,7 +1752,7 @@ public:
 };
 
 class LTextListFormat : public QTextListFormat {
-    friend class N173;
+    friend class N175;
 public:
     LTextListFormat(uint u) : unique(u) {}
 
@@ -1740,7 +1761,7 @@ public:
 };
 
 class LTextOption : public QTextOption {
-    friend class N174;
+    friend class N176;
 public:
     LTextOption(uint u) : unique(u) {}
     LTextOption(uint u, Qt::Alignment x1) : QTextOption(x1), unique(u) {}
@@ -1751,7 +1772,7 @@ public:
 };
 
 class LTextTableCell : public QTextTableCell {
-    friend class N175;
+    friend class N177;
 public:
     LTextTableCell(uint u) : unique(u) {}
     LTextTableCell(uint u, const QTextTableCell& x1) : QTextTableCell(x1), unique(u) {}
@@ -1761,7 +1782,7 @@ public:
 };
 
 class LTextTableCellFormat : public QTextTableCellFormat {
-    friend class N176;
+    friend class N178;
 public:
     LTextTableCellFormat(uint u) : unique(u) {}
 
@@ -1770,7 +1791,7 @@ public:
 };
 
 class LTextTableFormat : public QTextTableFormat {
-    friend class N177;
+    friend class N179;
 public:
     LTextTableFormat(uint u) : unique(u) {}
 
@@ -1779,7 +1800,7 @@ public:
 };
 
 class LTime : public QTime {
-    friend class N178;
+    friend class N180;
 public:
     LTime(uint u) : unique(u) {}
     LTime(uint u, int x1, int x2, int x3 = 0, int x4 = 0) : QTime(x1, x2, x3, x4), unique(u) {}
@@ -1789,7 +1810,7 @@ public:
 };
 
 class LTimerEvent : public QTimerEvent {
-    friend class N179;
+    friend class N181;
 public:
     LTimerEvent(uint u, int x1) : QTimerEvent(x1), unique(u) {}
 
@@ -1798,7 +1819,7 @@ public:
 };
 
 class LToolTip : public QToolTip {
-    friend class N180;
+    friend class N182;
 public:
 
     static NumList overrideIds;
@@ -1806,7 +1827,7 @@ public:
 };
 
 class LTouchEvent : public QTouchEvent {
-    friend class N181;
+    friend class N183;
 public:
     LTouchEvent(uint u, QEvent::Type x1, QTouchEvent::DeviceType x2 = TouchScreen, Qt::KeyboardModifiers x3 = Qt::NoModifier, Qt::TouchPointStates x4 = 0, const QList<QTouchEvent::TouchPoint>& x5 = QList<QTouchEvent::TouchPoint>()) : QTouchEvent(x1, x2, x3, x4, x5), unique(u) {}
 
@@ -1815,7 +1836,7 @@ public:
 };
 
 class LTransform : public QTransform {
-    friend class N182;
+    friend class N184;
 public:
     LTransform(uint u) : unique(u) {}
     LTransform(uint u, qreal x1, qreal x2, qreal x3, qreal x4, qreal x5, qreal x6, qreal x7, qreal x8, qreal x9 = 1.0) : QTransform(x1, x2, x3, x4, x5, x6, x7, x8, x9), unique(u) {}
@@ -1827,7 +1848,7 @@ public:
 };
 
 class LTreeWidgetItem : public QTreeWidgetItem {
-    friend class N183;
+    friend class N185;
 public:
     LTreeWidgetItem(uint u, int x1 = Type) : QTreeWidgetItem(x1), unique(u) {}
     LTreeWidgetItem(uint u, const QStringList& x1, int x2 = Type) : QTreeWidgetItem(x1, x2), unique(u) {}
@@ -1848,7 +1869,7 @@ public:
 };
 
 class LUndoCommand : public QUndoCommand {
-    friend class N184;
+    friend class N186;
 public:
     LUndoCommand(uint u, QUndoCommand* x1 = 0) : QUndoCommand(x1), unique(u) {}
     LUndoCommand(uint u, const QString& x1, QUndoCommand* x2 = 0) : QUndoCommand(x1, x2), unique(u) {}
@@ -1863,7 +1884,7 @@ public:
 };
 
 class LUrl : public QUrl {
-    friend class N185;
+    friend class N187;
 public:
     LUrl(uint u) : unique(u) {}
     LUrl(uint u, const QString& x1) : QUrl(x1), unique(u) {}
@@ -1875,12 +1896,13 @@ public:
 };
 
 class LVariant : public QVariant {
-    friend class N187;
+    friend class N189;
 public:
     LVariant(uint u) : unique(u) {}
     LVariant(uint u, const QLocale& x1) : QVariant(x1), unique(u) {}
     LVariant(uint u, const QRegExp& x1) : QVariant(x1), unique(u) {}
     LVariant(uint u, Qt::GlobalColor x1) : QVariant(x1), unique(u) {}
+    LVariant(uint u, Type x1) : QVariant(x1), unique(u) {}
     LVariant(uint u, const QVariant& x1) : QVariant(x1), unique(u) {}
     LVariant(uint u, int x1) : QVariant(x1), unique(u) {}
     LVariant(uint u, uint x1) : QVariant(x1), unique(u) {}
@@ -1914,7 +1936,7 @@ public:
 };
 
 class LVector2D : public QVector2D {
-    friend class N188;
+    friend class N190;
 public:
     LVector2D(uint u) : unique(u) {}
     LVector2D(uint u, qreal x1, qreal x2) : QVector2D(x1, x2), unique(u) {}
@@ -1928,7 +1950,7 @@ public:
 };
 
 class LVector3D : public QVector3D {
-    friend class N189;
+    friend class N191;
 public:
     LVector3D(uint u) : unique(u) {}
     LVector3D(uint u, qreal x1, qreal x2, qreal x3) : QVector3D(x1, x2, x3), unique(u) {}
@@ -1943,7 +1965,7 @@ public:
 };
 
 class LVector4D : public QVector4D {
-    friend class N190;
+    friend class N192;
 public:
     LVector4D(uint u) : unique(u) {}
     LVector4D(uint u, qreal x1, qreal x2, qreal x3, qreal x4) : QVector4D(x1, x2, x3, x4), unique(u) {}
@@ -1959,7 +1981,7 @@ public:
 };
 
 class LWhatsThis : public QWhatsThis {
-    friend class N199;
+    friend class N201;
 public:
 
     static NumList overrideIds;
@@ -1967,7 +1989,7 @@ public:
 };
 
 class LWhatsThisClickedEvent : public QWhatsThisClickedEvent {
-    friend class N200;
+    friend class N202;
 public:
     LWhatsThisClickedEvent(uint u, const QString& x1) : QWhatsThisClickedEvent(x1), unique(u) {}
 
@@ -1976,7 +1998,7 @@ public:
 };
 
 class LWheelEvent : public QWheelEvent {
-    friend class N201;
+    friend class N203;
 public:
     LWheelEvent(uint u, const QPoint& x1, int x2, Qt::MouseButtons x3, Qt::KeyboardModifiers x4, Qt::Orientation x5 = Qt::Vertical) : QWheelEvent(x1, x2, x3, x4, x5), unique(u) {}
     LWheelEvent(uint u, const QPoint& x1, const QPoint& x2, int x3, Qt::MouseButtons x4, Qt::KeyboardModifiers x5, Qt::Orientation x6 = Qt::Vertical) : QWheelEvent(x1, x2, x3, x4, x5, x6), unique(u) {}
@@ -1986,7 +2008,7 @@ public:
 };
 
 class LWidgetItem : public QWidgetItem {
-    friend class N202;
+    friend class N204;
 public:
     LWidgetItem(uint u, QWidget* x1) : QWidgetItem(x1), unique(u) {}
 
@@ -2010,7 +2032,7 @@ public:
 };
 
 class LWindowStateChangeEvent : public QWindowStateChangeEvent {
-    friend class N203;
+    friend class N205;
 public:
 
     static NumList overrideIds;
@@ -2018,7 +2040,7 @@ public:
 };
 
 class LWriteLocker : public QWriteLocker {
-    friend class N204;
+    friend class N206;
 public:
     LWriteLocker(uint u, QReadWriteLock* x1) : QWriteLocker(x1), unique(u) {}
 

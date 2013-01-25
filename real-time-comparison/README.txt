@@ -29,6 +29,6 @@ My tests using "oprofile" showed that the EQL functions are never the
 bottleneck (as expected), and that Qt has done a good job with Q_INVOKABLE,
 which is really fast.
 
-(See functions QLOAD-C++ / QAUTO-LOAD-C++ and "Qt_EQL_dynamic/" if you want
-to use Qt/C++ code for your bottlenecks.)
+See functions QLOAD-C++ / QAUTO-RELOAD-C++ (Linux only) and "Qt_EQL_dynamic/"
+if you want to use Qt/C++ code for your bottlenecks.
 

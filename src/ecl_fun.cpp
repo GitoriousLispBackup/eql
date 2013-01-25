@@ -224,6 +224,8 @@ static bool inherits(const QByteArray& sub, const QByteArray& super) {
     while(!(upper = superClassName(upper)).isEmpty()) {
         // multiple inheritance exceptions (see helper/multiple-inheritance.txt)
         if("QGraphicsObject" == upper) {
+            if("QObject" == super) {
+                return true; }
             upper = "QGraphicsItem"; }
         if(upper == super) {
             return true; }}
@@ -533,6 +535,7 @@ TO_QT_TYPE_PTR2(QBrush, qbrush)
 TO_QT_TYPE_PTR2(QCursor, qcursor)
 TO_QT_TYPE_PTR2(QDate, qdate)
 TO_QT_TYPE_PTR2(QDateTime, qdatetime)
+TO_QT_TYPE_PTR2(QEasingCurve, qeasingcurve)
 TO_QT_TYPE_PTR2(QFileInfo, qfileinfo)
 TO_QT_TYPE_PTR2(QFont, qfont)
 TO_QT_TYPE_PTR2(QIcon, qicon)
@@ -882,6 +885,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case QMetaType::QCursor:                 p = new QCursor(toQCursor(l_arg)); break;
         case QMetaType::QDate:                   p = new QDate(*toQDatePointer(l_arg)); break;
         case QMetaType::QDateTime:               p = new QDateTime(*toQDateTimePointer(l_arg)); break;
+        case QMetaType::QEasingCurve:            p = new QEasingCurve(*toQEasingCurvePointer(l_arg)); break;
         case QMetaType::QFont:                   p = new QFont(*toQFontPointer(l_arg)); break;
         case QMetaType::QKeySequence:            p = new QKeySequence(*toQKeySequencePointer(l_arg)); break;
         case QMetaType::QLine:                   p = new QLine(toQLine(l_arg)); break;
@@ -1035,6 +1039,7 @@ cl_object to_lisp_arg(const MetaArg& arg) {
             case QMetaType::QCursor:                 l_ret = from_qcursor(*(QCursor*)p); break;
             case QMetaType::QDate:                   l_ret = from_qdate(*(QDate*)p); break;
             case QMetaType::QDateTime:               l_ret = from_qdatetime(*(QDateTime*)p); break;
+            case QMetaType::QEasingCurve:            l_ret = from_qeasingcurve(*(QEasingCurve*)p); break;
             case QMetaType::QFont:                   l_ret = from_qfont(*(QFont*)p); break;
             case QMetaType::QIcon:                   l_ret = from_qicon(*(QIcon*)p); break;
             case QMetaType::QImage:                  l_ret = from_qimage(*(QImage*)p); break;

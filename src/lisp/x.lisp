@@ -126,7 +126,8 @@
       (nreverse list))))
 
 (defun join (list &optional (sep #\Space))
-  (format nil (format nil "~~{~~A~~^~A~~}" sep) list))
+  (format nil (concatenate 'string "~{~A~^" (string sep) "~}")
+          list))
 
 (defun bytes-to-string (b)
   (map 'string 'code-char b))

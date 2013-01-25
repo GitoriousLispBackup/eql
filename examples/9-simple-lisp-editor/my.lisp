@@ -1,17 +1,17 @@
 (in-package :eql-user)
 
-(defvar *window*    (qnew "QDialog"))
-(defvar *label*     (qnew "QLabel"))
-(defvar *line-edit* (qnew "QLineEdit"))
-(defvar *layout*    (qnew "QVBoxLayout"))
+(defvar *window*    (qnew "QDialog"
+                          "windowTitle" "My Personal Analyst"))
+(defvar *label*     (qnew "QLabel"
+                          "text" "Please enter your <b>Top Secret</b> (you will feel better)"))
+(defvar *line-edit* (qnew "QLineEdit"
+                          "echoMode" |QLineEdit.Password|))
+(defvar *layout*    (qnew "QVBoxLayout(QWidget*)" *window*))
 
 (defun start ()
-  (qset *window* "windowTitle" "My Personal Analyst")
-  (qset *label* "text" "Please enter your <b>Top Secret</b> (you will feel better)")
-  (qset *line-edit* "echoMode" |QLineEdit.Password|)
-  (dolist (w (list *label* *line-edit*))
-    (qfun *layout* "addWidget" w))
-  (qfun *window* "setLayout" *layout*)
+  (x:do-with (qfun *layout* "addWidget")
+    *label*
+    *line-edit*)
   (qconnect *line-edit* "returnPressed()" 'analyze)
   (x:do-with (qfun *window*) "show" "raise"))
 

@@ -185,7 +185,7 @@ public:
 };
 
 class LUrlInfo : public QUrlInfo {
-    friend class N186;
+    friend class N188;
 public:
     LUrlInfo(uint u) : unique(u) {}
     LUrlInfo(uint u, const QUrlInfo& x1) : QUrlInfo(x1), unique(u) {}

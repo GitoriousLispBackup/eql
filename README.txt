@@ -98,8 +98,8 @@ To quit the tool, do:
 In order to run (sort of) a top-level processing Qt events, do (requires ECL threads):
   eql -qtpl
 
-  Note: If you want to use "ecl-readline" together with the "-qtpl" option, just compile the
-  file "eql/src/lisp/ecl-readline.lisp" (which depends on the "readline" C library).
+  Note: If you want to use "ecl-readline" together with "-qtpl", just compile
+  "eql/src/lisp/ecl-readline.lisp" (which depends on the "readline" C library).
   It will then be loaded automatically on startup.
 
 

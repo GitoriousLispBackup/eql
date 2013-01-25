@@ -122,6 +122,8 @@
         "QSpacerItem"
         "QStandardItem"
         "QStatusTipEvent"
+        "QStyleOption"
+        "QStyleOptionGraphicsItem"
         "QSystemSemaphore"
         "QTabletEvent"
         "QTableWidgetItem"

@@ -367,6 +367,8 @@
    "virtual void setData ( const QVariant & , int = Qt::UserRole + 1 )"
    "virtual int type () const")
   (("QStatusTipEvent" . "QEvent"))
+  (("QStyleOption" . NIL))
+  (("QStyleOptionGraphicsItem" . "QStyleOption"))
   (("QSvgGenerator" . "QPaintDevice")
    "virtual int metric ( QPaintDevice::PaintDeviceMetric ) const")
   (("QSystemSemaphore" . NIL))

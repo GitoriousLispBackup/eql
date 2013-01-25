@@ -65,7 +65,7 @@ void ini() {
     LObjects::N[144] = new N145;
     LObjects::N[145] = new N146;
     LObjects::N[146] = new N147;
-    LObjects::N[185] = new N186; }
+    LObjects::N[187] = new N188; }
 
 const QMetaObject* staticMetaObject(int n) {
     const QMetaObject* m = 0;
@@ -102,7 +102,7 @@ void deleteNObject(int n, void* p, int gc) {
         case 145: if(gc) delete (QSslConfiguration*)p; else delete (LSslConfiguration*)p; break;
         case 146: if(gc) delete (QSslError*)p; else delete (LSslError*)p; break;
         case 147: if(gc) delete (QSslKey*)p; else delete (LSslKey*)p; break;
-        case 186: if(gc) delete (QUrlInfo*)p; else delete (LUrlInfo*)p; break; }}
+        case 188: if(gc) delete (QUrlInfo*)p; else delete (LUrlInfo*)p; break; }}
 
 NumList* overrideFunctions(const QByteArray& name) {
     NumList* ids = 0;
@@ -138,7 +138,7 @@ NumList* overrideFunctions(const QByteArray& name) {
             case 145: ids = &LSslConfiguration::overrideIds; break;
             case 146: ids = &LSslError::overrideIds; break;
             case 147: ids = &LSslKey::overrideIds; break;
-            case 186: ids = &LUrlInfo::overrideIds; break; }}
+            case 188: ids = &LUrlInfo::overrideIds; break; }}
     return ids; }
 
 QT_END_NAMESPACE

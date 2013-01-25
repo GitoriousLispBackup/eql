@@ -449,9 +449,11 @@
    "void setCustomType ( EasingFunction )"
    "void setOvershoot ( qreal )"
    "void setPeriod ( qreal )"
+   "void setType ( Type )"
    "Type type () const"
    "qreal valueForProgress ( qreal ) const")
   (("QEvent" . NIL)
+   "new QEvent ( Type )"
    "void accept ()"
    "void ignore ()"
    "bool isAccepted () const"
@@ -2963,6 +2965,14 @@
   (("QStatusTipEvent" . "QEvent")
    "new QStatusTipEvent ( const QString & )"
    "QString tip () const")
+  (("QStyleOption" . NIL)
+   "new QStyleOption ( int = QStyleOption::Version, int = SO_Default )"
+   "new QStyleOption ( const QStyleOption & )"
+   "void initFrom ( const QWidget * )")
+  (("QStyleOptionGraphicsItem" . "QStyleOption")
+   "new QStyleOptionGraphicsItem ()"
+   "new QStyleOptionGraphicsItem ( const QStyleOptionGraphicsItem & )"
+   "static qreal levelOfDetailFromTransform ( const QTransform & )")
   (("QSvgGenerator" . "QPaintDevice")
    "new QSvgGenerator ()"
    "QString description () const"
@@ -3813,6 +3823,7 @@
    "new QVariant ( const QLocale & )"
    "new QVariant ( const QRegExp & )"
    "new QVariant ( Qt::GlobalColor )"
+   "new QVariant ( Type )"
    "new QVariant ( const QVariant & )"
    "new QVariant ( int )"
    "new QVariant ( uint )"
@@ -3840,7 +3851,9 @@
    "new QVariant ( const QRect & )"
    "new QVariant ( const QRectF & )"
    "new QVariant ( const QUrl & )"
+   "bool canConvert ( Type ) const"
    "void clear ()"
+   "bool convert ( Type )"
    "bool isNull () const"
    "bool isValid () const"
    "QBitArray toBitArray () const"
@@ -3873,7 +3886,8 @@
    "Type type () const"
    "const char * typeName () const"
    "int userType () const"
-   "static Type nameToType ( const char * )")
+   "static Type nameToType ( const char * )"
+   "static const char * typeToName ( Type )")
   (("QVector2D" . NIL)
    "new QVector2D ()"
    "new QVector2D ( qreal , qreal )"

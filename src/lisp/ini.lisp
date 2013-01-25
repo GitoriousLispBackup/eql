@@ -164,7 +164,7 @@
 (defmacro tr (src &optional con (n -1))
   "args: (source &optional context plural-number)
    Macro expanding to <code>qtranslate</code>, which calls <code>QCoreApplication::translate()</code>.<br>Both <code>source</code> and <code>context</code> can be Lisp forms evaluating to constant strings (at compile time).<br>The <code>context</code> argument defaults to the Lisp file name. For the <code>plural-number</code>, see Qt Assistant."
-  ;; see compiler-macro in my_app/tr.lisp
+  ;; see compiler-macro in "my_app/tr.lisp"
   (let ((source (ignore-errors (eval src)))
         (context (ignore-errors (eval con))))
     `(eql:qtranslate ,(if (stringp context)
@@ -273,7 +273,7 @@
   (qlet ((msg "QMessageBox"
               "icon" |QMessageBox.Information|
               "text" (if (stringp x) x (prin1-to-string x))))
-    (dolist (fun '("show" "raise" "exec")) ; "raise" needed in some situations
+    (dolist (fun '("show" "raise" "exec")) ; "raise" needed in some situations (e.g. OSX)
       (qfun msg fun)))
   x)
 

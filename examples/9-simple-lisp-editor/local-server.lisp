@@ -91,10 +91,10 @@
         *gui-debug-io* (make-two-way-stream (input-hook:new 'handle-debug-io)
                                             (two-way-stream-output-stream *terminal-io*))))
 
-
 (defun file-data (file)
+  "To use together with '#.' reader macro, for embedding data in compiled files."
   (with-open-file (s file :direction :input :element-type '(signed-byte 8))
-    (let ((data (make-array (file-length s))))
+    (let ((data (make-array (file-length s) :element-type '(signed-byte 8))))
       (read-sequence data s)
       data)))
 
@@ -103,12 +103,13 @@
                      (qnew "QIcon(QPixmap)"
                            (let ((pix (qnew "QPixmap")))
                              (qfun pix "loadFromData"
-                                   ;; embed data (in compiled file)
+                                   ;; embed data
                                    #.(file-data (in-home "examples/9-simple-lisp-editor/data/local_server.png"))
                                    "PNG")
                              pix))))
          (menu (qnew "QMenu"))
-         (quit (qnew "QAction(QObject*)" menu "text" (tr "Quit EQL server"))))
+         (quit (qnew "QAction(QObject*)" menu
+                     "text" (tr "Quit EQL server"))))
     (qfun menu "addAction(QAction*)" quit)
     (qconnect quit "triggered()" (lambda () (qdel tray) (qquit)))
     (x:do-with (qfun tray)

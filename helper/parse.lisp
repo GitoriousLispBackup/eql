@@ -7,8 +7,7 @@
 (use-package :x)
 
 (defconstant +skip+
-  (list "( Type )"
-        "(preliminary)"
+  (list "(preliminary)"
         "(deprecated)"
         "<Attribute>"
         "<FormatRange>"

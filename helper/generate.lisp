@@ -316,7 +316,6 @@
                                         (subseq name templ (1- (length name)))
                                         name)))
                    (not (find #\: name))
-                   (not (find #\_ name))
                    (upper-case-p 1st))
               (if templ
                   (format nil "~A~A::~A"
