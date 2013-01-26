@@ -315,12 +315,20 @@
 </pre>
 </p><br>
 <p>
+<b>QSIGNAL (name)</b>
+<p>Needed in functions which expect a <code>const char*</code> Qt signal (not needed in <code>qconnect</code>).</p>
+</p><br>
+<p>
 <b>QSINGLE-SHOT (milliseconds function)</b>
 <p>A single shot timer similar to <code>QTimer::singleShot()</code>.</p>
 <pre>
   (qsingle-shot 0 'on-qt-idle)
   (let ((ms 500)) (qsingle-shot ms (lambda () (qmsg ms))))
 </pre>
+</p><br>
+<p>
+<b>QSLOT (name)</b>
+<p>Needed in functions which expect a <code>const char*</code> Qt slot (not needed in <code>qconnect</code>).</p>
 </p><br>
 <p>
 <b>QSTATIC-META-OBJECT (class-name)</b>

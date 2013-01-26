@@ -77,6 +77,19 @@
   (defun in-home (file)
     (concatenate 'string home file)))
 
+(defun %signal/slot (ch name)
+  (read-from-string (format nil "\"~C~A\"" ch name))) ; force creation of string literal
+
+(defun qsignal (name)
+  "args: (name)
+   Needed in functions which expect a <code>const char*</code> Qt signal (not needed in <code>qconnect</code>)."  
+  (%signal/slot #\2 name))
+
+(defun qslot (name)
+  "args: (name)
+   Needed in functions which expect a <code>const char*</code> Qt slot (not needed in <code>qconnect</code>)."  
+  (%signal/slot #\1 name))
+
 ;;; top-level / slime-mode processing Qt events (command line options "-qtpl" and "-slime")
 
 (defvar *top-level-form*  nil)
@@ -438,7 +451,9 @@
                   (cons 'qset                 '(object name value))
                   (cons 'qset-color           '(widget color-role color))
                   (cons 'qset-property        '(object name value))
+                  (cons 'qsignal              '(name))
                   (cons 'qsingle-shot         '(milliseconds function))
+                  (cons 'qslot                '(name))
                   (cons 'qstatic-meta-object  '(class-name))
                   (cons 'qsuper-class-name    '(class-name))
                   (cons 'qt-object-id         '(object))

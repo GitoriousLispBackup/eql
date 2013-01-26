@@ -70,7 +70,9 @@
    #:qset-color
    #:qset-null
    #:qset-property
+   #:qsignal
    #:qsingle-shot
+   #:qslot
    #:qstatic-meta-object
    #:qsuper-class-name
    #:qt-object

@@ -4,8 +4,6 @@
 
 (defconstant +state-switch-event+ (+ |QEvent.User| 256))
 
-(defparameter *qsignal-timeout* "2timeout()") ; literal
-
 ;;; state-switch-event
 
 (let (events)
@@ -77,7 +75,7 @@
   (let ((trans (new-state-switch-transition (incf (switcher-state-count state-switcher)))))
     (x:do-with (qfun trans)
       ("setTargetState" state)
-      ( "addAnimation" animation))
+      ("addAnimation" animation))
     (qfun state-switcher "addTransition(QAbstractTransition*)" trans)))
 
 (defun add-property-animation (anim-group button property curve-type duration &optional pause)
@@ -93,11 +91,11 @@
     (qfun group "addAnimation" anim)))
 
 (defun ini ()
-  (let* ((button1 (new-graphics-rect-widget "tomato"))
-         (button2 (new-graphics-rect-widget "lightgreen"))
-         (button3 (new-graphics-rect-widget "lightblue"))
-         (button4 (new-graphics-rect-widget "lightyellow"))
-         (buttons (list button1 button2 button3 button4))
+  (let* ((item1 (new-graphics-rect-widget "tomato"))
+         (item2 (new-graphics-rect-widget "lightgreen"))
+         (item3 (new-graphics-rect-widget "lightblue"))
+         (item4 (new-graphics-rect-widget "lightyellow"))
+         (items (list item1 item2 item3 item4))
          (scene      (qnew "QGraphicsScene(qreal,qreal,qreal,qreal)" 0 0 300 300))
          (window     (qnew "QGraphicsView(QGraphicsScene*)" scene))
          (machine    (qnew "QStateMachine"))
@@ -106,15 +104,15 @@
          (anim-group (qnew "QParallelAnimationGroup"))         
          (timer      (qnew "QTimer"
                            "singleShot" t)))
-    (qfun* button2 "QGraphicsItem" "setZValue" 1)
-    (qfun* button3 "QGraphicsItem" "setZValue" 2)
-    (qfun* button4 "QGraphicsItem" "setZValue" 3)
+    (qfun* item2 "QGraphicsItem" "setZValue" 1)
+    (qfun* item3 "QGraphicsItem" "setZValue" 2)
+    (qfun* item4 "QGraphicsItem" "setZValue" 3)
     (x:do-with (qfun scene)
       ("setBackgroundBrush" (qnew "QBrush(QColor)" "darkslategray"))
-      ("addItem" button1)
-      ("addItem" button2)
-      ("addItem" button3)
-      ("addItem" button4))
+      ("addItem" item1)
+      ("addItem" item2)
+      ("addItem" item3)
+      ("addItem" item4))
     (x:do-with (qfun window)
       ("setFrameStyle" 0)
       ("setAlignment" (logior |Qt.AlignLeft| |Qt.AlignTop|))
@@ -125,49 +123,49 @@
                (lambda (event)
                  (qfun window "fitInView(QRectF)" (qfun scene "sceneRect"))
                  (qcall-default)))
-    (let ((state1 (create-geometry-state group buttons
+    (let ((state1 (create-geometry-state group items
                                          '((100 0 50 50)
                                            (150 0 50 50)
                                            (200 0 50 50)
                                            (250 0 50 50))))
-          (state2 (create-geometry-state group buttons
+          (state2 (create-geometry-state group items
                                          '((250 100 50 50)
                                            (250 150 50 50)
                                            (250 200 50 50)
                                            (250 250 50 50))))
-          (state3 (create-geometry-state group buttons
+          (state3 (create-geometry-state group items
                                          '((150 250 50 50)
                                            (100 250 50 50)
                                            (50  250 50 50)
                                            (0   250 50 50))))
-          (state4 (create-geometry-state group buttons
+          (state4 (create-geometry-state group items
                                          '((0 150 50 50)
                                            (0 100 50 50)
                                            (0 50  50 50)
                                            (0 0   50 50))))
-          (state5 (create-geometry-state group buttons
+          (state5 (create-geometry-state group items
                                          '((100 100 50 50)
                                            (150 100 50 50)
                                            (100 150 50 50)
                                            (150 150 50 50))))
-          (state6 (create-geometry-state group buttons
+          (state6 (create-geometry-state group items
                                          '((50  50  50 50)
                                            (200 50  50 50)
                                            (50  200 50 50)
                                            (200 200 50 50))))
-          (state7 (create-geometry-state group buttons
+          (state7 (create-geometry-state group items
                                          '((0   0   50 50)
                                            (250 0   50 50)
                                            (0   250 50 50)
                                            (250 250 50 50))))
           (state-switcher (new-state-switcher machine "stateSwitcher")))
       (qfun group "setInitialState" state1)
-      (add-property-animation anim-group button4 "geometry" |QEasingCurve.InElastic|  1500)
-      (add-property-animation anim-group button3 "geometry" |QEasingCurve.OutElastic| 1500 150)
-      (add-property-animation anim-group button2 "geometry" |QEasingCurve.InElastic|  1500 225)
-      (add-property-animation anim-group button1 "geometry" |QEasingCurve.OutElastic| 1500 300)
+      (add-property-animation anim-group item4 "geometry" |QEasingCurve.InElastic|  1500)
+      (add-property-animation anim-group item3 "geometry" |QEasingCurve.OutElastic| 1500 150)
+      (add-property-animation anim-group item2 "geometry" |QEasingCurve.InElastic|  1500 225)
+      (add-property-animation anim-group item1 "geometry" |QEasingCurve.OutElastic| 1500 300)
       (qset timer "interval" 2500) 
-      (qfun group "addTransition" timer *qsignal-timeout* (ensure-qt-object state-switcher))
+      (qfun group "addTransition" timer (qsignal "timeout()") (ensure-qt-object state-switcher))
       (dolist (state (list state1 state2 state3 state4 state5 state6 state7))
         (add-state state-switcher state anim-group)))
     (x:do-with (qfun machine)
