@@ -6,13 +6,12 @@
 
 ;;; state-switch-event
 
-(let (events)
+(let (event-rand)
   (defun new-state-switch-event (rand)
-    (let ((ev (qnew "QEvent(QEvent::Type)" +state-switch-event+)))
-      (push (list ev rand) events)
-      ev))
-  (defun event-rand (event)
-    (second (find event events :key 'first :test 'qeql))))
+    (setf event-rand rand)
+    (qnew "QEvent(QEvent::Type)" +state-switch-event+))
+  (defun event-rand ()
+    event-rand))
 
 ;;; state-switch-transition
 
@@ -30,7 +29,7 @@
                  (and (= +state-switch-event+
                          (qfun event "type"))
                       (= (transition-rand trans)
-                         (event-rand event)))))
+                         (event-rand)))))
     trans))
 
 ;;; state-switcher
@@ -96,7 +95,7 @@
          (item3 (new-graphics-rect-widget "lightblue"))
          (item4 (new-graphics-rect-widget "lightyellow"))
          (items (list item1 item2 item3 item4))
-         (scene      (qnew "QGraphicsScene(qreal,qreal,qreal,qreal)" 0 0 300 300))
+         (scene      (qnew "QGraphicsScene(qreal...)" 0 0 300 300))
          (window     (qnew "QGraphicsView(QGraphicsScene*)" scene))
          (machine    (qnew "QStateMachine"))
          (group      (qnew "QState"
