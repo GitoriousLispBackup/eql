@@ -41,8 +41,8 @@
       ("maximum" 100))
     (qconnect slider "valueChanged(int)" 'change))
   (qset *color* "text" "#ffaa00")
-  (qconnect *color* "textChanged(QString)" 'repaint)
-  (qconnect *opacity* "valueChanged(int)" 'repaint)
+  (qconnect *color* "textChanged(QString)" 'update)
+  (qconnect *opacity* "valueChanged(int)" 'update)
   (qconnect *choose-color* "clicked()" 'color-dialog)
   (qconnect *reset* "clicked()" 'reset)
   (qconnect *reset-color* "clicked()" (lambda () (qset *opacity* "value" 0)))
@@ -62,8 +62,8 @@
           (! "fillRect(QRect,QColor)" (qfun *pixmap* "rect") color)))
       (! "end"))))
 
-(defun repaint (&optional arg)
-  (qfun *display* "repaint"))
+(defun update (&optional arg)
+  (qfun *display* "update"))
 
 (defun change (value)
   (flet ((adjust-1 (x)
@@ -76,7 +76,7 @@
            (img3 (qfun img2    "changeGamma"      (adjust-2 (qget *gamma* "value")))))     ;   1 100 10,000
       (qdel *pixmap*)
       (setf *pixmap* (qfun "QPixmap" "fromImage" img3)))
-    (repaint)))
+    (update)))
 
 (defun reset ()
   (dolist (slider (list *brightness* *contrast* *gamma*))

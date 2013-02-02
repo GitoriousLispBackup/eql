@@ -165,6 +165,6 @@
        (qapropos !search !class-name)))
 
 (defun qmsg (x)
-  "A simple message box for any readable Lisp object."
+  "A simple message box for Lisp objects."
   #q (qmsg !x))
 

@@ -535,7 +535,7 @@ TO_QT_TYPE_PTR2(QBrush, qbrush)
 TO_QT_TYPE_PTR2(QCursor, qcursor)
 TO_QT_TYPE_PTR2(QDate, qdate)
 TO_QT_TYPE_PTR2(QDateTime, qdatetime)
-TO_QT_TYPE_PTR2(QEasingCurve, qeasingcurve)
+TO_QT_TYPE_PTR(QEasingCurve, qeasingcurve)
 TO_QT_TYPE_PTR2(QFileInfo, qfileinfo)
 TO_QT_TYPE_PTR2(QFont, qfont)
 TO_QT_TYPE_PTR2(QIcon, qicon)
@@ -660,7 +660,7 @@ QVariant toQVariant(cl_object l_obj, const char* s_type, int type) {
     if(QMetaType::VoidStar == type) {
         QtObject obj = toQtObject(l_obj);
         if(obj.pointer) {
-            qVariantSetValue(var, MetaPointer(obj.pointer, obj.id)); }}
+            qVariantSetValue(var, eql_pointer(obj.pointer, obj.id)); }}
     return var; }
 
 static QVariantList toQVariantList(cl_object l_list) {
@@ -2412,7 +2412,7 @@ cl_object qsingle_shot(cl_object l_msec, cl_object l_fun) {
     ecl_process_env()->nvalues = 1;
     void* fun = getLispFun(l_fun);
     if(fun) {
-        new SingleShot(toInt(l_msec), fun);
+        new SingleShot(toInt(l_msec), fun); // see "delete this;" in "single_shot.h"
         return l_msec; }
     error_msg("QSINGLE-SHOT", LIST2(l_msec, l_fun));
     return Cnil; }

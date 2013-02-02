@@ -72,7 +72,7 @@ QVariant eql_fun(const QByteArray& fun,
                  QGenericArgument a6, QGenericArgument a7, QGenericArgument a8, QGenericArgument a9, QGenericArgument a10) {
     return eql_fun2(fun, ret_type, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10); }
 
-bool checkType(int id, const QByteArray& name) { return LObjects::checkType(id, name); }
+bool eql_check_type(int id, const QByteArray& name) { return LObjects::checkType(id, name); }
 
 QT_END_NAMESPACE
 

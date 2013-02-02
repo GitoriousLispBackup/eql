@@ -12,8 +12,8 @@ QT_BEGIN_NAMESPACE
 #define QSLOT(x)   "1"#x
 #define QSIGNAL(x) "2"#x
 
-#define Q_PTR(type, var) (checkType(qVariantValue<MetaPointer>(var).id, #type) \
-                         ? (type)qVariantValue<MetaPointer>(var).pointer \
+#define Q_PTR(type, var) (eql_check_type(qVariantValue<eql_pointer>(var).id, #type) \
+                         ? (type)qVariantValue<eql_pointer>(var).pointer \
                          : 0)
 
 extern void
@@ -43,18 +43,18 @@ eql_fun(const QByteArray&,
         QGenericArgument = QGenericArgument(),
         QGenericArgument = QGenericArgument());
 
-extern bool checkType(int, const QByteArray&);
+extern bool eql_check_type(int, const QByteArray&);
 
-struct MetaPointer {
+struct eql_pointer {
     void* pointer;
     int id;
 
-    MetaPointer()               : pointer(0), id(0) {}
-    MetaPointer(void* v, int i) : pointer(v), id(i) {}
+    eql_pointer()               : pointer(0), id(0) {}
+    eql_pointer(void* v, int i) : pointer(v), id(i) {}
 };
 
 QT_END_NAMESPACE
 
-Q_DECLARE_METATYPE(MetaPointer)
+Q_DECLARE_METATYPE(eql_pointer)
 
 #endif

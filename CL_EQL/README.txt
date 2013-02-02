@@ -105,7 +105,7 @@ QHELP / QMSG
 These are simple convenience functions, see "q.lisp".
 
   (qhelp "changed" "QLineEdit") ; see QAPROPOS
-  (qmsg 'hello)                 ; any (readable) Lisp object
+  (qmsg 'hello)                 ; message box
 
 
 NOTES

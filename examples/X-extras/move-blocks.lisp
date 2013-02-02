@@ -164,7 +164,7 @@
       (add-property-animation anim-group item2 "geometry" |QEasingCurve.InElastic|  1500 225)
       (add-property-animation anim-group item1 "geometry" |QEasingCurve.OutElastic| 1500 300)
       (qset timer "interval" 2500) 
-      (qfun group "addTransition" timer (qsignal "timeout()") (ensure-qt-object state-switcher))
+      (qfun group "addTransition" timer (qsignal "timeout()") state-switcher)
       (dolist (state (list state1 state2 state3 state4 state5 state6 state7))
         (add-state state-switcher state anim-group)))
     (x:do-with (qfun machine)

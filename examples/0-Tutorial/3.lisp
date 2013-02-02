@@ -7,7 +7,7 @@
       (label     (qnew "QLabel"
                        "text" "Name:"))
       (line-edit (qnew "QLineEdit"))
-      (layout (qnew "QHBoxLayout")))
+      (layout    (qnew "QHBoxLayout")))
   (dolist (w (list label line-edit))
     (qfun layout "addWidget" w))
   (qfun window "setLayout" layout)

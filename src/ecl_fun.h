@@ -270,12 +270,12 @@ struct EQL_EXPORT QtObject {
 };
 
 // for Qt_EQL
-struct MetaPointer {
+struct eql_pointer {
     void* pointer;
     int id;
 
-    MetaPointer()               : pointer(0), id(0) {}
-    MetaPointer(void* v, int i) : pointer(v), id(i) {}
+    eql_pointer()               : pointer(0), id(0) {}
+    eql_pointer(void* v, int i) : pointer(v), id(i) {}
 };
 
 struct QtMetaObject : private QObject {
@@ -298,6 +298,6 @@ EQL_EXPORT QtObject toQtObject(cl_object, cl_object = Cnil, bool* = 0);
 
 QT_END_NAMESPACE
 
-Q_DECLARE_METATYPE(MetaPointer)
+Q_DECLARE_METATYPE(eql_pointer)
 
 #endif

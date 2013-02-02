@@ -279,16 +279,18 @@
   (unless *eval-socket*
     (setf *eval-socket* (qnew "QLocalSocket")))
   (when (= |QLocalSocket.UnconnectedState| (qfun *eval-socket* "state"))
-    (qfun *eval-socket* "connectToServer" "EQL:eval-server")
-    (qfun *eval-socket* "waitForConnected")))
+    (x:do-with (qfun *eval-socket*)
+      ("connectToServer" "EQL:eval-server")
+      ("waitForConnected"))))
 
 (defun %remote-eval (exp)
   (%ini-remote-eval)
   (when (qfun *eval-socket* "isWritable")
     (let ((utf8 (qutf8 (prin1-to-string exp))))
-      (qfun *eval-socket* "write(QByteArray)" (x:string-to-bytes (format nil "~D ~A" (length utf8) utf8))))
-    (qfun *eval-socket* "waitForBytesWritten")
-    (qfun *eval-socket* "waitForReadyRead")
+      (x:do-with (qfun *eval-socket*)
+        ("write(QByteArray)" (x:string-to-bytes (format nil "~D ~A" (length utf8) utf8)))
+        ("waitForBytesWritten")
+        ("waitForReadyRead")))
     ;; data may arrive splitted in more blocks
     (let* ((block-1 (qfun *eval-socket* "readAll"))
            (pos-space (position (char-code #\Space) block-1)))

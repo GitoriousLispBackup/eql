@@ -93,7 +93,7 @@ public:
         clearBytes();
         QString name("EQL:eval-server");
         QLocalServer::removeServer(name);
-        listen(name),
+        listen(name);
         connect(this, SIGNAL(newConnection()), SLOT(newConnection())); }
 
     void clearBytes() {
