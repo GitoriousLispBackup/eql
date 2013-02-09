@@ -34,6 +34,14 @@
     ("rootIsDecorated" nil)
     ("selectionMode" |QAbstractItemView.ExtendedSelection|))
   (qfuns *items* "header" "hide")
+  (qfuns *items* "header" ("setStretchLastSection" t))
+  (qsingle-shot 0 (lambda ()
+                    (x:do-with (qfun *items*)
+                      ("resizeColumnToContents" 0)
+                      ("setMinimumHeight" (+ (* 2 (qfun *items* "frameWidth"))
+                                             (* (1+ (qfun *items* "topLevelItemCount"))
+                                                (fourth (qfun *items* "visualItemRect"
+                                                              (qfun *items* "topLevelItem" 0)))))))))
   ;; duration
   (x:do-with (qset *duration*)
     ("minimum" 1)
