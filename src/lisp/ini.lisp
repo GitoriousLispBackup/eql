@@ -78,7 +78,7 @@
     (concatenate 'string home file)))
 
 (defun %signal/slot (ch name)
-  (read-from-string (format nil "\"~C~A\"" ch name))) ; force creation of string literal
+  (values (read-from-string (format nil "\"~C~A\"" ch name)))) ; force creation of string literal
 
 (defun qsignal (name)
   "args: (name)

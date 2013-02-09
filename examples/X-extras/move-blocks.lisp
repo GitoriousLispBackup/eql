@@ -1,8 +1,61 @@
-;;; This is (kind of) a port of the Qt example "moveblocks"
+;;; This is a (slightely extended) port of the Qt example "moveblocks"
 
 (in-package :eql-user)
 
+;;; user interface
+
+(defvar *main* (qload-ui (in-home "examples/data/move-blocks.ui")))
+
+(defvar-ui *main*
+  *duration*
+  *easing-curve*
+  *items*
+  *pause*
+  *view*)
+
+(defun easing-curve-names ()
+  (let (names)
+    (do-external-symbols (var (find-package :eql))
+      (let ((name (symbol-name var)))
+        (when (x:starts-with "QEasingCurve." name)
+          (push name names))))
+    (mapcar (lambda (name) (subseq name #.(length "QEasingCurve.")))
+            (sort names 'string<))))
+
+(defun ini-ui ()
+  ;; easing curve
+  (x:do-with (qfun *easing-curve*)
+    ("setToolTip" "Change easing curve of selected items")
+    ("addItems" (easing-curve-names)))
+  (qconnect *easing-curve* "activated(QString)" 'change-easing-curve)
+  ;; items
+  (x:do-with (qset *items*)
+    ("columnCount" 2)
+    ("rootIsDecorated" nil)
+    ("selectionMode" |QAbstractItemView.ExtendedSelection|))
+  (qfuns *items* "header" "hide")
+  ;; duration
+  (x:do-with (qset *duration*)
+    ("minimum" 1)
+    ("maximum" 4000)
+    ("value"   1500))
+  (qconnect *duration* "valueChanged(int)" 'change-duration) 
+  ;; pause
+  (x:do-with (qset *pause*)
+    ("minimum" 1)
+    ("maximum" 1000)
+    ("value"   150))
+  (qconnect *pause* "valueChanged(int)" 'change-pause)
+  ;; sizes
+  (qset *view* "minimumSize" '(250 250))
+  (qfun *main* "resize" '(0 0)))
+
+;;; globals
+
 (defconstant +state-switch-event+ (+ |QEvent.User| 256))
+
+(defvar *timer* (qnew "QTimer"
+                      "singleShot" t))
 
 ;;; state-switch-event
 
@@ -54,14 +107,23 @@
                    (qfuns switch "machine" ("postEvent" (new-state-switch-event n))))))
     switch))
 
-;;;
+;;; main
 
-(defun new-graphics-rect-widget (color)
-  (let ((grect (qnew "QGraphicsWidget")))
-    (qoverride grect "paint(QPainter*,QStyleOptionGraphicsItem*,QWidget*)"
-               (lambda (painter _ _)
-                 (qfun painter "fillRect(QRectF,QColor)" (qfun grect "rect") color)))
-    grect))
+(let ((n 0))
+  (defun new-graphics-rect-widget (color)
+    (let ((grect (qnew "QGraphicsWidget")))
+      (qoverride grect "paint(QPainter*,QStyleOptionGraphicsItem*,QWidget*)"
+                 (lambda (painter _ _)
+                   (qfun painter "fillRect(QRectF,QColor)" (qfun grect "rect") color)))
+      ;; add item to *items* (QTreeWidget)
+      (let ((item (qnew "QTreeWidgetItem(QStringList)" (list (format nil "item ~D" (incf n))))))
+        (qfun item "setIcon" 0 (qnew "QIcon(QPixmap)"
+                                     (let ((pixmap (qnew "QPixmap(int,int)" 10 10)))
+                                       (qfun pixmap "fill" color)
+                                       pixmap)))
+        (qfun item "setText" 1 (if (evenp n) "InElastic" "OutElastic")) ; initial values 
+        (qfun *items* "addTopLevelItem" item))
+      grect)))
 
 (defun create-geometry-state (parent objects rects)
   (let ((result (qnew "QState(QState*)" parent)))
@@ -77,17 +139,44 @@
       ("addAnimation" animation))
     (qfun state-switcher "addTransition(QAbstractTransition*)" trans)))
 
-(defun add-property-animation (anim-group button property curve-type duration &optional pause)
-  (let ((anim (qnew "QPropertyAnimation(QObject*,QByteArray)" button (x:string-to-bytes property)))
-        (group (if pause
-                   (let ((group (qnew "QSequentialAnimationGroup(QObject*)" anim-group)))
-                     (qfun group "addPause" pause)
-                     group)
-                   anim-group)))
-    (x:do-with (qfun anim)
-      ("setDuration" duration)
-      ("setEasingCurve" (qnew "QEasingCurve(QEasingCurve::Type)" curve-type)))
-    (qfun group "addAnimation" anim)))
+(let (animations groups)
+  (defun add-property-animation (anim-group button property curve-type duration &optional pause)
+    (let ((anim (qnew "QPropertyAnimation(QObject*,QByteArray)" button (x:string-to-bytes property)))
+          (group (if pause
+                     (let ((group (qnew "QSequentialAnimationGroup(QObject*)" anim-group)))
+                       (qfun group "addPause" pause)
+                       (push group groups)
+                       group)
+                     anim-group)))
+      (x:do-with (qfun anim)
+        ("setDuration" duration)
+        ("setEasingCurve" (qnew "QEasingCurve(QEasingCurve::Type)" curve-type)))
+      (push anim animations)
+      (qfun group "addAnimation" anim)))
+  (defun change-easing-curve (name)
+    (let ((type (symbol-value (intern (concatenate 'string "QEasingCurve." name)))))
+      (dotimes (i (qfun *items* "topLevelItemCount"))
+        (let ((item (qfun *items* "topLevelItem" i)))
+          (when (qfun item "isSelected")
+            (qfun item "setText" 1 name)
+            (qfun (nth i animations) "setEasingCurve" (qnew "QEasingCurve(QEasingCurve::Type)" type)))))))
+  (defun change-duration (msec)
+    (dolist (anim animations)
+      (qfun anim "setDuration" msec))
+    (update-timer))
+  (defun change-pause (msec)
+    (let ((n 0))
+      (dolist (group groups)
+        (let ((anim (qfun group "takeAnimation" 1)))
+          (x:do-with (qfun group)
+            ("clear")
+            ("addPause" (* (incf n) msec))
+            ("addAnimation" anim)))))
+    (update-timer))
+  (defun update-timer ()
+    (qset *timer* "interval" (+ (qget *duration* "value")
+                                (* 4 (qget *pause* "value"))
+                                500))))
 
 (defun ini ()
   (let* ((item1 (new-graphics-rect-widget "tomato"))
@@ -96,13 +185,11 @@
          (item4 (new-graphics-rect-widget "lightyellow"))
          (items (list item1 item2 item3 item4))
          (scene      (qnew "QGraphicsScene(qreal...)" 0 0 300 300))
-         (window     (qnew "QGraphicsView(QGraphicsScene*)" scene))
          (machine    (qnew "QStateMachine"))
          (group      (qnew "QState"
                            "objectName" "group"))
-         (anim-group (qnew "QParallelAnimationGroup"))         
-         (timer      (qnew "QTimer"
-                           "singleShot" t)))
+         (anim-group (qnew "QParallelAnimationGroup")))         
+    (qfun *view* "setScene" scene)
     (qfun* item2 "QGraphicsItem" "setZValue" 1)
     (qfun* item3 "QGraphicsItem" "setZValue" 2)
     (qfun* item4 "QGraphicsItem" "setZValue" 3)
@@ -112,15 +199,14 @@
       ("addItem" item2)
       ("addItem" item3)
       ("addItem" item4))
-    (x:do-with (qfun window)
-      ("setFrameStyle" 0)
+    (x:do-with (qfun *view*)
       ("setAlignment" (logior |Qt.AlignLeft| |Qt.AlignTop|))
       ("setHorizontalScrollBarPolicy" |Qt.ScrollBarAlwaysOff|)
       ("setVerticalScrollBarPolicy"   |Qt.ScrollBarAlwaysOff|))
-    (qconnect group "entered()" timer "start()")
-    (qoverride window "resizeEvent(QResizeEvent*)"
+    (qconnect group "entered()" *timer* "start()")
+    (qoverride *view* "resizeEvent(QResizeEvent*)"
                (lambda (event)
-                 (qfun window "fitInView(QRectF)" (qfun scene "sceneRect"))
+                 (qfun *view* "fitInView(QRectF)" (qfun scene "sceneRect"))
                  (qcall-default)))
     (let ((state1 (create-geometry-state group items
                                          '((100 0 50 50)
@@ -163,16 +249,16 @@
       (add-property-animation anim-group item3 "geometry" |QEasingCurve.OutElastic| 1500 150)
       (add-property-animation anim-group item2 "geometry" |QEasingCurve.InElastic|  1500 225)
       (add-property-animation anim-group item1 "geometry" |QEasingCurve.OutElastic| 1500 300)
-      (qset timer "interval" 2500) 
-      (qfun group "addTransition" timer (qsignal "timeout()") state-switcher)
+      (qset *timer* "interval" 2500) 
+      (qfun group "addTransition" *timer* (qsignal "timeout()") state-switcher)
       (dolist (state (list state1 state2 state3 state4 state5 state6 state7))
         (add-state state-switcher state anim-group)))
     (x:do-with (qfun machine)
       ("addState" group)
       ("setInitialState" group)
       ("start"))
-    (x:do-with (qfun window)
-      ("resize" 300 300)
-      ("show"))))
+    (qfun *main* "show")))
 
-(ini)
+(progn
+  (ini-ui)
+  (ini))
