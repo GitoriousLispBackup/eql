@@ -2,13 +2,16 @@
 
 (in-package :eql-user)
 
+;;;
 ;;; user interface
+;;;
 
 (defvar *main* (qload-ui (in-home "examples/data/move-blocks.ui")))
 
 (defvar-ui *main*
   *duration*
   *easing-curve*
+  *graph*
   *items*
   *pause*
   *view*)
@@ -19,8 +22,8 @@
       (let ((name (symbol-name var)))
         (when (x:starts-with "QEasingCurve." name)
           (push name names))))
-    (mapcar (lambda (name) (subseq name #.(length "QEasingCurve.")))
-            (sort names 'string<))))
+    (sort (mapcar (lambda (name) (subseq name #.(length "QEasingCurve."))) names)
+          'string<)))
 
 (defun ini-ui ()
   ;; easing curve
@@ -35,13 +38,10 @@
     ("selectionMode" |QAbstractItemView.ExtendedSelection|))
   (qfuns *items* "header" "hide")
   (qfuns *items* "header" ("setStretchLastSection" t))
-  (qsingle-shot 0 (lambda ()
-                    (x:do-with (qfun *items*)
-                      ("resizeColumnToContents" 0)
-                      ("setMinimumHeight" (+ (* 2 (qfun *items* "frameWidth"))
-                                             (* (1+ (qfun *items* "topLevelItemCount"))
-                                                (fourth (qfun *items* "visualItemRect"
-                                                              (qfun *items* "topLevelItem" 0)))))))))
+  (qsingle-shot 0 (lambda () (qfun *items* "resizeColumnToContents" 0)))
+  ;; graph
+  (update-graph-pixmap |QEasingCurve.OutElastic| :ini)
+  (qoverride *graph* "paintEvent(QPaintEvent*)" 'paint-graph)
   ;; duration
   (x:do-with (qset *duration*)
     ("minimum" 1)
@@ -58,7 +58,66 @@
   (qset *view* "minimumSize" '(250 250))
   (qfun *main* "resize" '(0 0)))
 
-;;; globals
+(let ((n 0))
+  (defun add-to-items (color)
+    (let ((item (qnew "QTreeWidgetItem(QStringList)" (list (format nil "item ~D" (incf n))))))
+      (qfun item "setIcon" 0 (qnew "QIcon(QPixmap)"
+                                   (let ((pixmap (qnew "QPixmap(int,int)" 10 10)))
+                                     (qfun pixmap "fill" color)
+                                     pixmap)))
+      (qfun item "setText" 1 (if (oddp n) "InElastic" "OutElastic")) ; initial values 
+      (qfun *items* "addTopLevelItem" item))))
+
+;;; graph pixmap (easing curve)
+
+(let* ((steps 70)
+       (bx 5)
+       (by 30)
+       (progress bx)
+       pixmap)
+  (defun update-graph-pixmap (type &optional ini)
+    (when pixmap
+      (qdel pixmap))
+    (setf pixmap (qnew "QPixmap(int,int)" (+ (* 2 bx) steps) (+ (* 2 by) steps)))
+    (when ini
+      (qfun *graph* "setFixedSize" (qfun pixmap "size")))
+    (qlet ((curve   "QEasingCurve(QEasingCurve::Type)" type)
+           (painter "QPainter(QPixmap*)" pixmap)
+           (brush1  "QBrush(QColor)" "lightgray")
+           (brush2  "QBrush(QColor)" "cornflowerblue")
+           (pen1    "QPen(QBrush,qreal,Qt::PenStyle)" brush1 1 |Qt.DashLine|)
+           (pen2    "QPen(QBrush,qreal)" brush2 2))
+      (qfun pixmap "fill" "lightyellow")
+      (x:do-with (qfun painter)
+        ("setRenderHint" |QPainter.Antialiasing|)
+        ("setPen(QPen)" pen1)
+        ("drawLine(QLine)" (list bx by (+ bx steps) by))
+        ("drawLine(QLine)" (let ((y (+ steps by))) (list bx y (+ bx steps) y)))
+        ("setPen(QPen)" pen2))
+      (let (p*)
+        (dotimes (x (1+ steps))
+          (let ((p (list (+ bx x) (- (+ by steps)
+                                     (* steps (qfun curve "valueForProgress" (/ x steps)))))))
+            (qfun painter "drawLine(QLineF)" (append (or p* p) p))
+            (setf p* p))))))
+  (defun paint-graph (event)
+    (qlet ((p "QPainter(QWidget*)" *graph*))
+        (qfun p "drawPixmap(QPoint,QPixmap)" '(0 0) pixmap)
+        (when progress
+          (x:do-with (qfun p)
+            ("setPen(QColor)" "red")
+            ("drawLine(QLineF)" (list progress 0 progress (+ (* 2 by) steps)))))))
+  (defun update-graph-progress (ms)
+    (let ((max (qget *duration* "value")))
+      (setf progress (if (= max ms)
+                         nil
+                         (+ bx (* steps (/ ms max))))))
+    (qfun *graph* "update")
+    (qcall-default)))
+
+;;;
+;;; move blocks
+;;;
 
 (defconstant +state-switch-event+ (+ |QEvent.User| 256))
 
@@ -117,21 +176,13 @@
 
 ;;; main
 
-(let ((n 0))
-  (defun new-graphics-rect-widget (color)
-    (let ((grect (qnew "QGraphicsWidget")))
-      (qoverride grect "paint(QPainter*,QStyleOptionGraphicsItem*,QWidget*)"
-                 (lambda (painter _ _)
-                   (qfun painter "fillRect(QRectF,QColor)" (qfun grect "rect") color)))
-      ;; add item to *items* (QTreeWidget)
-      (let ((item (qnew "QTreeWidgetItem(QStringList)" (list (format nil "item ~D" (incf n))))))
-        (qfun item "setIcon" 0 (qnew "QIcon(QPixmap)"
-                                     (let ((pixmap (qnew "QPixmap(int,int)" 10 10)))
-                                       (qfun pixmap "fill" color)
-                                       pixmap)))
-        (qfun item "setText" 1 (if (evenp n) "InElastic" "OutElastic")) ; initial values 
-        (qfun *items* "addTopLevelItem" item))
-      grect)))
+(defun new-graphics-rect-widget (color)
+  (let ((grect (qnew "QGraphicsWidget")))
+    (qoverride grect "paint(QPainter*,QStyleOptionGraphicsItem*,QWidget*)"
+               (lambda (painter _ _)
+                 (qfun painter "fillRect(QRectF,QColor)" (qfun grect "rect") color)))
+    (add-to-items color) ; see *items*
+    grect))
 
 (defun create-geometry-state (parent objects rects)
   (let ((result (qnew "QState(QState*)" parent)))
@@ -147,27 +198,32 @@
       ("addAnimation" animation))
     (qfun state-switcher "addTransition(QAbstractTransition*)" trans)))
 
+(defmacro push* (item list)
+  `(setf ,list (nconc ,list (list ,item))))
+
 (let (animations groups)
   (defun add-property-animation (anim-group button property curve-type duration &optional pause)
     (let ((anim (qnew "QPropertyAnimation(QObject*,QByteArray)" button (x:string-to-bytes property)))
           (group (if pause
                      (let ((group (qnew "QSequentialAnimationGroup(QObject*)" anim-group)))
                        (qfun group "addPause" pause)
-                       (push group groups)
+                       (push* group groups)
                        group)
                      anim-group)))
       (x:do-with (qfun anim)
         ("setDuration" duration)
         ("setEasingCurve" (qnew "QEasingCurve(QEasingCurve::Type)" curve-type)))
-      (push anim animations)
-      (qfun group "addAnimation" anim)))
+      (push* anim animations)
+      (qfun group "addAnimation" anim)
+      anim))
   (defun change-easing-curve (name)
     (let ((type (symbol-value (intern (concatenate 'string "QEasingCurve." name)))))
       (dotimes (i (qfun *items* "topLevelItemCount"))
         (let ((item (qfun *items* "topLevelItem" i)))
           (when (qfun item "isSelected")
             (qfun item "setText" 1 name)
-            (qfun (nth i animations) "setEasingCurve" (qnew "QEasingCurve(QEasingCurve::Type)" type)))))))
+            (qfun (nth i animations) "setEasingCurve" (qnew "QEasingCurve(QEasingCurve::Type)" type)))))
+      (update-graph-pixmap type)))
   (defun change-duration (msec)
     (dolist (anim animations)
       (qfun anim "setDuration" msec))
@@ -211,11 +267,6 @@
       ("setAlignment" (logior |Qt.AlignLeft| |Qt.AlignTop|))
       ("setHorizontalScrollBarPolicy" |Qt.ScrollBarAlwaysOff|)
       ("setVerticalScrollBarPolicy"   |Qt.ScrollBarAlwaysOff|))
-    (qconnect group "entered()" *timer* "start()")
-    (qoverride *view* "resizeEvent(QResizeEvent*)"
-               (lambda (event)
-                 (qfun *view* "fitInView(QRectF)" (qfun scene "sceneRect"))
-                 (qcall-default)))
     (let ((state1 (create-geometry-state group items
                                          '((100 0 50 50)
                                            (150 0 50 50)
@@ -252,19 +303,26 @@
                                            (0   250 50 50)
                                            (250 250 50 50))))
           (state-switcher (new-state-switcher machine "stateSwitcher")))
-      (qfun group "setInitialState" state1)
-      (add-property-animation anim-group item4 "geometry" |QEasingCurve.InElastic|  1500)
-      (add-property-animation anim-group item3 "geometry" |QEasingCurve.OutElastic| 1500 150)
-      (add-property-animation anim-group item2 "geometry" |QEasingCurve.InElastic|  1500 225)
-      (add-property-animation anim-group item1 "geometry" |QEasingCurve.OutElastic| 1500 300)
+      (let ((anim (add-property-animation anim-group item1 "geometry" |QEasingCurve.OutElastic| 1500)))
+        (qoverride anim "updateCurrentTime(int)" 'update-graph-progress))
+      (add-property-animation anim-group item2 "geometry" |QEasingCurve.InElastic|  1500 150)
+      (add-property-animation anim-group item3 "geometry" |QEasingCurve.OutElastic| 1500 225)
+      (add-property-animation anim-group item4 "geometry" |QEasingCurve.InElastic|  1500 300)
       (qset *timer* "interval" 2500) 
-      (qfun group "addTransition" *timer* (qsignal "timeout()") state-switcher)
       (dolist (state (list state1 state2 state3 state4 state5 state6 state7))
-        (add-state state-switcher state anim-group)))
+        (add-state state-switcher state anim-group))
+      (x:do-with (qfun group)
+        ("setInitialState" state1)
+        ("addTransition" *timer* (qsignal "timeout()") state-switcher)))
     (x:do-with (qfun machine)
       ("addState" group)
-      ("setInitialState" group)
-      ("start"))
+      ("setInitialState" group))
+    (qconnect group "entered()" *timer* "start()")
+    (qoverride *view* "resizeEvent(QResizeEvent*)"
+               (lambda (event)
+                 (qfun *view* "fitInView(QRectF)" (qfun scene "sceneRect"))
+                 (qcall-default)))
+    (qsingle-shot 0 (lambda () (qfun machine "start")))
     (qfun *main* "show")))
 
 (progn
