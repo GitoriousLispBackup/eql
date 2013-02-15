@@ -1,6 +1,45 @@
-;;; This is a (slightely extended) port of the Qt example "moveblocks"
+;;; This is a (slightely extended) port of the Qt example "moveblocks".
+;;; Depends on plugin in "cpp/", needed for custom easing curve function.
+;;;
+;;; Exploring the features is left as an exercise...
 
 (in-package :eql-user)
+
+(setf *break-on-errors* t)
+
+;;;
+;;; cpp plugin
+;;;
+
+(defvar *c++*                 (qload-c++ (in-home "examples/X-extras/cpp/easing_curve")))
+(defvar *custom-easing-curve* (qfun+ *c++* "easingCurve"))
+
+(let ((sub 0)
+      (div 1)
+      function)
+  (defun custom-easing-function (progress)
+    (let ((y (ignore-errors
+               (eval (subst progress 'x function)))))
+      (if y
+          (/ (- y sub) div)
+          progress)))
+  (defun easing-function-edited ()
+    (labels ((call (x)
+               (ignore-errors (eval (subst x 'x function))))
+             (normalize ()
+               (setf sub (or (call 0)         0)
+                     div (or (- (call 1) sub) 1))
+               (when (zerop div)
+                 (setf div 1))))
+      (let* ((fun (ignore-errors
+                    (read-from-string (format nil "(progn ~A)" (qget *custom* "plainText")))))
+             (y   (ignore-errors
+                    (eval (subst 1 'x fun)))))
+        (when (numberp y)
+          (setf function fun)
+          (normalize)
+          (update-graph-pixmap *custom-easing-curve*))
+        (qset-color *custom* |QPalette.Base| (if y "white" "peachpuff"))))))
 
 ;;;
 ;;; user interface
@@ -9,6 +48,7 @@
 (defvar *main* (qload-ui (in-home "examples/data/move-blocks.ui")))
 
 (defvar-ui *main*
+  *custom*
   *duration*
   *easing-curve*
   *graph*
@@ -30,7 +70,23 @@
   (x:do-with (qfun *easing-curve*)
     ("setToolTip" "Change easing curve of selected items")
     ("addItems" (easing-curve-names)))
+  (qfun *easing-curve* "setCurrentIndex" (qfun *easing-curve* "findText" "InElastic"))
   (qconnect *easing-curve* "activated(QString)" 'change-easing-curve)
+  ;; custom easing curve function
+  (x:do-with (qset *custom*)
+    ("font" (qnew "QFont(QString,int)"
+                  #+darwin  "Monaco"      #+darwin  12
+                  #+linux   "Monospace"   #+linux   9
+                  #+windows "Courier New" #+windows 10))
+    ("plainText" (format nil ";; \"Custom\" easing function~
+                            ~%~
+                            ~%(defun ease (s)~
+                            ~%  (- (* (expt x 3) (1+ s))~
+                            ~%     (* (expt x 2) s)))~
+                            ~%~
+                            ~%(ease (- (* 15 x) 7))")))
+  (qconnect *custom* "textChanged()" 'easing-function-edited)
+  (easing-function-edited)
   ;; items
   (x:do-with (qset *items*)
     ("columnCount" 2)
@@ -40,7 +96,8 @@
   (qfuns *items* "header" ("setStretchLastSection" t))
   (qsingle-shot 0 (lambda () (qfun *items* "resizeColumnToContents" 0)))
   ;; graph
-  (update-graph-pixmap |QEasingCurve.OutElastic| :ini)
+  (qlet ((curve "QEasingCurve(QEasingCurve::Type)" |QEasingCurve.OutElastic|))
+    (update-graph-pixmap curve :ini))
   (qoverride *graph* "paintEvent(QPaintEvent*)" 'paint-graph)
   ;; duration
   (x:do-with (qset *duration*)
@@ -55,8 +112,13 @@
     ("value"   150))
   (qconnect *pause* "valueChanged(int)" 'change-pause)
   ;; sizes
-  (qset *view* "minimumSize" '(250 250))
-  (qfun *main* "resize" '(0 0)))
+  (qset *view*   "minimumSize" '(250 250)) ; initial size, see below
+  (qset *items*  "minimumWidth" 200)
+  (qset *custom* "minimumWidth" 250)
+  (qfun *main* "resize" '(0 0))
+  (qsingle-shot 0 (lambda ()
+                    (qfun *main* "show")
+                    (qset *view* "minimumSize" '(10 10)))))
 
 (let ((n 0))
   (defun add-to-items (color)
@@ -75,14 +137,13 @@
        (by 30)
        (progress bx)
        pixmap)
-  (defun update-graph-pixmap (type &optional ini)
+  (defun update-graph-pixmap (curve &optional ini)
     (when pixmap
       (qdel pixmap))
     (setf pixmap (qnew "QPixmap(int,int)" (+ (* 2 bx) steps) (+ (* 2 by) steps)))
     (when ini
       (qfun *graph* "setFixedSize" (qfun pixmap "size")))
-    (qlet ((curve   "QEasingCurve(QEasingCurve::Type)" type)
-           (painter "QPainter(QPixmap*)" pixmap)
+    (qlet ((painter "QPainter(QPixmap*)" pixmap)
            (brush1  "QBrush(QColor)" "lightgray")
            (brush2  "QBrush(QColor)" "cornflowerblue")
            (pen1    "QPen(QBrush,qreal,Qt::PenStyle)" brush1 1 |Qt.DashLine|)
@@ -102,11 +163,11 @@
             (setf p* p))))))
   (defun paint-graph (event)
     (qlet ((p "QPainter(QWidget*)" *graph*))
-        (qfun p "drawPixmap(QPoint,QPixmap)" '(0 0) pixmap)
-        (when progress
-          (x:do-with (qfun p)
-            ("setPen(QColor)" "red")
-            ("drawLine(QLineF)" (list progress 0 progress (+ (* 2 by) steps)))))))
+      (qfun p "drawPixmap(QPoint,QPixmap)" '(0 0) pixmap)
+      (when progress
+        (x:do-with (qfun p)
+          ("setPen(QColor)" "red")
+          ("drawLine(QLineF)" (list progress 0 progress (+ (* 2 by) steps)))))))
   (defun update-graph-progress (ms)
     (let ((max (qget *duration* "value")))
       (setf progress (if (= max ms)
@@ -219,11 +280,14 @@
   (defun change-easing-curve (name)
     (let ((type (symbol-value (intern (concatenate 'string "QEasingCurve." name)))))
       (dotimes (i (qfun *items* "topLevelItemCount"))
-        (let ((item (qfun *items* "topLevelItem" i)))
+        (let ((item (qfun *items* "topLevelItem" i))
+              (curve (if (string= "Custom" name)
+                     *custom-easing-curve*
+                     (qnew "QEasingCurve(QEasingCurve::Type)" type))))
           (when (qfun item "isSelected")
             (qfun item "setText" 1 name)
-            (qfun (nth i animations) "setEasingCurve" (qnew "QEasingCurve(QEasingCurve::Type)" type)))))
-      (update-graph-pixmap type)))
+            (qfun (nth i animations) "setEasingCurve" curve))
+          (update-graph-pixmap curve)))))
   (defun change-duration (msec)
     (dolist (anim animations)
       (qfun anim "setDuration" msec))
@@ -316,14 +380,13 @@
         ("addTransition" *timer* (qsignal "timeout()") state-switcher)))
     (x:do-with (qfun machine)
       ("addState" group)
-      ("setInitialState" group))
+      ("setInitialState" group)
+      ("start"))
     (qconnect group "entered()" *timer* "start()")
     (qoverride *view* "resizeEvent(QResizeEvent*)"
                (lambda (event)
                  (qfun *view* "fitInView(QRectF)" (qfun scene "sceneRect"))
-                 (qcall-default)))
-    (qsingle-shot 0 (lambda () (qfun machine "start")))
-    (qfun *main* "show")))
+                 (qcall-default)))))
 
 (progn
   (ini-ui)

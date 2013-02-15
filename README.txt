@@ -28,7 +28,7 @@ REQUIREMENTS
 BUILD (see also: "Windows Easy Guide" in doc/)
 =====
 
-(N.B. for rebuilding, please see the README-REBUILD.txt)
+(N.B. for rebuilding, please see README-REBUILD.txt)
 
   [Windows]
     You first need to adapt the file src/windows.pri (include & library paths).
@@ -99,8 +99,8 @@ In order to run (sort of) a top-level processing Qt events, do (requires ECL thr
   eql -qtpl
 
   Note: If you want to use "ecl-readline" together with "-qtpl", just compile
-  "eql/src/lisp/ecl-readline.lisp" (which depends on the "readline" C library).
-  It will then be loaded automatically on startup.
+        "eql/src/lisp/ecl-readline.lisp" (which depends on the "readline" C library).
+        It will then be loaded automatically on startup.
 
 
 
