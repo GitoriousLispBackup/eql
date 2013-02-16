@@ -21,6 +21,9 @@ static const QMetaObject* staticQtMetaObject = QtMetaObject::get();
 
 // meta types
 static const int T_bool_ok_pointer =                  qRegisterMetaType<bool*>("bool*");
+#if QT_VERSION < 0x040700
+static const int T_QEasingCurve =                     qRegisterMetaType<QEasingCurve>("QEasingCurve");
+#endif
 static const int T_QFileInfo =                        qRegisterMetaType<QFileInfo>("QFileInfo");
 static const int T_QFileInfoList =                    qRegisterMetaType<QFileInfoList>("QFileInfoList");
 static const int T_QGradient =                        qRegisterMetaType<QGradient>("QGradient");
@@ -885,7 +888,9 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case QMetaType::QCursor:                 p = new QCursor(toQCursor(l_arg)); break;
         case QMetaType::QDate:                   p = new QDate(*toQDatePointer(l_arg)); break;
         case QMetaType::QDateTime:               p = new QDateTime(*toQDateTimePointer(l_arg)); break;
+#if QT_VERSION >= 0x040700
         case QMetaType::QEasingCurve:            p = new QEasingCurve(*toQEasingCurvePointer(l_arg)); break;
+#endif
         case QMetaType::QFont:                   p = new QFont(*toQFontPointer(l_arg)); break;
         case QMetaType::QKeySequence:            p = new QKeySequence(*toQKeySequencePointer(l_arg)); break;
         case QMetaType::QLine:                   p = new QLine(toQLine(l_arg)); break;
@@ -931,6 +936,9 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
                 p = v; }
             else if("const char*" == sType) {
                 p = to_cstring_ptr(l_arg); }}
+#if QT_VERSION < 0x040700
+        else if(T_QEasingCurve == n)                     p = new QEasingCurve(*toQEasingCurvePointer(l_arg));
+#endif
         else if(T_QFileInfo == n)                        p = new QFileInfo(toQFileInfo(l_arg));
         else if(T_QFileInfoList == n)                    p = new QFileInfoList(toQFileInfoList(l_arg));
         else if(T_QGradient == n)                        p = new QGradient(toQGradient(l_arg));
@@ -1039,7 +1047,9 @@ cl_object to_lisp_arg(const MetaArg& arg) {
             case QMetaType::QCursor:                 l_ret = from_qcursor(*(QCursor*)p); break;
             case QMetaType::QDate:                   l_ret = from_qdate(*(QDate*)p); break;
             case QMetaType::QDateTime:               l_ret = from_qdatetime(*(QDateTime*)p); break;
+#if QT_VERSION >= 0x040700
             case QMetaType::QEasingCurve:            l_ret = from_qeasingcurve(*(QEasingCurve*)p); break;
+#endif
             case QMetaType::QFont:                   l_ret = from_qfont(*(QFont*)p); break;
             case QMetaType::QIcon:                   l_ret = from_qicon(*(QIcon*)p); break;
             case QMetaType::QImage:                  l_ret = from_qimage(*(QImage*)p); break;
@@ -1080,6 +1090,9 @@ cl_object to_lisp_arg(const MetaArg& arg) {
                     l_ret = make_base_string_copy(*(char**)p); }
                 else {
                     l_ret = ecl_make_unsigned_integer((cl_index)*(void**)p); }}
+#if QT_VERSION < 0x040700
+            else if(T_QEasingCurve == n)                     l_ret = from_qeasingcurve(*(QEasingCurve*)p);
+#endif
             else if(T_QFileInfo == n)                        l_ret = from_qfileinfo(*(QFileInfo*)p);
             else if(T_QFileInfoList == n)                    l_ret = from_qfileinfolist(*(QFileInfoList*)p);
             else if(T_QGradientStop == n)                    l_ret = from_qgradientstop(*(QGradientStop*)p);
