@@ -85,7 +85,7 @@ public:
     static void cleanUp();
     static uint unique() { return ++i_unique; }
     static void deleteNObject(int, void*, int = 0);
-    static const QMetaObject* staticMetaObject(const QByteArray&, int n = -1);
+    static const QMetaObject* staticMetaObject(const QByteArray&, int n = 0);
     static const char* nObjectSuperClass(const QByteArray&);
     static StrList overrideFunctions(const QByteArray&);
     static quint64 override_id(uint, int);

@@ -23,7 +23,7 @@
    #:qdel
    #:qdelete
    #:qdisconnect
-   #:qenum
+   #:qenums
    #:qeql
    #:qescape
    #:qeval
@@ -48,7 +48,6 @@
    #:qload-ui
    #:qlocal8bit
    #:qmessage-box
-   #:qmeta-enums
    #:qmsg
    #:qnew
    #:qnew-instance

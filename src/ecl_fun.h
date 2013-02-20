@@ -1,4 +1,4 @@
-// copyright (c) 2010-2012 Polos Ruetz
+// copyright (c) 2010-2013 Polos Ruetz
 
 #ifndef ECL_FUN_H
 #define ECL_FUN_H
@@ -221,7 +221,7 @@ cl_object qconnect2             (cl_object, cl_object, cl_object, cl_object);
 cl_object qcopy                 (cl_object);
 cl_object qdelete2              (cl_object, cl_object);
 cl_object qdisconnect2          (cl_object, cl_object, cl_object, cl_object);
-cl_object qenum                 (cl_object, cl_object);
+cl_object qenums2               (cl_object, cl_object);
 cl_object qescape               (cl_object);
 cl_object qexec2                (cl_object);
 cl_object qexit                 ();

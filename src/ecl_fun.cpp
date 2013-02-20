@@ -1,4 +1,4 @@
-// copyright (c) 2010-2012 Polos Ruetz
+// copyright (c) 2010-2013 Polos Ruetz
 
 #include "ecl_fun.h"
 #include "eql.h"
@@ -101,7 +101,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object((char*)"qcopy"),                  (cl_objectfn_fixed)qcopy,                 1);
     cl_def_c_function(c_string_to_object((char*)"%qdelete"),               (cl_objectfn_fixed)qdelete2,              2);
     cl_def_c_function(c_string_to_object((char*)"%qdisconnect"),           (cl_objectfn_fixed)qdisconnect2,          4);
-    cl_def_c_function(c_string_to_object((char*)"qenum"),                  (cl_objectfn_fixed)qenum,                 2);
+    cl_def_c_function(c_string_to_object((char*)"%qenums"),                (cl_objectfn_fixed)qenums2,               2);
     cl_def_c_function(c_string_to_object((char*)"qescape"),                (cl_objectfn_fixed)qescape,               1);
     cl_def_c_function(c_string_to_object((char*)"%qexec"),                 (cl_objectfn_fixed)qexec2,                1);
     cl_def_c_function(c_string_to_object((char*)"qexit"),                  (cl_objectfn_fixed)qexit,                 0);
@@ -113,7 +113,6 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object((char*)"%qload-c++"),             (cl_objectfn_fixed)qload_cpp,             2);
     cl_def_c_function(c_string_to_object((char*)"qload-ui"),               (cl_objectfn_fixed)qload_ui,              1);
     cl_def_c_function(c_string_to_object((char*)"qlocal8bit"),             (cl_objectfn_fixed)qlocal8bit,            1);
-    cl_def_c_function(c_string_to_object((char*)"qmeta-enums"),            (cl_objectfn_fixed)qmeta_enums,           0);
     cl_def_c_function(c_string_to_object((char*)"%qnew-instance"),         (cl_objectfn_fixed)qnew_instance2,        2);
     cl_def_c_function(c_string_to_object((char*)"%qobject-names"),         (cl_objectfn_fixed)qobject_names2,        1);
     cl_def_c_function(c_string_to_object((char*)"qok"),                    (cl_objectfn_fixed)qok,                   0);
@@ -2159,52 +2158,30 @@ cl_object qobject_names2(cl_object l_type) {
     cl_object l_ret = from_qstringlist(list);
     return l_ret; }
 
-cl_object qenum(cl_object l_name, cl_object l_key) { // for internal use only
+cl_object qenums2(cl_object l_class, cl_object l_name) {
+    /// args: (class-name &optional enum-name)
+    /// Returns all meta enums of the given <code>class-name</code>.
+    ///     (qenums "QLineEdit" "EchoMode") ; gives '("QLineEdit" ("EchoMode" ("Normal" . 0) ...))
     ecl_process_env()->nvalues = 1;
-    if(ECL_STRINGP(l_name) && ECL_STRINGP(l_key)) {
+    if(ECL_STRINGP(l_class)) {
+        QByteArray className(toCString(l_class));
         QByteArray name(toCString(l_name));
-        QByteArray key(toCString(l_key));
-        int i = name.indexOf("::");
-        if(i != -1) {
-            const QMetaObject* mo;
-            if(name.startsWith("Qt")) {
-                mo = staticQtMetaObject; }
-            else {
-                mo = LObjects::staticMetaObject(name.left(i)); }
-            if(mo) {
-                int n = mo->indexOfEnumerator(name.mid(i + 2));
-                if(n != -1) {
-                    QMetaEnum me = mo->enumerator(n);
-                    int val = (me.isFlag() ? me.keysToValue(key) : me.keyToValue(key));
-                    cl_object l_ret = ecl_make_integer(val);
-                    return l_ret; }}}}
-    error_msg("QENUM", LIST2(l_name, l_key));
+        const QMetaObject* mo = ("Qt" == className) ? staticQtMetaObject : LObjects::staticMetaObject(className);
+        if(mo) {
+            cl_object l_enums = Cnil;
+            for(int i = mo->enumeratorOffset(); i < mo->enumeratorCount(); ++i) {
+                QMetaEnum me(mo->enumerator(i));
+                if((l_name == Cnil) || (me.name() == name)) {
+                    cl_object l_keys = LIST1(from_cstring(me.name()));
+                    for(int j = 0; j < me.keyCount(); ++j) {
+                        QByteArray key(me.key(j));
+                        int val = (me.isFlag() ? me.keysToValue(key) : me.keyToValue(key));
+                        l_keys = CONS(CONS(from_cstring(key), ecl_make_integer(val)), l_keys); }
+                    l_enums = CONS(cl_nreverse(l_keys), l_enums); }}
+            l_enums = CONS(l_class, cl_nreverse(l_enums));
+            return l_enums; }}
+    error_msg("QENUMS", LIST2(l_class, l_name));
     return Cnil; }
-
-static cl_object enums(const QMetaObject* mo) {
-    cl_object l_enums = Cnil;
-    if(mo) {
-        for(int i = mo->enumeratorOffset(); i < mo->enumeratorCount(); ++i) {
-            QMetaEnum me(mo->enumerator(i));
-            if(Cnil == l_enums) {
-                l_enums = LIST1(from_cstring(me.scope())); }
-            cl_object l_keys = LIST1(from_cstring(me.name()));
-            for(int j = 0; j < me.keyCount(); ++j) {
-                l_keys = CONS(from_cstring(me.key(j)), l_keys); }
-            l_enums = CONS(cl_nreverse(l_keys), l_enums); }}
-    l_enums = cl_nreverse(l_enums);
-    return l_enums; }
-
-cl_object qmeta_enums() { // for internal use only
-    ecl_process_env()->nvalues = 1;
-    cl_object l_all_enums = Cnil;
-    Q_FOREACH(QByteArray name, LObjects::qNames) {
-        cl_object l_enums = enums(LObjects::staticMetaObject(name));
-        if(l_enums != Cnil) {
-            l_all_enums = CONS(l_enums, l_all_enums); }}
-    l_all_enums = CONS(enums(staticQtMetaObject), l_all_enums);
-    l_all_enums = cl_nreverse(l_all_enums);
-    return l_all_enums; }
 
 cl_object qapp() {
     /// args: ()
@@ -2250,8 +2227,8 @@ cl_object qexit() {
 
 cl_object qstatic_meta_object(cl_object l_class) {
     /// args: (class-name)
-    /// Returns the static QMetaObject of the given class name (for <code>QObject</code> inherited classes).
-    ///     (qstatic-meta-object "QWidget")
+    /// Returns the <code>::staticMetaObject</code> of the given class name.
+    ///     (qstatic-meta-object "QEasingCurve")
     ecl_process_env()->nvalues = 1;
     if(ECL_STRINGP(l_class)) {
         const QMetaObject* m = LObjects::staticMetaObject(toCString(l_class));

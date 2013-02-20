@@ -1,4 +1,4 @@
-;;; copyright (c) 2010-2012 Polos Ruetz
+;;; copyright (c) 2010-2013 Polos Ruetz
 
 (load "../src/lisp/x")
 (load "load-modules")
@@ -6,6 +6,7 @@
 (load "parsed/n-methods")
 (load "parsed/q-override")
 (load "parsed/n-override")
+(load "no-static-meta-object")
 
 (use-package :x)
 
@@ -927,8 +928,10 @@
                    ~%    override_lisp_functions[id] = fun; }~
                    ~%~
                    ~%const QMetaObject* LObjects::staticMetaObject(const QByteArray& name, int n) {~
-                   ~%    if(n == -1) {~
-                   ~%        n = LObjects::q_names.value(name); }~
+                   ~%    if(!n) {~
+                   ~%        n = LObjects::q_names.value(name, 0);~
+                   ~%        if(!n) {~
+                   ~%            n = -LObjects::n_names.value(name, 0); }}~
                    ~%    const QMetaObject* m = 0;~
                    ~%    switch(n) {"
                 (1- len-n)
@@ -938,6 +941,16 @@
       (format (module-stream module :ini) "~%const QMetaObject* staticMetaObject(int n) {~
                                            ~%    const QMetaObject* m = 0;~
                                            ~%    switch(n) {"))
+    (let ((i (1- (- (length *n-methods*)))))
+      (dolist (obj (reverse *n-methods*))
+        (incf i)
+        (let* ((class (class-name* obj))
+               (module (class-module class)))
+          (unless (find* class *no-static-meta-object*)
+            (format (if (eql :gui module)
+                        s
+                        (module-stream module :ini))
+                    "~%        case ~D: m = &~A::staticMetaObject; break;" i class)))))
     (let ((i 0))
       (dolist (obj *q-methods*)
         (incf i)

@@ -90,6 +90,9 @@
    Needed in functions which expect a <code>const char*</code> Qt slot (not needed in <code>qconnect</code>)."  
   (%signal/slot #\1 name))
 
+(defun qenums (class-name &optional enum-name)
+  (%qenums class-name enum-name))
+
 ;;; top-level / slime-mode processing Qt events (command line options "-qtpl" and "-slime")
 
 (defvar *top-level-form*  nil)
@@ -414,6 +417,7 @@
                   (cons 'qdelete              '(object))
                   (cons 'qdel                 '(object))
                   (cons 'qdisconnect          '(caller &optional signal receiver/function slot))
+                  (cons 'qenums               '(class-name &optional enum-name))
                   (cons 'qeql                 '(object1 object2))
                   (cons 'qescape              '(string))
                   (cons 'qexec                '(&optional milliseconds))

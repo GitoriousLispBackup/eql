@@ -2156,10 +2156,74 @@ void LObjects::setOverrideFun(quint64 id, void* fun) {
     override_lisp_functions[id] = fun; }
 
 const QMetaObject* LObjects::staticMetaObject(const QByteArray& name, int n) {
-    if(n == -1) {
-        n = LObjects::q_names.value(name); }
+    if(!n) {
+        n = LObjects::q_names.value(name, 0);
+        if(!n) {
+            n = -LObjects::n_names.value(name, 0); }}
     const QMetaObject* m = 0;
     switch(n) {
+        case -205: m = &QWindowStateChangeEvent::staticMetaObject; break;
+        case -203: m = &QWheelEvent::staticMetaObject; break;
+        case -202: m = &QWhatsThisClickedEvent::staticMetaObject; break;
+        case -183: m = &QTouchEvent::staticMetaObject; break;
+        case -181: m = &QTimerEvent::staticMetaObject; break;
+        case -179: m = &QTextTableFormat::staticMetaObject; break;
+        case -178: m = &QTextTableCellFormat::staticMetaObject; break;
+        case -175: m = &QTextListFormat::staticMetaObject; break;
+        case -171: m = &QTextImageFormat::staticMetaObject; break;
+        case -170: m = &QTextFrameFormat::staticMetaObject; break;
+        case -168: m = &QTextFormat::staticMetaObject; break;
+        case -161: m = &QTextCharFormat::staticMetaObject; break;
+        case -158: m = &QTextBlockFormat::staticMetaObject; break;
+        case -156: m = &QTabletEvent::staticMetaObject; break;
+        case -149: m = &QStatusTipEvent::staticMetaObject; break;
+        case -133: m = &QSizePolicy::staticMetaObject; break;
+        case -132: m = &QShowEvent::staticMetaObject; break;
+        case -131: m = &QShortcutEvent::staticMetaObject; break;
+        case -128: m = &QResizeEvent::staticMetaObject; break;
+        case -123: m = &QRadialGradient::staticMetaObject; break;
+        case -113: m = &QPalette::staticMetaObject; break;
+        case -110: m = &QPainter::staticMetaObject; break;
+        case -109: m = &QPaintEvent::staticMetaObject; break;
+        case -99: m = &QMoveEvent::staticMetaObject; break;
+        case -98: m = &QMouseEvent::staticMetaObject; break;
+        case -92: m = &QLocale::staticMetaObject; break;
+        case -90: m = &QLinearGradient::staticMetaObject; break;
+        case -86: m = &QKeyEvent::staticMetaObject; break;
+        case -82: m = &QInputMethodEvent::staticMetaObject; break;
+        case -81: m = &QInputEvent::staticMetaObject; break;
+        case -79: m = &QIconDragEvent::staticMetaObject; break;
+        case -77: m = &QHoverEvent::staticMetaObject; break;
+        case -74: m = &QHideEvent::staticMetaObject; break;
+        case -72: m = &QHelpEvent::staticMetaObject; break;
+        case -69: m = &QGraphicsSceneWheelEvent::staticMetaObject; break;
+        case -68: m = &QGraphicsSceneResizeEvent::staticMetaObject; break;
+        case -67: m = &QGraphicsSceneMoveEvent::staticMetaObject; break;
+        case -66: m = &QGraphicsSceneMouseEvent::staticMetaObject; break;
+        case -65: m = &QGraphicsSceneHoverEvent::staticMetaObject; break;
+        case -64: m = &QGraphicsSceneHelpEvent::staticMetaObject; break;
+        case -63: m = &QGraphicsSceneEvent::staticMetaObject; break;
+        case -62: m = &QGraphicsSceneDragDropEvent::staticMetaObject; break;
+        case -61: m = &QGraphicsSceneContextMenuEvent::staticMetaObject; break;
+        case -47: m = &QGradient::staticMetaObject; break;
+        case -46: m = &QGestureEvent::staticMetaObject; break;
+        case -37: m = &QFontDatabase::staticMetaObject; break;
+        case -36: m = &QFont::staticMetaObject; break;
+        case -35: m = &QFocusEvent::staticMetaObject; break;
+        case -34: m = &QFileOpenEvent::staticMetaObject; break;
+        case -31: m = &QEvent::staticMetaObject; break;
+        case -30: m = &QEasingCurve::staticMetaObject; break;
+        case -29: m = &QDynamicPropertyChangeEvent::staticMetaObject; break;
+        case -28: m = &QDropEvent::staticMetaObject; break;
+        case -27: m = &QDragMoveEvent::staticMetaObject; break;
+        case -26: m = &QDragLeaveEvent::staticMetaObject; break;
+        case -25: m = &QDragEnterEvent::staticMetaObject; break;
+        case -17: m = &QContextMenuEvent::staticMetaObject; break;
+        case -16: m = &QConicalGradient::staticMetaObject; break;
+        case -14: m = &QCloseEvent::staticMetaObject; break;
+        case -13: m = &QChildEvent::staticMetaObject; break;
+        case -7: m = &QActionEvent::staticMetaObject; break;
+        case -3: m = &QAccessibleEvent::staticMetaObject; break;
         case 1: m = &QAbstractAnimation::staticMetaObject; break;
         case 2: m = &QAbstractButton::staticMetaObject; break;
         case 3: m = &QAbstractItemDelegate::staticMetaObject; break;

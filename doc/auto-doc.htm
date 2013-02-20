@@ -87,6 +87,13 @@
 </pre>
 </p><br>
 <p>
+<b>QENUMS (class-name &optional enum-name)</b>
+<p>Returns all meta enums of the given <code>class-name</code>.</p>
+<pre>
+  (qenums "QLineEdit" "EchoMode") ; gives '("QLineEdit" ("EchoMode" ("Normal" . 0) ...))
+</pre>
+</p><br>
+<p>
 <b>QEQL (object1 object2)</b>
 <p>Returns <code>T</code> for same instances of a Qt class.<br>To test for same Qt classes only, do:</p>
 <pre>
@@ -329,9 +336,9 @@
 </p><br>
 <p>
 <b>QSTATIC-META-OBJECT (class-name)</b>
-<p>Returns the static QMetaObject of the given class name (for <code>QObject</code> inherited classes).</p>
+<p>Returns the <code>::staticMetaObject</code> of the given class name.</p>
 <pre>
-  (qstatic-meta-object "QWidget")
+  (qstatic-meta-object "QEasingCurve")
 </pre>
 </p><br>
 <p>
