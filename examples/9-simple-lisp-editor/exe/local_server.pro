@@ -1,5 +1,6 @@
 TEMPLATE     = app
-CONFIG      += no_keywords console release
+CONFIG      += no_keywords release
+CONFIG      += console
 INCLUDEPATH += ../../../src
 LIBS        += -lecl -L. -leql-local-server -L../../.. -leql
 TARGET       = eql_local_server

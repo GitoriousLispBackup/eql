@@ -2160,8 +2160,9 @@ cl_object qobject_names2(cl_object l_type) {
 
 cl_object qenums2(cl_object l_class, cl_object l_name) {
     /// args: (class-name &optional enum-name)
-    /// Returns all meta enums of the given <code>class-name</code>.
+    /// Returns the meta enum list of the given <code>class-name</code> and <code>enum-name</code> (see <code>Q_ENUMS</code> in Qt sources).<br>Omitting <code>enum-name</code> will return all meta enum lists  of the class/scope.
     ///     (qenums "QLineEdit" "EchoMode") ; gives '("QLineEdit" ("EchoMode" ("Normal" . 0) ...))
+    ///     (qenums "Qt")
     ecl_process_env()->nvalues = 1;
     if(ECL_STRINGP(l_class)) {
         QByteArray className(toCString(l_class));

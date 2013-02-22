@@ -88,9 +88,10 @@
 </p><br>
 <p>
 <b>QENUMS (class-name &optional enum-name)</b>
-<p>Returns all meta enums of the given <code>class-name</code>.</p>
+<p>Returns the meta enum list of the given <code>class-name</code> and <code>enum-name</code> (see <code>Q_ENUMS</code> in Qt sources).<br>Omitting <code>enum-name</code> will return all meta enum lists  of the class/scope.</p>
 <pre>
   (qenums "QLineEdit" "EchoMode") ; gives '("QLineEdit" ("EchoMode" ("Normal" . 0) ...))
+  (qenums "Qt")
 </pre>
 </p><br>
 <p>

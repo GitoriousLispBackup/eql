@@ -1,4 +1,4 @@
-;;; copyright (c) 2010-2012 Polos Ruetz
+;;; copyright (c) 2010-2013 Polos Ruetz
 
 (unless (eql:qrequire :network)
   (error "[EQL] module :network required")
@@ -43,6 +43,7 @@
 (defvar *terminal-out-buffer*    (make-string-output-stream))
 (defvar *gui-debug-io*           nil)
 (defvar *sharp-q*                nil) ; see "CL_EQL/"
+(defvar *silent*                 (find "-silent" (qfun "QCoreApplication" "arguments") :test 'string=))
 
 ;; REPL variables
 (defvar +   nil)
@@ -77,15 +78,21 @@
         nil)))
 
 (defun ini-streams ()
-  (setf *standard-output* (make-broadcast-stream *standard-output*
-                                                 *standard-output-buffer*)
-        *trace-output*    (make-broadcast-stream *trace-output*
-                                                 *trace-output-buffer*)
-        *error-output*    (make-broadcast-stream *error-output*
-                                                 *error-output-buffer*))
+  (if *silent*
+      (setf *standard-output* *standard-output-buffer*
+            *trace-output*    *trace-output-buffer*
+            *error-output*    *error-output-buffer*)
+      (setf *standard-output* (make-broadcast-stream *standard-output*
+                                                     *standard-output-buffer*)
+            *trace-output*    (make-broadcast-stream *trace-output*
+                                                     *trace-output-buffer*)
+            *error-output*    (make-broadcast-stream *error-output*
+                                                     *error-output-buffer*)))
   (setf *terminal-io*  (make-two-way-stream (two-way-stream-input-stream *terminal-io*)
-                                            (make-broadcast-stream (two-way-stream-output-stream *terminal-io*)
-                                                                   *terminal-out-buffer*))
+                                            (if *silent*
+                                                *terminal-out-buffer*
+                                                (make-broadcast-stream (two-way-stream-output-stream *terminal-io*)
+                                                                       *terminal-out-buffer*)))
         *query-io*     (make-two-way-stream (input-hook:new 'handle-query-io)
                                             (two-way-stream-output-stream *terminal-io*))
         *gui-debug-io* (make-two-way-stream (input-hook:new 'handle-debug-io)
