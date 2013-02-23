@@ -57,13 +57,9 @@
   *view*)
 
 (defun easing-curve-names ()
-  (let (names)
-    (do-external-symbols (var (find-package :eql))
-      (let ((name (symbol-name var)))
-        (when (x:starts-with "QEasingCurve." name)
-          (push name names))))
-    (sort (mapcar (lambda (name) (subseq name #.(length "QEasingCurve."))) names)
-          'string<)))
+  (let ((custom "Custom"))
+    (cons custom (sort (remove custom (mapcar 'car (cdadr (qenums "QEasingCurve" "Type"))) :test 'string=)
+                       'string<))))
 
 (defun ini-ui ()
   ;; easing curve

@@ -1,4 +1,4 @@
-// copyright (c) 2011-2012 Polos Ruetz
+// copyright (c) 2011-2013 Polos Ruetz
 
 #include "extras.h"
 #include <math.h>

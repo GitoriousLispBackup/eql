@@ -1,4 +1,4 @@
-;;; copyright (c) 2010-2012 Polos Ruetz
+;;; copyright (c) 2010-2013 Polos Ruetz
 
 ;; load all available modules for documentation purposes
 (dolist (module (list :help :network :opengl :sql :svg :webkit))

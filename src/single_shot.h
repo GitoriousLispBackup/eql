@@ -1,4 +1,4 @@
-// copyright (c) 2012 Polos Ruetz ; idea from QTimer::singleShot()
+// copyright (c) 2012-2013 Polos Ruetz ; idea from QTimer::singleShot()
 
 #ifndef SINGLE_SHOT_H
 #define SINGLE_SHOT_H

@@ -1,4 +1,4 @@
-// copyright (c) 2010-2012 Polos Ruetz
+// copyright (c) 2010-2013 Polos Ruetz
 
 #ifndef DYN_OBJECT_H
 #define DYN_OBJECT_H

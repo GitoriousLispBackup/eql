@@ -37,16 +37,9 @@
     (write-sequence data s)))
 
 (defun show-error (error)
-  (let (msg) 
-    (do-external-symbols (symbol)
-      (let ((name (symbol-name symbol)))
-        ;; take the error string from the Qt enumerator symbol name
-        (when (and (x:starts-with "QNetworkReply." name)
-                   (x:ends-with "Error" name)
-                   (= error (symbol-value symbol)))
-          (setf msg (format nil (tr "Download error: <span style='color:red; font-weight:bold;'>~A</span>")
-                            (subseq name (1+ (position #\. name)) (- (length name) #.(length "Error")))))
-          (return))))
+  (let ((msg (x:when-it (find error (cdadr (qenums "QNetworkReply" "NetworkError")) :key 'cdr)
+               (format nil (tr "Download error: <span style='color:red; font-weight:bold;'>~A</span>")
+                       (car x:it)))))
     (qfun "QMessageBox" "critical" nil "EQL" (or msg (tr "Unknown download error.")))))
 
 (download "http://planet.lisp.org/")

@@ -1,4 +1,4 @@
-// copyright (c) 2010-2012 Polos Ruetz
+// copyright (c) 2010-2013 Polos Ruetz
 
 #ifndef UI_LOADER_H
 #define UI_LOADER_H

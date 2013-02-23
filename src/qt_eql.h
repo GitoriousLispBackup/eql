@@ -1,4 +1,4 @@
-// copyright (c) 2011-2012 Polos Ruetz
+// copyright (c) 2011-2013 Polos Ruetz
 // see Qt_EQL example
 
 #ifndef QT_EQL_H

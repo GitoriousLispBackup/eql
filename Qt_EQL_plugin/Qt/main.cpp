@@ -1,5 +1,3 @@
-// copyright (c) 2012 Polos Ruetz
-
 #include <QApplication>
 #include <QWidget>
 #include "qt_application.h"

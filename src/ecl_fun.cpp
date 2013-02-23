@@ -1481,7 +1481,7 @@ enum { GarbageCollection = 1 };
 cl_object qdelete2(cl_object l_obj, cl_object l_later) {
     /// args: (object &optional later)
     /// alias: qdel
-    /// Deletes any Qt object, and sets the <code>pointer</code> value to <code>0</code>. Deleting a widget deletes all its child widgets, too.<br>If <code>later</code> is not <code>NIL</code>, the function <code>QObject::deleteLater()</code> will be called instead.<br>See <code>qlet</code> for local Qt objects.<br>Returns <code>T</code> if the object has effectively been deleted.
+    /// Deletes any Qt object, and sets the <code>pointer</code> value to <code>0</code>. Deleting a widget deletes all its child widgets, too.<br>If <code>later</code> is not <code>NIL</code>, the function <code>QObject::deleteLater()</code> will be called instead (but note: the <code>object</code> pointer will be set to <code>0</code> immediately.)<br>Returns <code>T</code> if the object has effectively been deleted.<br><br>See also <code>qlet</code> for local Qt objects.
     ///     (qdel widget)
     ///     (qdel socket :later)
     ecl_process_env()->nvalues = 1;

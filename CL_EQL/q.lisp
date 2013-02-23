@@ -1,4 +1,4 @@
-;;; copyright (c) 2012 Polos Ruetz
+;;; copyright (c) 2012-2013 Polos Ruetz
 ;;; 
 ;;;
 ;;; Run: (after building the plugin in "cpp/")
