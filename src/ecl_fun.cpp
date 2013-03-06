@@ -929,7 +929,9 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
                 QtObject o = toQtObject(l_arg);
                 ulong l = (ulong)o.pointer;
                 // cast from QObject to non QObject + multiple inheritance problem
-                if((o.id > 0) && LObjects::n_names.contains(sType.left(sType.length() - 1))) {
+                // e.g. QGraphicsObject, which inherits both QObject and QGraphicsItem
+                int q = sType.indexOf('Q');
+                if((o.id > 0) && LObjects::n_names.contains(sType.mid(q, sType.length() - q - 1))) {
                     l += sizeof(QObject); }
                 void** v = new void*((void*)l);
                 p = v; }
