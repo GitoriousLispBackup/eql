@@ -8,8 +8,8 @@
 TESTED WITH
 ===========
 
-* ECL 11.1.1 / 12.7.1 / 12.12.1 (threads + unicode)
-* Qt4.6, 4.7, 4.8
+* ECL 11.1.1 / 12.7.1 / 12.12.1 / 13.5.1 (all: threads + unicode)
+* Qt 4.6 (not recommended), 4.7, 4.8
 * Linux / OSX 10.4 / Windows XP, 7 (MSVC 2008, 2010)
 
 
@@ -19,6 +19,7 @@ REQUIREMENTS
 
 * ECL >= 11.1.1 threads + unicode
 * Qt4 >= 4.6 http://qt-project.org/downloads
+         (Qt5 is currently not planned to be supported in the near future)
 
 * Slime: any version that plays together with your ECL version (requires ECL threads)
          (on Windows you'll need ECL >= 12.12.1 / git >= 2012-09-01)

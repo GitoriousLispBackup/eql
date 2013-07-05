@@ -30,7 +30,7 @@
         (let ((model (qnew "QSqlRelationalTableModel")))
           (x:do-with (qfun model)
             ("setTable" "friends")
-            ("setRelation" 2 (qnew "QSqlRelation(QString,QString,QString)" "countries" "id" "country"))
+            ("setRelation" 2 (qnew "QSqlRelation(QString...)" "countries" "id" "country"))
             ("select"))
           (x:do-with (qfun *table-view*)
             ("setModel" model)
@@ -38,5 +38,14 @@
             ("resizeColumnsToContents")
             ("show"))))
       (qfun "QMessageBox" "critical" nil "EQL" (tr "Could not open database."))))
+
+(defun cell-string (row column)
+  (qfuns *table-view* "model" ("index" row column) "data" "toString"))
+
+(defun selected-cells ()
+  (mapcar (lambda (model-index)
+            (cons (qfun model-index "row")
+                  (qfun model-index "column")))
+          (qfuns *table-view* "selectionModel" "selectedIndexes")))
 
 (ini)

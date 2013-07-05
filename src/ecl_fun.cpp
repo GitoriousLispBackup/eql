@@ -42,8 +42,9 @@ static const int T_QList_QGraphicsWidget =            qRegisterMetaType<QList<QG
 static const int T_QList_QKeySequence =               qRegisterMetaType<QList<QKeySequence> >("QList<QKeySequence>");
 static const int T_QList_QListWidgetItem =            qRegisterMetaType<QList<QListWidgetItem*> >("QList<QListWidgetItem*>");
 static const int T_QList_QMdiSubWindow =              qRegisterMetaType<QList<QMdiSubWindow*> >("QList<QMdiSubWindow*>");
+static const int T_QModelIndexList =                  qRegisterMetaType<QModelIndexList>("QModelIndexList");
 static const int T_QList_QObject =                    qRegisterMetaType<QList<QObject*> >("QList<QObject*>");
-static const int T_QObjectList =                      qRegisterMetaType<QList<QObject*> >("QObjectList");
+static const int T_QObjectList =                      qRegisterMetaType<QObjectList>("QObjectList");
 static const int T_QList_QPolygonF =                  qRegisterMetaType<QList<QPolygonF> >("QList<QPolygonF>");
 static const int T_QList_QSize =                      qRegisterMetaType<QList<QSize> >("QList<QSize>");
 static const int T_QList_QStandardItem =              qRegisterMetaType<QList<QStandardItem*> >("QList<QStandardItem*>");
@@ -56,7 +57,7 @@ static const int T_QList_QTreeWidgetItem =            qRegisterMetaType<QList<QT
 static const int T_QList_QUndoStack =                 qRegisterMetaType<QList<QUndoStack*> >("QList<QUndoStack*>");
 static const int T_QList_QUrl =                       qRegisterMetaType<QList<QUrl> >("QList<QUrl>");
 static const int T_QList_QWidget =                    qRegisterMetaType<QList<QWidget*> >("QList<QWidget*>");
-static const int T_QWidgetList =                      qRegisterMetaType<QList<QWidget*> >("QWidgetList");
+static const int T_QWidgetList =                      qRegisterMetaType<QWidgetList>("QWidgetList");
 static const int T_QList_int =                        qRegisterMetaType<QList<int> >("QList<int>");
 static const int T_QList_qreal =                      qRegisterMetaType<QList<qreal> >("QList<qreal>");
 static const int T_QModelIndex =                      qRegisterMetaType<QModelIndex>("QModelIndex");
@@ -545,7 +546,7 @@ TO_QT_TYPE_PTR2(QImage, qimage)
 TO_QT_TYPE_PTR2(QKeySequence, qkeysequence)
 TO_QT_TYPE_PTR2(QLocale, qlocale)
 TO_QT_TYPE_PTR2(QMatrix, qmatrix)
-TO_QT_TYPE_PTR(QModelIndex, qmodelindex)
+TO_QT_TYPE_PTR2(QModelIndex, qmodelindex)
 TO_QT_TYPE_PTR(QPainterPath, qpainterpath)
 TO_QT_TYPE_PTR2(QPalette, qpalette)
 TO_QT_TYPE_PTR2(QPen, qpen)
@@ -594,6 +595,7 @@ TO_QT_LIST_PTR(QWidget)
 TO_QT_LIST_VAL(QByteArray)
 TO_QT_LIST_VAL(QFileInfo)
 TO_QT_LIST_VAL(QKeySequence)
+TO_QT_LIST_VAL(QModelIndex)
 TO_QT_LIST_VAL(QPolygonF)
 TO_QT_LIST_VAL(QSize)
 TO_QT_LIST_VAL(QTableWidgetSelectionRange)
@@ -798,6 +800,7 @@ TO_CL_LIST_PTR(QUndoStack, qundostack)
 TO_CL_LIST_VAL(QByteArray, qbytearray)
 TO_CL_LIST_VAL(QFileInfo, qfileinfo)
 TO_CL_LIST_VAL(QKeySequence, qkeysequence)
+TO_CL_LIST_VAL(QModelIndex, qmodelindex)
 TO_CL_LIST_VAL(QPolygonF, qpolygonf)
 TO_CL_LIST_VAL(QSize, qsize)
 TO_CL_LIST_VAL(QTableWidgetSelectionRange, qtablewidgetselectionrange)
@@ -958,6 +961,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         else if(T_QList_QKeySequence == n)               p = new QList<QKeySequence>(toQKeySequenceList(l_arg));
         else if(T_QList_QListWidgetItem == n)            p = new QList<QListWidgetItem*>(toQListWidgetItemList(l_arg));
         else if(T_QList_QMdiSubWindow == n)              p = new QList<QMdiSubWindow*>(toQMdiSubWindowList(l_arg));
+        else if(T_QModelIndexList == n)                  p = new QModelIndexList(toQModelIndexList(l_arg));
         else if((T_QObjectList == n) || (T_QList_QObject == n))
             p = new QList<QObject*>(toQObjectList(l_arg));
         else if(T_QList_QPolygonF == n)                  p = new QList<QPolygonF>(toQPolygonFList(l_arg));
@@ -1111,6 +1115,7 @@ cl_object to_lisp_arg(const MetaArg& arg) {
             else if(T_QList_QKeySequence == n)               l_ret = from_qkeysequencelist(*(QList<QKeySequence>*)p);
             else if(T_QList_QListWidgetItem == n)            l_ret = from_qlistwidgetitemlist(*(QList<QListWidgetItem*>*)p);
             else if(T_QList_QMdiSubWindow == n)              l_ret = from_qmdisubwindowlist(*(QList<QMdiSubWindow*>*)p);
+            else if(T_QModelIndexList == n)                  l_ret = from_qmodelindexlist(*(QModelIndexList*)p);
             else if((T_QObjectList == n) || (T_QList_QObject == n))
                 l_ret = from_qobjectlist(*(QList<QObject*>*)p);
             else if(T_QList_QPolygonF == n)                  l_ret = from_qpolygonflist(*(QList<QPolygonF>*)p);

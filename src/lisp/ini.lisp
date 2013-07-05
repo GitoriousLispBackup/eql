@@ -37,7 +37,8 @@
    A simple syntax for nested <code>qfun</code> calls.
        (qfuns object \"funA\" \"funB\" \"funC\")      ; expands to: (qfun (qfun (qfun object \"funA\") \"funB\") \"funC\")
        (qfuns object (\"funA\" 1) (\"funB\" a b c)) ; expands to: (qfun (qfun object \"funA\" 1) \"funB\" a b c)
-       (qfuns \"QApplication\" \"font\" \"family\")"
+       (qfuns \"QApplication\" \"font\" \"family\")
+       (qfuns *table-view* \"model\" (\"index\" 0 2) \"data\" \"toString\")"
   (let (form)
     (dolist (fun functions)
       (setf form (append (list 'qfun (or form object)) (x:ensure-list fun))))
