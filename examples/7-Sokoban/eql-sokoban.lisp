@@ -111,8 +111,7 @@
            (item (if (or pixmap
                          (probe-file file))
                      (qnew "QGraphicsPixmapItem(QPixmap)"
-                           (cdr (if pixmap
-                                    pixmap
+                           (cdr (or pixmap
                                     (first (push (cons file (qnew "QPixmap(QString)" file))
                                                  pixmaps)))))
                      (let ((item (qnew "QGraphicsTextItem"))) ; simple text item dummies (when pics are missing)

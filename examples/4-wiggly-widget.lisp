@@ -16,10 +16,9 @@
 (defparameter *step* 0)
 
 (defun start ()
-  (qset *wiggly* "font" (let ((font (qnew "QFont(QFont)" (qfun "QApplication" "font"))))
-                          (qfun font "setPointSize"
-                                (+ 20 (qfun font "pointSize")))
-                          font))
+  (qset *wiggly* "font" (x:let-it (qfun "QApplication" "font")
+                          (qfun x:it "setPointSize"
+                                (+ 20 (qfun x:it "pointSize")))))
   (qfun *wiggly* "setBackgroundRole" |QPalette.Light|)
   (let ((dlg (qnew "QDialog" "size" (list 600 200)))
         (vbox (qnew "QVBoxLayout")))

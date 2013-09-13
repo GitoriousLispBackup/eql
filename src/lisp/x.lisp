@@ -15,6 +15,7 @@
    #:if-it
    #:if-it*
    #:join
+   #:let-it
    #:split
    #:starts-with
    #:string-split
@@ -37,6 +38,11 @@
 (defmacro if-it* (exp then &optional else)
   `(let ((it* ,exp))
     (if it* ,then ,else)))
+
+(defmacro let-it (exp &body body)
+  `(let ((it ,exp))
+     ,@body
+     it))
 
 (defmacro when-it (exp &body body)
   `(let ((it ,exp))

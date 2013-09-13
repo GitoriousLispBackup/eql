@@ -120,9 +120,8 @@
   (defun add-to-items (color)
     (let ((item (qnew "QTreeWidgetItem(QStringList)" (list (format nil "item ~D" (incf n))))))
       (qfun item "setIcon" 0 (qnew "QIcon(QPixmap)"
-                                   (let ((pixmap (qnew "QPixmap(int,int)" 10 10)))
-                                     (qfun pixmap "fill" color)
-                                     pixmap)))
+                                   (x:let-it (qnew "QPixmap(int,int)" 10 10)
+                                     (qfun x:it "fill" color))))
       (qfun item "setText" 1 (if (oddp n) "InElastic" "OutElastic")) ; initial values 
       (qfun *items* "addTopLevelItem" item))))
 

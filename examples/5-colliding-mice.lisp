@@ -50,11 +50,10 @@
       mouse)))
 
 (defun brush (color &optional (style |Qt.SolidPattern|))
-  (let ((b (qnew "QBrush")))
-    (qfun b "setStyle" style)
+  (x:let-it (qnew "QBrush")
+    (qfun x:it "setStyle" style)
     (when color
-      (qfun b "setColor(QColor)" color))
-    b))
+      (qfun x:it "setColor(QColor)" color))))
 
 (let ((white (brush "white"))
       (black (brush "black"))

@@ -38,9 +38,8 @@
   (with-open-file (s (os-pathname file) :direction :input)
     (when (eql :set set-name)
       (setf *file-name* file))
-    (let ((str (make-string (file-length s))))
-      (read-sequence str s)
-      str)))
+    (x:let-it (make-string (file-length s))
+      (read-sequence x:it s))))
 
 (defun in-home* (name)
   (in-home (concatenate 'string "examples/9-simple-lisp-editor/" name)))

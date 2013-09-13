@@ -753,6 +753,7 @@
                 "if-it"
                 "if-it*"
                 "join"
+                "let-it"
                 "split"
                 "starts-with"
                 "string-split"
