@@ -282,6 +282,14 @@
           (nreverse line*))
         line)))
 
+(defun join-args (args)
+  (with-output-to-string (s)
+    (dolist (arg args)
+      (unless (x:empty-string arg)
+        (unless (string= ")" arg)
+          (write-char #\Space s))
+        (write-string arg s)))))
+
 (let (string-lines-pos)
   (defun qt-to-eql (qt-line &optional tr)
     (flet ((to-list (line)
@@ -426,12 +434,12 @@
                              ;; add quotes to method name
                              (setf (nth (1+ x:it) line) (prin1-to-string (nth (1+ x:it) line)))))
                          (let* ((string-list-p (x:ends-with "QStringList()" qt-line))
-                                (fun (format nil "~%~A   ~{ ~A~}~A"
+                                (fun (format nil "~%~A   ~A~A"
                                              (if tr "" "  ")
-                                             (let ((args (prepare-args line)))
-                                               (if string-list-p
-                                                   (append (nbutlast args 1) (list "(list")) ; start string-list
-                                                   args))
+                                             (join-args (let ((args (prepare-args line)))
+                                                          (if string-list-p
+                                                              (append (nbutlast args 1) (list "(list")) ; start string-list
+                                                              args)))
                                              (make-string (if (find "(tr " line :test 'x:starts-with)
                                                               (if (eql :start string-lines-pos) 0 1)
                                                               (- (count "(qfun" line :test 'string=) (if string-list-p 1 0)))
