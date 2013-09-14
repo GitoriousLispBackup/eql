@@ -2613,6 +2613,7 @@ public:
 class EQL_EXPORT N189 : public QObject { // QVariant
     Q_OBJECT
 public:
+    Q_INVOKABLE void* C(uint u, const QCursor& x1) { return new LVariant(u, x1); }
     Q_INVOKABLE void* C(uint u) { return new LVariant(u); }
     Q_INVOKABLE void* C(uint u, const QLocale& x1) { return new LVariant(u, x1); }
     Q_INVOKABLE void* C(uint u, const QRegExp& x1) { return new LVariant(u, x1); }

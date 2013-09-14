@@ -187,11 +187,18 @@
 ;;; visual automation
 
 (defun auto (buttons)
+  "Run visually the passed BUTTONS (either a string or a list of single button strings)."
+  (when (stringp buttons)
+    (setf buttons (x:split buttons)))
   (when buttons
     (qfun (qfind-child *main* (first buttons)) "animateClick" 300)
     (qsingle-shot 1300 (lambda () (auto (rest buttons))))))
 
 ;;; example / eql calculator -a
 
-(when (find "-a" (qfun "QApplication" "arguments") :test 'string=)
-  (auto '("AC" "2" "+" "3" "=" "*" "=" "1/x" "1/x" "+-" "blah")))
+(defun qarg (argument)
+  (find argument (qfun "QApplication" "arguments") :test 'string=))
+
+(when (qarg "-a")
+  (auto "AC 2 + 3 = * = 1/x 1/x +- blah"))
+

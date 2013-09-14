@@ -161,13 +161,16 @@
             super)))))
   (defun parse (type class s so no-new)
     ;; "bool QPainter::begin ( QPaintDevice * )": multiple inheritance problem
-    (let ((qpainter (and (string= "QPainter" class)
-                         (string= "public functions" type))))
-      (when qpainter
-        (dolist (device (list "QImage" "QPicture" "QPixmap" "QPrinter" "QWidget")) 
-          (format s "~%   \"new QPainter ( ~A * )\"~
-                     ~%   \"bool begin ( ~A * )\""
-                  device device)))
+    (let* ((pub (string= "public functions" type))
+           (qpainter (and pub (string= "QPainter" class)))
+           (qvariant (and pub (string= "QVariant" class))))
+      (cond (qpainter
+              (dolist (device (list "QImage" "QPicture" "QPixmap" "QPrinter" "QWidget")) 
+                (format s "~%   \"new QPainter ( ~A * )\"~
+                           ~%   \"bool begin ( ~A * )\""
+                        device device)))
+            (qvariant
+             (format s "~%   \"new QVariant ( const QCursor & )\"")))        
       (let ((static (starts-with "static" type))
             (protected (search "protected" type))
             (p (search* (format nil "<h2>~A</h2>" type) html)))

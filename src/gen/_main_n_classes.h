@@ -1898,6 +1898,7 @@ public:
 class LVariant : public QVariant {
     friend class N189;
 public:
+    LVariant(uint u, const QCursor& x1) : QVariant(x1), unique(u) {}
     LVariant(uint u) : unique(u) {}
     LVariant(uint u, const QLocale& x1) : QVariant(x1), unique(u) {}
     LVariant(uint u, const QRegExp& x1) : QVariant(x1), unique(u) {}

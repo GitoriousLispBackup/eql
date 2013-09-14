@@ -182,11 +182,14 @@
                                              (format nil "(qnew \"QVariant(~A)\" ~A)" type arg))))
                                       (variant-type
                                        (prog1
-                                           (format nil "(qnew \"QVariant(~A)\" ~S)"
+                                           (format nil "(qnew \"QVariant(~A)\" ~A)"
                                                    variant-type
-                                                   (if (string= "QChar" variant-type)
-                                                       (code-char (parse-integer arg))
-                                                       arg))
+                                                   (cond ((string= "QChar" variant-type)
+                                                          (prin1-to-string (code-char (parse-integer arg))))
+                                                         ((string= "QCursor" variant-type)
+                                                          (format nil "(qnew \"QCursor(Qt::CursorShape)\" ~A)" arg))
+                                                         (t
+                                                          (prin1-to-string arg))))
                                          (setf variant-type nil)))
                                       (url
                                         (setf url nil)

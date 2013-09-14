@@ -3819,6 +3819,7 @@
    "static bool greaterThan ( const QUrlInfo & , const QUrlInfo & , int )"
    "static bool lessThan ( const QUrlInfo & , const QUrlInfo & , int )")
   (("QVariant" . NIL)
+   "new QVariant ( const QCursor & )"
    "new QVariant ()"
    "new QVariant ( const QLocale & )"
    "new QVariant ( const QRegExp & )"
