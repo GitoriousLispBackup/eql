@@ -164,7 +164,7 @@
                     (list (format nil "(qfun \"QColor\" \"fromRgb\"~{ ~A~})" (rest args))))
                    (t
                     (let ((args* (copy-list args))
-                          variant variant-type url)
+                          variant variant-type cursor url)
                       (dotimes (i (length args))
                         (x:when-it (and (string= "(qfun" (nth i args))
                                         (find-qt-method (nth (1+ i) args) (nth (+ i 2) args)))
@@ -191,11 +191,17 @@
                                                          (t
                                                           (prin1-to-string arg))))
                                          (setf variant-type nil)))
+                                      (cursor
+                                        (setf cursor nil)
+                                        (format nil "(qnew \"QCursor(Qt::CursorShape)\" ~A)" arg))
                                       (url
                                         (setf url nil)
                                         (format nil "(qnew \"QUrl(QString)\" ~A)" arg))
                                       ((string= "QVariant" arg)
                                        (setf variant t)
+                                       "")
+                                      ((string= "QCursor" arg)
+                                       (setf cursor t)
                                        "")
                                       ((string= "QUrl" arg)
                                        (setf url t)
