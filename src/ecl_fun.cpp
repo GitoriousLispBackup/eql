@@ -130,6 +130,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object((char*)"qsuper-class-name"),      (cl_objectfn_fixed)qsuper_class_name,     1);
     cl_def_c_function(c_string_to_object((char*)"qtranslate"),             (cl_objectfn_fixed)qtranslate,            3);
     cl_def_c_function(c_string_to_object((char*)"qt-object-name"),         (cl_objectfn_fixed)qt_object_name,        1);
+    cl_def_c_function(c_string_to_object((char*)"qt-object-?"),            (cl_objectfn_fixed)qt_object_x,           1);
     cl_def_c_function(c_string_to_object((char*)"%qui-class"),             (cl_objectfn_fixed)qui_class2,            2);
     cl_def_c_function(c_string_to_object((char*)"qui-names"),              (cl_objectfn_fixed)qui_names,             1);
     cl_def_c_function(c_string_to_object((char*)"qutf8"),                  (cl_objectfn_fixed)qutf8,                 1);
@@ -401,6 +402,8 @@ static QString toQString(cl_object l_str) {
 
 static int classId(cl_object l_class) {
     QByteArray name(toCString(l_class));
+    if('L' == name.at(0)) {
+        name[0] = 'Q'; }
     int id = LObjects::q_names.value(name, 0);
     if(!id) {
         id = -LObjects::n_names.value(name, 0); }
@@ -2146,6 +2149,20 @@ cl_object qt_object_name(cl_object l_obj) {
     QtObject o = toQtObject(l_obj);
     cl_object l_ret = from_cstring(o.className());
     return l_ret; }
+
+cl_object qt_object_x(cl_object l_obj) { /// qt-object-?
+    /// args: (object)
+    /// Returns the specific <code>qt-object</code> of a generic <code>qt-object</code>.<br>Works for QObject inherited classes only.
+    ///     (qt-object-? (qfuns box-layout ("itemAt" 0) "widget"))
+    ecl_process_env()->nvalues = 1;
+    QtObject o = toQtObject(l_obj);
+    if(o.pointer && o.isQObject()) {
+        QObject* obj = (QObject*)o.pointer;
+        cl_object l_ret = qt_object_from_name(LObjects::vanillaQtSuperClassName(obj->metaObject()),
+                                              obj,
+                                              obj->property("EQL.unique").toUInt());
+        return l_ret; }
+    return Cnil; }
 
 cl_object qobject_names2(cl_object l_type) {
     /// args: (&optional type)

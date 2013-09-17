@@ -173,10 +173,12 @@
 
 (defmethod print-object ((obj qt-object) s)
   (print-unreadable-object (obj s :type nil :identity nil)
-    (format s "~A 0x~X~A"
-            (qt-object-name obj)
-            (qt-object-pointer obj)
-            (if (qt-object-finalize obj) " GC" ""))))
+    (let ((unique (qt-object-unique obj)))
+      (format s "~A 0x~X~A~A"
+              (qt-object-name obj)
+              (qt-object-pointer obj)
+              (if (zerop unique) "" (format nil " [~D]" unique))
+              (if (qt-object-finalize obj) " GC" "")))))
 
 (defmacro tr (src &optional con (n -1))
   "args: (source &optional context plural-number)
@@ -213,12 +215,16 @@
        (= (qt-object-id object1) (qt-object-id object2))"
   (let ((obj1* (ensure-qt-object obj1))
         (obj2* (ensure-qt-object obj2)))
-    (and (qt-object-p obj1*)
-         (qt-object-p obj2*)
-         (= (qt-object-id obj1*)
-            (qt-object-id obj2*))
-         (= (qt-object-pointer obj1*)
-            (qt-object-pointer obj2*)))))
+    (when (and (qt-object-p obj1*)
+               (qt-object-p obj2*))
+      (let ((u1 (qt-object-unique obj1*))
+            (u2 (qt-object-unique obj2*)))
+        (or (and (not (zerop u1))
+                 (= u1 u2))
+            (and (= (qt-object-id obj1*)
+                    (qt-object-id obj2*))
+                 (= (qt-object-pointer obj1*)
+                    (qt-object-pointer obj2*))))))))
 
 (defun qnull-object (obj)
   "args: (object)
@@ -465,6 +471,7 @@
                   (cons 'qt-object-p          '(object))
                   (cons 'qt-object-pointer    '(object))
                   (cons 'qt-object-unique     '(object))
+                  (cons 'qt-object-?          '(object))
                   (cons 'quic                 '(&optional (file.h "ui.h") (file.lisp "ui.lisp") (ui-package :ui)))
                   (cons 'qui-class            '(file-name &optional object-name))
                   (cons 'qui-names            '(file-name))

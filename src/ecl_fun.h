@@ -250,6 +250,7 @@ cl_object qstatic_meta_object   (cl_object);
 cl_object qsuper_class_name     (cl_object);
 cl_object qtranslate            (cl_object, cl_object, cl_object);
 cl_object qt_object_name        (cl_object);
+cl_object qt_object_x           (cl_object);
 cl_object qui_class2            (cl_object, cl_object);
 cl_object qui_names             (cl_object);
 cl_object qutf8                 (cl_object);

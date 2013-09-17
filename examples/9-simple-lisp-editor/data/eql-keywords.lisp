@@ -73,6 +73,7 @@
   "qt-object-p"
   "qt-object-pointer"
   "qt-object-unique"
+  "qt-object-?"
   "qtranslate"
   "quic"
   "qui-class"
