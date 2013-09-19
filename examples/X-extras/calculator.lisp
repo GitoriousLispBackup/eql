@@ -4,6 +4,7 @@
 ;;; - runs visual automations
 
 (defpackage :calculator
+  (:nicknames :clc)
   (:use :common-lisp :eql)
   (:export))
 

@@ -221,9 +221,9 @@
       (qmsg "<html>Class currently not available (see EQL modules and <b><code>qrequire</code></b>)."))))
 
 (defun populate-primitives ()
-  (dolist (type (list (cons "QByteArray"    "(vector -50 0 50)")
+  (dolist (type (list (cons "QByteArray"    "(vector -50 0 50) ; convenient for binary data exchange Lisp <-> C++")
                       (cons "QChar"         "#\\a")
-                      (cons "QColor"        "either name or object: \"#FF0000\" / \"red\" / (qnew \"QColor\")")
+                      (cons "QColor"        "(or \"#FF0000\" \"green\" (qnew \"QColor(QString)\" \"blue\"))")
                       (cons "QGradientStop" "(cons 0 color)")
                       (cons "QLine"         "(list x1 y1 x2 y2)")
                       (cons "QPoint"        "(list x y)")

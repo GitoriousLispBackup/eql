@@ -2153,6 +2153,7 @@ cl_object qt_object_name(cl_object l_obj) {
 cl_object qt_object_x(cl_object l_obj) { /// qt-object-?
     /// args: (object)
     /// Returns the specific <code>qt-object</code> of a generic <code>qt-object</code>.<br>Works for QObject inherited classes only.
+    ///     (qt-object-? (qfun widget "parentWidget"))
     ///     (qt-object-? (qfuns box-layout ("itemAt" 0) "widget"))
     ecl_process_env()->nvalues = 1;
     QtObject o = toQtObject(l_obj);

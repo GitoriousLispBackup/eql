@@ -174,8 +174,12 @@
 (defmethod print-object ((obj qt-object) s)
   (print-unreadable-object (obj s :type nil :identity nil)
     (let ((unique (qt-object-unique obj)))
-      (format s "~A 0x~X~A~A"
+      (format s "~A~A 0x~X~A~A"
               (qt-object-name obj)
+              (if (and (plusp (qt-object-id obj))
+                       (plusp (qt-object-pointer obj)))
+                  (format nil " ~S" (qfun obj "objectName"))
+                  "")
               (qt-object-pointer obj)
               (if (zerop unique) "" (format nil " [~D]" unique))
               (if (qt-object-finalize obj) " GC" "")))))
