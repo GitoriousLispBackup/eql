@@ -128,6 +128,11 @@
                     *slime-evaluated* t)))
           (progn
             (mp:with-lock (*top-level-lock*)
+              ;; needed to avoid unrecoverable BREAK on errors during READ (command line option "-qtpl")
+              (when (stringp *top-level-form*)
+                (handler-case (setf *top-level-form* (read-from-string *top-level-form*))
+                  (error (err)
+                    (princ err))))
               (si::feed-top-level))
             (finish-output)
             (qsingle-shot 0 'start-read-thread))))
@@ -138,7 +143,7 @@
   (si::tpl-prompt)
   (unless (find-package :ecl-readline)
     (princ "> "))
-  (let ((form (si::tpl-read)))
+  (let ((form (si::%tpl-read)))
     (mp:with-lock (*top-level-lock*)
       (setf *top-level-form* form)))
   (values))
@@ -492,6 +497,52 @@
     (let ((*debugger-hook* nil)
           (*tpl-level* -1))
       (%tpl))))
+
+(defun %read-lines ()
+  ;; allow multi-line expressions (command line option "-qtpl")
+  (let (lines)
+    (loop
+      (let ((line (read-line)))
+        (setf lines (if lines (format nil "~A~%~A" lines line) line))
+        (multiple-value-bind (form x)
+            (ignore-errors
+              (read-from-string (format nil "(~A)" (remove-if-not (lambda (ch) (find ch "()\"")) lines))))
+          (when (numberp x)
+            (return lines)))))))
+
+(defun %tpl-read (&aux (*read-suppress* nil))
+  (finish-output)
+  (loop
+    (case (peek-char nil *standard-input* nil :EOF)
+      ((#\))
+       (warn "Ignoring an unmatched right parenthesis.")
+       (read-char))
+      ((#\space #\tab)
+       (read-char))
+      ((#\newline #\return)
+       (read-char)
+       ;; avoid repeating prompt on successive empty lines:
+       (let ((command (tpl-make-command :newline "")))
+         (when command (return command))))
+      (:EOF
+       (terpri)
+       (return (tpl-make-command :EOF "")))
+      (#\:
+       (return (tpl-make-command (read-preserving-whitespace)
+                                 (read-line))))
+      (#\?
+       (read-char)
+       (case (peek-char nil *standard-input* nil :EOF)
+         ((#\space #\tab #\newline #\return :EOF)
+          (return (tpl-make-command :HELP (read-line))))
+         (t
+          (unread-char #\?)
+          (return (read-preserving-whitespace)))))
+      ;; We use READ-PRESERVING-WHITESPACE because with READ, if an
+      ;; error happens within the reader, and we perform a ":C" or
+      ;; (CONTINUE), the reader will wait for an inexistent #\Newline.
+      (t
+       (return (%read-lines))))))
 
 (defun %tpl (&key ((:commands *tpl-commands*) tpl-commands)
                  ((:prompt-hook *tpl-prompt-hook*) *tpl-prompt-hook*)
