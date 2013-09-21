@@ -756,14 +756,20 @@ static cl_object from_qgradientstop(const QGradientStop& gs) {
 static cl_object from_qwidgetlist(const QWidgetList& wl) {
     cl_object l_list = Cnil;
     Q_FOREACH(QWidget* w, wl) {
-        l_list = CONS(qt_object_from_name(w->metaObject()->className(), w), l_list); }
+        l_list = CONS(qt_object_from_name(w->metaObject()->className(),
+                                          w,
+                                          w->property("EQL.unique").toUInt()),
+                      l_list); }
     l_list = cl_nreverse(l_list);
     return l_list; }
 
 static cl_object from_qobjectlist(const QObjectList& ol) {
     cl_object l_list = Cnil;
     Q_FOREACH(QObject* o, ol) {
-        l_list = CONS(qt_object_from_name(o->metaObject()->className(), o), l_list); }
+        l_list = CONS(qt_object_from_name(o->metaObject()->className(),
+                                          o,
+                                          o->property("EQL.unique").toUInt()),
+                      l_list); }
     l_list = cl_nreverse(l_list);
     return l_list; }
 
@@ -1825,7 +1831,9 @@ cl_object qsender() {
     ecl_process_env()->nvalues = 1;
     QObject* curr = DynObject::currentSender;
     if(curr) {
-        cl_object l_ret = qt_object_from_name(curr->metaObject()->className(), curr);
+        cl_object l_ret = qt_object_from_name(curr->metaObject()->className(),
+                                              curr,
+                                              curr->property("EQL.unique").toUInt());
         return l_ret; }
     error_msg("QSENDER", Cnil);
     return Cnil; }

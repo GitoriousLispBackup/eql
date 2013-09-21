@@ -506,9 +506,16 @@
         (setf lines (if lines (format nil "~A~%~A" lines line) line))
         (multiple-value-bind (form x)
             (ignore-errors
-              (read-from-string (format nil "(~A)" (remove-if-not (lambda (ch) (find ch "()\"")) lines))))
+              (read-from-string (format nil "(~A)" (let ((lines* (copy-seq lines)))
+                                                     (x:while-it (position #\\ lines*)
+                                                       (setf lines* (replace lines* "  " :start1 x:it)))
+                                                     (remove-if-not (lambda (ch)
+                                                                      (find ch '(#\Space #\Newline #\( #\) #\" #\;)))
+                                                                    lines*)))))
           (when (numberp x)
-            (return lines)))))))
+            (return (if (find lines '("nil" "NIL" "()") :test 'string=) ; avoid strange BREAK on NIL values
+                        "'()"
+                        lines))))))))
 
 (defun %tpl-read (&aux (*read-suppress* nil))
   (finish-output)

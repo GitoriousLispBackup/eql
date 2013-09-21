@@ -187,13 +187,13 @@
 
 ;;; visual automation
 
-(defun auto (buttons)
+(defun auto (buttons &optional (milliseconds 500))
   "Runs visually the passed BUTTONS (either one string or a list of button strings)."
   (when (stringp buttons)
     (setf buttons (x:split buttons)))
   (when buttons
-    (qfun (qfind-child *main* (first buttons)) "animateClick" 200)
-    (qsingle-shot 1200 (lambda () (auto (rest buttons))))))
+    (qfun (qfind-child *main* (first buttons)) "animateClick" milliseconds)
+    (qsingle-shot (* 2 milliseconds) (lambda () (auto (rest buttons) milliseconds)))))
 
 ;;; example / eql calculator -a
 
