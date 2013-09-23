@@ -321,6 +321,12 @@
 (defun qexec (&optional ms)
   (%qexec ms))
 
+(defun qsleep (seconds)
+  "args: (seconds)
+   Similar to <code>sleep</code>, but continuing to process Qt events."
+  (%qexec (floor (* 1000 seconds)))
+  nil)
+
 (defun qfind-children (object &optional object-name class-name)
   (%qfind-children object object-name class-name))
 
@@ -472,6 +478,7 @@
                   (cons 'qset-property        '(object name value))
                   (cons 'qsignal              '(name))
                   (cons 'qsingle-shot         '(milliseconds function))
+                  (cons 'qsleep               '(seconds))
                   (cons 'qslot                '(name))
                   (cons 'qstatic-meta-object  '(class-name))
                   (cons 'qsuper-class-name    '(class-name))
@@ -504,6 +511,8 @@
     (loop
       (let ((line (read-line)))
         (setf lines (if lines (format nil "~A~%~A" lines line) line))
+        ;; test for balanced parenthesis; if yes, we have a READ-able expression
+        ;; (see READ-FROM-STRING in EVAL-TOP-LEVEL)
         (multiple-value-bind (form x)
             (ignore-errors
               (read-from-string (format nil "(~A)" (let ((lines* (copy-seq lines)))
@@ -513,7 +522,7 @@
                                                                       (find ch '(#\Space #\Newline #\( #\) #\" #\;)))
                                                                     lines*)))))
           (when (numberp x)
-            (return (if (find lines '("nil" "NIL" "()") :test 'string=) ; avoid strange BREAK on NIL values
+            (return (if (find (string-upcase lines) '("NIL" "()") :test 'string=) ; avoid strange BREAK on NIL values
                         "'()"
                         lines))))))))
 

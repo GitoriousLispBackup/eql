@@ -71,6 +71,7 @@
    #:qset-property
    #:qsignal
    #:qsingle-shot
+   #:qsleep
    #:qslot
    #:qstatic-meta-object
    #:qsuper-class-name
