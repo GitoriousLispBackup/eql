@@ -274,9 +274,9 @@
 (defun qinvoke-method* (object cast-class-name function-name &rest arguments)
   "args: (object cast-class-name function-name &rest arguments)
    alias: qfun*
-   Similar to <code>qinvoke-method</code>, additionally passing a class name, enforcing a cast to that class.
-       (qfun* event \"QKeyEvent\" \"key\")
-       (qfun* graphics-text-item \"QGraphicsItem\" \"setPos\" (list x y)) ; multiple inheritance problem"
+   Similar to <code>qinvoke-method</code>, additionally passing a class name, enforcing a cast to that class.<br>Note that this cast is not type safe (the same as a C cast, so dirty hacks are possible).
+       (qfun* graphics-text-item \"QGraphicsItem\" \"setPos\" (list x y)) ; multiple inheritance problem
+       (qfun* event \"QKeyEvent\" \"key\") ; not needed in QADD-EVENT-FILTER (see also QT-OBJECT-?)"
   (%qinvoke-method object cast-class-name function-name arguments))
 
 (defun qinvoke-method+ (object function-name &rest arguments)

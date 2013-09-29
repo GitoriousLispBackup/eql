@@ -39,14 +39,15 @@
     (incf *mouse-count*)
     (let ((mouse (make-mouse)))
       (qfun mouse "setRotation" (random (* 360 16)))
-      (qoverride mouse "boundingRect()"
-                 (lambda () '(-18.5 -22.5 36.5 60.5)))
-      (qoverride mouse "shape()"
-                 (lambda () shape))
-      (qoverride mouse "paint(QPainter*,QStyleOptionGraphicsItem*,QWidget*)"
-                 (lambda (painter s w) (paint mouse painter)))
-      (qoverride mouse "advance(int)"
-                 (lambda (step) (advance mouse step)))
+      (x:do-with (qoverride mouse)
+        ("boundingRect()"
+         (lambda () '(-18.5 -22.5 36.5 60.5)))
+        ("shape()"
+         (lambda () shape))
+        ("paint(QPainter*,QStyleOptionGraphicsItem*,QWidget*)"
+         (lambda (painter s w) (paint mouse painter)))
+        ("advance(int)"
+         (lambda (step) (advance mouse step))))
       mouse)))
 
 (defun brush (color &optional (style |Qt.SolidPattern|))
@@ -223,6 +224,16 @@
 (defun iv (&optional (ms 30))
   "Change move interval."
   (qset *timer* "interval" ms))
+
+(defun ? ()
+  ;; demo of QSLEEP (a SLEEP processing Qt events)
+  (let ((max (print (length (qfun *graphics-scene* "items")))))
+    (dotimes (n max)
+      (print (m-))
+      (qsleep 1))
+    (dotimes (n max)
+      (print (m+))
+      (qsleep 1))))
 
 #|
 (require :profile)

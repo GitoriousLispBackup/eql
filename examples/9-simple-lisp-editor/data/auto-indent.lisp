@@ -26,6 +26,7 @@
           lambda
           let
           let*
+          let-it
           loop
           multiple-value-bind
           qlet
@@ -37,4 +38,5 @@
           do-string
           when-it
           when-it*
-          while))
+          while
+          while-it))

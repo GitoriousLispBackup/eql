@@ -409,6 +409,158 @@ static int classId(cl_object l_class) {
         id = -LObjects::n_names.value(name, 0); }
     return id; }
 
+static const char* eventName(QEvent::Type type) {
+    const char* name = 0;
+    switch(type) {
+        case QEvent::AccessibilityHelp:
+        case QEvent::AccessibilityDescription:
+            name = "QAccessibleEvent";
+            break;
+        case QEvent::ActionRemoved:
+        case QEvent::ActionChanged:
+        case QEvent::ActionAdded:
+            name = "QActionEvent";
+            break;
+        case QEvent::ChildRemoved:
+        case QEvent::ChildPolished:
+        case QEvent::ChildAdded:
+            name = "QChildEvent";
+            break;
+        case QEvent::Clipboard:
+            name = "QClipboardEvent";
+            break;
+        case QEvent::Close:
+            name = "QCloseEvent";
+            break;
+        case QEvent::ContextMenu:
+            name = "QContextMenuEvent";
+            break;
+        case QEvent::DragEnter:
+            name = "QDragEnterEvent";
+            break;
+        case QEvent::DragLeave:
+            name = "QDragLeaveEvent";
+            break;
+        case QEvent::DragMove:
+            name = "QDragMoveEvent";
+            break;
+        case QEvent::Drop:
+            name = "QDropEvent";
+            break;
+        case QEvent::FileOpen:
+            name = "QFileOpenEvent";
+            break;
+        case QEvent::FocusOut:
+        case QEvent::FocusIn:
+            name = "QFocusEvent";
+            break;
+        case QEvent::GraphicsSceneContextMenu:
+            name = "QGraphicsSceneContextMenuEvent";
+            break;
+        case QEvent::GraphicsSceneDrop:
+        case QEvent::GraphicsSceneDragMove:
+        case QEvent::GraphicsSceneDragLeave:
+        case QEvent::GraphicsSceneDragEnter:
+            name = "QGraphicsSceneDragDropEvent";
+            break;
+        case QEvent::GraphicsSceneHelp:
+            name = "QHelpEvent";
+            break;
+        case QEvent::GraphicsSceneHoverMove:
+        case QEvent::GraphicsSceneHoverLeave:
+        case QEvent::GraphicsSceneHoverEnter:
+            name = "QGraphicsSceneHoverEvent";
+            break;
+        case QEvent::GraphicsSceneMouseRelease:
+        case QEvent::GraphicsSceneMousePress:
+        case QEvent::GraphicsSceneMouseMove:
+        case QEvent::GraphicsSceneMouseDoubleClick:
+            name = "QGraphicsSceneMouseEvent";
+            break;
+        case QEvent::GraphicsSceneMove:
+            name = "QGraphicsSceneMoveEvent";
+            break;
+        case QEvent::GraphicsSceneResize:
+            name = "QGraphicsSceneResizeEvent";
+            break;
+        case QEvent::GraphicsSceneWheel:
+            name = "QGraphicsSceneWheelEvent";
+            break;
+        case QEvent::Hide:
+            name = "QHideEvent";
+            break;
+        case QEvent::HoverMove:
+        case QEvent::HoverLeave:
+        case QEvent::HoverEnter:
+            name = "QHoverEvent";
+            break;
+        case QEvent::IconDrag:
+            name = "QIconDragEvent";
+            break;
+        case QEvent::InputMethod:
+            name = "QInputMethodEvent";
+            break;
+        case QEvent::KeyRelease:
+        case QEvent::KeyPress:
+            name = "QKeyEvent";
+            break;
+        case QEvent::MouseMove:
+        case QEvent::MouseButtonRelease:
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseButtonDblClick:
+            name = "QMouseEvent";
+            break;
+        case QEvent::Move:
+            name = "QMoveEvent";
+            break;
+        case QEvent::Paint:
+            name = "QPaintEvent";
+            break;
+        case QEvent::Resize:
+            name = "QResizeEvent";
+            break;
+        case QEvent::Shortcut:
+            name = "QShortcutEvent";
+            break;
+        case QEvent::ShortcutOverride:
+            name = "QKeyEvent";
+            break;
+        case QEvent::Show:
+            name = "QShowEvent";
+            break;
+        case QEvent::StatusTip:
+            name = "QStatusTipEvent";
+            break;
+        case QEvent::TabletLeaveProximity:
+        case QEvent::TabletEnterProximity:
+        case QEvent::TabletRelease:
+        case QEvent::TabletPress:
+        case QEvent::TabletMove:
+            name = "QTabletEvent";
+            break;
+        case QEvent::Timer:
+            name = "QTimerEvent";
+            break;
+        case QEvent::WhatsThis:
+        case QEvent::ToolTip:
+            name = "QHelpEvent";
+            break;
+        case QEvent::Wheel:
+            name = "QWheelEvent";
+            break;
+        case QEvent::TouchEnd:
+        case QEvent::TouchUpdate:
+        case QEvent::TouchBegin:
+            name = "QTouchEvent";
+            break;
+        case QEvent::GestureOverride:
+        case QEvent::Gesture:
+            name = "QGestureEvent";
+            break;
+        default:
+            name = 0; }
+    return name; }
+
 static QByteArray qtObjectName(cl_object l_obj) {
     STATIC_SYMBOL_PKG(s_ensure_qt_object, (char*)"ENSURE-QT-OBJECT", (char*)"EQL")
     STATIC_SYMBOL_PKG(s_qt_object_id,     (char*)"QT-OBJECT-ID",     (char*)"EQL")
@@ -1947,8 +2099,8 @@ QVariant callOverrideFun(void* fun, int id, const void** args, quint64 override_
 
 cl_object qadd_event_filter(cl_object l_obj, cl_object l_ev, cl_object l_fun) {
     /// args: (object event function)
-    /// Convenience function. Adds a Lisp function to be called on a given event type.<br>If the object argument is <code>NIL</code>, the event will be captured for the whole application.<br>If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.<br><br>Returns a handle which can be used to remove the filter, see <code>qremove-event-filter</code>.<br><br>See also <code>qoverride</code> for <code>QObject::eventFilter(QObject*,QEvent*)</code> and <br><code>QObject::installEventFilter(QObject*)</code>,<br><code>QObject::removeEventFilter(QObject*)</code>.
-    ///     (qadd-event-filter nil |QEvent.MouseButtonPress| (lambda (obj ev) (print obj) nil))
+    /// Convenience function. Adds a Lisp function to be called on a given event type.<br>If the object argument is <code>NIL</code>, the event will be captured for the whole application.<br>If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.<br><br>Returns a handle which can be used to remove the filter, see <code>qremove-event-filter</code>.<br><br>See also <code>qoverride</code> for <code>QObject::eventFilter(QObject*,QEvent*)</code> and <br><code>QObject::installEventFilter(QObject*)</code>,<br><code>QObject::removeEventFilter(QObject*)</code>.<br><br>The event class corresponds to the respective event type (no cast needed).
+    ///     (qadd-event-filter nil |QEvent.MouseButtonPress| (lambda (object mouse-event) (print object) nil))
     ecl_process_env()->nvalues = 1;
     void* fun = getLispFun(l_fun);
     if(fun) {
@@ -1978,7 +2130,7 @@ bool callEventFun(void* fun, QObject* obj, QEvent* ev) {
             obj = obj->parent(); }
         return (call_lisp_fun((cl_object)fun,
                               LIST2(qt_object_from_name(obj->metaObject()->className(), (void*)obj),
-                                    qt_object_from_name("QEvent", (void*)ev)))
+                                    qt_object_from_name(eventName(ev->type()), (void*)ev)))
                 != Cnil); }
     return true; }
 
@@ -2160,18 +2312,26 @@ cl_object qt_object_name(cl_object l_obj) {
 
 cl_object qt_object_x(cl_object l_obj) { /// qt-object-?
     /// args: (object)
-    /// Returns the specific <code>qt-object</code> of a generic <code>qt-object</code>.<br>Works for QObject inherited classes only.
+    /// Returns the specific <code>qt-object</code> of a generic <code>qt-object</code>.<br>Works for QObject and QEvent inherited classes only.
     ///     (qt-object-? (qfun widget "parentWidget"))
     ///     (qt-object-? (qfuns box-layout ("itemAt" 0) "widget"))
+    ///     (qt-object-? event)
     ecl_process_env()->nvalues = 1;
     QtObject o = toQtObject(l_obj);
-    if(o.pointer && o.isQObject()) {
-        QObject* obj = (QObject*)o.pointer;
-        cl_object l_ret = qt_object_from_name(LObjects::vanillaQtSuperClassName(obj->metaObject()),
-                                              obj,
-                                              obj->property("EQL.unique").toUInt());
-        return l_ret; }
-    return Cnil; }
+    cl_object l_ret = l_obj;
+    if(o.pointer) {
+        // QObject
+        if(o.isQObject()) {
+            QObject* obj = (QObject*)o.pointer;
+            l_ret = qt_object_from_name(LObjects::vanillaQtSuperClassName(obj->metaObject()),
+                                        obj,
+                                        obj->property("EQL.unique").toUInt()); }
+        // QEvent
+        else if(o.id == -LObjects::n_names.value("QEvent")) {
+            const char* name = eventName(((QEvent*)o.pointer)->type());
+            if(name) {
+                l_ret = qt_object_from_name(name, o.pointer, o.unique); }}}
+    return l_ret; }
 
 cl_object qobject_names2(cl_object l_type) {
     /// args: (&optional type)
@@ -2233,7 +2393,7 @@ cl_object qprocess_events() {
 
 cl_object qexec2(cl_object l_milliseconds) {
     /// args: (&optional milliseconds)
-    /// Convenience function to call <code>QApplication::exec()</code>.<br>Optionally pass the time in milliseconds after which <code>QEventLoop::exit()</code> will be called.
+    /// Convenience function to call <code>QApplication::exec()</code>.<br>Optionally pass the time in milliseconds after which <code>QEventLoop::exit()</code> will be called.<br>See also <code>qsleep</code>.
     ecl_process_env()->nvalues = 1;
     if(l_milliseconds != Cnil) {
         static QTimer* timer = 0;

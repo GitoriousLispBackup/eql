@@ -12,9 +12,9 @@
 </p><br>
 <p>
 <b>QADD-EVENT-FILTER (object event function)</b>
-<p>Convenience function. Adds a Lisp function to be called on a given event type.<br>If the object argument is <code>NIL</code>, the event will be captured for the whole application.<br>If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.<br><br>Returns a handle which can be used to remove the filter, see <code>qremove-event-filter</code>.<br><br>See also <code>qoverride</code> for <code>QObject::eventFilter(QObject*,QEvent*)</code> and <br><code>QObject::installEventFilter(QObject*)</code>,<br><code>QObject::removeEventFilter(QObject*)</code>.</p>
+<p>Convenience function. Adds a Lisp function to be called on a given event type.<br>If the object argument is <code>NIL</code>, the event will be captured for the whole application.<br>If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.<br><br>Returns a handle which can be used to remove the filter, see <code>qremove-event-filter</code>.<br><br>See also <code>qoverride</code> for <code>QObject::eventFilter(QObject*,QEvent*)</code> and <br><code>QObject::installEventFilter(QObject*)</code>,<br><code>QObject::removeEventFilter(QObject*)</code>.<br><br>The event class corresponds to the respective event type (no cast needed).</p>
 <pre>
-  (qadd-event-filter nil |QEvent.MouseButtonPress| (lambda (obj ev) (print obj) nil))
+  (qadd-event-filter nil |QEvent.MouseButtonPress| (lambda (object mouse-event) (print object) nil))
 </pre>
 </p><br>
 <p>
@@ -111,7 +111,7 @@
 </p><br>
 <p>
 <b>QEXEC (&optional milliseconds)</b>
-<p>Convenience function to call <code>QApplication::exec()</code>.<br>Optionally pass the time in milliseconds after which <code>QEventLoop::exit()</code> will be called.</p>
+<p>Convenience function to call <code>QApplication::exec()</code>.<br>Optionally pass the time in milliseconds after which <code>QEventLoop::exit()</code> will be called.<br>See also <code>qsleep</code>.</p>
 </p><br>
 <p>
 <b>QEXIT ()</b>
@@ -161,10 +161,10 @@
 <b>QINVOKE-METHOD* (object cast-class-name function-name &rest arguments)</b>
 <br>
 <b>QFUN*</b>
-<p>Similar to <code>qinvoke-method</code>, additionally passing a class name, enforcing a cast to that class.</p>
+<p>Similar to <code>qinvoke-method</code>, additionally passing a class name, enforcing a cast to that class.<br>Note that this cast is not type safe (the same as a C cast, so dirty hacks are possible).</p>
 <pre>
-  (qfun* event "QKeyEvent" "key")
   (qfun* graphics-text-item "QGraphicsItem" "setPos" (list x y)) ; multiple inheritance problem
+  (qfun* event "QKeyEvent" "key") ; not needed in QADD-EVENT-FILTER (see also QT-OBJECT-?)
 </pre>
 </p><br>
 <p>
@@ -356,10 +356,11 @@
 </p><br>
 <p>
 <b>QT-OBJECT-? (object)</b>
-<p>Returns the specific <code>qt-object</code> of a generic <code>qt-object</code>.<br>Works for QObject inherited classes only.</p>
+<p>Returns the specific <code>qt-object</code> of a generic <code>qt-object</code>.<br>Works for QObject and QEvent inherited classes only.</p>
 <pre>
   (qt-object-? (qfun widget "parentWidget"))
   (qt-object-? (qfuns box-layout ("itemAt" 0) "widget"))
+  (qt-object-? event)
 </pre>
 </p><br>
 <p>

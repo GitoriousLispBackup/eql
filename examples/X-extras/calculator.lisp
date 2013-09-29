@@ -92,7 +92,8 @@
 
 (defun clear-clicked ()
   (setf *value2* nil)
-  (clear-display))
+  (clear-display)
+  (qfun *main* "adjustSize"))
 
 (defun operate ()
   (x:when-it (funcall-protect *operation* *value2* *value1*)
@@ -187,10 +188,23 @@
 
 ;;; visual automation
 
-(defun auto (buttons &optional (milliseconds 500))
+(defun prepare (buttons)
+  (flet ((normalize (string)
+           (string-trim " " (with-output-to-string (s)
+                              (x:do-string (ch string)
+                                (unless (char= #\Space ch)
+                                  (format s "~C " ch)))))))
+    (let ((buttons* (normalize buttons)))
+      (dolist (name (sort (mapcar (lambda (o) (qget o "objectName"))
+                                  (qfind-children *main* nil "QToolButton"))
+                          '> :key 'length))
+        (setf buttons* (x:string-substitute name (normalize name) buttons*)))
+      (x:split buttons*))))
+
+(defun auto (buttons &optional (milliseconds 400))
   "Runs visually the passed BUTTONS (either one string or a list of button strings)."
   (when (stringp buttons)
-    (setf buttons (x:split buttons)))
+    (setf buttons (prepare buttons)))
   (when buttons
     (qfun (qfind-child *main* (first buttons)) "animateClick" milliseconds)
     (qsingle-shot (* 2 milliseconds) (lambda () (auto (rest buttons) milliseconds)))))
@@ -201,5 +215,4 @@
   (find argument (qfun "QApplication" "arguments") :test 'string=))
 
 (when (qarg "-a")
-  (auto "AC 1 . 5 + 3 . 5 = * = 1/x 1/x +- blah"))
-
+  (auto "AC 1.25 + 3.75 = *= *= 1/x 1/x +- blah"))

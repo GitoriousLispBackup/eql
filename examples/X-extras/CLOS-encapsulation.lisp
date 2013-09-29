@@ -3,10 +3,10 @@
 ;; define class or struct
 
 (defclass my-label-1 ()
-  ((label :initform (qnew "QLabel"))))
+  ((label :initform (qnew "QLabel" "objectName" "label_1"))))
 
 (defstruct my-label-2
-  (label (qnew "QLabel")))
+  (label (qnew "QLabel" "objectName" "label_2")))
 
 ;; specialize THE-QT-OBJECT
 
@@ -21,7 +21,7 @@
 
 (defvar *label-1* (make-instance 'my-label-1))
 (defvar *label-2* (make-my-label-2))
-(defvar *label-3* (qnew "QLabel"))
+(defvar *label-3* (qnew "QLabel" "objectName" "label_3"))
 
 (defun run ()
   (let* ((dialog (qnew "QDialog"))
@@ -29,7 +29,7 @@
     (x:do-with (qfun layout "addWidget")
       *label-1* *label-2* *label-3*)
     (flet ((print-me (label color)
-             (qset (symbol-value label) "text" (format nil "<h3 style='color: ~A'>~A ... ~A"
+             (qset (symbol-value label) "text" (format nil "<h4 style='color: ~A'>~A ... ~A"
                                                        color
                                                        label
                                                        (qescape (princ-to-string (symbol-value label)))))))

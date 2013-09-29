@@ -133,7 +133,7 @@
 (defun key-pressed (obj event)
   (flet ((change-level (x)
            (qset *level* "value" (+ x (qget *level* "value")))))
-    (case (qfun* event "QKeyEvent" "key")
+    (case (qfun event "key")
       (#.|Qt.Key_Up|
          (move :north *maze*))
       (#.|Qt.Key_Down|
