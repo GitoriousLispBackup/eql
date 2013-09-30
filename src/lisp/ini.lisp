@@ -154,6 +154,13 @@
   #-threads
   (error "ECL threads not enabled, can't process Qt events."))
 
+(defun exec-with-simple-restart ()
+  (loop
+    (with-simple-restart (restart-qt-events (if *slime-mode*
+                                                "Restart Qt event processing."
+                                                "LAST RESORT ONLY (type :r1 and hit Return twice)")) ; command line option "-qtpl"
+      (qexec))))
+
 (defmacro qeval (&rest forms)
   ;; this macro will be redefined in Slime mode (see "../../slime/repl-hook.lisp")
   "args: (&rest forms)

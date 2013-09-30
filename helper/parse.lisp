@@ -165,10 +165,10 @@
            (qpainter (and pub (string= "QPainter" class)))
            (qvariant (and pub (string= "QVariant" class))))
       (cond (qpainter
-              (dolist (device (list "QImage" "QPicture" "QPixmap" "QPrinter" "QWidget")) 
-                (format s "~%   \"new QPainter ( ~A * )\"~
-                           ~%   \"bool begin ( ~A * )\""
-                        device device)))
+             (dolist (device (list "QImage" "QPicture" "QPixmap" "QPrinter" "QWidget")) 
+               (format s "~%   \"new QPainter ( ~A * )\"~
+                          ~%   \"bool begin ( ~A * )\""
+                       device device)))
             (qvariant
              (format s "~%   \"new QVariant ( const QCursor & )\"")))        
       (let ((static (starts-with "static" type))

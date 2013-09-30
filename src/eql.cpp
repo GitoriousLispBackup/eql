@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "13.9.2"; // Sep 2013
+const char EQL::version[] = "13.9.3"; // Sep 2013
 
 extern "C" void ini_EQL(cl_object);
 
@@ -42,6 +42,7 @@ QString EQL::home() {
     return path; }
 
 void EQL::exec(const QStringList& args) {
+    bool exec_with_simple_restart = false;
     QStringList arguments(args);
     eval("(in-package :eql-user)");
     eval(QString("(eql::set-home \"%1\")").arg(home()).toAscii().constData());
@@ -51,10 +52,8 @@ void EQL::exec(const QStringList& args) {
         arguments.removeAll("-slime");
         QApplication::setQuitOnLastWindowClosed(false);
         forms << "(setf eql:*slime-mode* t)"
-              << "(eql::eval-top-level)"
-              << "(loop"
-                 "  (with-simple-restart (restart-qt-events \"Restart Qt event processing.\")"
-                 "    (qexec)))"; }
+              << "(eql::eval-top-level)";
+        exec_with_simple_restart = true; }
     if(arguments.count() == 1) {
         forms << "(si:top-level)"; }
     if(arguments.contains("-qgui")) {
@@ -66,7 +65,8 @@ void EQL::exec(const QStringList& args) {
         forms << "(when (directory (in-home \"src/lisp/ecl-readline.fas*\"))"
                  "  (load (in-home \"src/lisp/ecl-readline\")))"
               << "(eql::start-read-thread)"
-              << "(eql::eval-top-level)"; }
+              << "(eql::eval-top-level)" ;
+        exec_with_simple_restart = true; }
     if(arguments.contains("-quic")) {
         arguments.removeAll("-quic");
         if(arguments.size() >= 2) {
@@ -90,7 +90,9 @@ void EQL::exec(const QStringList& args) {
         code = forms.first(); }
     else {
         code = "(progn " + forms.join(" ") + ")"; }
-    eval(code.toAscii().constData()); }
+    eval(code.toAscii().constData());
+    if(exec_with_simple_restart) {
+        eval("(eql::exec-with-simple-restart)"); }}
 
 void EQL::exec(lisp_ini ini, const QByteArray& expression, const QByteArray& package) {
     // see my_app example
