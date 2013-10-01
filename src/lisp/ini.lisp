@@ -155,11 +155,19 @@
   (error "ECL threads not enabled, can't process Qt events."))
 
 (defun exec-with-simple-restart ()
-  (loop
-    (with-simple-restart (restart-qt-events (if *slime-mode*
-                                                "Restart Qt event processing."
-                                                "LAST RESORT ONLY (type :r1 and hit Return twice)")) ; command line option "-qtpl"
-      (qexec))))
+  (if *slime-mode*
+      (loop
+         (with-simple-restart (restart-qt-events "Restart Qt event processing.")
+           (qexec)))
+      (exec-with-simple-restart-dialog)))
+
+(let (loaded)
+  (defun exec-with-simple-restart-dialog ()
+    ;; command line option "-qtpl" only, see "restart-dialog.lisp"
+    (unless loaded
+      (setf loaded t)
+      (load (in-home "src/lisp/restart-dialog")))
+    (funcall (find-symbol "EXEC-WITH-SIMPLE-RESTART" :restart-dialog))))
 
 (defmacro qeval (&rest forms)
   ;; this macro will be redefined in Slime mode (see "../../slime/repl-hook.lisp")
@@ -218,8 +226,17 @@
 (defun qgui (&optional ev)
   "args: (&optional process-events)
    Launches the <code>EQL</code> convenience GUI.<br>If you don't have an interactive environment, you can pass <code>T</code> to run a pseudo Qt event loop. A better option is to start the tool like so:<br><code>eql -qgui</code>, in order to run the Qt event loop natively."
-  (in-package :eql-user)
-  (load (in-home "gui/gui"))
+  (let (found)
+    (when (find-package :gui)
+      (let ((gui (find-symbol "*GUI*" :gui)))
+        (when gui
+          (setf found t)
+          (setf gui (symbol-value gui))
+          (qfun gui "show")
+          (qfun gui "raise"))))
+    (unless found
+      (in-package :eql-user)
+      (load (in-home "gui/gui"))))
   (when ev
     (loop
       (qprocess-events)
