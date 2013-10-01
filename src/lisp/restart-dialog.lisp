@@ -67,12 +67,12 @@
 
 (in-package :restart-dialog)
 
-(let (dialog command pos)
+(let (dialog command)
   (defun command ()
     (unless dialog
       (setf dialog  (qnew "QDialog(QWidget*,Qt::WindowFlags)" nil |Qt.WindowStaysOnTopHint|
                           "windowTitle" (tr "EQL Debug Dialog"))
-            command (qnew "QLineEdit" "text" ":r1"))
+            command (qnew "QLineEdit" "text"))
       (let ((lb  (qnew "QLabel" "text" (tr "Enter debug command (:h for help)")))
             (btn (qnew "QDialogButtonBox"))
             (lay (qnew "QVBoxLayout(QWidget*)" dialog)))
@@ -83,16 +83,11 @@
           lb command btn)
         (qconnect btn "accepted()" dialog "accept()")
         (qconnect btn "rejected()" dialog "reject()")))
-    (x:do-with (qfun command) "setFocus" "selectAll")
-    (qsingle-shot 0 (lambda ()
-                      (x:do-with (qfun dialog) "activateWindow" "raise")
-                      (when pos
-                        (qset dialog "pos" pos))))
-    (prog1
-        (if (= |QDialog.Accepted| (qfun dialog "exec"))
-            (qget command "text")
-            ":r1")
-      (setf pos (qget dialog "pos")))))
+    (x:do-with (qfun command) "clear" "setFocus")
+    (qsingle-shot 0 (lambda () (x:do-with (qfun dialog) "activateWindow" "raise")))
+    (if (= |QDialog.Accepted| (qfun dialog "exec"))
+        (qget command "text")
+        ":r1")))
 
 ;;; main
 
