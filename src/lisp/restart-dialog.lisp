@@ -72,7 +72,10 @@
     (unless dialog
       (setf dialog  (qnew "QDialog(QWidget*,Qt::WindowFlags)" nil |Qt.WindowStaysOnTopHint|
                           "windowTitle" (tr "EQL Debug Dialog"))
-            command (qnew "QLineEdit" "text"))
+            command (qnew "QLineEdit" "font" (qnew "QFont(QString,int)"
+                                                   #+darwin  "Monaco"      #+darwin  12
+                                                   #+linux   "Monospace"   #+linux   9
+                                                   #+windows "Courier New" #+windows 10)))
       (let ((lb  (qnew "QLabel" "text" (tr "Enter debug command (:h for help)")))
             (btn (qnew "QDialogButtonBox"))
             (lay (qnew "QVBoxLayout(QWidget*)" dialog)))

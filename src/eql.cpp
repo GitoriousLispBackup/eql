@@ -64,8 +64,8 @@ void EQL::exec(const QStringList& args) {
         QApplication::setQuitOnLastWindowClosed(false);
         forms << "(when (directory (in-home \"src/lisp/ecl-readline.fas*\"))"
                  "  (load (in-home \"src/lisp/ecl-readline\")))"
-              << "(eql::start-read-thread)"
-              << "(eql::eval-top-level)" ;
+              << "(eql::eval-top-level)"
+              << "(qsingle-shot 500 'eql::start-read-thread)";
         exec_with_simple_restart = true; }
     if(arguments.contains("-quic")) {
         arguments.removeAll("-quic");
@@ -105,6 +105,7 @@ enum { NotFound = -1 };
 
 void EQL::exec(QWidget* widget, const QString& lispFile, const QString& slimeHookFile) {
     // see Qt_EQL example
+    bool exec_with_simple_restart = false;
     QStringList forms;
     eval("(in-package :eql)");
     forms << QString("(set-home \"%1\")").arg(home())
@@ -123,11 +124,11 @@ void EQL::exec(QWidget* widget, const QString& lispFile, const QString& slimeHoo
         forms << QString("(load \"%1\")").arg(startSwankFile)
               << QString("(setf eql::*slime-hook-file* \"%1\")").arg(slimeHookFile)
               << QString("(setf eql:*slime-mode* t)")
-              << QString("(eql::eval-top-level)")
-              << "(loop"
-                 "  (with-simple-restart (restart-qt-events \"Restart Qt event processing.\")"
-                 "    (qexec)))"; }
-    eval(QString("(progn " + forms.join(" ") + ")").toAscii().constData()); }
+              << QString("(eql::eval-top-level)");
+        exec_with_simple_restart = true; }
+    eval(QString("(progn " + forms.join(" ") + ")").toAscii().constData());
+    if(exec_with_simple_restart) {
+        eval("(eql::exec-with-simple-restart)"); }}
 
 bool EQL::cl_booted = false;
 bool EQL::return_value_p = false;
