@@ -1,0 +1,105 @@
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<style>
+pre    { color: black; background-color: #F6F6F6; }
+code   { color: black; }
+.input { color: blue; }
+</style>
+</head>
+<div style="width: 800px">
+<h2>Debugging</h2>
+This is a simple <b>tutorial</b> using the top-level processing Qt events:
+<pre>
+  $ <span class="input">eql -qtpl</span>
+</pre>
+<br>
+<h3>Example 1: Error on REPL</h3>
+<pre>
+
+  EQL-USER[1]> <span class="input">(/ 0 0)</span>
+
+  1. (RESTART-TOPLEVEL) Go back to Top-Level REPL.
+  2. (RESTART-QT-EVENTS) Last resort only - prefer "Go back to Top-Level REPL"
+
+  ** BREAK [LEVEL 2]>
+
+</pre>
+&nbsp;&nbsp;&nbsp;<img src="debug-dialog.png"/>
+<p>Note that all debug input is handled in a debug dialog, <b>not</b> in the
+console window.</p>
+<p>So, either type the restart number in the dialog
+<pre><span class="input"> :r1</span></pre>
+or just click the Cancel button, which will always choose <code>:r1</code>.
+<br>See <code>:h</code> for all available debug options.
+<br>
+<p><b>Important note</b>:</p>
+<p>If you see <code>(RESTART-<span style="color:red">TOPLEVEL</span>)</code>
+in the list of possible restarts,<br><b style="color:red">never</b> choose
+<code>(RESTART-QT-EVENTS)</code>, as this would cause the REPL to stop
+working.</p>
+<br>
+<h3>Example 2: Error during Qt event processing</h3>
+Start calculator example:
+<pre>
+  $ <span class="input">eql -qtpl examples/X-extras/calculator</span>
+</pre>
+<br>
+Let's run this function:
+<pre>
+  EQL-USER[1]> <span class="input">(clc:auto "42 ? blah")</span>
+</pre>
+<br>
+This will output 2 errors, without breaking into the debugger:
+<pre>
+
+  [EQL:err] QFIND-CHILD #&lt;QDialog "" 0x39737d0 [1]&gt; "?"
+
+  [EQL:err] QINVOKE-METHOD NIL NIL "animateClick" (400)
+
+</pre>
+<p><b>Note</b>: After eventual print output (like the above), you
+  won't see a fresh top-level prompt.<br>Don't get confused by this, as
+  you can continue to enter commands.</p>
+Now make EQL errors break into the debugger:
+<pre>
+  EQL-USER[2]> <span class="input">(setf eql:*break-on-errors* t)</span>
+</pre>
+<br>
+Run our function again:
+<pre>
+
+  EQL-USER[3]> <span class="input">(clc:auto "42 ? blah")</span>
+
+  Condition of type: SIMPLE-CONDITION
+
+  [EQL:err] QFIND-CHILD #&lt;QDialog "" 0x39737d0 [1]&gt; "?"
+
+  Available restarts:
+
+  1. (CONTINUE) Return from BREAK.
+  2. (RESTART-QT-EVENTS) Last resort only - prefer "Go back to Top-Level REPL"
+
+  ** BREAK [LEVEL 1]>
+
+</pre>
+&nbsp;&nbsp;&nbsp;<img src="debug-dialog.png"/>
+<p>Now there are 2 possible restarts:</p>
+<pre><span class="input"> :r1</span></pre>
+<code>(CONTINUE)</code> will continue execution, which will break on
+the next error, then finish our function.
+<pre><span class="input"> :r2</span></pre>
+<code>(RESTART-QT-EVENTS)</code> will abort execution, returning to
+the REPL immediately.
+<br><br>
+<hr>
+<br>
+<h3>Exceptional situations</h3>
+There is one situation where interactive debugging won't work, and
+this is in code inside an (overridden)
+<pre>"paintEvent(QPaintEvent*)"</pre> function, as this may cause
+recursive paint events and segfaults.
+<br>&nbsp;
+<br>&nbsp;
+</div>
+</html>

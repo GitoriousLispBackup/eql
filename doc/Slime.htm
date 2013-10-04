@@ -81,13 +81,13 @@ program will always pause (Qt event processing will be stopped until you take so
   action).</p>
 <br>
 <h4>Abort / Restart</h4>
-<p>
-<p>Be careful after entering the Slime debugger:
-<br>As a rule of thumb, always choose the first <code>[ABORT]</code> or <code>[RESTART]</code>
-  counting from the top (otherwise you might loose the connection to the swank
-  server).</p>
-<p>Special attention is needed for <code>[RESTART-QT-EVENTS]</code>: you should
-  choose it only if there is no other abort/restart available.</p>
+<p>Be careful after entering the Slime debugger. If you see this:
+<br>
+<br><code>[ABORT] Return to SLIME's top level.</code>
+<br><code>[RESTART-QT-EVENTS] Last resort only - prefer "Return to SLIME's top level"</code>
+<br>
+<br>Always choose the first one, otherwise you'll be stuck.
+</p>
 <br>
 <h4>Help</h4>
 <p>For help see the <code>qapropos</code> and <code>qgui</code> functions.</p>

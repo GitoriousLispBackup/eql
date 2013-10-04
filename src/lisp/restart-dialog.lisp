@@ -119,5 +119,5 @@
   (let ((*debug-io* (make-two-way-stream (input-hook 'handle-debug-io)
                                          (two-way-stream-output-stream *terminal-io*))))
     (loop
-      (with-simple-restart (restart-qt-events "Restart Qt event processing.")
+      (with-simple-restart (restart-qt-events "Last resort only - prefer \"Go back to Top-Level REPL\"")
         (qexec)))))

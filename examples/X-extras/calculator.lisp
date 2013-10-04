@@ -6,7 +6,10 @@
 (defpackage :calculator
   (:nicknames :clc)
   (:use :common-lisp :eql)
-  (:export))
+  (:export
+   #:*main*
+   #:auto
+   #:run))
 
 (in-package :calculator)
 

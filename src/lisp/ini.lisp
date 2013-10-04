@@ -157,7 +157,7 @@
 (defun exec-with-simple-restart ()
   (if *slime-mode*
       (loop
-         (with-simple-restart (restart-qt-events "Restart Qt event processing.")
+         (with-simple-restart (restart-qt-events "Last resort only - prefer \"Return to SLIME's top level\"")
            (qexec)))
       (exec-with-simple-restart-dialog)))
 
