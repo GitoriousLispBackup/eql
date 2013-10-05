@@ -97,13 +97,24 @@
 (defun current-level ()
   (- si::*tpl-level* si::*step-level* -1))
 
+(defun ensure-safe-restart (command)
+  ;; don't allow RESTART-QT-EVENTS when RESTART-TOPLEVEL is available (would block REPL)
+  (let* ((restarts (mapcar (lambda (r) (restart-name (first r))) si::*restart-clusters*))
+         (top-level (position 'si::restart-toplevel restarts))
+         (qt-events (position 'restart-qt-events restarts)))
+    (if (and top-level
+             (string= (string-downcase command) (format nil ":r~D" qt-events)))
+        (format nil ":r~D" top-level)
+        command)))
+
 (defun handle-debug-io ()
   (when (find-package :ecl-readline)
     (terpri)
     (princ (si::tpl-prompt)))
   (let ((cmd (command)))
-    (when (x:empty-string cmd)
-      (setf cmd ":r1"))
+    (setf cmd (if (x:empty-string cmd)
+                  ":r1"
+                  (ensure-safe-restart cmd)))
     (princ cmd)
     (terpri)
     (if (= 1 (current-level))

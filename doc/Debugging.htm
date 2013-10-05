@@ -32,13 +32,13 @@ console window.</p>
 <pre><span class="input"> :r1</span></pre>
 or just click the Cancel button, which will always choose <code>:r1</code>.
 <br>See <code>:h</code> for all available debug options.
-<br>
-<p><b>Important note</b>:</p>
-<p>If you see <code>(RESTART-<span style="color:red">TOPLEVEL</span>)</code>
-in the list of possible restarts,<br><b style="color:red">never</b> choose
-<code>(RESTART-QT-EVENTS)</code>, as this would cause the REPL to stop
-working.</p>
-<br>
+<br><br>
+<p><b>Note</b>: If both of the following:
+<pre> (RESTART-TOPLEVEL)
+ (RESTART-QT-EVENTS)</pre>
+are available, the first one will automatically be chosen, as restarting Qt
+ events would block the REPL in this case.</p>
+<br><br>
 <h3>Example 2: Error during Qt event processing</h3>
 Start calculator example:
 <pre>
@@ -93,7 +93,7 @@ the next error, then finish our function.
 the REPL immediately.
 <br><br>
 <hr>
-<br>
+<br><br>
 <h3>Exceptional situations</h3>
 There is one situation where interactive debugging won't work, and
 this is in code inside an (overridden)
