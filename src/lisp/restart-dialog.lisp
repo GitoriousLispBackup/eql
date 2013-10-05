@@ -75,8 +75,9 @@
             command (qnew "QLineEdit" "font" (qnew "QFont(QString,int)"
                                                    #+darwin  "Monaco"      #+darwin  12
                                                    #+linux   "Monospace"   #+linux   9
-                                                   #+windows "Courier New" #+windows 10)))
-      (let ((lb  (qnew "QLabel" "text" (tr "Enter debug command (:h for help)")))
+                                                   #+windows "Courier New" #+windows 10)
+                                      "minimumWidth" 350))
+      (let ((lb  (qnew "QLabel" "text" (tr "Enter debug command or Lisp expression (:h for help)")))
             (btn (qnew "QDialogButtonBox"))
             (lay (qnew "QVBoxLayout(QWidget*)" dialog)))
         (x:do-with (qfun btn "addButton")
@@ -86,7 +87,7 @@
           lb command btn)
         (qconnect btn "accepted()" dialog "accept()")
         (qconnect btn "rejected()" dialog "reject()")))
-    (x:do-with (qfun command) "clear" "setFocus")
+    (x:do-with (qfun command) "selectAll" "setFocus")
     (qsingle-shot 0 (lambda () (x:do-with (qfun dialog) "activateWindow" "raise")))
     (if (= |QDialog.Accepted| (qfun dialog "exec"))
         (qget command "text")
@@ -112,9 +113,12 @@
     (terpri)
     (princ (si::tpl-prompt)))
   (let ((cmd (command)))
-    (setf cmd (if (x:empty-string cmd)
-                  ":r1"
-                  (ensure-safe-restart cmd)))
+    (setf cmd (cond ((x:empty-string cmd)
+                     ":r1")
+                    ((string= ":exit" (string-downcase cmd))
+                     "(eql:qquit)")
+                    (t
+                     (ensure-safe-restart cmd))))
     (princ cmd)
     (terpri)
     (if (= 1 (current-level))
@@ -130,5 +134,5 @@
   (let ((*debug-io* (make-two-way-stream (input-hook 'handle-debug-io)
                                          (two-way-stream-output-stream *terminal-io*))))
     (loop
-      (with-simple-restart (restart-qt-events "Last resort only - prefer \"Go back to Top-Level REPL\"")
+      (with-simple-restart (restart-qt-events "Restart Qt event processing.")
         (qexec)))))
