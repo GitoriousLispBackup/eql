@@ -33,7 +33,7 @@ This is a simple <b>tutorial</b> using the top-level processing Qt events:
 <p>Note that all debug input is handled in a debug dialog, <b>not</b> in the
 console window.</p>
 <p>So, either type the restart number in the dialog
-<pre><span class="input"> :r1</span></pre>
+<pre><span class="input">  :r1</span></pre>
 or just click the Cancel button, which will always choose <code>:r1</code>.
 <br>Type <code>:h</code> for all available debug options.
 <p>Both restarts will have the same effect here, see note at bottom.</p>
@@ -85,10 +85,10 @@ Run our function again:
 </pre>
 &nbsp;&nbsp;&nbsp;<img src="debug-dialog.png"/>
 <p>Now there are 2 possible restarts:</p>
-<pre><span class="input"> :r1</span></pre>
+<pre><span class="input">  :r1</span></pre>
 <code>(CONTINUE)</code> will continue execution, which will break on
 the next error, then finish our function.
-<pre><span class="input"> :r2</span></pre>
+<pre><span class="input">  :r2</span></pre>
 <code>(RESTART-QT-EVENTS)</code> will abort execution, returning to
 the REPL immediately.
 <br><br>
@@ -97,16 +97,21 @@ the REPL immediately.
 <h3>Notes</h3>
 There is one situation where interactive debugging won't work, and
 this is in code inside an (overridden)
-<pre>"paintEvent(QPaintEvent*)"</pre> function, as this may cause
+<pre>  "paintEvent(QPaintEvent*)"</pre> function, as this may cause
 recursive paint events and segfaults.
+<br>&nbsp;
+<br>&nbsp;<br>
+To exit instantly from EQL during debugging (on nasty errors), just type
+<pre><span class="input">  :exit</span></pre>
+in the debug dialog.
 <br>&nbsp;
 <br>&nbsp;<br>
 On simple <code>read</code> errors on the REPL (e.g. non-existing packages, non-external symbols), the debugger will not be entered (as this would cause an unrecoverable <code>break</code>, since <code>read</code> runs in its own thread here); instead, the erroneous input string will be returned as-is.
 <br>&nbsp;
 <br>&nbsp;<br>
 The conflicting case
-<pre> (RESTART-TOPLEVEL)
- (RESTART-QT-EVENTS)</pre>
+<pre>  (RESTART-TOPLEVEL)
+  (RESTART-QT-EVENTS)</pre>
 is resolved automatically (<code>RESTART-QT-EVENTS</code> would block the REPL in this case).
 <br>&nbsp;
 <br>&nbsp;

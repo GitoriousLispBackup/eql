@@ -100,7 +100,7 @@
 
 (defun ensure-safe-restart (command)
   ;; don't allow RESTART-QT-EVENTS when RESTART-TOPLEVEL is available (would block REPL)
-  (let* ((restarts (mapcar (lambda (r) (restart-name (first r))) si::*restart-clusters*))
+  (let* ((restarts (mapcar 'restart-name (compute-restarts)))
          (top-level (position 'si::restart-toplevel restarts))
          (qt-events (position 'restart-qt-events restarts)))
     (if (and top-level
