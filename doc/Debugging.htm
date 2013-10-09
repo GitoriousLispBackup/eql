@@ -2,7 +2,7 @@
 <head>
 <link rel="stylesheet" href="style.css" type="text/css">
 <style>
-pre    { color: black; background-color: #F6F6F6; }
+pre    { color: black; background-color: #F4F4F4; }
 code   { color: black; }
 .input { color: blue; }
 </style>
@@ -17,7 +17,7 @@ This is a simple <b>tutorial</b> using the top-level processing Qt events:
 <h3>Example 1: Error on REPL (trivial)</h3>
 <pre>
 
-  EQL-USER[1]> <span class="input">(/ 0 0)</span>
+  EQL-USER[1]&gt; <span class="input">(/ 0 0)</span>
 
   Condition of type: DIVISION-BY-ZERO
 
@@ -26,7 +26,7 @@ This is a simple <b>tutorial</b> using the top-level processing Qt events:
   1. (RESTART-TOPLEVEL) Go back to Top-Level REPL.
   2. (RESTART-QT-EVENTS) Restart Qt event processing.
 
-  ** BREAK [LEVEL 2]>
+  ** BREAK [LEVEL 2]&gt;
 
 </pre>
 &nbsp;&nbsp;&nbsp;<img src="debug-dialog.png"/>
@@ -46,7 +46,7 @@ Start calculator example:
 <br>
 Let's run this function:
 <pre>
-  EQL-USER[1]> <span class="input">(clc:auto "42 ? blah")</span>
+  EQL-USER[1]&gt; <span class="input">(clc:auto "42 ? blah")</span>
 </pre>
 <br>
 This will output 2 errors, without breaking into the debugger:
@@ -63,13 +63,13 @@ This will output 2 errors, without breaking into the debugger:
 <br>
 Now make EQL errors break into the debugger:
 <pre>
-  EQL-USER[2]> <span class="input">(setf eql:*break-on-errors* t)</span>
+  EQL-USER[2]&gt; <span class="input">(setf eql:*break-on-errors* t)</span>
 </pre>
 <br>
 Run our function again:
 <pre>
 
-  EQL-USER[3]> <span class="input">(clc:auto "42 ? blah")</span>
+  EQL-USER[3]&gt; <span class="input">(clc:auto "42 ? blah")</span>
 
   Condition of type: SIMPLE-CONDITION
 
@@ -80,7 +80,7 @@ Run our function again:
   1. (CONTINUE) Return from BREAK.
   2. (RESTART-QT-EVENTS) Restart Qt event processing.
 
-  ** BREAK [LEVEL 1]>
+  ** BREAK [LEVEL 1]&gt;
 
 </pre>
 &nbsp;&nbsp;&nbsp;<img src="debug-dialog.png"/>
@@ -102,8 +102,8 @@ recursive paint events and segfaults.
 <br>&nbsp;
 <br>&nbsp;<br>
 To exit instantly from EQL during debugging (on nasty errors), just type
-<pre><span class="input">  :exit</span></pre>
-in the debug dialog.
+<pre><span class="input">  :qq</span> / <span class="input">:exit</span></pre>
+in the debug dialog (or REPL).
 <br>&nbsp;
 <br>&nbsp;<br>
 On simple <code>read</code> errors on the REPL (e.g. non-existing packages, non-external symbols), the debugger will not be entered (as this would cause an unrecoverable <code>break</code>, since <code>read</code> runs in its own thread here); instead, the erroneous input string will be returned as-is.
@@ -113,6 +113,19 @@ The conflicting case
 <pre>  (RESTART-TOPLEVEL)
   (RESTART-QT-EVENTS)</pre>
 is resolved automatically (<code>RESTART-QT-EVENTS</code> would block the REPL in this case).
+<br>&nbsp;
+<br>&nbsp;
+<br>
+<h3>Tip</h3>
+You might want to put this in your <code>~/.eclrc</code> file:
+<pre>
+
+  #+eql
+  (progn
+    (setf eql:*qtpl* t)
+    (setf eql:*break-on-errors* t))
+
+</pre>
 <br>&nbsp;
 <br>&nbsp;
 </div>

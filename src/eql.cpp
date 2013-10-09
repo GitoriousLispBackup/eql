@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "13.9.3"; // Sep 2013
+const char EQL::version[] = "13.10.1"; // Oct 2013
 
 extern "C" void ini_EQL(cl_object);
 
@@ -47,19 +47,25 @@ void EQL::exec(const QStringList& args) {
     eval("(in-package :eql-user)");
     eval(QString("(eql::set-home \"%1\")").arg(home()).toAscii().constData());
     QStringList forms;
+    // Slime
     if(arguments.contains("-slime") ||
-      (arguments.indexOf(QRegExp("*start-swank*.lisp", Qt::CaseInsensitive, QRegExp::Wildcard)) != -1)) {
+       (arguments.indexOf(QRegExp("*start-swank*.lisp", Qt::CaseInsensitive, QRegExp::Wildcard)) != -1)) {
         arguments.removeAll("-slime");
         QApplication::setQuitOnLastWindowClosed(false);
         forms << "(setf eql:*slime-mode* t)"
               << "(eql::eval-top-level)";
         exec_with_simple_restart = true; }
-    if(arguments.count() == 1) {
-        forms << "(si:top-level)"; }
+    // .eclrc
+    else if(!arguments.contains("-norc")) {
+        eval("(x:when-it (probe-file \"~/.eclrc\") (load x:it))"); }
+    arguments.removeAll("-norc");
+    // -qgui
     if(arguments.contains("-qgui")) {
         arguments.removeAll("-qgui");
         forms << "(qgui)"; }
-    if(arguments.contains("-qtpl")) {
+    // -qtpl
+    if(arguments.contains("-qtpl") ||
+       (Ct == cl_symbol_value(cl_intern(1, make_constant_base_string("*QTPL*"))))) {
         arguments.removeAll("-qtpl");
         QApplication::setQuitOnLastWindowClosed(false);
         forms << "(when (directory (in-home \"src/lisp/ecl-readline.fas*\"))"
@@ -67,30 +73,39 @@ void EQL::exec(const QStringList& args) {
               << "(eql::eval-top-level)"
               << "(qsingle-shot 500 'eql::start-read-thread)";
         exec_with_simple_restart = true; }
+    // -quic
     if(arguments.contains("-quic")) {
         arguments.removeAll("-quic");
-        if(arguments.size() >= 2) {
+        if(arguments.length() >= 2) {
             QString uiFile(QDir::fromNativeSeparators(arguments.at(1)));
             int sep = uiFile.lastIndexOf('/') + 1;
             forms << QString("(ext:run-program \"uic\" (list \"-o\" \"ui.h\" \"%1\"))").arg(uiFile)  
                   << QString("(eql:quic \"ui.h\" \"%1ui-%2.lisp\" %3)")
                              .arg(uiFile.left(sep))
                              .arg(uiFile.mid(sep, uiFile.length() - sep - 3))
-                             .arg((arguments.size() == 2) ? ":ui" : arguments.at(2))
+                             .arg((arguments.length() == 2) ? ":ui" : arguments.at(2))
                   << QString("(delete-file \"ui.h\")")
                   << QString("(eql:qq)"); }
         else {
             qDebug() << "\nPlease pass a file.ui (Qt Designer).\n";
             exit(-1); }}
-    else if(arguments.count() > 1) {
-        QString fileName(QDir::fromNativeSeparators(arguments.at(1)));
-        forms.prepend(QString("(load \"%1\")").arg(fileName)); }
+    else {
+        if(arguments.length() == 1) {
+            // simple top-level
+            if(forms.isEmpty()) {
+                forms << "(si:top-level)"; }}
+        else {
+            // load file
+            QString fileName(QDir::fromNativeSeparators(arguments.at(1)));
+            forms.prepend(QString("(load \"%1\")").arg(fileName)); }}
+    // eval
     QString code;
     if(forms.length() == 1) {
         code = forms.first(); }
     else {
         code = "(progn " + forms.join(" ") + ")"; }
     eval(code.toAscii().constData());
+    // RESTART for Qt event loop
     if(exec_with_simple_restart) {
         eval("(eql::exec-with-simple-restart)"); }}
 

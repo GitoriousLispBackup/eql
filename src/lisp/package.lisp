@@ -5,6 +5,7 @@
   (:export
    #:*break-on-errors*
    #:*slime-mode*
+   #:*qtpl*
    #:defvar-ui
    #:ensure-qt-object
    #:in-home

@@ -92,16 +92,19 @@ Use your taskbar to show it.)
 If you start the EQL executable without arguments, it will start the usual ECL top-level
 (without processing Qt events).
 
+To _not_ load ~/.eclrc on startup, do:
+    eql -norc
+
 To quit the tool, do:
     (eql:qquit) or
     (eql:qq)
 
 In order to run (sort of) a top-level processing Qt events, do (requires ECL threads):
-  eql -qtpl
+    eql -qtpl
 
-  Note: If you want to use "ecl-readline" together with "-qtpl", just compile
-        "eql/src/lisp/ecl-readline.lisp" (which depends on the "readline" C library).
-        It will then be loaded automatically on startup.
+    Notes: If you want to use "ecl-readline" together with "-qtpl", just compile
+           "eql/src/lisp/ecl-readline.lisp" (which depends on the "readline" C library).
+           It will then be loaded automatically on startup.
 
 
 

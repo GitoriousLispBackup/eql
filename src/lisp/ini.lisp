@@ -4,6 +4,7 @@
 
 (defvar *break-on-errors* nil "Unless NIL, causes a simple (BREAK) on any EQL error.")
 (defvar *slime-mode*      nil)
+(defvar *qtpl*            nil "To set in ~/.eclrc only; the same as command line option -qtpl.")
 
 (defmacro alias (s1 s2)
   `(setf (symbol-function ',s1) (function ,s2)))
@@ -150,7 +151,7 @@
 
 (defun start-read-thread ()
   #+threads
-  (mp:process-run-function :read '%read-thread)
+  (setf proc (mp:process-run-function :read '%read-thread))
   #-threads
   (error "ECL threads not enabled, can't process Qt events."))
 
@@ -568,8 +569,10 @@
        (terpri)
        (return (tpl-make-command :EOF "")))
       (#\:
-       (return (tpl-make-command (read-preserving-whitespace)
-                                 (read-line))))
+       (let ((exp (read-preserving-whitespace)))
+         (return (if (find exp '(:qq :exit))
+                     "(eql:qquit)"
+                     (tpl-make-command exp (read-line))))))
       (#\?
        (read-char)
        (case (peek-char nil *standard-input* nil :EOF)

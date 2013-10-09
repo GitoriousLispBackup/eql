@@ -115,7 +115,7 @@
   (let ((cmd (command)))
     (setf cmd (cond ((x:empty-string cmd)
                      ":r1")
-                    ((string= ":exit" (string-downcase cmd))
+                    ((find (string-downcase cmd) '(":qq" ":exit") :test 'string=)
                      "(eql:qquit)")
                     (t
                      (ensure-safe-restart cmd))))

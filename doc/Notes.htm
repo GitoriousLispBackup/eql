@@ -7,8 +7,9 @@
 <p>For the current version number, please visit:
 <a href="http://gitorious.org/eql/eql/blobs/master/src/eql.cpp"
    target="_blank"><code>EQL::version</code></a> at line 10.</p>
+<p>Pass <code>-norc</code> on the command line to <b>not</b> load <code>~/.eclrc</code> on startup.<br>Since <code>:eql</code> is in <code>*features*</code>, you can use <code>#+eql</code> / <code>#-eql</code>.</p>
 <p>To run a Lisp file directly, do e.g. <code>eql
-    examples/5-colliding-mice.lisp -qtpl</code>.</p>
+    examples/5-colliding-mice -qtpl</code>.</p>
 <p>See the EQL UI (command <code>eql -qgui</code>) for a complete list of all
   supported classes and functions.</p>
 <p>In the above mentioned UI you find a "<b>Select</b>" button, allowing you
@@ -16,10 +17,11 @@
   from the UI command line. After selecting a widget, the
   parameter <code>qsel:*q*</code> will be set to it.</p>
   <p>See command line option <code>-qtpl</code> for a top-level processing Qt
-  events (see <code>../README.txt</code>).<br>It uses a simple GUI dialog for
+  events (see also <b>readline</b> note in <code>../README.txt</code>).<br>It uses a simple GUI dialog for
   debug input (needed because <code>read</code> runs in its own thread).<br>On
-  eventual print output, you won't see a fresh prompt, but the top-level will
-  remain ready for input.
+  eventual print output, you won't see a fresh prompt, but the REPL will
+  remain ready for input.<br>You can set this option permanently by adding this in <code>~./eclrc</code>:
+  <br><code>#+eql (setf eql:*qtpl* t)</code>
 </p>
 <p>If you want to use temporary Qt objects, you can use the <code>qlet</code>
   convenience macro (see the function list). It's a <code>let*</code> variant
