@@ -86,4 +86,7 @@
             (! "drawEllipse(QRect)" '(53 -4 8 8))))
         (! "end")))))
 
-(start)
+(progn
+  (start)
+  (qsingle-shot 0 (lambda () (in-package :clock))))
+

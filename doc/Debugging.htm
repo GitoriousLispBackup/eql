@@ -116,16 +116,19 @@ is resolved automatically (<code>RESTART-QT-EVENTS</code> would block the REPL i
 <br>&nbsp;
 <br>&nbsp;
 <br>
-<h3>Tip</h3>
+<h3>Tips</h3>
 You might want to put this in your <code>~/.eclrc</code> file:
 <pre>
 
   #+eql
   (progn
-    (setf eql:*qtpl* t)
+    (setf eql:*qtpl* t) ; same as -qtpl
     (setf eql:*break-on-errors* t))
 
 </pre>
+<br><hr><br>
+<p>In order to automatically switch to a given package after loading a file, add this line:</p>
+<pre>  (qsingle-shot 0 (lambda () (in-package :my-package)))</pre>
 <br>&nbsp;
 <br>&nbsp;
 </div>

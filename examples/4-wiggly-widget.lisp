@@ -1,6 +1,7 @@
 ;;; This is a port of the Qt Example "Wiggly Widget"
 
 (defpackage :wiggly-widget
+  (:nicknames :wiggly)
   (:use :common-lisp :eql)
   (:export
    #:start))
@@ -61,4 +62,7 @@
     (qfun *wiggly* "update"))
   (qcall-default))
 
-(start)
+(progn
+  (start)
+  (qsingle-shot 0 (lambda () (in-package :wiggly))))
+
