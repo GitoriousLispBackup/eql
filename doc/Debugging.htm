@@ -121,13 +121,12 @@ You might want to put this in your <code>~/.eclrc</code> file:
 <pre>
 
   #+eql
-  (progn
-    (setf eql:*qtpl* t) ; same as -qtpl
-    (setf eql:*break-on-errors* t))
+  (setf eql:*qtpl*            t  ; same as -qtpl
+        eql:*break-on-errors* t)
 
 </pre>
 <br><hr><br>
-<p>In order to automatically switch to a given package after loading a file, add this line:</p>
+<p>In order to automatically switch the REPL to a given package after loading a file, add this line:</p>
 <pre>  (qsingle-shot 0 (lambda () (in-package :my-package)))</pre>
 <br>&nbsp;
 <br>&nbsp;
