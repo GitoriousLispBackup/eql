@@ -47,24 +47,22 @@ void EQL::exec(const QStringList& args) {
     eval("(in-package :eql-user)");
     eval(QString("(eql::set-home \"%1\")").arg(home()).toAscii().constData());
     QStringList forms;
+    // .eclrc
+    if(arguments.contains("-norc")) {
+        arguments.removeAll("-norc"); }
+    else {
+        eval("(x:when-it (probe-file \"~/.eclrc\") (load x:it))"); }
     // Slime
     if(arguments.contains("-slime") ||
        (arguments.indexOf(QRegExp("*start-swank*.lisp", Qt::CaseInsensitive, QRegExp::Wildcard)) != -1)) {
         arguments.removeAll("-slime");
         QApplication::setQuitOnLastWindowClosed(false);
-        forms << "(setf eql:*slime-mode* t)"
+        forms << "(setf eql:*slime-mode* t"
+                 "      eql:*qtpl*       nil)"
               << "(eql::eval-top-level)";
         exec_with_simple_restart = true; }
-    // .eclrc
-    else if(!arguments.contains("-norc")) {
-        eval("(x:when-it (probe-file \"~/.eclrc\") (load x:it))"); }
-    arguments.removeAll("-norc");
-    // -qgui
-    if(arguments.contains("-qgui")) {
-        arguments.removeAll("-qgui");
-        forms << "(qgui)"; }
     // -qtpl
-    if(arguments.contains("-qtpl") ||
+    else if(arguments.contains("-qtpl") ||
        (Ct == cl_symbol_value(cl_intern(1, make_constant_base_string("*QTPL*"))))) {
         arguments.removeAll("-qtpl");
         QApplication::setQuitOnLastWindowClosed(false);
@@ -73,6 +71,10 @@ void EQL::exec(const QStringList& args) {
               << "(eql::eval-top-level)"
               << "(qsingle-shot 500 'eql::start-read-thread)";
         exec_with_simple_restart = true; }
+    // -qgui
+    if(arguments.contains("-qgui")) {
+        arguments.removeAll("-qgui");
+        forms << "(qgui)"; }
     // -quic
     if(arguments.contains("-quic")) {
         arguments.removeAll("-quic");

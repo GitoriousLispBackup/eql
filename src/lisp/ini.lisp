@@ -160,7 +160,9 @@
       (loop
          (with-simple-restart (restart-qt-events "Last resort only - prefer \"Return to SLIME's top level\"")
            (qexec)))
-      (exec-with-simple-restart-dialog)))
+      (progn
+        (setf *qtpl* t)
+        (exec-with-simple-restart-dialog))))
 
 (let (loaded)
   (defun exec-with-simple-restart-dialog ()
