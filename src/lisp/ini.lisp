@@ -584,6 +584,10 @@
       (t
        (return (%read-lines))))))
 
+(defun %break-where ()
+  (when (> *tpl-level* 0)
+    (tpl-print-current)))
+
 (defun %tpl (&key ((:commands *tpl-commands*) tpl-commands)
                  ((:prompt-hook *tpl-prompt-hook*) *tpl-prompt-hook*)
                  (broken-at nil)
@@ -630,7 +634,7 @@
                
                (with-grabbed-console
                    (unless quiet
-                     (break-where)
+                     (%break-where)
                      (setf quiet t))
                  (if eql::*top-level-form*
                      (setq - eql::*top-level-form*

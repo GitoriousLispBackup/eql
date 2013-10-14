@@ -59,8 +59,7 @@ void EQL::exec(const QStringList& args) {
         arguments.removeAll("-slime");
         QApplication::setQuitOnLastWindowClosed(false);
         forms << "(setf eql:*slime-mode* t"
-                 "      eql:*qtpl*       nil)"
-              << "(eql::eval-top-level)";
+                 "      eql:*qtpl*       nil)";
         exec_with_simple_restart = true; }
     // -qtpl
     else if(arguments.contains("-qtpl") || (cl_symbol_value(s_qtpl) == Ct)) {
@@ -69,7 +68,6 @@ void EQL::exec(const QStringList& args) {
         QApplication::setQuitOnLastWindowClosed(false);
         forms << "(when (directory (in-home \"src/lisp/ecl-readline.fas*\"))"
                  "  (load (in-home \"src/lisp/ecl-readline\")))"
-              << "(eql::eval-top-level)"
               << "(qsingle-shot 500 'eql::start-read-thread)";
         exec_with_simple_restart = true; }
     // -qgui
@@ -143,8 +141,8 @@ void EQL::exec(QWidget* widget, const QString& lispFile, const QString& slimeHoo
         QApplication::setQuitOnLastWindowClosed(false);
         forms << QString("(load \"%1\")").arg(startSwankFile)
               << QString("(setf eql::*slime-hook-file* \"%1\")").arg(slimeHookFile)
-              << QString("(setf eql:*slime-mode* t)")
-              << QString("(eql::eval-top-level)");
+              << QString("(setf eql:*slime-mode* t"
+                         "      eql:*qtpl*       nil)");
         exec_with_simple_restart = true; }
     eval(QString("(progn " + forms.join(" ") + ")").toAscii().constData());
     if(exec_with_simple_restart) {
