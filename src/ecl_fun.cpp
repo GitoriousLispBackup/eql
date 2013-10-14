@@ -92,7 +92,9 @@ void iniCLFunctions() {
     if(cl_find_package(eql) == Cnil) {
         cl_make_package(1, eql); }
     si_select_package(eql);
+    cl_def_c_function(c_string_to_object((char*)"call-eval-top-level"),    (cl_objectfn_fixed)call_eval_top_level,   0);
     cl_def_c_function(c_string_to_object((char*)"%make-qimage/dangerous"), (cl_objectfn_fixed)make_qimage_dangerous, 5);
+    cl_def_c_function(c_string_to_object((char*)"no-qexec"),               (cl_objectfn_fixed)no_qexec,              0);
     cl_def_c_function(c_string_to_object((char*)"qadd-event-filter"),      (cl_objectfn_fixed)qadd_event_filter,     3);
     cl_def_c_function(c_string_to_object((char*)"%qapropos"),              (cl_objectfn_fixed)qapropos2,             3);
     cl_def_c_function(c_string_to_object((char*)"qapp"),                   (cl_objectfn_fixed)qapp,                  0);
@@ -2409,6 +2411,10 @@ cl_object qexec2(cl_object l_milliseconds) {
     QApplication::exec();
     return Ct; }
 
+cl_object no_qexec() {
+    EQL::qexec = false;
+    return Cnil; }
+
 cl_object qexit() {
     /// args: ()
     /// Calls <code>QEventLoop::exit()</code>, in order to exit event processing after a call to <code>qexec</code> with a timeout.<br>Returns <code>T</code> if the event loop has effectively been exited.
@@ -2629,6 +2635,11 @@ cl_object qversion() {
     l_env->values[0] = from_cstring(EQL::version);
     l_env->values[1] = from_cstring(qVersion());
     return l_env->values[0]; }
+
+cl_object call_eval_top_level () {
+    // safe, blocking call from other thread ("evalTopLevel" will run in main thread, see "eql.h")
+    QMetaObject::invokeMethod(LObjects::eql, "evalTopLevel", Qt::BlockingQueuedConnection); 
+    return Cnil; }
 
 
 

@@ -98,71 +98,60 @@
 ;;; top-level / slime-mode processing Qt events (command line options "-qtpl" and "-slime")
 
 (defvar *top-level-form*  nil)
-(defvar *top-level-lock*  #+threads (mp:make-lock :name 'top-level))
 (defvar *slime-values*    nil)
 (defvar *slime-package*   (find-package :eql-user))
-(defvar *slime-evaluated* nil)
 (defvar *slime-hook-file* nil)
+
+(defun load-slime-hook-file ()
+  (if (and (find-package :swank)
+           (find-symbol "*SLIME-REPL-EVAL-HOOKS*" :swank))
+      (load (or *slime-hook-file* (in-home "slime/repl-hook")))
+      (qsingle-shot 500 'load-slime-hook-file))) ; we need to wait for Emacs "slime-connect"
            
 #+threads
-(let (hook-loaded-p timer)
-  (defun eval-top-level ()
-    (unless timer
-      (setf timer (qnew "QTimer" "interval" 200 "singleShot" t))
-      (qconnect timer "timeout()" 'eval-top-level))
-    (when (and *slime-mode*
-               (not hook-loaded-p)
-               (find-package :swank)
-               (find-symbol "*SLIME-REPL-EVAL-HOOKS*" :swank))
-      (setf hook-loaded-p t)
-      (load (or *slime-hook-file* (in-home "slime/repl-hook"))))
-    (when *top-level-form*
-      (if *slime-mode*
-          (let ((values (multiple-value-list
-                          (with-simple-restart (abort "Return to SLIME's top level.")
-                            (eval *top-level-form*)))))
-            (finish-output)
-            (mp:with-lock (*top-level-lock*)
-              (setf *top-level-form*  nil
-                    *slime-values*    values
-                    *slime-package*   *package*
-                    *slime-evaluated* t)))
-          (progn
-            (mp:with-lock (*top-level-lock*)
-              ;; needed to avoid unrecoverable BREAK on errors during READ (command line option "-qtpl")
-              (when (stringp *top-level-form*)
-                (handler-case (setf *top-level-form* (read-from-string *top-level-form*))
-                  (error (err)
-                    (princ err))))
-              (si::feed-top-level))
-            (finish-output)
-            (qsingle-shot 0 'start-read-thread))))
-    (qfun timer "start")))
+(defun eval-top-level ()
+  (when *top-level-form*
+    (if *slime-mode*
+        (progn
+          (setf *slime-values*   (multiple-value-list
+                                   (with-simple-restart (abort "Return to SLIME's top level.")
+                                     (eval *top-level-form*)))
+                *top-level-form* nil
+                *slime-package*  *package*)
+          (finish-output))
+        (progn
+          ;; needed to avoid unrecoverable BREAK on errors during READ (command line option "-qtpl")
+          (when (stringp *top-level-form*)
+            (handler-case (setf *top-level-form* (read-from-string *top-level-form*))
+              (error (err)
+                (princ err)))
+            (si::feed-top-level))
+          (finish-output)
+          (qsingle-shot 0 'start-read-thread)))))
 
 #+threads
 (defun %read-thread ()
   (si::tpl-prompt)
   (unless (find-package :ecl-readline)
     (princ "> "))
-  (let ((form (si::%tpl-read)))
-    (mp:with-lock (*top-level-lock*)
-      (setf *top-level-form* form)))
+  (setf *top-level-form* (si::%tpl-read))
+  (call-eval-top-level) ; defined in "../ecl_fun.cpp" 
   (values))
 
 (defun start-read-thread ()
   #+threads
-  (setf proc (mp:process-run-function :read '%read-thread))
+  (mp:process-run-function :read '%read-thread)
   #-threads
   (error "ECL threads not enabled, can't process Qt events."))
 
 (defun exec-with-simple-restart ()
   (if *slime-mode*
-      (loop
-         (with-simple-restart (restart-qt-events "Last resort only - prefer \"Return to SLIME's top level\"")
-           (qexec)))
       (progn
-        (setf *qtpl* t)
-        (exec-with-simple-restart-dialog))))
+        (load-slime-hook-file)
+        (loop
+          (with-simple-restart (restart-qt-events "Last resort only - prefer \"Return to SLIME's top level\"")
+            (qexec))))
+      (exec-with-simple-restart-dialog)))
 
 (let (loaded)
   (defun exec-with-simple-restart-dialog ()
@@ -417,11 +406,7 @@
    alias: qq
    Terminates EQL, passing the given arguments to the ECL function <code>ext:quit</code>."
   (assert (typep exit-status 'fixnum))
-  (qprocess-events)
-  (qfun (qapp) "aboutToQuit")
-  (qdisconnect (qapp) "aboutToQuit()")
-  ;; EXT:QUIT hangs in EQL (doesn't happen in pure ECL)
-  (qsingle-shot 100 (lambda () (ffi:c-inline (exit-status) (:int) :void "exit(#0)" :one-liner t :side-effects t)))
+  (no-qexec)
   (ext:quit exit-status kill-all-threads))
 
 ;; simplify using CLOS; see example "X-extras/CLOS-encapsulation.lisp"

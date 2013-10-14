@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "13.10.1"; // Oct 2013
+const char EQL::version[] = "13.10.2"; // Oct 2013
 
 extern "C" void ini_EQL(cl_object);
 
@@ -95,6 +95,7 @@ void EQL::exec(const QStringList& args) {
         if(arguments.length() == 1) {
             // simple top-level
             if(forms.isEmpty()) {
+                EQL::qexec = false;
                 forms << "(si:top-level)"; }}
         else {
             // load file
@@ -109,6 +110,7 @@ void EQL::exec(const QStringList& args) {
     eval(code.toAscii().constData());
     // RESTART for Qt event loop
     if(exec_with_simple_restart) {
+        EQL::qexec = false;
         eval("(eql::exec-with-simple-restart)"); }}
 
 void EQL::exec(lisp_ini ini, const QByteArray& expression, const QByteArray& package) {
@@ -149,4 +151,5 @@ void EQL::exec(QWidget* widget, const QString& lispFile, const QString& slimeHoo
 
 bool EQL::cl_booted = false;
 bool EQL::return_value_p = false;
+bool EQL::qexec = true;
 QEventLoop* EQL::eventLoop = 0;

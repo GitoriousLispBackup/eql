@@ -7,6 +7,7 @@
 #include <ecl/ecl.h>
 #include "eql.h"
 #include <iostream>
+#include <QtDebug>
 
 int catch_all_qexec() {
     int ret = 0;
@@ -36,4 +37,6 @@ int main(int argc, char** argv) {
     std::cout << "*** EQL " << EQL::version << ", Qt " << qVersion() << " ***" << std::endl;
     eql.exec(args);
 
-    return catch_all_qexec(); }
+    if(EQL::qexec) {
+        return catch_all_qexec(); }
+    return 0; }
