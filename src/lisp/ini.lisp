@@ -5,6 +5,7 @@
 (defvar *break-on-errors* nil "Unless NIL, causes a simple (BREAK) on any EQL error.")
 (defvar *slime-mode*      nil)
 (defvar *qtpl*            nil "To set in ~/.eclrc only; the same as command line option -qtpl.")
+(defvar *quitting*        nil)
 
 (defmacro alias (s1 s2)
   `(setf (symbol-function ',s1) (function ,s2)))
@@ -127,7 +128,8 @@
                 (princ err)))
             (si::feed-top-level))
           (finish-output)
-          (qsingle-shot 0 'start-read-thread)))))
+          (unless *quitting*
+            (qsingle-shot 0 'start-read-thread))))))
 
 #+threads
 (defun %read-thread ()
@@ -155,11 +157,12 @@
 
 (let (loaded)
   (defun exec-with-simple-restart-dialog ()
-    ;; command line option "-qtpl" only, see "restart-dialog.lisp"
-    (unless loaded
-      (setf loaded t)
-      (load (in-home "src/lisp/restart-dialog")))
-    (funcall (find-symbol "EXEC-WITH-SIMPLE-RESTART" :restart-dialog))))
+    (when *qtpl*
+      ;; command line option "-qtpl" only, see "restart-dialog.lisp"
+      (unless loaded
+        (setf loaded t)
+        (load (in-home "src/lisp/restart-dialog")))
+      (funcall (find-symbol "EXEC-WITH-SIMPLE-RESTART" :restart-dialog)))))
 
 (defmacro qeval (&rest forms)
   ;; this macro will be redefined in Slime mode (see "../../slime/repl-hook.lisp")
@@ -406,7 +409,14 @@
    alias: qq
    Terminates EQL, passing the given arguments to the ECL function <code>ext:quit</code>."
   (assert (typep exit-status 'fixnum))
+  (setf *qtpl*     nil
+        *quitting* t)
   (no-qexec)
+  (qfun (qapp) "aboutToQuit")
+  #+win32 ; EXT:QUIT may hang
+  (mp:process-run-function :exit (lambda ()
+                                   (sleep 0.1)
+                                   (ffi:c-inline (exit-status) (:int) :void "exit(#0)" :one-liner t :side-effects t)))
   (ext:quit exit-status kill-all-threads))
 
 ;; simplify using CLOS; see example "X-extras/CLOS-encapsulation.lisp"
@@ -525,7 +535,7 @@
         (setf lines (if lines (format nil "~A~%~A" lines line) line))
         ;; test for balanced parenthesis; if yes, we have a READ-able expression
         ;; (see READ-FROM-STRING in EVAL-TOP-LEVEL)
-        (multiple-value-bind (form x)
+        (multiple-value-bind (_ x)
             (ignore-errors
               (read-from-string (format nil "(~A)" (let ((lines* (copy-seq lines)))
                                                      (x:while-it (position #\\ lines*)

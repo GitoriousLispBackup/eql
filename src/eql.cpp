@@ -42,6 +42,7 @@ QString EQL::home() {
     return path; }
 
 void EQL::exec(const QStringList& args) {
+    cl_object s_qtpl = cl_intern(1, make_constant_base_string("*QTPL*"));
     bool exec_with_simple_restart = false;
     QStringList arguments(args);
     eval("(in-package :eql-user)");
@@ -62,9 +63,9 @@ void EQL::exec(const QStringList& args) {
               << "(eql::eval-top-level)";
         exec_with_simple_restart = true; }
     // -qtpl
-    else if(arguments.contains("-qtpl") ||
-       (Ct == cl_symbol_value(cl_intern(1, make_constant_base_string("*QTPL*"))))) {
+    else if(arguments.contains("-qtpl") || (cl_symbol_value(s_qtpl) == Ct)) {
         arguments.removeAll("-qtpl");
+        ecl_setq(ecl_process_env(), s_qtpl, Ct);
         QApplication::setQuitOnLastWindowClosed(false);
         forms << "(when (directory (in-home \"src/lisp/ecl-readline.fas*\"))"
                  "  (load (in-home \"src/lisp/ecl-readline\")))"
@@ -95,7 +96,7 @@ void EQL::exec(const QStringList& args) {
         if(arguments.length() == 1) {
             // simple top-level
             if(forms.isEmpty()) {
-                EQL::qexec = false;
+                qexec = false;
                 forms << "(si:top-level)"; }}
         else {
             // load file
@@ -110,7 +111,7 @@ void EQL::exec(const QStringList& args) {
     eval(code.toAscii().constData());
     // RESTART for Qt event loop
     if(exec_with_simple_restart) {
-        EQL::qexec = false;
+        qexec = false;
         eval("(eql::exec-with-simple-restart)"); }}
 
 void EQL::exec(lisp_ini ini, const QByteArray& expression, const QByteArray& package) {

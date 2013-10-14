@@ -2637,7 +2637,7 @@ cl_object qversion() {
     return l_env->values[0]; }
 
 cl_object call_eval_top_level () {
-    // safe, blocking call from other thread ("evalTopLevel" will run in main thread, see "eql.h")
+    // safe, blocking call from other ECL thread ("evalTopLevel" will run in main thread, see "eql.h")
     QMetaObject::invokeMethod(LObjects::eql, "evalTopLevel", Qt::BlockingQueuedConnection); 
     return Cnil; }
 
