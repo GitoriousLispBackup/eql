@@ -189,7 +189,7 @@
   (when (= (qfun event "timerId") (qfun *timer* "timerId"))
     (when (= *max* (incf *count*))
       (report)
-      (qq))
+      (qsingle-shot 0 'qq)) ; needed with -qtpl
     (incf *step*)
     (qfun *wiggly* "update"))
   (qcall-default))

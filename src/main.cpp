@@ -7,7 +7,6 @@
 #include <ecl/ecl.h>
 #include "eql.h"
 #include <iostream>
-#include <QtDebug>
 
 int catch_all_qexec() {
     int ret = 0;

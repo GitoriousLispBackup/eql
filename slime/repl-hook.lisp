@@ -2,7 +2,7 @@
 
 (defun %qeval (form)
   (setf *top-level-form* (subst 'identity 'qeval form))
-  (call-eval-top-level) ; call eval in main thread
+  (call-eval-top-level) ; blocking call to EVAL in main thread
   (setf *package* *slime-package*)
   (let ((values *slime-values*))
     (setf *slime-values* nil)

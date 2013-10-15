@@ -413,7 +413,8 @@
         *quitting* t)
   (no-qexec)
   (qfun (qapp) "aboutToQuit")
-  #+win32 ; EXT:QUIT may hang
+  (qfun (qapp) "quit")
+  #+threads ; EXT:QUIT may hang in some situations
   (mp:process-run-function :exit (lambda ()
                                    (sleep 0.1)
                                    (ffi:c-inline (exit-status) (:int) :void "exit(#0)" :one-liner t :side-effects t)))

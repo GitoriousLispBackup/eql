@@ -37,7 +37,8 @@ public:
     void exec(QWidget*, const QString&, const QString& = QString());                // see Qt_EQL example
 
     Q_INVOKABLE void evalTopLevel() { // see "ecl_fun.cpp:call_eval_top_level()"
-        cl_funcall(1, cl_intern(2, make_constant_base_string("EVAL-TOP-LEVEL"), cl_find_package(make_constant_base_string("EQL")))); }
+        cl_funcall(1, cl_intern(2, make_constant_base_string("EVAL-TOP-LEVEL"),
+                                   cl_find_package(make_constant_base_string("EQL")))); }
 
 public Q_SLOTS:
     void exitEventLoop() { eventLoop->exit(); }
