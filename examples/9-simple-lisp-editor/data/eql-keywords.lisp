@@ -54,6 +54,7 @@
   "qremove-event-filter"
   "qrequire"
   "qrgb"
+  "qrun-in-gui-thread"
   "qsel"
   "qselect"
   "qsender"

@@ -67,9 +67,9 @@
         (qconnect *server* "newConnection()" 'new-client-connection)
         (multiple-value-bind (eql-version qt-version)
             (qversion)
-          (format t "~%EQL local-server (ECL ~A, EQL ~A, Qt ~A)~@
+          (format t "~%EQL local-server (EQL ~A, ECL ~A, Qt ~A)~@
                        Use local-client to send input.~%"
-                  (ext::lisp-implementation-version) eql-version qt-version))
+                  eql-version (lisp-implementation-version) qt-version))
         (ini-system-tray)
         t)
       (progn

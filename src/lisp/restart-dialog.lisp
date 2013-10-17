@@ -67,31 +67,31 @@
 
 (in-package :restart-dialog)
 
-(let (dialog command)
+(let ((text ":r1"))
   (defun command ()
-    (unless dialog
-      (setf dialog  (qnew "QDialog(QWidget*,Qt::WindowFlags)" nil |Qt.WindowStaysOnTopHint|
-                          "windowTitle" (tr "EQL Debug Dialog"))
-            command (qnew "QLineEdit" "font" (qnew "QFont(QString,int)"
+    (qlet ((dialog  (qnew "QDialog(QWidget*,Qt::WindowFlags)" nil |Qt.WindowStaysOnTopHint|
+                          "windowTitle" (tr "EQL Debug Dialog")))
+           (command (qnew "QLineEdit" "font" (qnew "QFont(QString,int)"
                                                    #+darwin  "Monaco"      #+darwin  12
                                                    #+linux   "Monospace"   #+linux   9
                                                    #+windows "Courier New" #+windows 10)
+                                      "text" text
                                       "minimumWidth" 350))
-      (let ((lb  (qnew "QLabel" "text" (tr "Enter debug command or Lisp expression (:h for help)")))
-            (btn (qnew "QDialogButtonBox"))
-            (lay (qnew "QVBoxLayout(QWidget*)" dialog)))
-        (x:do-with (qfun btn "addButton")
-          |QDialogButtonBox.Ok|
-          |QDialogButtonBox.Cancel|)
-        (x:do-with (qfun lay "addWidget")
-          lb command btn)
-        (qconnect btn "accepted()" dialog "accept()")
-        (qconnect btn "rejected()" dialog "reject()")))
-    (x:do-with (qfun command) "selectAll" "setFocus")
-    (qsingle-shot 0 (lambda () (x:do-with (qfun dialog) "activateWindow" "raise")))
-    (if (= |QDialog.Accepted| (qfun dialog "exec"))
-        (qget command "text")
-        ":r1")))
+           (label   (qnew "QLabel" "text" (tr "Enter debug command or Lisp expression (:h for help)")))
+           (buttons (qnew "QDialogButtonBox"))
+           (layout  (qnew "QVBoxLayout(QWidget*)" dialog)))
+      (x:do-with (qfun buttons "addButton")
+        |QDialogButtonBox.Ok|
+        |QDialogButtonBox.Cancel|)
+      (x:do-with (qfun layout "addWidget")
+        label command buttons)
+      (qconnect buttons "accepted()" dialog "accept()")
+      (qconnect buttons "rejected()" dialog "reject()")
+      (x:do-with (qfun command) "selectAll" "setFocus")
+      (qsingle-shot 0 (lambda () (x:do-with (qfun dialog) "activateWindow" "raise")))
+      (setf text (if (= |QDialog.Accepted| (qfun dialog "exec"))
+                     (qget command "text")
+                     ":r1")))))
 
 ;;; main
 

@@ -4,9 +4,9 @@
 #include <QWidget>
 #include <QStringList>
 #include <QTextCodec>
+#include <iostream>
 #include <ecl/ecl.h>
 #include "eql.h"
-#include <iostream>
 
 int catch_all_qexec() {
     int ret = 0;
@@ -24,16 +24,16 @@ int main(int argc, char** argv) {
     if(args.contains("-h") || (args.contains("--help"))) {
         std::cout << "Usage: eql [file] [-qtpl] [-qgui] [-quic file.ui [:ui-package]] [-slime] [-norc]" << std::endl;
         exit(0); }
-    if(args.contains("-v") || args.contains("--version")) {
-        std::cout << "EQL " << EQL::version << std::endl;
-        exit(0); }
 
     QTextCodec* utf8 = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForCStrings(utf8);
     QTextCodec::setCodecForTr(utf8);
 
     EQL eql;
-    std::cout << "*** EQL " << EQL::version << ", Qt " << qVersion() << " ***" << std::endl;
+    eql.printVersion();
+    if(args.contains("-v") || args.contains("--version")) {
+        std::cout << std::endl;
+        exit(0); }
     eql.exec(args);
 
     if(EQL::qexec) {

@@ -92,7 +92,6 @@ void iniCLFunctions() {
     if(cl_find_package(eql) == Cnil) {
         cl_make_package(1, eql); }
     si_select_package(eql);
-    cl_def_c_function(c_string_to_object((char*)"call-eval-top-level"),    (cl_objectfn_fixed)call_eval_top_level,   0);
     cl_def_c_function(c_string_to_object((char*)"%make-qimage/dangerous"), (cl_objectfn_fixed)make_qimage_dangerous, 5);
     cl_def_c_function(c_string_to_object((char*)"no-qexec"),               (cl_objectfn_fixed)no_qexec,              0);
     cl_def_c_function(c_string_to_object((char*)"qadd-event-filter"),      (cl_objectfn_fixed)qadd_event_filter,     3);
@@ -124,6 +123,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object((char*)"qproperty"),              (cl_objectfn_fixed)qproperty,             2);
     cl_def_c_function(c_string_to_object((char*)"%qrequire"),              (cl_objectfn_fixed)qrequire2,             2);
     cl_def_c_function(c_string_to_object((char*)"qremove-event-filter"),   (cl_objectfn_fixed)qremove_event_filter,  1);
+    cl_def_c_function(c_string_to_object((char*)"qrun-in-gui-thread"),     (cl_objectfn_fixed)qrun_in_gui_thread,    1);
     cl_def_c_function(c_string_to_object((char*)"qsender"),                (cl_objectfn_fixed)qsender,               0);
     cl_def_c_function(c_string_to_object((char*)"%qset-gc"),               (cl_objectfn_fixed)qset_gc,               1);
     cl_def_c_function(c_string_to_object((char*)"qset-property"),          (cl_objectfn_fixed)qset_property,         3);
@@ -2636,9 +2636,19 @@ cl_object qversion() {
     l_env->values[1] = from_cstring(qVersion());
     return l_env->values[0]; }
 
-cl_object call_eval_top_level () {
-    // safe, blocking call from other ECL thread ("evalTopLevel" will run in main thread, see "eql.h")
-    QMetaObject::invokeMethod(LObjects::eql, "evalTopLevel", Qt::BlockingQueuedConnection); 
+cl_object qrun_in_gui_thread(cl_object l_fun) {
+    /// args: (function)
+    /// Runs <code>function</code> in GUI thread while blocking the calling thread. This is needed to run GUI code from ECL threads other than the main thread.<br>Returns <code>T</code> on success.
+    ///     (qrun-in-gui-thread (lambda () (qset ui:*progress-bar* "value" value)))
+    if(l_fun != Cnil) {
+        QObject o;
+        if(o.thread() != QApplication::instance()->thread()) {
+            QMetaObject::invokeMethod(LObjects::eql,
+                                      "runInGuiThread",
+                                      Qt::BlockingQueuedConnection,
+                                      Q_ARG(void*, (void*)l_fun)); 
+            return Ct; }}
+    error_msg("QRUN-IN-GUI-THREAD", LIST1(l_fun));
     return Cnil; }
 
 

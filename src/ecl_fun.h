@@ -211,7 +211,6 @@ class QByteArray;
 class QObject;
 class QEvent;
 
-cl_object call_eval_top_level   ();
 cl_object make_qimage_dangerous (cl_object, cl_object, cl_object, cl_object, cl_object);
 cl_object no_qexec              ();
 cl_object qadd_event_filter     (cl_object, cl_object, cl_object);
@@ -244,6 +243,7 @@ cl_object qprocess_events       ();
 cl_object qproperty             (cl_object, cl_object);
 cl_object qremove_event_filter  (cl_object);
 cl_object qrequire2             (cl_object, cl_object);
+cl_object qrun_in_gui_thread    (cl_object);
 cl_object qsender               ();
 cl_object qset_gc               (cl_object);
 cl_object qset_property         (cl_object, cl_object, cl_object);

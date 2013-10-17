@@ -59,13 +59,13 @@
                  `(defvar ,name (qfind-child ,main ,(string-downcase (substitute #\_ #\- (string-trim "*" (symbol-name name)))))))
                names)))
 
-(defun %get-function (fn pkg)
-  (typecase fn
+(defun %get-function (fun pkg)
+  (typecase fun
     (symbol
-     fn)
+     fun)
     (function
      (let ((var (intern (symbol-name (gensym)) pkg)))
-       (setf (symbol-function var) fn)
+       (setf (symbol-function var) fun)
        var))))
 
 (defun %make-vector ()
@@ -137,7 +137,7 @@
   (unless (find-package :ecl-readline)
     (princ "> "))
   (setf *top-level-form* (si::%tpl-read))
-  (call-eval-top-level) ; defined in "../ecl_fun.cpp" 
+  (qrun-in-gui-thread 'eval-top-level)
   (values))
 
 (defun start-read-thread ()
@@ -407,18 +407,16 @@
 (defun qquit (&optional (exit-status 0) (kill-all-threads t))
   "args: (&optional (exit-status 0) (kill-all-threads t))
    alias: qq
-   Terminates EQL, passing the given arguments to the ECL function <code>ext:quit</code>."
+   Terminates EQL. Use this function to quit gracefully, <b>not</b> <code>ext:quit</code>."
+  (declare (ignore kill-all-threads)) ; only here to be equivalent to EXT:QUIT 
   (assert (typep exit-status 'fixnum))
   (setf *qtpl*     nil
         *quitting* t)
   (no-qexec)
   (qfun (qapp) "aboutToQuit")
   (qfun (qapp) "quit")
-  #+threads ; EXT:QUIT may hang in some situations
-  (mp:process-run-function :exit (lambda ()
-                                   (sleep 0.1)
-                                   (ffi:c-inline (exit-status) (:int) :void "exit(#0)" :one-liner t :side-effects t)))
-  (ext:quit exit-status kill-all-threads))
+  (ffi:c-inline () () :void "cl_shutdown()" :one-liner t :side-effects t)
+  (ffi:c-inline (exit-status) (:int) :void "exit(#0)" :one-liner t :side-effects t))
 
 ;; simplify using CLOS; see example "X-extras/CLOS-encapsulation.lisp"
 
@@ -495,6 +493,7 @@
                   (cons 'qremove-event-filter '(handle))
                   (cons 'qrequire             '(module &optional quiet))
                   (cons 'qrgb                 '(red green blue &optional (alpha 255)))
+                  (cons 'qrun-in-gui-thread   '(function))
                   (cons 'qset-null            '(object))
                   (cons 'qset                 '(object name value))
                   (cons 'qset-color           '(widget color-role color))

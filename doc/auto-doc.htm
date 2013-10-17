@@ -273,7 +273,7 @@
 <b>QQUIT (&optional (exit-status 0) (kill-all-threads t))</b>
 <br>
 <b>QQ</b>
-<p>Terminates EQL, passing the given arguments to the ECL function <code>ext:quit</code>.</p>
+<p>Terminates EQL. Use this function to quit gracefully, <b>not</b> <code>ext:quit</code>.</p>
 </p><br>
 <p>
 <b>QREMOVE-EVENT-FILTER (handle)</b>
@@ -289,6 +289,13 @@
 <p>
 <b>QRGB (red green blue &optional (alpha 255))</b>
 <p>Constructs a <code>(unsigned-byte 32)</code> value that represents a 32 bit pixel color specified by the red, green, blue and alpha values.</p>
+</p><br>
+<p>
+<b>QRUN-IN-GUI-THREAD (function)</b>
+<p>Runs <code>function</code> in GUI thread while blocking the calling thread. This is needed to run GUI code from ECL threads other than the main thread.<br>Returns <code>T</code> on success.</p>
+<pre>
+  (qrun-in-gui-thread (lambda () (qset ui:*progress-bar* "value" value)))
+</pre>
 </p><br>
 <p>
 <b>QSELECT ()</b>

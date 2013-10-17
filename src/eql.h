@@ -35,10 +35,13 @@ public:
     void exec(const QStringList&);
     void exec(lisp_ini, const QByteArray& = "nil", const QByteArray& = "eql-user"); // see my_app example
     void exec(QWidget*, const QString&, const QString& = QString());                // see Qt_EQL example
+    
+    void printVersion() {
+        eval("(multiple-value-bind (eql qt)"
+             "    (eql:qversion)"
+             "  (format t \"EQL ~A (ECL ~A, Qt ~A)~%\" eql (lisp-implementation-version) qt))"); }
 
-    Q_INVOKABLE void evalTopLevel() { // see "ecl_fun.cpp:call_eval_top_level()"
-        cl_funcall(1, cl_intern(2, make_constant_base_string("EVAL-TOP-LEVEL"),
-                                   cl_find_package(make_constant_base_string("EQL")))); }
+    Q_INVOKABLE void runInGuiThread(void*);
 
 public Q_SLOTS:
     void exitEventLoop() { eventLoop->exit(); }

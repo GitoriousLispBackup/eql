@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "13.10.2"; // Oct 2013
+const char EQL::version[] = "13.10.3"; // Oct 2013
 
 extern "C" void ini_EQL(cl_object);
 
@@ -147,6 +147,15 @@ void EQL::exec(QWidget* widget, const QString& lispFile, const QString& slimeHoo
     eval(QString("(progn " + forms.join(" ") + ")").toAscii().constData());
     if(exec_with_simple_restart) {
         eval("(eql::exec-with-simple-restart)"); }}
+
+void EQL::runInGuiThread(void* function) {
+    const cl_env_ptr l_env = ecl_process_env();
+    CL_CATCH_ALL_BEGIN(l_env) {
+        CL_UNWIND_PROTECT_BEGIN(l_env) {
+            cl_funcall(1, (cl_object)function); }
+        CL_UNWIND_PROTECT_EXIT {}
+        CL_UNWIND_PROTECT_END; }
+    CL_CATCH_ALL_END; }
 
 bool EQL::cl_booted = false;
 bool EQL::return_value_p = false;
