@@ -1,7 +1,5 @@
 #+unix (si::trap-fpe t nil)
 
-(load "~/.eclrc") ; for Quicklisp
-
 (ql:quickload :cl-opengl)
 
 (unless (eql:qrequire :opengl)

@@ -291,8 +291,8 @@
 <p>Constructs a <code>(unsigned-byte 32)</code> value that represents a 32 bit pixel color specified by the red, green, blue and alpha values.</p>
 </p><br>
 <p>
-<b>QRUN-IN-GUI-THREAD (function)</b>
-<p>Runs <code>function</code> in GUI thread while blocking the calling thread. This is needed to run GUI code from ECL threads other than the main thread.<br>Returns <code>T</code> on success.</p>
+<b>QRUN-IN-GUI-THREAD (function &optional (blocking t))</b>
+<p>Runs <code>function</code> in GUI thread while (by default) blocking the calling thread. This is needed to run GUI code from ECL threads other than the main thread.<br>Returns <code>T</code> on success.<br><br>There are 2 reasons to always wrap any EQL function like this, if called from another ECL thread:<ul><li>Qt GUI methods always need to run in the GUI thread<li>EQL functions are not designed to be reentrant (not needed for GUI code)</ul></p>
 <pre>
   (qrun-in-gui-thread (lambda () (qset ui:*progress-bar* "value" value)))
 </pre>

@@ -11,7 +11,6 @@
 ;;;
 ;;;   - in "local-server.lisp" add:
 ;;;
-;;;       (load "~/.eclrc")
 ;;;       (ql:quickload :cl-store)
 ;;;
 ;;;   - in "q.lisp" add:

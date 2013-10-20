@@ -243,7 +243,7 @@ cl_object qprocess_events       ();
 cl_object qproperty             (cl_object, cl_object);
 cl_object qremove_event_filter  (cl_object);
 cl_object qrequire2             (cl_object, cl_object);
-cl_object qrun_in_gui_thread    (cl_object);
+cl_object qrun_in_gui_thread2   (cl_object, cl_object);
 cl_object qsender               ();
 cl_object qset_gc               (cl_object);
 cl_object qset_property         (cl_object, cl_object, cl_object);

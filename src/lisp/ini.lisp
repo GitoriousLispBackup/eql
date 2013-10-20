@@ -129,7 +129,7 @@
             (si::feed-top-level))
           (finish-output)
           (unless *quitting*
-            (qsingle-shot 0 'start-read-thread))))))
+            (start-read-thread))))))
 
 #+threads
 (defun %read-thread ()
@@ -137,7 +137,7 @@
   (unless (find-package :ecl-readline)
     (princ "> "))
   (setf *top-level-form* (si::%tpl-read))
-  (qrun-in-gui-thread 'eval-top-level)
+  (qrun-in-gui-thread 'eval-top-level nil)
   (values))
 
 (defun start-read-thread ()
@@ -403,6 +403,9 @@
                                              (when ,reloaded
                                                (funcall ,reloaded ',variable ,library-name)))))
        (defvar ,reloaded nil))))
+
+(defun qrun-in-gui-thread (function &optional (blocking t))
+  (%qrun-in-gui-thread function blocking))
 
 (defun qquit (&optional (exit-status 0) (kill-all-threads t))
   "args: (&optional (exit-status 0) (kill-all-threads t))

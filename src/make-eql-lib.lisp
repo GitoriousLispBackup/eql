@@ -1,12 +1,9 @@
-(unless (find :unicode *features*)
-  (error "Please build ECL with unicode support (configure --enable-unicode)"))
+#-unicode
+(error "Please build ECL with unicode support (configure --enable-unicode)")
 
 (require :cmp)
 
 (setf *break-on-signals* 'error)
-
-(unless (find-package :c)
-  (make-package :c))
 
 #+msvc
 (setf c::*compile-in-constants* t)
