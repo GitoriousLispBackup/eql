@@ -5,7 +5,6 @@
 (defvar *break-on-errors* nil "Unless NIL, causes a simple (BREAK) on any EQL error.")
 (defvar *slime-mode*      nil)
 (defvar *qtpl*            nil "To set in ~/.eclrc only; the same as command line option -qtpl.")
-(defvar *quitting*        nil)
 
 (defmacro alias (s1 s2)
   `(setf (symbol-function ',s1) (function ,s2)))
@@ -128,8 +127,7 @@
                 (princ err)))
             (si::feed-top-level))
           (finish-output)
-          (unless *quitting*
-            (start-read-thread))))))
+          (start-read-thread)))))
 
 #+threads
 (defun %read-thread ()
@@ -407,19 +405,26 @@
 (defun qrun-in-gui-thread (function &optional (blocking t))
   (%qrun-in-gui-thread function blocking))
 
+(defmacro qrun-in-gui-thread* (&body body)
+  "args: (&body body)
+   alias: qrun*
+   Convenience macro for <code>qrun</code>, wrapping <code>body</code> in a <code>lambda</code>, in order to pass arguments etc.
+       (qrun* (qset ui:*progress-bar* \"value\" value))
+       (let (widget) (qrun* (setf widget (qnew \"QWidget\"))))"
+  `(qrun (lambda () ,@body)))
+
+(defmacro qrun* (&body body) ; alias
+  `(qrun-in-gui-thread* ,@body))
+
 (defun qquit (&optional (exit-status 0) (kill-all-threads t))
   "args: (&optional (exit-status 0) (kill-all-threads t))
    alias: qq
    Terminates EQL. Use this function to quit gracefully, <b>not</b> <code>ext:quit</code>."
   (declare (ignore kill-all-threads)) ; only here to be equivalent to EXT:QUIT 
   (assert (typep exit-status 'fixnum))
-  (setf *qtpl*     nil
-        *quitting* t)
-  (no-qexec)
   (qfun (qapp) "aboutToQuit")
   (qfun (qapp) "quit")
-  (ffi:c-inline () () :void "cl_shutdown()" :one-liner t :side-effects t)
-  (ffi:c-inline (exit-status) (:int) :void "exit(#0)" :one-liner t :side-effects t))
+  (ffi:c-inline (exit-status) (:int) :void "cl_shutdown(); exit(#0);" :one-liner nil :side-effects t))
 
 ;; simplify using CLOS; see example "X-extras/CLOS-encapsulation.lisp"
 
@@ -446,6 +451,7 @@
 (alias qfun* qinvoke-method*)
 (alias qfun+ qinvoke-method+)
 (alias qmsg  qmessage-box)
+(alias qrun  qrun-in-gui-thread)
 (alias qsel  qselect)
 (alias qq    qquit)
 
@@ -496,7 +502,10 @@
                   (cons 'qremove-event-filter '(handle))
                   (cons 'qrequire             '(module &optional quiet))
                   (cons 'qrgb                 '(red green blue &optional (alpha 255)))
+                  (cons 'qrun                 '(function))
                   (cons 'qrun-in-gui-thread   '(function))
+                  (cons 'qrun*                '(&body body))
+                  (cons 'qrun-in-gui-thread*  '(&body body))
                   (cons 'qset-null            '(object))
                   (cons 'qset                 '(object name value))
                   (cons 'qset-color           '(widget color-role color))

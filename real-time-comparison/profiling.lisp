@@ -59,8 +59,7 @@
   ()
   (:metaclass qt-class)
   (:qt-superclass "QWidget")
-  (:override ("paintEvent" paint)
-             ("timerEvent" timeout)))
+  (:override ("paintEvent" paint)))
 
 #+common-qt
 (defmethod initialize-instance :after ((instance wiggly) &key parent)
@@ -76,7 +75,7 @@
   (setf *qapp*   (make-qapplication) 
         *wiggly* (make-instance 'wiggly)
         *edit*   (#_new QLineEdit)
-        *timer*  (#_new QBasicTimer))
+        *timer*  (#_new QTimer))
   (#_setAlignment *edit* (#_Qt::AlignCenter))
   (let ((dlg  (#_new QDialog))
         (vbox (#_new QVBoxLayout)))
@@ -85,36 +84,34 @@
       (#_addWidget vbox w))
     (#_resize dlg 600 200)
     (#_setText *edit* "1234567890987654321")
-    (#_start *timer* 10 *wiggly*)
+    (connect *timer* (QSIGNAL "timeout()") 'timeout)
+    (#_start *timer* 10)
     (#_show dlg)
     (#_raise dlg)
     (#_exec *qapp*)))
 
 #+eql
 (defun new-wiggly ()
-  (let ((w (qnew "QWidget"
-                 "font" (let ((font (qfun "QApplication" "font")))
-                          (qfun font "setPointSize" (+ 20 (qfun font "pointSize")))
-                          font)
-                 "autoFillBackground" t)))
-    (qfun w "setBackgroundRole" |QPalette.Light|)
-    (x:do-with (qoverride w)
-      ("paintEvent(QPaintEvent*)" 'paint)
-      ("timerEvent(QTimerEvent*)" 'timeout))
-    w))
+  (x:let-it (qnew "QWidget"
+                  "font" (x:let-it (qfun "QApplication" "font")
+                           (qfun x:it "setPointSize" (+ 20 (qfun x:it "pointSize"))))
+                  "autoFillBackground" t)
+    (qfun x:it "setBackgroundRole" |QPalette.Light|)
+    (qoverride x:it "paintEvent(QPaintEvent*)" 'paint)))
 
 #+eql
 (defun start ()
   (setf *wiggly* (new-wiggly)
         *edit*   (qnew "QLineEdit" "alignment" |Qt.AlignCenter|)
-        *timer*  (qnew "QBasicTimer"))
+        *timer*  (qnew "QTimer"))
   (let ((dlg  (qnew "QDialog" "size" (list 600 200)))
         (vbox (qnew "QVBoxLayout")))
     (qfun dlg "setLayout" vbox)
     (dolist (w (list *wiggly* *edit*))
       (qfun vbox "addWidget" w))
     (qset *edit* "text" "1234567890987654321")
-    (qfun *timer* "start" 10 *wiggly*)
+    (qconnect *timer* "timeout()" 'timeout)
+    (qfun *timer* "start" 10)
     (x:do-with (qfun dlg) "show" "raise")))
 
 #+common-qt
@@ -175,24 +172,20 @@
 (defvar *max*   1000)
 
 #+common-qt
-(defmethod timeout ((this wiggly) event)
-  (when (= (#_timerId event) (#_timerId *timer*))
-    (when (= *max* (incf *count*))
-      (report)
-      (sb-ext:quit))
-    (incf *step*)
-    (#_update *wiggly*))
-  (call-next-qmethod))
+(defun timeout ()
+  (when (= *max* (incf *count*))
+    (report)
+    (sb-ext:quit))
+  (incf *step*)
+  (#_update *wiggly*))
 
 #+eql
-(defun timeout (event)
-  (when (= (qfun event "timerId") (qfun *timer* "timerId"))
-    (when (= *max* (incf *count*))
-      (report)
-      (qsingle-shot 0 'qq)) ; needed with -qtpl
-    (incf *step*)
-    (qfun *wiggly* "update"))
-  (qcall-default))
+(defun timeout ()
+  (when (= *max* (incf *count*))
+    (report)
+    (qq))
+  (incf *step*)
+  (qfun *wiggly* "update"))
 
 (profile
   paint

@@ -2638,9 +2638,9 @@ cl_object qversion() {
 
 cl_object qrun_in_gui_thread2(cl_object l_fun, cl_object l_block) {
     /// args: (function &optional (blocking t))
+    /// alias: qrun
     /// Runs <code>function</code> in GUI thread while (by default) blocking the calling thread. This is needed to run GUI code from ECL threads other than the main thread.<br>Returns <code>T</code> on success.<br><br>There are 2 reasons to always wrap any EQL function like this, if called from another ECL thread:<ul><li>Qt GUI methods always need to run in the GUI thread<li>EQL functions are not designed to be reentrant (not needed for GUI code)</ul>
-
-    ///     (qrun-in-gui-thread (lambda () (qset ui:*progress-bar* "value" value)))
+    ///     (qrun 'update-view-data)
     if(l_fun != Cnil) {
         QObject o;
         if(o.thread() != QApplication::instance()->thread()) {

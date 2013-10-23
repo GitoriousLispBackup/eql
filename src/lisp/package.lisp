@@ -63,7 +63,10 @@
    #:qremove-event-filter
    #:qrequire
    #:qrgb
+   #:qrun
    #:qrun-in-gui-thread
+   #:qrun*
+   #:qrun-in-gui-thread*
    #:qsel
    #:qselect
    #:qsender
