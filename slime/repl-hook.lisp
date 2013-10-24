@@ -5,7 +5,7 @@
       (qrun-in-gui-thread*
         (values (multiple-value-list
                   (with-simple-restart (abort "Return to SLIME's top level.")
-                    (eval (subst 'identity 'eqval form))))
+                    (eval (subst 'identity 'qeval form))))
                 *package*))
     (finish-output)
     (setf *package* package)
