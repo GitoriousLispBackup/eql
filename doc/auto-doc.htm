@@ -303,10 +303,10 @@
 <b>QRUN-IN-GUI-THREAD* (&body body)</b>
 <br>
 <b>QRUN*</b>
-<p>Convenience macro for <code>qrun</code>, wrapping <code>body</code> in a <code>lambda</code>, in order to pass arguments etc.</p>
+<p>Convenience macro for <code>qrun</code>, wrapping <code>body</code> in a closure (passing arguments, return values).</p>
 <pre>
   (qrun* (qset ui:*progress-bar* "value" value))
-  (let (widget) (qrun* (setf widget (qnew "QWidget"))))
+  (let ((item (qrun* (qnew "QTableWidgetItem")))) ...) ; return value(s)
 </pre>
 </p><br>
 <p>

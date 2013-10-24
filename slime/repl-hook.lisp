@@ -1,11 +1,14 @@
 (in-package :eql)
 
 (defun %qeval (form)
-  (setf *top-level-form* (subst 'identity 'qeval form))
-  (qrun-in-gui-thread 'eval-top-level)
-  (setf *package* *slime-package*)
-  (let ((values *slime-values*))
-    (setf *slime-values* nil)
+  (multiple-value-bind (values package)
+      (qrun-in-gui-thread*
+        (values (multiple-value-list
+                  (with-simple-restart (abort "Return to SLIME's top level.")
+                    (eval (subst 'identity 'eqval form))))
+                *package*))
+    (finish-output)
+    (setf *package* package)
     (values-list values)))
 
 (defmacro qeval (&rest forms)

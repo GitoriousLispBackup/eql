@@ -97,9 +97,6 @@
 
 ;;; top-level / slime-mode processing Qt events (command line options "-qtpl" and "-slime")
 
-(defvar *top-level-form*  nil)
-(defvar *slime-values*    nil)
-(defvar *slime-package*   (find-package :eql-user))
 (defvar *slime-hook-file* nil)
 
 (defun load-slime-hook-file ()
@@ -109,33 +106,12 @@
       (qsingle-shot 500 'load-slime-hook-file))) ; we need to wait for Emacs "slime-connect"
            
 #+threads
-(defun eval-top-level ()
-  (when *top-level-form*
-    (if *slime-mode*
-        (progn
-          (setf *slime-values*   (multiple-value-list
-                                   (with-simple-restart (abort "Return to SLIME's top level.")
-                                     (eval *top-level-form*)))
-                *top-level-form* nil
-                *slime-package*  *package*)
-          (finish-output))
-        (progn
-          ;; needed to avoid unrecoverable BREAK on errors during READ (command line option "-qtpl")
-          (when (stringp *top-level-form*)
-            (handler-case (setf *top-level-form* (read-from-string *top-level-form*))
-              (error (err)
-                (princ err)))
-            (si::feed-top-level))
-          (finish-output)
-          (start-read-thread)))))
-
-#+threads
 (defun %read-thread ()
   (si::tpl-prompt)
   (unless (find-package :ecl-readline)
     (princ "> "))
-  (setf *top-level-form* (si::%tpl-read))
-  (qrun-in-gui-thread 'eval-top-level nil)
+  (let ((form (si::%tpl-read)))
+    (qrun-in-gui-thread (lambda () (eval-top-level form)) nil))
   (values))
 
 (defun start-read-thread ()
@@ -143,6 +119,16 @@
   (mp:process-run-function :read '%read-thread)
   #-threads
   (error "ECL threads not enabled, can't process Qt events."))
+
+(defun eval-top-level (form)
+  ;; needed to avoid unrecoverable BREAK on errors during READ (command line option "-qtpl")
+  (when (stringp form)
+    (handler-case (setf form (read-from-string form))
+      (error (err)
+        (princ err)))
+    (si::feed-top-level form))
+  (finish-output)
+  (start-read-thread))
 
 (defun exec-with-simple-restart ()
   (if *slime-mode*
@@ -408,10 +394,16 @@
 (defmacro qrun-in-gui-thread* (&body body)
   "args: (&body body)
    alias: qrun*
-   Convenience macro for <code>qrun</code>, wrapping <code>body</code> in a <code>lambda</code>, in order to pass arguments etc.
+   Convenience macro for <code>qrun</code>, wrapping <code>body</code> in a closure (passing arguments, return values).
        (qrun* (qset ui:*progress-bar* \"value\" value))
-       (let (widget) (qrun* (setf widget (qnew \"QWidget\"))))"
-  `(qrun (lambda () ,@body)))
+       (let ((item (qrun* (qnew \"QTableWidgetItem\")))) ...) ; return value(s)"
+  (let ((values (gensym)))
+    `(let (,values)
+       (qrun (lambda ()
+               (setf ,values (multiple-value-list ,(if (second body)
+                                                       (cons 'progn body)
+                                                       (first body))))))
+       (values-list ,values))))
 
 (defmacro qrun* (&body body) ; alias
   `(qrun-in-gui-thread* ,@body))
@@ -533,11 +525,11 @@
 
 (in-package :si)
 
-(defun feed-top-level ()
+(defun feed-top-level (form)
   (catch *quit-tag*
     (let ((*debugger-hook* nil)
           (*tpl-level* -1))
-      (%tpl))))
+      (%tpl form))))
 
 (defun %read-lines ()
   ;; allow multi-line expressions (command line option "-qtpl")
@@ -600,10 +592,10 @@
   (when (> *tpl-level* 0)
     (tpl-print-current)))
 
-(defun %tpl (&key ((:commands *tpl-commands*) tpl-commands)
-                 ((:prompt-hook *tpl-prompt-hook*) *tpl-prompt-hook*)
-                 (broken-at nil)
-                 (quiet nil))
+(defun %tpl (form &key ((:commands *tpl-commands*) tpl-commands)
+                       ((:prompt-hook *tpl-prompt-hook*) *tpl-prompt-hook*)
+                       (broken-at nil)
+                       (quiet nil))
   #-ecl-min
   (declare (c::policy-debug-ihs-frame))
   (let* ((*ihs-base* *ihs-top*)
@@ -648,9 +640,9 @@
                    (unless quiet
                      (%break-where)
                      (setf quiet t))
-                 (if eql::*top-level-form*
-                     (setq - eql::*top-level-form*
-                           eql::*top-level-form* nil)
+                 (if form
+                     (setq - form
+                           form nil)
                      (setq - (locally (declare (notinline tpl-read))
                                (tpl-prompt)
                                (tpl-read))))
