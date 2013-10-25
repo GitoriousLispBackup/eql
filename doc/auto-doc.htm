@@ -294,7 +294,7 @@
 <b>QRUN-IN-GUI-THREAD (function &optional (blocking t))</b>
 <br>
 <b>QRUN</b>
-<p>Runs <code>function</code> in GUI thread while (by default) blocking the calling thread. This is needed to run GUI code from ECL threads other than the main thread.<br>Returns <code>T</code> on success.<br><br>There are 2 reasons to always wrap any EQL function like this, if called from another ECL thread:<ul><li>Qt GUI methods always need to run in the GUI thread<li>EQL functions are not designed to be reentrant (not needed for GUI code)</ul></p>
+<p>Runs <code>function</code> in GUI thread while (by default) blocking the calling thread (if called from main thread, <code>function</code> will simply be called directly).<br>This is needed to run GUI code from ECL threads other than the main thread.<br>Returns <code>T</code> on success.<br><br>There are 2 reasons to always wrap any EQL function like this, if called from another ECL thread:<ul><li>Qt GUI methods always need to run in the GUI thread<li>EQL functions are not designed to be reentrant (not needed for GUI code)</ul>See also macro <code>qrun*</code>.</p>
 <pre>
   (qrun 'update-view-data)
 </pre>

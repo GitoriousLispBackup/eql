@@ -1,12 +1,27 @@
 ;;; A simple demo for macro QRUN-IN-GUI-THREAD* / QRUN*
 ;;;
-;;; Calculate primes in thread and update QListWidget directly from thread.
+;;; Calculate primes in threads and update QTreeWidget directly from threads.
 
-(defvar *list-widget* (qnew "QListWidget"))
+(defvar *tree-widget* (qnew "QTreeWidget"
+                            "alternatingRowColors" t
+                            "size" '(500 300)))
+
+(defvar *start-time*)
 
 (defun new-item (text)
-  (qrun* (qnew "QListWidgetItem(QString,QListWidget*)" text *list-widget*)
-         (qfun *list-widget* "scrollToBottom")))
+  (let ((column (or (ignore-errors
+                      (parse-integer (mp:process-name mp:*current-process*)))
+                    1)))
+    (qrun* (let ((item (qnew "QTreeWidgetItem")))
+             (x:do-with (qfun item)
+               ("setTextAlignment" 0 |Qt.AlignRight|)
+               ("setText" 0 (format nil "~:D" (- (get-internal-real-time) *start-time*)))
+               ("setText" column text))
+             (x:do-with (qfun *tree-widget*)
+               ("addTopLevelItem" item)
+               ("resizeColumnToContents" 0)
+               ("resizeColumnToContents" column)
+               ("scrollToBottom"))))))
 
 (defun prime-p (x)
   ;; slow and dumb
@@ -18,16 +33,22 @@
                  :never (= 0 (mod x i))))))
 
 (defun primes (start number)
+  (qrun* (qfun *tree-widget* "clear"))
+  (setf *start-time* (get-internal-real-time))
   (do ((i (1+ start) (1+ i))
        (found 0))
-    ((= found number) (new-item "OK"))
+    ((= found number) (new-item "Done"))
     (when (prime-p i)
       (incf found)
       (new-item (princ-to-string i)))))
 
-(defun run ()
-  (mp:process-run-function :primes (lambda () (primes (expt 10 12) 25)))
-  (x:do-with (qfun *list-widget*) "show" "raise"))
+(defun run (&optional (number-threads 2))
+  (qset *tree-widget* "columnCount" (1+ number-threads))
+  (qfun *tree-widget* "setHeaderLabels"
+        (cons "Time" (loop :for i :from 1 :to number-threads :collect (format nil "Thread ~D" i))))
+  (dotimes (n number-threads)
+    (let ((name (princ-to-string (1+ n))))
+      (mp:process-run-function name (lambda () (primes #.(expt 10 12) 15)))))
+  (x:do-with (qfun *tree-widget*) "show" "raise"))
 
 (run)
-
