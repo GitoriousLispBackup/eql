@@ -58,6 +58,16 @@
                  `(defvar ,name (qfind-child ,main ,(string-downcase (substitute #\_ #\- (string-trim "*" (symbol-name name)))))))
                names)))
 
+(defmacro qsingle-shot (ms fun)
+  (if (or (eql 'lambda (first fun))
+          (and (listp (second fun))
+               (eql 'lambda (caadr fun)))) ; #'(lambda ())
+      (let ((fun* (gensym)))
+        `(let ((,fun* (intern ,(symbol-name fun*))))
+           (setf (symbol-function ,fun*) ,fun)
+           (%qsingle-shot ,ms ,fun*)))
+      `(%qsingle-shot ,ms ,fun)))
+
 (defun %get-function (fun pkg)
   (typecase fun
     (symbol

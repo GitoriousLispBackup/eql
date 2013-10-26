@@ -247,7 +247,7 @@ cl_object qrun_in_gui_thread2   (cl_object, cl_object);
 cl_object qsender               ();
 cl_object qset_gc               (cl_object);
 cl_object qset_property         (cl_object, cl_object, cl_object);
-cl_object qsingle_shot          (cl_object, cl_object);
+cl_object qsingle_shot2         (cl_object, cl_object);
 cl_object qstatic_meta_object   (cl_object);
 cl_object qsuper_class_name     (cl_object);
 cl_object qtranslate            (cl_object, cl_object, cl_object);

@@ -127,7 +127,7 @@ void iniCLFunctions() {
     cl_def_c_function(c_string_to_object((char*)"qsender"),                (cl_objectfn_fixed)qsender,               0);
     cl_def_c_function(c_string_to_object((char*)"%qset-gc"),               (cl_objectfn_fixed)qset_gc,               1);
     cl_def_c_function(c_string_to_object((char*)"qset-property"),          (cl_objectfn_fixed)qset_property,         3);
-    cl_def_c_function(c_string_to_object((char*)"qsingle-shot"),           (cl_objectfn_fixed)qsingle_shot,          2);
+    cl_def_c_function(c_string_to_object((char*)"%qsingle-shot"),          (cl_objectfn_fixed)qsingle_shot2,         2);
     cl_def_c_function(c_string_to_object((char*)"qstatic-meta-object"),    (cl_objectfn_fixed)qstatic_meta_object,   1);
     cl_def_c_function(c_string_to_object((char*)"qsuper-class-name"),      (cl_objectfn_fixed)qsuper_class_name,     1);
     cl_def_c_function(c_string_to_object((char*)"qtranslate"),             (cl_objectfn_fixed)qtranslate,            3);
@@ -2594,15 +2594,14 @@ cl_object qsuper_class_name(cl_object l_name) {
     error_msg("QSUPER-CLASS-NAME", LIST1(l_name));
     return Cnil; }
 
-cl_object qsingle_shot(cl_object l_msec, cl_object l_fun) {
+cl_object qsingle_shot2(cl_object l_msec, cl_object l_fun) {
     /// args: (milliseconds function)
     /// A single shot timer similar to <code>QTimer::singleShot()</code>.
     ///     (qsingle-shot 0 'on-qt-idle)
     ///     (let ((ms 500)) (qsingle-shot ms (lambda () (qmsg ms))))
     ecl_process_env()->nvalues = 1;
-    void* fun = getLispFun(l_fun);
-    if(fun) {
-        new SingleShot(toInt(l_msec), fun); // see "delete this;" in "single_shot.h"
+    if(l_fun != Cnil) {
+        new SingleShot(toInt(l_msec), l_fun); // see "delete this;" in "single_shot.h"
         return l_msec; }
     error_msg("QSINGLE-SHOT", LIST2(l_msec, l_fun));
     return Cnil; }

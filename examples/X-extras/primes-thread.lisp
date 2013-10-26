@@ -23,14 +23,13 @@
                ("resizeColumnToContents" column)
                ("scrollToBottom"))))))
 
-(defun prime-p (x)
-  ;; slow and dumb
-  (cond ((not (integerp x)) nil)
-        ((< x 2) nil)
-        ((= x 2) 2)
-        ((= 0 (mod x 2)) nil)
-        (t (loop :for i :from 3 :to (isqrt x) :by 2
-                 :never (= 0 (mod x i))))))
+(defun primep (x)
+  ;; slow/dumb
+  (or (= 2 x)
+      (and (integerp x)
+           (> x 2)
+           (not (zerop (mod x 2)))
+           (loop :for i :from 3 :to (isqrt x) :by 2 :never (zerop (mod x i))))))
 
 (defun primes (start number)
   (qrun* (qfun *tree-widget* "clear"))
@@ -38,7 +37,7 @@
   (do ((i (1+ start) (1+ i))
        (found 0))
     ((= found number) (new-item "Done"))
-    (when (prime-p i)
+    (when (primep i)
       (incf found)
       (new-item (princ-to-string i)))))
 
