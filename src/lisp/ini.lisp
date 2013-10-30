@@ -86,8 +86,8 @@
 (let (home)
   (defun set-home (path)
     (setf home path))
-  (defun in-home (file)
-    (concatenate 'string home file)))
+  (defun in-home (&rest files)
+    (apply 'concatenate 'string home files)))
 
 (defun %signal/slot (ch name)
   (values (read-from-string (format nil "\"~C~A\"" ch name)))) ; force creation of string literal
@@ -461,7 +461,7 @@
 
 (dolist (el (list (cons 'defvar-ui            '(main-widget &rest variables))
                   (cons 'ensure-qt-object     '(object))
-                  (cons 'in-home              '(file-name))
+                  (cons 'in-home              '(&rest file-names))
                   (cons 'qadd-event-filter    '(object event function))
                   (cons 'qapropos             '(&optional search-string class-name))
                   (cons 'qapropos*            '(&optional search-string class-name))

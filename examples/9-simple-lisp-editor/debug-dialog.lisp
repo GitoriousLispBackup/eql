@@ -34,7 +34,7 @@
     (add-messages msg messages)
     (if (= |QDialog.Accepted| (qfun dlg "exec"))
         (qget cmd "text")
-        ":exit")))
+        ":r1")))
 
 (defun add-messages (text-edit messages)
   (dolist (msg messages)

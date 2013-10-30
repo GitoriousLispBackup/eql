@@ -42,7 +42,7 @@
       (read-sequence x:it s))))
 
 (defun in-home* (name)
-  (in-home (concatenate 'string "examples/9-simple-lisp-editor/" name)))
+  (in-home "examples/9-simple-lisp-editor/" name))
 
 (defun from-file (name)
   (eval (read-from-string (read-file (in-home* name) :do-not-set))))
@@ -1039,7 +1039,7 @@
 
 (defun run-on-server (str &optional restart)
   (flet ((path-to-server (name)
-           (x:when-it (probe-file (in-home (concatenate 'string "examples/9-simple-lisp-editor/" name)))
+           (x:when-it (probe-file (in-home "examples/9-simple-lisp-editor/" name))
              (namestring x:it))))
     (qprocess-events)
     (or (local-client:request str)

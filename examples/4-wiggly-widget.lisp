@@ -12,7 +12,7 @@
 
 (defvar *wiggly* (qnew "QWidget" "autoFillBackground" t))
 (defvar *edit*   (qnew "QLineEdit" "alignment" |Qt.AlignCenter|))
-(defvar *timer*  (qnew "QBasicTimer"))
+(defvar *timer*  (qnew "QTimer"))
 
 (defparameter *step* 0)
 
@@ -26,10 +26,9 @@
     (qfun dlg "setLayout" vbox)
     (dolist (w (list *wiggly* *edit*))
       (qfun vbox "addWidget" w))
-    (qfun *timer* "start" 50 *wiggly*)
-    (x:do-with (qoverride *wiggly*)
-      ("paintEvent(QPaintEvent*)" 'paint)
-      ("timerEvent(QTimerEvent*)" 'timeout))
+    (qconnect *timer* "timeout()" 'timeout)
+    (qoverride *wiggly* "paintEvent(QPaintEvent*)" 'paint)
+    (qfun *timer* "start" 50)
     (qset *edit* "text" "= never odd or even =")
     (x:do-with (qfun dlg) "show" "raise")))
 
@@ -56,11 +55,9 @@
                                         (string ch)))
           (incf x (qfun metrics "width(QChar)" ch)))))))
 
-(defun timeout (ev)
-  (when (= (qfun ev "timerId") (qfun *timer* "timerId"))
-    (incf *step*)
-    (qfun *wiggly* "update"))
-  (qcall-default))
+(defun timeout ()
+  (incf *step*)
+  (qfun *wiggly* "update"))
 
 (progn
   (start)

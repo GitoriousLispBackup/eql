@@ -9,9 +9,10 @@
 (defvar *start-time*)
 
 (defun new-item (text)
-  (let ((column (or (ignore-errors
-                      (parse-integer (mp:process-name mp:*current-process*)))
+  ;; in "primes" thread
+  (let ((column (or (parse-integer (symbol-name (mp:process-name mp:*current-process*)) :junk-allowed t)
                     1)))
+    ;; in GUI/main thread (safe because queued and blocking)
     (qrun* (let ((item (qnew "QTreeWidgetItem")))
              (x:do-with (qfun item)
                ("setTextAlignment" 0 |Qt.AlignRight|)
@@ -34,20 +35,24 @@
 (defun primes (start number)
   (qrun* (qfun *tree-widget* "clear"))
   (setf *start-time* (get-internal-real-time))
-  (do ((i (1+ start) (1+ i))
+  (do ((i start (1+ i))
        (found 0))
     ((= found number) (new-item "Done"))
     (when (primep i)
       (incf found)
       (new-item (princ-to-string i)))))
 
+(defun all-threads ()
+  (format t "~%Threads:~%~%~{  ~S~%~}~%" (reverse (mp:all-processes))))
+
 (defun run (&optional (number-threads 2))
   (qset *tree-widget* "columnCount" (1+ number-threads))
   (qfun *tree-widget* "setHeaderLabels"
         (cons "Time" (loop :for i :from 1 :to number-threads :collect (format nil "Thread ~D" i))))
   (dotimes (n number-threads)
-    (let ((name (princ-to-string (1+ n))))
+    (let ((name (make-symbol (princ-to-string (1+ n)))))
       (mp:process-run-function name (lambda () (primes #.(expt 10 12) 15)))))
-  (x:do-with (qfun *tree-widget*) "show" "raise"))
+  (x:do-with (qfun *tree-widget*) "show" "raise")
+  (all-threads))
 
 (run)
