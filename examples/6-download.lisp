@@ -19,16 +19,16 @@
     (qconnect *manager* "finished(QNetworkReply*)" 'download-finished))
   (qlet ((url "QUrl(QString)" name)
          (request "QNetworkRequest(QUrl)" url))
-    (qfun *manager* "get" request)))
+    (! "get" *manager* request)))
 
 (defun download-finished (reply)
-  (qfun reply "deleteLater") ; QNetworkReply*: heap result, delete manually
-  (let ((error (qfun reply "error")))
+  (! "deleteLater" reply) ; QNetworkReply*: heap result, delete manually
+  (let ((error (! "error" reply)))
     (if (= |QNetworkReply.NoError| error)
-        (let ((data (qfun reply "readAll")))
+        (let ((data (! "readAll" reply)))
           (save-data data)
-          (qfun "QMessageBox" "information" nil "EQL"
-                (format nil (tr "Downloaded ~:D bytes, see \"download.data\".") (length data))))
+          (! "information" "QMessageBox" nil "EQL"
+             (format nil (tr "Downloaded ~:D bytes, see \"download.data\".") (length data))))
         (show-error error))))
 
 (defun save-data (data)
@@ -40,6 +40,6 @@
   (let ((msg (x:when-it (find error (cdadr (qenums "QNetworkReply" "NetworkError")) :key 'cdr)
                (format nil (tr "Download error: <span style='color:red; font-weight:bold;'>~A</span>")
                        (car x:it)))))
-    (qfun "QMessageBox" "critical" nil "EQL" (or msg (tr "Unknown download error.")))))
+    (! "critical" "QMessageBox" nil "EQL" (or msg (tr "Unknown download error.")))))
 
 (download "http://planet.lisp.org/")

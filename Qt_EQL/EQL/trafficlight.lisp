@@ -23,10 +23,10 @@
   (defun paint-event (widget color width height)
     ;;(x:d widget (qget widget "objectName") color) ; debug output
     ;;(local-server:output)                         ; get output buffer (for editor output widget)
-    (qfun brush "setColor(QColor)" color)
-    (qfun pen "setColor" "steelblue")
-    (qfun pen "setWidth" 5)
-    (x:do-with (qfun painter)
+    (! "setColor(QColor)" brush color)
+    (! "setColor" pen "steelblue")
+    (! "setWidth" pen 5)
+    (x:do-with painter
       ("begin(QWidget*)" widget)
       ("setRenderHint" |QPainter.Antialiasing|)
       ("setPen(QPen)" pen)
@@ -36,7 +36,7 @@
       ("end"))))
 
 (defun run ()
-  (qfun *qt-main* "resize" '(110 300))
-  (qfun *qt-main* "show"))
+  (! "resize" *qt-main* '(110 300))
+  (! "show" *qt-main*))
 
 (run)

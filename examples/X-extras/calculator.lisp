@@ -18,8 +18,8 @@
                           "frameShape" |QFrame.Box|))
 (defvar *float*     (qnew "QLineEdit"
                           "readOnly" t
-                          "font" (x:let-it (qfun "QApplication" "font")
-                                   (qfun x:it "setPointSize" (+ 6 (qfun x:it "pointSize"))))))
+                          "font" (x:let-it (! "font" "QApplication")
+                                   (! "setPointSize" x:it (+ 6 (! "pointSize" x:it))))))
 
 (defvar *precision* 0f0) ; f = float, d = double, l = long
 (defvar *value1*    nil)
@@ -37,7 +37,7 @@
       (ignore-errors (apply fun args))
     (or val
         (progn
-          (qfun "QMessageBox" "critical" nil "Error" (error-to-string err))
+          (! "critical" "QMessageBox" nil "Error" (error-to-string err))
           0))))
 
 (defun display-number (n)
@@ -96,7 +96,7 @@
 (defun clear-clicked ()
   (setf *value2* nil)
   (clear-display)
-  (qfun *main* "adjustSize"))
+  (! "adjustSize" *main*))
 
 (defun operate ()
   (x:when-it (funcall-protect *operation* *value2* *value1*)
@@ -130,7 +130,7 @@
           (point (b)) (clear (b)) (back (b)) (words (b)) (equal (b)))
       (dotimes (n 10)
         (setf (svref digits n) (b)))
-      (x:do-with (qfun layout "addWidget")
+      (x:do-with (! "addWidget" layout)
         (reci     2 0)
         (divide   2 1)
         (multiply 2 2)
@@ -148,7 +148,7 @@
       (let ((n 0))
         (dotimes (r 3)
           (dotimes (c 3)
-            (qfun layout "addWidget" (svref digits (incf n)) (- 5 r) c))))
+            (! "addWidget" layout (svref digits (incf n)) (- 5 r) c))))
       (dolist (btn (list (list plus     "+")
                          (list minus    "-")
                          (list multiply "*")
@@ -184,8 +184,8 @@
             (list clear back sign point reci words equal)
             (list 'clear-clicked 'back-clicked 'sign-clicked 'point-clicked 'reci-clicked 'words-clicked 'equal-clicked))
       (clear-display)
-      (qfun *real* "setFocus")
-      (x:do-with (qfun *main*) "show" "raise"))))
+      (! "setFocus" *real*)
+      (x:do-with *main* "show" "raise"))))
 
 (run)
 
@@ -209,13 +209,13 @@
   (when (stringp buttons)
     (setf buttons (prepare buttons)))
   (when buttons
-    (qfun (qfind-child *main* (first buttons)) "animateClick" milliseconds)
+    (! "animateClick" (qfind-child *main* (first buttons)) milliseconds)
     (qsingle-shot (* 2 milliseconds) (lambda () (auto (rest buttons) milliseconds)))))
 
 ;;; example / eql calculator -a
 
 (defun qarg (argument)
-  (find argument (qfun "QApplication" "arguments") :test 'string=))
+  (find argument (! "arguments" "QApplication") :test 'string=))
 
 (when (qarg "-a")
   (auto "AC 1.25 + 3.75 = *= *= 1/x 1/x +- blah"))

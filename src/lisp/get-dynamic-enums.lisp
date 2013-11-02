@@ -20,7 +20,7 @@
         (add-enums "Qt")
         (dolist (name (qobject-names))
           (let ((mo (qstatic-meta-object name)))
-            (when (and mo (string= (qfun mo "className") name))
+            (when (and mo (string= (! "className" mo) name))
               (add-enums name))))
         (let ((ex ""))
           (dolist (enum (sort all-enums 'string<))

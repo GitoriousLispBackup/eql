@@ -160,12 +160,12 @@ the FORMAT argument."
   (let ((rv (make-qimage/worker array format :width width :height height)))
     (case format
       ((#.|QImage.Format_Mono| #.|QImage.Format_MonoLSB|)
-       (qfun rv "setColorTable" (if color-table
-                                    color-table
-                                    (default-color-table/mono))))
+       (! "setColorTable" rv (if color-table
+                                 color-table
+                                 (default-color-table/mono))))
       (#.|QImage.Format_Indexed8|
-         (qfun rv "setColorTable" (if color-table
-                                      color-table
-                                      (default-color-table/indexed8)))))
+         (! "setColorTable" rv (if color-table
+                                   color-table
+                                   (default-color-table/indexed8)))))
     rv))
 

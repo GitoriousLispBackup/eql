@@ -13,13 +13,13 @@
     *label*
     *line-edit*)
   (qconnect *line-edit* "returnPressed()" 'analyze)
-  (x:do-with (qfun *window*) "show" "raise"))
+  (x:do-with *window* "show" "raise"))
 
 (defun analyze ()
   (qlet ((dlg "QProgressDialog"
               "maximum" 20
               "labelText" "<h1 style='color:crimson'>Wow!</h1><p>(updating WikiLeaks...)</p>"))
-    (x:do-with (qfun dlg) "show" "raise")
+    (x:do-with dlg "show" "raise")
     (dotimes (n (qget dlg "maximum"))
       (sleep 0.1)
       (qset dlg "value" n)

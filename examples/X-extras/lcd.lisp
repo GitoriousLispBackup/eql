@@ -7,12 +7,12 @@
     (qoverride widget "mouseMoveEvent(QMouseEvent*)"
                (lambda (event)
                  (qset-color widget |QPalette.Window|
-                             (qfun "QColor" "fromHsv"
-                                   (floor (* 359 (/ (qfun event "x") (qfun widget "width"))))
-                                   (floor (* 255 (/ (qfun event "y") (qfun widget "height"))))
-                                   255))))
+                             (! "fromHsv" "QColor"
+                                (floor (* 359 (/ (! "x" event) (! "width" widget))))
+                                (floor (* 255 (/ (! "y" event) (! "height" widget))))
+                                255))))
     (qoverride widget "mousePressEvent(QMouseEvent*)" (lambda (event) (qquit)))
-    (qfun "QCursor" "setPos" '(0 0))
-    (qfun widget "showFullScreen")))
+    (! "setPos" "QCursor" '(0 0))
+    (! "showFullScreen" widget)))
 
 (lcd-test)

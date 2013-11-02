@@ -63,10 +63,10 @@
 
 (defun ini-ui ()
   ;; easing curve
-  (x:do-with (qfun *easing-curve*)
+  (x:do-with *easing-curve*
     ("setToolTip" "Change easing curve of selected items")
     ("addItems" (easing-curve-names)))
-  (qfun *easing-curve* "setCurrentIndex" (qfun *easing-curve* "findText" "InElastic"))
+  (! "setCurrentIndex" *easing-curve* (! "findText" *easing-curve* "InElastic"))
   (qconnect *easing-curve* "activated(QString)" 'change-easing-curve)
   ;; custom easing curve function
   (x:do-with (qset *custom*)
@@ -88,9 +88,9 @@
     ("columnCount" 2)
     ("rootIsDecorated" nil)
     ("selectionMode" |QAbstractItemView.ExtendedSelection|))
-  (qfuns *items* "header" "hide")
-  (qfuns *items* "header" ("setStretchLastSection" t))
-  (qsingle-shot 0 (lambda () (qfun *items* "resizeColumnToContents" 0)))
+  (! ("hide" "header" *items*))
+  (! (("setStretchLastSection" t) "header" *items*))
+  (qsingle-shot 0 (lambda () (! "resizeColumnToContents" *items* 0)))
   ;; graph
   (qlet ((curve "QEasingCurve(QEasingCurve::Type)" |QEasingCurve.OutElastic|))
     (update-graph-pixmap curve :ini))
@@ -111,19 +111,19 @@
   (qset *view*   "minimumSize" '(250 250)) ; initial size, see below
   (qset *items*  "minimumWidth" 200)
   (qset *custom* "minimumWidth" 250)
-  (qfun *main* "resize" '(0 0))
+  (! "resize" *main* '(0 0))
   (qsingle-shot 0 (lambda ()
-                    (qfun *main* "show")
-                    (qset *view* "minimumSize" '(10 10)))))
+                    (! "show" *main*)
+                    (! "setMinimumSize" *view* '(10 10)))))
 
 (let ((n 0))
   (defun add-to-items (color)
     (let ((item (qnew "QTreeWidgetItem(QStringList)" (list (format nil "item ~D" (incf n))))))
-      (qfun item "setIcon" 0 (qnew "QIcon(QPixmap)"
-                                   (x:let-it (qnew "QPixmap(int,int)" 10 10)
-                                     (qfun x:it "fill" color))))
-      (qfun item "setText" 1 (if (oddp n) "InElastic" "OutElastic")) ; initial values 
-      (qfun *items* "addTopLevelItem" item))))
+      (! "setIcon" item 0 (qnew "QIcon(QPixmap)"
+                                (x:let-it (qnew "QPixmap(int,int)" 10 10)
+                                  (! "fill" x:it color))))
+      (! "setText" item 1 (if (oddp n) "InElastic" "OutElastic")) ; initial values 
+      (! "addTopLevelItem" *items* item))))
 
 ;;; graph pixmap (easing curve)
 
@@ -137,14 +137,14 @@
       (qdel pixmap))
     (setf pixmap (qnew "QPixmap(int,int)" (+ (* 2 bx) steps) (+ (* 2 by) steps)))
     (when ini
-      (qfun *graph* "setFixedSize" (qfun pixmap "size")))
+      (! "setFixedSize" *graph* (! "size" pixmap)))
     (qlet ((painter "QPainter(QPixmap*)" pixmap)
            (brush1  "QBrush(QColor)" "lightgray")
            (brush2  "QBrush(QColor)" "cornflowerblue")
            (pen1    "QPen(QBrush,qreal,Qt::PenStyle)" brush1 1 |Qt.DashLine|)
            (pen2    "QPen(QBrush,qreal)" brush2 2))
-      (qfun pixmap "fill" "lightyellow")
-      (x:do-with (qfun painter)
+      (! "fill" pixmap "lightyellow")
+      (x:do-with painter
         ("setRenderHint" |QPainter.Antialiasing|)
         ("setPen(QPen)" pen1)
         ("drawLine(QLine)" (list bx by (+ bx steps) by))
@@ -153,14 +153,14 @@
       (let (p*)
         (dotimes (x (1+ steps))
           (let ((p (list (+ bx x) (- (+ by steps)
-                                     (* steps (qfun curve "valueForProgress" (/ x steps)))))))
-            (qfun painter "drawLine(QLineF)" (append (or p* p) p))
+                                     (* steps (! "valueForProgress" curve (/ x steps)))))))
+            (! "drawLine(QLineF)" painter (append (or p* p) p))
             (setf p* p))))))
   (defun paint-graph (event)
     (qlet ((p "QPainter(QWidget*)" *graph*))
-      (qfun p "drawPixmap(QPoint,QPixmap)" '(0 0) pixmap)
+      (! "drawPixmap(QPoint,QPixmap)" p '(0 0) pixmap)
       (when progress
-        (x:do-with (qfun p)
+        (x:do-with p
           ("setPen(QColor)" "red")
           ("drawLine(QLineF)" (list progress 0 progress (+ (* 2 by) steps)))))))
   (defun update-graph-progress (ms)
@@ -168,7 +168,7 @@
       (setf progress (if (= max ms)
                          nil
                          (+ bx (* steps (/ ms max))))))
-    (qfun *graph* "update")
+    (! "update" *graph*)
     (qcall-default)))
 
 ;;;
@@ -203,7 +203,7 @@
     (qoverride trans "eventTest(QEvent*)"
                (lambda (event)
                  (and (= +state-switch-event+
-                         (qfun event "type"))
+                         (! "type" event))
                       (= (transition-rand trans)
                          (event-rand)))))
     trans))
@@ -227,7 +227,7 @@
                    (x:while (= (setf n (1+ (random (switcher-state-count switch))))
                                (switcher-last-index switch)))
                    (setf (switcher-last-index switch) n)
-                   (qfuns switch "machine" ("postEvent" (new-state-switch-event n))))))
+                   (! (("postEvent" (new-state-switch-event n)) "machine" switch)))))
     switch))
 
 ;;; main
@@ -236,23 +236,23 @@
   (let ((grect (qnew "QGraphicsWidget")))
     (qoverride grect "paint(QPainter*,QStyleOptionGraphicsItem*,QWidget*)"
                (lambda (painter _ _)
-                 (qfun painter "fillRect(QRectF,QColor)" (qfun grect "rect") color)))
+                 (! "fillRect(QRectF,QColor)" painter (! "rect" grect) color)))
     (add-to-items color) ; see *items*
     grect))
 
 (defun create-geometry-state (parent objects rects)
   (let ((result (qnew "QState(QState*)" parent)))
     (mapc (lambda (object rect)
-            (qfun result "assignProperty" object "geometry" (qnew "QVariant(QRect)" rect)))
+            (! "assignProperty" result object "geometry" (qnew "QVariant(QRect)" rect)))
           objects rects)
     result))
 
 (defun add-state (state-switcher state animation)
   (let ((trans (new-state-switch-transition (incf (switcher-state-count state-switcher)))))
-    (x:do-with (qfun trans)
+    (x:do-with trans
       ("setTargetState" state)
       ("addAnimation" animation))
-    (qfun state-switcher "addTransition(QAbstractTransition*)" trans)))
+    (! "addTransition(QAbstractTransition*)" state-switcher trans)))
 
 (defmacro push* (item list)
   `(setf ,list (nconc ,list (list ,item))))
@@ -262,36 +262,36 @@
     (let ((anim (qnew "QPropertyAnimation(QObject*,QByteArray)" button (x:string-to-bytes property)))
           (group (if pause
                      (let ((group (qnew "QSequentialAnimationGroup(QObject*)" anim-group)))
-                       (qfun group "addPause" pause)
+                       (! "addPause" group pause)
                        (push* group groups)
                        group)
                      anim-group)))
-      (x:do-with (qfun anim)
+      (x:do-with anim
         ("setDuration" duration)
         ("setEasingCurve" (qnew "QEasingCurve(QEasingCurve::Type)" curve-type)))
       (push* anim animations)
-      (qfun group "addAnimation" anim)
+      (! "addAnimation" group anim)
       anim))
   (defun change-easing-curve (name)
     (let ((type (symbol-value (intern (concatenate 'string "QEasingCurve." name)))))
-      (dotimes (i (qfun *items* "topLevelItemCount"))
-        (let ((item (qfun *items* "topLevelItem" i))
+      (dotimes (i (! "topLevelItemCount" *items*))
+        (let ((item (! "topLevelItem" *items* i))
               (curve (if (string= "Custom" name)
                      *custom-easing-curve*
                      (qnew "QEasingCurve(QEasingCurve::Type)" type))))
-          (when (qfun item "isSelected")
-            (qfun item "setText" 1 name)
-            (qfun (nth i animations) "setEasingCurve" curve))
+          (when (! "isSelected" item)
+            (! "setText" item 1 name)
+            (! "setEasingCurve" (nth i animations) curve))
           (update-graph-pixmap curve)))))
   (defun change-duration (msec)
     (dolist (anim animations)
-      (qfun anim "setDuration" msec))
+      (! "setDuration" anim msec))
     (update-timer))
   (defun change-pause (msec)
     (let ((n 0))
       (dolist (group groups)
-        (let ((anim (qfun group "takeAnimation" 1)))
-          (x:do-with (qfun group)
+        (let ((anim (! "takeAnimation" group 1)))
+          (x:do-with group
             ("clear")
             ("addPause" (* (incf n) msec))
             ("addAnimation" anim)))))
@@ -312,17 +312,17 @@
          (group      (qnew "QState"
                            "objectName" "group"))
          (anim-group (qnew "QParallelAnimationGroup")))         
-    (qfun *view* "setScene" scene)
-    (qfun* item2 "QGraphicsItem" "setZValue" 1)
-    (qfun* item3 "QGraphicsItem" "setZValue" 2)
-    (qfun* item4 "QGraphicsItem" "setZValue" 3)
-    (x:do-with (qfun scene)
+    (! "setScene" *view* scene)
+    (! "setZValue" ("QGraphicsItem" item2) 1)
+    (! "setZValue" ("QGraphicsItem" item3) 2)
+    (! "setZValue" ("QGraphicsItem" item4) 3)
+    (x:do-with scene
       ("setBackgroundBrush" (qnew "QBrush(QColor)" "darkslategray"))
       ("addItem" item1)
       ("addItem" item2)
       ("addItem" item3)
       ("addItem" item4))
-    (x:do-with (qfun *view*)
+    (x:do-with *view*
       ("setAlignment" (logior |Qt.AlignLeft| |Qt.AlignTop|))
       ("setHorizontalScrollBarPolicy" |Qt.ScrollBarAlwaysOff|)
       ("setVerticalScrollBarPolicy"   |Qt.ScrollBarAlwaysOff|))
@@ -370,17 +370,17 @@
       (qset *timer* "interval" 2500) 
       (dolist (state (list state1 state2 state3 state4 state5 state6 state7))
         (add-state state-switcher state anim-group))
-      (x:do-with (qfun group)
+      (x:do-with group
         ("setInitialState" state1)
         ("addTransition" *timer* (qsignal "timeout()") state-switcher)))
-    (x:do-with (qfun machine)
+    (x:do-with machine
       ("addState" group)
       ("setInitialState" group)
       ("start"))
     (qconnect group "entered()" *timer* "start()")
     (qoverride *view* "resizeEvent(QResizeEvent*)"
                (lambda (event)
-                 (qfun *view* "fitInView(QRectF)" (qfun scene "sceneRect"))
+                 (! "fitInView(QRectF)" *view* (! "sceneRect" scene))
                  (qcall-default)))))
 
 (progn

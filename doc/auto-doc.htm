@@ -155,6 +155,12 @@
   (qfun item "setText" 0 "Some objects are EQL.")
   (qfun "QDateTime" "currentDateTime") ; static method
   (qfun slider "valueChanged" 10) ; emit signal
+  ;;;
+  ;;; alternatively:
+  ;;;
+  (! "setText" item 0 "Some objects are EQL.")
+  (! "currentDateTime" "QDateTime") ; static method
+  (! "valueChanged" slider 10) ; emit signal
 </pre>
 </p><br>
 <p>
@@ -165,6 +171,11 @@
 <pre>
   (qfun* graphics-text-item "QGraphicsItem" "setPos" (list x y)) ; multiple inheritance problem
   (qfun* event "QKeyEvent" "key") ; not needed in QADD-EVENT-FILTER (see also QT-OBJECT-?)
+  ;;;
+  ;;; alternatively:
+  ;;;
+  (! "setPos" ("QGraphicsItem" graphics-text-item) (list x y)) ; multiple inheritance problem
+  (! "key" ("QKeyEvent" event)) ; not needed in QADD-EVENT-FILTER (see also QT-OBJECT-?)
 </pre>
 </p><br>
 <p>
@@ -186,6 +197,13 @@
   (qfuns object ("funA" 1) ("funB" a b c)) ; expands to: (qfun (qfun object "funA" 1) "funB" a b c)
   (qfuns "QApplication" "font" "family")
   (qfuns *table-view* "model" ("index" 0 2) "data" "toString")
+  ;;;
+  ;;; alternatively:
+  ;;;
+  (! ("funC" "funB" "funA" object))      ; expands to: (qfun (qfun (qfun object "funA") "funB") "funC")
+  (! (("funB" a b c) ("funA" 1) object)) ; expands to: (qfun (qfun object "funA" 1) "funB" a b c)
+  (! ("family" "font" "QApplication"))
+  (! ("toString" "data" ("index" 0 2) "model" *table-view*))
 </pre>
 </p><br>
 <p>
@@ -246,14 +264,14 @@
 <b>QOK ()</b>
 <p>Needed to get the boolean <b>ok</b> value in cases like this:</p>
 <pre>
-  (qfun "QFontDialog" "getFont(bool*)" nil)
+  (! "getFont(bool*)" "QFontDialog" nil)
 </pre>
 </p><br>
 <p>
 <b>QOVERRIDE (object name function)</b>
 <p>Sets a Lisp function to be called on a virtual Qt method.<br>To remove a function, pass <code>NIL</code> instead of the function argument.<br><br>If you call <code>qcall-default</code> anywhere inside your overridden function, the base implementation will be called <b>afterwards</b>.<br>Instead of <code>qcall-default</code> you can directly call the base implementation, which is useful if you want to do post-processing of the returned value.</p>
 <pre>
-  (qoverride edit "keyPressEvent(QKeyEvent*)" (lambda (ev) (print (qfun ev "key")) (qcall-default)))
+  (qoverride edit "keyPressEvent(QKeyEvent*)" (lambda (ev) (print (! "key" ev)) (qcall-default)))
 </pre>
 </p><br>
 <p>
@@ -377,8 +395,8 @@
 <b>QT-OBJECT-? (object)</b>
 <p>Returns the specific <code>qt-object</code> of a generic <code>qt-object</code>.<br>Works for QObject and QEvent inherited classes only.</p>
 <pre>
-  (qt-object-? (qfun widget "parentWidget"))
-  (qt-object-? (qfuns box-layout ("itemAt" 0) "widget"))
+  (qt-object-? (! "parentWidget" widget))
+  (qt-object-? (! ("widget" ("itemAt" 0) box-layout))
   (qt-object-? event)
 </pre>
 </p><br>

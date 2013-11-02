@@ -1744,6 +1744,12 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
     ///     (qfun item "setText" 0 "Some objects are EQL.")
     ///     (qfun "QDateTime" "currentDateTime") ; static method
     ///     (qfun slider "valueChanged" 10) ; emit signal
+    ///     ;;;
+    ///     ;;; alternatively:
+    ///     ;;;
+    ///     (! "setText" item 0 "Some objects are EQL.")
+    ///     (! "currentDateTime" "QDateTime") ; static method
+    ///     (! "valueChanged" slider 10) ; emit signal
     static QHash<QByteArray, int> i_slot;
     static QHash<QByteArray, int> i_method;
     if((l_obj != Cnil) && ECL_STRINGP(l_name)) {
@@ -2019,7 +2025,7 @@ void callConnectFun(void* fun, const StrList& types, void** args) {
 cl_object qoverride(cl_object l_obj, cl_object l_name, cl_object l_fun) {
     /// args: (object name function)
     /// Sets a Lisp function to be called on a virtual Qt method.<br>To remove a function, pass <code>NIL</code> instead of the function argument.<br><br>If you call <code>qcall-default</code> anywhere inside your overridden function, the base implementation will be called <b>afterwards</b>.<br>Instead of <code>qcall-default</code> you can directly call the base implementation, which is useful if you want to do post-processing of the returned value.
-    ///     (qoverride edit "keyPressEvent(QKeyEvent*)" (lambda (ev) (print (qfun ev "key")) (qcall-default)))
+    ///     (qoverride edit "keyPressEvent(QKeyEvent*)" (lambda (ev) (print (! "key" ev)) (qcall-default)))
     ecl_process_env()->nvalues = 1;
     QtObject o = toQtObject(l_obj);
     void* fun = (Cnil == l_fun) ? 0 : getLispFun(l_fun);
@@ -2315,8 +2321,8 @@ cl_object qt_object_name(cl_object l_obj) {
 cl_object qt_object_x(cl_object l_obj) { /// qt-object-?
     /// args: (object)
     /// Returns the specific <code>qt-object</code> of a generic <code>qt-object</code>.<br>Works for QObject and QEvent inherited classes only.
-    ///     (qt-object-? (qfun widget "parentWidget"))
-    ///     (qt-object-? (qfuns box-layout ("itemAt" 0) "widget"))
+    ///     (qt-object-? (! "parentWidget" widget))
+    ///     (qt-object-? (! ("widget" ("itemAt" 0) box-layout))
     ///     (qt-object-? event)
     ecl_process_env()->nvalues = 1;
     QtObject o = toQtObject(l_obj);
@@ -2609,7 +2615,7 @@ cl_object qsingle_shot2(cl_object l_msec, cl_object l_fun) {
 cl_object qok() {
     /// args: ()
     /// Needed to get the boolean <b>ok</b> value in cases like this:
-    ///    (qfun "QFontDialog" "getFont(bool*)" nil)
+    ///    (! "getFont(bool*)" "QFontDialog" nil)
     ecl_process_env()->nvalues = 1;
     return _ok_ ? Ct : Cnil; }
 

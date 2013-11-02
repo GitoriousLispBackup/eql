@@ -9,26 +9,26 @@
 (in-package :clock)
 
 (defvar *clock* (qnew "QWidget(QWidget*,Qt::WindowFlags)" nil |Qt.WindowStaysOnTopHint|
-                      "size" (list 170 170)
-                      "pos" (list 50 50)))
+                      "size" '(170 170)
+                      "pos" '(50 50)))
 
 (defun start ()
   (let ((timer (qnew "QTimer(QObject*)" *clock*)))
-    (qconnect timer "timeout()" (lambda () (qfun *clock* "update")))
+    (qconnect timer "timeout()" (lambda () (! "update" *clock*)))
     (qoverride *clock* "paintEvent(QPaintEvent*)" 'paint)
-    (qfun timer "start" 500)
-    (x:do-with (qfun *clock*) "show" "raise")))
+    (! "start" timer 500)
+    (x:do-with *clock* "show" "raise")))
 
 (defun pen (width &optional (color "black"))
   (x:let-it (qnew "QPen")
-    (x:do-with (qfun x:it)
+    (x:do-with x:it
       ("setCapStyle" |Qt.RoundCap|)
       ("setWidth" width)
       ("setColor" color))))
 
 (defun brush (color)
   (x:let-it (qnew "QBrush")
-    (x:do-with (qfun x:it)
+    (x:do-with x:it
       ("setStyle" |Qt.SolidPattern|)
       ("setColor(QColor)" color))))
 

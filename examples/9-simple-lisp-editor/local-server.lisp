@@ -43,7 +43,7 @@
 (defvar *terminal-out-buffer*    (make-string-output-stream))
 (defvar *gui-debug-io*           nil)
 (defvar *sharp-q*                nil) ; see "CL_EQL/"
-(defvar *silent*                 (find "-silent" (qfun "QCoreApplication" "arguments") :test 'string=))
+(defvar *silent*                 (find "-silent" (! "arguments" "QCoreApplication") :test 'string=))
 
 ;; REPL variables
 (defvar +   nil)
@@ -57,8 +57,8 @@
 (defvar /// nil)
 
 (defun ini (&optional (name "EQL:local-server"))
-  (qfun "QLocalServer" "removeServer" name)
-  (if (qfun *server* "listen" name)
+  (! "removeServer" "QLocalServer" name)
+  (if (! "listen" *server* name)
       (progn
         (ini-streams)
         (set-debugger-hook)
@@ -73,8 +73,8 @@
         (ini-system-tray)
         t)
       (progn
-        (qfun "QMessageBox" "critical" nil (tr "EQL local-server")
-              (format nil (tr "Unable to start the server: ~A.") (qfun *server* "errorString")))
+        (! "critical" "QMessageBox" nil (tr "EQL local-server")
+              (format nil (tr "Unable to start the server: ~A.") (! "errorString" *server*)))
         nil)))
 
 (defun ini-streams ()
@@ -108,18 +108,17 @@
 (defun ini-system-tray ()
   (let* ((tray (qnew "QSystemTrayIcon(QIcon)"
                      (qnew "QIcon(QPixmap)"
-                           (let ((pix (qnew "QPixmap")))
-                             (qfun pix "loadFromData"
-                                   ;; embed data
-                                   #.(file-data (in-home "examples/9-simple-lisp-editor/data/local_server.png"))
-                                   "PNG")
-                             pix))))
+                           (x:let-it (qnew "QPixmap")
+                             (! "loadFromData" x:it
+                                ;; embed data
+                                #.(file-data (in-home "examples/9-simple-lisp-editor/data/local_server.png"))
+                                "PNG")))))
          (menu (qnew "QMenu"))
          (quit (qnew "QAction(QObject*)" menu
                      "text" (tr "Quit EQL server"))))
-    (qfun menu "addAction(QAction*)" quit)
+    (! "addAction(QAction*)" menu quit)
     (qconnect quit "triggered()" (lambda () (qdel tray) (qquit)))
-    (x:do-with (qfun tray)
+    (x:do-with tray
       ("setContextMenu" menu)
       ("show"))))
 
@@ -133,13 +132,13 @@
           data nil))
   (defun new-client-connection ()
     (reset)
-    (setf *client* (qfun *server* "nextPendingConnection"))
+    (setf *client* (! "nextPendingConnection" *server*))
     (qconnect *client* "readyRead()" 'read-from-client)
     (qconnect *client* "disconnected()" (lambda () (qdel *client* :later))))
   (defun read-from-client ()
     (when *function*
       (restart-all-timers) ; see (stop-all-timers)
-      (let ((all (qfun *client* "readAll")))
+      (let ((all (! "readAll" *client*)))
         ;; data may arrive splitted in more blocks
         (if size
             (when (< bytes-read size)
@@ -227,13 +226,13 @@
            (sleep 0.05)))
     (when (and *client*
                (not (qnull-object *client*)))
-      (x:while (not (zerop (qfun *client* "bytesToWrite")))
+      (x:while (not (zerop (! "bytesToWrite" *client*)))
         (pause))
-      (if (qfun *client* "isWritable")
+      (if (! "isWritable" *client*)
           (let ((utf8 (qutf8 str)))
-            (qfun *client* "write(QByteArray)" (x:string-to-bytes (format nil "~D ~S ~A" (length utf8) type utf8)))
+            (! "write(QByteArray)" *client* (x:string-to-bytes (format nil "~D ~S ~A" (length utf8) type utf8)))
             (pause))
-          (qfun "QMessageBox" "critical" nil "EQL" (tr "Could not write to client."))))))
+          (! "critical" "QMessageBox" nil "EQL" (tr "Could not write to client."))))))
 
 (defun handle-query-io ()
   (let ((txt (query-dialog:get-text (get-output-stream-string *terminal-out-buffer*))))
@@ -262,15 +261,15 @@
   (defun stop-all-timers ()
     "Stop all timers (which need to have a parent) on errors, in order to avoid recursive debug loops. The timers will be restarted on next command from client."
     (setf timers nil)
-    (dolist (w (cons (qapp) (qfun "QApplication" "allWidgets")))
-      (dolist (o (qfun w "children"))
+    (dolist (w (cons (qapp) (! "allWidgets" "QApplication")))
+      (dolist (o (! "children" w))
         (when (and (= #.(qid "QTimer") (qt-object-id o))
-                   (qfun o "isActive"))
-          (qfun o "stop")
+                   (! "isActive" o))
+          (! "stop" o)
           (push o timers)))))
   (defun restart-all-timers ()
     (dolist (timer timers)
-      (qfun timer "start"))
+      (! "start" timer))
     (setf timers nil)))
 
 ;;; extensions
@@ -285,21 +284,21 @@
 (defun %ini-remote-eval ()
   (unless *eval-socket*
     (setf *eval-socket* (qnew "QLocalSocket")))
-  (when (= |QLocalSocket.UnconnectedState| (qfun *eval-socket* "state"))
-    (x:do-with (qfun *eval-socket*)
+  (when (= |QLocalSocket.UnconnectedState| (! "state" *eval-socket*))
+    (x:do-with *eval-socket*
       ("connectToServer" "EQL:eval-server")
       ("waitForConnected"))))
 
 (defun %remote-eval (exp)
   (%ini-remote-eval)
-  (when (qfun *eval-socket* "isWritable")
+  (when (! "isWritable" *eval-socket*)
     (let ((utf8 (qutf8 (prin1-to-string exp))))
-      (x:do-with (qfun *eval-socket*)
+      (x:do-with *eval-socket*
         ("write(QByteArray)" (x:string-to-bytes (format nil "~D ~A" (length utf8) utf8)))
         ("waitForBytesWritten")
         ("waitForReadyRead")))
     ;; data may arrive splitted in more blocks
-    (let* ((block-1 (qfun *eval-socket* "readAll"))
+    (let* ((block-1 (! "readAll" *eval-socket*))
            (pos-space (position (char-code #\Space) block-1)))
       (when pos-space
         (let ((head (x:bytes-to-string (subseq block-1 0 (1+ pos-space))))
@@ -310,8 +309,8 @@
             (setf bytes-read (length (first data)))
             (x:while (< bytes-read size)
               (qprocess-events)
-              (qfun *eval-socket* "waitForReadyRead")
-              (let ((block (qfun *eval-socket* "readAll")))
+              (! "waitForReadyRead" *eval-socket*)
+              (let ((block (! "readAll" *eval-socket*)))
                 (incf bytes-read (length block))
                 (push block data)))
             (unless (zerop size)

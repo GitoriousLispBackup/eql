@@ -23,7 +23,7 @@
 ;;;     #q (qmsg #!x))
 ;;;
 ;;;   #q (load "../2-clock.lisp")
-;;;   #q (qfun clock:*clock* "showMaximized")
+;;;   #q (! "showMaximized" clock:*clock*)
 
 (set-dispatch-macro-character #\# #\q (lambda (stream c n) (%read-q stream)))
 

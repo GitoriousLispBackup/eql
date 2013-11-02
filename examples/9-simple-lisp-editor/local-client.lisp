@@ -30,7 +30,7 @@
           data nil))
   (defun read-data ()
     (when *function*
-      (let ((all (qfun *socket* "readAll")))
+      (let ((all (! "readAll" *socket*)))
         ;; data may arrive splitted in more blocks
         (if size
             (when (< bytes-read size)
@@ -51,11 +51,11 @@
 
 (defun request (str)
   (reset-data)
-  (x:do-with (qfun *socket*)
+  (x:do-with *socket*
     ("abort")
     ("connectToServer" *server-name*)
     ("waitForConnected"))
-  (when (qfun *socket* "isWritable")
+  (when (! "isWritable" *socket*)
     (let ((utf8 (qutf8 str)))
-      (qfun *socket* "write(QByteArray)" (x:string-to-bytes (format nil "~D ~A" (length utf8) utf8))))
+      (! "write(QByteArray)" *socket* (x:string-to-bytes (format nil "~D ~A" (length utf8) utf8))))
     t))

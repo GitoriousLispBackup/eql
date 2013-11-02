@@ -93,10 +93,10 @@
 #+eql
 (defun new-wiggly ()
   (x:let-it (qnew "QWidget"
-                  "font" (x:let-it (qfun "QApplication" "font")
-                           (qfun x:it "setPointSize" (+ 20 (qfun x:it "pointSize"))))
+                  "font" (x:let-it (! "font" "QApplication")
+                           (! "setPointSize" x:it (+ 20 (! "pointSize" x:it))))
                   "autoFillBackground" t)
-    (qfun x:it "setBackgroundRole" |QPalette.Light|)
+    (! "setBackgroundRole" x:it |QPalette.Light|)
     (qoverride x:it "paintEvent(QPaintEvent*)" 'paint)))
 
 #+eql
@@ -106,13 +106,13 @@
         *timer*  (qnew "QTimer"))
   (let ((dlg  (qnew "QDialog" "size" (list 600 200)))
         (vbox (qnew "QVBoxLayout")))
-    (qfun dlg "setLayout" vbox)
+    (! "setLayout" dlg vbox)
     (dolist (w (list *wiggly* *edit*))
-      (qfun vbox "addWidget" w))
+      (! "addWidget" vbox w))
     (qset *edit* "text" "1234567890987654321")
     (qconnect *timer* "timeout()" 'timeout)
-    (qfun *timer* "start" 10)
-    (x:do-with (qfun dlg) "show" "raise")))
+    (! "start" *timer* 10)
+    (x:do-with dlg "show" "raise")))
 
 #+common-qt
 (let (painter pen metrics)
@@ -150,23 +150,23 @@
             metrics (qnew "QFontMetrics(QFont)" (qget *wiggly* "font"))))
     (let* ((text (qget *edit* "text"))
            (x (/ (- (qget *wiggly* "width")
-                    (qfun metrics "width(QString)" text))
+                    (! "width(QString)" metrics text))
                  2))
-           (y (/ (- (+ (qget *wiggly* "height") (qfun metrics "ascent"))
-                    (qfun metrics "descent"))
+           (y (/ (- (+ (qget *wiggly* "height") (! "ascent" metrics))
+                    (! "descent" metrics))
                  2))
-           (h (qfun metrics "height")))
-      (qfun painter "begin(QWidget*)" *wiggly*)
+           (h (! "height" metrics)))
+      (! "begin(QWidget*)" painter *wiggly*)
       (dotimes (i (length text))
         (let ((ix (mod (+ i *step*) 16))
               (ch (char text i)))
-          (qfun pen "setColor" (qfun "QColor" "fromHsv" (* 16 (- 15 ix)) 255 191))
-          (x:do-with (qfun painter)
+          (! "setColor" pen (! "fromHsv" "QColor" (* 16 (- 15 ix)) 255 191))
+          (x:do-with painter
             ("setPen(QPen)" pen)
             ("drawText(QPoint,QString)" (list (floor x) (floor (- y (/ (* h (svref *sinus* ix)) 400))))
                                         (string ch)))
-          (incf x (qfun metrics "width(QChar)" ch))))
-      (qfun painter "end"))))
+          (incf x (! "width(QChar)" metrics ch))))
+      (! "end" painter))))
 
 (defvar *count* 0)
 (defvar *max*   1000)
@@ -185,7 +185,7 @@
     (report)
     (qq))
   (incf *step*)
-  (qfun *wiggly* "update"))
+  (! "update" *wiggly*))
 
 (profile
   paint

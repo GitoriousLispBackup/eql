@@ -21,11 +21,11 @@
 (defparameter *item-size*       nil)
 (defparameter *maze*            nil)
 (defparameter *my-mazes*        (mapcar 'copy-maze *mazes*))
-(defparameter *scene-size*      (list 600 500))
+(defparameter *scene-size*      '(600 500))
 (defparameter *print-text-maze* nil "additionally print maze to terminal")
 
 (defvar *scene* (qnew "QGraphicsScene"
-                      "sceneRect" (append (list 0 0) *scene-size*)
+                      "sceneRect" (append '(0 0) *scene-size*)
                       "backgroundBrush" (qnew "QBrush(QColor)" "slategray")))
 (defvar *view*  (qnew "QGraphicsView"
                       "windowTitle" "Sokoban"
@@ -45,7 +45,7 @@
   (car (find type +item-types+ :key 'cdr)))
 
 (defun ini ()
-  (x:do-with (qfun *view*)
+  (x:do-with *view*
     ("setScene" *scene*)
     ("setRenderHint" |QPainter.Antialiasing|)
     ("setCacheMode" |QGraphicsView.CacheBackground|)
@@ -63,18 +63,18 @@
         (hbox2    (qnew "QHBoxLayout"))
         (layout   (qnew "QVBoxLayout")))
     (dolist (w (list *level* *view*))
-      (qfun hbox1 "addWidget" w))
+      (! "addWidget" hbox1 w))
     (dolist (w (list zoom-in zoom-out help))
-      (qfun hbox2 "addWidget" w))
-    (dolist (lay (list hbox1 hbox2))
-      (qfun layout "addLayout" lay))
-    (qfun hbox2 "setStretchFactor(QWidget*,int)" help 1)
-    (qfun main "setLayout" layout)
+      (! "addWidget" hbox2 w))
+    (dolist (l (list hbox1 hbox2))
+      (!"addLayout" layout l))
+    (! "setStretchFactor(QWidget*,int)" hbox2 help 1)
+    (! "setLayout" main layout)
     (qconnect *level* "valueChanged(int)" (lambda (val) (set-maze) (draw)))
     (qconnect zoom-in  "clicked()" (lambda () (zoom :in)))
     (qconnect zoom-out "clicked()" (lambda () (zoom :out)))
     (qadd-event-filter nil |QEvent.KeyPress| 'key-pressed)
-    (x:do-with (qfun main) "show" "raise")))
+    (x:do-with main "show" "raise")))
 
 (defun set-maze ()
   (setf *maze* (nth (qget *level* "value") *my-mazes*))
@@ -82,7 +82,7 @@
   (draw-items :wall))
 
 (defun clear-items ()
-  (qfun *scene* "clear")
+  (! "clear" *scene*)
   (setf *items* (mapcar (lambda (x) (list (cdr x))) +item-types+)))
 
 (defun create-items ()
@@ -91,7 +91,7 @@
            (dolist (type (x:ensure-list types))
              (let ((item (create-item type)))
                (push item (cdr (assoc type *items*)))
-               (qfun *scene* "addItem" item)))))
+               (! "addItem" *scene* item)))))
     (dolist (row (maze-text *maze*))
       (x:do-string (char row)
         (unless (char= #\Space char)
@@ -114,26 +114,25 @@
                            (cdr (or pixmap
                                     (first (push (cons file (qnew "QPixmap(QString)" file))
                                                  pixmaps)))))
-                     (let ((item (qnew "QGraphicsTextItem"))) ; simple text item dummies (when pics are missing)
-                       (qfun item "setHtml"
-                             (format nil "<span style='font-family:monospace; font-size:12pt; font-weight:bold; color:~A;'>~C"
-                                     (case type
-                                       (:wall    "blue")
-                                       (:object  "orange")
-                                       (:object2 "gold")
-                                       (:goal    "white")
-                                       (:player  "red")
-                                       (:player2 "magenta"))
-                                     char))
-                       item))))
+                     (x:let-it (qnew "QGraphicsTextItem") ; simple text item dummies (when pics are missing)
+                       (! "setHtml" x:it
+                          (format nil "<span style='font-family:monospace; font-size:12pt; font-weight:bold; color:~A;'>~C"
+                                  (case type
+                                    (:wall    "blue")
+                                    (:object  "orange")
+                                    (:object2 "gold")
+                                    (:goal    "white")
+                                    (:player  "red")
+                                    (:player2 "magenta"))
+                                  char))))))
       (unless *item-size*
-        (setf *item-size* (cddr (qfun item "boundingRect"))))
+        (setf *item-size* (cddr (! "boundingRect" item))))
       item)))
 
 (defun key-pressed (obj event)
   (flet ((change-level (x)
            (qset *level* "value" (+ x (qget *level* "value")))))
-    (case (qfun event "key")
+    (case (! "key" event)
       (#.|Qt.Key_Up|
          (move :north *maze*))
       (#.|Qt.Key_Down|
@@ -161,14 +160,14 @@
         (y 0))
     (unless (eql :wall type)
       (dolist (item items)
-        (qfun* item "QGraphicsItem" "setVisible" nil)))
+        (! "setVisible" ("QGraphicsItem" item) nil)))
     (dolist (row (maze-text *maze*))
       (let ((x 0))
         (x:do-string (curr-char row)
           (when (char= char curr-char)
-            (x:do-with (qfun* (first items) "QGraphicsItem")
-              ("setPos" (list x y))
-              ("setVisible" t))
+            (let ((item (first items)))
+              (! "setPos" ("QGraphicsItem" item) (list x y))
+              (! "setVisible" ("QGraphicsItem" item) t))
             (setf items (rest items)))
           (incf x (first *item-size*))))
       (incf y (second *item-size*)))))
@@ -181,7 +180,7 @@
 
 (defun zoom (direction)
   (let ((f (if (eql :in direction) 3/2 2/3)))
-    (qfun *view* "scale" f f)))
+    (! "scale" *view* f f)))
 
 (defun start ()
   (ini)

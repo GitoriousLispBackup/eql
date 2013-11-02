@@ -47,7 +47,7 @@
 
 #q
 (progn
-  (qfun *button* "show")
+  (! "show" *button*)
   (qconnect *button* "clicked()" (lambda () (qmsg ?(words-of-wisdom))))) ; note '?'
 
 (ev) ; needed for '?' only (see "Back to REPL" at the top of the desktop)

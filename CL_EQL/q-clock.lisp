@@ -22,25 +22,25 @@
 #q
 (defun start ()
   (let ((timer (qnew "QTimer(QObject*)" *clock*))) ; parent: see STOP-ALL-TIMERS in "local-server.lisp"
-    (qconnect timer "timeout()" (lambda () (qfun *clock* "update")))
+    (qconnect timer "timeout()" (lambda () (! "update" *clock*)))
     (qoverride *clock* "paintEvent(QPaintEvent*)" 'paint)
-    (qfun timer "start" 500)
-    (qfun *clock* "show")
-    (qfun *clock* "raise")))
+    (! "start" timer 500)
+    (! "show" *clock*)
+    (! "raise" *clock*)))
 
 #q
 (defun pen (width &optional (color "black"))
   (let ((pen (qnew "QPen")))
-    (qfun pen "setCapStyle" |Qt.RoundCap|)
-    (qfun pen "setWidth" width)
-    (qfun pen "setColor" color)
+    (! "setCapStyle" pen |Qt.RoundCap|)
+    (! "setWidth" pen width)
+    (! "setColor" pen color)
     pen))
 
 #q
 (defun brush (color)
   (let ((brush (qnew "QBrush")))
-    (qfun brush "setStyle" |Qt.SolidPattern|)
-    (qfun brush "setColor(QColor)" color)
+    (! "setStyle" brush |Qt.SolidPattern|)
+    (! "setColor(QColor)" brush color)
     brush))
 
 (progn ; for 'eval region' in Slime

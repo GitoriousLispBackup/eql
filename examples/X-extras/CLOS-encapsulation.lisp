@@ -26,7 +26,7 @@
 (defun run ()
   (let* ((dialog (qnew "QDialog"))
          (layout (qnew "QVBoxLayout(QWidget*)" dialog)))
-    (x:do-with (qfun layout "addWidget")
+    (x:do-with (! "addWidget" layout)
       *label-1* *label-2* *label-3*)
     (flet ((print-me (label color)
              (qset (symbol-value label) "text" (format nil "<h4 style='color: ~A'>~A ... ~A"
@@ -37,6 +37,6 @@
       (print-me '*label-1* "red")
       (print-me '*label-2* "green")
       (print-me '*label-3* "blue"))
-    (x:do-with (qfun dialog) "show" "raise")))
+    (x:do-with dialog "show" "raise")))
 
 (run)

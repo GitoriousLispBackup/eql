@@ -10,7 +10,7 @@
   (let ((table (qnew "QTableWidget(int,int)" *size* 1))
         (start (get-internal-real-time)))
     (dotimes (i *size*)
-      (qfun table "setItem" i 0 (qnew "QTableWidgetItem(QString)" "X")))
+      (! "setItem" table i 0 (qnew "QTableWidgetItem(QString)" "X")))
     (- (get-internal-real-time) start)))
 
 (compile 'test)
@@ -23,7 +23,7 @@
               (let ((proc (qnew "QProcess")))
                 (parse-integer
                  (x:bytes-to-string
-                  (x:do-with (qfun proc)
+                  (x:do-with proc
                     ("start" (format nil
                                      #+darwin "./test.app/Contents/MacOS/test ~A"
                                      #+linux  "./test ~A"

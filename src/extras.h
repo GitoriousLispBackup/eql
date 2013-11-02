@@ -1,7 +1,7 @@
 // copyright (c) 2011-2013 Polos Ruetz
 //
 // extra functions added to some Qt class
-// e.g. (qfun image "changeBrightness" 10)
+// e.g. (! "changeBrightness" image 10)
 
 #ifndef EXTRAS_H
 #define EXTRAS_H

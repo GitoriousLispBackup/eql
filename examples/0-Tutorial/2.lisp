@@ -8,5 +8,5 @@
       (button (qnew "QPushButton"
                     "text" "Press me"
                     "pos" (list 100 100))))
-  (qfun button "setParent" window)
-  (qfun window "show"))
+  (! "setParent" button window)
+  (! "show" window))

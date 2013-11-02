@@ -14,11 +14,11 @@
                     1)))
     ;; in GUI/main thread (safe because queued and blocking)
     (qrun* (let ((item (qnew "QTreeWidgetItem")))
-             (x:do-with (qfun item)
+             (x:do-with item
                ("setTextAlignment" 0 |Qt.AlignRight|)
                ("setText" 0 (format nil "~:D" (- (get-internal-real-time) *start-time*)))
                ("setText" column text))
-             (x:do-with (qfun *tree-widget*)
+             (x:do-with *tree-widget*
                ("addTopLevelItem" item)
                ("resizeColumnToContents" 0)
                ("resizeColumnToContents" column)
@@ -33,7 +33,7 @@
            (loop :for i :from 3 :to (isqrt x) :by 2 :never (zerop (mod x i))))))
 
 (defun primes (start number)
-  (qrun* (qfun *tree-widget* "clear"))
+  (qrun* (! "clear" *tree-widget*))
   (setf *start-time* (get-internal-real-time))
   (do ((i start (1+ i))
        (found 0))
@@ -46,13 +46,13 @@
   (format t "~%Threads:~%~%~{  ~S~%~}~%" (reverse (mp:all-processes))))
 
 (defun run (&optional (number-threads 2))
-  (qset *tree-widget* "columnCount" (1+ number-threads))
-  (qfun *tree-widget* "setHeaderLabels"
-        (cons "Time" (loop :for i :from 1 :to number-threads :collect (format nil "Thread ~D" i))))
+  (! "setColumnCount" *tree-widget* (1+ number-threads))
+  (! "setHeaderLabels" *tree-widget*
+     (cons "Time" (loop :for i :from 1 :to number-threads :collect (format nil "Thread ~D" i))))
   (dotimes (n number-threads)
     (let ((name (make-symbol (princ-to-string (1+ n)))))
       (mp:process-run-function name (lambda () (primes #.(expt 10 12) 15)))))
-  (x:do-with (qfun *tree-widget*) "show" "raise")
+  (x:do-with *tree-widget* "show" "raise")
   (all-threads))
 
 (run)

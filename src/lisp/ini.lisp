@@ -39,7 +39,14 @@
        (qfuns object \"funA\" \"funB\" \"funC\")      ; expands to: (qfun (qfun (qfun object \"funA\") \"funB\") \"funC\")
        (qfuns object (\"funA\" 1) (\"funB\" a b c)) ; expands to: (qfun (qfun object \"funA\" 1) \"funB\" a b c)
        (qfuns \"QApplication\" \"font\" \"family\")
-       (qfuns *table-view* \"model\" (\"index\" 0 2) \"data\" \"toString\")"
+       (qfuns *table-view* \"model\" (\"index\" 0 2) \"data\" \"toString\")
+       ;;;
+       ;;; alternatively:
+       ;;;
+       (! (\"funC\" \"funB\" \"funA\" object))      ; expands to: (qfun (qfun (qfun object \"funA\") \"funB\") \"funC\")
+       (! ((\"funB\" a b c) (\"funA\" 1) object)) ; expands to: (qfun (qfun object \"funA\" 1) \"funB\" a b c)
+       (! (\"family\" \"font\" \"QApplication\"))
+       (! (\"toString\" \"data\" (\"index\" 0 2) \"model\" *table-view*))"
   (let (form)
     (dolist (fun functions)
       (setf form (append (list 'qfun (or form object)) (x:ensure-list fun))))
@@ -47,6 +54,26 @@
 
 (defmacro qfuns (object &rest functions) ; alias
   `(qinvoke-methods ,object ,@functions))
+
+(defmacro ! (fun/s &rest args)
+  (if args
+      (if (and (consp (first args))
+               (stringp (caar args))
+               (char= #\Q (char (caar args) 0))) ; cast
+          `(qfun* ,(cadar args) ,(caar args) ,fun/s ,@(rest args))
+          `(qfun ,(first args) ,fun/s ,@(rest args)))
+      `(qfuns ,@(reverse fun/s))))
+
+(defmacro x:do-with (with &body body) ; re-definition from package :X because of EQL:QFUN
+  (when (atom with)
+    (setf with (list 'qfun with)))
+  `(progn
+     ,@(mapcar (lambda (line)
+                 (append with (if (or (atom line)
+                                      (eql 'quote (first line)))
+                                  (list line)
+                                  line)))
+               body)))
 
 (defmacro defvar-ui (main &rest names)
   "args: (main-widget &rest variables)
@@ -289,7 +316,12 @@
    alias: qfun*
    Similar to <code>qinvoke-method</code>, additionally passing a class name, enforcing a cast to that class.<br>Note that this cast is not type safe (the same as a C cast, so dirty hacks are possible).
        (qfun* graphics-text-item \"QGraphicsItem\" \"setPos\" (list x y)) ; multiple inheritance problem
-       (qfun* event \"QKeyEvent\" \"key\") ; not needed in QADD-EVENT-FILTER (see also QT-OBJECT-?)"
+       (qfun* event \"QKeyEvent\" \"key\") ; not needed in QADD-EVENT-FILTER (see also QT-OBJECT-?)
+       ;;;
+       ;;; alternatively:
+       ;;;
+       (! \"setPos\" (\"QGraphicsItem\" graphics-text-item) (list x y)) ; multiple inheritance problem
+       (! \"key\" (\"QKeyEvent\" event)) ; not needed in QADD-EVENT-FILTER (see also QT-OBJECT-?)"
   (%qinvoke-method object cast-class-name function-name arguments))
 
 (defun qinvoke-method+ (object function-name &rest arguments)

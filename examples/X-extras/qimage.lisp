@@ -1,8 +1,8 @@
 ;;; see "src/extras.*" for extra methods added to QImage:
 ;;;
-;;; (qfun image "changeBrightness" x)
-;;; (qfun image "changeContrast" x)
-;;; (qfun image "changeGamma" x)
+;;; (! "changeBrightness" image x)
+;;; (! "changeContrast" image x)
+;;; (! "changeGamma" image x)
 ;;;
 ;;; optionally pass image file as command line argument
 
@@ -27,14 +27,14 @@
   *reset-color*)
 
 (defvar *image* (qnew "QImage(QString)" (x:if-it (third (remove-if (lambda (arg) (x:starts-with "-" arg))
-                                                                   (qfun "QApplication" "arguments")))
+                                                                   (! "arguments" "QApplication")))
                                                  x:it
                                                  (in-home "examples/data/vernazza.jpg"))))
 
-(defvar *pixmap* (qfun "QPixmap" "fromImage" *image*))
+(defvar *pixmap* (! "fromImage" "QPixmap" *image*))
 
 (defun start ()
-  (qfun *display* "setFixedSize" (qfun *image* "size"))
+  (! "setFixedSize" *display* (! "size" *image*))
   (dolist (slider (list *brightness* *contrast* *gamma*))
     (x:do-with (qset slider)
       ("minimum" -100)
@@ -48,22 +48,18 @@
   (qconnect *reset-color* "clicked()" (lambda () (qset *opacity* "value" 0)))
   (qoverride *display* "paintEvent(QPaintEvent*)" 'paint)
   (reset)
-  (x:do-with (qfun *main*) "show" "raise"))
+  (x:do-with *main* "show" "raise"))
 
-(let ((pnt (qnew "QPainter")))
-  (defun paint (ev)
-    (flet ((! (&rest args)
-             (apply 'qfun pnt args)))
-      (! "begin(QWidget*)" *display*)
-      (! "drawPixmap(QPoint,QPixmap)" '(0 0) *pixmap*)
-      (let ((color (qget *color* "text")))
-        (when (= #.(length "#RRGGBB") (length color))
-          (! "setOpacity" (/ (qget *opacity* "value") 100))
-          (! "fillRect(QRect,QColor)" (qfun *pixmap* "rect") color)))
-      (! "end"))))
+(defun paint (ev)
+  (qlet ((painter "QPainter(QWidget*)" *display*))
+    (! "drawPixmap(QPoint,QPixmap)" painter '(0 0) *pixmap*)
+    (let ((color (! "text" *color*)))
+      (when (= #.(length "#RRGGBB") (length color))
+        (! "setOpacity" painter (/ (qget *opacity* "value") 100))
+        (! "fillRect(QRect,QColor)" painter (! "rect" *pixmap*) color)))))
 
 (defun update (&optional arg)
-  (qfun *display* "update"))
+  (! "update" *display*))
 
 (defun change (value)
   (flet ((adjust-1 (x)
@@ -71,11 +67,11 @@
          (adjust-2 (x)
            (floor (expt 100 (/ (+ 100 x) 100)))))
     ;; we use QLET here to force immediate deletion of temporary images (memory usage)
-    (qlet ((img1 (qfun *image* "changeBrightness" (adjust-1 (qget *brightness* "value")))) ; -75   0     75
-           (img2 (qfun img1    "changeContrast"   (adjust-2 (qget *contrast* "value"))))   ;   1 100 10,000
-           (img3 (qfun img2    "changeGamma"      (adjust-2 (qget *gamma* "value")))))     ;   1 100 10,000
+    (qlet ((img1 (! "changeBrightness" *image* (adjust-1 (qget *brightness* "value")))) ; -75   0     75
+           (img2 (! "changeContrast"   img1    (adjust-2 (qget *contrast* "value"))))   ;   1 100 10,000
+           (img3 (! "changeGamma"      img2    (adjust-2 (qget *gamma* "value")))))     ;   1 100 10,000
       (qdel *pixmap*)
-      (setf *pixmap* (qfun "QPixmap" "fromImage" img3)))
+      (setf *pixmap* (! "fromImage" "QPixmap" img3)))
     (update)))
 
 (defun reset ()
@@ -83,7 +79,7 @@
     (qset slider "value" 0)))
 
 (defun color-dialog ()
-  (x:when-it (qfun "QColorDialog" "getColor")
-    (qset *color* "text" (qfun x:it "name"))))
+  (x:when-it (! "getColor" "QColorDialog")
+    (qset *color* "text" (! "name" x:it))))
 
 (start)
