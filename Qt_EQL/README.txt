@@ -106,6 +106,11 @@ From Lisp you can call: (note QFUN+)
     (qfun+ *qt-main* "stop")
     (qfun+ *qt-main* "start")
 
+alternatively:
+
+    (! "stop"  (:qt *qt-main*))
+    (! "start" (:qt *qt-main*))
+
 This is possible because these 2 methods are declared Q_INVOKABLE
 in Qt/trafficlight.h.
 

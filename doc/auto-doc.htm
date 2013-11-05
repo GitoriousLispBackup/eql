@@ -28,7 +28,7 @@
   (qapropos "html" "QTextEdit")
   (qapropos nil "QWidget")
   (qapropos)
-  (qapropos nil *qt-main*) ; embedded C++ (see Qt_EQL example)
+  (qapropos nil *qt-main*) ; see Qt_EQL, Qt_EQL_dynamic
 </pre>
 </p><br>
 <p>
@@ -170,12 +170,12 @@
 <p>Similar to <code>qinvoke-method</code>, additionally passing a class name, enforcing a cast to that class.<br>Note that this cast is not type safe (the same as a C cast, so dirty hacks are possible).</p>
 <pre>
   (qfun* graphics-text-item "QGraphicsItem" "setPos" (list x y)) ; multiple inheritance problem
-  (qfun* event "QKeyEvent" "key") ; not needed in QADD-EVENT-FILTER (see also QT-OBJECT-?)
+  (qfun* event "QKeyEvent" "key") ; not needed with QADD-EVENT-FILTER (see also QT-OBJECT-?)
   ;;;
   ;;; alternatively:
   ;;;
   (! "setPos" ("QGraphicsItem" graphics-text-item) (list x y)) ; multiple inheritance problem
-  (! "key" ("QKeyEvent" event)) ; not needed in QADD-EVENT-FILTER (see also QT-OBJECT-?)
+  (! "key" ("QKeyEvent" event)) ; not needed with QADD-EVENT-FILTER (see also QT-OBJECT-?)
 </pre>
 </p><br>
 <p>
@@ -185,6 +185,10 @@
 <p>Use this variant to call user defined functions (declared <code>Q_INVOKABLE</code>), slots, signals from external C++ classes.<br><br>In order to call ordinary functions, slots, signals from external C++ classes, just use the ordinary <code>qfun</code>.</p>
 <pre>
   (qfun+ *qt-main* "foo") ; see Qt_EQL, Qt_EQL_dynamic
+  ;;;
+  ;;; alternatively:
+  ;;;
+  (! "foo" (:qt *qt-main*))
 </pre>
 </p><br>
 <p>
@@ -220,7 +224,7 @@
 <pre>
   (defparameter *c++* (qload-c++ "eql_cpp")) ; load (Linux: see also QAUTO-RELOAD-C++)
   (qapropos nil *c++*)                       ; documentation
-  (qfun+ *c++* "mySpeedyQtFunction")         ; call library function (note QFUN+)
+  (! "mySpeedyQtFunction" (:qt *c++*))       ; call library function (note :qt)
 </pre>
 </p><br>
 <p>

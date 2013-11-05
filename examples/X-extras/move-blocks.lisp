@@ -12,7 +12,7 @@
 ;;;
 
 (defvar *c++*                 (qload-c++ (in-home "examples/X-extras/cpp/easing_curve")))
-(defvar *custom-easing-curve* (qfun+ *c++* "easingCurve"))
+(defvar *custom-easing-curve* (! "easingCurve" (:qt *c++*)))
 
 (let ((sub 0)
       (div 1)

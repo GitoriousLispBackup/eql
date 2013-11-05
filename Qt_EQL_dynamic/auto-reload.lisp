@@ -7,10 +7,10 @@
 (in-package :eql-user)
 
 #+linux
-(qauto-reload-c++ *c++* (in-home "Qt_EQL_dynamic/eql_cpp"))
+(qauto-reload-c++ *lib* (in-home "Qt_EQL_dynamic/eql_cpp"))
 
 #+linux
-(setf *c++-reloaded* 'show-current-apropos)
+(setf *lib-reloaded* 'show-current-apropos)
 
 (defun show-current-apropos (variable plugin)
   (qset (qapp) "quitOnLastWindowClosed" nil) 

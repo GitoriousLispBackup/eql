@@ -57,11 +57,20 @@
 
 (defmacro ! (fun/s &rest args)
   (if args
-      (if (and (consp (first args))
-               (stringp (caar args))
-               (char= #\Q (char (caar args) 0))) ; cast
-          `(qfun* ,(cadar args) ,(caar args) ,fun/s ,@(rest args))
-          `(qfun ,(first args) ,fun/s ,@(rest args)))
+      (let (call)
+        (when (consp (first args))
+          (cond ((and (stringp (caar args))
+                      (char= #\Q (char (caar args) 0)))
+                 (setf call :cast))
+                ((eql :qt (caar args))
+                 (setf call :qt))))
+        (case call
+          (:cast
+           `(qfun* ,(cadar args) ,(caar args) ,fun/s ,@(rest args)))
+          (:qt
+           `(qfun+ ,(cadar args) ,fun/s ,@(rest args)))
+          (t
+           `(qfun ,(first args) ,fun/s ,@(rest args)))))
       `(qfuns ,@(reverse fun/s))))
 
 (defmacro x:do-with (with &body body) ; re-definition from package :X because of EQL:QFUN
@@ -316,19 +325,23 @@
    alias: qfun*
    Similar to <code>qinvoke-method</code>, additionally passing a class name, enforcing a cast to that class.<br>Note that this cast is not type safe (the same as a C cast, so dirty hacks are possible).
        (qfun* graphics-text-item \"QGraphicsItem\" \"setPos\" (list x y)) ; multiple inheritance problem
-       (qfun* event \"QKeyEvent\" \"key\") ; not needed in QADD-EVENT-FILTER (see also QT-OBJECT-?)
+       (qfun* event \"QKeyEvent\" \"key\") ; not needed with QADD-EVENT-FILTER (see also QT-OBJECT-?)
        ;;;
        ;;; alternatively:
        ;;;
        (! \"setPos\" (\"QGraphicsItem\" graphics-text-item) (list x y)) ; multiple inheritance problem
-       (! \"key\" (\"QKeyEvent\" event)) ; not needed in QADD-EVENT-FILTER (see also QT-OBJECT-?)"
+       (! \"key\" (\"QKeyEvent\" event)) ; not needed with QADD-EVENT-FILTER (see also QT-OBJECT-?)"
   (%qinvoke-method object cast-class-name function-name arguments))
 
 (defun qinvoke-method+ (object function-name &rest arguments)
   "args: (object function-name &rest arguments)
    alias: qfun+
    Use this variant to call user defined functions (declared <code>Q_INVOKABLE</code>), slots, signals from external C++ classes.<br><br>In order to call ordinary functions, slots, signals from external C++ classes, just use the ordinary <code>qfun</code>.
-       (qfun+ *qt-main* \"foo\") ; see Qt_EQL, Qt_EQL_dynamic"
+       (qfun+ *qt-main* \"foo\") ; see Qt_EQL, Qt_EQL_dynamic
+       ;;;
+       ;;; alternatively:
+       ;;;
+       (! \"foo\" (:qt *qt-main*))"
    (%qinvoke-method object :qt function-name arguments))
 
 (defun qconnect (from signal to &optional slot)

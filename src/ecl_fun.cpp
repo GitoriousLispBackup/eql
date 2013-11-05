@@ -246,7 +246,7 @@ static QByteArray prettyFunName(const QByteArray& name, bool this_arg) {
         pretty.truncate(pretty.length() - 1); }
     return pretty; }
 
-enum CallType { SignalOrSlot, Method, Static, Embedded };
+enum CallType { SignalOrSlot, Method, Static, Qt_EQL };
 
 static int findMethodIndex(CallType type, const QByteArray& name, const QMetaObject* mo, int len) {
     int n = -1;
@@ -273,7 +273,7 @@ static int findMethodIndex(CallType type, const QByteArray& name, const QMetaObj
         if(!search.contains('(')) {
             search.append('('); }
         StrList candidates;
-        int min = ((SignalOrSlot == type) || (Embedded == type)) ? 0 : mo->methodOffset();
+        int min = ((SignalOrSlot == type) || (Qt_EQL == type)) ? 0 : mo->methodOffset();
         for(int i = mo->methodCount() - 1; i >= min; --i) {
             QByteArray sig(mo->method(i).signature());
             int len_args = sig.count(',');
@@ -1482,7 +1482,7 @@ cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
     ///     (qapropos "html" "QTextEdit")
     ///     (qapropos nil "QWidget")
     ///     (qapropos)
-    ///     (qapropos nil *qt-main*) ; embedded C++ (see Qt_EQL example)
+    ///     (qapropos nil *qt-main*) ; see Qt_EQL, Qt_EQL_dynamic
     ecl_process_env()->nvalues = 1;    
     QByteArray search;
     if(ECL_STRINGP(l_search)) {
@@ -1490,7 +1490,7 @@ cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
     bool all = (Cnil == l_type);
     bool q = all ? false : (Ct == cl_eql(q_keyword(), l_type));
     StrList classes;
-    bool embedded = false;
+    bool qt_eql = false;
     const QMetaObject* mo = 0;
     if(ECL_STRINGP(l_class)) {
         classes << toCString(l_class); }
@@ -1505,7 +1505,7 @@ cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
         QtObject obj = toQtObject(l_class);
         if(obj.isQObject()) {
             if(obj.pointer) {
-                embedded = true;
+                qt_eql = true;
                 mo = ((QObject*)obj.pointer)->metaObject();
                 classes << QString("%1 : %2")
                         .arg(mo->className())
@@ -1515,7 +1515,7 @@ cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
     Q_FOREACH(QByteArray cl, classes) {
         bool found = false;
         bool non = LObjects::n_names.contains(cl);
-        if(non || embedded || LObjects::q_names.contains(cl)) {
+        if(non || qt_eql || LObjects::q_names.contains(cl)) {
             cl_object l_doc_pro = Cnil;
             cl_object l_doc_slo = Cnil;
             cl_object l_doc_sig = Cnil;
@@ -1537,7 +1537,7 @@ cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
                     l_doc = CONS(CONS(make_constant_base_string((char*)"Slots:"), l_doc_slo), l_doc); }
                 if(l_doc_sig != Cnil) {
                     l_doc = CONS(CONS(make_constant_base_string((char*)"Signals:"), l_doc_sig), l_doc); }
-                if((l_doc_ovr != Cnil) && !embedded) {
+                if((l_doc_ovr != Cnil) && !qt_eql) {
                     l_doc = CONS(CONS(make_constant_base_string((char*)"Override:"), l_doc_ovr), l_doc); }
                 l_doc = cl_nreverse(l_doc);
                 if(l_doc != Cnil) {
@@ -1754,19 +1754,19 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
     static QHash<QByteArray, int> i_method;
     if((l_obj != Cnil) && ECL_STRINGP(l_name)) {
         bool qobject_align = false;
-        bool embedded = false;
+        bool qt_eql = false;
         QByteArray castClass;
         if(l_cast != Cnil) {
             if(ECL_STRINGP(l_cast)) {
                 castClass = toCString(l_cast); }
             else if(cl_eql(qt_keyword(), l_cast)) {
-                embedded = true; }}
-        QtObject obj = toQtObject(l_obj, embedded ? Cnil : l_cast, &qobject_align);
+                qt_eql = true; }}
+        QtObject obj = toQtObject(l_obj, qt_eql ? Cnil : l_cast, &qobject_align);
         if(obj.id) {
             QByteArray name(QMetaObject::normalizedSignature(toCString(l_name)));
             int len_args = LEN(l_args);
             QByteArray cacheName((castClass.isEmpty()
-                                  ? (embedded
+                                  ? (qt_eql
                                      ? QByteArray(obj.pointer ? ((QObject*)obj.pointer)->metaObject()->className() : "Qt")
                                      : obj.className())
                                   : castClass)
@@ -1779,17 +1779,17 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
             else {
                 n = i_method.value(cacheName, -1);
                 if(n != -1) {
-                    if(embedded) {
+                    if(qt_eql) {
                         if(obj.pointer) {
                             mo = ((QObject*)obj.pointer)->metaObject(); }}
                     else {
                         method = true;
                         mo = methodMetaObject(obj); }}}
             if(n == -1) {
-                if(embedded) {
+                if(qt_eql) {
                     if(obj.pointer) {
                         mo = ((QObject*)obj.pointer)->metaObject();
-                        n = findMethodIndex(Embedded, name, mo, len_args); }}
+                        n = findMethodIndex(Qt_EQL, name, mo, len_args); }}
                 else {
                     mo = staticMetaObject(obj);
                     if(castClass.isEmpty() && obj.isQObject()) {
@@ -1835,7 +1835,7 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
                                 mo = methodMetaObject(obj);
                                 n = findMethodIndex(Method, _name.arg(castClass.constData()).toAscii(), mo, len_args); }}}}
                 if(n != -1) {
-                    if(method || embedded) {
+                    if(method || qt_eql) {
                         i_method[cacheName] = n; }
                     else {
                         i_slot[cacheName] = n; }}}
@@ -2222,7 +2222,7 @@ cl_object qload_cpp(cl_object l_lib_name, cl_object l_unload) { /// qload-c++
     /// Loads a custom Qt/C++ plugin (see <code>Qt_EQL_dynamic/</code>).<br>The <code>library-name</code> has to be passed as path to the plugin, without file ending.<br><br>This offers a simple way to extend your application with your own Qt/C++ functions.<br>The plugin will be reloaded (if supported by the OS) every time you call this function (Linux: see also <code>qauto-reload-c++</code>).<br>If the <code>unload</code> argument is not <code>NIL</code>, the plugin will be unloaded (if supported by the OS).
     ///     (defparameter *c++* (qload-c++ "eql_cpp")) ; load (Linux: see also QAUTO-RELOAD-C++)
     ///     (qapropos nil *c++*)                       ; documentation
-    ///     (qfun+ *c++* "mySpeedyQtFunction")         ; call library function (note QFUN+)
+    ///     (! "mySpeedyQtFunction" (:qt *c++*))       ; call library function (note :qt)
     static QHash<QString, QLibrary*> libraries;
     QString libName = toQString(l_lib_name);
     bool unload = (l_unload != Cnil);

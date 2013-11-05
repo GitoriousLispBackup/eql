@@ -9,14 +9,15 @@
 ;;;    2) do: (recompile-c++)
 ;;;    3) goto 1)
 ;;;
-;;; Call plugin functions using QFUN+:
+;;; Call plugin functions like this:
 ;;;
-;;;     (qfun+ *c++* "myFunction")
+;;;     (qfun+ *lib* "myFunction")   ; a)
+;;;     (! "myFunction" (:qt *lib*)) ; b)
 ;;;
 
 (in-package :eql-user)
 
-(defvar *c++* (qload-c++ (in-home "Qt_EQL_dynamic/eql_cpp")))
+(defvar *lib* (qload-c++ (in-home "Qt_EQL_dynamic/eql_cpp")))
 
 (defun recompile-c++ ()
   (qload-c++ (in-home "Qt_EQL_dynamic/eql_cpp")
@@ -24,6 +25,6 @@
   (ext:run-program #+msvc "make.bat" #-msvc "make"
                    #+msvc nil        #-msvc '("-C" "cpp/")
                    :output t)
-  (setf *c++* (qload-c++ (in-home "Qt_EQL_dynamic/eql_cpp")))
-  (assert (qt-object-p *c++*))
-  (qapropos nil *c++*))
+  (setf *lib* (qload-c++ (in-home "Qt_EQL_dynamic/eql_cpp")))
+  (assert (qt-object-p *lib*))
+  (qapropos nil *lib*))

@@ -9,6 +9,11 @@ make
 
 eql run.lisp -qtpl
 
-(qfun+ *qt-main* "stop")
-(qfun+ *qt-main* "start")
+  (qfun+ *qt-main* "stop")
+  (qfun+ *qt-main* "start")
+
+alternatively:
+
+  (! "stop"  (:qt *qt-main*))
+  (! "start" (:qt *qt-main*))
 

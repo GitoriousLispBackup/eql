@@ -13,7 +13,7 @@
 (defvar *wiggly* (qnew "QWidget"
                        "font" (x:let-it (! "font" "QApplication")
                                 (! "setPointSize" x:it
-                                    (+ 20 (! "pointSize" x:it))))
+                                   (+ 20 (! "pointSize" x:it))))
                        "autoFillBackground" t))
 
 (defvar *edit*   (qnew "QLineEdit" "alignment" |Qt.AlignCenter|))
