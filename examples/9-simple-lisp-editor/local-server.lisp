@@ -43,7 +43,7 @@
 (defvar *terminal-out-buffer*    (make-string-output-stream))
 (defvar *gui-debug-io*           nil)
 (defvar *sharp-q*                nil) ; see "CL_EQL/"
-(defvar *silent*                 (find "-silent" (! "arguments" "QCoreApplication") :test 'string=))
+(defvar *silent*                 (find "-silent" (! "arguments" "QApplication") :test 'string=))
 
 ;; REPL variables
 (defvar +   nil)

@@ -13,9 +13,9 @@ Build:
   
   remove "tmp/" (if present)
 
-  eql make.lisp
+  eql make
   qmake
-  make (MSVC: nmake)
+  make     (MSVC: nmake)
 
 
 Now you should find a "my_app" executable.

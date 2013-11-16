@@ -1,7 +1,7 @@
 BUILD
 =====
 
-  eql make.lisp
+  eql make
   qmake
   make
 

@@ -6,7 +6,11 @@ QT_BEGIN_NAMESPACE
 QObject* ini()
 {
     // any QObject inherited class will do (e.g. main window of a C++ application)
-    static QObject* cpp = 0; if(!cpp) cpp = new CPP;
+    static QObject* cpp = 0;
+    if(!cpp) {
+        cpp = new CPP;
+        cpp->setObjectName("Qt_EQL_dynamic");
+    }
     return cpp;
 }
 
@@ -21,7 +25,8 @@ void CPP::runExamples()
         QVariant ret = eql_fun("eql-user:say-number", QVariant::String, // see: ecl_fun.cpp:toQVariant()
                                Q_ARG(ulong, n));                        // see: ecl_fun.cpp:to_lisp_arg()
 
-        QMessageBox::information(0, "Example 1", "<pre><b>eql_fun(\"eql-user:say-number\"...);</b><br><br>" + ret.toString());
+        QMessageBox::information(0, "Example 1",
+                                 "<pre><b>eql_fun(\"eql-user:say-number\"...);</b><br><br>" + ret.toString());
     }
 
     // (2) call FORMAT directly
@@ -31,7 +36,8 @@ void CPP::runExamples()
                                Q_ARG(QString, "~R"),
                                Q_ARG(ulong, n));
 
-        QMessageBox::information(0, "Example 2", "<pre><b>eql_fun(\"format\"...);</b><br><br>" + ret.toString());
+        QMessageBox::information(0, "Example 2",
+                                 "<pre><b>eql_fun(\"format\"...);</b><br><br>" + ret.toString());
     }
 
     // (3) returning a pointer
@@ -47,7 +53,9 @@ void CPP::runExamples()
         QString msg;
         QDebug out(&msg);
         out << "<p>Q_PTR returned:<b>" << object << "</b></p><p>(type checked at run time)</p>";
-        QMessageBox::information(0, "Example 3", "<pre><b>eql_fun(\"qnew\"...);</b>" + msg);
+
+        QMessageBox::information(0, "Example 3",
+                                 "<pre><b>eql_fun(\"qnew\"...);</b>" + msg);
     }
 }
 

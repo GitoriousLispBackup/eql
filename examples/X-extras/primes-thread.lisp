@@ -42,17 +42,19 @@
       (incf found)
       (new-item (princ-to-string i)))))
 
-(defun all-threads ()
+(defun list-all-threads ()
   (format t "~%Threads:~%~%~{  ~S~%~}~%" (reverse (mp:all-processes))))
 
 (defun run (&optional (number-threads 2))
-  (! "setColumnCount" *tree-widget* (1+ number-threads))
-  (! "setHeaderLabels" *tree-widget*
-     (cons "Time" (loop :for i :from 1 :to number-threads :collect (format nil "Thread ~D" i))))
+  (x:do-with *tree-widget*
+    ("setColumnCount" (1+ number-threads))
+    ("setHeaderLabels" (cons "Time"
+                             (loop :for i :from 1 :to number-threads
+                                   :collect (format nil "Thread ~D" i)))))
   (dotimes (n number-threads)
     (let ((name (make-symbol (princ-to-string (1+ n)))))
       (mp:process-run-function name (lambda () (primes #.(expt 10 12) 15)))))
   (x:do-with *tree-widget* "show" "raise")
-  (all-threads))
+  (list-all-threads))
 
 (run)
