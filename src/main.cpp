@@ -1,11 +1,8 @@
 // copyright (c) 2010-2013 Polos Ruetz
 
 #include <QApplication>
-#include <QWidget>
-#include <QStringList>
-#include <QTextCodec>
+#include <QtCore>
 #include <iostream>
-#include <ecl/ecl.h>
 #include "eql.h"
 
 int catch_all_qexec() {

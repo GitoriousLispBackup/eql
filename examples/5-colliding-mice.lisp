@@ -18,7 +18,7 @@
 (defconstant +2pi+ (* 2 pi))
 
 (defvar *graphics-scene* (qnew "QGraphicsScene"
-                               "sceneRect" (list -300 -300 600 600)))
+                               "sceneRect" '(-300 -300 600 600)))
 (defvar *timer*          (qnew "QTimer"))
 (defvar *mouse-count*    0)
 
@@ -176,7 +176,7 @@
   (setf *random-state* (make-random-state t))
   (let ((view (qnew "QGraphicsView"
                     "windowTitle" "Colliding Mice"
-                    "size" (list 400 300))))
+                    "size" '(400 300))))
     (! "setItemIndexMethod" *graphics-scene* |QGraphicsScene.NoIndex|)
     (x:do-with view
       ("setScene" *graphics-scene*)

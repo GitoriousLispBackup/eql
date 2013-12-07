@@ -8,7 +8,10 @@
 
 (in-package :wiggly-widget)
 
-(defvar *sinus* #(0 38 71 92 100 92 71 38 0 -38 -71 -92 -100 -92 -71 -38))
+(defparameter *curve* #.(coerce (loop :for i :from 0 to 15
+                                  :collect (round (* 100 (sin (* i (/ pi 8))))))
+                                'vector)
+  "Vector of 16 values ranging from -100 to 100.")
 
 (defvar *wiggly* (qnew "QWidget"
                        "font" (x:let-it (! "font" "QApplication")
@@ -53,7 +56,7 @@
           (x:do-with painter
             ("setPen(QPen)" pen)
             ("drawText(QPoint,QString)" (list (floor x)
-                                              (floor (- y (/ (* h (svref *sinus* ix)) 400))))
+                                              (floor (- y (/ (* h (svref *curve* ix)) 400))))
                                         (string ch)))
           (incf x (! "width(QChar)" metrics ch)))))))
 

@@ -32,3 +32,5 @@ which is really fast.
 See functions QLOAD-C++ / QAUTO-RELOAD-C++ (Linux only) and "Qt_EQL_dynamic/"
 if you want to use Qt/C++ code for your bottlenecks.
 
+See also notes in "profiling.lisp".
+

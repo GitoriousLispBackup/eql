@@ -151,7 +151,7 @@
     ("setStretchFactor" 0 2)
     ("setStretchFactor" 1 1))
   (x:do-with (qset *main*)
-    ("size" (list 800 500))
+    ("size" '(800 500))
     ("windowTitle" "Simple Lisp Editor"))
   (! "setFixedHeight" *command* (+ (second (font-metrics-size))
                                    (* 2 (! "frameWidth" *command*))))

@@ -139,7 +139,7 @@
                              (< 0 height 2048))
                     (return-from get-size (list width height)))))))
           (qget *gl-widget* "size"))
-        (list 0 0))))
+        '(0 0))))
 
 (defun start ()
   (ini)

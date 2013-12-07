@@ -5,10 +5,13 @@
 ;;; It will run 10 seconds and output a profiling report.
 ;;;
 ;;;     sbcl --load profiling.lisp
-;;;     eql profiling.lisp
+;;;     eql profiling.lisp; eql profiling.fas;
 ;;;
-;;; In my tests CommonQt/SBCL was slightely faster on Linux,
-;;; and EQL was slightely faster on OSX.
+;;; In my tests, CommonQt/SBCL was a little faster than EQL
+;;; (except on Windows).
+;;;
+;;; But note that CommonQt/ECL (if you get it to work)
+;;; would be much slower than EQL.
 ;;;
 
 #-eql

@@ -29,7 +29,7 @@
                       "backgroundBrush" (qnew "QBrush(QColor)" "slategray")))
 (defvar *view*  (qnew "QGraphicsView"
                       "windowTitle" "Sokoban"
-                      "size" (list 650 550)))
+                      "size" '(650 550)))
 (defvar *level* (qnew "QSlider(Qt::Orientation)" |Qt.Vertical|
                       "tickInterval" 5
                       "tickPosition" |QSlider.TicksRight|
