@@ -8,7 +8,7 @@
 
 (in-package :wiggly-widget)
 
-(defparameter *curve* #.(coerce (loop :for i :from 0 to 15
+(defparameter *curve* #.(coerce (loop :for i :from 0 :to 15
                                   :collect (round (* 100 (sin (* i (/ pi 8))))))
                                 'vector)
   "Vector of 16 values ranging from -100 to 100.")
