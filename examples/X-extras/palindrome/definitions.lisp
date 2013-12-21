@@ -1,23 +1,23 @@
-(defparameter *duration*     5000)
+(defparameter *duration*     3000)
 (defparameter *pause*        50)
 (defparameter *easing-curve* |QEasingCurve.InOutSine|)
 
 ;;; colors
 
 (defparameter *background* "black")
-(defparameter *white*      (! "lighter" (qnew "QColor(QString)" "gray")      190))
-(defparameter *green*      (! "lighter" (qnew "QColor(QString)" "limegreen") 170))
-(defparameter *red*        (! "lighter" (qnew "QColor(QString)" "red")       170))
+(defparameter *color-1*    (! "lighter" (qnew "QColor(QString)" "gray") 190))
+(defparameter *color-2*    (! "lighter" (qnew "QColor(QString)" "blue") 170))
+(defparameter *color-3*    (! "lighter" (qnew "QColor(QString)" "red")  170))
 
 (defparameter *items*
-  (list (list "P" *green* '(g s))
-        (list "A" *white* '(d j p v))
-        (list "T" *red*   '(c k o w))
-        (list "E" *white* '(h l n r))
-        (list "R" *green* '(a i q y))
-        (list "N" *red*   '(m))
-        (list "O" *white* '(b f t x))
-        (list "S" *green* '(e u))))
+  (list (list "P" *color-2* '(g s))
+        (list "A" *color-1* '(d j p v))
+        (list "T" *color-3* '(c k o w))
+        (list "E" *color-1* '(h l n r))
+        (list "R" *color-2* '(a i q y))
+        (list "N" *color-3* '(m))
+        (list "O" *color-1* '(b f t x))
+        (list "S" *color-2* '(e u))))
 
 (defparameter *state-1*
   '("..............."
@@ -83,8 +83,4 @@
         (ex-rotated)
         (rotated)
         *state-2*
-        (ex-rotated)
-        (rotated)
-        *state-2*
         (ex-rotated)))
-
