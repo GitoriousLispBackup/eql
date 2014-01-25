@@ -1,22 +1,27 @@
-(defparameter *duration*     3000)
-(defparameter *pause*        50)
-(defparameter *easing-curve* |QEasingCurve.InOutSine|)
+(provide :definitions)
+
+(defparameter *duration*       3000)                     ; (change-duration 1000)
+(defparameter *pause*          50)                       ; (change-pause 0)
+(defparameter *easing-curve*   |QEasingCurve.InOutSine|) ; (change-easing-curve "OutBounce")
+(defparameter *window-opacity* 10/10)
 
 ;;; colors
 
-(defparameter *background* "black")
-(defparameter *color-1*    (! "lighter" (qnew "QColor(QString)" "gray") 190))
-(defparameter *color-2*    (! "lighter" (qnew "QColor(QString)" "blue") 170))
-(defparameter *color-3*    (! "lighter" (qnew "QColor(QString)" "red")  170))
+(defparameter *background*  "black")
+(defparameter *color-1*     (! "lighter" (qnew "QColor(QString)" "gray")   190))
+(defparameter *color-2*     (! "lighter" (qnew "QColor(QString)" "blue")   170))
+(defparameter *color-3*     (! "lighter" (qnew "QColor(QString)" "red")    170))
+(defparameter *color-4*     (! "lighter" (qnew "QColor(QString)" "yellow") 170))
+(defparameter *color-pause* *color-2*)
 
 (defparameter *items*
   (list (list "P" *color-2* '(g s))
-        (list "A" *color-1* '(d j p v))
+        (list "A" *color-4* '(d j p v))
         (list "T" *color-3* '(c k o w))
         (list "E" *color-1* '(h l n r))
         (list "R" *color-2* '(a i q y))
         (list "N" *color-3* '(m))
-        (list "O" *color-1* '(b f t x))
+        (list "O" *color-4* '(b f t x))
         (list "S" *color-2* '(e u))))
 
 (defparameter *state-1*

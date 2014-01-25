@@ -1,7 +1,6 @@
 (in-package :eql-user)
 
-(when (probe-file "definitions.lisp")
-  (load "definitions"))
+(require :definitions "definitions")
 
 (defconstant +state-switch-event+ (+ |QEvent.User| 256))
 (defconstant +size+               20)
@@ -13,13 +12,15 @@
 
 (defvar *main*  (qnew "QWidget"
                       "mouseTracking" t
-                      "windowOpacity" 5/5))
+                      "windowOpacity" *window-opacity*))
 (defvar *view*  (qnew "QGraphicsView"
                       "mouseTracking" t
                       "frameShape" |QFrame.NoFrame|))
 (defvar *timer* (qnew "QTimer"
                       "singleShot" t))
-(defvar *width* (x:when-it (third (! "arguments" "QApplication")) (parse-integer x:it)))
+
+(defvar *width* (parse-integer (first (last (! "arguments" "QApplication")))
+                               :junk-allowed t))
 
 (defmacro push* (item list)
   `(setf ,list (nconc ,list (list ,item))))
@@ -81,19 +82,18 @@
 
 ;;; main
 
-(let ((font (let ((font (! "font" "QApplication")))
-              (! "setBold" font t)
-              font))
+(let ((font (x:let-it (! "font" "QApplication")
+              (! "setBold" x:it t)))
       items items*)
   (defun new-graphics-item (text color id)
     (let ((item (qnew "QGraphicsWidget")))
       (qoverride item "paint(QPainter*,QStyleOptionGraphicsItem*,QWidget*)"
                  (lambda (painter _ _)
-                   (let ((rect (! "rect" item)))
-                     (x:do-with painter
-                       ("fillRect(QRectF,QColor)" rect color)
-                       ("setFont" font)
-                       ("drawText(QRectF,int,QString)" rect |Qt.AlignCenter| text)))))
+                   (x:do-with painter
+                     ("fillRect(QRectF,QColor)" (mapcar '+ (! "rect" item) '(1 1 -2 -2)) color)
+                     ("setFont" font)
+                     ("setPen(QColor)" "black")
+                     ("drawText(QRectF,int,QString)" (! "rect" item) |Qt.AlignCenter| text))))
       (push (cons id item) items*)
       item))
   (defun id-item (id)
@@ -134,22 +134,22 @@
       (push* anim animations)
       (! "addAnimation" group anim)
       anim))
-  (defun change-easing-curve (name)
-    (let ((type (symbol-value (intern (concatenate 'string "QEasingCurve." name)))))
-      (dotimes (i (! *items* "topLevelItemCount" *items*))
-        (let ((item (! *items* "topLevelItem" *items* i))
-              (curve (if (string= "Custom" name)
-                     *custom-easing-curve*
-                     (qnew "QEasingCurve(QEasingCurve::Type)" type))))
-          (when (! item "isSelected" item)
-            (! "setText" item 1 name)
-            (! "setEasingCurve" (nth i animations) curve))
-          (update-graph-pixmap curve)))))
+  (defun change-easing-curve (curve)
+    (let ((type (etypecase curve
+                  (integer
+                    curve)
+                  (string
+                    (symbol-value (intern (concatenate 'string "QEasingCurve." curve)))))))
+      (setf *easing-curve* type)
+      (dolist (anim animations)
+        (! "setEasingCurve" anim (qnew "QEasingCurve(QEasingCurve::Type)" type)))))
   (defun change-duration (msec)
+    (setf *duration* msec)
     (dolist (anim animations)
       (! "setDuration" anim msec))
     (update-timer))
   (defun change-pause (msec)
+    (setf *pause* msec)
     (let ((n 0))
       (dolist (group groups)
         (let ((anim (! "takeAnimation" group 1)))
@@ -159,9 +159,7 @@
             ("addAnimation" anim)))))
     (update-timer))
   (defun update-timer ()
-    (qset *timer* "interval" (+ (qget *duration* "value")
-                                (* 4 (qget *pause* "value"))
-                                500))))
+    (qset *timer* "interval" (+ *duration* (* 4 *pause*) 1000))))
 
 (defun create-geometry-states (group)
   (flet ((item-count ()
@@ -247,12 +245,21 @@
     ;; quit on mouse click
     (dolist (w (list *main* *view*))
       (qoverride w "mousePressEvent(QMouseEvent*)" (lambda (event) (qquit))))
+    ;; pause on key Space
     ;; save screenshot on key S
     ;; quit on key Escape
     (qadd-event-filter nil |QEvent.KeyPress|
                        (lambda (_ event)
                          (let ((key (! "key" event)))
                            (case key
+                             (#.|Qt.Key_Space|
+                                (let ((active (qget *timer* "active")))
+                                  (if active
+                                      (! "stop" *timer*)
+                                      (x:do-with *timer*
+                                        ("timeout")
+                                        ("start")))
+                                  (qset-color *main* |QPalette.Window| (if active *color-pause* *background*))))
                              (#.|Qt.Key_S|
                                 (let ((widget (! "viewport" *view*)))
                                   (! (("save" "screenshot.png" "PNG")
