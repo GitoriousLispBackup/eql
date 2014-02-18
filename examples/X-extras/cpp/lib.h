@@ -13,13 +13,11 @@ QT_BEGIN_NAMESPACE
 
 extern "C" { LIB_EXPORT QObject* ini(); }
 
-class CPP : public QObject
-{
+class CPP : public QObject {
     Q_OBJECT
 public:
-    QEasingCurve* curve;
 
-    Q_INVOKABLE QEasingCurve* easingCurve() { return curve; }
+    Q_INVOKABLE QEasingCurve* easingCurve();
 };
 
 QT_END_NAMESPACE

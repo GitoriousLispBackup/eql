@@ -69,17 +69,19 @@
 
 (let ((text ":r1"))
   (defun command ()
-    (qlet ((dialog  (qnew "QDialog(QWidget*,Qt::WindowFlags)" nil |Qt.WindowStaysOnTopHint|
-                          "windowTitle" (tr "EQL Debug Dialog")))
-           (command (qnew "QLineEdit" "font" (qnew "QFont(QString,int)"
-                                                   #+darwin  "Monaco"      #+darwin  12
-                                                   #+linux   "Monospace"   #+linux   9
-                                                   #+windows "Courier New" #+windows 10)
-                                      "text" text
-                                      "minimumWidth" 350))
-           (label   (qnew "QLabel" "text" (tr "Enter debug command or Lisp expression (:h for help)")))
-           (buttons (qnew "QDialogButtonBox"))
-           (layout  (qnew "QVBoxLayout(QWidget*)" dialog)))
+    (qlet ((dialog  "QDialog(QWidget*,Qt::WindowFlags)" nil |Qt.WindowStaysOnTopHint|
+                    "windowTitle" (tr "EQL Debug Dialog"))
+           (command "QLineEdit"
+                    "font" #.(qnew "QFont(QString,int)"
+                                   #+darwin  "Monaco"      #+darwin  12
+                                   #+linux   "Monospace"   #+linux   9
+                                   #+windows "Courier New" #+windows 10)
+                    "text" text
+                    "minimumWidth" 350)
+           (label   "QLabel"
+                    "text" (tr "Enter debug command or Lisp expression (:h for help)"))
+           (buttons "QDialogButtonBox")
+           (layout  "QVBoxLayout(QWidget*)" dialog))
       (x:do-with (! "addButton" buttons)
         |QDialogButtonBox.Ok|
         |QDialogButtonBox.Cancel|)

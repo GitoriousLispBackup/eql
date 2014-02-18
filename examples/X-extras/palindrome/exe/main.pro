@@ -9,4 +9,5 @@ MOC_DIR      = ./tmp/
 
 include(../../../../src/windows.pri)
 
+HEADERS += main.h
 SOURCES += main.cpp

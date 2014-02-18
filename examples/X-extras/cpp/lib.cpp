@@ -1,23 +1,24 @@
 #include "lib.h"
-#include "../../../src/eql_fun.h"
+#include "eql_fun.h"
 
 QT_BEGIN_NAMESPACE
 
-static qreal easingFunction(qreal progress)
-{
+static qreal easingFunction(qreal progress) {
     // see "../move-blocks.lisp"
     return eql_fun("eql-user::custom-easing-function", QVariant::Double,
-                   Q_ARG(qreal, progress)).toDouble();
-}
+                   Q_ARG(qreal, progress)).toDouble(); }
 
-QObject* ini()
-{
-    static CPP* cpp = 0; if(!cpp) cpp = new CPP;
+QEasingCurve* CPP::easingCurve() {
+    static QEasingCurve* curve = 0;
+    if(!curve) {
+        curve = new QEasingCurve(QEasingCurve::Custom);
+        curve->setCustomType(easingFunction); }
+    return curve; }
 
-    cpp->curve = new QEasingCurve(QEasingCurve::Custom);
-    cpp->curve->setCustomType(easingFunction);
-
-    return cpp;
-}
+QObject* ini() {
+    static CPP* cpp = 0;
+    if(!cpp) {
+        cpp = new CPP; }
+    return cpp; }
 
 QT_END_NAMESPACE

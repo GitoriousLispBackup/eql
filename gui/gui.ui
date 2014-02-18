@@ -78,7 +78,7 @@
           <attribute name="title">
            <string>QObjects</string>
           </attribute>
-          <layout class="QVBoxLayout">
+          <layout class="QVBoxLayout" name="verticalLayout">
            <item>
             <widget class="QLabel" name="q_super_classes">
              <property name="text">
@@ -87,14 +87,31 @@
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="q_names">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-            </widget>
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <item>
+              <widget class="QComboBox" name="q_names">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
            </item>
            <item>
             <widget class="QTabWidget" name="tabWidget">
@@ -186,7 +203,7 @@
           <attribute name="title">
            <string>Non QObjects</string>
           </attribute>
-          <layout class="QVBoxLayout">
+          <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
             <widget class="QLabel" name="n_super_classes">
              <property name="text">
@@ -195,14 +212,31 @@
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="n_names">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-            </widget>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item>
+              <widget class="QComboBox" name="n_names">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
            </item>
            <item>
             <widget class="QTabWidget" name="tabWidget_2">

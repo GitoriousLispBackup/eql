@@ -1,5 +1,6 @@
 TEMPLATE    = lib
 CONFIG      += plugin release
+INCLUDEPATH += ../../../src
 LIBS        += -L../../.. -leql
 DESTDIR     = ./
 TARGET      = easing_curve

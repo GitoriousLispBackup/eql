@@ -39,7 +39,7 @@
             (push item items)))
         (! "appendRow(QList<QStandardItem*>)" model (nreverse items))))
     (! "setModel" view model)
-    (! ("hide" "verticalHeader" view))                          ; see QFUNS
-    (! (("setStretchLastSection" t) "horizontalHeader" view)))) ; see QFUNS
+    (! ("hide" "verticalHeader" view))                          ; see "0.lisp"
+    (! (("setStretchLastSection" t) "horizontalHeader" view)))) ; see "0.lisp"
 
 (start)

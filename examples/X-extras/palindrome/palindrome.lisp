@@ -2,13 +2,19 @@
 
 (require :definitions "definitions")
 
+(dolist (arg (mapcar 'read-from-string (! "arguments" "QApplication")))
+  (when (numberp arg)
+    (if (integerp arg)
+        (setf *window-width* arg)
+        (setf *window-opacity* arg))))
+
 (defconstant +state-switch-event+ (+ |QEvent.User| 256))
 (defconstant +size+               20)
 
 (defparameter *item-size* (list +size+ +size+))
 (defparameter *view-size* (list (* +size+ (length (caar *states*)))
                                 (* +size+ (length (car *states*)))))
-(defparameter *color-m*   "white")
+(defparameter *color-m*   nil)
 
 (defvar *main*  (qnew "QWidget"
                       "mouseTracking" t
@@ -19,11 +25,22 @@
 (defvar *timer* (qnew "QTimer"
                       "singleShot" t))
 
-(defvar *width* (parse-integer (first (last (! "arguments" "QApplication")))
-                               :junk-allowed t))
-
 (defmacro push* (item list)
   `(setf ,list (nconc ,list (list ,item))))
+
+;;; custom easing curve (see both "../cpp/lib.h" and "exe/main.h")
+;;; see CUSTOM-EASING-FUNCTION in "definitions.lisp"
+
+(let (curve)
+  (defun custom-easing-curve ()
+    (or curve
+        (setf curve (cond ((directory "*easing_curve.*")
+                           (! "easingCurve" (:qt (qload-c++ "easing_curve"))))
+                          ((string= "Qt_EQL_Application"
+                                    (! ("className" "metaObject" (qapp))))
+                           (! "easingCurve" (:qt (qapp))))
+                          (t
+                           (qnew "QEasingCurve(QEasingCurve::Type)" |QEasingCurve.Linear|))))))) ; fallback
 
 ;;; state-switch-event
 
@@ -130,19 +147,24 @@
                      anim-group)))
       (x:do-with anim
         ("setDuration" duration)
-        ("setEasingCurve" (qnew "QEasingCurve(QEasingCurve::Type)" curve-type)))
+        ("setEasingCurve" (if (= |QEasingCurve.Custom| curve-type)
+                              (custom-easing-curve)
+                              (qnew "QEasingCurve(QEasingCurve::Type)" curve-type))))
       (push* anim animations)
       (! "addAnimation" group anim)
       anim))
   (defun change-easing-curve (curve)
-    (let ((type (etypecase curve
-                  (integer
-                    curve)
-                  (string
-                    (symbol-value (intern (concatenate 'string "QEasingCurve." curve)))))))
-      (setf *easing-curve* type)
+    (let* ((type (etypecase curve
+                   (integer
+                     curve)
+                   (string
+                     (symbol-value (intern (concatenate 'string "QEasingCurve." curve))))))
+           (curve (if (= |QEasingCurve.Custom| type)
+                      (custom-easing-curve)
+                      (qnew "QEasingCurve(QEasingCurve::Type)" type))))
+      (setf *easing-curve* curve)
       (dolist (anim animations)
-        (! "setEasingCurve" anim (qnew "QEasingCurve(QEasingCurve::Type)" type)))))
+        (! "setEasingCurve" anim curve))))
   (defun change-duration (msec)
     (setf *duration* msec)
     (dolist (anim animations)
@@ -267,12 +289,12 @@
                                       "QPixmap"))))
                              (#.|Qt.Key_Escape|
                                 (qquit))))))
-    (if *width*
-        (! "setFixedSize" *view* (list *width* *width*))
+    (if *window-width*
+        (! "setFixedSize" *view* (list *window-width* *window-width*))
         (! "setFixedWidth" *view* (apply 'min (nthcdr 2 (! ("screenGeometry" "desktop" "QApplication"))))))
     (! "setPos" "QCursor" (qget *main* "pos"))
     (x:do-with *main*
-      ((if *width* "show" "showFullScreen"))
+      ((if *window-width* "show" "showFullScreen"))
       ("raise"))))
 
 (ini)

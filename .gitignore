@@ -41,3 +41,4 @@ real-time-comparison/test
 eql_profile*
 send
 eql_local_server
+palindrome

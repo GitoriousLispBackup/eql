@@ -3,7 +3,9 @@
 (defparameter *duration*       3000)                     ; (change-duration 1000)
 (defparameter *pause*          50)                       ; (change-pause 0)
 (defparameter *easing-curve*   |QEasingCurve.InOutSine|) ; (change-easing-curve "OutBounce")
-(defparameter *window-opacity* 10/10)
+
+(defparameter *window-width*   nil)                      ; INTEGER command line argument
+(defparameter *window-opacity* 10/10)                    ; FLOAT/RATIONAL command line argument
 
 ;;; colors
 
@@ -58,6 +60,12 @@
     "..............."
     ".......x......."))
 
+(defun custom-easing-function (x) ; |QEasingCurve.Custom|
+  (flet ((ease (s)
+           (- (* (expt x 3) (1+ s))
+              (* (expt x 2) s))))
+    (ease (- (* 15 x) 7))))
+
 (let (ex)
   (defun rotated (&optional (state ex))
     (let* ((width  (length (first state)))
@@ -77,15 +85,15 @@
     ex))
 
 (defparameter *states*
-  (list *state-1*
+  (list *state-1*           ; 1
         *state-2*
         *state-1*
-        (rotated *state-1*)
+        (rotated *state-1*) ; 2
         *state-2*
         (ex-rotated)
-        (rotated)
+        (rotated)           ; 3
         *state-2*
         (ex-rotated)
-        (rotated)
+        (rotated)           ; 4
         *state-2*
         (ex-rotated)))
