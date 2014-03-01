@@ -285,14 +285,14 @@
                              (#.|Qt.Key_S|
                                 (let ((widget (! "viewport" *view*)))
                                   (! (("save" "screenshot.png" "PNG")
-                                      ("grabWidget(QWidget*,QRect)" widget (qget widget "rect"))
+                                      ("grabWidget(QWidget*,QRect)" widget (! "rect" widget))
                                       "QPixmap"))))
                              (#.|Qt.Key_Escape|
                                 (qquit))))))
     (if *window-width*
         (! "setFixedSize" *view* (list *window-width* *window-width*))
         (! "setFixedWidth" *view* (apply 'min (nthcdr 2 (! ("screenGeometry" "desktop" "QApplication"))))))
-    (! "setPos" "QCursor" (qget *main* "pos"))
+    (qsingle-shot 0 (lambda () (! "setPos" "QCursor" (! "pos" *main*))))
     (x:do-with *main*
       ((if *window-width* "show" "showFullScreen"))
       ("raise"))))

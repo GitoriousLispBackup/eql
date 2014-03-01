@@ -286,8 +286,6 @@ struct QtMetaObject : private QObject {
     static const QMetaObject* get() { return &static_cast<QtMetaObject*>(0)->staticQtMetaObject; }
 };
 
-typedef QPair<QByteArray, void*> MetaArg;
-
 void iniCLFunctions();
 void callConnectFun(void*, const QList<QByteArray>&, void**);
 bool callEventFun(void*, QObject*, QEvent*);
