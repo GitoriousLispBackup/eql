@@ -1,4 +1,4 @@
-// copyright (c) 2010-2013 Polos Ruetz
+// copyright (c) 2010-2014 Polos Ruetz
 
 #include "eql.h"
 #include "ecl_fun.h"
@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "13.11.1"; // Nov 2013
+const char EQL::version[] = "14.3.1"; // Mar 2014
 
 extern "C" void ini_EQL(cl_object);
 

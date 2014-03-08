@@ -21,23 +21,21 @@
 
 (defun setup-model-and-view (view)
   (let ((model (qnew "QStandardItemModel")))
-    (! "setHorizontalHeaderLabels" model (list "Name" "Office"))
-    (dolist (row (list (list "Verne Nilsen" "123")
-                       (list "Carlos Tang" "77")
-                       (list "Bronwyn Hawcroft" "119")
-                       (list "Alessandro Hanssen" "32")
-                       (list "Andrew John Bakken" "54")
-                       (list "Vanessa Weatherley" "85")
-                       (list "Rebecca Dickens" "17")
-                       (list "David Bradley" "42")
-                       (list "Knut Walters" "25")
-                       (list "Andrea Jones" "34")))
-      (let (items)
-        (dolist (text row)
-          (let ((item (qnew "QStandardItem")))
-            (! "setText" item text)
-            (push item items)))
-        (! "appendRow(QList<QStandardItem*>)" model (nreverse items))))
+    (! "setHorizontalHeaderLabels" model '("Name" "Office"))
+    (dolist (row '(("Verne Nilsen" "123")
+                   ("Carlos Tang" "77")
+                   ("Bronwyn Hawcroft" "119")
+                   ("Alessandro Hanssen" "32")
+                   ("Andrew John Bakken" "54")
+                   ("Vanessa Weatherley" "85")
+                   ("Rebecca Dickens" "17")
+                   ("David Bradley" "42")
+                   ("Knut Walters" "25")
+                   ("Andrea Jones" "34")))
+      (! "appendRow(QList<QStandardItem*>)"
+         model
+         (loop :for text :in row
+               :collect (qnew "QStandardItem(QString)" text))))
     (! "setModel" view model)
     (! ("hide" "verticalHeader" view))                          ; see "0.lisp"
     (! (("setStretchLastSection" t) "horizontalHeader" view)))) ; see "0.lisp"

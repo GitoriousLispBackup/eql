@@ -1,4 +1,4 @@
-// copyright (c) 2010-2013 Polos Ruetz
+// copyright (c) 2010-2014 Polos Ruetz
 
 #include "ecl_fun.h"
 #include "eql.h"
@@ -66,7 +66,10 @@ static const int T_QPolygonF =                        qRegisterMetaType<QPolygon
 static const int T_QRgb =                             qRegisterMetaType<QRgb>("QRgb");
 static const int T_QTableWidgetSelectionRange =       qRegisterMetaType<QTableWidgetSelectionRange>("QTableWidgetSelectionRange");
 static const int T_QTextBlock =                       qRegisterMetaType<QTextBlock>("QTextBlock");
+static const int T_QTextBlockFormat =                 qRegisterMetaType<QTextBlockFormat>("QTextBlockFormat");
 static const int T_QTextCharFormat =                  qRegisterMetaType<QTextCharFormat>("QTextCharFormat");
+static const int T_QTextFrameFormat =                 qRegisterMetaType<QTextFrameFormat>("QTextFrameFormat");
+static const int T_QTextListFormat =                  qRegisterMetaType<QTextListFormat>("QTextListFormat");
 static const int T_QTextCursor =                      qRegisterMetaType<QTextCursor>("QTextCursor");
 static const int T_QTextDocumentFragment =            qRegisterMetaType<QTextDocumentFragment>("QTextDocumentFragment");
 static const int T_QTextLine =                        qRegisterMetaType<QTextLine>("QTextLine");
@@ -711,7 +714,10 @@ TO_QT_TYPE_PTR2(QPixmap, qpixmap)
 TO_QT_TYPE_PTR2(QSizePolicy, qsizepolicy)
 TO_QT_TYPE_PTR2(QTableWidgetSelectionRange, qtablewidgetselectionrange)
 TO_QT_TYPE_PTR2(QTextBlock, qtextblock)
+TO_QT_TYPE_PTR(QTextBlockFormat, qtextblockformat)
 TO_QT_TYPE_PTR(QTextCharFormat, qtextcharformat)
+TO_QT_TYPE_PTR(QTextFrameFormat, qtextframeformat)
+TO_QT_TYPE_PTR(QTextListFormat, qtextlistformat)
 TO_QT_TYPE_PTR(QTextCursor, qtextcursor)
 TO_QT_TYPE_PTR(QTextDocumentFragment, qtextdocumentfragment)
 TO_QT_TYPE_PTR2(QTextFormat, qtextformat)
@@ -1148,7 +1154,10 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         else if(T_QRgb == n)                             p = new QRgb(toUInt(l_arg));
         else if(T_QTableWidgetSelectionRange == n)       p = new QTableWidgetSelectionRange(*toQTableWidgetSelectionRangePointer(l_arg));
         else if(T_QTextBlock == n)                       p = new QTextBlock(*toQTextBlockPointer(l_arg));
+        else if(T_QTextBlockFormat == n)                 p = new QTextBlockFormat(*toQTextBlockFormatPointer(l_arg));
         else if(T_QTextCharFormat == n)                  p = new QTextCharFormat(*toQTextCharFormatPointer(l_arg));
+        else if(T_QTextFrameFormat == n)                 p = new QTextFrameFormat(*toQTextFrameFormatPointer(l_arg));
+        else if(T_QTextListFormat == n)                  p = new QTextListFormat(*toQTextListFormatPointer(l_arg));
         else if(T_QTextCursor == n)                      p = new QTextCursor(*toQTextCursorPointer(l_arg));
         else if(T_QTextDocumentFragment == n)            p = new QTextDocumentFragment(*toQTextDocumentFragmentPointer(l_arg));
         else if(T_QTextLine == n)                        p = new QTextLine(*toQTextLinePointer(l_arg));
@@ -1302,7 +1311,10 @@ cl_object to_lisp_arg(const MetaArg& arg) {
             else if(T_QRgb == n)                             l_ret = ecl_make_unsigned_integer(*(QRgb*)p);
             else if(T_QTableWidgetSelectionRange == n)       l_ret = from_qtablewidgetselectionrange(*(QTableWidgetSelectionRange*)p);
             else if(T_QTextBlock == n)                       l_ret = from_qtextblock(*(QTextBlock*)p);
+            else if(T_QTextBlockFormat == n)                 l_ret = from_qtextblockformat(*(QTextBlockFormat*)p);
             else if(T_QTextCharFormat == n)                  l_ret = from_qtextcharformat(*(QTextCharFormat*)p);
+            else if(T_QTextFrameFormat == n)                 l_ret = from_qtextframeformat(*(QTextFrameFormat*)p);
+            else if(T_QTextListFormat == n)                  l_ret = from_qtextlistformat(*(QTextListFormat*)p);
             else if(T_QTextCursor == n)                      l_ret = from_qtextcursor(*(QTextCursor*)p);
             else if(T_QTextDocumentFragment == n)            l_ret = from_qtextdocumentfragment(*(QTextDocumentFragment*)p);
             else if(T_QTextLine == n)                        l_ret = from_qtextline(*(QTextLine*)p);
@@ -1482,7 +1494,7 @@ cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
     ///     (qapropos "html" "QTextEdit")
     ///     (qapropos nil "QWidget")
     ///     (qapropos)
-    ///     (qapropos nil *qt-main*) ; see Qt_EQL, Qt_EQL_dynamic
+    ///     (qapropos nil *qt-main*) ; see Qt_EQL, Qt_EQL_dynamic (custom Qt classes, Qt3Support classes)
     ecl_process_env()->nvalues = 1;    
     QByteArray search;
     if(ECL_STRINGP(l_search)) {
