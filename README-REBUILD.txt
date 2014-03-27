@@ -3,7 +3,7 @@ REBUILD STEPS
 
 Change to eql/src/ and do:
 
-1) remove the directory tmp/
+1) remove directory tmp/
 
 2) ecl -shell make-eql-lib.lisp
 

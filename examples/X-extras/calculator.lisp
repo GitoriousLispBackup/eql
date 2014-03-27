@@ -122,8 +122,8 @@
   (flet ((b ()
            (qnew "QToolButton"
                  "minimumSize" '(35 25)
-                 "sizePolicy" (qnew "QSizePolicy(QSizePolicy::Policy,QSizePolicy::Policy)"
-                                    |QSizePolicy.Expanding| |QSizePolicy.Expanding|))))
+                 "sizePolicy" #.(qnew "QSizePolicy(QSizePolicy::Policy,QSizePolicy::Policy)"
+                                      |QSizePolicy.Expanding| |QSizePolicy.Expanding|))))
     (let ((layout (qnew "QGridLayout(QWidget*)" *main*))
           (digits (make-array 10))
           (plus (b)) (minus (b)) (multiply (b)) (divide (b)) (reci (b)) (sign (b))

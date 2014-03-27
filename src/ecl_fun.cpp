@@ -563,7 +563,7 @@ static const char* eventName(QEvent::Type type) {
             name = "QGestureEvent";
             break;
         default:
-            name = 0; }
+            name = "QEvent"; }
     return name; }
 
 static QByteArray qtObjectName(cl_object l_obj) {
