@@ -1,4 +1,5 @@
-;;; Removes web elements from Html file:
+;;;
+;;; REMOVE WEB ELEMENTS ------------------------------------------------
 ;;;
 ;;; (open-file)                ; a) select local file
 ;;; (open-url)                 ; b) enter URL
@@ -19,6 +20,12 @@
 ;;; (view :div :id "main ")    ; displays "outerHtml" of single element
 ;;;
 ;;; (save-file)
+;;;
+;;;
+;;; INSPECTOR ----------------------------------------------------------
+;;;
+;;; (inspector)                ; see context menu / inspect
+;;;
 
 (qrequire :webkit)
 
@@ -117,5 +124,16 @@
             (when (or (not attribute)
                       (string-equal value (! "attribute" element attr)))
               (view* element)))))))
+
+(let (web-inspector)
+  (defun inspector ()
+    "Displays QWebInspector; use 'inspect' from context menu of QWebView to inspect single elements."
+    (unless web-inspector
+      (setf web-inspector (qnew "QWebInspector"))
+      (! "setAttribute" (! "globalSettings" "QWebSettings")
+         |QWebSettings.DeveloperExtrasEnabled| t))
+    (x:do-with web-inspector
+      ("setPage" (! "page" *web-view*))
+      ("show"))))
 
 (open-url)
