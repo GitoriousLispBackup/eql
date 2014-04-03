@@ -260,6 +260,7 @@
 (defenum |QWebSettings.JavaEnabled| 2)
 (defenum |QWebSettings.JavascriptCanAccessClipboard| 6)
 (defenum |QWebSettings.JavascriptCanOpenWindows| 5)
+(defenum |QWebSettings.JavascriptEnabled| 1)
 (defenum |QWebSettings.LocalContentCanAccessRemoteUrls| 19)
 (defenum |QWebSettings.LocalStorageDatabaseEnabled| 13)
 (defenum |QWebSettings.LocalStorageEnabled| 13)

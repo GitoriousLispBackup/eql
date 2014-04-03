@@ -76,7 +76,7 @@
         (t
          "*")))
 
-(defun count* (tag/selector)
+(defun count* (&optional (tag/selector "*"))
   (! ("count" ("findAllElements" (to-string tag/selector)) (frame))))
 
 (defun strip (tag/selector &optional attribute value)
