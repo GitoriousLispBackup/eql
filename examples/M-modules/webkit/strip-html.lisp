@@ -130,10 +130,9 @@
     "Displays QWebInspector; use 'inspect' from context menu of QWebView to inspect single elements."
     (unless web-inspector
       (setf web-inspector (qnew "QWebInspector"))
-      (! "setAttribute" (! "globalSettings" "QWebSettings")
-         |QWebSettings.DeveloperExtrasEnabled| t))
-    (x:do-with web-inspector
-      ("setPage" (! "page" *web-view*))
-      ("show"))))
+      (let ((settings (! "settings" *web-view*)))
+        (! "setAttribute" settings |QWebSettings.DeveloperExtrasEnabled| t))
+      (! "setPage" web-inspector (! "page" *web-view*)))
+    (! "show" web-inspector)))
 
 (open-url)

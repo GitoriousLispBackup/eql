@@ -39,7 +39,6 @@
       (qfun *vertical-layout-1* "setContentsMargins" -1 4 -1 4)
       (setf *web-view* (qnew "QWebView(QWidget*)" *central-widget*))
       (qfun *web-view* "setObjectName" "web_view")
-      (qfun *web-view* "setUrl" (qnew "QUrl(QString)" "http://qt.nokia.com/"))
       (qfun *vertical-layout-1* "addWidget" *web-view*)
       (qfun *main* "setCentralWidget" *central-widget*)
       (setf *menu-bar* (qnew "QMenuBar(QWidget*)" *main*))

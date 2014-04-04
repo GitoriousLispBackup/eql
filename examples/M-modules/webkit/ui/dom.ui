@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Window</class>
+ <class>main</class>
  <widget class="QMainWindow" name="main">
   <property name="geometry">
    <rect>
@@ -22,13 +22,7 @@
      <number>4</number>
     </property>
     <item>
-     <widget class="QWebView" name="web_view">
-      <property name="url">
-       <url>
-        <string>http://qt.nokia.com/</string>
-       </url>
-      </property>
-     </widget>
+     <widget class="QWebView" name="web_view"/>
     </item>
    </layout>
   </widget>
