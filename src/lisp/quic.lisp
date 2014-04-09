@@ -30,7 +30,7 @@
   (dolist (module (list :help :opengl :svg :webkit))
     (eql:qrequire module :quiet)))
 
-(defun run (&optional (ui.h "ui.h") (ui.lisp "ui.lisp") (ui-package :ui))
+(defun run (&optional (ui.h "ui.h") (ui.lisp "ui.lisp") (ui-package :ui) properties)
   (load-ui-related-qt-modules)
   (with-setq-reset (*defvars* *qlets* *lets-ini* *lets-tr* *main-var* *main-class* *classes* *line-nr* *section*)
     (setf *defvars* (make-hash-table :test 'equal)
@@ -86,11 +86,12 @@
           (dolist (line (nreverse code))
             (write-string line out))
           (format out "~%      (retranslate-ui)~
-                       ~%      (qfun ~A \"show\"))))~
+                       ~%      (qfun ~A ~S))))~
                        ~%~
                        ~%(defun retranslate-ui ()~
                        ~%  (let (~{~A~^ ~})"
                   (var-name *main-var*)
+                  (if (find :maximized properties) "showMaximized" "show")
                   (mapcar 'var-name (reverse *lets-tr*)))
           (dolist (line (nreverse tr))
             (write-string line out))

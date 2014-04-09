@@ -77,14 +77,19 @@ void EQL::exec(const QStringList& args) {
     // -quic
     if(arguments.contains("-quic")) {
         arguments.removeAll("-quic");
+        bool maximized = false;
+        if(arguments.contains(":maximized")) {
+            arguments.removeAll(":maximized");
+            maximized = true; }
         if(arguments.length() >= 2) {
             QString uiFile(QDir::fromNativeSeparators(arguments.at(1)));
             int sep = uiFile.lastIndexOf('/') + 1;
             forms << QString("(ext:run-program \"uic\" (list \"-o\" \"ui.h\" \"%1\"))").arg(uiFile)  
-                  << QString("(eql:quic \"ui.h\" \"%1ui-%2.lisp\" %3)")
+                  << QString("(eql:quic \"ui.h\" \"%1ui-%2.lisp\" %3 %4)")
                              .arg(uiFile.left(sep))
                              .arg(uiFile.mid(sep, uiFile.length() - sep - 3))
                              .arg((arguments.length() == 2) ? ":ui" : arguments.at(2))
+                             .arg(maximized ? ":maximized" : "")
                   << QString("(delete-file \"ui.h\")")
                   << QString("(eql:qq)"); }
         else {
