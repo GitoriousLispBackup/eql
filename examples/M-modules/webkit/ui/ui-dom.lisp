@@ -1,3 +1,5 @@
+;;; THIS FILE IS GENERATED
+
 (defpackage :ui
   (:use :common-lisp :eql)
   (:export

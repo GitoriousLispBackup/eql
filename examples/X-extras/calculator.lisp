@@ -13,13 +13,13 @@
 
 (in-package :calculator)
 
-(defvar *main*      (qnew "QDialog"))
-(defvar *real*      (qnew "QLabel"
-                          "frameShape" |QFrame.Box|))
-(defvar *float*     (qnew "QLineEdit"
-                          "readOnly" t
-                          "font" (x:let-it (! "font" "QApplication")
-                                   (! "setPointSize" x:it (+ 6 (! "pointSize" x:it))))))
+(defvar *main*  (qnew "QDialog"))
+(defvar *real*  (qnew "QLabel"
+                      "frameShape" |QFrame.Box|))
+(defvar *float* (qnew "QLineEdit"
+                      "readOnly" t
+                      "font" (x:let-it (! "font" "QApplication")
+                               (! "setPointSize" x:it (+ 6 (! "pointSize" x:it))))))
 
 (defvar *precision* 0f0) ; f = float, d = double, l = long
 (defvar *value1*    nil)

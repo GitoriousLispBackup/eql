@@ -43,6 +43,7 @@
   "qmsg"
   "qnew"
   "qnew-instance"
+  "qnull"
   "qnull-object"
   "qobject-names"
   "qok"

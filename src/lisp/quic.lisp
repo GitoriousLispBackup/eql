@@ -38,7 +38,10 @@
           *line-nr* 0)
     (with-open-file (in ui.h :direction :input)
       (with-open-file (out ui.lisp :direction :output :if-exists :supersede)
-        (format out "(defpackage ~(~S~)~%  (:use :common-lisp :eql)" ui-package)
+        (format out ";;; THIS FILE IS GENERATED~
+                   ~%~
+                   ~%(defpackage ~(~S~)~%  (:use :common-lisp :eql)"
+                ui-package)
         (let (code tr)
           (x:while-it (read-line in nil nil)
             (incf *line-nr*)

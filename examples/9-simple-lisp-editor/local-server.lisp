@@ -125,7 +125,7 @@
 (let (size bytes-read data)
   (defun reset (&optional data-only)
     (unless data-only
-      (when (and *client* (not (qnull-object *client*)))
+      (when (and *client* (not (qnull *client*)))
         (qdisconnect *client*)
         (qdel *client*)))
     (setf size nil
@@ -225,7 +225,7 @@
            (qprocess-events)
            (sleep 0.05)))
     (when (and *client*
-               (not (qnull-object *client*)))
+               (not (qnull *client*)))
       (x:while (not (zerop (! "bytesToWrite" *client*)))
         (pause))
       (if (! "isWritable" *client*)

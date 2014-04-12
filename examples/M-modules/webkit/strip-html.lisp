@@ -1,4 +1,5 @@
 ;;;
+;;;
 ;;; REMOVE WEB ELEMENTS ------------------------------------------------
 ;;;
 ;;; (open-file)                ; a) select local file
@@ -22,9 +23,16 @@
 ;;; (save-file)
 ;;;
 ;;;
+;;;
 ;;; INSPECTOR ----------------------------------------------------------
 ;;;
 ;;; (inspector)                ; see context menu / inspect
+;;;
+;;;
+;;;
+;;; ITERATE ------------------------------------------------------------
+;;;
+;;; (iterate-elements "A" (! "setOuterXml" element text))
 ;;;
 
 (qrequire :webkit)
