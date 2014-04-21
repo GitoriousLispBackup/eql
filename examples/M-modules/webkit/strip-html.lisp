@@ -1,5 +1,4 @@
 ;;;
-;;;
 ;;; REMOVE WEB ELEMENTS ------------------------------------------------
 ;;;
 ;;; (open-file)                ; a) select local file
@@ -23,16 +22,14 @@
 ;;; (save-file)
 ;;;
 ;;;
-;;;
 ;;; INSPECTOR ----------------------------------------------------------
 ;;;
-;;; (inspector)                ; see context menu / inspect
-;;;
+;;; (inspector) ; see context menu / inspect
 ;;;
 ;;;
 ;;; ITERATE ------------------------------------------------------------
 ;;;
-;;; (iterate-elements "A" (! "setOuterXml" element text))
+;;; (iterate-elements "A" (! "setOuterXml" element text)) ; unlink
 ;;;
 
 (qrequire :webkit)
@@ -78,7 +75,8 @@
     (let ((file (! "getSaveFileName" "QFileDialog" nil nil nil filter)))
       (unless (x:empty-string file)
         (with-open-file (s (os-pathname file) :direction :output :if-exists :supersede)
-          (write-string (! "toHtml" (frame)) s))))))
+          (write-string (! "toHtml" (frame)) s)
+          file)))))
 
 (defun frame ()
   (! ("mainFrame" "page" *web-view*)))

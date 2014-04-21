@@ -1,4 +1,4 @@
-;;; copyright (c) 2010-2013 Polos Ruetz
+;;; copyright (c) 2010-2014 Polos Ruetz
 
 (in-package :eql)
 
@@ -286,6 +286,7 @@
 
 (defun qnull-object (obj)
   "args: (object)
+   alias: qnull
    Checks for a <code>0</code> Qt object pointer."
   (let ((obj* (ensure-qt-object obj)))
     (when (qt-object-p obj*)

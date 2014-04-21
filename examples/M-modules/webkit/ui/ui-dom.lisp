@@ -1,4 +1,4 @@
-;;; THIS FILE IS GENERATED
+;;; THIS FILE IS GENERATED (see 'eql -quic')
 
 (defpackage :ui
   (:use :common-lisp :eql)
