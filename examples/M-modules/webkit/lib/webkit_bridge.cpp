@@ -1,5 +1,5 @@
 #include "webkit_bridge.h"
-#include "../../eql/src/eql_fun.h" // for eql_fun()
+#include "../../../../src/eql_fun.h" // for eql_fun()
 
 QT_BEGIN_NAMESPACE
 
@@ -14,6 +14,11 @@ QStringList CPP::testCall(const QVariantList& arguments) {
     QVariant ret = eql_fun("eql-user:test-call", QVariant::StringList,
                            Q_ARG(QVariantList, arguments));
     return ret.toStringList(); }
+
+QString CPP::eval(const QString& expression) {
+    QVariant ret = eql_fun("eql-user:eval*", QVariant::String,
+                           Q_ARG(QString, expression));
+    return ret.toString(); }
 
 QT_END_NAMESPACE
 

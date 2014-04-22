@@ -18,6 +18,7 @@ class CPP : public QObject
     Q_OBJECT
 public:
     Q_INVOKABLE QStringList testCall(const QVariantList&);
+    Q_INVOKABLE QString eval(const QString&);
 };
 
 QT_END_NAMESPACE

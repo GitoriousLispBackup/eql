@@ -1,0 +1,41 @@
+<html>
+  <body style="font-size: small">
+    <h2 style="color: navy">Simple QtWebKit Bridge Demo</h2>
+    <ol>
+      <li>
+        <p>Call Lisp function, passing a <b>JavaScript array</b></p>
+        <input type="button"
+               value="Call"
+               onclick="var date = new Date;
+                        alert(Lisp.testCall([42, 'hello world', date]));">
+      <li>
+        <p><b>Eval</b> in Lisp</p>
+        <input type="text"
+               id="expression"
+               value="(+ 1/2 1/3 1/4)"
+               size="50"
+               style="font-family: Courier New; font-size: 120%;"
+               onkeypress="if(event.keyCode == 13) {
+                             var exp = document.getElementById('expression');
+                             exp.value = Lisp.eval(exp.value); }">
+      <li>
+        <p>Set <b>Qt Property</b> of this QWebView</p>
+        <input type="button"
+               value="Zoom"
+               onclick="WebView.zoomFactor = document.getElementById('zoom').value">
+        <input type="text"
+               id="zoom"
+               value="0.9"
+               size="3">
+      <li>
+        <p>Call <b>Qt Slot</b> of this QWebView</p>
+        <input type="button"
+               value="Maximize"
+               onclick="WebView.showMaximized()">
+    </ol>
+    <hr>
+    <p>See <a href="#" onclick="Lisp.eval('(inspector)');">Web Inspector</a>
+       <b>Scripts</b> and <b>Console</b> for debugging.
+    </p>
+  </body>
+</html>
