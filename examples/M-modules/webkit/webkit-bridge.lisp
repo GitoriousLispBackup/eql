@@ -1,6 +1,7 @@
 ;;; Simple QtWebKit Bridge Demo
 ;;;
-;;; depends on small plugin, see "lib/webkit_bridge.pro"
+;;; - depends on small plugin, see "lib/webkit_bridge.pro"
+;;; - run (inspector) for JavaScript debugging
 
 (qrequire :webkit)
 
@@ -20,7 +21,6 @@
      (format nil "<html>~
                 ~%  <body>~
                 ~%    <h3>Simple QtWebKit Bridge Demo</h3>~
-                ~%    <p>See <b>QWebInspector</b> [Scripts] and [Console] for debugging.</p>
                 ~%    <ol>~
                 ~%      <li>~
                 ~%        <p>Call Lisp function passing a JavaScript array.</p>~
@@ -36,9 +36,9 @@
                 ~%        <input type=\"button\" value=\"Maximize\"~
                 ~%               onclick=\"WebView.showMaximized()\">~
                 ~%    </ol>~
+                ~%    <p>See <b>QWebInspector</b> [Scripts] and [Console] for debugging.</p>
                 ~%  </body>~
                 ~%</html>"))
-  (inspector) ; for debugging
   (! "show" *web-view*))
 
 (let (web-inspector)
