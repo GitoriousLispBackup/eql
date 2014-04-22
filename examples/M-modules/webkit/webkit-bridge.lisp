@@ -10,6 +10,9 @@
 
 (defvar *web-view* (qnew "QWebView"))
 
+(defun frame ()
+  (! ("mainFrame" "page" *web-view*)))
+
 (defun ini ()
   (! "addToJavaScriptWindowObject" (frame) "Lisp"    *webkit-bridge*) ; for example  1
   (! "addToJavaScriptWindowObject" (frame) "WebView" *web-view*)      ; for examples 2, 3
@@ -17,9 +20,10 @@
      (format nil "<html>~
                 ~%  <body>~
                 ~%    <h3>Simple QtWebKit Bridge Demo</h3>~
+                ~%    <p>See <b>QWebInspector</b> [Scripts] and [Console] for debugging.</p>
                 ~%    <ol>~
                 ~%      <li>~
-                ~%        <p>Call Lisp function with list of arguments (JavaScript array).</p>~
+                ~%        <p>Call Lisp function passing a JavaScript array.</p>~
                 ~%        <input type=\"button\" value=\"Call Lisp\"~
                 ~%               onclick=\"alert( Lisp.testCall( [1, 2, 3, 'hello world'] ))\">~
                 ~%      <li>~
@@ -34,14 +38,24 @@
                 ~%    </ol>~
                 ~%  </body>~
                 ~%</html>"))
+  (inspector) ; for debugging
   (! "show" *web-view*))
 
-(defun frame ()
-  (! ("mainFrame" "page" *web-view*)))
+(let (web-inspector)
+  (defun inspector ()
+    "Features JavaScript debugger and console."
+    (unless web-inspector
+      (setf web-inspector (qnew "QWebInspector"))
+      (let ((settings (! "settings" *web-view*)))
+        (! "setAttribute" settings |QWebSettings.DeveloperExtrasEnabled| t))
+      (! "setPage" web-inspector (! "page" *web-view*)))
+    (! "show" web-inspector)))
 
 (defun test-call (arguments)
   "This function can be called from JavaScript. Needs C++ glue code, see 'lib/webkit_bridge'."
-  (qmsg arguments)
-  (mapcar 'princ-to-string (reverse arguments)))
+  ;;                              From:               C++:            To:
+  (qmsg arguments)              ; JS array of vars -> QVariantList -> LIST
+  (mapcar 'princ-to-string      ; LIST of strings  -> QStringList  -> JS array of strings
+          (reverse arguments)))
 
 (ini)
