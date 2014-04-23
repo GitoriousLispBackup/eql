@@ -1,5 +1,5 @@
 #include "webkit_bridge.h"
-#include "../../../../src/eql_fun.h" // for eql_fun()
+#include <eql_fun.h>
 
 QT_BEGIN_NAMESPACE
 

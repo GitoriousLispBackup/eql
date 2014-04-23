@@ -32,6 +32,8 @@
 ;;; (iterate-elements "A" (! "setOuterXml" element text)) ; unlink
 ;;;
 
+#+win32 (si:trap-fpe 'floating-point-underflow nil) ; for QWebInspector
+
 (qrequire :webkit)
 
 (in-package :eql-user)

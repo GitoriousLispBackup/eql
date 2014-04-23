@@ -2,6 +2,8 @@
 ;;;
 ;;; depends on small plugin, see "lib/webkit_bridge.pro"
 
+#+win32 (si:trap-fpe 'floating-point-underflow nil) ; for QWebInspector
+
 (qrequire :webkit)
 
 (in-package :eql-user)
@@ -37,6 +39,7 @@
 
 (defun test-call (arguments)
   ;;                              From:               C++:            To:
+  ;;                              -------------------------------------------------------
   (qmsg arguments)              ; JS array of vars -> QVariantList -> LIST
   (mapcar 'princ-to-string      ; LIST of strings  -> QStringList  -> JS array of strings
           (reverse arguments)))
