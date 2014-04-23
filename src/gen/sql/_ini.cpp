@@ -18,7 +18,7 @@ NumList LSqlIndex::overrideIds = NumList();
 NumList LSqlQuery::overrideIds = NumList();
 NumList LSqlRecord::overrideIds = NumList();
 NumList LSqlRelation::overrideIds = NumList();
-NumList LSqlResult::overrideIds = NumList() << 307 << 419 << 420 << 414 << 98 << 421 << 422 << 423 << 424 << 425 << 426 << 427 << 428 << 429 << 430 << 431 << 432 << 433 << 434 << 435 << 316 << 436 << 437 << 123;
+NumList LSqlResult::overrideIds = NumList() << 307 << 422 << 423 << 417 << 98 << 424 << 425 << 426 << 427 << 428 << 429 << 430 << 431 << 432 << 433 << 434 << 435 << 436 << 437 << 438 << 316 << 439 << 440 << 123;
 
 void ini() {
     static bool _ = false; if(_) return; _ = true;

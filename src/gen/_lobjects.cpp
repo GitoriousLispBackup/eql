@@ -254,16 +254,16 @@ NumList LVBoxLayout::overrideIds = NumList();
 NumList LValidator::overrideIds = NumList() << 124 << 126;
 NumList LVariantAnimation::overrideIds = NumList() << 296 << 295 << 1 << 2 << 4;
 NumList LWidget::overrideIds = NumList() << 23 << 24 << 25 << 26 << 27 << 14 << 28 << 29 << 30 << 31 << 32 << 33 << 34 << 15 << 35 << 16 << 36 << 37 << 17 << 18 << 38 << 39 << 19 << 20 << 21 << 40 << 22 << 41 << 42 << 43 << 44 << 45;
-NumList LWidgetAction::overrideIds = NumList() << 368 << 369 << 5;
+NumList LWidgetAction::overrideIds = NumList() << 371 << 372 << 5;
 NumList LWindowsStyle::overrideIds = NumList() << 164 << 160 << 161 << 162 << 173 << 174 << 165 << 166 << 167 << 168 << 170 << 176 << 175 << 5 << 10;
-NumList LWizard::overrideIds = NumList() << 370 << 371 << 372 << 373 << 99 << 26 << 182 << 22 << 41;
-NumList LWizardPage::overrideIds = NumList() << 374 << 375 << 376 << 370 << 377;
+NumList LWizard::overrideIds = NumList() << 373 << 374 << 375 << 376 << 99 << 26 << 182 << 22 << 41;
+NumList LWizardPage::overrideIds = NumList() << 377 << 378 << 379 << 373 << 380;
 NumList LWorkspace::overrideIds = NumList() << 26 << 14 << 6 << 5 << 36 << 22 << 41 << 42 << 44;
 NumList LAbstractGraphicsShapeItem::overrideIds = NumList() << 249 << 250;
 NumList LAccessible::overrideIds = NumList();
 NumList LAccessibleEvent::overrideIds = NumList();
-NumList LAccessibleInterface::overrideIds = NumList() << 382 << 383 << 384 << 385 << 386 << 387 << 388 << 389 << 390 << 391 << 392 << 393 << 394 << 395;
-NumList LAccessibleWidget::overrideIds = NumList() << 382 << 383 << 384 << 385 << 386 << 389 << 390 << 391 << 393 << 394 << 395;
+NumList LAccessibleInterface::overrideIds = NumList() << 385 << 386 << 387 << 388 << 389 << 390 << 391 << 392 << 393 << 394 << 395 << 396 << 397 << 398;
+NumList LAccessibleWidget::overrideIds = NumList() << 385 << 386 << 387 << 388 << 389 << 392 << 393 << 394 << 396 << 397 << 398;
 NumList LActionEvent::overrideIds = NumList();
 NumList LBasicTimer::overrideIds = NumList();
 NumList LBitArray::overrideIds = NumList();
@@ -284,11 +284,11 @@ NumList LDirIterator::overrideIds = NumList();
 NumList LDragEnterEvent::overrideIds = NumList();
 NumList LDragLeaveEvent::overrideIds = NumList();
 NumList LDragMoveEvent::overrideIds = NumList();
-NumList LDropEvent::overrideIds = NumList() << 396 << 397 << 398;
+NumList LDropEvent::overrideIds = NumList() << 399 << 400 << 401;
 NumList LDynamicPropertyChangeEvent::overrideIds = NumList();
 NumList LEasingCurve::overrideIds = NumList();
 NumList LEvent::overrideIds = NumList();
-NumList LFileIconProvider::overrideIds = NumList() << 399 << 400 << 401;
+NumList LFileIconProvider::overrideIds = NumList() << 402 << 403 << 404;
 NumList LFileInfo::overrideIds = NumList();
 NumList LFileOpenEvent::overrideIds = NumList();
 NumList LFocusEvent::overrideIds = NumList();
@@ -298,15 +298,15 @@ NumList LFontInfo::overrideIds = NumList();
 NumList LFontMetrics::overrideIds = NumList();
 NumList LGestureEvent::overrideIds = NumList();
 NumList LGradient::overrideIds = NumList();
-NumList LGraphicsAnchorLayout::overrideIds = NumList() << 146 << 149 << 150 << 407 << 212 << 229;
+NumList LGraphicsAnchorLayout::overrideIds = NumList() << 146 << 149 << 150 << 410 << 212 << 229;
 NumList LGraphicsEllipseItem::overrideIds = NumList() << 240 << 248 << 249 << 250 << 211 << 241 << 213;
-NumList LGraphicsGridLayout::overrideIds = NumList() << 146 << 149 << 150 << 407 << 212 << 229;
-NumList LGraphicsItem::overrideIds = NumList() << 378 << 240 << 379 << 380 << 248 << 249 << 250 << 211 << 241 << 213 << 214 << 215 << 216 << 217 << 218 << 15 << 16 << 220 << 221 << 222 << 37 << 24 << 223 << 17 << 18 << 224 << 225 << 226 << 227 << 242 << 381 << 231;
+NumList LGraphicsGridLayout::overrideIds = NumList() << 146 << 149 << 150 << 410 << 212 << 229;
+NumList LGraphicsItem::overrideIds = NumList() << 381 << 240 << 382 << 383 << 248 << 249 << 250 << 211 << 241 << 213 << 214 << 215 << 216 << 217 << 218 << 15 << 16 << 220 << 221 << 222 << 37 << 24 << 223 << 17 << 18 << 224 << 225 << 226 << 227 << 242 << 384 << 231;
 NumList LGraphicsItemGroup::overrideIds = NumList() << 240 << 249 << 250 << 211 << 213;
-NumList LGraphicsLayout::overrideIds = NumList() << 146 << 149 << 150 << 407 << 408 << 243;
+NumList LGraphicsLayout::overrideIds = NumList() << 146 << 149 << 150 << 410 << 411 << 243;
 NumList LGraphicsLayoutItem::overrideIds = NumList() << 212 << 243 << 229;
 NumList LGraphicsLineItem::overrideIds = NumList() << 240 << 248 << 249 << 250 << 211 << 241 << 213;
-NumList LGraphicsLinearLayout::overrideIds = NumList() << 146 << 149 << 150 << 407 << 212 << 229;
+NumList LGraphicsLinearLayout::overrideIds = NumList() << 146 << 149 << 150 << 410 << 212 << 229;
 NumList LGraphicsPathItem::overrideIds = NumList() << 240 << 248 << 249 << 250 << 211 << 241 << 213;
 NumList LGraphicsPixmapItem::overrideIds = NumList() << 240 << 248 << 249 << 250 << 211 << 241 << 213;
 NumList LGraphicsPolygonItem::overrideIds = NumList() << 240 << 248 << 249 << 250 << 211 << 241 << 213;
@@ -329,15 +329,15 @@ NumList LIconDragEvent::overrideIds = NumList();
 NumList LImage::overrideIds = NumList();
 NumList LInputEvent::overrideIds = NumList();
 NumList LInputMethodEvent::overrideIds = NumList();
-NumList LItemEditorFactory::overrideIds = NumList() << 409 << 410;
+NumList LItemEditorFactory::overrideIds = NumList() << 412 << 413;
 NumList LItemSelection::overrideIds = NumList();
 NumList LItemSelectionRange::overrideIds = NumList();
 NumList LKeyEvent::overrideIds = NumList();
 NumList LKeySequence::overrideIds = NumList();
-NumList LLayoutItem::overrideIds = NumList() << 147 << 157 << 148 << 23 << 149 << 158 << 159 << 151 << 152 << 153 << 154 << 26 << 411 << 412;
+NumList LLayoutItem::overrideIds = NumList() << 147 << 157 << 148 << 23 << 149 << 158 << 159 << 151 << 152 << 153 << 154 << 26 << 414 << 415;
 NumList LLibraryInfo::overrideIds = NumList();
 NumList LLinearGradient::overrideIds = NumList();
-NumList LListWidgetItem::overrideIds = NumList() << 413 << 414 << 415;
+NumList LListWidgetItem::overrideIds = NumList() << 416 << 417 << 418;
 NumList LLocale::overrideIds = NumList();
 NumList LMargins::overrideIds = NumList();
 NumList LMatrix::overrideIds = NumList();
@@ -353,7 +353,7 @@ NumList LPainterPathStroker::overrideIds = NumList();
 NumList LPalette::overrideIds = NumList();
 NumList LPen::overrideIds = NumList();
 NumList LPersistentModelIndex::overrideIds = NumList();
-NumList LPicture::overrideIds = NumList() << 417;
+NumList LPicture::overrideIds = NumList() << 420;
 NumList LPixmap::overrideIds = NumList();
 NumList LPixmapCache::overrideIds = NumList();
 NumList LPrinter::overrideIds = NumList();
@@ -366,18 +366,18 @@ NumList LReadWriteLock::overrideIds = NumList();
 NumList LRegExp::overrideIds = NumList();
 NumList LRegion::overrideIds = NumList();
 NumList LResizeEvent::overrideIds = NumList();
-NumList LRunnable::overrideIds = NumList() << 418;
+NumList LRunnable::overrideIds = NumList() << 421;
 NumList LSemaphore::overrideIds = NumList();
 NumList LShortcutEvent::overrideIds = NumList();
 NumList LShowEvent::overrideIds = NumList();
 NumList LSizePolicy::overrideIds = NumList();
-NumList LSpacerItem::overrideIds = NumList() << 147 << 157 << 158 << 151 << 153 << 154 << 26 << 411;
-NumList LStandardItem::overrideIds = NumList() << 413 << 414 << 438 << 213;
+NumList LSpacerItem::overrideIds = NumList() << 147 << 157 << 158 << 151 << 153 << 154 << 26 << 414;
+NumList LStandardItem::overrideIds = NumList() << 416 << 417 << 441 << 213;
 NumList LStatusTipEvent::overrideIds = NumList();
 NumList LStyleOption::overrideIds = NumList();
 NumList LStyleOptionGraphicsItem::overrideIds = NumList();
 NumList LSystemSemaphore::overrideIds = NumList();
-NumList LTableWidgetItem::overrideIds = NumList() << 413 << 414 << 415;
+NumList LTableWidgetItem::overrideIds = NumList() << 416 << 417 << 418;
 NumList LTableWidgetSelectionRange::overrideIds = NumList();
 NumList LTabletEvent::overrideIds = NumList();
 NumList LTextBlock::overrideIds = NumList();
@@ -385,7 +385,7 @@ NumList LTextBlockFormat::overrideIds = NumList();
 NumList LTextBlockUserData::overrideIds = NumList();
 NumList LTextBoundaryFinder::overrideIds = NumList();
 NumList LTextCharFormat::overrideIds = NumList();
-NumList LTextCodec::overrideIds = NumList() << 440 << 441 << 442 << 443 << 444;
+NumList LTextCodec::overrideIds = NumList() << 443 << 444 << 445 << 446 << 447;
 NumList LTextCursor::overrideIds = NumList();
 NumList LTextDecoder::overrideIds = NumList();
 NumList LTextDocumentFragment::overrideIds = NumList();
@@ -408,8 +408,8 @@ NumList LTimerEvent::overrideIds = NumList();
 NumList LToolTip::overrideIds = NumList();
 NumList LTouchEvent::overrideIds = NumList();
 NumList LTransform::overrideIds = NumList();
-NumList LTreeWidgetItem::overrideIds = NumList() << 413 << 445 << 446;
-NumList LUndoCommand::overrideIds = NumList() << 447 << 448 << 449 << 450;
+NumList LTreeWidgetItem::overrideIds = NumList() << 416 << 448 << 449;
+NumList LUndoCommand::overrideIds = NumList() << 450 << 451 << 452 << 453;
 NumList LUrl::overrideIds = NumList();
 NumList LVariant::overrideIds = NumList();
 NumList LVector2D::overrideIds = NumList();
@@ -418,7 +418,7 @@ NumList LVector4D::overrideIds = NumList();
 NumList LWhatsThis::overrideIds = NumList();
 NumList LWhatsThisClickedEvent::overrideIds = NumList();
 NumList LWheelEvent::overrideIds = NumList();
-NumList LWidgetItem::overrideIds = NumList() << 147 << 157 << 148 << 23 << 158 << 151 << 153 << 154 << 26 << 412;
+NumList LWidgetItem::overrideIds = NumList() << 147 << 157 << 148 << 23 << 158 << 151 << 153 << 154 << 26 << 415;
 NumList LWindowStateChangeEvent::overrideIds = NumList();
 NumList LWriteLocker::overrideIds = NumList();
 
@@ -428,7 +428,7 @@ void LObjects::ini(EQL* e) {
         ok = true;
         eql = e;
         dynObject = new DynObject;
-        Q = new QObject* [224]; for(int i = 0; i < 224; ++i) { Q[i] = 0; }
+        Q = new QObject* [225]; for(int i = 0; i < 225; ++i) { Q[i] = 0; }
         N = new QObject* [206]; for(int i = 0; i < 206; ++i) { N[i] = 0; }
         Q[0] = new Q1;
         Q[1] = new Q2;
@@ -611,12 +611,12 @@ void LObjects::ini(EQL* e) {
         Q[210] = new Q211;
         Q[211] = new Q212;
         Q[212] = new Q213;
-        Q[218] = new Q219;
         Q[219] = new Q220;
         Q[220] = new Q221;
         Q[221] = new Q222;
         Q[222] = new Q223;
         Q[223] = new Q224;
+        Q[224] = new Q225;
         N[0] = new N1;
         N[1] = new N2;
         N[2] = new N3;
@@ -998,13 +998,14 @@ void LObjects::ini(EQL* e) {
         q_names["QWebHistoryInterface"] = 215;
         q_names["QWebInspector"] = 216;
         q_names["QWebPage"] = 217;
-        q_names["QWebView"] = 218;
-        q_names["QWidget"] = 219;
-        q_names["QWidgetAction"] = 220;
-        q_names["QWindowsStyle"] = 221;
-        q_names["QWizard"] = 222;
-        q_names["QWizardPage"] = 223;
-        q_names["QWorkspace"] = 224;
+        q_names["QWebPluginFactory"] = 218;
+        q_names["QWebView"] = 219;
+        q_names["QWidget"] = 220;
+        q_names["QWidgetAction"] = 221;
+        q_names["QWindowsStyle"] = 222;
+        q_names["QWizard"] = 223;
+        q_names["QWizardPage"] = 224;
+        q_names["QWorkspace"] = 225;
         n_names["QAbstractGraphicsShapeItem"] = 1;
         n_names["QAccessible"] = 2;
         n_names["QAccessibleEvent"] = 3;
@@ -1577,102 +1578,105 @@ void LObjects::ini(EQL* e) {
         override_function_ids["javaScriptConsoleMessage(QString,int,QString)"] = 364;
         override_function_ids["javaScriptPrompt(QWebFrame*,QString,QString,QString*)"] = 365;
         override_function_ids["userAgentForUrl(QUrl)"] = 366;
-        override_function_ids["createWindow(QWebPage::WebWindowType)"] = 367;
-        override_function_ids["createWidget(QWidget*)"] = 368;
-        override_function_ids["deleteWidget(QWidget*)"] = 369;
-        override_function_ids["nextId()"] = 370;
-        override_function_ids["validateCurrentPage()"] = 371;
-        override_function_ids["cleanupPage(int)"] = 372;
-        override_function_ids["initializePage(int)"] = 373;
-        override_function_ids["cleanupPage()"] = 374;
-        override_function_ids["initializePage()"] = 375;
-        override_function_ids["isComplete()"] = 376;
-        override_function_ids["validatePage()"] = 377;
-        override_function_ids["advance(int)"] = 378;
-        override_function_ids["collidesWithItem(QGraphicsItem*,Qt::ItemSelectionMode)"] = 379;
-        override_function_ids["collidesWithPath(QPainterPath,Qt::ItemSelectionMode)"] = 380;
-        override_function_ids["sceneEventFilter(QGraphicsItem*,QEvent*)"] = 381;
-        override_function_ids["actionText(int,Text,int)"] = 382;
-        override_function_ids["childAt(int,int)"] = 383;
-        override_function_ids["childCount()"] = 384;
-        override_function_ids["doAction(int,int,QVariantList)"] = 385;
-        override_function_ids["indexOfChild(QAccessibleInterface*)"] = 386;
-        override_function_ids["isValid()"] = 387;
-        override_function_ids["object()"] = 388;
-        override_function_ids["rect(int)"] = 389;
-        override_function_ids["relationTo(int,QAccessibleInterface*,int)"] = 390;
-        override_function_ids["role(int)"] = 391;
-        override_function_ids["setText(Text,int,QString)"] = 392;
-        override_function_ids["state(int)"] = 393;
-        override_function_ids["text(Text,int)"] = 394;
-        override_function_ids["userActionCount(int)"] = 395;
-        override_function_ids["encodedData(const char*)"] = 396;
-        override_function_ids["format(int)"] = 397;
-        override_function_ids["provides(const char*)"] = 398;
-        override_function_ids["icon(IconType)"] = 399;
-        override_function_ids["icon(QFileInfo)"] = 400;
-        override_function_ids["type(QFileInfo)"] = 401;
-        override_function_ids["create(QGLContext*)"] = 402;
-        override_function_ids["doneCurrent()"] = 403;
-        override_function_ids["makeCurrent()"] = 404;
-        override_function_ids["swapBuffers()"] = 405;
-        override_function_ids["chooseContext(QGLContext*)"] = 406;
-        override_function_ids["removeAt(int)"] = 407;
-        override_function_ids["widgetEvent(QEvent*)"] = 408;
-        override_function_ids["createEditor(QVariant::Type,QWidget*)"] = 409;
-        override_function_ids["valuePropertyName(QVariant::Type)"] = 410;
-        override_function_ids["spacerItem()"] = 411;
-        override_function_ids["widget()"] = 412;
-        override_function_ids["clone()"] = 413;
-        override_function_ids["data(int)"] = 414;
-        override_function_ids["setData(int,QVariant)"] = 415;
-        override_function_ids["queryProxy(QNetworkProxyQuery)"] = 416;
-        override_function_ids["setData(const char*,uint)"] = 417;
-        override_function_ids["run()"] = 418;
-        override_function_ids["bindValue(int,QVariant,QSql::ParamType)"] = 419;
-        override_function_ids["bindValue(QString,QVariant,QSql::ParamType)"] = 420;
-        override_function_ids["fetch(int)"] = 421;
-        override_function_ids["fetchFirst()"] = 422;
-        override_function_ids["fetchLast()"] = 423;
-        override_function_ids["fetchNext()"] = 424;
-        override_function_ids["fetchPrevious()"] = 425;
-        override_function_ids["isNull(int)"] = 426;
-        override_function_ids["lastInsertId()"] = 427;
-        override_function_ids["numRowsAffected()"] = 428;
-        override_function_ids["prepare(QString)"] = 429;
-        override_function_ids["record()"] = 430;
-        override_function_ids["reset(QString)"] = 431;
-        override_function_ids["savePrepare(QString)"] = 432;
-        override_function_ids["setActive(bool)"] = 433;
-        override_function_ids["setAt(int)"] = 434;
-        override_function_ids["setForwardOnly(bool)"] = 435;
-        override_function_ids["setQuery(QString)"] = 436;
-        override_function_ids["setSelect(bool)"] = 437;
-        override_function_ids["setData(QVariant,int)"] = 438;
-        override_function_ids["metric(QPaintDevice::PaintDeviceMetric)"] = 439;
-        override_function_ids["aliases()"] = 440;
-        override_function_ids["mibEnum()"] = 441;
-        override_function_ids["name()"] = 442;
-        override_function_ids["convertFromUnicode(QChar*,int,ConverterState*)"] = 443;
-        override_function_ids["convertToUnicode(const char*,int,ConverterState*)"] = 444;
-        override_function_ids["data(int,int)"] = 445;
-        override_function_ids["setData(int,int,QVariant)"] = 446;
-        override_function_ids["id()"] = 447;
-        override_function_ids["mergeWith(QUndoCommand*)"] = 448;
-        override_function_ids["redo()"] = 449;
-        override_function_ids["undo()"] = 450;
-        override_function_ids["setDir(bool)"] = 451;
-        override_function_ids["setFile(bool)"] = 452;
-        override_function_ids["setGroup(QString)"] = 453;
-        override_function_ids["setLastModified(QDateTime)"] = 454;
-        override_function_ids["setName(QString)"] = 455;
-        override_function_ids["setOwner(QString)"] = 456;
-        override_function_ids["setPermissions(int)"] = 457;
-        override_function_ids["setReadable(bool)"] = 458;
-        override_function_ids["setSize(qint64)"] = 459;
-        override_function_ids["setSymLink(bool)"] = 460;
-        override_function_ids["setWritable(bool)"] = 461;
-        override_arg_types = new const char** [461];
+        override_function_ids["create(QString,QUrl,QStringList,QStringList)"] = 367;
+        override_function_ids["plugins()"] = 368;
+        override_function_ids["refreshPlugins()"] = 369;
+        override_function_ids["createWindow(QWebPage::WebWindowType)"] = 370;
+        override_function_ids["createWidget(QWidget*)"] = 371;
+        override_function_ids["deleteWidget(QWidget*)"] = 372;
+        override_function_ids["nextId()"] = 373;
+        override_function_ids["validateCurrentPage()"] = 374;
+        override_function_ids["cleanupPage(int)"] = 375;
+        override_function_ids["initializePage(int)"] = 376;
+        override_function_ids["cleanupPage()"] = 377;
+        override_function_ids["initializePage()"] = 378;
+        override_function_ids["isComplete()"] = 379;
+        override_function_ids["validatePage()"] = 380;
+        override_function_ids["advance(int)"] = 381;
+        override_function_ids["collidesWithItem(QGraphicsItem*,Qt::ItemSelectionMode)"] = 382;
+        override_function_ids["collidesWithPath(QPainterPath,Qt::ItemSelectionMode)"] = 383;
+        override_function_ids["sceneEventFilter(QGraphicsItem*,QEvent*)"] = 384;
+        override_function_ids["actionText(int,Text,int)"] = 385;
+        override_function_ids["childAt(int,int)"] = 386;
+        override_function_ids["childCount()"] = 387;
+        override_function_ids["doAction(int,int,QVariantList)"] = 388;
+        override_function_ids["indexOfChild(QAccessibleInterface*)"] = 389;
+        override_function_ids["isValid()"] = 390;
+        override_function_ids["object()"] = 391;
+        override_function_ids["rect(int)"] = 392;
+        override_function_ids["relationTo(int,QAccessibleInterface*,int)"] = 393;
+        override_function_ids["role(int)"] = 394;
+        override_function_ids["setText(Text,int,QString)"] = 395;
+        override_function_ids["state(int)"] = 396;
+        override_function_ids["text(Text,int)"] = 397;
+        override_function_ids["userActionCount(int)"] = 398;
+        override_function_ids["encodedData(const char*)"] = 399;
+        override_function_ids["format(int)"] = 400;
+        override_function_ids["provides(const char*)"] = 401;
+        override_function_ids["icon(IconType)"] = 402;
+        override_function_ids["icon(QFileInfo)"] = 403;
+        override_function_ids["type(QFileInfo)"] = 404;
+        override_function_ids["create(QGLContext*)"] = 405;
+        override_function_ids["doneCurrent()"] = 406;
+        override_function_ids["makeCurrent()"] = 407;
+        override_function_ids["swapBuffers()"] = 408;
+        override_function_ids["chooseContext(QGLContext*)"] = 409;
+        override_function_ids["removeAt(int)"] = 410;
+        override_function_ids["widgetEvent(QEvent*)"] = 411;
+        override_function_ids["createEditor(QVariant::Type,QWidget*)"] = 412;
+        override_function_ids["valuePropertyName(QVariant::Type)"] = 413;
+        override_function_ids["spacerItem()"] = 414;
+        override_function_ids["widget()"] = 415;
+        override_function_ids["clone()"] = 416;
+        override_function_ids["data(int)"] = 417;
+        override_function_ids["setData(int,QVariant)"] = 418;
+        override_function_ids["queryProxy(QNetworkProxyQuery)"] = 419;
+        override_function_ids["setData(const char*,uint)"] = 420;
+        override_function_ids["run()"] = 421;
+        override_function_ids["bindValue(int,QVariant,QSql::ParamType)"] = 422;
+        override_function_ids["bindValue(QString,QVariant,QSql::ParamType)"] = 423;
+        override_function_ids["fetch(int)"] = 424;
+        override_function_ids["fetchFirst()"] = 425;
+        override_function_ids["fetchLast()"] = 426;
+        override_function_ids["fetchNext()"] = 427;
+        override_function_ids["fetchPrevious()"] = 428;
+        override_function_ids["isNull(int)"] = 429;
+        override_function_ids["lastInsertId()"] = 430;
+        override_function_ids["numRowsAffected()"] = 431;
+        override_function_ids["prepare(QString)"] = 432;
+        override_function_ids["record()"] = 433;
+        override_function_ids["reset(QString)"] = 434;
+        override_function_ids["savePrepare(QString)"] = 435;
+        override_function_ids["setActive(bool)"] = 436;
+        override_function_ids["setAt(int)"] = 437;
+        override_function_ids["setForwardOnly(bool)"] = 438;
+        override_function_ids["setQuery(QString)"] = 439;
+        override_function_ids["setSelect(bool)"] = 440;
+        override_function_ids["setData(QVariant,int)"] = 441;
+        override_function_ids["metric(QPaintDevice::PaintDeviceMetric)"] = 442;
+        override_function_ids["aliases()"] = 443;
+        override_function_ids["mibEnum()"] = 444;
+        override_function_ids["name()"] = 445;
+        override_function_ids["convertFromUnicode(QChar*,int,ConverterState*)"] = 446;
+        override_function_ids["convertToUnicode(const char*,int,ConverterState*)"] = 447;
+        override_function_ids["data(int,int)"] = 448;
+        override_function_ids["setData(int,int,QVariant)"] = 449;
+        override_function_ids["id()"] = 450;
+        override_function_ids["mergeWith(QUndoCommand*)"] = 451;
+        override_function_ids["redo()"] = 452;
+        override_function_ids["undo()"] = 453;
+        override_function_ids["setDir(bool)"] = 454;
+        override_function_ids["setFile(bool)"] = 455;
+        override_function_ids["setGroup(QString)"] = 456;
+        override_function_ids["setLastModified(QDateTime)"] = 457;
+        override_function_ids["setName(QString)"] = 458;
+        override_function_ids["setOwner(QString)"] = 459;
+        override_function_ids["setPermissions(int)"] = 460;
+        override_function_ids["setReadable(bool)"] = 461;
+        override_function_ids["setSize(qint64)"] = 462;
+        override_function_ids["setSymLink(bool)"] = 463;
+        override_function_ids["setWritable(bool)"] = 464;
+        override_arg_types = new const char** [464];
         { static const char* s[] = { "int", 0 }; override_arg_types[0] = s; }
         { static const char* s[] = { 0, "int", 0 }; override_arg_types[1] = s; }
         { static const char* s[] = { 0, "QAbstractAnimation::Direction", 0 }; override_arg_types[2] = s; }
@@ -2039,101 +2043,104 @@ void LObjects::ini(EQL* e) {
         { static const char* s[] = { 0, "QString", "int", "QString", 0 }; override_arg_types[363] = s; }
         { static const char* s[] = { "bool", "QWebFrame*", "QString", "QString", "QString*", 0 }; override_arg_types[364] = s; }
         { static const char* s[] = { "QString", "QUrl", 0 }; override_arg_types[365] = s; }
-        { static const char* s[] = { "QWebView*", "QWebPage::WebWindowType", 0 }; override_arg_types[366] = s; }
-        { static const char* s[] = { "QWidget*", "QWidget*", 0 }; override_arg_types[367] = s; }
-        { static const char* s[] = { 0, "QWidget*", 0 }; override_arg_types[368] = s; }
-        { static const char* s[] = { "int", 0 }; override_arg_types[369] = s; }
-        { static const char* s[] = { "bool", 0 }; override_arg_types[370] = s; }
-        { static const char* s[] = { 0, "int", 0 }; override_arg_types[371] = s; }
-        { static const char* s[] = { 0, "int", 0 }; override_arg_types[372] = s; }
-        { static const char* s[] = { 0, 0 }; override_arg_types[373] = s; }
-        { static const char* s[] = { 0, 0 }; override_arg_types[374] = s; }
-        { static const char* s[] = { "bool", 0 }; override_arg_types[375] = s; }
-        { static const char* s[] = { "bool", 0 }; override_arg_types[376] = s; }
-        { static const char* s[] = { 0, "int", 0 }; override_arg_types[377] = s; }
-        { static const char* s[] = { "bool", "QGraphicsItem*", "Qt::ItemSelectionMode", 0 }; override_arg_types[378] = s; }
-        { static const char* s[] = { "bool", "QPainterPath", "Qt::ItemSelectionMode", 0 }; override_arg_types[379] = s; }
-        { static const char* s[] = { "bool", "QGraphicsItem*", "QEvent*", 0 }; override_arg_types[380] = s; }
-        { static const char* s[] = { "QString", "int", "Text", "int", 0 }; override_arg_types[381] = s; }
-        { static const char* s[] = { "int", "int", "int", 0 }; override_arg_types[382] = s; }
-        { static const char* s[] = { "int", 0 }; override_arg_types[383] = s; }
-        { static const char* s[] = { "bool", "int", "int", "QVariantList", 0 }; override_arg_types[384] = s; }
-        { static const char* s[] = { "int", "QAccessibleInterface*", 0 }; override_arg_types[385] = s; }
-        { static const char* s[] = { "bool", 0 }; override_arg_types[386] = s; }
-        { static const char* s[] = { "QObject*", 0 }; override_arg_types[387] = s; }
-        { static const char* s[] = { "QRect", "int", 0 }; override_arg_types[388] = s; }
-        { static const char* s[] = { "Relation", "int", "QAccessibleInterface*", "int", 0 }; override_arg_types[389] = s; }
-        { static const char* s[] = { "Role", "int", 0 }; override_arg_types[390] = s; }
-        { static const char* s[] = { 0, "Text", "int", "QString", 0 }; override_arg_types[391] = s; }
-        { static const char* s[] = { "State", "int", 0 }; override_arg_types[392] = s; }
-        { static const char* s[] = { "QString", "Text", "int", 0 }; override_arg_types[393] = s; }
-        { static const char* s[] = { "int", "int", 0 }; override_arg_types[394] = s; }
-        { static const char* s[] = { "QByteArray", "const char*", 0 }; override_arg_types[395] = s; }
-        { static const char* s[] = { "const char*", "int", 0 }; override_arg_types[396] = s; }
-        { static const char* s[] = { "bool", "const char*", 0 }; override_arg_types[397] = s; }
-        { static const char* s[] = { "QIcon", "IconType", 0 }; override_arg_types[398] = s; }
-        { static const char* s[] = { "QIcon", "QFileInfo", 0 }; override_arg_types[399] = s; }
-        { static const char* s[] = { "QString", "QFileInfo", 0 }; override_arg_types[400] = s; }
-        { static const char* s[] = { "bool", "QGLContext*", 0 }; override_arg_types[401] = s; }
-        { static const char* s[] = { 0, 0 }; override_arg_types[402] = s; }
-        { static const char* s[] = { 0, 0 }; override_arg_types[403] = s; }
-        { static const char* s[] = { 0, 0 }; override_arg_types[404] = s; }
-        { static const char* s[] = { "bool", "QGLContext*", 0 }; override_arg_types[405] = s; }
-        { static const char* s[] = { 0, "int", 0 }; override_arg_types[406] = s; }
-        { static const char* s[] = { 0, "QEvent*", 0 }; override_arg_types[407] = s; }
-        { static const char* s[] = { "QWidget*", "QVariant::Type", "QWidget*", 0 }; override_arg_types[408] = s; }
-        { static const char* s[] = { "QByteArray", "QVariant::Type", 0 }; override_arg_types[409] = s; }
-        { static const char* s[] = { "QSpacerItem*", 0 }; override_arg_types[410] = s; }
-        { static const char* s[] = { "QWidget*", 0 }; override_arg_types[411] = s; }
-        { static const char* s[] = { "QListWidgetItem*", 0 }; override_arg_types[412] = s; }
-        { static const char* s[] = { "QVariant", "int", 0 }; override_arg_types[413] = s; }
-        { static const char* s[] = { 0, "int", "QVariant", 0 }; override_arg_types[414] = s; }
-        { static const char* s[] = { "QList<QNetworkProxy>", "QNetworkProxyQuery", 0 }; override_arg_types[415] = s; }
-        { static const char* s[] = { 0, "const char*", "uint", 0 }; override_arg_types[416] = s; }
-        { static const char* s[] = { 0, 0 }; override_arg_types[417] = s; }
-        { static const char* s[] = { 0, "int", "QVariant", "QSql::ParamType", 0 }; override_arg_types[418] = s; }
-        { static const char* s[] = { 0, "QString", "QVariant", "QSql::ParamType", 0 }; override_arg_types[419] = s; }
-        { static const char* s[] = { "bool", "int", 0 }; override_arg_types[420] = s; }
-        { static const char* s[] = { "bool", 0 }; override_arg_types[421] = s; }
-        { static const char* s[] = { "bool", 0 }; override_arg_types[422] = s; }
-        { static const char* s[] = { "bool", 0 }; override_arg_types[423] = s; }
+        { static const char* s[] = { "QObject*", "QString", "QUrl", "QStringList", "QStringList", 0 }; override_arg_types[366] = s; }
+        { static const char* s[] = { "QList<Plugin>", 0 }; override_arg_types[367] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[368] = s; }
+        { static const char* s[] = { "QWebView*", "QWebPage::WebWindowType", 0 }; override_arg_types[369] = s; }
+        { static const char* s[] = { "QWidget*", "QWidget*", 0 }; override_arg_types[370] = s; }
+        { static const char* s[] = { 0, "QWidget*", 0 }; override_arg_types[371] = s; }
+        { static const char* s[] = { "int", 0 }; override_arg_types[372] = s; }
+        { static const char* s[] = { "bool", 0 }; override_arg_types[373] = s; }
+        { static const char* s[] = { 0, "int", 0 }; override_arg_types[374] = s; }
+        { static const char* s[] = { 0, "int", 0 }; override_arg_types[375] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[376] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[377] = s; }
+        { static const char* s[] = { "bool", 0 }; override_arg_types[378] = s; }
+        { static const char* s[] = { "bool", 0 }; override_arg_types[379] = s; }
+        { static const char* s[] = { 0, "int", 0 }; override_arg_types[380] = s; }
+        { static const char* s[] = { "bool", "QGraphicsItem*", "Qt::ItemSelectionMode", 0 }; override_arg_types[381] = s; }
+        { static const char* s[] = { "bool", "QPainterPath", "Qt::ItemSelectionMode", 0 }; override_arg_types[382] = s; }
+        { static const char* s[] = { "bool", "QGraphicsItem*", "QEvent*", 0 }; override_arg_types[383] = s; }
+        { static const char* s[] = { "QString", "int", "Text", "int", 0 }; override_arg_types[384] = s; }
+        { static const char* s[] = { "int", "int", "int", 0 }; override_arg_types[385] = s; }
+        { static const char* s[] = { "int", 0 }; override_arg_types[386] = s; }
+        { static const char* s[] = { "bool", "int", "int", "QVariantList", 0 }; override_arg_types[387] = s; }
+        { static const char* s[] = { "int", "QAccessibleInterface*", 0 }; override_arg_types[388] = s; }
+        { static const char* s[] = { "bool", 0 }; override_arg_types[389] = s; }
+        { static const char* s[] = { "QObject*", 0 }; override_arg_types[390] = s; }
+        { static const char* s[] = { "QRect", "int", 0 }; override_arg_types[391] = s; }
+        { static const char* s[] = { "Relation", "int", "QAccessibleInterface*", "int", 0 }; override_arg_types[392] = s; }
+        { static const char* s[] = { "Role", "int", 0 }; override_arg_types[393] = s; }
+        { static const char* s[] = { 0, "Text", "int", "QString", 0 }; override_arg_types[394] = s; }
+        { static const char* s[] = { "State", "int", 0 }; override_arg_types[395] = s; }
+        { static const char* s[] = { "QString", "Text", "int", 0 }; override_arg_types[396] = s; }
+        { static const char* s[] = { "int", "int", 0 }; override_arg_types[397] = s; }
+        { static const char* s[] = { "QByteArray", "const char*", 0 }; override_arg_types[398] = s; }
+        { static const char* s[] = { "const char*", "int", 0 }; override_arg_types[399] = s; }
+        { static const char* s[] = { "bool", "const char*", 0 }; override_arg_types[400] = s; }
+        { static const char* s[] = { "QIcon", "IconType", 0 }; override_arg_types[401] = s; }
+        { static const char* s[] = { "QIcon", "QFileInfo", 0 }; override_arg_types[402] = s; }
+        { static const char* s[] = { "QString", "QFileInfo", 0 }; override_arg_types[403] = s; }
+        { static const char* s[] = { "bool", "QGLContext*", 0 }; override_arg_types[404] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[405] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[406] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[407] = s; }
+        { static const char* s[] = { "bool", "QGLContext*", 0 }; override_arg_types[408] = s; }
+        { static const char* s[] = { 0, "int", 0 }; override_arg_types[409] = s; }
+        { static const char* s[] = { 0, "QEvent*", 0 }; override_arg_types[410] = s; }
+        { static const char* s[] = { "QWidget*", "QVariant::Type", "QWidget*", 0 }; override_arg_types[411] = s; }
+        { static const char* s[] = { "QByteArray", "QVariant::Type", 0 }; override_arg_types[412] = s; }
+        { static const char* s[] = { "QSpacerItem*", 0 }; override_arg_types[413] = s; }
+        { static const char* s[] = { "QWidget*", 0 }; override_arg_types[414] = s; }
+        { static const char* s[] = { "QListWidgetItem*", 0 }; override_arg_types[415] = s; }
+        { static const char* s[] = { "QVariant", "int", 0 }; override_arg_types[416] = s; }
+        { static const char* s[] = { 0, "int", "QVariant", 0 }; override_arg_types[417] = s; }
+        { static const char* s[] = { "QList<QNetworkProxy>", "QNetworkProxyQuery", 0 }; override_arg_types[418] = s; }
+        { static const char* s[] = { 0, "const char*", "uint", 0 }; override_arg_types[419] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[420] = s; }
+        { static const char* s[] = { 0, "int", "QVariant", "QSql::ParamType", 0 }; override_arg_types[421] = s; }
+        { static const char* s[] = { 0, "QString", "QVariant", "QSql::ParamType", 0 }; override_arg_types[422] = s; }
+        { static const char* s[] = { "bool", "int", 0 }; override_arg_types[423] = s; }
         { static const char* s[] = { "bool", 0 }; override_arg_types[424] = s; }
-        { static const char* s[] = { "bool", "int", 0 }; override_arg_types[425] = s; }
-        { static const char* s[] = { "QVariant", 0 }; override_arg_types[426] = s; }
-        { static const char* s[] = { "int", 0 }; override_arg_types[427] = s; }
-        { static const char* s[] = { "bool", "QString", 0 }; override_arg_types[428] = s; }
-        { static const char* s[] = { "QSqlRecord", 0 }; override_arg_types[429] = s; }
-        { static const char* s[] = { "bool", "QString", 0 }; override_arg_types[430] = s; }
+        { static const char* s[] = { "bool", 0 }; override_arg_types[425] = s; }
+        { static const char* s[] = { "bool", 0 }; override_arg_types[426] = s; }
+        { static const char* s[] = { "bool", 0 }; override_arg_types[427] = s; }
+        { static const char* s[] = { "bool", "int", 0 }; override_arg_types[428] = s; }
+        { static const char* s[] = { "QVariant", 0 }; override_arg_types[429] = s; }
+        { static const char* s[] = { "int", 0 }; override_arg_types[430] = s; }
         { static const char* s[] = { "bool", "QString", 0 }; override_arg_types[431] = s; }
-        { static const char* s[] = { 0, "bool", 0 }; override_arg_types[432] = s; }
-        { static const char* s[] = { 0, "int", 0 }; override_arg_types[433] = s; }
-        { static const char* s[] = { 0, "bool", 0 }; override_arg_types[434] = s; }
-        { static const char* s[] = { 0, "QString", 0 }; override_arg_types[435] = s; }
-        { static const char* s[] = { 0, "bool", 0 }; override_arg_types[436] = s; }
-        { static const char* s[] = { 0, "QVariant", "int", 0 }; override_arg_types[437] = s; }
-        { static const char* s[] = { "int", "QPaintDevice::PaintDeviceMetric", 0 }; override_arg_types[438] = s; }
-        { static const char* s[] = { "QList<QByteArray>", 0 }; override_arg_types[439] = s; }
-        { static const char* s[] = { "int", 0 }; override_arg_types[440] = s; }
-        { static const char* s[] = { "QByteArray", 0 }; override_arg_types[441] = s; }
-        { static const char* s[] = { "QByteArray", "QChar*", "int", "ConverterState*", 0 }; override_arg_types[442] = s; }
-        { static const char* s[] = { "QString", "const char*", "int", "ConverterState*", 0 }; override_arg_types[443] = s; }
-        { static const char* s[] = { "QVariant", "int", "int", 0 }; override_arg_types[444] = s; }
-        { static const char* s[] = { 0, "int", "int", "QVariant", 0 }; override_arg_types[445] = s; }
-        { static const char* s[] = { "int", 0 }; override_arg_types[446] = s; }
-        { static const char* s[] = { "bool", "QUndoCommand*", 0 }; override_arg_types[447] = s; }
-        { static const char* s[] = { 0, 0 }; override_arg_types[448] = s; }
-        { static const char* s[] = { 0, 0 }; override_arg_types[449] = s; }
-        { static const char* s[] = { 0, "bool", 0 }; override_arg_types[450] = s; }
-        { static const char* s[] = { 0, "bool", 0 }; override_arg_types[451] = s; }
-        { static const char* s[] = { 0, "QString", 0 }; override_arg_types[452] = s; }
-        { static const char* s[] = { 0, "QDateTime", 0 }; override_arg_types[453] = s; }
-        { static const char* s[] = { 0, "QString", 0 }; override_arg_types[454] = s; }
+        { static const char* s[] = { "QSqlRecord", 0 }; override_arg_types[432] = s; }
+        { static const char* s[] = { "bool", "QString", 0 }; override_arg_types[433] = s; }
+        { static const char* s[] = { "bool", "QString", 0 }; override_arg_types[434] = s; }
+        { static const char* s[] = { 0, "bool", 0 }; override_arg_types[435] = s; }
+        { static const char* s[] = { 0, "int", 0 }; override_arg_types[436] = s; }
+        { static const char* s[] = { 0, "bool", 0 }; override_arg_types[437] = s; }
+        { static const char* s[] = { 0, "QString", 0 }; override_arg_types[438] = s; }
+        { static const char* s[] = { 0, "bool", 0 }; override_arg_types[439] = s; }
+        { static const char* s[] = { 0, "QVariant", "int", 0 }; override_arg_types[440] = s; }
+        { static const char* s[] = { "int", "QPaintDevice::PaintDeviceMetric", 0 }; override_arg_types[441] = s; }
+        { static const char* s[] = { "QList<QByteArray>", 0 }; override_arg_types[442] = s; }
+        { static const char* s[] = { "int", 0 }; override_arg_types[443] = s; }
+        { static const char* s[] = { "QByteArray", 0 }; override_arg_types[444] = s; }
+        { static const char* s[] = { "QByteArray", "QChar*", "int", "ConverterState*", 0 }; override_arg_types[445] = s; }
+        { static const char* s[] = { "QString", "const char*", "int", "ConverterState*", 0 }; override_arg_types[446] = s; }
+        { static const char* s[] = { "QVariant", "int", "int", 0 }; override_arg_types[447] = s; }
+        { static const char* s[] = { 0, "int", "int", "QVariant", 0 }; override_arg_types[448] = s; }
+        { static const char* s[] = { "int", 0 }; override_arg_types[449] = s; }
+        { static const char* s[] = { "bool", "QUndoCommand*", 0 }; override_arg_types[450] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[451] = s; }
+        { static const char* s[] = { 0, 0 }; override_arg_types[452] = s; }
+        { static const char* s[] = { 0, "bool", 0 }; override_arg_types[453] = s; }
+        { static const char* s[] = { 0, "bool", 0 }; override_arg_types[454] = s; }
         { static const char* s[] = { 0, "QString", 0 }; override_arg_types[455] = s; }
-        { static const char* s[] = { 0, "int", 0 }; override_arg_types[456] = s; }
-        { static const char* s[] = { 0, "bool", 0 }; override_arg_types[457] = s; }
-        { static const char* s[] = { 0, "qint64", 0 }; override_arg_types[458] = s; }
-        { static const char* s[] = { 0, "bool", 0 }; override_arg_types[459] = s; }
+        { static const char* s[] = { 0, "QDateTime", 0 }; override_arg_types[456] = s; }
+        { static const char* s[] = { 0, "QString", 0 }; override_arg_types[457] = s; }
+        { static const char* s[] = { 0, "QString", 0 }; override_arg_types[458] = s; }
+        { static const char* s[] = { 0, "int", 0 }; override_arg_types[459] = s; }
         { static const char* s[] = { 0, "bool", 0 }; override_arg_types[460] = s; }
+        { static const char* s[] = { 0, "qint64", 0 }; override_arg_types[461] = s; }
+        { static const char* s[] = { 0, "bool", 0 }; override_arg_types[462] = s; }
+        { static const char* s[] = { 0, "bool", 0 }; override_arg_types[463] = s; }
         qNames = q_names.keys();
         nNames = n_names.keys(); }}
 
@@ -2141,13 +2148,13 @@ void LObjects::cleanUp() {
     delete EQL::eventLoop;
     delete[] override_arg_types;
     for(int i = 205; i + 1; --i) { delete N[i]; }
-    for(int i = 223; i + 1; --i) { delete Q[i]; }
+    for(int i = 224; i + 1; --i) { delete Q[i]; }
     delete[] N;
     delete[] Q;
     delete dynObject; }
 
 quint64 LObjects::override_id(uint unique, int id) {
-    return (461 * (quint64)unique + id); }
+    return (464 * (quint64)unique + id); }
 
 void* LObjects::overrideFun(quint64 id) {
     return override_lisp_functions.value(id, 0); }
@@ -2405,12 +2412,12 @@ const QMetaObject* LObjects::staticMetaObject(const QByteArray& name, int n) {
         case 211: m = &QVBoxLayout::staticMetaObject; break;
         case 212: m = &QValidator::staticMetaObject; break;
         case 213: m = &QVariantAnimation::staticMetaObject; break;
-        case 219: m = &QWidget::staticMetaObject; break;
-        case 220: m = &QWidgetAction::staticMetaObject; break;
-        case 221: m = &QWindowsStyle::staticMetaObject; break;
-        case 222: m = &QWizard::staticMetaObject; break;
-        case 223: m = &QWizardPage::staticMetaObject; break;
-        case 224: m = &QWorkspace::staticMetaObject; break;
+        case 220: m = &QWidget::staticMetaObject; break;
+        case 221: m = &QWidgetAction::staticMetaObject; break;
+        case 222: m = &QWindowsStyle::staticMetaObject; break;
+        case 223: m = &QWizard::staticMetaObject; break;
+        case 224: m = &QWizardPage::staticMetaObject; break;
+        case 225: m = &QWorkspace::staticMetaObject; break;
         case 88:
         case 89:
         case 90:
@@ -2463,6 +2470,7 @@ const QMetaObject* LObjects::staticMetaObject(const QByteArray& name, int n) {
         case 216:
         case 217:
         case 218:
+        case 219:
             if(staticMetaObject_webkit) {
                 m = staticMetaObject_webkit(n); }
             break; }
@@ -2958,12 +2966,12 @@ StrList LObjects::overrideFunctions(const QByteArray& name) {
             case 211: ids = LVBoxLayout::overrideIds; break;
             case 212: ids = LValidator::overrideIds; break;
             case 213: ids = LVariantAnimation::overrideIds; break;
-            case 219: ids = LWidget::overrideIds; break;
-            case 220: ids = LWidgetAction::overrideIds; break;
-            case 221: ids = LWindowsStyle::overrideIds; break;
-            case 222: ids = LWizard::overrideIds; break;
-            case 223: ids = LWizardPage::overrideIds; break;
-            case 224: ids = LWorkspace::overrideIds; break;
+            case 220: ids = LWidget::overrideIds; break;
+            case 221: ids = LWidgetAction::overrideIds; break;
+            case 222: ids = LWindowsStyle::overrideIds; break;
+            case 223: ids = LWizard::overrideIds; break;
+            case 224: ids = LWizardPage::overrideIds; break;
+            case 225: ids = LWorkspace::overrideIds; break;
             case 88:
             case 89:
             case 90:
@@ -3026,6 +3034,7 @@ StrList LObjects::overrideFunctions(const QByteArray& name) {
             case 216:
             case 217:
             case 218:
+            case 219:
                 if(override_webkit) {
                     NumList* _ids = override_webkit(name);
                     if(_ids) {

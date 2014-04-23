@@ -169,16 +169,38 @@ public:
     void timerEvent(QTimerEvent* x1) { quint64 id = LObjects::override_id(unique, 10); void* fun = LObjects::overrideFun(id); if(fun && (LObjects::calling != id)) { const void* args[] = { &x1 }; callOverrideFun(fun, 10, args, id); } if(!fun || LObjects::call_default || (LObjects::calling == id)) { QWebPage::timerEvent(x1); }}
 };
 
-class LWebView : public QWebView {
+class LWebPluginFactory : public QWebPluginFactory {
     Q_OBJECT
     friend class Q218;
+public:
+    LWebPluginFactory(uint u, QObject* x1 = 0) : QWebPluginFactory(x1), unique(u) {}
+
+    static NumList overrideIds;
+    uint unique;
+
+    QObject* create(const QString& x1, const QUrl& x2, const QStringList& x3, const QStringList& x4) const { quint64 id = LObjects::override_id(unique, 367); void* fun = LObjects::overrideFun(id); QObject* ret = 0; if(fun && (LObjects::calling != id)) { const void* args[] = { &x1, &x2, &x3, &x4 }; ret = (QObject*)qVariantValue<void*>(callOverrideFun(fun, 367, args, id)); } return ret; }
+    bool extension(Extension x1, const ExtensionOption* x2 = 0, ExtensionReturn* x3 = 0) { quint64 id = LObjects::override_id(unique, 355); void* fun = LObjects::overrideFun(id); bool ret = false; if(fun && (LObjects::calling != id)) { const void* args[] = { &x1, &x2, &x3 }; ret = callOverrideFun(fun, 355, args, id).toBool(); } if(!fun || LObjects::call_default || (LObjects::calling == id)) { ret = QWebPluginFactory::extension(x1, x2, x3); } return ret; }
+    QList<Plugin> plugins() const { quint64 id = LObjects::override_id(unique, 368); void* fun = LObjects::overrideFun(id); QList<Plugin> ret; if(fun && (LObjects::calling != id)) { ret = qVariantValue<QList<Plugin> >(callOverrideFun(fun, 368, 0, id)); } return ret; }
+    void refreshPlugins() { quint64 id = LObjects::override_id(unique, 369); void* fun = LObjects::overrideFun(id); if(fun && (LObjects::calling != id)) { callOverrideFun(fun, 369, 0, id); } if(!fun || LObjects::call_default || (LObjects::calling == id)) { QWebPluginFactory::refreshPlugins(); }}
+    bool supportsExtension(Extension x1) const { quint64 id = LObjects::override_id(unique, 356); void* fun = LObjects::overrideFun(id); bool ret = false; if(fun && (LObjects::calling != id)) { const void* args[] = { &x1 }; ret = callOverrideFun(fun, 356, args, id).toBool(); } if(!fun || LObjects::call_default || (LObjects::calling == id)) { ret = QWebPluginFactory::supportsExtension(x1); } return ret; }
+    bool eventFilter(QObject* x1, QEvent* x2) { quint64 id = LObjects::override_id(unique, 5); void* fun = LObjects::overrideFun(id); bool ret = false; if(fun && (LObjects::calling != id)) { const void* args[] = { &x1, &x2 }; ret = callOverrideFun(fun, 5, args, id).toBool(); } if(!fun || LObjects::call_default || (LObjects::calling == id)) { ret = QWebPluginFactory::eventFilter(x1, x2); } return ret; }
+    void childEvent(QChildEvent* x1) { quint64 id = LObjects::override_id(unique, 6); void* fun = LObjects::overrideFun(id); if(fun && (LObjects::calling != id)) { const void* args[] = { &x1 }; callOverrideFun(fun, 6, args, id); } if(!fun || LObjects::call_default || (LObjects::calling == id)) { QWebPluginFactory::childEvent(x1); }}
+    void connectNotify(const char* x1) { quint64 id = LObjects::override_id(unique, 7); void* fun = LObjects::overrideFun(id); if(fun && (LObjects::calling != id)) { const void* args[] = { &x1 }; callOverrideFun(fun, 7, args, id); } if(!fun || LObjects::call_default || (LObjects::calling == id)) { QWebPluginFactory::connectNotify(x1); }}
+    void customEvent(QEvent* x1) { quint64 id = LObjects::override_id(unique, 8); void* fun = LObjects::overrideFun(id); if(fun && (LObjects::calling != id)) { const void* args[] = { &x1 }; callOverrideFun(fun, 8, args, id); } if(!fun || LObjects::call_default || (LObjects::calling == id)) { QWebPluginFactory::customEvent(x1); }}
+    void disconnectNotify(const char* x1) { quint64 id = LObjects::override_id(unique, 9); void* fun = LObjects::overrideFun(id); if(fun && (LObjects::calling != id)) { const void* args[] = { &x1 }; callOverrideFun(fun, 9, args, id); } if(!fun || LObjects::call_default || (LObjects::calling == id)) { QWebPluginFactory::disconnectNotify(x1); }}
+    void timerEvent(QTimerEvent* x1) { quint64 id = LObjects::override_id(unique, 10); void* fun = LObjects::overrideFun(id); if(fun && (LObjects::calling != id)) { const void* args[] = { &x1 }; callOverrideFun(fun, 10, args, id); } if(!fun || LObjects::call_default || (LObjects::calling == id)) { QWebPluginFactory::timerEvent(x1); }}
+};
+
+class LWebView : public QWebView {
+    Q_OBJECT
+    friend class Q219;
 public:
     LWebView(uint u, QWidget* x1 = 0) : QWebView(x1), unique(u) {}
 
     static NumList overrideIds;
     uint unique;
 
-    QWebView* createWindow(QWebPage::WebWindowType x1) { quint64 id = LObjects::override_id(unique, 367); void* fun = LObjects::overrideFun(id); QWebView* ret = 0; if(fun && (LObjects::calling != id)) { const void* args[] = { &x1 }; ret = (QWebView*)qVariantValue<void*>(callOverrideFun(fun, 367, args, id)); } if(!fun || LObjects::call_default || (LObjects::calling == id)) { ret = QWebView::createWindow(x1); } return ret; }
+    QWebView* createWindow(QWebPage::WebWindowType x1) { quint64 id = LObjects::override_id(unique, 370); void* fun = LObjects::overrideFun(id); QWebView* ret = 0; if(fun && (LObjects::calling != id)) { const void* args[] = { &x1 }; ret = (QWebView*)qVariantValue<void*>(callOverrideFun(fun, 370, args, id)); } if(!fun || LObjects::call_default || (LObjects::calling == id)) { ret = QWebView::createWindow(x1); } return ret; }
     QVariant inputMethodQuery(Qt::InputMethodQuery x1) const { quint64 id = LObjects::override_id(unique, 24); void* fun = LObjects::overrideFun(id); QVariant ret; if(fun && (LObjects::calling != id)) { const void* args[] = { &x1 }; ret = qVariantValue<QVariant>(callOverrideFun(fun, 24, args, id)); } if(!fun || LObjects::call_default || (LObjects::calling == id)) { ret = QWebView::inputMethodQuery(x1); } return ret; }
     QSize sizeHint() const { quint64 id = LObjects::override_id(unique, 26); void* fun = LObjects::overrideFun(id); QSize ret; if(fun && (LObjects::calling != id)) { ret = qVariantValue<QSize>(callOverrideFun(fun, 26, 0, id)); } if(!fun || LObjects::call_default || (LObjects::calling == id)) { ret = QWebView::sizeHint(); } return ret; }
     void changeEvent(QEvent* x1) { quint64 id = LObjects::override_id(unique, 14); void* fun = LObjects::overrideFun(id); if(fun && (LObjects::calling != id)) { const void* args[] = { &x1 }; callOverrideFun(fun, 14, args, id); } if(!fun || LObjects::call_default || (LObjects::calling == id)) { QWebView::changeEvent(x1); }}

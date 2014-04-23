@@ -1,5 +1,6 @@
 QLatin1String
 QList<ExtraSelection>
+QList<Plugin>
 QList<QGLShader*>
 QList<QHelpSearchQuery>
 QList<QHostAddress>
@@ -29,7 +30,6 @@ QPair<QHostAddress,int>
 QStyleHintReturn
 QThread
 QVector<QVariant>
-QWebPluginFactory
 Q_IPV6ADDR
 quint16
 quint64

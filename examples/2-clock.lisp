@@ -12,6 +12,9 @@
                       "size" '(170 170)
                       "pos" '(50 50)))
 
+(defvar *show-seconds* t)
+(defvar *show-minutes* t)
+
 (defun start ()
   (let ((timer (qnew "QTimer(QObject*)" *clock*)))
     (qconnect timer "timeout()" (lambda () (! "update" *clock*)))
@@ -71,22 +74,21 @@
             (! "setPen(QPen)" pen-hour)
             (! "setOpacity" 0.5)
             (! "drawLine(QLine)" '(-10 0 36 0)))
-          (with-save ()
-            (! "rotate" (* 6 min))
-            (! "setPen(QPen)" pen-minute)
-            (! "setOpacity" 0.5)
-            (! "drawLine(QLine)" '(-15 0 65 0)))
-          (with-save ()
-            (! "rotate" (* 6 sec))
-            (! "setPen(QPen)" pen-second)
-            (! "setBrush(QBrush)" brush-second)
-            (! "drawEllipse(QRectF)" '(-1.5 -1.5 3 3))
-            (! "setOpacity" 0.7)
-            (! "drawLine(QLine)" '(-15 0 52 0))
-            (! "drawEllipse(QRect)" '(53 -4 8 8))))
+          (when *show-minutes*
+            (with-save ()
+              (! "rotate" (* 6 min))
+              (! "setPen(QPen)" pen-minute)
+              (! "setOpacity" 0.5)
+              (! "drawLine(QLine)" '(-15 0 65 0))))
+          (when *show-seconds*
+            (with-save ()
+              (! "rotate" (* 6 sec))
+              (! "setPen(QPen)" pen-second)
+              (! "setBrush(QBrush)" brush-second)
+              (! "drawEllipse(QRectF)" '(-1.5 -1.5 3 3))
+              (! "setOpacity" 0.7)
+              (! "drawLine(QLine)" '(-15 0 52 0))
+              (! "drawEllipse(QRect)" '(53 -4 8 8)))))
         (! "end")))))
 
-(progn
-  (start)
-  (qsingle-shot 0 (lambda () (in-package :clock))))
-
+(start)

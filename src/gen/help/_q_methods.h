@@ -72,14 +72,14 @@ public:
     Q_INVOKABLE bool MisCreatingIndex(QHelpIndexModel* o) const { return o->isCreatingIndex(); }
 };
 
-class Q94 : public Q219 { // QHelpSearchQueryWidget
+class Q94 : public Q220 { // QHelpSearchQueryWidget
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QWidget* x1 = 0) { return new LHelpSearchQueryWidget(u, x1); }
     Q_INVOKABLE QList<QHelpSearchQuery> Mquery(QHelpSearchQueryWidget* o) const { return o->query(); }
 };
 
-class Q95 : public Q219 { // QHelpSearchResultWidget
+class Q95 : public Q220 { // QHelpSearchResultWidget
     Q_OBJECT
 public:
     Q_INVOKABLE QUrl MlinkAt(QHelpSearchResultWidget* o, const QPoint& x1) { return o->linkAt(x1); }

@@ -9,7 +9,7 @@ QT_BEGIN_NAMESPACE
 NumList LGraphicsSvgItem::overrideIds = NumList() << 240 << 211 << 213;
 NumList LSvgRenderer::overrideIds = NumList();
 NumList LSvgWidget::overrideIds = NumList() << 26 << 22;
-NumList LSvgGenerator::overrideIds = NumList() << 439;
+NumList LSvgGenerator::overrideIds = NumList() << 442;
 
 void ini() {
     static bool _ = false; if(_) return; _ = true;

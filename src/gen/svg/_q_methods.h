@@ -46,7 +46,7 @@ public:
     Q_INVOKABLE QRectF MviewBoxF(QSvgRenderer* o) const { return o->viewBoxF(); }
 };
 
-class Q178 : public Q219 { // QSvgWidget
+class Q178 : public Q220 { // QSvgWidget
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QWidget* x1 = 0) { return new LSvgWidget(u, x1); }

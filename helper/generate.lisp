@@ -1,4 +1,4 @@
-;;; copyright (c) 2010-2013 Polos Ruetz
+;;; copyright (c) 2010-2014 Polos Ruetz
 
 (load "../src/lisp/x")
 (load "load-modules")
@@ -19,7 +19,9 @@
                                                   "QNetworkCacheMetaData::AttributesMap"
                                                   "QNetworkCacheMetaData::RawHeaderList"
                                                   "QPainterPath::Element"
-                                                  "QPixmapCache::Key"))
+                                                  "QPixmapCache::Key"
+                                                  "QWebPluginFactory::MimeType"
+                                                  "QWebPluginFactory::Plugin"))
 
 (defparameter *max-constructor-args*      0)
 (defparameter *max-method-args*           0)

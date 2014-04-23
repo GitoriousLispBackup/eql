@@ -1688,6 +1688,12 @@
    "virtual bool javaScriptPrompt ( QWebFrame * , const QString & , const QString & , QString * )"
    "virtual QString userAgentForUrl ( const QUrl & ) const"
    "virtual bool event ( QEvent * )")
+  (("QWebPluginFactory" . "QObject")
+   "virtual QObject * create ( const QString & , const QUrl & , const QStringList & , const QStringList & ) const = 0"
+   "virtual bool extension ( Extension , const ExtensionOption * = 0, ExtensionReturn * = 0 )"
+   "virtual QList<Plugin> plugins () const = 0"
+   "virtual void refreshPlugins ()"
+   "virtual bool supportsExtension ( Extension ) const")
   (("QWebView" . "QWidget")
    "virtual QWebView * createWindow ( QWebPage::WebWindowType )"
    "virtual bool event ( QEvent * )"

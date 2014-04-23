@@ -7,5 +7,6 @@
         "QWebHistoryInterface"
         "QWebInspector"
         "QWebPage"
+        "QWebPluginFactory"
         "QWebView"
         ))

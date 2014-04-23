@@ -4478,6 +4478,13 @@
    "QWidget * view () const"
    "QSize viewportSize () const"
    "virtual bool event ( QEvent * )")
+  (("QWebPluginFactory" . "QObject")
+   "new QWebPluginFactory ( QObject * = 0 )"
+   "virtual QObject * create ( const QString & , const QUrl & , const QStringList & , const QStringList & ) const = 0"
+   "virtual bool extension ( Extension , const ExtensionOption * = 0, ExtensionReturn * = 0 )"
+   "virtual QList<Plugin> plugins () const = 0"
+   "virtual void refreshPlugins ()"
+   "virtual bool supportsExtension ( Extension ) const")
   (("QWebView" . "QWidget")
    "new QWebView ( QWidget * = 0 )"
    "bool findText ( const QString & , QWebPage::FindFlags = 0 )"

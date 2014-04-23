@@ -4,6 +4,8 @@
 #include "../../ecl_fun.h"
 #include <QtWebKit>
 
+Q_DECLARE_METATYPE(QList<QWebPluginFactory::Plugin>)
+
 #ifdef Q_WS_WIN
 #define LIB_EXPORT __declspec(dllexport)
 #else

@@ -116,6 +116,17 @@ public:
     Q_INVOKABLE bool Mevent(QWebPage* o, QEvent* x1) { return o->event(x1); }
 };
 
+class Q218 : public Q127 { // QWebPluginFactory
+    Q_OBJECT
+public:
+    Q_INVOKABLE void* C(uint u, QObject* x1 = 0) { return new LWebPluginFactory(u, x1); }
+    Q_INVOKABLE QObject* Mcreate(QWebPluginFactory* o, const QString& x1, const QUrl& x2, const QStringList& x3, const QStringList& x4) const { return o->create(x1, x2, x3, x4); }
+    Q_INVOKABLE bool Mextension(QWebPluginFactory* o, QWebPluginFactory::Extension x1, const QWebPluginFactory::ExtensionOption* x2 = 0, QWebPluginFactory::ExtensionReturn* x3 = 0) { return o->extension(x1, x2, x3); }
+    Q_INVOKABLE QList<QWebPluginFactory::Plugin> Mplugins(QWebPluginFactory* o) const { return o->plugins(); }
+    Q_INVOKABLE void MrefreshPlugins(QWebPluginFactory* o) { o->refreshPlugins(); }
+    Q_INVOKABLE bool MsupportsExtension(QWebPluginFactory* o, QWebPluginFactory::Extension x1) const { return o->supportsExtension(x1); }
+};
+
 class Q82 : public Q83 { // QGraphicsWebView
     Q_OBJECT
 public:
@@ -147,7 +158,7 @@ public:
     Q_INVOKABLE void MupdateGeometry(QGraphicsWebView* o) { o->updateGeometry(); }
 };
 
-class Q216 : public Q219 { // QWebInspector
+class Q216 : public Q220 { // QWebInspector
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QWidget* x1 = 0) { return new LWebInspector(u, x1); }
@@ -157,7 +168,7 @@ public:
     Q_INVOKABLE QSize MsizeHint(QWebInspector* o) const { return o->sizeHint(); }
 };
 
-class Q218 : public Q219 { // QWebView
+class Q219 : public Q220 { // QWebView
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QWidget* x1 = 0) { return new LWebView(u, x1); }
