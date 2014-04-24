@@ -9,6 +9,15 @@
                onclick="var date = new Date;
                         alert(Lisp.testCall([42, 'hello world', date]));">
       <li>
+        <p><b>Change value</b> in Lisp (passing a QWebElement)</p>
+        <input type="button"
+               value="Flip"
+               onclick="Lisp.flipValue(document.getElementById('flip'));">
+        <input type="text"
+               id="flip"
+               value="Never odd or even"
+               size="25">
+      <li>
         <p><b>Eval</b> in Lisp</p>
         <input type="text"
                id="expression"

@@ -2,6 +2,7 @@
 #define LIB_H
 
 #include <QtGui>
+#include <QtWebKit>
 
 #ifdef Q_WS_WIN
 #define LIB_EXPORT __declspec(dllexport)
@@ -19,6 +20,7 @@ class CPP : public QObject
 public:
     Q_INVOKABLE QStringList testCall(const QVariantList&);
     Q_INVOKABLE QString eval(const QString&);
+    Q_INVOKABLE void flipValue(const QWebElement&);
 };
 
 QT_END_NAMESPACE

@@ -20,5 +20,10 @@ QString CPP::eval(const QString& expression) {
                            Q_ARG(QString, expression));
     return ret.toString(); }
 
+void CPP::flipValue(const QWebElement& element) {
+    eql_fun("eql-user:flip-value",
+            Q_ARG(QWebElement, element));
+}
+
 QT_END_NAMESPACE
 

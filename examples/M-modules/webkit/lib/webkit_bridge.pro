@@ -1,3 +1,4 @@
+QT          += webkit
 TEMPLATE    = lib
 CONFIG      += plugin release
 INCLUDEPATH += ../../../../src

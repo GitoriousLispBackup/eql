@@ -18,7 +18,7 @@
   (mapc (lambda (name value)
           (when (find name '("show-minutes" "show-seconds") :test 'string-equal)
             (setf (symbol-value (find-symbol (string-upcase (format nil "*~A*" name)) :clock))
-                  (string= "true" value))))
+                  (string-equal "true" value))))
         arg-names arg-values))
 
 (defun ini ()
