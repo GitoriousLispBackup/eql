@@ -124,10 +124,13 @@
                  "minimumSize" '(35 25)
                  "sizePolicy" #.(qnew "QSizePolicy(QSizePolicy::Policy,QSizePolicy::Policy)"
                                       |QSizePolicy.Expanding| |QSizePolicy.Expanding|))))
-    (let ((layout (qnew "QGridLayout(QWidget*)" *main*))
-          (digits (make-array 10))
-          (plus (b)) (minus (b)) (multiply (b)) (divide (b)) (reci (b)) (sign (b))
-          (point (b)) (clear (b)) (back (b)) (words (b)) (equal (b)))
+    (let* ((layout* (! "layout" *main*))
+           (layout (if (qnull layout*) ; for multiple call of RUN
+                       (qnew "QGridLayout(QWidget*)" *main*)
+                       (qt-object-? layout*)))
+           (digits (make-array 10))
+           (plus (b)) (minus (b)) (multiply (b)) (divide (b)) (reci (b)) (sign (b))
+           (point (b)) (clear (b)) (back (b)) (words (b)) (equal (b)))
       (dotimes (n 10)
         (setf (svref digits n) (b)))
       (x:do-with (! "addWidget" layout)
