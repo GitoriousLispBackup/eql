@@ -16,7 +16,9 @@
 
 (in-package :eql-user)
 
-(defvar *web-view*        (qnew "QWebView"))
+(defvar *web-view*        (qnew "QWebView"
+                                "windowTitle"
+                                "EQL-WebKit -- Lisp enabled Browser with JavaScript / Lisp bridge"))
 (defvar *network-manager* (qnew "QNetworkAccessManager"))
 (defvar *webkit-bridge*   (qload-c++ "lib/examples_browser"))
 (defvar *files-left*)

@@ -6,8 +6,6 @@
 
 (qrequire :webkit)
 
-(in-package :eql-user)
-
 (defvar *webkit-bridge* (qload-c++ "lib/webkit_bridge"))
 
 (defvar *web-view* (qnew "QWebView" "size" '(700 500)))
@@ -34,6 +32,19 @@
         (! "setAttribute" settings |QWebSettings.DeveloperExtrasEnabled| t))
       (! "setPage" web-inspector (! "page" *web-view*)))
     (! "show" web-inspector)))
+
+;;; clone me
+
+(defvar *clone-name* #.(format nil "CLONE-~D" (random (expt 10 30))))
+
+(defun clone ()
+  (make-package #.*clone-name*)
+  (in-package #.*clone-name*)
+  (use-package :eql)
+  (load "webkit-bridge")
+  (! "setWindowTitle" (symbol-value (find-symbol "*WEB-VIEW*" #.*clone-name*))
+     #.*clone-name*)
+  "(clone)")
 
 ;;; These functions can be called from JavaScript (some C++ glue code needed, see "lib/webkit_bridge").
 
