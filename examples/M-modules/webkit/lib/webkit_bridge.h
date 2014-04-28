@@ -18,7 +18,7 @@ class CPP : public QObject
 {
     Q_OBJECT
 public:
-    Q_INVOKABLE QStringList testCall(const QVariantList&);
+    Q_INVOKABLE QStringList testCall(const QDateTime&, const QVariantList&);
     Q_INVOKABLE QString eval(const QString&);
     Q_INVOKABLE void flipValue(const QWebElement&);
 };

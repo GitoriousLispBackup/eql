@@ -95,20 +95,18 @@
                       name))))))
 
 (defun clear-cache ()
-  (let ((f 0)
-        (d 0))
+  (let ((fs 0)
+        (ds 0))
     ;; delete files
     (dolist (file (directory "cache/**/*.*"))
       (when (ignore-errors (delete-file file))
-        (incf f)))
+        (incf fs)))
     ;; delete empty directories
     (dolist (dir (butlast (sort (directory "cache/**/") '>
                                 :key (lambda (dir) (count #\/ (namestring dir))))))
       (when (ignore-errors (delete-file dir))
-        (incf d)))
+        (incf ds)))
     (! "setPlainText" (! "findFirstElement" (frame) "#message")
-       (format nil "deleted: ~D file~A, ~D director~A"
-               f (if (= 1 f) "" "s")
-               d (if (= 1 d) "y" "ies")))))
+       (format nil "deleted: ~D file~:P, ~D director~:@P" fs ds))))
 
 (ini)

@@ -10,8 +10,9 @@ QObject* ini() {
         cpp->setObjectName("webkit_bridge"); }
     return cpp; }
 
-QStringList CPP::testCall(const QVariantList& arguments) {
+QStringList CPP::testCall(const QDateTime& dateTime, const QVariantList& arguments) {
     QVariant ret = eql_fun("eql-user:test-call", QVariant::StringList,
+                           Q_ARG(QDateTime, dateTime),
                            Q_ARG(QVariantList, arguments));
     return ret.toStringList(); }
 

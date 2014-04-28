@@ -3,11 +3,11 @@
     <h2 style="color: navy">Simple QtWebKit Bridge Demo</h2>
     <ol>
       <li>
-        <p>Call Lisp function, passing a <b>JavaScript array</b></p>
+      <p>Call Lisp function, passing a <b>Date</b> and an <b>Array</b></p>
         <input type="button"
                value="Call"
-               onclick="var date = new Date;
-                        alert(Lisp.testCall([42, 'hello world', date]));">
+               onclick="var now = new Date();
+                        alert(Lisp.testCall(now, ['hello', 42]));">
       <li>
         <p><b>Change value</b> in Lisp (passing a QWebElement)</p>
         <input type="button"
