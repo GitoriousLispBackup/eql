@@ -1,5 +1,7 @@
 ;;; QtWebKit Plugin Widget Example
 ;;;
+;;; (depends on small plugin, see "lib/plugin_widget.pro")
+;;;
 ;;; This is a simple example of embedding a custom QWidget in a QWebView.
 ;;;
 ;;; Note: Adding QNetworkRequest to the plugin widget would allow to get
@@ -9,7 +11,11 @@
 
 (in-package :eql-user)
 
-(defvar *web-view* (qnew "QWebView"))
+(defvar *web-view*      (qnew "QWebView"))
+(defvar *webkit-bridge* (qload-c++ "lib/plugin_widget"))
+
+(defun frame ()
+  (! ("mainFrame" "page" *web-view*)))
 
 (defun clock ()
   (symbol-value (find-symbol "*CLOCK*" :clock)))
@@ -34,6 +40,9 @@
                    (set-params arg-names arg-values)
                    (clock))))
     (! (("setPluginFactory" web-plugin) "page" *web-view*)))
+  (qconnect *web-view* "loadFinished(bool)"
+            (lambda (ok)
+              (! "addToJavaScriptWindowObject" (frame) "Lisp" *webkit-bridge*)))
   (! "setUrl" *web-view* (qnew "QUrl(QString)" "plugin-widget.htm"))
   (! "show" *web-view*))
 

@@ -1,7 +1,17 @@
 <html>
   <head>
+    <style>
+      body, table { font-family: Arial; font-size: small; }
+    </style>
   </head>
-  <body style="font-family: Arial; font-size: small;">
+  <body>
+    <table width="100%">
+      <tr>
+        <td><a href="#" onclick="WebView.showNormal()"><b>Exit Fullscreen Mode</b></a></td>
+        <td align="right"><a href="#" onclick="WebView.showNormal()"><b>Exit Fullscreen Mode</b></a></td>
+      </tr>
+    </table>
+    <hr>
     <h1 style="color: navy">Examples Browser</h1>
     <ul>
       <li>Launch applications after downloading them (any number of files, any file type).
@@ -25,7 +35,6 @@
                                                         '7-Sokoban/pics/player2.png',
                                                         '7-Sokoban/pics/wall.png']);">sokoban</a>
     </ol>
-    <input type="button" value="clear cache" onclick="Lisp.clearCache()">
     <span id="message"></span>
   </body>
 </html>

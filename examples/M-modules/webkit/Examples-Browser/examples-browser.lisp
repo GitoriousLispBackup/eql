@@ -10,6 +10,9 @@
 ;;; Once downloaded, the application files are cached locally (to be run offline).
 ;;;
 ;;; This could be a convenient way for distributing/updating applications in a network.
+;;;
+;;; Another use case could be a full-screen QWebView on a thumb client, acting as a
+;;; Desktop for some limited/restricted client application.
 
 (qrequire :webkit)
 (qrequire :network)
@@ -17,8 +20,7 @@
 (in-package :eql-user)
 
 (defvar *web-view*        (qnew "QWebView"
-                                "windowTitle"
-                                "EQL-WebKit -- Lisp enabled Browser with JavaScript / Lisp bridge"))
+                                "windowTitle" "Lisp enabled WebKit with JavaScript / Lisp bridge"))
 (defvar *network-manager* (qnew "QNetworkAccessManager"))
 (defvar *webkit-bridge*   (qload-c++ "lib/examples_browser"))
 (defvar *files-left*)
@@ -30,10 +32,11 @@
 (defun ini ()
   (qconnect *web-view* "loadFinished(bool)"
             (lambda (ok)
-              (! "addToJavaScriptWindowObject" (frame) "Lisp" *webkit-bridge*)))
+              (! "addToJavaScriptWindowObject" (frame) "Lisp"    *webkit-bridge*)
+              (! "addToJavaScriptWindowObject" (frame) "WebView" *web-view*)))
   (qconnect *network-manager* "finished(QNetworkReply*)" 'download-finished)
   (! "setUrl" *web-view* (qnew "QUrl(QString)" "examples-browser.htm"))
-  (! "show" *web-view*))
+  (! "showFullScreen" *web-view*))
 
 ;;; download
 
@@ -89,6 +92,7 @@
         (progn
           (setf *files-left* (length file-names)
                 *ini-file*   ini-file)
+          ;; QNetworkAccessManager does it all for us (asynchroneous, parallel download)
           (dolist (name file-names)
             (download (format nil "file:///~A" (in-home "examples/" name)) ; change this to a network location
                       id
