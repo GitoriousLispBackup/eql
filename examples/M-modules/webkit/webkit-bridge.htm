@@ -24,7 +24,7 @@
                value="(clone)"
                size="50"
                style="font-family: Courier New; font-size: 120%;"
-               onkeypress="if(event.keyCode == 13) {
+               onkeypress="if(window.event.keyCode == 13) {
                              var exp = document.getElementById('expression');
                              exp.value = Lisp.eval(exp.value); }">
       <li>
