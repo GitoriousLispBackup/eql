@@ -1,1 +1,1 @@
-Run "eql -quic dom.ui" after editing dom.ui.
+Run "eql -quic dom.ui" after editing dom.ui (in Qt Designer).

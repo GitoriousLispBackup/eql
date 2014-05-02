@@ -18,8 +18,9 @@ A list of features:
 2) JavaScript / Lisp bridge: call Lisp functions directly from Html/JS;
    see QWebInspector [Scripts] and [Console] for debugging and executing JS;
    (test your Lisp functions by directly calling them from the QWebInspector
-   console).
+   console)
 
 3) embed your own custom QWidgets in Html (see "plugin-widget" example),
-   as they integrate natively here
+   as they integrate natively here (either written in EQL or Qt/C++,
+   see QLOAD-C++)
 

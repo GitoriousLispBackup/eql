@@ -8,11 +8,6 @@
 ;;; the QUrl to a network location (in function RUN, see below).
 ;;;
 ;;; Once downloaded, the application files are cached locally (to be run offline).
-;;;
-;;; This could be a convenient way for distributing/updating applications in a network.
-;;;
-;;; Another use case could be a full-screen QWebView on a thumb client, acting as a
-;;; Desktop for some limited/restricted client application.
 
 (qrequire :webkit)
 (qrequire :network)
