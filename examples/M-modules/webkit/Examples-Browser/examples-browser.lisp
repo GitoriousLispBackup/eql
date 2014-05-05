@@ -16,8 +16,8 @@
 
 (defvar *web-view*        (qnew "QWebView"
                                 "windowTitle" "Lisp enabled WebKit with JavaScript / Lisp bridge"))
-(defvar *network-manager* (qnew "QNetworkAccessManager"))
-(defvar *webkit-bridge*   (qload-c++ "lib/examples_browser"))
+(defvar *network-manager*   (qnew "QNetworkAccessManager"))
+(defvar *webkit-bridge*     (qload-c++ "lib/examples_browser"))
 (defvar *files-left*)
 (defvar *ini-file*)
 
@@ -31,7 +31,7 @@
               (! "addToJavaScriptWindowObject" (frame) "WebView" *web-view*)))
   (qconnect *network-manager* "finished(QNetworkReply*)" 'download-finished)
   (! "setUrl" *web-view* (qnew "QUrl(QString)" "examples-browser.htm"))
-  (! "showFullScreen" *web-view*))
+  (! "showMaximized" *web-view*))
 
 ;;; download
 
@@ -41,7 +41,7 @@
          (qid "QVariant(QString)" id)
          (qname "QVariant(QString)" name))
     (let ((reply (! "get" *network-manager* request)))
-      ;; set dynamic properties
+      ;; dynamic properties
       (! "setProperty" reply "id" qid)
       (! "setProperty" reply "cache-name" qname))))
 
@@ -56,14 +56,31 @@
   (format nil "cache/~A" name))
 
 (defun save-data (reply)
-  (let ((file (cache-file (! ("toString" ("property" "cache-name") reply))))) ; get dynamic property
+  (let ((file (cache-file (! ("toString" ("property" "cache-name") reply))))) ; dynamic property
     (ensure-directories-exist file)
     (with-open-file (s file :direction :output :if-exists :supersede
                        :element-type '(signed-byte 8))
       (write-sequence (! "readAll" reply) s)))
   (when (zerop (decf *files-left*))
-    (disable-link (! ("toString" ("property" "id") reply))) ; get dynamic property
-    (load *ini-file*)))
+    (load* (! ("toString" ("property" "id") reply)) ; dynamic property
+           *ini-file*)))
+
+(let (top-level-widgets)
+  (defun load* (id file)
+    (load file)
+    (let ((latest (first (sort (! "topLevelWidgets" "QApplication") '> :key 'qt-object-unique))))
+      (push (cons id latest)
+            top-level-widgets)
+      (x:do-with latest
+        ("show")
+        ("raise"))))
+  (defun load/show (id file)
+    (let ((widget (cdr (find id top-level-widgets :test 'string= :key 'car))))
+      (if widget
+          (progn
+            (! (if (qget widget "minimized") "showNormal" "show") widget)
+            (! "raise" widget))
+          (load* id file)))))
 
 (defun show-download-error (error)
   (let ((msg (x:when-it (find error (cdadr (qenums "QNetworkReply" "NetworkError")) :key 'cdr)
@@ -71,19 +88,12 @@
                        (car x:it)))))
     (! "critical" "QMessageBox" nil "EQL" (or msg (tr "Unknown download error.")))))
 
-(defun disable-link (id)
-  "Avoid multiple LOAD of same application."
-  (let ((a (! "findFirstElement" (frame) (format nil "#~A" id))))
-    (! "setOuterXml" a (! "toPlainText" a))))
-
 ;;; these functions are callable from JavaScript (see "lib/examples_browser.*")
 
 (defun run (id file-names)
   (let ((ini-file (cache-file (first file-names))))
     (if (probe-file ini-file)
-        (progn
-          (disable-link id)
-          (load ini-file))
+        (load/show id ini-file)
         (progn
           (setf *files-left* (length file-names)
                 *ini-file*   ini-file)

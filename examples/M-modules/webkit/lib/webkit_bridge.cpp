@@ -1,5 +1,4 @@
 #include "webkit_bridge.h"
-#include <eql_fun.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -20,10 +19,6 @@ QString CPP::eval(const QString& expression) {
     QVariant ret = eql_fun("eql-user:eval*", QVariant::String,
                            Q_ARG(QString, expression));
     return ret.toString(); }
-
-void CPP::flipValue(const QWebElement& element) {
-    eql_fun("eql-user:flip-value",
-            Q_ARG(QWebElement, element)); }
 
 QT_END_NAMESPACE
 

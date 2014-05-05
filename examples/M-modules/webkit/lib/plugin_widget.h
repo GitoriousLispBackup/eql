@@ -2,6 +2,7 @@
 #define LIB_H
 
 #include <QtGui>
+#include <eql_fun.h>
 
 #ifdef Q_WS_WIN
 #define LIB_EXPORT __declspec(dllexport)
@@ -17,7 +18,8 @@ class CPP : public QObject
 {
     Q_OBJECT
 public:
-    Q_INVOKABLE void setParams(const QStringList&, const QStringList&);
+    Q_INVOKABLE void setParams(const QStringList& argNames, const QStringList& argValues) {
+        eql_fun("eql-user:set-params", Q_ARG(QStringList, argNames), Q_ARG(QStringList, argValues)); }
 };
 
 QT_END_NAMESPACE
