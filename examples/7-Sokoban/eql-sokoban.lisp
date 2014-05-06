@@ -26,7 +26,7 @@
 
 (defvar *scene* (qnew "QGraphicsScene"
                       "sceneRect" (append '(0 0) *scene-size*)
-                      "backgroundBrush" (qnew "QBrush(QColor)" "slategray")))
+                      "backgroundBrush" (qnew "QBrush(QColor)" "lightslategray")))
 (defvar *view*  (qnew "QGraphicsView"
                       "windowTitle" "Sokoban"
                       "size" '(650 550)))

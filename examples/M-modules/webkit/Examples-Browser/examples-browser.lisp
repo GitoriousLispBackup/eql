@@ -14,10 +14,9 @@
 
 (in-package :eql-user)
 
-(defvar *web-view*        (qnew "QWebView"
-                                "windowTitle" "Lisp enabled WebKit with JavaScript / Lisp bridge"))
-(defvar *network-manager*   (qnew "QNetworkAccessManager"))
-(defvar *webkit-bridge*     (qload-c++ "lib/examples_browser"))
+(defvar *web-view*        (qnew "QWebView" "windowTitle" "EQL WebKit"))
+(defvar *network-manager* (qnew "QNetworkAccessManager"))
+(defvar *webkit-bridge*   (qload-c++ "lib/examples_browser"))
 (defvar *files-left*)
 (defvar *ini-file*)
 
