@@ -6,8 +6,10 @@
 
 (qrequire :webkit)
 
+(load "inspector")
+
 (defvar *webkit-bridge* (qload-c++ "lib/webkit_bridge"))
-(defvar *web-view*      (qnew "QWebView" "size" '(700 500)))
+(defvar *web-view*      (qnew "QWebView" "size" '(700 540)))
 
 (defvar eql-user::*clone-count* 0)
 
@@ -23,16 +25,6 @@
   (when (find "debug" (! "arguments" "QApplication") :test 'string=)
     (inspector))
   (! "show" *web-view*))
-
-(let (web-inspector)
-  (defun inspector ()
-    "Features JavaScript debugger and console."
-    (unless web-inspector
-      (setf web-inspector (qnew "QWebInspector"))
-      (let ((settings (! "settings" *web-view*)))
-        (! "setAttribute" settings |QWebSettings.DeveloperExtrasEnabled| t))
-      (! "setPage" web-inspector (! "page" *web-view*)))
-    (! "show" web-inspector)))
 
 ;;; clone me
 

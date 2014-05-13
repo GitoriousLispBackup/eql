@@ -38,6 +38,8 @@
 
 (in-package :eql-user)
 
+(load "inspector")
+
 (defvar *web-view* (qnew "QWebView"))
 
 (defmacro iterate-elements (tag/selector &body body)
@@ -132,15 +134,5 @@
             (when (or (not attribute)
                       (string-equal value (! "attribute" element attr)))
               (view* element)))))))
-
-(let (web-inspector)
-  (defun inspector ()
-    "Displays QWebInspector; use 'inspect' from context menu of QWebView to inspect single elements."
-    (unless web-inspector
-      (setf web-inspector (qnew "QWebInspector"))
-      (let ((settings (! "settings" *web-view*)))
-        (! "setAttribute" settings |QWebSettings.DeveloperExtrasEnabled| t))
-      (! "setPage" web-inspector (! "page" *web-view*)))
-    (! "show" web-inspector)))
 
 (open-url)

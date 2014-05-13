@@ -11,6 +11,8 @@
 
 (in-package :eql-user)
 
+(load "inspector")
+
 (defvar *web-view*      (qnew "QWebView"))
 (defvar *webkit-bridge* (qload-c++ "lib/plugin_widget"))
 

@@ -15,7 +15,7 @@
                onclick="Lisp.flipValue(document.getElementById('flip'));">
         <input type="text"
                id="flip"
-               value="Never odd or even"
+               value="never odd or even"
                size="25">
       <li>
         <p><b>Eval</b> in Lisp</p>
@@ -24,9 +24,10 @@
                value="(clone)"
                size="50"
                style="font-family: Courier New; font-size: 120%;"
-               onkeypress="if(window.event.keyCode == 13) {
-                             var exp = document.getElementById('expression');
-                             exp.value = Lisp.eval(exp.value); }">
+               onkeypress="var code = window.event.keyCode;
+                           if((code == 13) || (code == 14)) {
+                               var exp = document.getElementById('expression');
+                               exp.value = Lisp.eval(exp.value); }">
       <li>
         <p>Set <b>Qt Property</b> of this QWebView</p>
         <input type="button"
@@ -43,8 +44,12 @@
                onclick="WebView.showMaximized()">
     </ol>
     <hr>
-    <p>See <a href="#" onclick="Lisp.eval('(inspector)');">Web Inspector</a>
-       <b>Scripts</b> and <b>Console</b> for debugging.
+    <p>See also <a href="#" onclick="Lisp.eval('(inspector)');">Web Inspector</a>
+      <b>Scripts</b> and <b>Console:</b>
+    </p>
+    <p>
+      Script debugging, introspecting web elements / functions and properties of exposed objects
+      <br>(type <em>Lisp</em> and see drop down of <em>QtRuntimeObject</em>)
     </p>
   </body>
 </html>

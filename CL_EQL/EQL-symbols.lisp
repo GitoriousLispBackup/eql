@@ -47,6 +47,7 @@ QMESSAGE-BOX
 QMSG 
 QNEW 
 QNEW-INSTANCE 
+QNULL 
 QNULL-OBJECT 
 QOBJECT-NAMES 
 QOK 
@@ -2871,6 +2872,7 @@ TR
 |QWebSettings.JavaEnabled| 
 |QWebSettings.JavascriptCanAccessClipboard| 
 |QWebSettings.JavascriptCanOpenWindows| 
+|QWebSettings.JavascriptEnabled| 
 |QWebSettings.LocalContentCanAccessRemoteUrls| 
 |QWebSettings.LocalStorageDatabaseEnabled| 
 |QWebSettings.LocalStorageEnabled| 

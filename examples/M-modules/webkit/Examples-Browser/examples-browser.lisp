@@ -14,6 +14,8 @@
 
 (in-package :eql-user)
 
+(load "../inspector")
+
 (defvar *web-view*        (qnew "QWebView" "windowTitle" "EQL WebKit"))
 (defvar *network-manager* (qnew "QNetworkAccessManager"))
 (defvar *webkit-bridge*   (qload-c++ "lib/examples_browser"))
@@ -26,8 +28,7 @@
 (defun ini ()
   (qconnect *web-view* "loadFinished(bool)"
             (lambda (ok)
-              (! "addToJavaScriptWindowObject" (frame) "Lisp"    *webkit-bridge*)
-              (! "addToJavaScriptWindowObject" (frame) "WebView" *web-view*)))
+              (! "addToJavaScriptWindowObject" (frame) "Lisp" *webkit-bridge*)))
   (qconnect *network-manager* "finished(QNetworkReply*)" 'download-finished)
   (! "setUrl" *web-view* (qnew "QUrl(QString)" "examples-browser.htm"))
   (! "showMaximized" *web-view*))
