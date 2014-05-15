@@ -26,8 +26,8 @@
   (! ("mainFrame" "page" *web-view*)))
 
 (defun ini ()
-  (qconnect *web-view* "loadFinished(bool)"
-            (lambda (ok)
+  (qconnect (frame) "javaScriptWindowObjectCleared()"
+            (lambda ()
               (! "addToJavaScriptWindowObject" (frame) "Lisp" *webkit-bridge*)))
   (qconnect *network-manager* "finished(QNetworkReply*)" 'download-finished)
   (! "setUrl" *web-view* (qnew "QUrl(QString)" "examples-browser.htm"))
@@ -71,9 +71,7 @@
     (let ((latest (first (sort (! "topLevelWidgets" "QApplication") '> :key 'qt-object-unique))))
       (push (cons id latest)
             top-level-widgets)
-      (x:do-with latest
-        ("show")
-        ("raise"))))
+      (x:do-with latest "show" "raise")))
   (defun load/show (id file)
     (let ((widget (cdr (find id top-level-widgets :test 'string= :key 'car))))
       (if widget

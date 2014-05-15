@@ -9,7 +9,7 @@
 (load "inspector")
 
 (defvar *webkit-bridge* (qload-c++ "lib/webkit_bridge"))
-(defvar *web-view*      (qnew "QWebView" "size" '(700 540)))
+(defvar *web-view*      (qnew "QWebView" "size" '(700 550)))
 
 (defvar eql-user::*clone-count* 0)
 
@@ -17,8 +17,8 @@
   (! ("mainFrame" "page" *web-view*)))
 
 (defun ini ()
-  (qconnect *web-view* "loadFinished(bool)"
-            (lambda (ok)
+  (qconnect (frame) "javaScriptWindowObjectCleared()"
+            (lambda ()
               (! "addToJavaScriptWindowObject" (frame) "Lisp"    *webkit-bridge*)  ; for examples 1, 2, 3
               (! "addToJavaScriptWindowObject" (frame) "WebView" *web-view*)))     ; for examples 4, 5
   (! "setUrl" *web-view* (qnew "QUrl(QString)" "webkit-bridge.htm"))
@@ -62,7 +62,7 @@
       expression)))
 
 (defun flip-value (web-element)
-  "Passing a QWebElement allows convenient access to its attributes etc. A 'value' of an <input> element can only be changed through JavaScript."
+  ;; indirection fun: a 'value' of an <input> element can only be changed through JavaScript
   (flet ((js (code)
            (! ("toString" ("evaluateJavaScript" code) web-element))))
     (js (format nil "this.value = ~S" (reverse (js "this.value"))))))

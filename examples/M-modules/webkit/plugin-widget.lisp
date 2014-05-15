@@ -42,8 +42,8 @@
                    (set-params arg-names arg-values)
                    (clock))))
     (! (("setPluginFactory" web-plugin) "page" *web-view*)))
-  (qconnect *web-view* "loadFinished(bool)"
-            (lambda (ok)
+  (qconnect (frame) "javaScriptWindowObjectCleared()"
+            (lambda ()
               (! "addToJavaScriptWindowObject" (frame) "Lisp" *webkit-bridge*)))
   (! "setUrl" *web-view* (qnew "QUrl(QString)" "plugin-widget.htm"))
   (! "show" *web-view*))

@@ -21,15 +21,15 @@
 (defparameter *item-size*       nil)
 (defparameter *maze*            nil)
 (defparameter *my-mazes*        (mapcar 'copy-maze *mazes*))
-(defparameter *scene-size*      '(600 500))
+(defparameter *scene-size*      '(650 550))
 (defparameter *print-text-maze* nil "additionally print maze to terminal")
 
 (defvar *scene* (qnew "QGraphicsScene"
                       "sceneRect" (append '(0 0) *scene-size*)
-                      "backgroundBrush" (qnew "QBrush(QColor)" "lightslategray")))
+                      "backgroundBrush" (qnew "QBrush(QColor)" "#DED6AD")))
 (defvar *view*  (qnew "QGraphicsView"
                       "windowTitle" "Sokoban"
-                      "size" '(650 550)))
+                      "size" (mapcar (lambda (x) (+ 50 x)) *scene-size*)))
 (defvar *level* (qnew "QSlider(Qt::Orientation)" |Qt.Vertical|
                       "tickInterval" 5
                       "tickPosition" |QSlider.TicksRight|
@@ -107,24 +107,10 @@
   (defun create-item (type)
     (let* ((char (type-char type))
            (file (in-home (format nil "examples/7-Sokoban/pics/~(~A~).png" type)))
-           (pixmap (assoc file pixmaps :test 'string=))
-           (item (if (or pixmap
-                         (probe-file file))
-                     (qnew "QGraphicsPixmapItem(QPixmap)"
-                           (cdr (or pixmap
-                                    (first (push (cons file (qnew "QPixmap(QString)" file))
-                                                 pixmaps)))))
-                     (x:let-it (qnew "QGraphicsTextItem") ; simple text item dummies (when pics are missing)
-                       (! "setHtml" x:it
-                          (format nil "<span style='font-family:monospace; font-size:12pt; font-weight:bold; color:~A;'>~C"
-                                  (case type
-                                    (:wall    "blue")
-                                    (:object  "orange")
-                                    (:object2 "gold")
-                                    (:goal    "white")
-                                    (:player  "red")
-                                    (:player2 "magenta"))
-                                  char))))))
+           (pixmap (cdr (or (assoc file pixmaps :test 'string=)
+                            (first (push (cons file (qnew "QPixmap(QString)" file))
+                                         pixmaps)))))
+           (item (qnew "QGraphicsPixmapItem(QPixmap)" pixmap)))
       (unless *item-size*
         (setf *item-size* (cddr (! "boundingRect" item))))
       item)))
@@ -185,7 +171,6 @@
 (defun start ()
   (ini)
   (set-maze)
-  (draw)
-  (zoom :out))
+  (draw))
 
 (start)
