@@ -1,6 +1,6 @@
 ;;; "Examples" Browser
 ;;;
-;;; (depends on small plugin, see "lib/examples_browser.pro")
+;;; (depends on small plugin, see "lib/")
 ;;;
 ;;; Run EQL examples "downloading"/starting them from an EQL WebKit browser.
 ;;;
@@ -12,7 +12,13 @@
 (qrequire :webkit)
 (qrequire :network)
 
-(in-package :eql-user)
+(defpackage :browser
+  (:use :common-lisp :eql)
+  (:export
+    #:*web-view*
+    #:ini))
+
+(in-package :browser)
 
 (defvar *web-view*        (qnew "QWebView" "windowTitle" "EQL WebKit"))
 (defvar *network-manager* (qnew "QNetworkAccessManager"))
@@ -87,7 +93,7 @@
 ;;; These functions can be called from JavaScript (see "README-GLUE-CODE.txt")
 
 (defun run (id file-names)
-  "qt: bool run(QString, QStringList)"
+  "Qt: bool run(QString, QStringList)"
   (let ((ini-file (cache-file (first file-names))))
     (if (probe-file ini-file)
         (load/show id ini-file)
@@ -101,7 +107,7 @@
                       name))))))
 
 (defun clear-cache ()
-  "qt: void clearCache()"
+  "Qt: void clearCache()"
   (let ((fs 0)
         (ds 0))
     ;; delete files

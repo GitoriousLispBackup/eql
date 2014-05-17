@@ -1,6 +1,6 @@
 ;;; QtWebKit Plugin Widget Example
 ;;;
-;;; (depends on small plugin, see "lib/plugin_widget.pro")
+;;; (depends on small plugin, see "lib/")
 ;;;
 ;;; This is a simple example of embedding a custom QWidget in a QWebView.
 ;;;
@@ -23,7 +23,7 @@
   (symbol-value (find-symbol "*CLOCK*" :clock)))
 
 (defun set-params (arg-names arg-values)
-  "qt: void setParams(QStringList, QStringList)" ; see "README-GLUE-CODE.txt"
+  "Qt: void setParams(QStringList, QStringList)" ; see "README-GLUE-CODE.txt"
   (mapc (lambda (name value)
           (when (find name '("show-minutes" "show-seconds") :test 'string-equal)
             (setf (symbol-value (find-symbol (string-upcase (format nil "*~A*" name)) :clock))
