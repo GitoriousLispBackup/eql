@@ -25,7 +25,7 @@
                size="50"
                style="font-family: Courier New; font-size: 120%;"
                onkeypress="var code = window.event.keyCode;
-                           if((code == 13) || (code == 14)) {
+                           if((code == 13) || (code == 14)) { // Return, Enter
                                var exp = document.getElementById('expression');
                                exp.value = Lisp.eval(exp.value); }">
       <li>

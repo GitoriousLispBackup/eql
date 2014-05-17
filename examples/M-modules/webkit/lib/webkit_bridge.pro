@@ -10,5 +10,7 @@ MOC_DIR     = ./tmp/
 
 include(../../../../src/windows.pri)
 
-HEADERS += webkit_bridge.h
+HEADERS += _invokables.h \
+           webkit_bridge.h
 SOURCES += webkit_bridge.cpp
+

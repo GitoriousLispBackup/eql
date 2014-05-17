@@ -13,16 +13,18 @@
 
 QT_BEGIN_NAMESPACE
 
-extern "C" { LIB_EXPORT QObject* ini(); }
-
-class CPP : public QObject
-{
+class CPP : public QObject {
     Q_OBJECT
 public:
-    Q_INVOKABLE QStringList testCall(const QDateTime&, const QVariantList&);
-    Q_INVOKABLE QString eval(const QString&);
-    Q_INVOKABLE void flipValue(const QWebElement& we) { eql_fun("eql-user:flip-value", Q_ARG(QWebElement, we)); }
+#include "_invokables.h"
 };
+
+extern "C" {
+    LIB_EXPORT QObject* ini() {
+        static QObject* cpp = 0;
+        if(!cpp) {
+            cpp = new CPP; }
+        return cpp; }}
 
 QT_END_NAMESPACE
 

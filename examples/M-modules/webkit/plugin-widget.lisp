@@ -14,7 +14,7 @@
 (load "inspector")
 
 (defvar *web-view*      (qnew "QWebView"))
-(defvar *webkit-bridge* (qload-c++ "lib/plugin_widget"))
+(defvar *webkit-bridge* (qload-c++ "lib/webkit_bridge"))
 
 (defun frame ()
   (! ("mainFrame" "page" *web-view*)))
@@ -23,6 +23,7 @@
   (symbol-value (find-symbol "*CLOCK*" :clock)))
 
 (defun set-params (arg-names arg-values)
+  "qt: void setParams(QStringList, QStringList)" ; see "README-GLUE-CODE.txt"
   (mapc (lambda (name value)
           (when (find name '("show-minutes" "show-seconds") :test 'string-equal)
             (setf (symbol-value (find-symbol (string-upcase (format nil "*~A*" name)) :clock))

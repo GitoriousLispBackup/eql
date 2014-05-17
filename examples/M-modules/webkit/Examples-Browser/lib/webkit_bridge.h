@@ -2,6 +2,7 @@
 #define LIB_H
 
 #include <QtGui>
+#include <QtWebKit>
 #include <eql_fun.h>
 
 #ifdef Q_WS_WIN
@@ -12,15 +13,18 @@
 
 QT_BEGIN_NAMESPACE
 
-extern "C" { LIB_EXPORT QObject* ini(); }
-
-class CPP : public QObject
-{
+class CPP : public QObject {
     Q_OBJECT
 public:
-    Q_INVOKABLE bool run(const QString&, const QStringList&);
-    Q_INVOKABLE void clearCache() { eql_fun("eql-user:clear-cache"); }
+#include "_invokables.h"
 };
+
+extern "C" {
+    LIB_EXPORT QObject* ini() {
+        static QObject* cpp = 0;
+        if(!cpp) {
+            cpp = new CPP; }
+        return cpp; }}
 
 QT_END_NAMESPACE
 

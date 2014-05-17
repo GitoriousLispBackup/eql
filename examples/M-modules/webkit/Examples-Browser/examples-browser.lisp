@@ -14,11 +14,9 @@
 
 (in-package :eql-user)
 
-(load "../inspector")
-
 (defvar *web-view*        (qnew "QWebView" "windowTitle" "EQL WebKit"))
 (defvar *network-manager* (qnew "QNetworkAccessManager"))
-(defvar *webkit-bridge*   (qload-c++ "lib/examples_browser"))
+(defvar *webkit-bridge*   (qload-c++ "lib/webkit_bridge"))
 (defvar *files-left*)
 (defvar *ini-file*)
 
@@ -86,9 +84,10 @@
                        (car x:it)))))
     (! "critical" "QMessageBox" nil "EQL" (or msg (tr "Unknown download error.")))))
 
-;;; these functions are callable from JavaScript (see "lib/examples_browser.*")
+;;; These functions can be called from JavaScript (see "README-GLUE-CODE.txt")
 
 (defun run (id file-names)
+  "qt: bool run(QString, QStringList)"
   (let ((ini-file (cache-file (first file-names))))
     (if (probe-file ini-file)
         (load/show id ini-file)
@@ -102,6 +101,7 @@
                       name))))))
 
 (defun clear-cache ()
+  "qt: void clearCache()"
   (let ((fs 0)
         (ds 0))
     ;; delete files

@@ -39,9 +39,10 @@
      #.*clone-name*)
   "(clone)")
 
-;;; These functions can be called from JavaScript (some C++ glue code needed, see "lib/webkit_bridge").
+;;; These functions can be called from JavaScript (see "README-GLUE-CODE.txt")
 
 (defun test-call (now arguments)
+  "qt: QStringList testCall(QDateTime, QVariantList)"
   ;;           | from                C++             to
   ;; ----------|--------------------------------------------------------
   ;; arguments | JS array of vars -> QVariantList -> LIST
@@ -55,6 +56,7 @@
           (cons now arguments)))
 
 (defun eval* (expression)
+  "qt: QString eval(QString)"
   (handler-case (princ-to-string (eval (read-from-string expression)))
     (error (condition)
       (qmsg (format nil "<p><b style='color:red'>Lisp Eval Error</b></p><p>~A</p>"
@@ -62,6 +64,7 @@
       expression)))
 
 (defun flip-value (web-element)
+  "qt: void flipValue(QWebElement)"
   ;; indirection fun: a 'value' of an <input> element can only be changed through JavaScript
   (flet ((js (code)
            (! ("toString" ("evaluateJavaScript" code) web-element))))

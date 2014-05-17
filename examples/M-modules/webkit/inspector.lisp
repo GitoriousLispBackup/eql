@@ -1,3 +1,5 @@
+;; to be loaded in code with defined *web-view* (QWebView)
+
 (let (web-inspector)
   (defun inspector ()
     "Web element inspector, JavaScript debugger and console."
