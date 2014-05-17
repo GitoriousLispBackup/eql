@@ -8,10 +8,10 @@
 
 (load "inspector")
 
-(defvar *webkit-bridge* (qload-c++ "lib/webkit_bridge"))
-(defvar *web-view*      (qnew "QWebView" "size" '(700 550)))
+(defvar *web-view* (qnew "QWebView" "size" '(700 550)))
 
-(defvar eql-user::*clone-count* 0)
+(defvar eql-user::*webkit-bridge* (qload-c++ "lib/webkit_bridge"))
+(defvar eql-user::*clone-count*   0)
 
 (defun frame ()
   (! ("mainFrame" "page" *web-view*)))
@@ -19,8 +19,8 @@
 (defun ini ()
   (qconnect (frame) "javaScriptWindowObjectCleared()"
             (lambda ()
-              (! "addToJavaScriptWindowObject" (frame) "Lisp"    *webkit-bridge*)  ; for examples 1, 2, 3
-              (! "addToJavaScriptWindowObject" (frame) "WebView" *web-view*)))     ; for examples 4, 5
+              (! "addToJavaScriptWindowObject" (frame) "Lisp"    eql-user::*webkit-bridge*) ; for examples 1, 2, 3
+              (! "addToJavaScriptWindowObject" (frame) "WebView" *web-view*)))              ; for examples 4, 5
   (! "setUrl" *web-view* (qnew "QUrl(QString)" "webkit-bridge.htm"))
   (when (find "debug" (! "arguments" "QApplication") :test 'string=)
     (inspector))
