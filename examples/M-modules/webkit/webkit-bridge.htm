@@ -6,13 +6,12 @@
       <p>Call Lisp function, passing a <b>Date</b> and an <b>Array</b></p>
         <input type="button"
                value="Call"
-               onclick="var now = new Date();
-                        alert(Lisp.testCall(now, ['hello', 42]));">
+               onclick="alert(Lisp.testCall(new Date(), ['hello', 42]))">
       <li>
         <p><b>Change value</b> in Lisp (passing a QWebElement)</p>
         <input type="button"
                value="Flip"
-               onclick="Lisp.flipValue(document.getElementById('flip'));">
+               onclick="Lisp.flipValue(document.getElementById('flip'))">
         <input type="text"
                id="flip"
                value="never odd or even"
@@ -23,7 +22,7 @@
                id="expression"
                value="(clone)"
                size="50"
-               style="font-family: Courier New; font-size: 120%;"
+               style="font-family: Courier New; font-size: 110%;"
                onkeypress="var code = window.event.keyCode;
                            if((code == 13) || (code == 14)) { // Return, Enter
                                var exp = document.getElementById('expression');

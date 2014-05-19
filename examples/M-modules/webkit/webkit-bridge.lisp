@@ -10,8 +10,8 @@
 
 (defvar *web-view* (qnew "QWebView" "size" '(700 550)))
 
-(defvar eql-user::*webkit-bridge* (qload-c++ "lib/webkit_bridge"))
-(defvar eql-user::*clone-count*   0)
+(defvar eql-user::*webkit-bridge* (qload-c++ "lib/webkit_bridge")) ; eval once only, even from other package (see CLONE)
+(defvar eql-user::*clone-count*   0)                               ; (see above)
 
 (defun frame ()
   (! ("mainFrame" "page" *web-view*)))

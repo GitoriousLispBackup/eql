@@ -1,4 +1,4 @@
-;; to be loaded in code with defined *web-view* (QWebView)
+;; to be loaded in code with a defined *web-view* (QWebView)
 
 (let (web-inspector)
   (defun inspector ()

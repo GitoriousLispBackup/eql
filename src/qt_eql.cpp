@@ -1,5 +1,5 @@
 // copyright (c) 2011-2013 Polos Ruetz
-// see Qt_EQL example
+// see Qt_EQL, Qt_EQL_dynamic
 
 #include <QtGui>
 #include <ecl/ecl.h>
