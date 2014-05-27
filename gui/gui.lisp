@@ -82,8 +82,8 @@
   (qconnect *n-names* "activated(QString)" 'change-n-object)
   (qconnect *edit* "returnPressed()" 'eval-edit)
   (qconnect *select* "clicked()" (lambda () (qselect 'widget-selected)))
-  (dolist (sig (list "textChanged(QString)" "returnPressed()"))
-    (qconnect *search-help* sig 'search-help))
+  (qconnect *search-help* "textChanged(QString)" 'search-help)
+  (qconnect *search-help* "returnPressed()" 'search-help)
   (qoverride *edit* "keyPressEvent(QKeyEvent*)" 'history-move)
   (change-class-q-object "QWidget" :super)
   (change-class-n-object "QMetaObject" :super)
@@ -95,9 +95,17 @@
   (! "setFocus" *edit*)
   (x:do-with *gui* "show" "raise"))
 
-(defun search-help (&optional txt)
-  (unless (! "find" *help* (! "text" *search-help*))
-    (! "moveCursor" *help* |QTextCursor.Start|)))
+(defun search-help (&optional text)
+  (flet ((move-start ()
+           (! "moveCursor" *help* |QTextCursor.Start|))
+         (find* ()
+           (! "find" *help* (! "text" *search-help*))))
+    (when text
+      (move-start))
+    (unless (find*)
+      (move-start)
+      (unless text
+        (find*)))))
 
 (defun saved-history ()
   (let ((ex "")
