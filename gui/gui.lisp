@@ -97,15 +97,11 @@
 
 (defun search-help (&optional text)
   (flet ((move-start ()
-           (! "moveCursor" *help* |QTextCursor.Start|))
-         (find* ()
-           (! "find" *help* (! "text" *search-help*))))
+           (! "moveCursor" *help* |QTextCursor.Start|)))
     (when text
       (move-start))
-    (unless (find*)
-      (move-start)
-      (unless text
-        (find*)))))
+    (unless (! "find" *help* (! "text" *search-help*))
+      (move-start))))
 
 (defun saved-history ()
   (let ((ex "")

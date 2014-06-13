@@ -2,7 +2,10 @@ EQL WebKit examples
 ===================
 
 
-If you already know Common Lisp, and have some basic knowledge of
+This enables any application to embed web content, which can be fully
+controlled from Lisp.
+
+Or, if you already know Common Lisp, and have some basic knowledge of
 Html/JavaScript, you can easily create a GUI, without learning much of
 Qt, and without relying on a web-server.
 

@@ -29,4 +29,6 @@
         (examine-child-elements element item)
         (setf element (! "nextSibling" element))))))
 
-(ini "../../../doc/index.html")
+(ini (or (third (! "arguments" "QApplication"))
+         "../../../doc/index.html"))
+

@@ -42,7 +42,7 @@
 ;;; These functions can be called from JavaScript (see "README-GLUE-CODE.txt")
 
 (defun test-call (now arguments)
-  "Qt: QStringList testCall(QDateTime, QVariantList)"
+  "Qt: QStringList testCall(QDateTime, QVariantList = 0)"
   ;;           | from                C++             to
   ;; ----------|--------------------------------------------------------
   ;; arguments | JS array of vars -> QVariantList -> LIST

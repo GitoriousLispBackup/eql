@@ -54,12 +54,22 @@ void EQL::exec(const QStringList& args) {
     else {
         eval("(x:when-it (probe-file \"~/.eclrc\") (load x:it))"); }
     // Slime
-    if(arguments.contains("-slime") ||
-       (arguments.indexOf(QRegExp("*start-swank*.lisp", Qt::CaseInsensitive, QRegExp::Wildcard)) != -1)) {
+    int i_swank = arguments.indexOf(QRegExp("*start-swank*.lisp", Qt::CaseInsensitive, QRegExp::Wildcard));
+    if(arguments.contains("-slime") || (i_swank != -1))  {
         arguments.removeAll("-slime");
+        QString swankFile;
+        if(i_swank != -1) {
+            swankFile = arguments.at(i_swank);
+            arguments.removeAt(i_swank); }
         QApplication::setQuitOnLastWindowClosed(false);
         forms << "(setf eql:*slime-mode* t"
                  "      eql:*qtpl*       nil)";
+        if(arguments.length() == 2) {
+            QString fileName(QDir::fromNativeSeparators(arguments.at(1)));
+            forms << QString("(load \"%1\")").arg(fileName);
+            arguments.removeAt(1); }
+        if(!swankFile.isEmpty()) {
+            arguments << swankFile; }
         exec_with_simple_restart = true; }
     // -qtpl
     else if(arguments.contains("-qtpl") || (cl_symbol_value(s_qtpl) == Ct)) {
