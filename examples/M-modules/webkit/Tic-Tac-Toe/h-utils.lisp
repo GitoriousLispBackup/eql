@@ -64,7 +64,7 @@
            ,@body)))))
 
 (defun js (javascript &optional web-element)
-  "Evaluate JavaScript in the context of either a QWebElement (as 'this') or the main QWebFrame."
+  "Evaluates JavaScript in the context of either a QWebElement (as 'this') or the main QWebFrame."
   (! ("toString" ("evaluateJavaScript" javascript)
                  (or web-element (frame)))))
 
@@ -98,6 +98,14 @@
         (iterate-elements selector/web-element
           (%do element))
         (%do selector/web-element))))
+
+(defun style-property (web-element property &optional (resolve |QWebElement.ComputedStyle|))
+  "Convenience function."
+  (! "styleProperty" web-element (string-downcase property) resolve))
+
+(defun set-style-property (web-element property value)
+  "Convenience function."
+  (! "setStyleProperty" web-element (string-downcase property) value))
 
 ;;; JavaScript bridge
 

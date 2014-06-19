@@ -1,21 +1,23 @@
 ;;; Tic-Tac-Toe
 ;;;
-;; (depends on small plugin, see "lib/")
-;; 
-;;; This is a simple WebKit application example.
+;;; (depends on small plugin, see "lib/")
+
+(defun ini (html-file size)
+  (qconnect *web-view* "loadFinished(bool)" (lambda (ok) (ini-html)))
+  (x:do-with *web-view*
+    ("setUrl" (qnew "QUrl(QString)" html-file))
+    ("resize" size)
+    ("show")))
+
+;;;
+;;; WebKit Application (no EQL functions needed, see "h-utils.lisp")
+;;; 
 
 (require :h-utils "h-utils")
 
 ;; CSS2 selectors
 (defvar *cells*    "TD")
 (defvar *new-game* "#new")
-
-(defun ini ()
-  (qconnect *web-view* "loadFinished(bool)" (lambda (ok) (ini-html)))
-  (x:do-with *web-view*
-    ("setUrl" (qnew "QUrl(QString)" "tic-tac-toe.htm"))
-    ("resize" '(350 400))
-    ("show")))
 
 (defun ini-html ()
   (hset *cells*
@@ -49,12 +51,13 @@
     (hset web-element :text (x-o))
     (check-win)))
 
-(defun e (x)
-  (expt 2 x))
+(defun s (&rest numbers)
+  "Sum of binary shifted numbers."
+  (apply '+ (mapcar (lambda (x) (ash 1 x)) numbers)))
 
-(let ((win-rows '(#.(+ (e 0) (e 1) (e 2)) #.(+ (e 3) (e 4) (e 5)) #.(+ (e 6) (e 7) (e 8)) ; horizontal
-                  #.(+ (e 0) (e 3) (e 6)) #.(+ (e 1) (e 4) (e 7)) #.(+ (e 2) (e 5) (e 8)) ; vertical
-                  #.(+ (e 0) (e 4) (e 8)) #.(+ (e 2) (e 4) (e 6)))))                      ; X
+(let ((win-rows (list (s 0 1 2) (s 3 4 5) (s 6 7 8) ; horizontal
+                      (s 0 3 6) (s 1 4 7) (s 2 5 8) ; vertical
+                      (s 0 4 8) (s 2 4 6))))        ; X
   (defun check-win ()
     (let ((values (multiple-value-list (hget *cells* :text))))
       (dolist (xo '("X" "O"))
@@ -62,19 +65,19 @@
           (loop :for val :in values
                 :for i :upfrom 0
                 :do (when (string= xo val)
-                      (incf sum (e i))))
+                      (incf sum (s i))))
           (dolist (row win-rows)
-            (when (>= (logand sum row) row)
+            (when (= row (logand sum row)) ; bit logic
               (mark-row row)
               (return-from check-win))))))))
 
 (flet ((set-background-color (i color)
-         (! "setStyleProperty" (element (format nil "#c~D" (1+ i)))
-            "background-color" color)))
+         (set-style-property (element (format nil "#c~D" (1+ i)))
+                             :background-color color)))
   (let (marked)
     (defun mark-row (row)
       (dotimes (i 9)
-        (when (= row (logior (e i) row))
+        (when (= row (logior (s i) row)) ; bit logic
           (set-background-color i "red")
           (push i marked))))
     (defun unmark-row ()
@@ -84,5 +87,5 @@
     (defun won ()
       marked)))
 
-(ini)
+(ini "tic-tac-toe.htm" '(350 400))
 
