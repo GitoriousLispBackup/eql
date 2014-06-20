@@ -6,6 +6,7 @@
   (qconnect *web-view* "loadFinished(bool)" (lambda (ok) (ini-html)))
   (x:do-with *web-view*
     ("setUrl" (qnew "QUrl(QString)" html-file))
+    ("setWindowTitle" "WebKit Application")
     ("resize" size)
     ("show")))
 
@@ -30,9 +31,9 @@
                 color: white;
                 background-color: steelblue;")
   (hset *cells*
-        :onclick "Lisp.call('move', this)")
+        :onclick "Lisp.web('move', this)") 
   (hset *new-game*
-        :onclick "Lisp.call('new-game')"))
+        :onclick "Lisp.fun('new-game')")) 
 
 (let ((s ""))
   (defun x-o ()
@@ -88,4 +89,3 @@
       marked)))
 
 (ini "tic-tac-toe.htm" '(350 400))
-

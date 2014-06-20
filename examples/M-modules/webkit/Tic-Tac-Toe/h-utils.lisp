@@ -11,7 +11,7 @@
 (defvar *webkit-bridge* (qload-c++ "lib/webkit_bridge"))
 
 (defun frame ()
-  (! ("mainFrame" "page" *web-view*)))
+  (qrun* (! ("mainFrame" "page" *web-view*))))
 
 ;;; ini
 
@@ -39,15 +39,15 @@
          expression)))
 
 (defun element (selector)
-  (let ((el (! "findFirstElement" (frame) selector)))
-    (unless (! "isNull" el)
+  (let ((el (qrun* (! "findFirstElement" (frame) selector))))
+    (unless (qrun* (! "isNull" el))
       el)))
 
 (defun htag-p (tag web-element)
-  (string-equal tag (! "tagName" web-element)))
+  (string-equal tag (qrun* (! "tagName" web-element))))
 
 (defun htype-p (type web-element)
-  (string-equal type (! "attribute" web-element "type")))
+  (string-equal type (qrun* (! "attribute" web-element "type"))))
 
 (defun input-text-p (web-element)
   (and (htag-p :input web-element)
@@ -58,26 +58,26 @@
 (defmacro iterate-elements (selector &body body)
   "Iterates over web elements of QWebFrame, binding ELEMENT to the current QWebElement."
   (let ((i (gensym)))
-    `(let ((elements (! "findAllElements" (frame) ,selector)))
-       (dotimes (,i (! "count" elements))
-         (let ((element (! "at" elements ,i)))
+    `(let ((elements (qrun* (! "findAllElements" (frame) ,selector))))
+       (dotimes (,i (qrun* (! "count" elements)))
+         (let ((element (qrun* (! "at" elements ,i))))
            ,@body)))))
 
 (defun js (javascript &optional web-element)
   "Evaluates JavaScript in the context of either a QWebElement (as 'this') or the main QWebFrame."
-  (! ("toString" ("evaluateJavaScript" javascript)
-                 (or web-element (frame)))))
+  (qrun* (! ("toString" ("evaluateJavaScript" javascript)
+                        (or web-element (frame))))))
 
 (defun hget (selector/web-element attribute)
   "Returns (as multiple values) Html attribute of either all elements matching selector, or of the given web element."
   (let (values)
     (flet ((%do (element)
              (push (if (eql :text attribute)
-                       (! "toPlainText" element)
+                       (qrun* (! "toPlainText" element))
                        (if (and (input-text-p element)
                                 (member attribute '(:value :size)))
                            (js (format nil "this.~(~A~)" attribute) element)
-                           (! "attribute" element (string-downcase attribute))))
+                           (qrun* (! "attribute" element (string-downcase attribute)))))
                    values)))
       (if (stringp selector/web-element)
           (iterate-elements selector/web-element
@@ -89,11 +89,11 @@
   "Sets Html attribute of either all elements matching selector, or of the given web element."
   (flet ((%do (element)
            (if (eql :text attribute)
-               (! "setPlainText" element value))
+               (qrun* (! "setPlainText" element value))
                (if (and (input-text-p element)
                         (member attribute '(:value :size)))
                    (js (format nil "this.~(~A~) = ~S" attribute value) element)
-                   (! "setAttribute" element (string-downcase attribute) value))))
+                   (qrun* (! "setAttribute" element (string-downcase attribute) value))))))
     (if (stringp selector/web-element)
         (iterate-elements selector/web-element
           (%do element))
@@ -101,20 +101,27 @@
 
 (defun style-property (web-element property &optional (resolve |QWebElement.ComputedStyle|))
   "Convenience function."
-  (! "styleProperty" web-element (string-downcase property) resolve))
+  (qrun* (! "styleProperty" web-element (string-downcase property) resolve)))
 
 (defun set-style-property (web-element property value)
   "Convenience function."
-  (! "setStyleProperty" web-element (string-downcase property) value))
+  (qrun* (! "setStyleProperty" web-element (string-downcase property) value)))
 
 ;;; JavaScript bridge
 
-(defun call (function web-element arguments)
-  "Qt: QString call(QString, QWebElement = 0, QVariantList = 0)"
+(defun fun (function arguments)
+  "Qt: QString fun(QString, QVariantList = 0)
+   Use this variant for ordinary function calls, e.g: Lisp.fun('+', ['1/2', '1/3'])"
+  (if arguments
+      (>> (apply (<< function) (<< arguments)))
+      (>> (funcall (<< function)))))
+
+(defun web (function web-element arguments)
+  "Qt: QString web(QString, QWebElement, QVariantList = 0)
+   Use this variant if you need to pass a QWebElement, e.g. Lisp.fun('move', this)"
   (cond (arguments
          (>> (apply (<< function) web-element (<< arguments))))
-        ((and web-element (not (! "isNull" web-element)))
+        ((not (qrun* (! "isNull" web-element)))
          (>> (funcall (<< function) web-element)))
         (t
          (>> (funcall (<< function))))))
-
