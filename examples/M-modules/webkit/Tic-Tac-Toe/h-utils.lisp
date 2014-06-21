@@ -85,15 +85,19 @@
           (%do selector/web-element)))
     (values-list (nreverse values))))
 
-(defun hset (selector/web-element attribute value)
-  "Sets Html attribute of either all elements matching selector, or of the given web element."
+(defun hset (selector/web-element &rest attributes)
+  "Sets Html attributes (any number of attribute/value pairs) of either all elements matching selector, or of the given web element."
   (flet ((%do (element)
-           (if (eql :text attribute)
-               (qrun* (! "setPlainText" element value))
-               (if (and (input-text-p element)
-                        (member attribute '(:value :size)))
-                   (js (format nil "this.~(~A~) = ~S" attribute value) element)
-                   (qrun* (! "setAttribute" element (string-downcase attribute) value))))))
+           (do ((curr attributes (cddr curr)))
+               ((null curr))
+             (let ((attribute (first curr))
+                   (value (second curr)))
+               (if (eql :text attribute)
+                   (qrun* (! "setPlainText" element value))
+                   (if (and (input-text-p element)
+                            (member attribute '(:value :size)))
+                       (js (format nil "this.~(~A~) = ~S" attribute value) element)
+                       (qrun* (! "setAttribute" element (string-downcase attribute) value))))))))
     (if (stringp selector/web-element)
         (iterate-elements selector/web-element
           (%do element))
@@ -118,7 +122,7 @@
 
 (defun web (function web-element arguments)
   "Qt: QString web(QString, QWebElement, QVariantList = 0)
-   Use this variant if you need to pass a QWebElement, e.g. Lisp.fun('move', this)"
+   Use this variant if you need to pass a QWebElement, e.g. Lisp.web('move', this)"
   (cond (arguments
          (>> (apply (<< function) web-element (<< arguments))))
         ((not (qrun* (! "isNull" web-element)))
