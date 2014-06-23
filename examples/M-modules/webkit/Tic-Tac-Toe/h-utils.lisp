@@ -43,6 +43,10 @@
     (unless (qrun* (! "isNull" el))
       el)))
 
+(defun assert-web-element (x)
+  (assert (= #.(qid "QWebElement") (qt-object-id x)) nil
+          "Wanted <QWebElement>, got: ~S." x))
+
 (defun htag-p (tag web-element)
   (string-equal tag (qrun* (! "tagName" web-element))))
 
@@ -82,7 +86,9 @@
       (if (stringp selector/web-element)
           (iterate-elements selector/web-element
             (%do element))
-          (%do selector/web-element)))
+          (progn
+            (assert-web-element selector/web-element)
+            (%do selector/web-element))))
     (values-list (nreverse values))))
 
 (defun hset (selector/web-element &rest attributes)
@@ -101,7 +107,9 @@
     (if (stringp selector/web-element)
         (iterate-elements selector/web-element
           (%do element))
-        (%do selector/web-element))))
+        (progn
+          (assert-web-element selector/web-element)
+          (%do selector/web-element)))))
 
 (defun style-property (web-element property &optional (resolve |QWebElement.ComputedStyle|))
   "Convenience function."
@@ -115,7 +123,7 @@
 
 (defun fun (function arguments)
   "Qt: QString fun(QString, QVariantList = 0)
-   Use this variant for ordinary function calls, e.g: Lisp.fun('+', ['1/2', '1/3'])"
+   Use this variant for ordinary function calls, e.g. Lisp.fun('+', ['1/2', '1/3'])"
   (if arguments
       (>> (apply (<< function) (<< arguments)))
       (>> (funcall (<< function)))))

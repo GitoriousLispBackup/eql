@@ -56,21 +56,22 @@
   "Sum of binary shifted numbers."
   (apply '+ (mapcar (lambda (x) (ash 1 x)) numbers)))
 
-(let ((win-rows (list (s 0 1 2) (s 3 4 5) (s 6 7 8) ; horizontal
-                      (s 0 3 6) (s 1 4 7) (s 2 5 8) ; vertical
-                      (s 0 4 8) (s 2 4 6))))        ; X
-  (defun check-win ()
-    (let ((values (multiple-value-list (hget *cells* :text))))
-      (dolist (xo '("X" "O"))
-        (let ((sum 0))
-          (loop :for val :in values
-                :for i :upfrom 0
-                :do (when (string= xo val)
-                      (incf sum (s i))))
-          (dolist (row win-rows)
-            (when (= row (logand sum row)) ; bit logic
-              (mark-row row)
-              (return-from check-win))))))))
+(defvar *win-rows* (list (s 0 1 2) (s 3 4 5) (s 6 7 8) ; horizontal
+                         (s 0 3 6) (s 1 4 7) (s 2 5 8) ; vertical
+                         (s 0 4 8) (s 2 4 6)))         ; X
+
+(defun check-win ()
+  (let ((values (multiple-value-list (hget *cells* :text))))
+    (dolist (xo '("X" "O"))
+      (let ((sum 0))
+        (loop :for val :in values
+              :for i :upfrom 0
+              :do (when (string= xo val)
+                    (incf sum (s i))))
+        (dolist (row *win-rows*)
+          (when (= row (logand sum row)) ; bit logic
+            (mark-row row)
+            (return-from check-win)))))))
 
 (defun set-background-color (i color)
   (set-style-property (element (format nil "#c~D" (1+ i)))
@@ -80,12 +81,19 @@
   (defun mark-row (row)
     (dotimes (i 9)
       (when (= row (logior (s i) row)) ; bit logic
-        (set-background-color i "red")
-        (push i marked))))
-  (defun unmark-row ()
+        (set-background-color i "orange")
+        (push i marked)))
+    ;; blink
+    (dotimes (n 2)
+      (qsleep 0.15)
+      (unmark-row nil)
+      (qsleep 0.15)
+      (unmark-row nil "orange")))
+  (defun unmark-row (&optional (reset t) (color "steelblue"))
     (dolist (i marked)
-      (set-background-color i "steelblue"))
-    (setf marked nil))
+      (set-background-color i color))
+    (when reset
+      (setf marked nil)))
   (defun won ()
     marked))
 
