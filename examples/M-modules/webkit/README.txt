@@ -28,3 +28,6 @@ A list of features:
    as they integrate natively here (either written in EQL or Qt/C++,
    see QLOAD-C++)
 
+
+See directory "Tic-Tac-Toe/" for an example of a WebKit application.
+

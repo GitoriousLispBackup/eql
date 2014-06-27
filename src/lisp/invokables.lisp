@@ -24,6 +24,11 @@
         (t
          (string-capitalize type))))
 
+(defun to-qvariant-type (type)
+  (if (find type '("QBitmap" "QIcon" "QImage" "QPixmap") :test 'string=)
+      (format nil "qVariantValue<~A>(ret)" type)
+      (format nil "ret.to~A()" (qvariant-type type))))
+
 (defun qt-value-p (type)
   (and (x:starts-with "Q" type)
        (not (x:ends-with "*" type))))
@@ -90,6 +95,6 @@
                         types vars)
                   (format s ");")
                   (unless void
-                    (format s "~%    return ret.to~A();" (qvariant-type ret)))
+                    (format s "~%    return ~A;" (to-qvariant-type ret)))
                   (format s " }~%~%")))))))))
   (terpri))

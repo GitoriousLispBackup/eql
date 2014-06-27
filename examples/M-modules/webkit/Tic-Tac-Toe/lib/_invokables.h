@@ -15,3 +15,8 @@ Q_INVOKABLE QString web(const QString& x1, const QWebElement& x2, const QVariant
             Q_ARG(QVariantList, x3));
     return ret.toString(); }
 
+Q_INVOKABLE QPixmap pixmap() {
+    QVariant ret =
+    eql_fun("eql-user:%web-pixmap", QVariant::Pixmap);
+    return qVariantValue<QPixmap>(ret); }
+

@@ -8,6 +8,15 @@ No Qt knowledge required, just use the convenience functions
 in "h-utils.lisp".
 
 
+WEB ELEMENT FUNCTIONS
+=====================
+
+All QWebElement methods have convenience wrappers:
+
+  (hget "*" :onclick)
+  (geometry "#c1")
+
+
 SLIME / THREADS NOTE
 ====================
 

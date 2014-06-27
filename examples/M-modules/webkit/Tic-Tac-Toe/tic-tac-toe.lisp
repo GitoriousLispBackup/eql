@@ -77,6 +77,16 @@
   (set-style-property (element (format nil "#c~D" (1+ i)))
                       :background-color color))
 
+(defun add-to-history ()
+  (flet ((img (x)
+           (format nil "#i~D" x)))
+    (dotimes (i 4)
+      ;; shift right
+      (assign-pixmap (to-pixmap (img (- 4 i)))
+                     (img (- 5 i))))
+    (assign-pixmap (to-pixmap "TABLE" 1/6)
+                   (img 1))))
+
 (let (marked)
   (defun mark-row (row)
     (dotimes (i 9)
@@ -85,10 +95,11 @@
         (push i marked)))
     ;; blink
     (dotimes (n 2)
-      (qsleep 0.15)
+      (qsleep 0.15) ; a SLEEP processing Qt events
       (unmark-row nil)
       (qsleep 0.15)
-      (unmark-row nil "orange")))
+      (unmark-row nil "orange"))
+    (add-to-history))
   (defun unmark-row (&optional (reset t) (color "steelblue"))
     (dolist (i marked)
       (set-background-color i color))
@@ -97,4 +108,4 @@
   (defun won ()
     marked))
 
-(ini "tic-tac-toe.htm" '(350 400))
+(ini "tic-tac-toe.htm" '(350 450))
