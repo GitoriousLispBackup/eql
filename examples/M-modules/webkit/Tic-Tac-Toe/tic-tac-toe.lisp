@@ -71,11 +71,20 @@
         (dolist (row *win-rows*)
           (when (= row (logand sum row)) ; bit logic
             (mark-row row)
+            (blink-row)
+            (add-to-history)
             (return-from check-win)))))))
 
 (defun set-background-color (i color)
   (set-style-property (element (format nil "#c~D" (1+ i)))
                       :background-color color))
+
+(defun blink-row ()
+  (dotimes (n 2)
+    (qsleep 0.15) ; a SLEEP processing Qt events
+    (unmark-row nil)
+    (qsleep 0.15)
+    (unmark-row nil "orange")))
 
 (defun add-to-history ()
   (flet ((img (x)
@@ -92,14 +101,7 @@
     (dotimes (i 9)
       (when (= row (logior (s i) row)) ; bit logic
         (set-background-color i "orange")
-        (push i marked)))
-    ;; blink
-    (dotimes (n 2)
-      (qsleep 0.15) ; a SLEEP processing Qt events
-      (unmark-row nil)
-      (qsleep 0.15)
-      (unmark-row nil "orange"))
-    (add-to-history))
+        (push i marked))))
   (defun unmark-row (&optional (reset t) (color "steelblue"))
     (dolist (i marked)
       (set-background-color i color))

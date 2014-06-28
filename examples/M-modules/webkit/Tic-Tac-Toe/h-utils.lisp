@@ -282,11 +282,10 @@
 ;;; pixmap utilities
 
 (defun assign-pixmap (pixmap web-element)
-  "Assign pixmap directly to a QWebElement."
+  "Assign pixmap directly to a web element."
   (let ((*web-pixmap* pixmap))
     ;; "Lisp.pixmap()" will call %WEB-PIXMAP
-    (js (format nil "Lisp.pixmap().assignToHTMLImageElement(document.getElementById('~A'))"
-                (hget web-element :id)))))
+    (js "Lisp.pixmap().assignToHTMLImageElement(this)" (ensure-web-element web-element))))
 
 (defun to-pixmap (web-element &optional scale-factor)
   "Get pixmap from web element, optionally scaling it."
@@ -295,10 +294,10 @@
            (decf (first rect) (first pos))
            (decf (second rect) (second pos))
            (let ((pixmap (! "grabWidget(QWidget*,QRect)" "QPixmap" *web-view* rect)))
-                  (if scale-factor
-                      (! "scaled(QSize,Qt::AspectRatioMode,Qt::TransformationMode)" pixmap
-                         (mapcar (lambda (x) (truncate (+ 0.5 (* scale-factor x))))
-                                 (nthcdr 2 rect))
-                         |Qt.IgnoreAspectRatio| |Qt.SmoothTransformation|)
-                      pixmap)))))
+             (if scale-factor
+                 (! "scaled(QSize,Qt::AspectRatioMode,Qt::TransformationMode)" pixmap
+                    (mapcar (lambda (x) (truncate (+ 0.5 (* scale-factor x))))
+                            (nthcdr 2 rect))
+                    |Qt.IgnoreAspectRatio| |Qt.SmoothTransformation|)
+                 pixmap)))))
 
