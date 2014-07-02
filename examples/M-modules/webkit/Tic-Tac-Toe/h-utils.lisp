@@ -136,15 +136,23 @@
 
 ;;; convenience functions (wrappers for all QWebElement methods)
 
-(defmacro defun-web-element ((name qt-name))
+(defmacro defun-web-element ((name qt-name &optional check-null))
   `(defun ,name (x)
      "QWebElement convenience function."
-     (qrun* (! ,qt-name (ensure-web-element x)))))
+     ,(if check-null
+          `(qrun* (let ((el (! ,qt-name (ensure-web-element x))))
+                    (unless (! "isNull" el)
+                      el)))
+          `(qrun* (! ,qt-name (ensure-web-element x))))))
 
-(defmacro defun-web-element-arg ((name qt-name))
+(defmacro defun-web-element-arg ((name qt-name &optional check-null))
   `(defun ,name (x arg)
      "QWebElement convenience function."
-     (qrun* (! ,qt-name (ensure-web-element x) arg))))
+     ,(if check-null
+          `(qrun* (let ((el (! ,qt-name (ensure-web-element x) arg)))
+                    (unless (! "isNull" el)
+                      el)))
+          `(qrun* (! ,qt-name (ensure-web-element x) arg)))))
 
 (defun attribute-names (web-element &optional namespace-uri)
   "QWebElement convenience function."
@@ -210,9 +218,9 @@
 
 (defun-web-element (document "document"))
 
-(defun-web-element-arg (find-first "findFirst"))
+(defun-web-element-arg (find-first "findFirst" :check-null))
 
-(defun-web-element (first-child "firstChild"))
+(defun-web-element (first-child "firstChild" :check-null))
 
 (defun-web-element (geometry "geometry"))
 
@@ -226,19 +234,19 @@
 
 (defun-web-element (is-null "isNull"))
 
-(defun-web-element (last-child "lastChild"))
+(defun-web-element (last-child "lastChild" :check-null))
 
 (defun-web-element (local-name "localName"))
 
 (defun-web-element (namespace-uri "namespaceUri"))
 
-(defun-web-element (next-sibling "nextSibling"))
+(defun-web-element (next-sibling "nextSibling" :check-null))
 
-(defun-web-element (parent "parent"))
+(defun-web-element (parent "parent" :check-null))
 
 (defun-web-element (prefix "prefix"))
 
-(defun-web-element (previous-sibling "previousSibling"))
+(defun-web-element (previous-sibling "previousSibling" :check-null))
 
 (defun-web-element-arg (remove-attribute "removeAttribute"))
 
@@ -276,28 +284,29 @@
          (>> (funcall (<< function))))))
 
 (defun %web-pixmap ()
-  "Qt: QPixmap pixmap()"
+  "Qt: QPixmap pixmap()" ; see "Lisp.pixmap()" below
   *web-pixmap*)
 
 ;;; pixmap utilities
 
 (defun assign-pixmap (pixmap web-element)
-  "Assign pixmap directly to a web element."
-  (let ((*web-pixmap* pixmap))
-    ;; "Lisp.pixmap()" will call %WEB-PIXMAP
-    (js "Lisp.pixmap().assignToHTMLImageElement(this)" (ensure-web-element web-element))))
+  "Directly assign pixmap to a <img> web element."
+  (let ((*web-pixmap* pixmap)
+        (element (ensure-web-element web-element)))
+    (assert (string= "IMG" (tag-name element)) nil
+            "Wanted <img>, got <~(~A~)>." (tag-name element))
+    (js "Lisp.pixmap().assignToHTMLImageElement(this)" element)))
 
 (defun to-pixmap (web-element &optional scale-factor)
-  "Get pixmap from web element, optionally scaling it."
-  (qrun* (let ((rect (geometry web-element))
-               (pos (! "scrollPosition" (frame))))
-           (decf (first rect) (first pos))
-           (decf (second rect) (second pos))
-           (let ((pixmap (! "grabWidget(QWidget*,QRect)" "QPixmap" *web-view* rect)))
-             (if scale-factor
-                 (! "scaled(QSize,Qt::AspectRatioMode,Qt::TransformationMode)" pixmap
-                    (mapcar (lambda (x) (truncate (+ 0.5 (* scale-factor x))))
-                            (nthcdr 2 rect))
-                    |Qt.IgnoreAspectRatio| |Qt.SmoothTransformation|)
-                 pixmap)))))
+  "Get pixmap (screenshot) from web element, optionally scaling it. With shown scrollbars, the web element must be entirely visible for this to work."
+  (qrun* (let* ((rect (geometry web-element))
+                (pixmap (! "grabWidget(QWidget*,QRect)" "QPixmap"
+                           *web-view*
+                           (mapcar '- rect (append (! "scrollPosition" (frame)) '(0 0))))))
+           (if scale-factor
+               (! "scaled(QSize,Qt::AspectRatioMode,Qt::TransformationMode)" pixmap
+                  (mapcar (lambda (x) (truncate (+ 0.5 (* scale-factor x))))
+                          (nthcdr 2 rect))
+                  |Qt.IgnoreAspectRatio| |Qt.SmoothTransformation|)
+               pixmap))))
 

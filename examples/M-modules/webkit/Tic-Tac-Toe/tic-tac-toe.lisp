@@ -17,19 +17,18 @@
 (require :h-utils "h-utils")
 
 ;; CSS2 selectors
-(defvar *cells*    "TD")
-(defvar *new-game* "#new")
+(defvar *board*      "#board")
+(defvar *cell-count* 9)
+(defvar *cells*      "[class=cells]")
+(defvar *new-game*   "#new")
+
+(defun cell-id (index)
+  (format nil "#c~D" (1+ index)))
 
 (defun ini-html ()
-  (hset *cells*
-        :style "width: 2cm;
-                height: 2cm;
-                text-align: center;
-                font-family: Courier New, Courier, monospaced;
-                font-size: 1.7cm;
-                font-weight: bold;
-                color: white;
-                background-color: steelblue;")
+  (dotimes (i *cell-count*)
+    (hset (cell-id i)
+          :class "cells"))
   (hset *cells*
         :onclick "Lisp.web('move', this)") 
   (hset *new-game*
@@ -76,8 +75,7 @@
             (return-from check-win)))))))
 
 (defun set-background-color (i color)
-  (set-style-property (element (format nil "#c~D" (1+ i)))
-                      :background-color color))
+  (set-style-property (cell-id i) :background-color color))
 
 (defun blink-row ()
   (dotimes (n 2)
@@ -87,18 +85,18 @@
     (unmark-row nil "orange")))
 
 (defun add-to-history ()
-  (flet ((img (x)
-           (format nil "#i~D" x)))
+  (flet ((img-id (i)
+           (format nil "#i~D" (1+ i))))
     (dotimes (i 4)
       ;; shift right
-      (assign-pixmap (to-pixmap (img (- 4 i)))
-                     (img (- 5 i))))
-    (assign-pixmap (to-pixmap "TABLE" 1/6)
-                   (img 1))))
+      (assign-pixmap (to-pixmap (img-id (- 3 i)))
+                     (img-id (- 4 i))))
+    (assign-pixmap (to-pixmap *board* 1/6)
+                   (img-id 0))))
 
 (let (marked)
   (defun mark-row (row)
-    (dotimes (i 9)
+    (dotimes (i *cell-count*)
       (when (= row (logior (s i) row)) ; bit logic
         (set-background-color i "orange")
         (push i marked))))
