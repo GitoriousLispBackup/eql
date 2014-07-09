@@ -1,10 +1,21 @@
-;;; Tic-Tac-Toe
+;;; "Tic-Tac-Toe" as WebKit Application
 ;;;
 ;;; (depends on small plugin, see "lib/")
 
+(require :h-utils "h-utils")
+
+(defpackage :tic-tac-toe
+  (:nicknames :ttt)
+  (:use :common-lisp :eql)
+  (:export
+   #:move
+   #:new-game))
+
+(in-package :tic-tac-toe)
+
 (defun ini (html-file size)
-  (qconnect *web-view* "loadFinished(bool)" (lambda (ok) (ini-html)))
-  (x:do-with *web-view*
+  (qconnect h:*web-view* "loadFinished(bool)" (lambda (ok) (ini-html)))
+  (x:do-with h:*web-view*
     ("setUrl" (qnew "QUrl(QString)" html-file))
     ("setWindowTitle" "WebKit Application")
     ("resize" size)
@@ -14,25 +25,24 @@
 ;;; WebKit Application (no EQL functions needed, see "h-utils.lisp")
 ;;; 
 
-(require :h-utils "h-utils")
+;;                 CSS2 selectors
+(defvar *board*    "#board")
+(defvar *cells*    "[class='cells']")
+(defvar *new-game* "#new")
 
-;; CSS2 selectors
-(defvar *board*      "#board")
 (defvar *cell-count* 9)
-(defvar *cells*      "[class=cells]")
-(defvar *new-game*   "#new")
 
 (defun cell-id (index)
   (format nil "#c~D" (1+ index)))
 
 (defun ini-html ()
   (dotimes (i *cell-count*)
-    (hset (cell-id i)
-          :class "cells"))
-  (hset *cells*
-        :onclick "Lisp.web('move', this)") 
-  (hset *new-game*
-        :onclick "Lisp.fun('new-game')")) 
+    (h:hset (cell-id i)
+            :class "cells"))
+  (h:hset *cells*
+          :onclick "Lisp.web('tic-tac-toe:move', this)") 
+  (h:hset *new-game*
+          :onclick "Lisp.fun('tic-tac-toe:new-game')")) 
 
 (let ((s ""))
   (defun x-o ()
@@ -43,12 +53,12 @@
 (defun new-game ()
   (reset-x-o)
   (unmark-row)
-  (hset *cells* :text ""))
+  (h:hset *cells* :text ""))
 
 (defun move (web-element)
   (when (and (not (won))
-             (x:empty-string (hget web-element :text)))
-    (hset web-element :text (x-o))
+             (x:empty-string (h:hget web-element :text)))
+    (h:hset web-element :text (x-o))
     (check-win)))
 
 (defun s (&rest numbers)
@@ -60,7 +70,7 @@
                          (s 0 4 8) (s 2 4 6)))         ; X
 
 (defun check-win ()
-  (let ((values (multiple-value-list (hget *cells* :text))))
+  (let ((values (multiple-value-list (h:hget *cells* :text))))
     (dolist (xo '("X" "O"))
       (let ((sum 0))
         (loop :for val :in values
@@ -75,7 +85,7 @@
             (return-from check-win)))))))
 
 (defun set-background-color (i color)
-  (set-style-property (cell-id i) :background-color color))
+  (h:set-style-property (cell-id i) :background-color color))
 
 (defun blink-row ()
   (dotimes (n 2)
@@ -89,10 +99,10 @@
            (format nil "#i~D" (1+ i))))
     (dotimes (i 4)
       ;; shift right
-      (assign-pixmap (to-pixmap (img-id (- 3 i)))
-                     (img-id (- 4 i))))
-    (assign-pixmap (to-pixmap *board* 1/6)
-                   (img-id 0))))
+      (h:assign-pixmap (h:to-pixmap (img-id (- 3 i)))
+                       (img-id (- 4 i))))
+    (h:assign-pixmap (h:to-pixmap *board* 1/6)
+                     (img-id 0))))
 
 (let (marked)
   (defun mark-row (row)

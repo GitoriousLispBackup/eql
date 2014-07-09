@@ -1,10 +1,72 @@
-;;; Html utils
+;;; Html utils (for easy WebKit GUIs)
+;;;
+;;; (depends on small plugin, see "lib/")
+;;;
+;;; Thread-safe utility functions, including convenience wrappers for all QWebElement methods
+;;; (see also HGET, HSET, JS, TO-PIXMAP, ASSIGN-PIXMAP).
 
 #+win32 (si:trap-fpe 'floating-point-underflow nil) ; for QWebInspector
 
 (qrequire :webkit)
 
+(defpackage :h-utils
+  (:nicknames :h)
+  (:use :common-lisp :eql)
+  (:export
+   #:*web-view*
+   #:add-class
+   #:append-html
+   #:append-inside
+   #:append-outside
+   #:assign-pixmap
+   #:attribute-names
+   #:classes
+   #:clear-html
+   #:clone
+   #:document
+   #:element
+   #:enclose-contents-with
+   #:enclose-with
+   #:find-first
+   #:first-child
+   #:frame
+   #:geometry
+   #:has-attribute
+   #:has-attributes
+   #:has-class
+   #:has-focus
+   #:hget
+   #:hset
+   #:inspector
+   #:is-null
+   #:iterate-child-elements
+   #:iterate-elements
+   #:js
+   #:last-child
+   #:local-name
+   #:namespace-uri
+   #:next-sibling
+   #:parent
+   #:prefix
+   #:prepend-inside
+   #:prepend-outside
+   #:previous-sibling
+   #:remove-all-children
+   #:remove-attribute
+   #:remove-class
+   #:remove-from-document
+   #:replace*
+   #:set-focus
+   #:set-style-property
+   #:style-property
+   #:tag-name
+   #:toggle-class
+   #:to-pixmap
+   #:web-frame))
+
 (provide :h-utils)
+
+(in-package :h-utils)
 
 (defvar *web-view*      (qnew "QWebView")) 
 (defvar *webkit-bridge* (qload-c++ "lib/webkit_bridge"))
@@ -21,6 +83,22 @@
             (! "addToJavaScriptWindowObject" (frame) "WebView" *web-view*)))
 
 ;;; utils
+
+(defmacro iterate-elements (selector &body body)
+  "Iterate over web elements of QWebFrame, binding ELEMENT to the current QWebElement."
+  (let ((i (gensym)))
+    `(let ((elements (qrun* (! "findAllElements" (frame) ,selector))))
+       (dotimes (,i (qrun* (! "count" elements)))
+         (let ((element (qrun* (! "at" elements ,i))))
+           ,@body)))))
+
+(defmacro iterate-child-elements (web-element selector &body body)
+  "Iterate over child elements of a QWebElement, binding ELEMENT to the current QWebElement."
+  (let ((i (gensym)))
+    `(let ((elements (qrun* (! "findAll" (ensure-web-element ,web-element) ,selector))))
+       (dotimes (,i (qrun* (! "count" elements)))
+         (let ((element (qrun* (! "at" elements ,i))))
+           ,@body)))))
 
 (defun >> (expression)
   "Convert to string if needed."
@@ -58,30 +136,13 @@
   (and (string-equal "INPUT" (tag-name web-element))
        (string-equal "text" (qrun* (! "attribute" web-element "type")))))
 
-;;; Html utils
-
-(defmacro iterate-elements (selector &body body)
-  "Iterate over web elements of QWebFrame, binding ELEMENT to the current QWebElement."
-  (let ((i (gensym)))
-    `(let ((elements (qrun* (! "findAllElements" (frame) ,selector))))
-       (dotimes (,i (qrun* (! "count" elements)))
-         (let ((element (qrun* (! "at" elements ,i))))
-           ,@body)))))
-
-(defmacro iterate-child-elements (web-element selector &body body)
-  "Iterate over child elements of a QWebElement, binding ELEMENT to the current QWebElement."
-  (let ((i (gensym)))
-    `(let ((elements (qrun* (! "findAll" (ensure-web-element ,web-element) ,selector))))
-       (dotimes (,i (qrun* (! "count" elements)))
-         (let ((element (qrun* (! "at" elements ,i))))
-           ,@body)))))
-
 (defun js (javascript &optional web-element)
   "Evaluate JavaScript in the context of either a QWebElement (as 'this') or the main QWebFrame."
   (qrun* (! ("toString" ("evaluateJavaScript" javascript)
                         (or web-element (frame))))))
 
-;;; Special functions HGET and HSET for :text :inner-xml :outer-xml, attributes like :value :src etc.
+;;; Special functions HGET and HSET for :text :inner-xml :outer-xml
+;;; and attributes like :value :src etc.
 
 (defun hget (selector/web-element attribute)
   "Return (as multiple values) Html attribute of either all elements matching selector, or of the given web element."
@@ -134,7 +195,7 @@
           (assert-web-element selector/web-element)
           (%do selector/web-element)))))
 
-;;; convenience functions (wrappers for all QWebElement methods)
+;;; convenience wrappers for all QWebElement methods
 
 (defmacro defun-web-element ((name qt-name &optional check-null))
   `(defun ,name (x)
@@ -284,7 +345,7 @@
          (>> (funcall (<< function))))))
 
 (defun %web-pixmap ()
-  "Qt: QPixmap pixmap()" ; see "Lisp.pixmap()" below
+  "Qt: QPixmap pixmap()" ; see "Lisp.pixmap()" in ASSIGN-PIXMAP
   *web-pixmap*)
 
 ;;; pixmap utilities
@@ -309,4 +370,18 @@
                           (nthcdr 2 rect))
                   |Qt.IgnoreAspectRatio| |Qt.SmoothTransformation|)
                pixmap))))
+
+;;; generic utilities
+
+(defun inspector ()
+  (when (probe-file "inspector.lisp")
+    (load "inspector")
+    (inspector) ; redefined function
+    t))
+
+(defun clear-html ()
+  (qrun* (! "setHtml" *web-view* "")))
+
+(defun append-html (text/html)
+  (append-inside "BODY" text/html))
 

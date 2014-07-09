@@ -11,10 +11,11 @@ in "h-utils.lisp".
 WEB ELEMENT FUNCTIONS
 =====================
 
-All QWebElement methods have convenience wrappers:
+All QWebElement methods have convenience wrappers, e.g:
 
-  (hget "*" :onclick)
-  (geometry "#c1")
+  (h:geometry "#c1")
+  (h:set-style-property x :color "red")
+  (h:hget "*" :onclick)
 
 
 SLIME / THREADS NOTE
