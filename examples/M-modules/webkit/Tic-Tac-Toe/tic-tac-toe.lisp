@@ -8,6 +8,10 @@
   (:nicknames :ttt)
   (:use :common-lisp :eql)
   (:export
+   #:*board*
+   #:*cells*
+   #:*cell-count*
+   #:*new-game*
    #:move
    #:new-game))
 
@@ -22,7 +26,7 @@
     ("show")))
 
 ;;;
-;;; WebKit Application (no EQL functions needed, see "h-utils.lisp")
+;;; WebKit Application (neither EQL functions nor JavaScript code needed, see "h-utils.lisp")
 ;;; 
 
 ;;                 CSS2 selectors
@@ -40,9 +44,9 @@
     (h:hset (cell-id i)
             :class "cells"))
   (h:hset *cells*
-          :onclick "Lisp.web('tic-tac-toe:move', this)") 
+          :onclick (h:lisp* (move :this))) ; pass QWebElement as 'this'
   (h:hset *new-game*
-          :onclick "Lisp.fun('tic-tac-toe:new-game')")) 
+          :onclick (h:lisp (new-game))))
 
 (let ((s ""))
   (defun x-o ()

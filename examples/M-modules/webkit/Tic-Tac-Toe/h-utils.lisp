@@ -41,6 +41,8 @@
    #:is-null
    #:iterate-child-elements
    #:iterate-elements
+   #:lisp
+   #:lisp*
    #:js
    #:last-child
    #:local-name
@@ -56,6 +58,9 @@
    #:remove-class
    #:remove-from-document
    #:replace*
+   #:scroll-to-anchor
+   #:scroll-to-bottom
+   #:scroll-to-top
    #:set-focus
    #:set-style-property
    #:style-property
@@ -327,6 +332,31 @@
 
 ;;; JavaScript bridge
 
+(defun %quote (arguments)
+  "Quote normal arguments, to prepare them for READ-FROM-STRING in Lisp. Strings are supposed to be JavaScript code."
+  (mapcar (lambda (arg)
+            (if (stringp arg)
+                arg
+                (format nil "'~A'" arg)))
+          arguments))
+
+(defmacro lisp (arguments)
+  "Generate JavaScript function call from a lispy definition (see function FUN)."
+  (format nil "Lisp.fun('~A::~A', [~{~A~^, ~}])"
+          (package-name (symbol-package (first arguments)))
+          (symbol-name (first arguments))
+          (%quote (rest arguments))))
+
+(defmacro lisp* (arguments)
+  "Generate JavaScript function call from a lispy definition. The first argument to the Lisp function is expected to be a QWebElement (see function WEB)."
+  (format nil "Lisp.web('~A::~A', ~A, [~{~A~^, ~}])"
+          (package-name (symbol-package (first arguments)))
+          (symbol-name (first arguments))
+          (if (eql :this (second arguments))
+              "this"
+              (second arguments))
+          (%quote (nthcdr 2 arguments))))
+
 (defun fun (function arguments)
   "Qt: QString fun(QString, QVariantList = 0)
    Use this variant for ordinary function calls, e.g. Lisp.fun('+', ['1/2', '1/3'])"
@@ -382,6 +412,17 @@
 (defun clear-html ()
   (qrun* (! "setHtml" *web-view* "")))
 
-(defun append-html (text/html)
-  (append-inside "BODY" text/html))
+(defun append-html (text/html &optional scroll-to-bottom)
+  (append-inside "BODY" text/html)
+  (when scroll-to-bottom
+    (qrun* (qsingle-shot 0 'scroll-to-bottom))))
+
+(defun scroll-to-top ()
+  (qrun* (! "setScrollPosition" (frame) '(0 0))))
+
+(defun scroll-to-bottom ()
+  (qrun* (! "setScrollPosition" (frame) '(0 #.(expt 2 15)))))
+
+(defun scroll-to-anchor (anchor)
+  (qrun* (! "scrollToAnchor" (frame) anchor)))
 
