@@ -333,22 +333,28 @@
 ;;; JavaScript bridge
 
 (defun %quote (arguments)
-  "Quote normal arguments, to prepare them for READ-FROM-STRING in Lisp. Strings are supposed to be JavaScript code."
+  "Quote normal arguments, to prepare them for READ-FROM-STRING in Lisp. Strings are supposed to be JavaScript code, e.g. \"window.event.keyCode\". Literal strings can be passed using STRING, e.g. (string \"ok\")."
   (mapcar (lambda (arg)
-            (if (stringp arg)
-                arg
-                (format nil "'~A'" arg)))
+            (cond ((and (consp arg)
+                        (eql 'string (first arg)))
+                   (format nil "'~S'" (second arg)))
+                  ((stringp arg)
+                   arg)
+                  (t
+                   (format nil "'~A'" arg))))
           arguments))
 
 (defmacro lisp (arguments)
-  "Generate JavaScript function call from a lispy definition (see function FUN)."
+  "Generate JavaScript function call from a lispy definition (see function FUN).
+  Example: (h:lisp (foo 42 \"window.event.keyCode\" (string \"ok\")))"
   (format nil "Lisp.fun('~A::~A', [~{~A~^, ~}])"
           (package-name (symbol-package (first arguments)))
           (symbol-name (first arguments))
           (%quote (rest arguments))))
 
 (defmacro lisp* (arguments)
-  "Generate JavaScript function call from a lispy definition. The first argument to the Lisp function is expected to be a QWebElement (see function WEB)."
+  "Generate JavaScript function call from a lispy definition. The first argument to the Lisp function is expected to be a QWebElement (see function WEB).
+  Example: (h:lisp* (foo :this 42 \"window.event.keyCode\" (string \"ok\")))"
   (format nil "Lisp.web('~A::~A', ~A, [~{~A~^, ~}])"
           (package-name (symbol-package (first arguments)))
           (symbol-name (first arguments))

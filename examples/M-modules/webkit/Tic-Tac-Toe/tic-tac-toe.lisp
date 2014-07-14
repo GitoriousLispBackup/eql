@@ -32,7 +32,7 @@
 ;;                 CSS2 selectors
 (defvar *board*    "#board")
 (defvar *cells*    "[class='cells']")
-(defvar *new-game* "#new")
+(defvar *new-game* "#new-game")
 
 (defvar *cell-count* 9)
 
