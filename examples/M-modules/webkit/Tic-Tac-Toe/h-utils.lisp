@@ -330,7 +330,8 @@
 
 (defun-web-element (web-frame "webFrame"))
 
-;;; JavaScript bridge
+;;; macros for JavaScript callback code; the functions can be tested like this:
+;;; (h:js (print (h:lisp (format nil (string "~R") 100))))
 
 (defun %quote (arguments)
   "Quote normal arguments, to prepare them for READ-FROM-STRING in Lisp. Strings are supposed to be JavaScript code, e.g. \"window.event.keyCode\". Literal strings can be passed using STRING, e.g. (string \"ok\")."
@@ -362,6 +363,8 @@
               "this"
               (second arguments))
           (%quote (nthcdr 2 arguments))))
+
+;;; to be called from JavaScript
 
 (defun fun (function arguments)
   "Qt: QString fun(QString, QVariantList = 0)
