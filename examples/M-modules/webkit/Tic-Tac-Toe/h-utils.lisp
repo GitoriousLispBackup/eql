@@ -80,13 +80,6 @@
 (defun frame ()
   (qrun* (! ("mainFrame" "page" *web-view*))))
 
-;;; ini
-
-(qconnect (frame) "javaScriptWindowObjectCleared()"
-          (lambda ()
-            (! "addToJavaScriptWindowObject" (frame) "Lisp" *webkit-bridge*)
-            (! "addToJavaScriptWindowObject" (frame) "WebView" *web-view*)))
-
 ;;; utils
 
 (defmacro iterate-elements (selector &body body)
@@ -434,4 +427,12 @@
 
 (defun scroll-to-anchor (anchor)
   (qrun* (! "scrollToAnchor" (frame) anchor)))
+
+;;; ini
+
+(qconnect (frame) "javaScriptWindowObjectCleared()"
+          (lambda ()
+            (! "addToJavaScriptWindowObject" (frame) "Lisp" *webkit-bridge*)
+            (! "addToJavaScriptWindowObject" (frame) "WebView" *web-view*)
+            (js "function string (x) { return '\"' + x + '\"'; }"))) ; global JS function
 
