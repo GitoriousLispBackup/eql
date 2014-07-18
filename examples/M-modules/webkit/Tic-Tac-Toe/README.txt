@@ -4,8 +4,8 @@ WEBKIT APP DEMO
 After creating a basic Html skeleton of the GUI, any Html
 properties/callbacks can be set from Lisp. 
 
-No Qt knowledge required, just use the convenience functions
-in "h-utils.lisp".
+No Qt/JavaScript code needed, just use the convenience
+functions in "h-utils.lisp".
 
 
 WEB ELEMENT FUNCTIONS

@@ -139,8 +139,8 @@
   (qrun* (! ("toString" ("evaluateJavaScript" javascript)
                         (or web-element (frame))))))
 
-;;; Special functions HGET and HSET for :text :inner-xml :outer-xml
-;;; and attributes like :value :src etc.
+;;; Special functions HGET and HSET for :text :inner-xml :outer-xml and attributes like :value :src etc.;
+;;; additionally, they can be used for any custom string property, e.g. :image-label "sunset"
 
 (defun hget (selector/web-element attribute)
   "Return (as multiple values) Html attribute of either all elements matching selector, or of the given web element."
@@ -329,33 +329,36 @@
 (defun %quote (arguments)
   "Quote normal arguments, to prepare them for READ-FROM-STRING in Lisp. Strings are supposed to be JavaScript code, e.g. \"window.event.keyCode\". Literal strings can be passed using STRING, e.g. (string \"ok\")."
   (mapcar (lambda (arg)
-            (cond ((and (consp arg)
-                        (eql 'string (first arg)))
-                   (format nil "'~S'" (second arg)))
+            (cond ((consp arg)
+                   (if (eql 'string (first arg))
+                       (format nil "'~S'" (second arg))
+                       (error "Only atom arguments allowed in JavaScript callback code: ~S" arg)))
                   ((stringp arg)
                    arg)
                   (t
                    (format nil "'~A'" arg))))
           arguments))
 
-(defmacro lisp (arguments)
-  "Generate JavaScript function call from a lispy definition (see function FUN).
-  Example: (h:lisp (foo 42 \"window.event.keyCode\" (string \"ok\")))"
-  (format nil "Lisp.fun('~A::~A', [~{~A~^, ~}])"
-          (package-name (symbol-package (first arguments)))
-          (symbol-name (first arguments))
-          (%quote (rest arguments))))
-
 (defmacro lisp* (arguments)
   "Generate JavaScript function call from a lispy definition. The first argument to the Lisp function is expected to be a QWebElement (see function WEB).
   Example: (h:lisp* (foo :this 42 \"window.event.keyCode\" (string \"ok\")))"
-  (format nil "Lisp.web('~A::~A', ~A, [~{~A~^, ~}])"
+  (format nil "Lisp.fun2('~A::~A', ~A, [~{~A~^, ~}])"
           (package-name (symbol-package (first arguments)))
           (symbol-name (first arguments))
           (if (eql :this (second arguments))
               "this"
               (second arguments))
           (%quote (nthcdr 2 arguments))))
+
+(defmacro lisp (arguments)
+  "Generate JavaScript function call from a lispy definition (see function FUN).
+  Example: (h:lisp (foo 42 \"window.event.keyCode\" (string \"ok\")))"
+  (if (eql :this (second arguments)) ; QWebElement argument
+      `(lisp* ,arguments)
+      (format nil "Lisp.fun('~A::~A', [~{~A~^, ~}])"
+              (package-name (symbol-package (first arguments)))
+              (symbol-name (first arguments))
+              (%quote (rest arguments)))))
 
 ;;; to be called from JavaScript
 
@@ -366,15 +369,14 @@
       (>> (apply (<< function) (<< arguments)))
       (>> (funcall (<< function)))))
 
-(defun web (function web-element arguments)
-  "Qt: QString web(QString, QWebElement, QVariantList = 0)
-   Use this variant if you need to pass a QWebElement, e.g. Lisp.web('move', this)"
-  (cond (arguments
-         (>> (apply (<< function) web-element (<< arguments))))
-        ((not (qrun* (! "isNull" web-element)))
-         (>> (funcall (<< function) web-element)))
-        (t
-         (>> (funcall (<< function))))))
+(defun fun* (function web-element arguments)
+  "Qt: QString fun2(QString, QWebElement, QVariantList = 0)
+   Use this variant if you need to pass a QWebElement, e.g. Lisp.fun2('move', this)"
+  (flet ((not-null (el)
+           (if (qrun* (! "isNull" el)) nil el)))
+    (if arguments
+        (>> (apply (<< function) (not-null web-element) (<< arguments)))
+        (>> (funcall (<< function) (not-null web-element))))))
 
 (defun %web-pixmap ()
   "Qt: QPixmap pixmap()" ; see "Lisp.pixmap()" in ASSIGN-PIXMAP
@@ -434,5 +436,5 @@
           (lambda ()
             (! "addToJavaScriptWindowObject" (frame) "Lisp" *webkit-bridge*)
             (! "addToJavaScriptWindowObject" (frame) "WebView" *web-view*)
-            (js "function string (x) { return '\"' + x + '\"'; }"))) ; global JS function
+            (js "function string (x) { return '\"' + x + '\"'; }"))) ; global JS function for H:LISP
 

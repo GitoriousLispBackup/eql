@@ -44,7 +44,7 @@
     (h:hset (cell-id i)
             :class "cells"))
   (h:hset *cells*
-          :onclick (h:lisp* (move :this))) ; pass QWebElement as 'this'
+          :onclick (h:lisp (move :this))) ; pass QWebElement as JS 'this'
   (h:hset *new-game*
           :onclick (h:lisp (new-game))))
 

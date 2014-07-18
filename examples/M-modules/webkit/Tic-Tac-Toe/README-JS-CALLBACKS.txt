@@ -3,7 +3,7 @@ Some examples for JS callbacks
 
   (h:hset "#x" :onclick (h:lisp (button-clicked)))                                 ; trivial
 
-  (h:hset "#x" :onclick (h:lisp* (button-clicked :this)))                          ; pass QWebElement (1)
+  (h:hset "#x" :onclick (h:lisp (button-clicked :this)))                           ; pass QWebElement (1)
 
   (h:hset "#x" :onclick (h:lisp* (button-clicked "document.getElementById('y')"))) ; pass QWebElement (2)
 
@@ -18,8 +18,8 @@ Summarizing
 ===========
 
  - any number of arguments allowed
- - if you need to pass a QWebElement, use H:LISP* instead of H:LISP, and pass it as first argument
- - string arguments like "x" or "document.getElementById('x')" are assumed to be JS code
+ - if you need to pass a QWebElement, use H:LISP* (not required for :this), and pass it as first argument
+ - string arguments like "x" or "window.event.keyCode" are assumed to be JS code
  - all arguments are quoted in JS and passed to READ-FROM-STRING in Lisp, so e.g. 1/2 will be preserved 
  - to pass a string, use (string "OK") for literal Lisp strings, and "string(x)" for JS string variables
 
