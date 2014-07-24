@@ -10,9 +10,10 @@
   (:export
    #:*board*
    #:*cells*
-   #:*cell-count*
    #:*computer-player*
    #:*new-game*
+   #:*player-1*
+   #:*player-2*
    #:*win-rows*
    #:move
    #:new-game))
@@ -36,8 +37,9 @@
 (defvar *cells*    "[class='cells']")
 (defvar *new-game* "#new-game")
 
-(defvar *computer-player* t)
-(defvar *cell-count*      9)
+(defvar *cell-count* 9)
+(defvar *player-1*   :human)
+(defvar *player-2*   :computer)
 
 (defun cell-id (index)
   (format nil "#c~D" (1+ index)))
@@ -69,7 +71,9 @@
 (defun new-game ()
   (reset-x-o)
   (unmark-row)
-  (h:hset *cells* :text ""))
+  (h:hset *cells* :text "")
+  (when (eql :computer *player-1*)
+    (computer-move)))
 
 (defun move (web-element)
   (when (and (not (won))
@@ -77,8 +81,9 @@
     (h:hset web-element :text (x-o))
     (check-win)
     (when (and (not (won))
-               *computer-player*
-      (computer-move)))))
+               (or (eql :computer *player-1*)
+                   (eql :computer *player-2*)))
+      (computer-move))))
 
 (defun s (&rest numbers)
   "Sum of binary shifted numbers."
@@ -88,12 +93,15 @@
                          (s 0 3 6) (s 1 4 7) (s 2 5 8) ; vertical
                          (s 0 4 8) (s 2 4 6)))         ; X
 
-(defun state (x-o)
-  (let ((sum 0))
-    (dotimes (i *cell-count*)
-      (when (string= x-o (cell-text i))
-        (incf sum (s i))))
-    sum))
+(let (latest)
+  (defun state (x-o)
+    (let ((sum 0))
+      (dotimes (i *cell-count*)
+        (when (string= x-o (cell-text i))
+          (incf sum (s i))))
+      (setf latest sum)))
+  (defun latest-state ()
+    latest))
 
 (defun check-win ()
   (dolist (x-o '("X" "O"))
@@ -117,9 +125,9 @@
 
 (defun blink-row ()
   (dotimes (n 2)
-    (qsleep 0.15) ; a SLEEP processing Qt events
+    (qsleep 1/7) ; a SLEEP processing Qt events
     (unmark-row nil)
-    (qsleep 0.15)
+    (qsleep 1/7)
     (unmark-row nil "orange")))
 
 (defun add-to-history ()
@@ -153,7 +161,7 @@
   (let ((state (state x-o)))
     (dolist (row *win-rows*)
       (let ((i (position (- row (logand state row)) ; bit logic
-                         #.(quote (list (s 0) (s 1) (s 2) (s 3) (s 4) (s 5) (s 6) (s 7) (s 8))))))
+                         #.(quote (loop :for i :below 9 :collect (s i))))))
         (when (and i (x:empty-string (cell-text i)))
           (return-from check-win-move i))))))
 
@@ -168,14 +176,19 @@
              (nth (random (length x:it)) x:it))))
     (let ((prev (previous-x-o))
           (curr (x-o)))
-      ;; not too clever, human can win
-      (x:when-it (or (check-win-move curr)
-                     (check-win-move prev)
-                     (mv 4)
-                     (mv (rnd '(0 2 6 8)))
-                     (mv (rnd '(1 3 5 7))))
+      ;; simple but sufficiently clever
+      (x:when-it (or (check-win-move curr)                                       ; win move? (me)
+                     (check-win-move prev)                                       ; prevent win move (you)
+                     (mv 4)                                                      ; center
+                     (and (not (find (latest-state) '(#b100000001 #b001000100))) ; (avoid trap)
+                          (mv (rnd '(0 2 6 8))))                                 ; corners
+                     (mv (rnd '(1 3 5 7))))                                      ; rest
         (h:hset (cell-id x:it) :text curr)
-        (check-win)))))
+        (check-win)
+        (when (and (not (won))
+                   (eql :computer *player-1*)
+                   (eql :computer *player-2*))
+          (computer-move))))))
 
 ;;; run
 
