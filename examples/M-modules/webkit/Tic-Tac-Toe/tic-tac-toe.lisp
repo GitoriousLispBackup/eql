@@ -10,7 +10,8 @@
   (:export
    #:*board*
    #:*cells*
-   #:*computer-player*
+   #:*level*
+   #:*levels*
    #:*new-game*
    #:*player-1*
    #:*player-2*
@@ -38,6 +39,8 @@
 (defvar *new-game* "#new-game")
 
 (defvar *cell-count* 9)
+(defvar *levels*     '(:novice :intermediate :experienced))
+(defvar *level*      (third *levels*))
 (defvar *player-1*   :human)
 (defvar *player-2*   :computer)
 
@@ -89,9 +92,9 @@
   "Sum of binary shifted numbers."
   (apply '+ (mapcar (lambda (x) (ash 1 x)) numbers)))
 
-(defvar *win-rows* (list (s 0 1 2) (s 3 4 5) (s 6 7 8) ; horizontal
-                         (s 0 3 6) (s 1 4 7) (s 2 5 8) ; vertical
-                         (s 0 4 8) (s 2 4 6)))         ; X
+(defvar *win-rows* '#.(list (s 0 1 2) (s 3 4 5) (s 6 7 8) ; horizontal
+                            (s 0 3 6) (s 1 4 7) (s 2 5 8) ; vertical
+                            (s 0 4 8) (s 2 4 6)))         ; X
 
 (let (latest)
   (defun state (x-o)
@@ -161,7 +164,7 @@
   (let ((state (state x-o)))
     (dolist (row *win-rows*)
       (let ((i (position (- row (logand state row)) ; bit logic
-                         #.(quote (loop :for i :below 9 :collect (s i))))))
+                         '#.(loop :for i :below 9 :collect (s i)))))
         (when (and i (x:empty-string (cell-text i)))
           (return-from check-win-move i))))))
 
@@ -176,13 +179,19 @@
              (nth (random (length x:it)) x:it))))
     (let ((prev (previous-x-o))
           (curr (x-o)))
-      ;; simple but sufficiently clever
-      (x:when-it (or (check-win-move curr)                                       ; win move? (me)
-                     (check-win-move prev)                                       ; prevent win move (you)
-                     (mv 4)                                                      ; center
-                     (and (not (find (latest-state) '(#b100000001 #b001000100))) ; (avoid trap)
-                          (mv (rnd '(0 2 6 8))))                                 ; corners
-                     (mv (rnd '(1 3 5 7))))                                      ; rest
+      (x:when-it (or (check-win-move curr)                                 ; win move? (me)
+                     (and (eql :novice *level*)
+                          (mv (rnd '#.(loop :for i :below 9 :collect i))))
+                     (check-win-move prev)                                 ; prevent win move (you)
+                     (and (eql :intermediate *level*)
+                          (or (mv (rnd '(1 3 5 7)))
+                              (mv (rnd '(0 2 4 6 8)))))
+                     ;; experienced
+                     (mv 4)                                                ; center
+                     (and (not (find (latest-state)
+                                     '#.(list (s 0 8) (s 2 6))))           ; avoid trap
+                          (mv (rnd '(0 2 6 8))))                           ; corners
+                     (mv (rnd '(1 3 5 7))))                                ; rest
         (h:hset (cell-id x:it) :text curr)
         (check-win)
         (when (and (not (won))
