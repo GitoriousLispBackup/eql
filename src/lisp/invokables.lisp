@@ -52,7 +52,7 @@
       (format s "// THIS FILE IS GENERATED (see \"invokables.lisp\" in sources)~%~%")
       (do-all-symbols (symbol)
         (unless (find (symbol-package symbol)
-                      #.(quote (mapcar 'find-package '(cl eql))))
+                      '#.(mapcar 'find-package (list 'cl 'eql)))
           (let ((doc (documentation symbol 'function)))
             (when (and doc
                        (string-equal "Qt: " (subseq doc 0 (min 4 (length doc))))

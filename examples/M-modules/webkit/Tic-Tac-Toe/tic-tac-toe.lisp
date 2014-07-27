@@ -33,14 +33,14 @@
 ;;; WebKit Application (neither EQL functions nor JavaScript code needed, see "h-utils.lisp")
 ;;; 
 
-;;                 CSS2 selectors
-(defvar *board*    "#board")
-(defvar *cells*    "[class='cells']")
-(defvar *new-game* "#new-game")
+;;                   CSS2 selectors
+(defvar *board*      "#board")
+(defvar *cells*      "[class='cells']")
+(defvar *new-game*   "#new-game")
 
 (defvar *cell-count* 9)
 (defvar *levels*     '(:novice :intermediate :experienced))
-(defvar *level*      (third *levels*))
+(defvar *level*      (second *levels*))
 (defvar *player-1*   :human)
 (defvar *player-2*   :computer)
 
@@ -61,7 +61,8 @@
   (h:hset *cells*
           :onclick (h:lisp (move :this))) ; pass QWebElement as JS 'this'
   (h:hset *new-game*
-          :onclick (h:lisp (new-game))))
+          :onclick (h:lisp (new-game)))
+  (new-game))
 
 (let ((s ""))
   (defun x-o ()
@@ -72,6 +73,9 @@
     (setf s "")))
 
 (defun new-game ()
+  (dolist (var '(*player-1* *player-2* *level*))
+    (format t "~%~(~A~12T~S~)" var (symbol-value var)))
+  (terpri)
   (reset-x-o)
   (unmark-row)
   (h:hset *cells* :text "")
@@ -90,7 +94,7 @@
 
 (defun s (&rest numbers)
   "Sum of binary shifted numbers."
-  (apply '+ (mapcar (lambda (x) (ash 1 x)) numbers)))
+  (loop :for n :in numbers :sum (ash 1 n)))
 
 (defvar *win-rows* '#.(list (s 0 1 2) (s 3 4 5) (s 6 7 8) ; horizontal
                             (s 0 3 6) (s 1 4 7) (s 2 5 8) ; vertical
@@ -180,18 +184,22 @@
     (let ((prev (previous-x-o))
           (curr (x-o)))
       (x:when-it (or (check-win-move curr)                                 ; win move? (me)
+                     (and (or (not (eql :novice *level*))
+                              (zerop (random 2)))
+                          (check-win-move prev))                           ; prevent win move (you)
+                     ;; novice
                      (and (eql :novice *level*)
                           (mv (rnd '#.(loop :for i :below 9 :collect i))))
-                     (check-win-move prev)                                 ; prevent win move (you)
+                     ;; intermediate
                      (and (eql :intermediate *level*)
-                          (or (mv (rnd '(1 3 5 7)))
-                              (mv (rnd '(0 2 4 6 8)))))
+                          (or (mv (rnd '(0 2 4 6 8)))                      ; corner, center
+                              (mv (rnd '(1 3 5 7)))))                      ; mid
                      ;; experienced
                      (mv 4)                                                ; center
                      (and (not (find (latest-state)
                                      '#.(list (s 0 8) (s 2 6))))           ; avoid trap
-                          (mv (rnd '(0 2 6 8))))                           ; corners
-                     (mv (rnd '(1 3 5 7))))                                ; rest
+                          (mv (rnd '(0 2 6 8))))                           ; corner
+                     (mv (rnd '(1 3 5 7))))                                ; mid
         (h:hset (cell-id x:it) :text curr)
         (check-win)
         (when (and (not (won))
