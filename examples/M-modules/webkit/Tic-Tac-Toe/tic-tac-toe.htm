@@ -1,11 +1,15 @@
 <html>
   <head>
     <style>
-    .cells {
-      width: 2cm; height: 2cm;
-      text-align: center;
-      font-family: Courier New, Courier, monospaced; font-size: 1.7cm; font-weight: bold;
-      color: white; background-color: steelblue; }
+      body {
+        background-color: lavender; }
+      .cells {
+        width: 2cm; height: 2cm;
+        text-align: center;
+        font-family: Courier New, Courier, monospaced; font-size: 1.7cm; font-weight: bold;
+        color: white; background-color: steelblue; }
+      input {
+        font-size: small; }
     </style>
   </head>
   <body>
@@ -21,7 +25,11 @@
         <td id="c7"><td id="c8"><td id="c9">
       </tr>
     </table>
-    <p><input type="button" value="New Game" id="new-game"></p>
+    <p>
+      <input type="button" value="New Game" id="new-game">
+      <input type="button" value="Clear History" id="clear-history">
+      <input type="button" value="Demo" id="demo">
+    </p>
     <img id="i1">&nbsp;
     <img id="i2">&nbsp;
     <img id="i3">&nbsp;

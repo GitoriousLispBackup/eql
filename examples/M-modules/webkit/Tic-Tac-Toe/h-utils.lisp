@@ -22,6 +22,7 @@
    #:attribute-names
    #:classes
    #:clear-html
+   #:clear-pixmap
    #:clone
    #:document
    #:element
@@ -404,6 +405,13 @@
                           (nthcdr 2 rect))
                   |Qt.IgnoreAspectRatio| |Qt.SmoothTransformation|)
                pixmap))))
+
+(let (dummy)
+  (defun clear-pixmap (web-element)
+    (unless dummy
+      (qrun* (setf dummy (qnew "QPixmap(int,int)" 1 1))
+             (! "fill" dummy (qnew "QColor(QString)" "transparent"))))
+    (assign-pixmap dummy web-element)))
 
 ;;; generic utilities
 

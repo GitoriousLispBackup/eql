@@ -32,8 +32,7 @@
                    ("David Bradley" "42")
                    ("Knut Walters" "25")
                    ("Andrea Jones" "34")))
-      (! "appendRow(QList<QStandardItem*>)"
-         model
+      (! "appendRow(QList<QStandardItem*>)" model
          (loop :for text :in row
                :collect (qnew "QStandardItem(QString)" text))))
     (! "setModel" view model)
