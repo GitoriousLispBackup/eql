@@ -137,9 +137,6 @@
                (multiple-value-list (h:hget *cells* :text)))
           (pretty-binary row)))
 
-(defun set-background-color (i color)
-  (h:set-style-property (cell-id i) :background-color color))
-
 (defun blink-row ()
   (dotimes (n 2)
     (qsleep 1/7) ; a SLEEP processing Qt events
@@ -153,14 +150,17 @@
 (defun add-to-history ()
   (dotimes (i 4)
     ;; shift right
-    (h:assign-pixmap (h:to-pixmap (img-id (- 3 i)))
-                     (img-id (- 4 i))))
-  (h:assign-pixmap (h:to-pixmap *board* 1/6)
-                   (img-id 0)))
+    (h:assign-pixmap (img-id (- 4 i))
+                     (h:to-pixmap (img-id (- 3 i)))))
+  (h:assign-pixmap (img-id 0)
+                   (h:to-pixmap *board* 1/6)))
 
 (defun clear-history ()
   (dotimes (i 5)
     (h:clear-pixmap (img-id i))))
+
+(defun set-background-color (i color)
+  (h:set-style-property (cell-id i) :background-color color))
 
 (let (marked)
   (defun mark-row (row)

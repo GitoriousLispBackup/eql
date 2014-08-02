@@ -385,8 +385,8 @@
 
 ;;; pixmap utilities
 
-(defun assign-pixmap (pixmap web-element)
-  "Directly assign pixmap to a <img> web element."
+(defun assign-pixmap (web-element pixmap)
+  "Directly assign a QPixmap to a <img> web element."
   (let ((*web-pixmap* pixmap)
         (element (ensure-web-element web-element)))
     (assert (string= "IMG" (tag-name element)) nil
@@ -411,7 +411,7 @@
     (unless dummy
       (qrun* (setf dummy (qnew "QPixmap(int,int)" 1 1))
              (! "fill" dummy (qnew "QColor(QString)" "transparent"))))
-    (assign-pixmap dummy web-element)))
+    (assign-pixmap web-element dummy)))
 
 ;;; generic utilities
 
