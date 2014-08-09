@@ -25,10 +25,13 @@
    #:clear-pixmap
    #:clone
    #:document
+   #:document-element
    #:element
    #:enclose-contents-with
    #:enclose-with
    #:find-first
+   #:find-all-elements
+   #:find-first-element
    #:first-child
    #:frame
    #:geometry
@@ -84,7 +87,7 @@
 ;;; utils
 
 (defmacro iterate-elements (selector &body body)
-  "Iterate over web elements of QWebFrame, binding ELEMENT to the current QWebElement."
+  "Iterate over web elements of QWebFrame, binding H:ELEMENT to the current QWebElement."
   (let ((i (gensym)))
     `(let ((elements (qrun* (! "findAllElements" (frame) ,selector))))
        (dotimes (,i (qrun* (! "count" elements)))
@@ -92,7 +95,7 @@
            ,@body)))))
 
 (defmacro iterate-child-elements (web-element selector &body body)
-  "Iterate over child elements of a QWebElement, binding ELEMENT to the current QWebElement."
+  "Iterate over child elements of a QWebElement, binding H:ELEMENT to the current QWebElement."
   (let ((i (gensym)))
     `(let ((elements (qrun* (! "findAll" (ensure-web-element ,web-element) ,selector))))
        (dotimes (,i (qrun* (! "count" elements)))
@@ -410,7 +413,7 @@
   (defun clear-pixmap (web-element)
     (unless dummy
       (qrun* (setf dummy (qnew "QPixmap(int,int)" 1 1))
-             (! "fill" dummy (qnew "QColor(QString)" "transparent"))))
+             (! "fill" dummy "transparent")))
     (assign-pixmap web-element dummy)))
 
 ;;; generic utilities
@@ -428,6 +431,17 @@
   (append-inside "BODY" text/html)
   (when scroll-to-bottom
     (qrun* (qsingle-shot 0 'scroll-to-bottom))))
+
+;;; wrappers for some QFrame methods
+
+(defun document-element ()
+  (qrun* (! "documentElement" (frame))))
+
+(defun find-all-elements (query)
+  (qrun* (! "findAllElements" (frame) query)))
+
+(defun find-first-element (query)
+  (qrun* (! "findFirstElement" (frame) query)))
 
 (defun scroll-to-top ()
   (qrun* (! "setScrollPosition" (frame) '(0 0))))
