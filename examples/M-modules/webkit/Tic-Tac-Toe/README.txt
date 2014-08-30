@@ -17,6 +17,16 @@ All QWebElement methods have convenience wrappers, e.g:
   (h:set-style-property x :color "red")
   (h:hget "*" :onclick)
 
+Given the introspective nature of a WebKit GUI, you can easily
+automate GUI testing:
+
+  ;; calls MOVE
+  (h:js (h:hget "#c5" :onclick)
+        (h:find-first-element "#c5"))
+
+  ;; calls NEW-GAME
+  (h:js (h:hget "#new-game" :onclick))
+
 
 SLIME / THREADS NOTE
 ====================

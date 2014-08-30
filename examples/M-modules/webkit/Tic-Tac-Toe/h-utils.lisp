@@ -3,7 +3,7 @@
 ;;; (depends on small plugin, see "lib/")
 ;;;
 ;;; Thread-safe utility functions, including convenience wrappers for all QWebElement methods
-;;; (see also HGET, HSET, JS, TO-PIXMAP, ASSIGN-PIXMAP).
+;;; (see also HGET, HSET, JS, TO-PIXMAP, ASSIGN-PIXMAP...).
 
 #+win32 (si:trap-fpe 'floating-point-underflow nil) ; for QWebInspector
 
@@ -29,8 +29,8 @@
    #:element
    #:enclose-contents-with
    #:enclose-with
-   #:find-first
    #:find-all-elements
+   #:find-first
    #:find-first-element
    #:first-child
    #:frame
@@ -118,12 +118,6 @@
         (t
          expression)))
 
-(defun element (selector)
-  "Return first matching web element for given selector."
-  (let ((el (qrun* (! "findFirstElement" (frame) selector))))
-    (unless (qrun* (! "isNull" el))
-      el)))
-
 (defun assert-web-element (x)
   (assert (= #.(qid "QWebElement") (qt-object-id x)) nil
           "Wanted <QWebElement>, got: ~S." x)
@@ -131,7 +125,7 @@
 
 (defun ensure-web-element (x)
   (if (stringp x)
-      (element x)
+      (find-first-element x)
       (assert-web-element x)))
 
 (defun %input-text-p (web-element)
@@ -139,7 +133,7 @@
        (string-equal "text" (qrun* (! "attribute" web-element "type")))))
 
 (defun js (javascript &optional web-element)
-  "Evaluate JavaScript in the context of either a QWebElement (as 'this') or the main QWebFrame."
+  "Evaluate JavaScript in the context (as 'this') of either a QWebElement or the main QWebFrame."
   (qrun* (! ("toString" ("evaluateJavaScript" javascript)
                         (or web-element (frame))))))
 
@@ -331,7 +325,7 @@
 ;;; (h:js (print (h:lisp (format nil (string "~R") 100))))
 
 (defun %quote (arguments)
-  "Quote normal arguments, to prepare them for READ-FROM-STRING in Lisp. Strings are supposed to be JavaScript code, e.g. \"window.event.keyCode\". Literal strings can be passed using STRING, e.g. (string \"ok\")."
+  "Quote arguments, to prepare them for READ-FROM-STRING in Lisp. Strings are supposed to be JavaScript code, e.g. \"window.event.keyCode\". Literal strings can be passed using STRING, e.g. (string \"ok\")."
   (mapcar (lambda (arg)
             (cond ((consp arg)
                    (if (eql 'string (first arg))
@@ -437,11 +431,17 @@
 (defun document-element ()
   (qrun* (! "documentElement" (frame))))
 
-(defun find-all-elements (query)
-  (qrun* (! "findAllElements" (frame) query)))
+(defun find-all-elements (selector)
+  "Return all matching web elements for given selector."
+  (let ((els (qrun* (! "findAllElements" (frame) selector))))
+    (unless (qrun* (! "isNull" els))
+      els)))
 
-(defun find-first-element (query)
-  (qrun* (! "findFirstElement" (frame) query)))
+(defun find-first-element (selector)
+  "Return first matching web element for given selector."
+  (let ((el (qrun* (! "findFirstElement" (frame) selector))))
+    (unless (qrun* (! "isNull" el))
+      el)))
 
 (defun scroll-to-top ()
   (qrun* (! "setScrollPosition" (frame) '(0 0))))

@@ -106,15 +106,15 @@
   "Sum of binary shifted numbers."
   (loop :for n :in numbers :sum (ash 1 n)))
 
-(let (latest)
+(let (sum)
   (defun state (x-o)
-    (let ((sum 0))
-      (dotimes (i *cell-count*)
-        (when (string= x-o (cell-text i))
-          (incf sum (s i))))
-      (setf latest sum)))
+    (setf sum 0)
+    (dotimes (i *cell-count*)
+      (when (string= x-o (cell-text i))
+        (incf sum (s i))))
+    sum)
   (defun latest-state ()
-    latest))
+    sum))
 
 (defvar *win-rows* '#.(list (s 0 1 2) (s 3 4 5) (s 6 7 8) ; horizontal
                             (s 0 3 6) (s 1 4 7) (s 2 5 8) ; vertical
