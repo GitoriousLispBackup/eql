@@ -13,6 +13,12 @@
 
 QT_BEGIN_NAMESPACE
 
+#define META_TYPE(constant, type) \
+    static const int constant = qRegisterMetaType< type >(#type);
+
+#define DEFUN(name, c_name, num_args) \
+    cl_def_c_function(c_string_to_object((char*)name), (cl_objectfn_fixed)c_name, num_args);
+
 #define PRINT(x) cl_print(1, x)
 #define TERPRI() cl_terpri(0)
 

@@ -19,127 +19,126 @@ static const char SLO = '1';
 static bool _ok_ = false;
 static const QMetaObject* staticQtMetaObject = QtMetaObject::get();
 
-// meta types
-static const int T_bool_ok_pointer =                  qRegisterMetaType<bool*>("bool*");
+META_TYPE (T_bool_ok_pointer,                  bool*)
 #if QT_VERSION < 0x040700
-static const int T_QEasingCurve =                     qRegisterMetaType<QEasingCurve>("QEasingCurve");
+META_TYPE (T_QEasingCurve,                     QEasingCurve)
 #endif
-static const int T_QFileInfo =                        qRegisterMetaType<QFileInfo>("QFileInfo");
-static const int T_QFileInfoList =                    qRegisterMetaType<QFileInfoList>("QFileInfoList");
-static const int T_QGradient =                        qRegisterMetaType<QGradient>("QGradient");
-static const int T_QGradientStop =                    qRegisterMetaType<QGradientStop>("QGradientStop");
-static const int T_QList_QAbstractAnimation =         qRegisterMetaType<QList<QAbstractAnimation*> >("QList<QAbstractAnimation*>");
-static const int T_QList_QAbstractButton =            qRegisterMetaType<QList<QAbstractButton*> >("QList<QAbstractButton*>");
-static const int T_QList_QAbstractState =             qRegisterMetaType<QList<QAbstractState*> >("QList<QAbstractState*>");
-static const int T_QList_QAction =                    qRegisterMetaType<QList<QAction*> >("QList<QAction*>");
-static const int T_QList_QByteArray =                 qRegisterMetaType<QList<QByteArray> >("QList<QByteArray>");
-static const int T_QList_QDockWidget =                qRegisterMetaType<QList<QDockWidget*> >("QList<QDockWidget*>");
-static const int T_QList_QGesture =                   qRegisterMetaType<QList<QGesture*> >("QList<QGesture*>");
-static const int T_QList_QGraphicsItem =              qRegisterMetaType<QList<QGraphicsItem*> >("QList<QGraphicsItem*>");
-static const int T_QList_QGraphicsTransform =         qRegisterMetaType<QList<QGraphicsTransform*> >("QList<QGraphicsTransform*>");
-static const int T_QList_QGraphicsView =              qRegisterMetaType<QList<QGraphicsView*> >("QList<QGraphicsView*>");
-static const int T_QList_QGraphicsWidget =            qRegisterMetaType<QList<QGraphicsWidget*> >("QList<QGraphicsWidget*>");
-static const int T_QList_QKeySequence =               qRegisterMetaType<QList<QKeySequence> >("QList<QKeySequence>");
-static const int T_QList_QListWidgetItem =            qRegisterMetaType<QList<QListWidgetItem*> >("QList<QListWidgetItem*>");
-static const int T_QList_QMdiSubWindow =              qRegisterMetaType<QList<QMdiSubWindow*> >("QList<QMdiSubWindow*>");
-static const int T_QModelIndexList =                  qRegisterMetaType<QModelIndexList>("QModelIndexList");
-static const int T_QList_QObject =                    qRegisterMetaType<QList<QObject*> >("QList<QObject*>");
-static const int T_QObjectList =                      qRegisterMetaType<QObjectList>("QObjectList");
-static const int T_QList_QPolygonF =                  qRegisterMetaType<QList<QPolygonF> >("QList<QPolygonF>");
-static const int T_QList_QSize =                      qRegisterMetaType<QList<QSize> >("QList<QSize>");
-static const int T_QList_QStandardItem =              qRegisterMetaType<QList<QStandardItem*> >("QList<QStandardItem*>");
-static const int T_QList_QTableWidgetItem =           qRegisterMetaType<QList<QTableWidgetItem*> >("QList<QTableWidgetItem*>");
-static const int T_QList_QTableWidgetSelectionRange = qRegisterMetaType<QList<QTableWidgetSelectionRange> >("QList<QTableWidgetSelectionRange>");
-static const int T_QList_QTextBlock =                 qRegisterMetaType<QList<QTextBlock> >("QList<QTextBlock>");
-static const int T_QList_QTextEdit_ExtraSelection =   qRegisterMetaType<QList<QTextEdit::ExtraSelection> >("QList<QTextEdit::ExtraSelection>");
-static const int T_QList_QTextFrame =                 qRegisterMetaType<QList<QTextFrame*> >("QList<QTextFrame*>");
-static const int T_QList_QTreeWidgetItem =            qRegisterMetaType<QList<QTreeWidgetItem*> >("QList<QTreeWidgetItem*>");
-static const int T_QList_QUndoStack =                 qRegisterMetaType<QList<QUndoStack*> >("QList<QUndoStack*>");
-static const int T_QList_QUrl =                       qRegisterMetaType<QList<QUrl> >("QList<QUrl>");
-static const int T_QList_QWidget =                    qRegisterMetaType<QList<QWidget*> >("QList<QWidget*>");
-static const int T_QWidgetList =                      qRegisterMetaType<QWidgetList>("QWidgetList");
-static const int T_QList_int =                        qRegisterMetaType<QList<int> >("QList<int>");
-static const int T_QList_qreal =                      qRegisterMetaType<QList<qreal> >("QList<qreal>");
-static const int T_QModelIndex =                      qRegisterMetaType<QModelIndex>("QModelIndex");
-static const int T_QPainterPath =                     qRegisterMetaType<QPainterPath>("QPainterPath");
-static const int T_QPolygonF =                        qRegisterMetaType<QPolygonF>("QPolygonF");
-static const int T_QRgb =                             qRegisterMetaType<QRgb>("QRgb");
-static const int T_QTableWidgetSelectionRange =       qRegisterMetaType<QTableWidgetSelectionRange>("QTableWidgetSelectionRange");
-static const int T_QTextBlock =                       qRegisterMetaType<QTextBlock>("QTextBlock");
-static const int T_QTextBlockFormat =                 qRegisterMetaType<QTextBlockFormat>("QTextBlockFormat");
-static const int T_QTextCharFormat =                  qRegisterMetaType<QTextCharFormat>("QTextCharFormat");
-static const int T_QTextFrameFormat =                 qRegisterMetaType<QTextFrameFormat>("QTextFrameFormat");
-static const int T_QTextListFormat =                  qRegisterMetaType<QTextListFormat>("QTextListFormat");
-static const int T_QTextCursor =                      qRegisterMetaType<QTextCursor>("QTextCursor");
-static const int T_QTextDocumentFragment =            qRegisterMetaType<QTextDocumentFragment>("QTextDocumentFragment");
-static const int T_QTextLine =                        qRegisterMetaType<QTextLine>("QTextLine");
-static const int T_QTextOption =                      qRegisterMetaType<QTextOption>("QTextOption");
+META_TYPE (T_QFileInfo,                        QFileInfo)
+META_TYPE (T_QFileInfoList,                    QFileInfoList)
+META_TYPE (T_QGradient,                        QGradient)
+META_TYPE (T_QGradientStop,                    QGradientStop)
+META_TYPE (T_QList_QAbstractAnimation,         QList<QAbstractAnimation*>)
+META_TYPE (T_QList_QAbstractButton,            QList<QAbstractButton*>)
+META_TYPE (T_QList_QAbstractState,             QList<QAbstractState*>)
+META_TYPE (T_QList_QAction,                    QList<QAction*>)
+META_TYPE (T_QList_QByteArray,                 QList<QByteArray>)
+META_TYPE (T_QList_QDockWidget,                QList<QDockWidget*>)
+META_TYPE (T_QList_QGesture,                   QList<QGesture*>)
+META_TYPE (T_QList_QGraphicsItem,              QList<QGraphicsItem*>)
+META_TYPE (T_QList_QGraphicsTransform,         QList<QGraphicsTransform*>)
+META_TYPE (T_QList_QGraphicsView,              QList<QGraphicsView*>)
+META_TYPE (T_QList_QGraphicsWidget,            QList<QGraphicsWidget*>)
+META_TYPE (T_QList_QKeySequence,               QList<QKeySequence>)
+META_TYPE (T_QList_QListWidgetItem,            QList<QListWidgetItem*>)
+META_TYPE (T_QList_QMdiSubWindow,              QList<QMdiSubWindow*>)
+META_TYPE (T_QModelIndexList,                  QModelIndexList)
+META_TYPE (T_QList_QObject,                    QList<QObject*>)
+META_TYPE (T_QObjectList,                      QObjectList)
+META_TYPE (T_QList_QPolygonF,                  QList<QPolygonF>)
+META_TYPE (T_QList_QSize,                      QList<QSize>)
+META_TYPE (T_QList_QStandardItem,              QList<QStandardItem*>)
+META_TYPE (T_QList_QTableWidgetItem,           QList<QTableWidgetItem*>)
+META_TYPE (T_QList_QTableWidgetSelectionRange, QList<QTableWidgetSelectionRange>)
+META_TYPE (T_QList_QTextBlock,                 QList<QTextBlock>)
+META_TYPE (T_QList_QTextEdit_ExtraSelection,   QList<QTextEdit::ExtraSelection>)
+META_TYPE (T_QList_QTextFrame,                 QList<QTextFrame*>)
+META_TYPE (T_QList_QTreeWidgetItem,            QList<QTreeWidgetItem*>)
+META_TYPE (T_QList_QUndoStack,                 QList<QUndoStack*>)
+META_TYPE (T_QList_QUrl,                       QList<QUrl>)
+META_TYPE (T_QList_QWidget,                    QList<QWidget*>)
+META_TYPE (T_QWidgetList,                      QWidgetList)
+META_TYPE (T_QList_int,                        QList<int>)
+META_TYPE (T_QList_qreal,                      QList<qreal>)
+META_TYPE (T_QModelIndex,                      QModelIndex)
+META_TYPE (T_QPainterPath,                     QPainterPath)
+META_TYPE (T_QPolygonF,                        QPolygonF)
+META_TYPE (T_QRgb,                             QRgb)
+META_TYPE (T_QTableWidgetSelectionRange,       QTableWidgetSelectionRange)
+META_TYPE (T_QTextBlock,                       QTextBlock)
+META_TYPE (T_QTextBlockFormat,                 QTextBlockFormat)
+META_TYPE (T_QTextCharFormat,                  QTextCharFormat)
+META_TYPE (T_QTextFrameFormat,                 QTextFrameFormat)
+META_TYPE (T_QTextListFormat,                  QTextListFormat)
+META_TYPE (T_QTextCursor,                      QTextCursor)
+META_TYPE (T_QTextDocumentFragment,            QTextDocumentFragment)
+META_TYPE (T_QTextLine,                        QTextLine)
+META_TYPE (T_QTextOption,                      QTextOption)
 #if QT_VERSION < 0x040700
-static const int T_QVariant =                         qRegisterMetaType<QVariant>("QVariant");
-static const int T_QList_QVariant =                   qRegisterMetaType<QVariantList>("QVariantList");
+META_TYPE (T_QVariant,                         QVariant)
+META_TYPE (T_QList_QVariant,                   QVariantList)
 #endif
-static const int T_QVector_QGradientstop =            qRegisterMetaType<QVector<QGradientStop> >("QGradientStops");
-static const int T_QVector_QLine =                    qRegisterMetaType<QVector<QLine> >("QVector<QLine>");
-static const int T_QVector_QLineF =                   qRegisterMetaType<QVector<QLineF> >("QVector<QLineF>");
-static const int T_QVector_QPoint =                   qRegisterMetaType<QVector<QPoint> >("QVector<QPoint>");
-static const int T_QVector_QPointF =                  qRegisterMetaType<QVector<QPointF> >("QVector<QPointF>");
-static const int T_QVector_QRect =                    qRegisterMetaType<QVector<QRect> >("QVector<QRect>");
-static const int T_QVector_QRectF =                   qRegisterMetaType<QVector<QRectF> >("QVector<QRectF>");
-static const int T_QVector_QRgb =                     qRegisterMetaType<QVector<QRgb> >("QVector<QRgb>");
-static const int T_QVector_QTextFormat =              qRegisterMetaType<QVector<QTextFormat> >("QVector<QTextFormat>");
-static const int T_QVector_QTextLength =              qRegisterMetaType<QVector<QTextLength> >("QVector<QTextLength>");
-static const int T_QVector_qreal =                    qRegisterMetaType<QVector<qreal> >("QVector<qreal>");
+META_TYPE (T_QVector_QGradientstop,            QVector<QGradientStop>)
+META_TYPE (T_QVector_QLine,                    QVector<QLine>)
+META_TYPE (T_QVector_QLineF,                   QVector<QLineF>)
+META_TYPE (T_QVector_QPoint,                   QVector<QPoint>)
+META_TYPE (T_QVector_QPointF,                  QVector<QPointF>)
+META_TYPE (T_QVector_QRect,                    QVector<QRect>)
+META_TYPE (T_QVector_QRectF,                   QVector<QRectF>)
+META_TYPE (T_QVector_QRgb,                     QVector<QRgb>)
+META_TYPE (T_QVector_QTextFormat,              QVector<QTextFormat>)
+META_TYPE (T_QVector_QTextLength,              QVector<QTextLength>)
+META_TYPE (T_QVector_qreal,                    QVector<qreal>)
 
 void iniCLFunctions() {
     cl_object eql(make_simple_base_string((char*)"EQL"));
     if(cl_find_package(eql) == Cnil) {
         cl_make_package(1, eql); }
     si_select_package(eql);
-    cl_def_c_function(c_string_to_object((char*)"%make-qimage/dangerous"), (cl_objectfn_fixed)make_qimage_dangerous, 5);
-    cl_def_c_function(c_string_to_object((char*)"no-qexec"),               (cl_objectfn_fixed)no_qexec,              0);
-    cl_def_c_function(c_string_to_object((char*)"qadd-event-filter"),      (cl_objectfn_fixed)qadd_event_filter,     3);
-    cl_def_c_function(c_string_to_object((char*)"%qapropos"),              (cl_objectfn_fixed)qapropos2,             3);
-    cl_def_c_function(c_string_to_object((char*)"qapp"),                   (cl_objectfn_fixed)qapp,                  0);
-    cl_def_c_function(c_string_to_object((char*)"qcall-default"),          (cl_objectfn_fixed)qcall_default,         0);
-    cl_def_c_function(c_string_to_object((char*)"qclear-event-filters"),   (cl_objectfn_fixed)qclear_event_filters,  0);
-    cl_def_c_function(c_string_to_object((char*)"%qconnect"),              (cl_objectfn_fixed)qconnect2,             4);
-    cl_def_c_function(c_string_to_object((char*)"qcopy"),                  (cl_objectfn_fixed)qcopy,                 1);
-    cl_def_c_function(c_string_to_object((char*)"%qdelete"),               (cl_objectfn_fixed)qdelete2,              2);
-    cl_def_c_function(c_string_to_object((char*)"%qdisconnect"),           (cl_objectfn_fixed)qdisconnect2,          4);
-    cl_def_c_function(c_string_to_object((char*)"%qenums"),                (cl_objectfn_fixed)qenums2,               2);
-    cl_def_c_function(c_string_to_object((char*)"qescape"),                (cl_objectfn_fixed)qescape,               1);
-    cl_def_c_function(c_string_to_object((char*)"%qexec"),                 (cl_objectfn_fixed)qexec2,                1);
-    cl_def_c_function(c_string_to_object((char*)"qexit"),                  (cl_objectfn_fixed)qexit,                 0);
-    cl_def_c_function(c_string_to_object((char*)"qfind-child"),            (cl_objectfn_fixed)qfind_child,           2);
-    cl_def_c_function(c_string_to_object((char*)"%qfind-children"),        (cl_objectfn_fixed)qfind_children2,       3);
-    cl_def_c_function(c_string_to_object((char*)"qfrom-utf8"),             (cl_objectfn_fixed)qfrom_utf8,            1);
-    cl_def_c_function(c_string_to_object((char*)"qid"),                    (cl_objectfn_fixed)qid,                   1);
-    cl_def_c_function(c_string_to_object((char*)"%qinvoke-method"),        (cl_objectfn_fixed)qinvoke_method2,       4);
-    cl_def_c_function(c_string_to_object((char*)"%qload-c++"),             (cl_objectfn_fixed)qload_cpp,             2);
-    cl_def_c_function(c_string_to_object((char*)"qload-ui"),               (cl_objectfn_fixed)qload_ui,              1);
-    cl_def_c_function(c_string_to_object((char*)"qlocal8bit"),             (cl_objectfn_fixed)qlocal8bit,            1);
-    cl_def_c_function(c_string_to_object((char*)"%qnew-instance"),         (cl_objectfn_fixed)qnew_instance2,        2);
-    cl_def_c_function(c_string_to_object((char*)"%qobject-names"),         (cl_objectfn_fixed)qobject_names2,        1);
-    cl_def_c_function(c_string_to_object((char*)"qok"),                    (cl_objectfn_fixed)qok,                   0);
-    cl_def_c_function(c_string_to_object((char*)"qoverride"),              (cl_objectfn_fixed)qoverride,             3);
-    cl_def_c_function(c_string_to_object((char*)"qprocess-events"),        (cl_objectfn_fixed)qprocess_events,       0);
-    cl_def_c_function(c_string_to_object((char*)"qproperty"),              (cl_objectfn_fixed)qproperty,             2);
-    cl_def_c_function(c_string_to_object((char*)"%qrequire"),              (cl_objectfn_fixed)qrequire2,             2);
-    cl_def_c_function(c_string_to_object((char*)"qremove-event-filter"),   (cl_objectfn_fixed)qremove_event_filter,  1);
-    cl_def_c_function(c_string_to_object((char*)"%qrun-in-gui-thread"),    (cl_objectfn_fixed)qrun_in_gui_thread2,   2);
-    cl_def_c_function(c_string_to_object((char*)"qsender"),                (cl_objectfn_fixed)qsender,               0);
-    cl_def_c_function(c_string_to_object((char*)"%qset-gc"),               (cl_objectfn_fixed)qset_gc,               1);
-    cl_def_c_function(c_string_to_object((char*)"qset-property"),          (cl_objectfn_fixed)qset_property,         3);
-    cl_def_c_function(c_string_to_object((char*)"%qsingle-shot"),          (cl_objectfn_fixed)qsingle_shot2,         2);
-    cl_def_c_function(c_string_to_object((char*)"qstatic-meta-object"),    (cl_objectfn_fixed)qstatic_meta_object,   1);
-    cl_def_c_function(c_string_to_object((char*)"qsuper-class-name"),      (cl_objectfn_fixed)qsuper_class_name,     1);
-    cl_def_c_function(c_string_to_object((char*)"qtranslate"),             (cl_objectfn_fixed)qtranslate,            3);
-    cl_def_c_function(c_string_to_object((char*)"qt-object-name"),         (cl_objectfn_fixed)qt_object_name,        1);
-    cl_def_c_function(c_string_to_object((char*)"qt-object-?"),            (cl_objectfn_fixed)qt_object_x,           1);
-    cl_def_c_function(c_string_to_object((char*)"%qui-class"),             (cl_objectfn_fixed)qui_class2,            2);
-    cl_def_c_function(c_string_to_object((char*)"qui-names"),              (cl_objectfn_fixed)qui_names,             1);
-    cl_def_c_function(c_string_to_object((char*)"qutf8"),                  (cl_objectfn_fixed)qutf8,                 1);
-    cl_def_c_function(c_string_to_object((char*)"qversion"),               (cl_objectfn_fixed)qversion,              0); }
+    DEFUN("%make-qimage/dangerous", make_qimage_dangerous, 5)
+    DEFUN("no-qexec",               no_qexec,              0)
+    DEFUN("qadd-event-filter",      qadd_event_filter,     3)
+    DEFUN("%qapropos",              qapropos2,             3)
+    DEFUN("qapp",                   qapp,                  0)
+    DEFUN("qcall-default",          qcall_default,         0)
+    DEFUN("qclear-event-filters",   qclear_event_filters,  0)
+    DEFUN("%qconnect",              qconnect2,             4)
+    DEFUN("qcopy",                  qcopy,                 1)
+    DEFUN("%qdelete",               qdelete2,              2)
+    DEFUN("%qdisconnect",           qdisconnect2,          4)
+    DEFUN("%qenums",                qenums2,               2)
+    DEFUN("qescape",                qescape,               1)
+    DEFUN("%qexec",                 qexec2,                1)
+    DEFUN("qexit",                  qexit,                 0)
+    DEFUN("qfind-child",            qfind_child,           2)
+    DEFUN("%qfind-children",        qfind_children2,       3)
+    DEFUN("qfrom-utf8",             qfrom_utf8,            1)
+    DEFUN("qid",                    qid,                   1)
+    DEFUN("%qinvoke-method",        qinvoke_method2,       4)
+    DEFUN("%qload-c++",             qload_cpp,             2)
+    DEFUN("qload-ui",               qload_ui,              1)
+    DEFUN("qlocal8bit",             qlocal8bit,            1)
+    DEFUN("%qnew-instance",         qnew_instance2,        2)
+    DEFUN("%qobject-names",         qobject_names2,        1)
+    DEFUN("qok",                    qok,                   0)
+    DEFUN("qoverride",              qoverride,             3)
+    DEFUN("qprocess-events",        qprocess_events,       0)
+    DEFUN("qproperty",              qproperty,             2)
+    DEFUN("%qrequire",              qrequire2,             2)
+    DEFUN("qremove-event-filter",   qremove_event_filter,  1)
+    DEFUN("%qrun-in-gui-thread",    qrun_in_gui_thread2,   2)
+    DEFUN("qsender",                qsender,               0)
+    DEFUN("%qset-gc",               qset_gc,               1)
+    DEFUN("qset-property",          qset_property,         3)
+    DEFUN("%qsingle-shot",          qsingle_shot2,         2)
+    DEFUN("qstatic-meta-object",    qstatic_meta_object,   1)
+    DEFUN("qsuper-class-name",      qsuper_class_name,     1)
+    DEFUN("qtranslate",             qtranslate,            3)
+    DEFUN("qt-object-name",         qt_object_name,        1)
+    DEFUN("qt-object-?",            qt_object_x,           1)
+    DEFUN("%qui-class",             qui_class2,            2)
+    DEFUN("qui-names",              qui_names,             1)
+    DEFUN("qutf8",                  qutf8,                 1)
+    DEFUN("qversion",               qversion,              0) }
 
 // QtObject methods
 

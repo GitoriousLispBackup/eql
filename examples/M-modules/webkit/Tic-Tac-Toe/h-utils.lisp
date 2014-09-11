@@ -70,6 +70,7 @@
    #:style-property
    #:tag-name
    #:toggle-class
+   #:to-html
    #:to-pixmap
    #:web-frame))
 
@@ -427,6 +428,9 @@
     (qrun* (qsingle-shot 0 'scroll-to-bottom))))
 
 ;;; wrappers for some QFrame methods
+
+(defun to-html ()
+  (qrun* (! "toHtml" (frame))))
 
 (defun document-element ()
   (qrun* (! "documentElement" (frame))))

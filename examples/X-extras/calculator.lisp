@@ -208,7 +208,7 @@
       (x:split buttons*))))
 
 (defun auto (buttons &optional (milliseconds 400))
-  "Runs visually the passed BUTTONS (either one string or a list of button strings)."
+  "Run visually the passed BUTTONS (either one string or a list of button strings)."
   (when (stringp buttons)
     (setf buttons (prepare buttons)))
   (when buttons
