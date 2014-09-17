@@ -90,55 +90,55 @@ META_TYPE (T_QVector_QTextLength,              QVector<QTextLength>)
 META_TYPE (T_QVector_qreal,                    QVector<qreal>)
 
 void iniCLFunctions() {
-    cl_object eql(make_simple_base_string((char*)"EQL"));
+    cl_object eql(STRING("EQL"));
     if(cl_find_package(eql) == Cnil) {
         cl_make_package(1, eql); }
     si_select_package(eql);
-    DEFUN("%make-qimage/dangerous", make_qimage_dangerous, 5)
-    DEFUN("no-qexec",               no_qexec,              0)
-    DEFUN("qadd-event-filter",      qadd_event_filter,     3)
-    DEFUN("%qapropos",              qapropos2,             3)
-    DEFUN("qapp",                   qapp,                  0)
-    DEFUN("qcall-default",          qcall_default,         0)
-    DEFUN("qclear-event-filters",   qclear_event_filters,  0)
-    DEFUN("%qconnect",              qconnect2,             4)
-    DEFUN("qcopy",                  qcopy,                 1)
-    DEFUN("%qdelete",               qdelete2,              2)
-    DEFUN("%qdisconnect",           qdisconnect2,          4)
-    DEFUN("%qenums",                qenums2,               2)
-    DEFUN("qescape",                qescape,               1)
-    DEFUN("%qexec",                 qexec2,                1)
-    DEFUN("qexit",                  qexit,                 0)
-    DEFUN("qfind-child",            qfind_child,           2)
-    DEFUN("%qfind-children",        qfind_children2,       3)
-    DEFUN("qfrom-utf8",             qfrom_utf8,            1)
-    DEFUN("qid",                    qid,                   1)
-    DEFUN("%qinvoke-method",        qinvoke_method2,       4)
-    DEFUN("%qload-c++",             qload_cpp,             2)
-    DEFUN("qload-ui",               qload_ui,              1)
-    DEFUN("qlocal8bit",             qlocal8bit,            1)
-    DEFUN("%qnew-instance",         qnew_instance2,        2)
-    DEFUN("%qobject-names",         qobject_names2,        1)
-    DEFUN("qok",                    qok,                   0)
-    DEFUN("qoverride",              qoverride,             3)
-    DEFUN("qprocess-events",        qprocess_events,       0)
-    DEFUN("qproperty",              qproperty,             2)
-    DEFUN("%qrequire",              qrequire2,             2)
-    DEFUN("qremove-event-filter",   qremove_event_filter,  1)
-    DEFUN("%qrun-in-gui-thread",    qrun_in_gui_thread2,   2)
-    DEFUN("qsender",                qsender,               0)
-    DEFUN("%qset-gc",               qset_gc,               1)
-    DEFUN("qset-property",          qset_property,         3)
-    DEFUN("%qsingle-shot",          qsingle_shot2,         2)
-    DEFUN("qstatic-meta-object",    qstatic_meta_object,   1)
-    DEFUN("qsuper-class-name",      qsuper_class_name,     1)
-    DEFUN("qtranslate",             qtranslate,            3)
-    DEFUN("qt-object-name",         qt_object_name,        1)
-    DEFUN("qt-object-?",            qt_object_x,           1)
-    DEFUN("%qui-class",             qui_class2,            2)
-    DEFUN("qui-names",              qui_names,             1)
-    DEFUN("qutf8",                  qutf8,                 1)
-    DEFUN("qversion",               qversion,              0) }
+    DEFUN ("%make-qimage/dangerous", make_qimage_dangerous, 5)
+    DEFUN ("no-qexec",               no_qexec,              0)
+    DEFUN ("qadd-event-filter",      qadd_event_filter,     3)
+    DEFUN ("%qapropos",              qapropos2,             3)
+    DEFUN ("qapp",                   qapp,                  0)
+    DEFUN ("qcall-default",          qcall_default,         0)
+    DEFUN ("qclear-event-filters",   qclear_event_filters,  0)
+    DEFUN ("%qconnect",              qconnect2,             4)
+    DEFUN ("qcopy",                  qcopy,                 1)
+    DEFUN ("%qdelete",               qdelete2,              2)
+    DEFUN ("%qdisconnect",           qdisconnect2,          4)
+    DEFUN ("%qenums",                qenums2,               2)
+    DEFUN ("qescape",                qescape,               1)
+    DEFUN ("%qexec",                 qexec2,                1)
+    DEFUN ("qexit",                  qexit,                 0)
+    DEFUN ("qfind-child",            qfind_child,           2)
+    DEFUN ("%qfind-children",        qfind_children2,       3)
+    DEFUN ("qfrom-utf8",             qfrom_utf8,            1)
+    DEFUN ("qid",                    qid,                   1)
+    DEFUN ("%qinvoke-method",        qinvoke_method2,       4)
+    DEFUN ("%qload-c++",             qload_cpp,             2)
+    DEFUN ("qload-ui",               qload_ui,              1)
+    DEFUN ("qlocal8bit",             qlocal8bit,            1)
+    DEFUN ("%qnew-instance",         qnew_instance2,        2)
+    DEFUN ("%qobject-names",         qobject_names2,        1)
+    DEFUN ("qok",                    qok,                   0)
+    DEFUN ("qoverride",              qoverride,             3)
+    DEFUN ("qprocess-events",        qprocess_events,       0)
+    DEFUN ("qproperty",              qproperty,             2)
+    DEFUN ("%qrequire",              qrequire2,             2)
+    DEFUN ("qremove-event-filter",   qremove_event_filter,  1)
+    DEFUN ("%qrun-in-gui-thread",    qrun_in_gui_thread2,   2)
+    DEFUN ("qsender",                qsender,               0)
+    DEFUN ("%qset-gc",               qset_gc,               1)
+    DEFUN ("qset-property",          qset_property,         3)
+    DEFUN ("%qsingle-shot",          qsingle_shot2,         2)
+    DEFUN ("qstatic-meta-object",    qstatic_meta_object,   1)
+    DEFUN ("qsuper-class-name",      qsuper_class_name,     1)
+    DEFUN ("qtranslate",             qtranslate,            3)
+    DEFUN ("qt-object-name",         qt_object_name,        1)
+    DEFUN ("qt-object-?",            qt_object_x,           1)
+    DEFUN ("%qui-class",             qui_class2,            2)
+    DEFUN ("qui-names",              qui_names,             1)
+    DEFUN ("qutf8",                  qutf8,                 1)
+    DEFUN ("qversion",               qversion,              0) }
 
 // QtObject methods
 
@@ -158,35 +158,35 @@ static cl_object from_cstring(const QByteArray& s) {
     return l_s; }
 
 static void arguments_msg(cl_object l_list) {
-    STATIC_SYMBOL(s_error_output, (char*)"*ERROR-OUTPUT*")
+    STATIC_SYMBOL (s_error_output, "*ERROR-OUTPUT*")
     cl_format(3,
               cl_symbol_value(s_error_output),
-              make_constant_base_string((char*)"~{~%~A~}"),
+              STRING("~{~%~A~}"),
               l_list); }
 
 static void type_msg(const QByteArray& wanted, const QByteArray& got) {
-    STATIC_SYMBOL(s_error_output, (char*)"*ERROR-OUTPUT*")
+    STATIC_SYMBOL (s_error_output, "*ERROR-OUTPUT*")
     cl_format(4,
               cl_symbol_value(s_error_output),
-              make_constant_base_string((char*)"~%[EQL:typ] wanted <~A> got <~A>"),
+              STRING("~%[EQL:typ] wanted <~A> got <~A>"),
               from_cstring(wanted),
               from_cstring(got.isEmpty() ? "no Qt object" : got)); }
 
 void error_msg(const char* fun, cl_object l_args) {
-    STATIC_SYMBOL_PKG(s_break_on_errors, (char*)"*BREAK-ON-ERRORS*", (char*)"EQL")
+    STATIC_SYMBOL_PKG (s_break_on_errors, "*BREAK-ON-ERRORS*", "EQL")
     if(cl_symbol_value(s_break_on_errors) != Cnil) {
-        STATIC_SYMBOL_PKG(s_break, (char*)"%BREAK", (char*)"EQL") // see lisp/ini.lisp
+        STATIC_SYMBOL_PKG (s_break, "%BREAK", "EQL") // see lisp/ini.lisp
         cl_funcall(4,
                    s_break,
-                   make_constant_base_string((char*)"~%[EQL:err] ~A ~{~S~^ ~}~%"),
-                   make_constant_base_string((char*)fun),
+                   STRING("~%[EQL:err] ~A ~{~S~^ ~}~%"),
+                   STRING(fun),
                    l_args); }
     else {
-        STATIC_SYMBOL(s_error_output, (char*)"*ERROR-OUTPUT*")
+        STATIC_SYMBOL (s_error_output, "*ERROR-OUTPUT*")
         cl_format(4,
                   cl_symbol_value(s_error_output),
-                  make_constant_base_string((char*)"~%[EQL:err] ~A ~{~S~^ ~}~%"),
-                  make_constant_base_string((char*)fun),
+                  STRING("~%[EQL:err] ~A ~{~S~^ ~}~%"),
+                  STRING(fun),
                   l_args); }}
 
 static char** to_cstring_ptr(cl_object l_str) {
@@ -297,15 +297,15 @@ static int findMethodIndex(CallType type, const QByteArray& name, const QMetaObj
     return n; }
 
 static cl_object q_keyword() {
-    STATIC_SYMBOL_PKG(s_q, (char*)"Q", (char*)"KEYWORD")
+    STATIC_SYMBOL_PKG (s_q, "Q", "KEYWORD")
     return s_q; }
 
 static cl_object qt_keyword() {
-    STATIC_SYMBOL_PKG(s_qt, (char*)"QT", (char*)"KEYWORD")
+    STATIC_SYMBOL_PKG (s_qt, "QT", "KEYWORD")
     return s_qt; }
 
 static cl_object make_vector() {
-    STATIC_SYMBOL_PKG(s_make_vector, (char*)"%MAKE-VECTOR", (char*)"EQL") // see lisp/ini.lisp
+    STATIC_SYMBOL_PKG (s_make_vector, "%MAKE-VECTOR", "EQL") // see lisp/ini.lisp
     cl_object l_vector = cl_funcall(1, s_make_vector);
     return l_vector; }
 
@@ -566,18 +566,18 @@ static const char* eventName(QEvent::Type type) {
     return name; }
 
 static QByteArray qtObjectName(cl_object l_obj) {
-    STATIC_SYMBOL_PKG(s_ensure_qt_object, (char*)"ENSURE-QT-OBJECT", (char*)"EQL")
-    STATIC_SYMBOL_PKG(s_qt_object_id,     (char*)"QT-OBJECT-ID",     (char*)"EQL")
+    STATIC_SYMBOL_PKG (s_ensure_qt_object, "ENSURE-QT-OBJECT", "EQL")
+    STATIC_SYMBOL_PKG (s_qt_object_id,     "QT-OBJECT-ID",     "EQL")
     l_obj = cl_funcall(2, s_ensure_qt_object, l_obj);
     if(l_obj != Cnil) {
         return QtObject::idToClassName(toInt(cl_funcall(2, s_qt_object_id, l_obj))); }
     return QByteArray(); }
 
 QtObject toQtObject(cl_object l_obj, cl_object l_cast, bool* qobject_align) {
-    STATIC_SYMBOL_PKG(s_ensure_qt_object,  (char*)"ENSURE-QT-OBJECT",  (char*)"EQL")
-    STATIC_SYMBOL_PKG(s_qt_object_pointer, (char*)"QT-OBJECT-POINTER", (char*)"EQL")
-    STATIC_SYMBOL_PKG(s_qt_object_unique,  (char*)"QT-OBJECT-UNIQUE",  (char*)"EQL")
-    STATIC_SYMBOL_PKG(s_qt_object_id,      (char*)"QT-OBJECT-ID",      (char*)"EQL")
+    STATIC_SYMBOL_PKG (s_ensure_qt_object,  "ENSURE-QT-OBJECT",  "EQL")
+    STATIC_SYMBOL_PKG (s_qt_object_pointer, "QT-OBJECT-POINTER", "EQL")
+    STATIC_SYMBOL_PKG (s_qt_object_unique,  "QT-OBJECT-UNIQUE",  "EQL")
+    STATIC_SYMBOL_PKG (s_qt_object_id,      "QT-OBJECT-ID",      "EQL")
     QtObject o;
     if(ECL_STRINGP(l_obj)) { // string name, for static methods
         o.id = classId(l_obj); }
@@ -595,7 +595,7 @@ QtObject toQtObject(cl_object l_obj, cl_object l_cast, bool* qobject_align) {
     return o; }
 
 static cl_object new_qt_object(void* pointer, uint unique, int id, bool finalize = false) {
-    STATIC_SYMBOL_PKG(s_new_qt_object, (char*)"NEW-QT-OBJECT", (char*)"EQL")
+    STATIC_SYMBOL_PKG (s_new_qt_object, "NEW-QT-OBJECT", "EQL")
     cl_object l_qt_object = cl_funcall(5,
                                        s_new_qt_object,
                                        ecl_make_unsigned_integer((cl_index)pointer),
@@ -693,90 +693,89 @@ static QList<QTextEdit::ExtraSelection> toQTextEditExtraSelectionList(cl_object 
     return l; }
 
 // implicit pointer types
-TO_QT_TYPE_PTR2(QBrush, qbrush)
-TO_QT_TYPE_PTR2(QCursor, qcursor)
-TO_QT_TYPE_PTR2(QDate, qdate)
-TO_QT_TYPE_PTR2(QDateTime, qdatetime)
-TO_QT_TYPE_PTR(QEasingCurve, qeasingcurve)
-TO_QT_TYPE_PTR2(QFileInfo, qfileinfo)
-TO_QT_TYPE_PTR2(QFont, qfont)
-TO_QT_TYPE_PTR2(QIcon, qicon)
-TO_QT_TYPE_PTR2(QImage, qimage)
-TO_QT_TYPE_PTR2(QKeySequence, qkeysequence)
-TO_QT_TYPE_PTR2(QLocale, qlocale)
-TO_QT_TYPE_PTR2(QMatrix, qmatrix)
-TO_QT_TYPE_PTR2(QModelIndex, qmodelindex)
-TO_QT_TYPE_PTR(QPainterPath, qpainterpath)
-TO_QT_TYPE_PTR2(QPalette, qpalette)
-TO_QT_TYPE_PTR2(QPen, qpen)
-TO_QT_TYPE_PTR2(QPixmap, qpixmap)
-TO_QT_TYPE_PTR2(QSizePolicy, qsizepolicy)
-TO_QT_TYPE_PTR2(QTableWidgetSelectionRange, qtablewidgetselectionrange)
-TO_QT_TYPE_PTR2(QTextBlock, qtextblock)
-TO_QT_TYPE_PTR(QTextBlockFormat, qtextblockformat)
-TO_QT_TYPE_PTR(QTextCharFormat, qtextcharformat)
-TO_QT_TYPE_PTR(QTextFrameFormat, qtextframeformat)
-TO_QT_TYPE_PTR(QTextListFormat, qtextlistformat)
-TO_QT_TYPE_PTR(QTextCursor, qtextcursor)
-TO_QT_TYPE_PTR(QTextDocumentFragment, qtextdocumentfragment)
-TO_QT_TYPE_PTR2(QTextFormat, qtextformat)
-TO_QT_TYPE_PTR2(QTextLength, qtextlength)
-TO_QT_TYPE_PTR(QTextLine, qtextline)
-TO_QT_TYPE_PTR(QTextOption, qtextoption)
-TO_QT_TYPE_PTR2(QTime, qtime)
-TO_QT_TYPE_PTR2(QTransform, qtransform)
-TO_QT_TYPE_PTR2(QUrl, qurl)
-TO_QT_TYPE_PTR(QVariant, qvariant)
+TO_QT_TYPE_PTR2 (QBrush, qbrush)
+TO_QT_TYPE_PTR2 (QCursor, qcursor)
+TO_QT_TYPE_PTR2 (QDate, qdate)
+TO_QT_TYPE_PTR2 (QDateTime, qdatetime)
+TO_QT_TYPE_PTR  (QEasingCurve, qeasingcurve)
+TO_QT_TYPE_PTR2 (QFileInfo, qfileinfo)
+TO_QT_TYPE_PTR2 (QFont, qfont)
+TO_QT_TYPE_PTR2 (QIcon, qicon)
+TO_QT_TYPE_PTR2 (QImage, qimage)
+TO_QT_TYPE_PTR2 (QKeySequence, qkeysequence)
+TO_QT_TYPE_PTR2 (QLocale, qlocale)
+TO_QT_TYPE_PTR2 (QMatrix, qmatrix)
+TO_QT_TYPE_PTR2 (QModelIndex, qmodelindex)
+TO_QT_TYPE_PTR  (QPainterPath, qpainterpath)
+TO_QT_TYPE_PTR2 (QPalette, qpalette)
+TO_QT_TYPE_PTR2 (QPen, qpen)
+TO_QT_TYPE_PTR2 (QPixmap, qpixmap)
+TO_QT_TYPE_PTR2 (QSizePolicy, qsizepolicy)
+TO_QT_TYPE_PTR2 (QTableWidgetSelectionRange, qtablewidgetselectionrange)
+TO_QT_TYPE_PTR2 (QTextBlock, qtextblock)
+TO_QT_TYPE_PTR  (QTextBlockFormat, qtextblockformat)
+TO_QT_TYPE_PTR  (QTextCharFormat, qtextcharformat)
+TO_QT_TYPE_PTR  (QTextFrameFormat, qtextframeformat)
+TO_QT_TYPE_PTR  (QTextListFormat, qtextlistformat)
+TO_QT_TYPE_PTR  (QTextCursor, qtextcursor)
+TO_QT_TYPE_PTR  (QTextDocumentFragment, qtextdocumentfragment)
+TO_QT_TYPE_PTR2 (QTextFormat, qtextformat)
+TO_QT_TYPE_PTR2 (QTextLength, qtextlength)
+TO_QT_TYPE_PTR  (QTextLine, qtextline)
+TO_QT_TYPE_PTR  (QTextOption, qtextoption)
+TO_QT_TYPE_PTR2 (QTime, qtime)
+TO_QT_TYPE_PTR2 (QTransform, qtransform)
+TO_QT_TYPE_PTR2 (QUrl, qurl)
+TO_QT_TYPE_PTR  (QVariant, qvariant)
 
-TO_QT_TYPEF(QPoint)
-TO_QT_TYPEF(QSize)
+TO_QT_TYPEF  (QPoint)
+TO_QT_TYPEF  (QSize)
+TO_QT_TYPEF2 (QLine)
+TO_QT_TYPEF2 (QRect)
 
-TO_QT_TYPEF2(QLine)
-TO_QT_TYPEF2(QRect)
+TO_QT_LIST_PTR (QAbstractAnimation)
+TO_QT_LIST_PTR (QAbstractButton)
+TO_QT_LIST_PTR (QAbstractState)
+TO_QT_LIST_PTR (QAction)
+TO_QT_LIST_PTR (QDockWidget)
+TO_QT_LIST_PTR (QGesture)
+TO_QT_LIST_PTR (QGraphicsItem)
+TO_QT_LIST_PTR (QGraphicsTransform)
+TO_QT_LIST_PTR (QGraphicsView)
+TO_QT_LIST_PTR (QGraphicsWidget)
+TO_QT_LIST_PTR (QListWidgetItem)
+TO_QT_LIST_PTR (QMdiSubWindow)
+TO_QT_LIST_PTR (QObject)
+TO_QT_LIST_PTR (QStandardItem)
+TO_QT_LIST_PTR (QTableWidgetItem)
+TO_QT_LIST_PTR (QTextFrame)
+TO_QT_LIST_PTR (QTreeWidgetItem)
+TO_QT_LIST_PTR (QUndoStack)
+TO_QT_LIST_PTR (QWidget)
 
-TO_QT_LIST_PTR(QAbstractAnimation)
-TO_QT_LIST_PTR(QAbstractButton)
-TO_QT_LIST_PTR(QAbstractState)
-TO_QT_LIST_PTR(QAction)
-TO_QT_LIST_PTR(QDockWidget)
-TO_QT_LIST_PTR(QGesture)
-TO_QT_LIST_PTR(QGraphicsItem)
-TO_QT_LIST_PTR(QGraphicsTransform)
-TO_QT_LIST_PTR(QGraphicsView)
-TO_QT_LIST_PTR(QGraphicsWidget)
-TO_QT_LIST_PTR(QListWidgetItem)
-TO_QT_LIST_PTR(QMdiSubWindow)
-TO_QT_LIST_PTR(QObject)
-TO_QT_LIST_PTR(QStandardItem)
-TO_QT_LIST_PTR(QTableWidgetItem)
-TO_QT_LIST_PTR(QTextFrame)
-TO_QT_LIST_PTR(QTreeWidgetItem)
-TO_QT_LIST_PTR(QUndoStack)
-TO_QT_LIST_PTR(QWidget)
+TO_QT_LIST_VAL  (QByteArray)
+TO_QT_LIST_VAL  (QFileInfo)
+TO_QT_LIST_VAL  (QKeySequence)
+TO_QT_LIST_VAL  (QModelIndex)
+TO_QT_LIST_VAL  (QPolygonF)
+TO_QT_LIST_VAL  (QSize)
+TO_QT_LIST_VAL  (QTableWidgetSelectionRange)
+TO_QT_LIST_VAL  (QTextBlock)
+TO_QT_LIST_VAL  (QUrl)
+TO_QT_LIST_VAL2 (int, Int)
+TO_QT_LIST_VAL2 (qreal, Real)
 
-TO_QT_LIST_VAL(QByteArray)
-TO_QT_LIST_VAL(QFileInfo)
-TO_QT_LIST_VAL(QKeySequence)
-TO_QT_LIST_VAL(QModelIndex)
-TO_QT_LIST_VAL(QPolygonF)
-TO_QT_LIST_VAL(QSize)
-TO_QT_LIST_VAL(QTableWidgetSelectionRange)
-TO_QT_LIST_VAL(QTextBlock)
-TO_QT_LIST_VAL(QUrl)
-TO_QT_LIST_VAL2(int, Int)
-TO_QT_LIST_VAL2(qreal, Real)
-
-TO_QT_VECTOR_VAL(QGradientStop)
-TO_QT_VECTOR_VAL(QLine)
-TO_QT_VECTOR_VAL(QLineF)
-TO_QT_VECTOR_VAL(QPoint)
-TO_QT_VECTOR_VAL(QPointF)
-TO_QT_VECTOR_VAL(QRect)
-TO_QT_VECTOR_VAL(QRectF)
-TO_QT_VECTOR_VAL(QTextFormat)
-TO_QT_VECTOR_VAL(QTextLength)
-TO_QT_VECTOR_VAL2(QRgb, UInt)
-TO_QT_VECTOR_VAL2(qreal, Real)
+TO_QT_VECTOR_VAL  (QGradientStop)
+TO_QT_VECTOR_VAL  (QLine)
+TO_QT_VECTOR_VAL  (QLineF)
+TO_QT_VECTOR_VAL  (QPoint)
+TO_QT_VECTOR_VAL  (QPointF)
+TO_QT_VECTOR_VAL  (QRect)
+TO_QT_VECTOR_VAL  (QRectF)
+TO_QT_VECTOR_VAL  (QTextFormat)
+TO_QT_VECTOR_VAL  (QTextLength)
+TO_QT_VECTOR_VAL2 (QRgb, UInt)
+TO_QT_VECTOR_VAL2 (qreal, Real)
 
 QVariant toQVariant(cl_object l_obj, const char* s_type, int type) {
     QVariant var;
@@ -941,51 +940,50 @@ static cl_object from_qtexteditextraselectionlist(const QList<QTextEdit::ExtraSe
     l_list = cl_nreverse(l_list);
     return l_list; }
 
-TO_CL_TYPEF(QPoint, qpoint, x, y)
-TO_CL_TYPEF(QSize, qsize, width, height)
+TO_CL_TYPEF  (QPoint, qpoint, x, y)
+TO_CL_TYPEF  (QSize, qsize, width, height)
+TO_CL_TYPEF2 (QLine, qline, x1, y1, x2, y2)
+TO_CL_TYPEF2 (QRect, qrect, x, y, width, height)
 
-TO_CL_TYPEF2(QLine, qline, x1, y1, x2, y2)
-TO_CL_TYPEF2(QRect, qrect, x, y, width, height)
+TO_CL_LIST_PTR (QAbstractAnimation, qabstractanimation)
+TO_CL_LIST_PTR (QAbstractButton, qabstractbutton)
+TO_CL_LIST_PTR (QAbstractState, qabstractstate)
+TO_CL_LIST_PTR (QAction, qaction)
+TO_CL_LIST_PTR (QDockWidget, qdockwidget)
+TO_CL_LIST_PTR (QGesture, qgesture)
+TO_CL_LIST_PTR (QGraphicsItem, qgraphicsitem)
+TO_CL_LIST_PTR (QGraphicsTransform, qgraphicstransform)
+TO_CL_LIST_PTR (QGraphicsView, qgraphicsview)
+TO_CL_LIST_PTR (QGraphicsWidget, qgraphicswidget)
+TO_CL_LIST_PTR (QListWidgetItem, qlistwidgetitem)
+TO_CL_LIST_PTR (QMdiSubWindow, qmdisubwindow)
+TO_CL_LIST_PTR (QStandardItem, qstandarditem)
+TO_CL_LIST_PTR (QTableWidgetItem, qtablewidgetitem)
+TO_CL_LIST_PTR (QTextFrame, qtextframe)
+TO_CL_LIST_PTR (QTreeWidgetItem, qtreewidgetitem)
+TO_CL_LIST_PTR (QUndoStack, qundostack)
 
-TO_CL_LIST_PTR(QAbstractAnimation, qabstractanimation)
-TO_CL_LIST_PTR(QAbstractButton, qabstractbutton)
-TO_CL_LIST_PTR(QAbstractState, qabstractstate)
-TO_CL_LIST_PTR(QAction, qaction)
-TO_CL_LIST_PTR(QDockWidget, qdockwidget)
-TO_CL_LIST_PTR(QGesture, qgesture)
-TO_CL_LIST_PTR(QGraphicsItem, qgraphicsitem)
-TO_CL_LIST_PTR(QGraphicsTransform, qgraphicstransform)
-TO_CL_LIST_PTR(QGraphicsView, qgraphicsview)
-TO_CL_LIST_PTR(QGraphicsWidget, qgraphicswidget)
-TO_CL_LIST_PTR(QListWidgetItem, qlistwidgetitem)
-TO_CL_LIST_PTR(QMdiSubWindow, qmdisubwindow)
-TO_CL_LIST_PTR(QStandardItem, qstandarditem)
-TO_CL_LIST_PTR(QTableWidgetItem, qtablewidgetitem)
-TO_CL_LIST_PTR(QTextFrame, qtextframe)
-TO_CL_LIST_PTR(QTreeWidgetItem, qtreewidgetitem)
-TO_CL_LIST_PTR(QUndoStack, qundostack)
+TO_CL_LIST_VAL (QByteArray, qbytearray)
+TO_CL_LIST_VAL (QFileInfo, qfileinfo)
+TO_CL_LIST_VAL (QKeySequence, qkeysequence)
+TO_CL_LIST_VAL (QModelIndex, qmodelindex)
+TO_CL_LIST_VAL (QPolygonF, qpolygonf)
+TO_CL_LIST_VAL (QSize, qsize)
+TO_CL_LIST_VAL (QTableWidgetSelectionRange, qtablewidgetselectionrange)
+TO_CL_LIST_VAL (QTextBlock, qtextblock)
+TO_CL_LIST_VAL (QUrl, qurl)
 
-TO_CL_LIST_VAL(QByteArray, qbytearray)
-TO_CL_LIST_VAL(QFileInfo, qfileinfo)
-TO_CL_LIST_VAL(QKeySequence, qkeysequence)
-TO_CL_LIST_VAL(QModelIndex, qmodelindex)
-TO_CL_LIST_VAL(QPolygonF, qpolygonf)
-TO_CL_LIST_VAL(QSize, qsize)
-TO_CL_LIST_VAL(QTableWidgetSelectionRange, qtablewidgetselectionrange)
-TO_CL_LIST_VAL(QTextBlock, qtextblock)
-TO_CL_LIST_VAL(QUrl, qurl)
-
-TO_CL_VECTOR_VAL(QGradientStop, qgradientstop)
-TO_CL_VECTOR_VAL(QLine, qline)
-TO_CL_VECTOR_VAL(QLineF, qlinef)
-TO_CL_VECTOR_VAL(QPoint, qpoint)
-TO_CL_VECTOR_VAL(QPointF, qpointf)
-TO_CL_VECTOR_VAL(QRect, qrect)
-TO_CL_VECTOR_VAL(QRectF, qrectf)
-TO_CL_VECTOR_VAL(QTextFormat, qtextformat)
-TO_CL_VECTOR_VAL(QTextLength, qtextlength)
-TO_CL_VECTOR_VAL2(QRgb, qrgb, ecl_make_unsigned_integer)
-TO_CL_VECTOR_VAL2(qreal, qreal, ecl_make_doublefloat)
+TO_CL_VECTOR_VAL  (QGradientStop, qgradientstop)
+TO_CL_VECTOR_VAL  (QLine, qline)
+TO_CL_VECTOR_VAL  (QLineF, qlinef)
+TO_CL_VECTOR_VAL  (QPoint, qpoint)
+TO_CL_VECTOR_VAL  (QPointF, qpointf)
+TO_CL_VECTOR_VAL  (QRect, qrect)
+TO_CL_VECTOR_VAL  (QRectF, qrectf)
+TO_CL_VECTOR_VAL  (QTextFormat, qtextformat)
+TO_CL_VECTOR_VAL  (QTextLength, qtextlength)
+TO_CL_VECTOR_VAL2 (QRgb, qrgb, ecl_make_unsigned_integer)
+TO_CL_VECTOR_VAL2 (qreal, qreal, ecl_make_doublefloat)
 
 static cl_object from_qvariant_value(const QVariant& var) {
     cl_object l_obj = Cnil;
@@ -1263,7 +1261,7 @@ cl_object to_lisp_arg(const MetaArg& arg) {
                 if(sType.startsWith('Q') || sType.startsWith("const Q")) {
                     l_ret = qt_object_from_name(sType, *(void**)p); }
                 else if("const char*" == sType) {
-                    l_ret = make_base_string_copy(*(char**)p); }
+                    l_ret = STRING_COPY(*(char**)p); }
                 else {
                     l_ret = ecl_make_unsigned_integer((cl_index)*(void**)p); }}
 #if QT_VERSION < 0x040700
@@ -1483,7 +1481,7 @@ static cl_object collect_info(const QByteArray& type, const QByteArray& qclass, 
     if(info.size()) {
         *found = true;
         Q_FOREACH(QByteArray i, info) {
-            l_info = CONS(make_base_string_copy((char*)i.constData()), l_info); }}
+            l_info = CONS(STRING_COPY(i.constData()), l_info); }}
     l_info = cl_nreverse(l_info);
     return l_info; }
 
@@ -1541,18 +1539,18 @@ cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
             if(found) {
                 cl_object l_doc = Cnil;
                 if(l_doc_pro != Cnil) {
-                    l_doc = CONS(CONS(make_constant_base_string((char*)"Properties:"), l_doc_pro), l_doc); }
+                    l_doc = CONS(CONS(STRING("Properties:"), l_doc_pro), l_doc); }
                 if(l_doc_met != Cnil) {
-                    l_doc = CONS(CONS(make_constant_base_string((char*)"Methods:"), l_doc_met), l_doc); }
+                    l_doc = CONS(CONS(STRING("Methods:"), l_doc_met), l_doc); }
                 if(l_doc_slo != Cnil) {
-                    l_doc = CONS(CONS(make_constant_base_string((char*)"Slots:"), l_doc_slo), l_doc); }
+                    l_doc = CONS(CONS(STRING("Slots:"), l_doc_slo), l_doc); }
                 if(l_doc_sig != Cnil) {
-                    l_doc = CONS(CONS(make_constant_base_string((char*)"Signals:"), l_doc_sig), l_doc); }
+                    l_doc = CONS(CONS(STRING("Signals:"), l_doc_sig), l_doc); }
                 if((l_doc_ovr != Cnil) && !qt_eql) {
-                    l_doc = CONS(CONS(make_constant_base_string((char*)"Override:"), l_doc_ovr), l_doc); }
+                    l_doc = CONS(CONS(STRING("Override:"), l_doc_ovr), l_doc); }
                 l_doc = cl_nreverse(l_doc);
                 if(l_doc != Cnil) {
-                    l_docs = CONS(CONS(make_base_string_copy((char*)cl.data()), l_doc), l_docs); }}}}
+                    l_docs = CONS(CONS(STRING_COPY(cl.data()), l_doc), l_docs); }}}}
     cl_object l_ret = cl_nreverse(l_docs);
     return l_ret; }
 
@@ -1669,7 +1667,7 @@ cl_object qdelete2(cl_object l_obj, cl_object l_later) {
     QtObject o = toQtObject(l_obj);
     if(o.pointer) {
         bool ok = false;
-        STATIC_SYMBOL_PKG(s_qt_object_finalize, (char*)"QT-OBJECT-FINALIZE", (char*)"EQL")
+        STATIC_SYMBOL_PKG (s_qt_object_finalize, "QT-OBJECT-FINALIZE", "EQL")
         if(cl_funcall(2, s_qt_object_finalize, l_obj) != Cnil) {
             if(_garbage_collection_) {
                 if(o.isQObject()) {
@@ -1691,7 +1689,7 @@ cl_object qdelete2(cl_object l_obj, cl_object l_later) {
                 LObjects::deleteNObject(-o.id, o.pointer); }
             ok = true; }
         if(ok) {
-            STATIC_SYMBOL_PKG(s_qset_null, (char*)"QSET-NULL", (char*)"EQL")
+            STATIC_SYMBOL_PKG (s_qset_null, "QSET-NULL", "EQL")
             cl_funcall(2, s_qset_null, l_obj);
             return Ct; }}
     // no error message (unintentional multiple deletion)
@@ -1925,8 +1923,8 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
     return Cnil; }
 
 static void* getLispFun(cl_object l_fun) {
-    STATIC_SYMBOL(s_package, (char*)"*PACKAGE*");
-    STATIC_SYMBOL_PKG(s_get_function, (char*)"%GET-FUNCTION", (char*)"EQL") // see lisp/ini.lisp
+    STATIC_SYMBOL (s_package, "*PACKAGE*");
+    STATIC_SYMBOL_PKG (s_get_function, "%GET-FUNCTION", "EQL") // see lisp/ini.lisp
     cl_object l_ret = cl_funcall(3,
                                  s_get_function,
                                  l_fun,
@@ -2057,8 +2055,8 @@ cl_object qcall_default() {
     return Ct; }
 
 QVariant callOverrideFun(void* fun, int id, const void** args, quint64 override_id) {
-    STATIC_SYMBOL_PKG(s_qt_object_p,       (char*)"QT-OBJECT-P",       (char*)"EQL")
-    STATIC_SYMBOL_PKG(s_qt_object_pointer, (char*)"QT-OBJECT-POINTER", (char*)"EQL")
+    STATIC_SYMBOL_PKG (s_qt_object_p,       "QT-OBJECT-P",       "EQL")
+    STATIC_SYMBOL_PKG (s_qt_object_pointer, "QT-OBJECT-POINTER", "EQL")
     int n = id - 1;
     int i = 0;
     const char* type = 0;

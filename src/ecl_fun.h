@@ -19,16 +19,21 @@ QT_BEGIN_NAMESPACE
 #define DEFUN(name, c_name, num_args) \
     cl_def_c_function(c_string_to_object((char*)name), (cl_objectfn_fixed)c_name, num_args);
 
+#define STRING(s) make_constant_base_string((char*)s)
+
+#define STRING_COPY(s) make_base_string_copy((char*)s)
+
 #define PRINT(x) cl_print(1, x)
+
 #define TERPRI() cl_terpri(0)
 
 #define STATIC_SYMBOL(var, name) \
-    static cl_object var = cl_intern(1, make_constant_base_string(name));
+    static cl_object var = cl_intern(1, make_constant_base_string((char*)name));
 
 #define STATIC_SYMBOL_PKG(var, name, pkg) \
     static cl_object var = cl_intern(2, \
-                                     make_constant_base_string(name), \
-                                     cl_find_package(make_constant_base_string(pkg)));
+                                     make_constant_base_string((char*)name), \
+                                     cl_find_package(make_constant_base_string((char*)pkg)));
 
 #define LEN(x) fixint(cl_length(x))
 
