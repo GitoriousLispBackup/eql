@@ -1636,7 +1636,6 @@ cl_object qcopy(cl_object l_obj) {
             const QMetaObject* mo = caller->metaObject();
             int n = mo->indexOfMethod(QByteArray("CC(uint,L") + o.className().mid(1) + "*)");
             if(n != -1) {
-                QMetaMethod mm(mo->method(n));
                 void* args[] = { 0, 0, 0 };
                 void* pointer = 0;
                 args[0] = &pointer; // return value

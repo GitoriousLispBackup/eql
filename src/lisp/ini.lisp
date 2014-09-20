@@ -414,6 +414,27 @@
 (defun qload-c++ (library-name &optional unload)
   (%qload-c++ library-name unload))
 
+(defun define-qt-wrappers (library)
+  "args: (library)
+   Defines wrapper functions for all Qt methods of given library (passed as quoted symbol).<br>The Lisp functions are defined and exported in a package named after <code>library</code>.
+       (define-qt-wrappers '*c++*) ; generate wrappers (see \"Qt_EQL_dynamic/\")
+       (c++:my-qt-function x y)    ; wrapper for: (! \"myQtFunction\" (:qt *c++*) x y)"
+  (let* ((pkg-name (string-trim "*" (symbol-name library)))
+         (pkg (or (find-package pkg-name)
+                  (make-package pkg-name :use '(:common-lisp :eql)))))
+    (dolist (fun (rest (find "Methods:" (cdar (qapropos* nil (symbol-value library)))
+                             :key 'first :test 'string=)))
+      (let* ((qt-name (subseq fun (1+ (position #\Space fun)) (position #\( fun)))
+             (lisp-name (with-output-to-string (s)
+                          (x:do-string (ch qt-name)
+                            (if (upper-case-p ch)
+                                (format s "-~C" ch)
+                                (write-char (char-upcase ch) s)))))
+             (symbol (intern lisp-name pkg)))
+        (setf (symbol-function symbol)
+              (lambda (&rest args) (%qinvoke-method (symbol-value library) :qt qt-name args)))
+        (export symbol pkg)))))
+
 #+linux
 (defun %ini-auto-reload (library-name watcher on-file-change)
   (multiple-value-bind (object file-name)
@@ -506,7 +527,8 @@
 
 ;; add property :function-lambda-list to plist of EQL functions (inspired by ext:function-lambda-list)
 
-(dolist (el (list (cons 'defvar-ui            '(main-widget &rest variables))
+(dolist (el (list (cons 'define-qt-wrappers   '(library))
+                  (cons 'defvar-ui            '(main-widget &rest variables))
                   (cons 'ensure-qt-object     '(object))
                   (cons 'in-home              '(&rest file-names))
                   (cons 'qadd-event-filter    '(object event function))

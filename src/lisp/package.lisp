@@ -7,6 +7,7 @@
    #:*slime-mode*
    #:*qtpl*
    #:!
+   #:define-qt-wrappers
    #:defvar-ui
    #:ensure-qt-object
    #:in-home

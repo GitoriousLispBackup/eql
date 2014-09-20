@@ -1,4 +1,5 @@
-'("defvar-ui"
+'("define-qt-wrappers"
+  "defvar-ui"
   "ensure-qt-object"
   "in-home"
   "new-qt-object"

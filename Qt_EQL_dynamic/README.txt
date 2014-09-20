@@ -21,4 +21,7 @@ QFIND-CHILDREN, QFUN+).
 Calling Lisp from C++ through "eql_fun()" is easy, and you can use any Qt
 class/type supported by EQL, see examples in "cpp_calling_lisp/lib.cpp".
 
+To automatically generate lispy wrappers for your Qt functions, see function
+DEFINE-QT-WRAPPERS.
+
 Linux only: see also function QAUTO-RELOAD-C++.

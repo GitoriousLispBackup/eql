@@ -1,4 +1,12 @@
 <html><body><p>
+<b>DEFINE-QT-WRAPPERS (library)</b>
+<p>Defines wrapper functions for all Qt methods of given library (passed as quoted symbol).<br>The Lisp functions are defined and exported in a package named after <code>library</code>.</p>
+<pre>
+  (define-qt-wrappers '*c++*) ; generate wrappers (see "Qt_EQL_dynamic/")
+  (c++:my-qt-function x y)    ; wrapper for: (! "myQtFunction" (:qt *c++*) x y)
+</pre>
+</p><br>
+<p>
 <b>DEFVAR-UI (main-widget &rest variables)</b>
 <p>This macro simplifies the definition of UI variables:</p>
 <pre>
