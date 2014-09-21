@@ -6,9 +6,7 @@
 (defvar *yellow*       (second *lights*))
 (defvar *green*        (third *lights*))
 
-(assert (qt-object-p *trafficlight*))
-
-(qapropos nil (first *lights*))
+(qapropos nil *red*)
 (qapropos nil *trafficlight*)
 
 ;;; generate wrappers
