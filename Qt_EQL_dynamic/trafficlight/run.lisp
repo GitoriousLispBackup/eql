@@ -1,9 +1,25 @@
 (in-package :eql-user)
 
-(defvar *qt-main* (qload-c++ (in-home "Qt_EQL_dynamic/trafficlight/trafficlight")))
+(defvar *trafficlight* (qload-c++ (in-home "Qt_EQL_dynamic/trafficlight/trafficlight")))
+(defvar *lights*       (qfind-children *trafficlight* nil "LightWidget"))
+(defvar *red*          (first *lights*))
+(defvar *yellow*       (second *lights*))
+(defvar *green*        (third *lights*))
 
-(assert (qt-object-p *qt-main*))
+(assert (qt-object-p *trafficlight*))
 
-(qapropos nil (first (qfind-children *qt-main* nil "LightWidget")))
-(qapropos nil *qt-main*)
+(qapropos nil (first *lights*))
+(qapropos nil *trafficlight*)
 
+;;; generate wrappers
+
+(define-qt-wrappers '*trafficlight*)
+(define-qt-wrappers '*red*)
+
+;;; now you can do:
+;;;
+;;; (start *trafficlight*)
+;;; (stop *trafficlight*)
+;;;
+;;; (turn-on *red*)
+;;; (turn-off *green*)

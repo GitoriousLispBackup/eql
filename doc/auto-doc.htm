@@ -1,9 +1,9 @@
 <html><body><p>
 <b>DEFINE-QT-WRAPPERS (library)</b>
-<p>Defines wrapper functions for all Qt methods of given library (passed as quoted symbol).<br>The Lisp functions are defined and exported in a package named after <code>library</code>.</p>
+<p>Defines CLOS methods for all Qt methods/signals/slots of given library (passed as quoted symbol).<br>(See example "Qt_EQL_dynamic/trafficlight/").</p>
 <pre>
   (define-qt-wrappers '*c++*) ; generate wrappers (see "Qt_EQL_dynamic/")
-  (c++:my-qt-function x y)    ; wrapper for: (! "myQtFunction" (:qt *c++*) x y)
+  (my-qt-function *c++* x y)  ; instead of: (! "myQtFunction" (:qt *c++*) x y)
 </pre>
 </p><br>
 <p>

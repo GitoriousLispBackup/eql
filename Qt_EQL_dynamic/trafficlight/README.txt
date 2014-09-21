@@ -9,11 +9,24 @@ make
 
 eql run.lisp -qtpl
 
-  (qfun+ *qt-main* "stop")
-  (qfun+ *qt-main* "start")
+________________________________________
 
-alternatively:
+Option 1:
 
-  (! "stop"  (:qt *qt-main*))
-  (! "start" (:qt *qt-main*))
+  (qfun+ *trafficlight* "stop")
+  (qfun+ *trafficlight* "start")
+________________________________________
 
+Option 2:
+
+  (! "stop"  (:qt *trafficlight*))
+  (! "start" (:qt *trafficlight*))
+________________________________________
+
+Option 3:
+
+  (define-qt-wrappers '*trafficlight*)
+
+  (start *trafficlight*)
+  (stop *trafficlight*)
+________________________________________
