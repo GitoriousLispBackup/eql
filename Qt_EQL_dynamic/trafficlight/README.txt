@@ -25,7 +25,7 @@ ________________________________________
 
 Option 3:
 
-  (define-qt-wrappers '*trafficlight*)
+  (define-qt-wrappers *trafficlight*)
 
   (start *trafficlight*)
   (stop *trafficlight*)

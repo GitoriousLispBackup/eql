@@ -11,8 +11,8 @@
 
 ;;; generate wrappers
 
-(define-qt-wrappers '*trafficlight*)
-(define-qt-wrappers '*red*)
+(define-qt-wrappers *trafficlight*)
+(define-qt-wrappers *red*)
 
 ;;; now you can do:
 ;;;
