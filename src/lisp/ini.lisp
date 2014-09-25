@@ -416,25 +416,24 @@
 
 (defun define-qt-wrappers (qt-library)
   "args: (qt-library)
-   Defines CLOS methods for all Qt methods/signals/slots of given library.<br>(See example \"Qt_EQL_dynamic/trafficlight/\").
+   Defines Lisp methods for all Qt methods/signals/slots of given library.<br>(See example <code>Qt_EQL_dynamic/trafficlight/</code>).
        (define-qt-wrappers *c++*) ; generate wrappers (see \"Qt_EQL_dynamic/\")
        (my-qt-function *c++* x y) ; instead of: (! \"myQtFunction\" (:qt *c++*) x y)"
-  (let ((library (ensure-qt-object qt-library)))
-    (when (qt-object-p library)
-      (dolist (functions '("Methods:" "Signals:" "Slots:"))
-        (dolist (fun (rest (find functions (cdar (qapropos* nil library))
-                                 :key 'first :test 'string=)))
-          (let* ((p (position #\( fun))
-                 (qt-name (subseq fun (1+ (position #\Space fun :from-end t :end p)) p))
-                 (lisp-name (intern (with-output-to-string (s)
-                                      (x:do-string (ch qt-name)
-                                        (if (upper-case-p ch)
-                                            (format s "-~C" ch)
-                                            (write-char (char-upcase ch) s)))))))
-              ;; no way to avoid EVAL here (excluding non-portable hacks)
-              (eval `(defgeneric ,lisp-name (object &rest arguments)))
-              (eval `(defmethod ,lisp-name ((object qt-object) &rest arguments)
-                       (%qinvoke-method object :qt ,qt-name arguments)))))))))
+  (let ((all-functions (cdar (qapropos* nil (ensure-qt-object qt-library)))))
+    (dolist (functions '("Methods:" "Signals:" "Slots:"))
+      (dolist (fun (rest (find functions all-functions
+                               :key 'first :test 'string=)))
+        (let* ((p (position #\( fun))
+               (qt-name (subseq fun (1+ (position #\Space fun :from-end t :end p)) p))
+               (lisp-name (intern (with-output-to-string (s)
+                                    (x:do-string (ch qt-name)
+                                      (if (upper-case-p ch)
+                                          (format s "-~C" ch)
+                                          (write-char (char-upcase ch) s)))))))
+          ;; no way to avoid EVAL here (excluding non-portable hacks)
+          (eval `(defgeneric ,lisp-name (object &rest arguments)))
+          (eval `(defmethod ,lisp-name ((object qt-object) &rest arguments)
+                   (%qinvoke-method object :qt ,qt-name arguments))))))))
 
 #+linux
 (defun %ini-auto-reload (library-name watcher on-file-change)

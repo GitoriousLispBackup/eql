@@ -6,8 +6,8 @@
 (defvar *yellow*       (second *lights*))
 (defvar *green*        (third *lights*))
 
-(qapropos nil *red*)
 (qapropos nil *trafficlight*)
+(qapropos nil *red*)
 
 ;;; generate wrappers
 

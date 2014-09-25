@@ -1,6 +1,6 @@
 <html><body><p>
 <b>DEFINE-QT-WRAPPERS (qt-library)</b>
-<p>Defines CLOS methods for all Qt methods/signals/slots of given library.<br>(See example "Qt_EQL_dynamic/trafficlight/").</p>
+<p>Defines Lisp methods for all Qt methods/signals/slots of given library.<br>(See example <code>Qt_EQL_dynamic/trafficlight/</code>).</p>
 <pre>
   (define-qt-wrappers *c++*) ; generate wrappers (see "Qt_EQL_dynamic/")
   (my-qt-function *c++* x y) ; instead of: (! "myQtFunction" (:qt *c++*) x y)
