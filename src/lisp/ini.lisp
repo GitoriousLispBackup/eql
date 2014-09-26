@@ -73,16 +73,23 @@
            `(qfun ,(first args) ,fun/s ,@(rest args)))))
       `(qfuns ,@(reverse fun/s))))
 
+
 (defmacro x:do-with (with &body body) ; re-definition from package :X because of EQL:QFUN
   (when (atom with)
     (setf with (list 'qfun with)))
   `(progn
      ,@(mapcar (lambda (line)
-                 (append with (if (or (atom line)
-                                      (eql 'quote (first line)))
-                                  (list line)
-                                  line)))
-               body)))
+                 ;; needed for Qt wrappers (see "all-wrappers.lisp")
+                 (if (and (eql 'qfun (first line))
+                          (symbolp (third line)))
+                     (cons (third line) (cons (second line) (nthcdr 3 line)))
+                     line))
+               (mapcar (lambda (line)
+                         (append with (if (or (atom line)
+                                              (eql 'quote (first line)))
+                                          (list line)
+                                          line)))
+                       body))))
 
 (defmacro defvar-ui (main &rest names)
   "args: (main-widget &rest variables)
