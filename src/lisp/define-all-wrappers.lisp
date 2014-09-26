@@ -1,9 +1,10 @@
 ;;; Define wrapper functions for all Qt methods/signals/slots using case
 ;;; preserving symbol names, and resolving type ambiguous argument lists
 
-(defvar *objects*     (qobject-names))
-(defvar *functions*   nil)
-(defvar *unambiguous* nil)
+(defvar *objects*               (qobject-names))
+(defvar *auto-cast-exceptions* '("QGraphicsItem"))
+(defvar *functions*            nil)
+(defvar *unambiguous*          nil)
 
 (let (latest)
   (defun num-args (fun)
@@ -16,6 +17,7 @@
     latest))
 
 (defun prepare ()
+  (setf *functions* nil)
   (dolist (object *objects*)
     (let ((all-functions (cdar (qapropos* nil object)))
           functions)
@@ -33,6 +35,7 @@
   (setf *functions* (nreverse *functions*)))
 
 (defun resolve-ambiguous ()
+  (setf *unambiguous* nil)
   (flet ((end-pos (fun p)
            (1+ (or (position #\, fun :start p)
                    (position #\) fun :start p))))
@@ -94,12 +97,19 @@
               *unambiguous*)))
     (setf *unambiguous* (nreverse *unambiguous*))))
 
+(defun cast (signature)
+  (dolist (exceptions *auto-cast-exceptions*)
+    (when (find signature exceptions :test 'string=)
+      (return-from cast "(%auto-cast object)")))
+  "nil")
+
 (defun define-all-wrappers (&optional (file "all-wrappers.lisp"))
   "Defines Lisp functions for all Qt methods/signals/slots, writing them to a file."
   (let (lisp-names definitions)
     (map nil (lambda (object signatures)
                (dolist (signature signatures)
-                 (let* ((static (when (x:starts-with "_s_" signature)
+                 (let* ((cast (cast signature))
+                        (static (when (x:starts-with "_s_" signature)
                                   (setf signature (subseq signature 3))))
                         (lisp-name (if static
                                        (format nil "|~A.~A|" signature object)
@@ -110,8 +120,8 @@
                                           ~%  (%qinvoke-method ~S nil ~S arguments))~%"
                                      lisp-name object signature)
                              (format nil "~%(defun ~A (object &rest arguments)~
-                                          ~%  (%qinvoke-method object nil ~S arguments))~%"
-                                     lisp-name signature))
+                                          ~%  (%qinvoke-method object ~A ~S arguments))~%"
+                                     lisp-name cast signature))
                          definitions))))
          *objects* *unambiguous*)
     (with-open-file (s file :direction :output :if-exists :supersede)
@@ -123,12 +133,21 @@
       (format s "))~
                ~%~
                ~%(in-package :eql)~
+               ~%~
+               ~%(defun %auto-cast (object)~
+               ~%  (when (find (qt-object-id object) '#.(list (qid \"QGraphicsSvgItem\") (qid \"QGraphicsTextItem\") (qid\"QGraphicsWidget\")))~
+               ~%    \"QGraphicsItem\"))~
                ~%")
       (dolist (def (sort (delete-duplicates definitions :test 'string=) 'string<))
         (princ def s)))))
 
 (progn
+  (let ((*objects* *auto-cast-exceptions*))
+    (prepare)
+    (resolve-ambiguous)
+    (setf *auto-cast-exceptions* *unambiguous*))
   (prepare)
   (resolve-ambiguous)
   (define-all-wrappers)
   (qq))
+

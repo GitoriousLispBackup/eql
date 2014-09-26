@@ -1,4 +1,18 @@
 ;;; This is a simple GUI for CL-Sokoban, see http://www.cliki.net/CL-Sokoban 
+;;;
+;;; ------------------------------------------------------------------------
+;;; IMPORTANT NOTE
+;;;
+;;; If you use one of: QGraphicsSvgItem, QGraphicsTextItem, QGraphicsWidget
+;;; you need a "cast" in order to call QGraphicsItem methods:
+;;;
+;;;   (! "setPos" ("QGraphicsItem" text-item) '(0 0)))
+;;;
+;;; (because of multiple inheritance from both QObject and QGraphicsItem)
+;;;
+;;; If you use the wrapper functions instead (see "src/lisp/all-wrappers"),
+;;; this cast is done automatically.
+;;; ------------------------------------------------------------------------
 
 (load (eql:in-home "examples/7-Sokoban/3rd-party/sokoban"))
 (load (eql:in-home "examples/7-Sokoban/3rd-party/levels"))
@@ -146,14 +160,14 @@
         (y 0))
     (unless (eql :wall type)
       (dolist (item items)
-        (! "setVisible" ("QGraphicsItem" item) nil)))
+        (! "setVisible" item nil)))
     (dolist (row (maze-text *maze*))
       (let ((x 0))
         (x:do-string (curr-char row)
           (when (char= char curr-char)
             (let ((item (first items)))
-              (! "setPos" ("QGraphicsItem" item) (list x y))
-              (! "setVisible" ("QGraphicsItem" item) t))
+              (! "setPos" item (list x y))
+              (! "setVisible" item t))
             (setf items (rest items)))
           (incf x (first *item-size*))))
       (incf y (second *item-size*)))))
