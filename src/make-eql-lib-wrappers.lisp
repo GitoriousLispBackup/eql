@@ -3,9 +3,19 @@
 
 (require :cmp)
 
-(defparameter *lisp-files* (list "x" "package" "ini" "enums1" "enums2" "enums3" "special-extensions" "all-wrappers"))
+(setf *break-on-signals* 'error)
 
-(compile-file "lisp/all-wrappers.lisp" :system-p t)
+#+msvc
+(setf c::*compile-in-constants* t)
+
+(defparameter *all-wrappers*'("all-wrappers-1" "all-wrappers-2" "all-wrappers-3" "all-wrappers-4"
+                              "all-wrappers-5" "all-wrappers-6" "all-wrappers-7" "all-wrappers-8"))
+
+(defparameter *lisp-files*   (append '("x" "package" "ini" "enums1" "enums2" "enums3" "special-extensions")
+                                     *all-wrappers*))
+
+(dolist (file *all-wrappers*) 
+  (compile-file (format nil "lisp/~A.lisp" file) :system-p t))
 
 (c:build-static-library "ini"
                         :lisp-files (mapcar (lambda (file)

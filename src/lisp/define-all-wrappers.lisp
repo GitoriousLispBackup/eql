@@ -1,7 +1,7 @@
 ;;; Define wrapper functions for all Qt methods/signals/slots using case
 ;;; preserving symbol names, and resolving type ambiguous argument lists
 
-(defvar *objects*               (qobject-names))
+(defvar *objects*              (qobject-names))
 (defvar *auto-cast-exceptions* '("QGraphicsItem"))
 (defvar *functions*            nil)
 (defvar *unambiguous*          nil)
@@ -103,7 +103,11 @@
       (return-from cast "(%auto-cast object)")))
   "nil")
 
-(defun define-all-wrappers (&optional (file "all-wrappers.lisp"))
+(let ((num 0))
+  (defun file (file)
+    (format nil "~A-~D.lisp" file (incf num))))
+
+(defun define-all-wrappers (&optional (file "all-wrappers"))
   "Defines Lisp functions for all Qt methods/signals/slots, writing them to a file."
   (let (lisp-names definitions)
     (map nil (lambda (object signatures)
@@ -124,22 +128,35 @@
                                      lisp-name cast signature))
                          definitions))))
          *objects* *unambiguous*)
-    (with-open-file (s file :direction :output :if-exists :supersede)
-      (format s "(defpackage :eql~
-               ~%  (:use :cl)~
-               ~%  (:export")
-      (dolist (name (sort (delete-duplicates lisp-names :test 'string=) 'string<))
-        (format s "~%   #:~A" name))
-      (format s "))~
-               ~%~
-               ~%(in-package :eql)~
-               ~%~
-               ~%(defun %auto-cast (object)~
-               ~%  (when (find (qt-object-id object) '#.(list (qid \"QGraphicsSvgItem\") (qid \"QGraphicsTextItem\") (qid\"QGraphicsWidget\")))~
-               ~%    \"QGraphicsItem\"))~
-               ~%")
-      (dolist (def (sort (delete-duplicates definitions :test 'string=) 'string<))
-        (princ def s)))))
+    ;; splitting into more files needed for Windows (string size limit)
+    (let ((symbols (sort (delete-duplicates lisp-names :test 'string=) 'string<))
+          (1st t))
+      (x:while symbols
+        (with-open-file (s (file file) :direction :output :if-exists :supersede)
+          (format s "(defpackage :eql~
+                   ~%  (:export")
+          (dotimes (n 1200)
+            (format s "~%   #:~A" (first symbols))
+            (setf symbols (rest symbols))
+            (unless symbols
+              (return)))
+          (format s "))~%")
+          (when 1st
+            (setf 1st nil)
+            (format s "~%(in-package :eql)~
+                       ~%~
+                       ~%(defun %auto-cast (object)~
+                       ~%  (when (find (qt-object-id object) '#.(list (qid \"QGraphicsSvgItem\") (qid \"QGraphicsTextItem\") (qid\"QGraphicsWidget\")))~
+                       ~%    \"QGraphicsItem\"))~%")))))
+    (setf definitions (sort (delete-duplicates definitions :test 'string=) 'string<))
+    (x:while definitions
+      (with-open-file (s (file file) :direction :output :if-exists :supersede)
+        (format s "(in-package :eql)~%")
+        (dotimes (n 1200)
+          (princ (first definitions) s)
+          (setf definitions (rest definitions))
+          (unless definitions
+            (return)))))))
 
 (progn
   (let ((*objects* *auto-cast-exceptions*))
