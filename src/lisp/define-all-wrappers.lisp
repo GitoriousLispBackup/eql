@@ -6,6 +6,8 @@
 (defvar *functions*            nil)
 (defvar *unambiguous*          nil)
 
+(defconstant +limit+ 1200) ; required for Windows (string size limit)
+
 (let (latest)
   (defun num-args (fun)
     (let ((num (count #\, fun))
@@ -135,7 +137,7 @@
         (with-open-file (s (file file) :direction :output :if-exists :supersede)
           (format s "(defpackage :eql~
                    ~%  (:export")
-          (dotimes (n 1200)
+          (dotimes (n +limit+)
             (format s "~%   #:~A" (first symbols))
             (setf symbols (rest symbols))
             (unless symbols
@@ -152,7 +154,7 @@
     (x:while definitions
       (with-open-file (s (file file) :direction :output :if-exists :supersede)
         (format s "(in-package :eql)~%")
-        (dotimes (n 1200)
+        (dotimes (n +limit+)
           (princ (first definitions) s)
           (setf definitions (rest definitions))
           (unless definitions

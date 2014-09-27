@@ -1,7 +1,7 @@
 Wrapper functions
 =================
 
-If you want to use wrapper functions for all Qt functions, compile/load file
+If you want to use wrapper functions for all Qt functions, see:
 
   "src/lisp/all-wrappers.lisp"
 

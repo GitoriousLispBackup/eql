@@ -129,9 +129,8 @@
     (let ((entries (make-array 0 :adjustable t :fill-pointer t)))
       (do-symbols (s (find-package *current-package*))
         (let ((name (symbol-name s)))
-          (vector-push-extend (if (and (char= #\Q (char name 0))
-                                       (find #\. name))
-                                  name ; Qt enum
+          (vector-push-extend (if (some 'lower-case-p name)
+                                  name ; Qt functions (see "all-wrappers", enums)
                                   (string-downcase name))
                               entries)))
       (sort entries #'string<)
