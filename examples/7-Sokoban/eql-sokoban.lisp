@@ -1,17 +1,21 @@
 ;;; This is a simple GUI for CL-Sokoban, see http://www.cliki.net/CL-Sokoban 
 ;;;
 ;;; ------------------------------------------------------------------------
+;;;
 ;;; IMPORTANT NOTE
 ;;;
 ;;; If you use one of: QGraphicsSvgItem, QGraphicsTextItem, QGraphicsWidget
 ;;; you need a "cast" in order to call QGraphicsItem methods:
 ;;;
-;;;   (! "setPos" ("QGraphicsItem" text-item) '(0 0)))
+;;;   (! "setPos" ("QGraphicsItem" graphics-text-item) '(0 0)))
 ;;;
 ;;; (because of multiple inheritance from both QObject and QGraphicsItem)
 ;;;
 ;;; If you use the wrapper functions instead (see "src/lisp/all-wrappers"),
-;;; this cast is done automatically.
+;;; this cast is done automatically:
+;;;
+;;;   (|setPos| graphics-text-item '(0 0)))
+;;;
 ;;; ------------------------------------------------------------------------
 
 (load (eql:in-home "examples/7-Sokoban/3rd-party/sokoban"))
