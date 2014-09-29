@@ -130,7 +130,7 @@
       (do-symbols (s (find-package *current-package*))
         (let ((name (symbol-name s)))
           (vector-push-extend (if (some 'lower-case-p name)
-                                  name ; Qt functions (see "all-wrappers", enums)
+                                  name ; Qt enums, Qt functions (see "all-wrappers")
                                   (string-downcase name))
                               entries)))
       (sort entries #'string<)

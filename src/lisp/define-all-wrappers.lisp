@@ -1,7 +1,16 @@
 ;;; Define wrapper functions for all Qt methods/signals/slots using case
 ;;; preserving symbol names, and resolving type ambiguous argument lists
 
-(defvar *objects*              (qobject-names))
+(dolist (module '(:help :network :opengl :sql :svg :webkit))
+  (eql:qrequire module))
+
+(defun objects ()
+  (let ((names (qobject-names)))
+    (dolist (del '("QWebHistory" "QWebSettings"))
+      (setf names (delete del names :test 'string=)))
+    names))
+
+(defvar *objects*              (objects))
 (defvar *auto-cast-exceptions* '("QGraphicsItem"))
 (defvar *functions*            nil)
 (defvar *unambiguous*          nil)
@@ -134,7 +143,7 @@
     (let ((symbols (sort (delete-duplicates lisp-names :test 'string=) 'string<))
           (1st t))
       (x:while symbols
-        (with-open-file (s (file file) :direction :output :if-exists :supersede)
+        (with-open-file (s (print (file file)) :direction :output :if-exists :supersede)
           (format s "(defpackage :eql~
                    ~%  (:export")
           (dotimes (n +limit+)
@@ -151,8 +160,9 @@
                        ~%  (when (find (qt-object-id object) '#.(list (qid \"QGraphicsSvgItem\") (qid \"QGraphicsTextItem\") (qid\"QGraphicsWidget\")))~
                        ~%    \"QGraphicsItem\"))~%")))))
     (setf definitions (sort (delete-duplicates definitions :test 'string=) 'string<))
+    (print (length definitions))
     (x:while definitions
-      (with-open-file (s (file file) :direction :output :if-exists :supersede)
+      (with-open-file (s (print (file file)) :direction :output :if-exists :supersede)
         (format s "(in-package :eql)~%")
         (dotimes (n +limit+)
           (princ (first definitions) s)

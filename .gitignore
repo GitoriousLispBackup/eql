@@ -20,6 +20,7 @@ _*
 .*.txt
 *.user
 .r
+.m
 .u
 r
 t.lisp
