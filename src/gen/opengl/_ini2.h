@@ -8,8 +8,8 @@
 
 QT_BEGIN_NAMESPACE
 
-TO_QT_TYPE_PTR(QGLFormat, qglformat)
-TO_QT_TYPE_PTR(QGLFramebufferObjectFormat, qglframebufferobjectformat)
+TO_QT_TYPE_PTR (QGLFormat, qglformat)
+TO_QT_TYPE_PTR (QGLFramebufferObjectFormat, qglframebufferobjectformat)
 
 static GLfloat toFloat(cl_object l_num) {
     GLfloat f = 0;
@@ -43,13 +43,15 @@ static GLuint toUInt(cl_object l_num) {
         i = fixnnint(l_num); }
     return i; }
 
+#define META_TYPE_(var, type) var = qRegisterMetaType< type >(#type);
+
 void ini2() {
-    LObjects::T_GLenum =                     qRegisterMetaType<GLenum>("GLenum");
-    LObjects::T_GLfloat =                    qRegisterMetaType<GLfloat>("GLfloat");
-    LObjects::T_GLint =                      qRegisterMetaType<GLint>("GLint");
-    LObjects::T_GLuint =                     qRegisterMetaType<GLuint>("GLuint");
-    LObjects::T_QGLFormat =                  qRegisterMetaType<QGLFormat>("QGLFormat");
-    LObjects::T_QGLFramebufferObjectFormat = qRegisterMetaType<QGLFramebufferObjectFormat>("QGLFramebufferObjectFormat"); }
+    META_TYPE_(LObjects::T_GLenum,                     GLenum)
+    META_TYPE_(LObjects::T_GLfloat,                    GLfloat)
+    META_TYPE_(LObjects::T_GLint,                      GLint)
+    META_TYPE_(LObjects::T_GLuint,                     GLuint)
+    META_TYPE_(LObjects::T_QGLFormat,                  QGLFormat)
+    META_TYPE_(LObjects::T_QGLFramebufferObjectFormat, QGLFramebufferObjectFormat) }
 
 void* toMetaArg(int n, cl_object l_arg) {
     void* p = 0;

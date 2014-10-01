@@ -8,22 +8,24 @@
 
 QT_BEGIN_NAMESPACE
 
-TO_QT_TYPE_PTR(QSqlDatabase, qsqldatabase)
-TO_QT_TYPE_PTR(QSqlError, qsqlerror)
-TO_QT_TYPE_PTR(QSqlField, qsqlfield)
-TO_QT_TYPE_PTR(QSqlIndex, qsqlindex)
-TO_QT_TYPE_PTR(QSqlQuery, qsqlquery)
-TO_QT_TYPE_PTR(QSqlRecord, qsqlrecord)
-TO_QT_TYPE_PTR(QSqlRelation, qsqlrelation)
+TO_QT_TYPE_PTR (QSqlDatabase, qsqldatabase)
+TO_QT_TYPE_PTR (QSqlError, qsqlerror)
+TO_QT_TYPE_PTR (QSqlField, qsqlfield)
+TO_QT_TYPE_PTR (QSqlIndex, qsqlindex)
+TO_QT_TYPE_PTR (QSqlQuery, qsqlquery)
+TO_QT_TYPE_PTR (QSqlRecord, qsqlrecord)
+TO_QT_TYPE_PTR (QSqlRelation, qsqlrelation)
+
+#define META_TYPE_(var, type) var = qRegisterMetaType< type >(#type);
 
 void ini2() {
-    LObjects::T_QSqlDatabase = qRegisterMetaType<QSqlDatabase>("QSqlDatabase");
-    LObjects::T_QSqlError =    qRegisterMetaType<QSqlError>("QSqlError");
-    LObjects::T_QSqlField =    qRegisterMetaType<QSqlField>("QSqlField");
-    LObjects::T_QSqlIndex =    qRegisterMetaType<QSqlIndex>("QSqlIndex");
-    LObjects::T_QSqlQuery =    qRegisterMetaType<QSqlQuery>("QSqlQuery");
-    LObjects::T_QSqlRecord =   qRegisterMetaType<QSqlRecord>("QSqlRecord");
-    LObjects::T_QSqlRelation = qRegisterMetaType<QSqlRelation>("QSqlRelation"); }
+    META_TYPE_(LObjects::T_QSqlDatabase, QSqlDatabase)
+    META_TYPE_(LObjects::T_QSqlError,    QSqlError)
+    META_TYPE_(LObjects::T_QSqlField,    QSqlField)
+    META_TYPE_(LObjects::T_QSqlIndex,    QSqlIndex)
+    META_TYPE_(LObjects::T_QSqlQuery,    QSqlQuery)
+    META_TYPE_(LObjects::T_QSqlRecord,   QSqlRecord)
+    META_TYPE_(LObjects::T_QSqlRelation, QSqlRelation) }
 
 void* toMetaArg(int n, cl_object l_arg) {
     void* p = 0;

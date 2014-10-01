@@ -8,14 +8,16 @@
 
 QT_BEGIN_NAMESPACE
 
-TO_QT_TYPE_PTR(QWebElement, qwebelement)
-TO_QT_TYPE_PTR(QWebElementCollection, qwebelementcollection)
-TO_QT_TYPE_PTR(QWebHitTestResult, qwebhittestresult)
+TO_QT_TYPE_PTR (QWebElement, qwebelement)
+TO_QT_TYPE_PTR (QWebElementCollection, qwebelementcollection)
+TO_QT_TYPE_PTR (QWebHitTestResult, qwebhittestresult)
+
+#define META_TYPE_(var, type) var = qRegisterMetaType< type >(#type);
 
 void ini2() {
-    LObjects::T_QWebElement =           qRegisterMetaType<QWebElement>("QWebElement");
-    LObjects::T_QWebElementCollection = qRegisterMetaType<QWebElementCollection>("QWebElementCollection");
-    LObjects::T_QWebHitTestResult =     qRegisterMetaType<QWebHitTestResult>("QWebHitTestResult"); }
+    META_TYPE_(LObjects::T_QWebElement,           QWebElement)
+    META_TYPE_(LObjects::T_QWebElementCollection, QWebElementCollection)
+    META_TYPE_(LObjects::T_QWebHitTestResult,     QWebHitTestResult) }
 
 void* toMetaArg(int n, cl_object l_arg) {
     void* p = 0;

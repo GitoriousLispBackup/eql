@@ -37,5 +37,13 @@ Re-link EQL doing something like:
 
 ---
 
+The convenience macro X:DO-WITH has been adapted to work with the wrappers:
+
+  (x:do-with item
+    (|setTextAlignment| 0 |Qt.AlignRight|)
+    (|setText| 0 "123"))
+
+---
+
 See also note in Sokoban example (no more casts needed).
 

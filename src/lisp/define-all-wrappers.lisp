@@ -157,7 +157,10 @@
             (format s "~%(in-package :eql)~
                        ~%~
                        ~%(defun %auto-cast (object)~
-                       ~%  (when (find (qt-object-id object) '#.(list (qid \"QGraphicsSvgItem\") (qid \"QGraphicsTextItem\") (qid\"QGraphicsWidget\")))~
+                       ~%  (when (find (qt-object-id object)~
+                       ~%              '#.(list (qid \"QGraphicsSvgItem\")~
+                       ~%                       (qid \"QGraphicsTextItem\")~
+                       ~%                       (qid \"QGraphicsWidget\")))~
                        ~%    \"QGraphicsItem\"))~%")))))
     (setf definitions (sort (delete-duplicates definitions :test 'string=) 'string<))
     (print (length definitions))

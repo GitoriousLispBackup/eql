@@ -8,28 +8,30 @@
 
 QT_BEGIN_NAMESPACE
 
-TO_QT_TYPE_PTR(QHostAddress, qhostaddress)
-TO_QT_TYPE_PTR(QHostInfo, qhostinfo)
-TO_QT_TYPE_PTR(QNetworkCacheMetaData, qnetworkcachemetadata)
-TO_QT_TYPE_PTR(QNetworkInterface, qnetworkinterface)
-TO_QT_TYPE_PTR(QNetworkProxy, qnetworkproxy)
-TO_QT_TYPE_PTR(QNetworkRequest, qnetworkrequest)
-TO_QT_TYPE_PTR(QSslCertificate, qsslcertificate)
-TO_QT_TYPE_PTR(QSslCipher, qsslcipher)
-TO_QT_TYPE_PTR(QSslConfiguration, qsslconfiguration)
-TO_QT_TYPE_PTR(QSslKey, qsslkey)
+TO_QT_TYPE_PTR (QHostAddress, qhostaddress)
+TO_QT_TYPE_PTR (QHostInfo, qhostinfo)
+TO_QT_TYPE_PTR (QNetworkCacheMetaData, qnetworkcachemetadata)
+TO_QT_TYPE_PTR (QNetworkInterface, qnetworkinterface)
+TO_QT_TYPE_PTR (QNetworkProxy, qnetworkproxy)
+TO_QT_TYPE_PTR (QNetworkRequest, qnetworkrequest)
+TO_QT_TYPE_PTR (QSslCertificate, qsslcertificate)
+TO_QT_TYPE_PTR (QSslCipher, qsslcipher)
+TO_QT_TYPE_PTR (QSslConfiguration, qsslconfiguration)
+TO_QT_TYPE_PTR (QSslKey, qsslkey)
+
+#define META_TYPE_(var, type) var = qRegisterMetaType< type >(#type);
 
 void ini2() {
-    LObjects::T_QHostAddress =          qRegisterMetaType<QHostAddress>("QHostAddress");
-    LObjects::T_QHostInfo =             qRegisterMetaType<QHostInfo>("QHostInfo");
-    LObjects::T_QNetworkCacheMetaData = qRegisterMetaType<QNetworkCacheMetaData>("QNetworkCacheMetaData");
-    LObjects::T_QNetworkInterface =     qRegisterMetaType<QNetworkInterface>("QNetworkInterface");
-    LObjects::T_QNetworkProxy =         qRegisterMetaType<QNetworkProxy>("QNetworkProxy");
-    LObjects::T_QNetworkRequest =       qRegisterMetaType<QNetworkRequest>("QNetworkRequest");
-    LObjects::T_QSslCertificate =       qRegisterMetaType<QSslCertificate>("QSslCertificate");
-    LObjects::T_QSslCipher =            qRegisterMetaType<QSslCipher>("QSslCipher");
-    LObjects::T_QSslConfiguration =     qRegisterMetaType<QSslConfiguration>("QSslConfiguration");
-    LObjects::T_QSslKey =               qRegisterMetaType<QSslKey>("QSslKey"); }
+    META_TYPE_(LObjects::T_QHostAddress,          QHostAddress)
+    META_TYPE_(LObjects::T_QHostInfo,             QHostInfo)
+    META_TYPE_(LObjects::T_QNetworkCacheMetaData, QNetworkCacheMetaData)
+    META_TYPE_(LObjects::T_QNetworkInterface,     QNetworkInterface)
+    META_TYPE_(LObjects::T_QNetworkProxy,         QNetworkProxy)
+    META_TYPE_(LObjects::T_QNetworkRequest,       QNetworkRequest)
+    META_TYPE_(LObjects::T_QSslCertificate,       QSslCertificate)
+    META_TYPE_(LObjects::T_QSslCipher,            QSslCipher)
+    META_TYPE_(LObjects::T_QSslConfiguration,     QSslConfiguration)
+    META_TYPE_(LObjects::T_QSslKey,               QSslKey) }
 
 void* toMetaArg(int n, cl_object l_arg) {
     void* p = 0;
