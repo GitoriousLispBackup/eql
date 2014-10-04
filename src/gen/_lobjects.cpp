@@ -3208,7 +3208,9 @@ StrList LObjects::overrideFunctions(const QByteArray& name) {
             case 71:
             case 73:
                 if(override_help) {
-                    ids = *override_help(name); }
+                    NumList* _ids = override_help(name);
+                    if(_ids) {
+                        ids = *_ids; }}
                 break;
             case 8:
             case 75:
@@ -3228,7 +3230,9 @@ StrList LObjects::overrideFunctions(const QByteArray& name) {
             case 147:
             case 188:
                 if(override_network) {
-                    ids = *override_network(name); }
+                    NumList* _ids = override_network(name);
+                    if(_ids) {
+                        ids = *_ids; }}
                 break;
             case 40:
             case 41:
@@ -3237,7 +3241,9 @@ StrList LObjects::overrideFunctions(const QByteArray& name) {
             case 44:
             case 45:
                 if(override_opengl) {
-                    ids = *override_opengl(name); }
+                    NumList* _ids = override_opengl(name);
+                    if(_ids) {
+                        ids = *_ids; }}
                 break;
             case 135:
             case 136:
@@ -3248,11 +3254,15 @@ StrList LObjects::overrideFunctions(const QByteArray& name) {
             case 141:
             case 142:
                 if(override_sql) {
-                    ids = *override_sql(name); }
+                    NumList* _ids = override_sql(name);
+                    if(_ids) {
+                        ids = *_ids; }}
                 break;
             case 152:
                 if(override_svg) {
-                    ids = *override_svg(name); }
+                    NumList* _ids = override_svg(name);
+                    if(_ids) {
+                        ids = *_ids; }}
                 break;
             case 193:
             case 194:
@@ -3263,7 +3273,9 @@ StrList LObjects::overrideFunctions(const QByteArray& name) {
             case 199:
             case 200:
                 if(override_webkit) {
-                    ids = *override_webkit(name); }
+                    NumList* _ids = override_webkit(name);
+                    if(_ids) {
+                        ids = *_ids; }}
                 break; }}
     StrList funs;
     Q_FOREACH(int id, ids) {

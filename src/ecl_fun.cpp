@@ -1435,10 +1435,9 @@ static StrList metaInfo(const QByteArray& type, const QByteArray& qclass, const 
                         if(name.contains(search, Qt::CaseInsensitive)) {
                             info << name.toAscii(); }}}}}}
     else if("override" == type) {
-        if((qclass != "QWebHistory") && (qclass != "QWebSettings")) { // exceptions (webkit related)
-            Q_FOREACH(QByteArray name, LObjects::overrideFunctions(qclass)) {
-                if(QString(name).contains(search, Qt::CaseInsensitive)) {
-                    info << name; }}}}
+        Q_FOREACH(QByteArray name, LObjects::overrideFunctions(qclass)) {
+            if(QString(name).contains(search, Qt::CaseInsensitive)) {
+                info << name; }}}
     else if(!non) {
         if(!mo) {
             mo = LObjects::staticMetaObject(qclass); }

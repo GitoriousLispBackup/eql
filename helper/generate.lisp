@@ -1088,7 +1088,9 @@
             (format s "~%            case ~D:" i)))
         (when (plusp i)
           (format s "~%                if(override_~(~A~)) {~
-                     ~%                    ids = *override_~(~A~)(name); }~
+                     ~%                    NumList* _ids = override_~(~A~)(name);~
+                     ~%                    if(_ids) {~
+                     ~%                        ids = *_ids; }}~
                      ~%                break;"
                   module module))))
     (format s " }}~
