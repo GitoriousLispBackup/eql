@@ -1,5 +1,62 @@
 (in-package :eql)
 
+(defun |mergeCells| (object &rest arguments)
+  (%qinvoke-method object nil "mergeCells" arguments))
+
+(defun |mergeCharFormat| (object &rest arguments)
+  (%qinvoke-method object nil "mergeCharFormat" arguments))
+
+(defun |mergeCurrentCharFormat| (object &rest arguments)
+  (%qinvoke-method object nil "mergeCurrentCharFormat" arguments))
+
+(defun |mergeWith| (object &rest arguments)
+  (%qinvoke-method object nil "mergeWith" arguments))
+
+(defun |merge| (object &rest arguments)
+  (%qinvoke-method object nil "merge" arguments))
+
+(defun |messageChanged| (object &rest arguments)
+  (%qinvoke-method object nil "messageChanged" arguments))
+
+(defun |messageClicked| (object &rest arguments)
+  (%qinvoke-method object nil "messageClicked" arguments))
+
+(defun |message| (object &rest arguments)
+  (%qinvoke-method object nil "message" arguments))
+
+(defun |metaData.QHelpEngineCore| (&rest arguments)
+  (%qinvoke-method "QHelpEngineCore" nil "metaData" arguments))
+
+(defun |metaDataChanged| (object &rest arguments)
+  (%qinvoke-method object nil "metaDataChanged" arguments))
+
+(defun |metaData| (object &rest arguments)
+  (%qinvoke-method object nil "metaData" arguments))
+
+(defun |metaInformation| (object &rest arguments)
+  (%qinvoke-method object nil "metaInformation" arguments))
+
+(defun |metaObject| (object &rest arguments)
+  (%qinvoke-method object nil "metaObject" arguments))
+
+(defun |methodCount| (object &rest arguments)
+  (%qinvoke-method object nil "methodCount" arguments))
+
+(defun |methodOffset| (object &rest arguments)
+  (%qinvoke-method object nil "methodOffset" arguments))
+
+(defun |mibEnum| (object &rest arguments)
+  (%qinvoke-method object nil "mibEnum" arguments))
+
+(defun |microFocusChanged| (object &rest arguments)
+  (%qinvoke-method object nil "microFocusChanged" arguments))
+
+(defun |midLineWidth| (object &rest arguments)
+  (%qinvoke-method object nil "midLineWidth" arguments))
+
+(defun |midlight| (object &rest arguments)
+  (%qinvoke-method object nil "midlight" arguments))
+
 (defun |mid| (object &rest arguments)
   (%qinvoke-method object nil "mid" arguments))
 
@@ -320,6 +377,18 @@
 
 (defun |object| (object &rest arguments)
   (%qinvoke-method object nil "object" arguments))
+
+(defun |offlineStorageDefaultQuota.QWebSettings| (&rest arguments)
+  (%qinvoke-method "QWebSettings" nil "offlineStorageDefaultQuota" arguments))
+
+(defun |offlineStoragePath.QWebSettings| (&rest arguments)
+  (%qinvoke-method "QWebSettings" nil "offlineStoragePath" arguments))
+
+(defun |offlineWebApplicationCachePath.QWebSettings| (&rest arguments)
+  (%qinvoke-method "QWebSettings" nil "offlineWebApplicationCachePath" arguments))
+
+(defun |offlineWebApplicationCacheQuota.QWebSettings| (&rest arguments)
+  (%qinvoke-method "QWebSettings" nil "offlineWebApplicationCacheQuota" arguments))
 
 (defun |offsetChanged| (object &rest arguments)
   (%qinvoke-method object nil "offsetChanged" arguments))
@@ -1554,8 +1623,17 @@
 (defun |requiredStatus| (object &rest arguments)
   (%qinvoke-method object nil "requiredStatus" arguments))
 
+(defun |resetAttribute| (object &rest arguments)
+  (%qinvoke-method object nil "resetAttribute" arguments))
+
 (defun |resetCachedContent| (object &rest arguments)
   (%qinvoke-method object nil "resetCachedContent" arguments))
+
+(defun |resetFontFamily| (object &rest arguments)
+  (%qinvoke-method object nil "resetFontFamily" arguments))
+
+(defun |resetFontSize| (object &rest arguments)
+  (%qinvoke-method object nil "resetFontSize" arguments))
 
 (defun |resetMatrix| (object &rest arguments)
   (%qinvoke-method object nil "resetMatrix" arguments))
@@ -3204,6 +3282,9 @@
 (defun |setDefaultTextColor| (object &rest arguments)
   (%qinvoke-method object nil "setDefaultTextColor" arguments))
 
+(defun |setDefaultTextEncoding| (object &rest arguments)
+  (%qinvoke-method object nil "setDefaultTextEncoding" arguments))
+
 (defun |setDefaultTextOption| (object &rest arguments)
   (%qinvoke-method object nil "setDefaultTextOption" arguments))
 
@@ -3518,84 +3599,3 @@
 
 (defun |setFile(QString)| (object &rest arguments)
   (%qinvoke-method object nil "setFile(QString)" arguments))
-
-(defun |setFileMode| (object &rest arguments)
-  (%qinvoke-method object nil "setFileMode" arguments))
-
-(defun |setFileNameAndVersion(QString,QString)| (object &rest arguments)
-  (%qinvoke-method object nil "setFileNameAndVersion(QString,QString)" arguments))
-
-(defun |setFileNameAndVersion(QString,int)| (object &rest arguments)
-  (%qinvoke-method object nil "setFileNameAndVersion(QString,int)" arguments))
-
-(defun |setFileName| (object &rest arguments)
-  (%qinvoke-method object nil "setFileName" arguments))
-
-(defun |setFile| (object &rest arguments)
-  (%qinvoke-method object nil "setFile" arguments))
-
-(defun |setFillRule| (object &rest arguments)
-  (%qinvoke-method object nil "setFillRule" arguments))
-
-(defun |setFilterCaseSensitivity| (object &rest arguments)
-  (%qinvoke-method object nil "setFilterCaseSensitivity" arguments))
-
-(defun |setFilterFixedString| (object &rest arguments)
-  (%qinvoke-method object nil "setFilterFixedString" arguments))
-
-(defun |setFilterKeyColumn| (object &rest arguments)
-  (%qinvoke-method object nil "setFilterKeyColumn" arguments))
-
-(defun |setFilterRegExp(QRegExp)| (object &rest arguments)
-  (%qinvoke-method object nil "setFilterRegExp(QRegExp)" arguments))
-
-(defun |setFilterRegExp(QString)| (object &rest arguments)
-  (%qinvoke-method object nil "setFilterRegExp(QString)" arguments))
-
-(defun |setFilterRegExp| (object &rest arguments)
-  (%qinvoke-method object nil "setFilterRegExp" arguments))
-
-(defun |setFilterRole| (object &rest arguments)
-  (%qinvoke-method object nil "setFilterRole" arguments))
-
-(defun |setFilterWildcard| (object &rest arguments)
-  (%qinvoke-method object nil "setFilterWildcard" arguments))
-
-(defun |setFiltersChildEvents| (object &rest arguments)
-  (%qinvoke-method object (%auto-cast object) "setFiltersChildEvents" arguments))
-
-(defun |setFilter| (object &rest arguments)
-  (%qinvoke-method object nil "setFilter" arguments))
-
-(defun |setFinalPage| (object &rest arguments)
-  (%qinvoke-method object nil "setFinalPage" arguments))
-
-(defun |setFinalStop| (object &rest arguments)
-  (%qinvoke-method object nil "setFinalStop" arguments))
-
-(defun |setFirstColumnSpanned| (object &rest arguments)
-  (%qinvoke-method object nil "setFirstColumnSpanned" arguments))
-
-(defun |setFirstDayOfWeek| (object &rest arguments)
-  (%qinvoke-method object nil "setFirstDayOfWeek" arguments))
-
-(defun |setFirstItemColumnSpanned| (object &rest arguments)
-  (%qinvoke-method object nil "setFirstItemColumnSpanned" arguments))
-
-(defun |setFixedHeight| (object &rest arguments)
-  (%qinvoke-method object nil "setFixedHeight" arguments))
-
-(defun |setFixedPitch| (object &rest arguments)
-  (%qinvoke-method object nil "setFixedPitch" arguments))
-
-(defun |setFixedSize| (object &rest arguments)
-  (%qinvoke-method object nil "setFixedSize" arguments))
-
-(defun |setFixedWidth| (object &rest arguments)
-  (%qinvoke-method object nil "setFixedWidth" arguments))
-
-(defun |setFlags| (object &rest arguments)
-  (%qinvoke-method object (%auto-cast object) "setFlags" arguments))
-
-(defun |setFlag| (object &rest arguments)
-  (%qinvoke-method object (%auto-cast object) "setFlag" arguments))

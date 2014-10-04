@@ -15,6 +15,7 @@ TO_QT_TYPE_PTR (QWebHitTestResult, qwebhittestresult)
 #define META_TYPE_(var, type) var = qRegisterMetaType< type >(#type);
 
 void ini2() {
+    // note: QWebHistoryItem can't be registered as QMetaType, lacking a public default constructor
     META_TYPE_(LObjects::T_QWebElement,           QWebElement)
     META_TYPE_(LObjects::T_QWebElementCollection, QWebElementCollection)
     META_TYPE_(LObjects::T_QWebHitTestResult,     QWebHitTestResult) }

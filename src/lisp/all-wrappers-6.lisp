@@ -903,6 +903,12 @@
 (defun |axis| (object &rest arguments)
   (%qinvoke-method object nil "axis" arguments))
 
+(defun |backItems| (object &rest arguments)
+  (%qinvoke-method object nil "backItems" arguments))
+
+(defun |backItem| (object &rest arguments)
+  (%qinvoke-method object nil "backItem" arguments))
+
 (defun |backgroundBrush| (object &rest arguments)
   (%qinvoke-method object nil "backgroundBrush" arguments))
 
@@ -1392,6 +1398,12 @@
 (defun |canFetchMore| (object &rest arguments)
   (%qinvoke-method object nil "canFetchMore" arguments))
 
+(defun |canGoBack| (object &rest arguments)
+  (%qinvoke-method object nil "canGoBack" arguments))
+
+(defun |canGoForward| (object &rest arguments)
+  (%qinvoke-method object nil "canGoForward" arguments))
+
 (defun |canPaste| (object &rest arguments)
   (%qinvoke-method object nil "canPaste" arguments))
 
@@ -1722,6 +1734,9 @@
 (defun |clearHistory| (object &rest arguments)
   (%qinvoke-method object nil "clearHistory" arguments))
 
+(defun |clearIconDatabase.QWebSettings| (&rest arguments)
+  (%qinvoke-method "QWebSettings" nil "clearIconDatabase" arguments))
+
 (defun |clearLayout| (object &rest arguments)
   (%qinvoke-method object nil "clearLayout" arguments))
 
@@ -1739,6 +1754,9 @@
 
 (defun |clearMaximumTime| (object &rest arguments)
   (%qinvoke-method object nil "clearMaximumTime" arguments))
+
+(defun |clearMemoryCaches.QWebSettings| (&rest arguments)
+  (%qinvoke-method "QWebSettings" nil "clearMemoryCaches" arguments))
 
 (defun |clearMessage| (object &rest arguments)
   (%qinvoke-method object nil "clearMessage" arguments))
@@ -2457,6 +2475,9 @@
 (defun |currentItemChanged| (object &rest arguments)
   (%qinvoke-method object nil "currentItemChanged" arguments))
 
+(defun |currentItemIndex| (object &rest arguments)
+  (%qinvoke-method object nil "currentItemIndex" arguments))
+
 (defun |currentItem| (object &rest arguments)
   (%qinvoke-method object nil "currentItem" arguments))
 
@@ -2762,6 +2783,9 @@
 
 (defun |defaultTextColor| (object &rest arguments)
   (%qinvoke-method object nil "defaultTextColor" arguments))
+
+(defun |defaultTextEncoding| (object &rest arguments)
+  (%qinvoke-method object nil "defaultTextEncoding" arguments))
 
 (defun |defaultTextOption| (object &rest arguments)
   (%qinvoke-method object nil "defaultTextOption" arguments))
@@ -3522,6 +3546,9 @@
 (defun |enableAttributeArray| (object &rest arguments)
   (%qinvoke-method object nil "enableAttributeArray" arguments))
 
+(defun |enablePersistentStorage.QWebSettings| (&rest arguments)
+  (%qinvoke-method "QWebSettings" nil "enablePersistentStorage" arguments))
+
 (defun |enabledChanged| (object &rest arguments)
   (%qinvoke-method object nil "enabledChanged" arguments))
 
@@ -3572,30 +3599,3 @@
 
 (defun |encodedUserName| (object &rest arguments)
   (%qinvoke-method object nil "encodedUserName" arguments))
-
-(defun |encryptionMethod| (object &rest arguments)
-  (%qinvoke-method object nil "encryptionMethod" arguments))
-
-(defun |endArray| (object &rest arguments)
-  (%qinvoke-method object nil "endArray" arguments))
-
-(defun |endEditBlock| (object &rest arguments)
-  (%qinvoke-method object nil "endEditBlock" arguments))
-
-(defun |endFrame| (object &rest arguments)
-  (%qinvoke-method object nil "endFrame" arguments))
-
-(defun |endGroup| (object &rest arguments)
-  (%qinvoke-method object nil "endGroup" arguments))
-
-(defun |endInsertColumns| (object &rest arguments)
-  (%qinvoke-method object nil "endInsertColumns" arguments))
-
-(defun |endInsertRows| (object &rest arguments)
-  (%qinvoke-method object nil "endInsertRows" arguments))
-
-(defun |endLayout| (object &rest arguments)
-  (%qinvoke-method object nil "endLayout" arguments))
-
-(defun |endMacro| (object &rest arguments)
-  (%qinvoke-method object nil "endMacro" arguments))

@@ -1,5 +1,14 @@
 (defpackage :eql
   (:export
+   #:|encryptionMethod|
+   #:|endArray|
+   #:|endEditBlock|
+   #:|endFrame|
+   #:|endGroup|
+   #:|endInsertColumns|
+   #:|endInsertRows|
+   #:|endLayout|
+   #:|endMacro|
    #:|endMoveColumns|
    #:|endMoveRows|
    #:|endNativePainting|
@@ -213,6 +222,7 @@
    #:|fontOverline|
    #:|fontPointSize|
    #:|fontSelected|
+   #:|fontSize|
    #:|fontStrikeOut|
    #:|fontStyleHint|
    #:|fontStyleStrategy|
@@ -231,6 +241,8 @@
    #:|format|
    #:|forwardAvailable|
    #:|forwardHistoryCount|
+   #:|forwardItems|
+   #:|forwardItem|
    #:|forwardUnsupportedContent|
    #:|forward|
    #:|fragment|
@@ -322,9 +334,11 @@
    #:|get|
    #:|globalPos|
    #:|globalRestorePolicy|
+   #:|globalSettings.QWebSettings|
    #:|globalStrut.QApplication|
    #:|globalX|
    #:|globalY|
+   #:|goToItem|
    #:|gotFocus|
    #:|grabFrameBuffer|
    #:|grabGesture|
@@ -484,6 +498,8 @@
    #:|icon(QFileIconProvider::IconType)|
    #:|icon(QFileInfo)|
    #:|iconChanged|
+   #:|iconDatabasePath.QWebSettings|
+   #:|iconForUrl.QWebSettings|
    #:|iconPixmap|
    #:|iconProvider|
    #:|iconSizeChanged|
@@ -1036,6 +1052,7 @@
    #:|localName|
    #:|localPort|
    #:|localSchemes.QWebSecurityOrigin|
+   #:|localStoragePath|
    #:|locale|
    #:|location.QLibraryInfo|
    #:|lockForRead|
@@ -1166,6 +1183,8 @@
    #:|maximumDateTime|
    #:|maximumDate|
    #:|maximumHeight|
+   #:|maximumItemCount|
+   #:|maximumPagesInCache.QWebSettings|
    #:|maximumSize|
    #:|maximumTime|
    #:|maximumViewportSize|
@@ -1180,23 +1199,4 @@
    #:|menuWidget|
    #:|menu|
    #:|mergeBlockCharFormat|
-   #:|mergeBlockFormat|
-   #:|mergeCells|
-   #:|mergeCharFormat|
-   #:|mergeCurrentCharFormat|
-   #:|mergeWith|
-   #:|merge|
-   #:|messageChanged|
-   #:|messageClicked|
-   #:|message|
-   #:|metaData.QHelpEngineCore|
-   #:|metaDataChanged|
-   #:|metaData|
-   #:|metaInformation|
-   #:|metaObject|
-   #:|methodCount|
-   #:|methodOffset|
-   #:|mibEnum|
-   #:|microFocusChanged|
-   #:|midLineWidth|
-   #:|midlight|))
+   #:|mergeBlockFormat|))

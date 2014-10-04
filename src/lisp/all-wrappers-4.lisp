@@ -1,5 +1,32 @@
 (defpackage :eql
   (:export
+   #:|setFileMode|
+   #:|setFileNameAndVersion(QString,QString)|
+   #:|setFileNameAndVersion(QString,int)|
+   #:|setFileName|
+   #:|setFile|
+   #:|setFillRule|
+   #:|setFilterCaseSensitivity|
+   #:|setFilterFixedString|
+   #:|setFilterKeyColumn|
+   #:|setFilterRegExp(QRegExp)|
+   #:|setFilterRegExp(QString)|
+   #:|setFilterRegExp|
+   #:|setFilterRole|
+   #:|setFilterWildcard|
+   #:|setFiltersChildEvents|
+   #:|setFilter|
+   #:|setFinalPage|
+   #:|setFinalStop|
+   #:|setFirstColumnSpanned|
+   #:|setFirstDayOfWeek|
+   #:|setFirstItemColumnSpanned|
+   #:|setFixedHeight|
+   #:|setFixedPitch|
+   #:|setFixedSize|
+   #:|setFixedWidth|
+   #:|setFlags|
+   #:|setFlag|
    #:|setFlat|
    #:|setFloatable|
    #:|setFloating|
@@ -22,6 +49,7 @@
    #:|setFontLetterSpacing|
    #:|setFontOverline|
    #:|setFontPointSize|
+   #:|setFontSize|
    #:|setFontStrikeOut|
    #:|setFontStyleHint|
    #:|setFontStyleStrategy|
@@ -106,6 +134,7 @@
    #:|setHsv|
    #:|setHtml|
    #:|setHttpOnly|
+   #:|setIconDatabasePath.QWebSettings|
    #:|setIconPixmap|
    #:|setIconProvider|
    #:|setIconSize|
@@ -201,6 +230,7 @@
    #:|setLocalAddress|
    #:|setLocalCertificate|
    #:|setLocalPort|
+   #:|setLocalStoragePath|
    #:|setLocale|
    #:|setLookupId|
    #:|setLoopCount|
@@ -221,6 +251,8 @@
    #:|setMaximumDateTime|
    #:|setMaximumDate|
    #:|setMaximumHeight|
+   #:|setMaximumItemCount|
+   #:|setMaximumPagesInCache.QWebSettings|
    #:|setMaximumSize|
    #:|setMaximumTime|
    #:|setMaximumWidth|
@@ -282,10 +314,15 @@
    #:|setNumber|
    #:|setNumericalPrecisionPolicy|
    #:|setNum|
+   #:|setObjectCacheCapacities.QWebSettings|
    #:|setObjectIndex|
    #:|setObjectName|
    #:|setObjectType|
    #:|setOctMode|
+   #:|setOfflineStorageDefaultQuota.QWebSettings|
+   #:|setOfflineStoragePath.QWebSettings|
+   #:|setOfflineWebApplicationCachePath.QWebSettings|
+   #:|setOfflineWebApplicationCacheQuota.QWebSettings|
    #:|setOffset(QPointF)|
    #:|setOffset(qreal)|
    #:|setOffsetToLastSection|
@@ -771,6 +808,7 @@
    #:|setUserInfo|
    #:|setUserName|
    #:|setUserState|
+   #:|setUserStyleSheetUrl|
    #:|setUser|
    #:|setUsesBigPixmap|
    #:|setUsesScrollButtons|
@@ -803,6 +841,7 @@
    #:|setView|
    #:|setVisible|
    #:|setVisualNavigation|
+   #:|setWebGraphic.QWebSettings|
    #:|setWeekdayTextFormat|
    #:|setWeight|
    #:|setWhatsThis|
@@ -1160,43 +1199,4 @@
    #:|textElideMode|
    #:|textFormat|
    #:|textFromValue|
-   #:|textIndent|
-   #:|textInteractionFlags|
-   #:|textKeys|
-   #:|textLength|
-   #:|textList|
-   #:|textMargins|
-   #:|textOption|
-   #:|textOutline|
-   #:|textSizeMultiplier|
-   #:|textStart|
-   #:|textValueChanged|
-   #:|textValueSelected|
-   #:|textValue|
-   #:|textWidth|
-   #:|textureCacheLimit.QGLContext|
-   #:|textureImage|
-   #:|textureTarget|
-   #:|texture|
-   #:|text|
-   #:|themeName.QIcon|
-   #:|themeSearchPaths.QIcon|
-   #:|thread|
-   #:|tickInterval|
-   #:|tickPosition|
-   #:|tightBoundingRect|
-   #:|tileSubWindows|
-   #:|tile|
-   #:|timeChanged|
-   #:|timeFormat|
-   #:|timeSpec|
-   #:|timeout|
-   #:|timerId|
-   #:|time|
-   #:|tip|
-   #:|titleBarWidget|
-   #:|titleChanged|
-   #:|titleFormat|
-   #:|title|
-   #:|toAce.QUrl|
-   #:|toAffine|))
+   #:|textIndent|))

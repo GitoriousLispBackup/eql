@@ -1,5 +1,32 @@
 (in-package :eql)
 
+(defun |encryptionMethod| (object &rest arguments)
+  (%qinvoke-method object nil "encryptionMethod" arguments))
+
+(defun |endArray| (object &rest arguments)
+  (%qinvoke-method object nil "endArray" arguments))
+
+(defun |endEditBlock| (object &rest arguments)
+  (%qinvoke-method object nil "endEditBlock" arguments))
+
+(defun |endFrame| (object &rest arguments)
+  (%qinvoke-method object nil "endFrame" arguments))
+
+(defun |endGroup| (object &rest arguments)
+  (%qinvoke-method object nil "endGroup" arguments))
+
+(defun |endInsertColumns| (object &rest arguments)
+  (%qinvoke-method object nil "endInsertColumns" arguments))
+
+(defun |endInsertRows| (object &rest arguments)
+  (%qinvoke-method object nil "endInsertRows" arguments))
+
+(defun |endLayout| (object &rest arguments)
+  (%qinvoke-method object nil "endLayout" arguments))
+
+(defun |endMacro| (object &rest arguments)
+  (%qinvoke-method object nil "endMacro" arguments))
+
 (defun |endMoveColumns| (object &rest arguments)
   (%qinvoke-method object nil "endMoveColumns" arguments))
 
@@ -639,6 +666,9 @@
 (defun |fontSelected| (object &rest arguments)
   (%qinvoke-method object nil "fontSelected" arguments))
 
+(defun |fontSize| (object &rest arguments)
+  (%qinvoke-method object nil "fontSize" arguments))
+
 (defun |fontStrikeOut| (object &rest arguments)
   (%qinvoke-method object nil "fontStrikeOut" arguments))
 
@@ -692,6 +722,12 @@
 
 (defun |forwardHistoryCount| (object &rest arguments)
   (%qinvoke-method object nil "forwardHistoryCount" arguments))
+
+(defun |forwardItems| (object &rest arguments)
+  (%qinvoke-method object nil "forwardItems" arguments))
+
+(defun |forwardItem| (object &rest arguments)
+  (%qinvoke-method object nil "forwardItem" arguments))
 
 (defun |forwardUnsupportedContent| (object &rest arguments)
   (%qinvoke-method object nil "forwardUnsupportedContent" arguments))
@@ -966,6 +1002,9 @@
 (defun |globalRestorePolicy| (object &rest arguments)
   (%qinvoke-method object nil "globalRestorePolicy" arguments))
 
+(defun |globalSettings.QWebSettings| (&rest arguments)
+  (%qinvoke-method "QWebSettings" nil "globalSettings" arguments))
+
 (defun |globalStrut.QApplication| (&rest arguments)
   (%qinvoke-method "QApplication" nil "globalStrut" arguments))
 
@@ -974,6 +1013,9 @@
 
 (defun |globalY| (object &rest arguments)
   (%qinvoke-method object nil "globalY" arguments))
+
+(defun |goToItem| (object &rest arguments)
+  (%qinvoke-method object nil "goToItem" arguments))
 
 (defun |gotFocus| (object &rest arguments)
   (%qinvoke-method object nil "gotFocus" arguments))
@@ -1451,6 +1493,12 @@
 
 (defun |iconChanged| (object &rest arguments)
   (%qinvoke-method object nil "iconChanged" arguments))
+
+(defun |iconDatabasePath.QWebSettings| (&rest arguments)
+  (%qinvoke-method "QWebSettings" nil "iconDatabasePath" arguments))
+
+(defun |iconForUrl.QWebSettings| (&rest arguments)
+  (%qinvoke-method "QWebSettings" nil "iconForUrl" arguments))
 
 (defun |iconPixmap| (object &rest arguments)
   (%qinvoke-method object nil "iconPixmap" arguments))
@@ -3108,6 +3156,9 @@
 (defun |localSchemes.QWebSecurityOrigin| (&rest arguments)
   (%qinvoke-method "QWebSecurityOrigin" nil "localSchemes" arguments))
 
+(defun |localStoragePath| (object &rest arguments)
+  (%qinvoke-method object nil "localStoragePath" arguments))
+
 (defun |locale| (object &rest arguments)
   (%qinvoke-method object nil "locale" arguments))
 
@@ -3498,6 +3549,12 @@
 (defun |maximumHeight| (object &rest arguments)
   (%qinvoke-method object nil "maximumHeight" arguments))
 
+(defun |maximumItemCount| (object &rest arguments)
+  (%qinvoke-method object nil "maximumItemCount" arguments))
+
+(defun |maximumPagesInCache.QWebSettings| (&rest arguments)
+  (%qinvoke-method "QWebSettings" nil "maximumPagesInCache" arguments))
+
 (defun |maximumSize| (object &rest arguments)
   (%qinvoke-method object nil "maximumSize" arguments))
 
@@ -3542,60 +3599,3 @@
 
 (defun |mergeBlockFormat| (object &rest arguments)
   (%qinvoke-method object nil "mergeBlockFormat" arguments))
-
-(defun |mergeCells| (object &rest arguments)
-  (%qinvoke-method object nil "mergeCells" arguments))
-
-(defun |mergeCharFormat| (object &rest arguments)
-  (%qinvoke-method object nil "mergeCharFormat" arguments))
-
-(defun |mergeCurrentCharFormat| (object &rest arguments)
-  (%qinvoke-method object nil "mergeCurrentCharFormat" arguments))
-
-(defun |mergeWith| (object &rest arguments)
-  (%qinvoke-method object nil "mergeWith" arguments))
-
-(defun |merge| (object &rest arguments)
-  (%qinvoke-method object nil "merge" arguments))
-
-(defun |messageChanged| (object &rest arguments)
-  (%qinvoke-method object nil "messageChanged" arguments))
-
-(defun |messageClicked| (object &rest arguments)
-  (%qinvoke-method object nil "messageClicked" arguments))
-
-(defun |message| (object &rest arguments)
-  (%qinvoke-method object nil "message" arguments))
-
-(defun |metaData.QHelpEngineCore| (&rest arguments)
-  (%qinvoke-method "QHelpEngineCore" nil "metaData" arguments))
-
-(defun |metaDataChanged| (object &rest arguments)
-  (%qinvoke-method object nil "metaDataChanged" arguments))
-
-(defun |metaData| (object &rest arguments)
-  (%qinvoke-method object nil "metaData" arguments))
-
-(defun |metaInformation| (object &rest arguments)
-  (%qinvoke-method object nil "metaInformation" arguments))
-
-(defun |metaObject| (object &rest arguments)
-  (%qinvoke-method object nil "metaObject" arguments))
-
-(defun |methodCount| (object &rest arguments)
-  (%qinvoke-method object nil "methodCount" arguments))
-
-(defun |methodOffset| (object &rest arguments)
-  (%qinvoke-method object nil "methodOffset" arguments))
-
-(defun |mibEnum| (object &rest arguments)
-  (%qinvoke-method object nil "mibEnum" arguments))
-
-(defun |microFocusChanged| (object &rest arguments)
-  (%qinvoke-method object nil "microFocusChanged" arguments))
-
-(defun |midLineWidth| (object &rest arguments)
-  (%qinvoke-method object nil "midLineWidth" arguments))
-
-(defun |midlight| (object &rest arguments)
-  (%qinvoke-method object nil "midlight" arguments))

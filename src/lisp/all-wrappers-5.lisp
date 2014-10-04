@@ -1,5 +1,44 @@
 (defpackage :eql
   (:export
+   #:|textInteractionFlags|
+   #:|textKeys|
+   #:|textLength|
+   #:|textList|
+   #:|textMargins|
+   #:|textOption|
+   #:|textOutline|
+   #:|textSizeMultiplier|
+   #:|textStart|
+   #:|textValueChanged|
+   #:|textValueSelected|
+   #:|textValue|
+   #:|textWidth|
+   #:|textureCacheLimit.QGLContext|
+   #:|textureImage|
+   #:|textureTarget|
+   #:|texture|
+   #:|text|
+   #:|themeName.QIcon|
+   #:|themeSearchPaths.QIcon|
+   #:|thread|
+   #:|tickInterval|
+   #:|tickPosition|
+   #:|tightBoundingRect|
+   #:|tileSubWindows|
+   #:|tile|
+   #:|timeChanged|
+   #:|timeFormat|
+   #:|timeSpec|
+   #:|timeout|
+   #:|timerId|
+   #:|time|
+   #:|tip|
+   #:|titleBarWidget|
+   #:|titleChanged|
+   #:|titleFormat|
+   #:|title|
+   #:|toAce.QUrl|
+   #:|toAffine|
    #:|toBitArray|
    #:|toBlockFormat|
    #:|toBool|
@@ -273,6 +312,7 @@
    #:|userInfo|
    #:|userName|
    #:|userState|
+   #:|userStyleSheetUrl|
    #:|userType|
    #:|user|
    #:|usesScrollButtons|
@@ -345,6 +385,7 @@
    #:|warning|
    #:|wasCanceled|
    #:|webFrame|
+   #:|webGraphic.QWebSettings|
    #:|weekdayTextFormat|
    #:|weight|
    #:|whatsThis|

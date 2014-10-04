@@ -1,5 +1,24 @@
 (defpackage :eql
   (:export
+   #:|mergeCells|
+   #:|mergeCharFormat|
+   #:|mergeCurrentCharFormat|
+   #:|mergeWith|
+   #:|merge|
+   #:|messageChanged|
+   #:|messageClicked|
+   #:|message|
+   #:|metaData.QHelpEngineCore|
+   #:|metaDataChanged|
+   #:|metaData|
+   #:|metaInformation|
+   #:|metaObject|
+   #:|methodCount|
+   #:|methodOffset|
+   #:|mibEnum|
+   #:|microFocusChanged|
+   #:|midLineWidth|
+   #:|midlight|
    #:|mid|
    #:|mimeData|
    #:|mimeTypes|
@@ -107,6 +126,10 @@
    #:|objectName|
    #:|objectType|
    #:|object|
+   #:|offlineStorageDefaultQuota.QWebSettings|
+   #:|offlineStoragePath.QWebSettings|
+   #:|offlineWebApplicationCachePath.QWebSettings|
+   #:|offlineWebApplicationCacheQuota.QWebSettings|
    #:|offsetChanged|
    #:|offset|
    #:|okButtonText|
@@ -518,7 +541,10 @@
    #:|requestedUrl|
    #:|request|
    #:|requiredStatus|
+   #:|resetAttribute|
    #:|resetCachedContent|
+   #:|resetFontFamily|
+   #:|resetFontSize|
    #:|resetMatrix|
    #:|resetTransform|
    #:|reset|
@@ -1068,6 +1094,7 @@
    #:|setDefaultStyleSheet|
    #:|setDefaultSuffix|
    #:|setDefaultTextColor|
+   #:|setDefaultTextEncoding|
    #:|setDefaultTextOption|
    #:|setDefaultUp|
    #:|setDefaultValue|
@@ -1172,31 +1199,4 @@
    #:|setFieldGrowthPolicy|
    #:|setField|
    #:|setFile(QFile)|
-   #:|setFile(QString)|
-   #:|setFileMode|
-   #:|setFileNameAndVersion(QString,QString)|
-   #:|setFileNameAndVersion(QString,int)|
-   #:|setFileName|
-   #:|setFile|
-   #:|setFillRule|
-   #:|setFilterCaseSensitivity|
-   #:|setFilterFixedString|
-   #:|setFilterKeyColumn|
-   #:|setFilterRegExp(QRegExp)|
-   #:|setFilterRegExp(QString)|
-   #:|setFilterRegExp|
-   #:|setFilterRole|
-   #:|setFilterWildcard|
-   #:|setFiltersChildEvents|
-   #:|setFilter|
-   #:|setFinalPage|
-   #:|setFinalStop|
-   #:|setFirstColumnSpanned|
-   #:|setFirstDayOfWeek|
-   #:|setFirstItemColumnSpanned|
-   #:|setFixedHeight|
-   #:|setFixedPitch|
-   #:|setFixedSize|
-   #:|setFixedWidth|
-   #:|setFlags|
-   #:|setFlag|))
+   #:|setFile(QString)|))

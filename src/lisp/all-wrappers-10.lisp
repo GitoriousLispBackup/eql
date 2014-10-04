@@ -1,5 +1,122 @@
 (in-package :eql)
 
+(defun |textInteractionFlags| (object &rest arguments)
+  (%qinvoke-method object nil "textInteractionFlags" arguments))
+
+(defun |textKeys| (object &rest arguments)
+  (%qinvoke-method object nil "textKeys" arguments))
+
+(defun |textLength| (object &rest arguments)
+  (%qinvoke-method object nil "textLength" arguments))
+
+(defun |textList| (object &rest arguments)
+  (%qinvoke-method object nil "textList" arguments))
+
+(defun |textMargins| (object &rest arguments)
+  (%qinvoke-method object nil "textMargins" arguments))
+
+(defun |textOption| (object &rest arguments)
+  (%qinvoke-method object nil "textOption" arguments))
+
+(defun |textOutline| (object &rest arguments)
+  (%qinvoke-method object nil "textOutline" arguments))
+
+(defun |textSizeMultiplier| (object &rest arguments)
+  (%qinvoke-method object nil "textSizeMultiplier" arguments))
+
+(defun |textStart| (object &rest arguments)
+  (%qinvoke-method object nil "textStart" arguments))
+
+(defun |textValueChanged| (object &rest arguments)
+  (%qinvoke-method object nil "textValueChanged" arguments))
+
+(defun |textValueSelected| (object &rest arguments)
+  (%qinvoke-method object nil "textValueSelected" arguments))
+
+(defun |textValue| (object &rest arguments)
+  (%qinvoke-method object nil "textValue" arguments))
+
+(defun |textWidth| (object &rest arguments)
+  (%qinvoke-method object nil "textWidth" arguments))
+
+(defun |textureCacheLimit.QGLContext| (&rest arguments)
+  (%qinvoke-method "QGLContext" nil "textureCacheLimit" arguments))
+
+(defun |textureImage| (object &rest arguments)
+  (%qinvoke-method object nil "textureImage" arguments))
+
+(defun |textureTarget| (object &rest arguments)
+  (%qinvoke-method object nil "textureTarget" arguments))
+
+(defun |texture| (object &rest arguments)
+  (%qinvoke-method object nil "texture" arguments))
+
+(defun |text| (object &rest arguments)
+  (%qinvoke-method object nil "text" arguments))
+
+(defun |themeName.QIcon| (&rest arguments)
+  (%qinvoke-method "QIcon" nil "themeName" arguments))
+
+(defun |themeSearchPaths.QIcon| (&rest arguments)
+  (%qinvoke-method "QIcon" nil "themeSearchPaths" arguments))
+
+(defun |thread| (object &rest arguments)
+  (%qinvoke-method object nil "thread" arguments))
+
+(defun |tickInterval| (object &rest arguments)
+  (%qinvoke-method object nil "tickInterval" arguments))
+
+(defun |tickPosition| (object &rest arguments)
+  (%qinvoke-method object nil "tickPosition" arguments))
+
+(defun |tightBoundingRect| (object &rest arguments)
+  (%qinvoke-method object nil "tightBoundingRect" arguments))
+
+(defun |tileSubWindows| (object &rest arguments)
+  (%qinvoke-method object nil "tileSubWindows" arguments))
+
+(defun |tile| (object &rest arguments)
+  (%qinvoke-method object nil "tile" arguments))
+
+(defun |timeChanged| (object &rest arguments)
+  (%qinvoke-method object nil "timeChanged" arguments))
+
+(defun |timeFormat| (object &rest arguments)
+  (%qinvoke-method object nil "timeFormat" arguments))
+
+(defun |timeSpec| (object &rest arguments)
+  (%qinvoke-method object nil "timeSpec" arguments))
+
+(defun |timeout| (object &rest arguments)
+  (%qinvoke-method object nil "timeout" arguments))
+
+(defun |timerId| (object &rest arguments)
+  (%qinvoke-method object nil "timerId" arguments))
+
+(defun |time| (object &rest arguments)
+  (%qinvoke-method object nil "time" arguments))
+
+(defun |tip| (object &rest arguments)
+  (%qinvoke-method object nil "tip" arguments))
+
+(defun |titleBarWidget| (object &rest arguments)
+  (%qinvoke-method object nil "titleBarWidget" arguments))
+
+(defun |titleChanged| (object &rest arguments)
+  (%qinvoke-method object nil "titleChanged" arguments))
+
+(defun |titleFormat| (object &rest arguments)
+  (%qinvoke-method object nil "titleFormat" arguments))
+
+(defun |title| (object &rest arguments)
+  (%qinvoke-method object nil "title" arguments))
+
+(defun |toAce.QUrl| (&rest arguments)
+  (%qinvoke-method "QUrl" nil "toAce" arguments))
+
+(defun |toAffine| (object &rest arguments)
+  (%qinvoke-method object nil "toAffine" arguments))
+
 (defun |toBitArray| (object &rest arguments)
   (%qinvoke-method object nil "toBitArray" arguments))
 
@@ -819,6 +936,9 @@
 (defun |userState| (object &rest arguments)
   (%qinvoke-method object nil "userState" arguments))
 
+(defun |userStyleSheetUrl| (object &rest arguments)
+  (%qinvoke-method object nil "userStyleSheetUrl" arguments))
+
 (defun |userType| (object &rest arguments)
   (%qinvoke-method object nil "userType" arguments))
 
@@ -1034,6 +1154,9 @@
 
 (defun |webFrame| (object &rest arguments)
   (%qinvoke-method object nil "webFrame" arguments))
+
+(defun |webGraphic.QWebSettings| (&rest arguments)
+  (%qinvoke-method "QWebSettings" nil "webGraphic" arguments))
 
 (defun |weekdayTextFormat| (object &rest arguments)
   (%qinvoke-method object nil "weekdayTextFormat" arguments))

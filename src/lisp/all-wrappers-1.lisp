@@ -301,6 +301,8 @@
    #:|averageCharWidth|
    #:|axisChanged|
    #:|axis|
+   #:|backItems|
+   #:|backItem|
    #:|backgroundBrush|
    #:|backgroundColor|
    #:|backgroundMode|
@@ -464,6 +466,8 @@
    #:|canEncode(QString)|
    #:|canEncode|
    #:|canFetchMore|
+   #:|canGoBack|
+   #:|canGoForward|
    #:|canPaste|
    #:|canReadLine|
    #:|canRedoChanged|
@@ -574,12 +578,14 @@
    #:|clearFocus|
    #:|clearForeground|
    #:|clearHistory|
+   #:|clearIconDatabase.QWebSettings|
    #:|clearLayout|
    #:|clearMapping|
    #:|clearMask|
    #:|clearMaximumDateTime|
    #:|clearMaximumDate|
    #:|clearMaximumTime|
+   #:|clearMemoryCaches.QWebSettings|
    #:|clearMessage|
    #:|clearMinimumDateTime|
    #:|clearMinimumDate|
@@ -819,6 +825,7 @@
    #:|currentIndexChanged|
    #:|currentIndex|
    #:|currentItemChanged|
+   #:|currentItemIndex|
    #:|currentItem|
    #:|currentList|
    #:|currentLoopChanged|
@@ -921,6 +928,7 @@
    #:|defaultStyleSheet|
    #:|defaultSuffix|
    #:|defaultTextColor|
+   #:|defaultTextEncoding|
    #:|defaultTextOption|
    #:|defaultValue|
    #:|defaultWidget|
@@ -1174,6 +1182,7 @@
    #:|enableAttributeArray(const char*)|
    #:|enableAttributeArray(int)|
    #:|enableAttributeArray|
+   #:|enablePersistentStorage.QWebSettings|
    #:|enabledChanged|
    #:|encloseContentsWith(QString)|
    #:|encloseContentsWith(QWebElement)|
@@ -1190,16 +1199,7 @@
    #:|encodedPath|
    #:|encodedQueryItemValue|
    #:|encodedQuery|
-   #:|encodedUserName|
-   #:|encryptionMethod|
-   #:|endArray|
-   #:|endEditBlock|
-   #:|endFrame|
-   #:|endGroup|
-   #:|endInsertColumns|
-   #:|endInsertRows|
-   #:|endLayout|
-   #:|endMacro|))
+   #:|encodedUserName|))
 
 (in-package :eql)
 
