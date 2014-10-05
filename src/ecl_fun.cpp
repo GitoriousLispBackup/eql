@@ -197,8 +197,9 @@ static char** to_cstring_ptr(cl_object l_str) {
 static const QMetaObject* staticMetaObject(QtObject o) {
     return LObjects::staticMetaObject(QByteArray(), o.id); }
 
-static const QMetaObject* methodMetaObject(QtObject o) {
-    return (o.isQObject() ? LObjects::Q[o.id - 1] : LObjects::N[-o.id - 1])->metaObject(); }
+static const QMetaObject* methodMetaObject(QtObject q) {
+    QObject* o = q.isQObject() ? LObjects::Q[q.id - 1] : LObjects::N[-q.id - 1];
+    return o ? o->metaObject() : 0; }
 
 static const QMetaObject* methodMetaObjectFromName(const QByteArray& name, bool qobject) {
     const QMetaObject* mo = 0;
@@ -1847,7 +1848,7 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
                         i_method[cacheName] = n; }
                     else {
                         i_slot[cacheName] = n; }}}
-            if(n != -1) {
+            if(mo && (n != -1)) {
                 // qt_metacall
                 QMetaMethod mm(mo->method(n));
                 StrList types(mm.parameterTypes());

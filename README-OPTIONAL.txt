@@ -17,7 +17,7 @@ Examples:
 Notes
 =====
 
-To generate the wrappers for your Qt version, run:
+To generate the wrappers for your Qt version (different from Qt 4.7) run:
 
   "src/lisp/define-all-wrappers.lisp"
 
