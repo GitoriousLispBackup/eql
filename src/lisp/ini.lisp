@@ -303,25 +303,30 @@
   (%qdelete obj later))
 
 (defun %string-or-nil (x)
-  (when x
-    (string x)))
+  (typecase x
+    (string
+      x)
+    (symbol
+      (unless (member x '(t nil))
+        (symbol-name x)))))
 
 (defun qapropos (&optional name class type)
-  (when (and (not name)
-             (not class)
-             (not (yes-or-no-p "Print documentation of all Qt classes?")))
-    (return-from qapropos))
-  (let ((main (%qapropos (%string-or-nil name) class type)))
-    (dolist (sub1 main)
-      (format t "~%~%~A~%" (first sub1))
-      (dolist (sub2 (rest sub1))
-        (format t "~%  ~A~%~%" (first sub2))
-        (dolist (sub3 (rest sub2))
-          (let* ((par (position #\( sub3))
-                 (x (if par
-                        (position #\Space sub3 :end par :from-end t)
-                        (position #\Space sub3))))
-            (format t "    ~A~A~%" (make-string (max 0 (- 15 x))) sub3))))))
+  (let ((name* (%string-or-nil name)))
+    (when (and (not name*)
+               (not class)
+               (not (yes-or-no-p "Print documentation of all Qt classes?")))
+      (return-from qapropos))
+    (let ((main (%qapropos name* class type)))
+      (dolist (sub1 main)
+        (format t "~%~%~A~%" (first sub1))
+        (dolist (sub2 (rest sub1))
+          (format t "~%  ~A~%~%" (first sub2))
+          (dolist (sub3 (rest sub2))
+            (let* ((par (position #\( sub3))
+                   (x (if par
+                          (position #\Space sub3 :end par :from-end t)
+                          (position #\Space sub3))))
+              (format t "    ~A~A~%" (make-string (max 0 (- 15 x))) sub3)))))))
   (terpri)
   nil)
 
