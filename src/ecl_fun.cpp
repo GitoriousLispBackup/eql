@@ -352,7 +352,11 @@ static T toFloat(cl_object l_num) {
         if(ECL_DOUBLE_FLOAT_P(l_f)) {
             f = df(l_f); }
         else if(ECL_SINGLE_FLOAT_P(l_f)) {
-            f = sf(l_f); }}
+            f = sf(l_f); }
+#ifdef ECL_LONG_FLOAT
+        else if(ECL_LONG_FLOAT_P(l_f)) {
+            f = ecl_long_float(l_f); }}
+#endif
     return f; }
 
 static qreal toReal(cl_object l_num) {
@@ -1491,7 +1495,8 @@ cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
     /// Finds all occurrencies of the given search string in the given object's meta information.<br>Constructors are listed under "Methods".<br>To list the user defined functions of external C++ classes (see Qt_EQL), pass the object instead of the class name.
     ///     (qapropos "html" "QTextEdit")
     ///     (qapropos nil "QWidget")
-    ///     (qapropos)
+    ///     (qapropos)             
+    ///     (qapropos '|toString|)   ; wrapper function symbol
     ///     (qapropos nil *qt-main*) ; see Qt_EQL, Qt_EQL_dynamic (custom Qt classes, Qt3Support classes)
     ecl_process_env()->nvalues = 1;    
     QByteArray search;

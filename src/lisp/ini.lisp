@@ -302,8 +302,16 @@
 (defun qdelete (obj &optional later)
   (%qdelete obj later))
 
+(defun %string-or-nil (x)
+  (when x
+    (string x)))
+
 (defun qapropos (&optional name class type)
-  (let ((main (%qapropos name class type)))
+  (when (and (not name)
+             (not class)
+             (not (yes-or-no-p "Print documentation of all Qt classes?")))
+    (return-from qapropos))
+  (let ((main (%qapropos (%string-or-nil name) class type)))
     (dolist (sub1 main)
       (format t "~%~%~A~%" (first sub1))
       (dolist (sub2 (rest sub1))
@@ -320,7 +328,7 @@
 (defun qapropos* (&optional name class type)
   "args: (&optional search-string class-name)
    Similar to <code>qapropos</code>, returning the results as nested list."
-  (%qapropos name class type))
+  (%qapropos (%string-or-nil name) class type))
 
 (defun qnew-instance (name &rest args)
   (%qnew-instance name args))

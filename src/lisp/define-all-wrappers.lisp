@@ -5,12 +5,12 @@
 (dolist (module '(:help :network :opengl :sql :svg :webkit))
   (eql:qrequire module))
 
+(defconstant +max-symbols-per-file+ 1200) ; required for Windows (string size limit)
+
 (defvar *objects*              (qobject-names))
 (defvar *auto-cast-exceptions* '("QGraphicsItem")) ; see note in Sokoban example
 (defvar *functions*            nil)
 (defvar *unambiguous*          nil)
-
-(defconstant +max-symbols+ 1200) ; required for Windows (string size limit)
 
 (let (latest)
   (defun num-args (fun)
@@ -136,7 +136,7 @@
         (with-open-file (s (print (file file)) :direction :output :if-exists :supersede)
           (format s "(defpackage :eql~
                    ~%  (:export")
-          (dotimes (n +max-symbols+)
+          (dotimes (n +max-symbols-per-file+)
             (format s "~%   #:~A" (first symbols))
             (setf symbols (rest symbols))
             (unless symbols
@@ -157,7 +157,7 @@
     (x:while definitions
       (with-open-file (s (print (file file)) :direction :output :if-exists :supersede)
         (format s "(in-package :eql)~%")
-        (dotimes (n +max-symbols+)
+        (dotimes (n +max-symbols-per-file+)
           (princ (first definitions) s)
           (setf definitions (rest definitions))
           (unless definitions
