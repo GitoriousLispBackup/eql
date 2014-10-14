@@ -292,10 +292,16 @@
 (defun all-symbols ()
   (let (all)
     (do-symbols (s)
-      (push (format nil "~A~(~A~)" (if (or (ignore-errors (symbol-function s))
-                                           (macro-function s)) "(" "")
-                    s)
-            all))
+      (let ((name (symbol-name s)))
+        (push (concatenate 'string
+                           (if (or (ignore-errors (symbol-function s))
+                                   (macro-function s))
+                               "("
+                               "")
+                           (if (some 'lower-case-p name)
+                               (format nil "|~A|" name)
+                               (string-downcase name)))
+              all)))
     (sort all 'string<)))
 
 (let (package)
