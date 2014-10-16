@@ -24,6 +24,8 @@ _*
 .u
 r
 t.lisp
+l1.lisp
+l2.lisp
 tr.h
 moc_*.cpp
 Makefile

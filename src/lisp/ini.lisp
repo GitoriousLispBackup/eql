@@ -314,7 +314,7 @@
   (let ((name* (%string-or-nil name)))
     (when (and (not name*)
                (not class)
-               (not (yes-or-no-p "Print documentation of all Qt classes?")))
+               (not (y-or-n-p "Print documentation of all Qt classes?")))
       (return-from qapropos))
     (let ((main (%qapropos name* class type)))
       (dolist (sub1 main)
