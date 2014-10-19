@@ -1,6 +1,5 @@
 (defpackage :eql
   (:export
-   #:|mergeCells|
    #:|mergeCharFormat|
    #:|mergeCurrentCharFormat|
    #:|mergeWith|
@@ -917,7 +916,6 @@
    #:|setBrush|
    #:|setBspTreeDepth|
    #:|setBuddy|
-   #:|setBuffer|
    #:|setButtonSymbols|
    #:|setButtonText|
    #:|setButton|
@@ -1199,4 +1197,6 @@
    #:|setFieldGrowthPolicy|
    #:|setField|
    #:|setFile(QFile)|
-   #:|setFile(QString)|))
+   #:|setFile(QString)|
+   #:|setFileMode|
+   #:|setFileNameAndVersion(QString,QString)|))

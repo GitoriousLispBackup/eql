@@ -422,7 +422,6 @@
    #:|brush|
    #:|bspTreeDepth|
    #:|buddy|
-   #:|buffer|
    #:|buildDate.QLibraryInfo|
    #:|buildKey.QLibraryInfo|
    #:|bundleName|
@@ -1199,7 +1198,8 @@
    #:|encodedPath|
    #:|encodedQueryItemValue|
    #:|encodedQuery|
-   #:|encodedUserName|))
+   #:|encodedUserName|
+   #:|encryptionMethod|))
 
 (in-package :eql)
 

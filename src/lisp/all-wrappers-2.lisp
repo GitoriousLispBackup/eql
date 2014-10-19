@@ -1,6 +1,5 @@
 (defpackage :eql
   (:export
-   #:|encryptionMethod|
    #:|endArray|
    #:|endEditBlock|
    #:|endFrame|
@@ -1199,4 +1198,5 @@
    #:|menuWidget|
    #:|menu|
    #:|mergeBlockCharFormat|
-   #:|mergeBlockFormat|))
+   #:|mergeBlockFormat|
+   #:|mergeCells|))

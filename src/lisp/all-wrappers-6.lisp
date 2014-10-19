@@ -1266,9 +1266,6 @@
 (defun |buddy| (object &rest arguments)
   (%qinvoke-method object nil "buddy" arguments))
 
-(defun |buffer| (object &rest arguments)
-  (%qinvoke-method object nil "buffer" arguments))
-
 (defun |buildDate.QLibraryInfo| (&rest arguments)
   (%qinvoke-method "QLibraryInfo" nil "buildDate" arguments))
 
@@ -3599,3 +3596,6 @@
 
 (defun |encodedUserName| (object &rest arguments)
   (%qinvoke-method object nil "encodedUserName" arguments))
+
+(defun |encryptionMethod| (object &rest arguments)
+  (%qinvoke-method object nil "encryptionMethod" arguments))

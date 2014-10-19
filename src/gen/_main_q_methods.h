@@ -2288,11 +2288,7 @@ class EQL_EXPORT Q23 : public Q97 { // QBuffer
     Q_OBJECT
 public:
     Q_INVOKABLE void* C(uint u, QObject* x1 = 0) { return new LBuffer(u, x1); }
-    Q_INVOKABLE void* C(uint u, QByteArray* x1, QObject* x2 = 0) { return new LBuffer(u, x1, x2); }
-    Q_INVOKABLE QByteArray Mbuffer(QBuffer* o) { return o->buffer(); }
-    Q_INVOKABLE QByteArray Mbuffer(QBuffer* o) const { return o->buffer(); }
     Q_INVOKABLE QByteArray Mdata(QBuffer* o) const { return o->data(); }
-    Q_INVOKABLE void MsetBuffer(QBuffer* o, QByteArray* x1) { o->setBuffer(x1); }
     Q_INVOKABLE void MsetData(QBuffer* o, const QByteArray& x1) { o->setData(x1); }
     Q_INVOKABLE void MsetData(QBuffer* o, const char* x1, int x2) { o->setData(x1, x2); }
     Q_INVOKABLE bool MatEnd(QBuffer* o) const { return o->atEnd(); }

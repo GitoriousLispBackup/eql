@@ -539,11 +539,7 @@
    "virtual QLayoutItem * takeAt ( int )")
   (("QBuffer" . "QIODevice")
    "new QBuffer ( QObject * = 0 )"
-   "new QBuffer ( QByteArray * , QObject * = 0 )"
-   "QByteArray & buffer ()"
-   "const QByteArray & buffer () const"
    "const QByteArray & data () const"
-   "void setBuffer ( QByteArray * )"
    "void setData ( const QByteArray & )"
    "void setData ( const char * , int )"
    "virtual bool atEnd () const"

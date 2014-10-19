@@ -1,8 +1,5 @@
 (in-package :eql)
 
-(defun |mergeCells| (object &rest arguments)
-  (%qinvoke-method object nil "mergeCells" arguments))
-
 (defun |mergeCharFormat| (object &rest arguments)
   (%qinvoke-method object nil "mergeCharFormat" arguments))
 
@@ -2751,9 +2748,6 @@
 (defun |setBuddy| (object &rest arguments)
   (%qinvoke-method object nil "setBuddy" arguments))
 
-(defun |setBuffer| (object &rest arguments)
-  (%qinvoke-method object nil "setBuffer" arguments))
-
 (defun |setButtonSymbols| (object &rest arguments)
   (%qinvoke-method object nil "setButtonSymbols" arguments))
 
@@ -3599,3 +3593,9 @@
 
 (defun |setFile(QString)| (object &rest arguments)
   (%qinvoke-method object nil "setFile(QString)" arguments))
+
+(defun |setFileMode| (object &rest arguments)
+  (%qinvoke-method object nil "setFileMode" arguments))
+
+(defun |setFileNameAndVersion(QString,QString)| (object &rest arguments)
+  (%qinvoke-method object nil "setFileNameAndVersion(QString,QString)" arguments))

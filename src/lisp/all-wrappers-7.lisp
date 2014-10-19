@@ -1,8 +1,5 @@
 (in-package :eql)
 
-(defun |encryptionMethod| (object &rest arguments)
-  (%qinvoke-method object nil "encryptionMethod" arguments))
-
 (defun |endArray| (object &rest arguments)
   (%qinvoke-method object nil "endArray" arguments))
 
@@ -3599,3 +3596,6 @@
 
 (defun |mergeBlockFormat| (object &rest arguments)
   (%qinvoke-method object nil "mergeBlockFormat" arguments))
+
+(defun |mergeCells| (object &rest arguments)
+  (%qinvoke-method object nil "mergeCells" arguments))

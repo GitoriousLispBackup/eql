@@ -1,7 +1,5 @@
 (defpackage :eql
   (:export
-   #:|textInteractionFlags|
-   #:|textKeys|
    #:|textLength|
    #:|textList|
    #:|textMargins|

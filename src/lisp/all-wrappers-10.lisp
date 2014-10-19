@@ -1,11 +1,5 @@
 (in-package :eql)
 
-(defun |textInteractionFlags| (object &rest arguments)
-  (%qinvoke-method object nil "textInteractionFlags" arguments))
-
-(defun |textKeys| (object &rest arguments)
-  (%qinvoke-method object nil "textKeys" arguments))
-
 (defun |textLength| (object &rest arguments)
   (%qinvoke-method object nil "textLength" arguments))
 

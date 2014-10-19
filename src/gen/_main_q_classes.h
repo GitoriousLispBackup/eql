@@ -687,7 +687,6 @@ class LBuffer : public QBuffer {
     friend class Q23;
 public:
     LBuffer(uint u, QObject* x1 = 0) : QBuffer(x1), unique(u) {}
-    LBuffer(uint u, QByteArray* x1, QObject* x2 = 0) : QBuffer(x1, x2), unique(u) {}
 
     static NumList overrideIds;
     uint unique;

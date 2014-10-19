@@ -1,11 +1,5 @@
 (in-package :eql)
 
-(defun |setFileMode| (object &rest arguments)
-  (%qinvoke-method object nil "setFileMode" arguments))
-
-(defun |setFileNameAndVersion(QString,QString)| (object &rest arguments)
-  (%qinvoke-method object nil "setFileNameAndVersion(QString,QString)" arguments))
-
 (defun |setFileNameAndVersion(QString,int)| (object &rest arguments)
   (%qinvoke-method object nil "setFileNameAndVersion(QString,int)" arguments))
 
@@ -3599,3 +3593,9 @@
 
 (defun |textIndent| (object &rest arguments)
   (%qinvoke-method object nil "textIndent" arguments))
+
+(defun |textInteractionFlags| (object &rest arguments)
+  (%qinvoke-method object nil "textInteractionFlags" arguments))
+
+(defun |textKeys| (object &rest arguments)
+  (%qinvoke-method object nil "textKeys" arguments))

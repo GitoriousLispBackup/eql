@@ -69,6 +69,8 @@
         "QList<T>"
         "QList<Tab>"
         "QList<QVariant>"
+        "QByteArray *"
+        "QByteArray & buffer ()"
         "QMap"
         "QMetaClassInfo"
         "QMetaEnum"
