@@ -114,7 +114,7 @@
             </layout>
            </item>
            <item>
-            <widget class="QTabWidget" name="tabWidget">
+            <widget class="QTabWidget" name="tabs_qobjects">
              <property name="currentIndex">
               <number>0</number>
              </property>
@@ -239,7 +239,7 @@
             </layout>
            </item>
            <item>
-            <widget class="QTabWidget" name="tabWidget_2">
+            <widget class="QTabWidget" name="tabs_non_qobjects">
              <property name="currentIndex">
               <number>0</number>
              </property>

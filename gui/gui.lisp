@@ -47,7 +47,9 @@
   *qt-tab*
   *search-help*
   *select*
-  *selected-widget*)
+  *selected-widget*
+  *tabs-non-qobjects*
+  *tabs-qobjects*)
 
 (defvar *code-font* (qnew "QFont(QString,int)"
                           #+darwin  "Monaco"      #+darwin  12
@@ -185,10 +187,13 @@
 (defun populate-objects (type)
   (let* ((class (qget (if (eql :q type) *q-names* *n-names*) "currentText"))
          (info (qapropos* nil class type))
-         (all (rest (first info))))
+         (all (rest (first info)))
+         (tab (if (eql :q type) *tabs-qobjects* *tabs-non-qobjects*))
+         (i-tab -1))
     (flet ((sub (name)
              (rest (find name all :key 'first :test 'string=))))
       (mapc (lambda (name tree)
+              (incf i-tab)
               (! "clear" tree)
               (dolist (curr (sub name))
                 (let* ((curr* (x:string-substitute "const_" "const " curr))
@@ -203,13 +208,15 @@
                     (! "setText" item 2 (subseq curr (1+ sp2))))
                   (! "addTopLevelItem" tree item)))
               (resize-tree tree)
-              (! "sortByColumn" tree 1 |Qt.AscendingOrder|))
+              (! "sortByColumn" tree 1 |Qt.AscendingOrder|)
+              (! "setTabEnabled" tab i-tab (not (zerop (! "topLevelItemCount" tree)))))
             (if (eql :q type)
                 (list "Properties:" "Methods:" "Slots:" "Signals:")
                 (list "Methods:"))
             (if (eql :q type)
                 (list *q-properties* *q-methods* *q-slots* *q-signals*)
                 (list *n-methods*)))
+      (incf i-tab)
       (let ((override (if (eql :q type) *q-override* *n-override*)))
         (! "clear" override)
         (dolist (curr (sub "Override:"))
@@ -220,7 +227,8 @@
               ("setText" 0 (subseq curr 0 sp))
               ("setText" 1 (subseq curr (1+ sp))))
             (! "addTopLevelItem" override item)))
-        (! "sortByColumn" override 1 |Qt.AscendingOrder|)))
+        (! "sortByColumn" override 1 |Qt.AscendingOrder|)
+        (! "setTabEnabled" tab i-tab (not (zerop (! "topLevelItemCount" override))))))
     (when (null info)
       (qmsg "<html>Class currently not available (see EQL modules and <b><code>qrequire</code></b>)."))))
 
