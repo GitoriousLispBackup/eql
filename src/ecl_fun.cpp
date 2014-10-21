@@ -355,8 +355,9 @@ static T toFloat(cl_object l_num) {
             f = sf(l_f); }
 #ifdef ECL_LONG_FLOAT
         else if(ECL_LONG_FLOAT_P(l_f)) {
-            f = ecl_long_float(l_f); }}
+            f = ecl_long_float(l_f); }
 #endif
+    }
     return f; }
 
 static qreal toReal(cl_object l_num) {

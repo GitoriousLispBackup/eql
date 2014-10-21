@@ -188,7 +188,7 @@
   (let* ((class (qget (if (eql :q type) *q-names* *n-names*) "currentText"))
          (info (qapropos* nil class type))
          (all (rest (first info)))
-         (tab (if (eql :q type) *tabs-qobjects* *tabs-non-qobjects*))
+         (tabs (if (eql :q type) *tabs-qobjects* *tabs-non-qobjects*))
          (i-tab -1))
     (flet ((sub (name)
              (rest (find name all :key 'first :test 'string=))))
@@ -203,13 +203,15 @@
                   (! "setTextAlignment" item 0 (logior |Qt.AlignRight| |Qt.AlignVCenter|))
                   (when sp1
                     (! "setText" item 0 (subseq curr 0 sp1)))
-                  (! "setText" item 1 (if sp1 (subseq curr (1+ sp1) sp2) curr))
+                  (! "setText" item 1 (concatenate 'string
+                                                   (if (string= "constructor" (! "text" item 0)) ": " "")
+                                                   (if sp1 (subseq curr (1+ sp1) sp2) curr)))
                   (when sp2
                     (! "setText" item 2 (subseq curr (1+ sp2))))
                   (! "addTopLevelItem" tree item)))
               (resize-tree tree)
               (! "sortByColumn" tree 1 |Qt.AscendingOrder|)
-              (! "setTabEnabled" tab i-tab (not (zerop (! "topLevelItemCount" tree)))))
+              (! "setTabEnabled" tabs i-tab (not (zerop (! "topLevelItemCount" tree)))))
             (if (eql :q type)
                 (list "Properties:" "Methods:" "Slots:" "Signals:")
                 (list "Methods:"))
@@ -228,7 +230,7 @@
               ("setText" 1 (subseq curr (1+ sp))))
             (! "addTopLevelItem" override item)))
         (! "sortByColumn" override 1 |Qt.AscendingOrder|)
-        (! "setTabEnabled" tab i-tab (not (zerop (! "topLevelItemCount" override))))))
+        (! "setTabEnabled" tabs i-tab (not (zerop (! "topLevelItemCount" override))))))
     (when (null info)
       (qmsg "<html>Class currently not available (see EQL modules and <b><code>qrequire</code></b>)."))))
 
