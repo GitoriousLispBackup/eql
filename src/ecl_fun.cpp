@@ -1509,6 +1509,9 @@ cl_object qapropos2(cl_object l_search, cl_object l_class, cl_object l_type) {
     bool qt_eql = false;
     const QMetaObject* mo = 0;
     if(ECL_STRINGP(l_class)) {
+        if(!classId(l_class)) {
+            error_msg("QAPROPOS: class not found:", LIST1(l_class));
+            return Cnil; }
         classes << toCString(l_class); }
     else if(Cnil == l_class) {
         if(all) {
@@ -1757,14 +1760,20 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
     /// alias: qfun
     /// Calls any of Qt methods, slots, signals. Static methods can be called by passing the string name of an object.<br>For overloaded Qt methods you may need to pass the argument types (as for <code>qconnect</code> and <code>qoverride</code>). In these (very few) ambiguous cases you will see a runtime error message, together with a list of all possible candidates.
     ///     (qfun item "setText" 0 "Some objects are EQL.")
-    ///     (qfun "QDateTime" "currentDateTime") ; static method
-    ///     (qfun slider "valueChanged" 10) ; emit signal
+    ///     (qfun "QDateTime" "currentDateTime")            ; static method
+    ///     (qfun slider "valueChanged" 10)                 ; emit signal
     ///     ;;;
-    ///     ;;; alternatively:
+    ///     ;;; alternative 1: (macro '!')
     ///     ;;;
     ///     (! "setText" item 0 "Some objects are EQL.")
-    ///     (! "currentDateTime" "QDateTime") ; static method
-    ///     (! "valueChanged" slider 10) ; emit signal
+    ///     (! "currentDateTime" "QDateTime")
+    ///     (! "valueChanged" slider 10)
+    ///     ;;;
+    ///     ;;; alternative 2: (wrapper functions)
+    ///     ;;;
+    ///     (|setText| item 0 "Some objects are EQL.")
+    ///     (|currentDateTime.QDateTime|)
+    ///     (|valueChanged| slider 10)
     static QHash<QByteArray, int> i_slot;
     static QHash<QByteArray, int> i_method;
     if((l_obj != Cnil) && ECL_STRINGP(l_name)) {

@@ -162,14 +162,20 @@
 <p>Calls any of Qt methods, slots, signals. Static methods can be called by passing the string name of an object.<br>For overloaded Qt methods you may need to pass the argument types (as for <code>qconnect</code> and <code>qoverride</code>). In these (very few) ambiguous cases you will see a runtime error message, together with a list of all possible candidates.</p>
 <pre>
   (qfun item "setText" 0 "Some objects are EQL.")
-  (qfun "QDateTime" "currentDateTime") ; static method
-  (qfun slider "valueChanged" 10) ; emit signal
+  (qfun "QDateTime" "currentDateTime")            ; static method
+  (qfun slider "valueChanged" 10)                 ; emit signal
   ;;;
-  ;;; alternatively:
+  ;;; alternative 1: (macro '!')
   ;;;
   (! "setText" item 0 "Some objects are EQL.")
-  (! "currentDateTime" "QDateTime") ; static method
-  (! "valueChanged" slider 10) ; emit signal
+  (! "currentDateTime" "QDateTime")
+  (! "valueChanged" slider 10)
+  ;;;
+  ;;; alternative 2: (wrapper functions)
+  ;;;
+  (|setText| item 0 "Some objects are EQL.")
+  (|currentDateTime.QDateTime|)
+  (|valueChanged| slider 10)
 </pre>
 </p><br>
 <p>
