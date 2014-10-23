@@ -1758,7 +1758,7 @@ cl_object qset_property(cl_object l_obj, cl_object l_name, cl_object l_val) {
 cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, cl_object l_args) {
     /// args: (object function-name &rest arguments)
     /// alias: qfun
-    /// Calls any of Qt methods, slots, signals. Static methods can be called by passing the string name of an object.<br>For overloaded Qt methods you may need to pass the argument types (as for <code>qconnect</code> and <code>qoverride</code>). In these (very few) ambiguous cases you will see a runtime error message, together with a list of all possible candidates.
+    /// Calls any of Qt methods, slots, signals. Static methods can be called by passing the string name of an object.<br><br>For overloaded Qt methods you may need to pass the argument types (as for <code>qconnect</code> and <code>qoverride</code>). In these (very few) ambiguous cases you will see a runtime error message, together with a list of all possible candidates.<br><br>The most convenient way of calling Qt methods is to use the wrapper functions (see alternative 2 below), which allows for tab completion, showing all possible candidates in case of ambiguous type lists (overloaded methods). Additionally, static functions are shown as one symbol (easily catching the eye).
     ///     (qfun item "setText" 0 "Some objects are EQL.")
     ///     (qfun "QDateTime" "currentDateTime")            ; static method
     ///     (qfun slider "valueChanged" 10)                 ; emit signal
