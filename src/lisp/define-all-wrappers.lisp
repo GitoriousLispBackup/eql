@@ -146,6 +146,8 @@
             (setf 1st nil)
             (format s "~%(in-package :eql)~
                        ~%~
+                       ~%(pushnew :qt-wrapper-functions *features*)~
+                       ~%~
                        ~%(defun %auto-cast (object)~
                        ~%  (when (find (qt-object-id object)~
                        ~%              '#.(list (qid \"QGraphicsSvgItem\")~

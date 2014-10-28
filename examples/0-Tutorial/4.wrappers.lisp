@@ -1,5 +1,6 @@
 ;;; Ported Qt Widgets Tutorial - Nested Layouts
 
+#-qt-wrapper-functions
 (load (in-home "src/lisp/all-wrappers"))
 
 (in-package :eql-user)
