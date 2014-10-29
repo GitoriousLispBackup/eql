@@ -1181,7 +1181,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         else if(T_QVector_QTextFormat == n)              p = new QVector<QTextFormat>(toQTextFormatVector(l_arg));
         else if(T_QVector_QTextLength == n)              p = new QVector<QTextLength>(toQTextLengthVector(l_arg));
         else if(T_QVector_qreal == n)                    p = new QVector<qreal>(toqrealVector(l_arg));
-        else if(T_WId == n)                              p = new WId((WId)toUInt<ulong>(l_arg));
+        else if(T_WId == n)                              p = new ulong(toUInt<ulong>(l_arg));
         // module types
         else if((n >= LObjects::T_GLenum) &&
                 (n <= LObjects::T_QGLFramebufferObjectFormat)) {

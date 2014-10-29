@@ -256,7 +256,7 @@
   (string= "void" (first arg)))
 
 (defun arg-to-c (arg &optional enum-class return)
-  (if (find (first arg) '("WId") :test 'string=)
+  (if (find* (first arg) '("WId"))
       (first arg)
       (let* ((type (add-namespace (first arg) enum-class))
              (enum-as-int (and return
