@@ -1,5 +1,14 @@
 (in-package :eql)
 
+(defun |textIndent| (object &rest arguments)
+  (%qinvoke-method object nil "textIndent" arguments))
+
+(defun |textInteractionFlags| (object &rest arguments)
+  (%qinvoke-method object nil "textInteractionFlags" arguments))
+
+(defun |textKeys| (object &rest arguments)
+  (%qinvoke-method object nil "textKeys" arguments))
+
 (defun |textLength| (object &rest arguments)
   (%qinvoke-method object nil "textLength" arguments))
 
@@ -1202,6 +1211,9 @@
 
 (defun |width| (object &rest arguments)
   (%qinvoke-method object nil "width" arguments))
+
+(defun |winId| (object &rest arguments)
+  (%qinvoke-method object nil "winId" arguments))
 
 (defun |windowActivated| (object &rest arguments)
   (%qinvoke-method object nil "windowActivated" arguments))

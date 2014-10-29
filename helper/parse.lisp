@@ -84,7 +84,6 @@
         "QWSEvent"
         "QXmlStreamReader"
         "WinPage"
-        "WId"
         "X11"
         "XEvent"
         "**"

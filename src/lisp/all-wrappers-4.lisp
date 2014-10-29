@@ -1,5 +1,8 @@
 (defpackage :eql
   (:export
+   #:|setFile(QString)|
+   #:|setFileMode|
+   #:|setFileNameAndVersion(QString,QString)|
    #:|setFileNameAndVersion(QString,int)|
    #:|setFileName|
    #:|setFile|
@@ -1196,7 +1199,4 @@
    #:|textEdited|
    #:|textElideMode|
    #:|textFormat|
-   #:|textFromValue|
-   #:|textIndent|
-   #:|textInteractionFlags|
-   #:|textKeys|))
+   #:|textFromValue|))

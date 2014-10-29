@@ -1168,6 +1168,7 @@
    #:|effectiveDate|
    #:|effectiveOpacity|
    #:|effectiveSizeHint|
+   #:|effectiveWinId|
    #:|elapsed|
    #:|elementCount|
    #:|elementExists|
@@ -1198,8 +1199,7 @@
    #:|encodedPath|
    #:|encodedQueryItemValue|
    #:|encodedQuery|
-   #:|encodedUserName|
-   #:|encryptionMethod|))
+   #:|encodedUserName|))
 
 (in-package :eql)
 

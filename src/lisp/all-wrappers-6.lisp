@@ -3504,6 +3504,9 @@
 (defun |effectiveSizeHint| (object &rest arguments)
   (%qinvoke-method object nil "effectiveSizeHint" arguments))
 
+(defun |effectiveWinId| (object &rest arguments)
+  (%qinvoke-method object nil "effectiveWinId" arguments))
+
 (defun |elapsed| (object &rest arguments)
   (%qinvoke-method object nil "elapsed" arguments))
 
@@ -3596,6 +3599,3 @@
 
 (defun |encodedUserName| (object &rest arguments)
   (%qinvoke-method object nil "encodedUserName" arguments))
-
-(defun |encryptionMethod| (object &rest arguments)
-  (%qinvoke-method object nil "encryptionMethod" arguments))

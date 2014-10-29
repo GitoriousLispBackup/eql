@@ -3491,6 +3491,7 @@ public:
     Q_INVOKABLE QPixmap SfromImage(const QImage& x1, Qt::ImageConversionFlags x2 = Qt::AutoColor) { return QPixmap::fromImage(x1, x2); }
     Q_INVOKABLE QPixmap SgrabWidget(QWidget* x1, const QRect& x2) { return QPixmap::grabWidget(x1, x2); }
     Q_INVOKABLE QPixmap SgrabWidget(QWidget* x1, int x2 = 0, int x3 = 0, int x4 = -1, int x5 = -1) { return QPixmap::grabWidget(x1, x2, x3, x4, x5); }
+    Q_INVOKABLE QPixmap SgrabWindow(WId x1, int x2 = 0, int x3 = 0, int x4 = -1, int x5 = -1) { return QPixmap::grabWindow(x1, x2, x3, x4, x5); }
     Q_INVOKABLE QTransform StrueMatrix(const QTransform& x1, int x2, int x3) { return QPixmap::trueMatrix(x1, x2, x3); }
     Q_INVOKABLE QMatrix StrueMatrix(const QMatrix& x1, int x2, int x3) { return QPixmap::trueMatrix(x1, x2, x3); }
 };

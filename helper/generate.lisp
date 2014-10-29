@@ -256,25 +256,27 @@
   (string= "void" (first arg)))
 
 (defun arg-to-c (arg &optional enum-class return)
-  (let* ((type (add-namespace (first arg) enum-class))
-         (enum-as-int (and return
-                           (find #\: type)
-                           (not (find #\< type)))))
-    (unless (and enum-as-int
-                 (find* type +special-typedefs-and-classes+))
-      (concatenate 'string
-                   (if (and (const-p arg)
-                            (or (not return)
-                                (not (string= "int" (first arg)))))
-                       "const "
-                       "")
-                   (if enum-as-int "int" type)
-                   (cond ((and (not return)
-                               (reference-p arg))
-                          "&")
-                         ((pointer-p arg)
-                          "*")
-                         (t ""))))))
+  (if (find (first arg) '("WId") :test 'string=)
+      (first arg)
+      (let* ((type (add-namespace (first arg) enum-class))
+             (enum-as-int (and return
+                               (find #\: type)
+                               (not (find #\< type)))))
+        (unless (and enum-as-int
+                     (find* type +special-typedefs-and-classes+))
+          (concatenate 'string
+                       (if (and (const-p arg)
+                                (or (not return)
+                                    (not (string= "int" (first arg)))))
+                           "const "
+                           "")
+                       (if enum-as-int "int" type)
+                       (cond ((and (not return)
+                                   (reference-p arg))
+                              "&")
+                             ((pointer-p arg)
+                              "*")
+                             (t "")))))))
 
 (defun arg-to-c-null-value (arg)
   (let ((type (arg-type arg)))

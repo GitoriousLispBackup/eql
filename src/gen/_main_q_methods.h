@@ -1831,6 +1831,7 @@ public:
     Q_INVOKABLE QRect McontentsRect(QWidget* o) const { return o->contentsRect(); }
     Q_INVOKABLE int McontextMenuPolicy(QWidget* o) const { return o->contextMenuPolicy(); }
     Q_INVOKABLE QCursor Mcursor(QWidget* o) const { return o->cursor(); }
+    Q_INVOKABLE WId MeffectiveWinId(QWidget* o) const { return o->effectiveWinId(); }
     Q_INVOKABLE void MensurePolished(QWidget* o) const { o->ensurePolished(); }
     Q_INVOKABLE int MfocusPolicy(QWidget* o) const { return o->focusPolicy(); }
     Q_INVOKABLE QWidget* MfocusProxy(QWidget* o) const { return o->focusProxy(); }
@@ -1997,6 +1998,7 @@ public:
     Q_INVOKABLE QRegion MvisibleRegion(QWidget* o) const { return o->visibleRegion(); }
     Q_INVOKABLE QString MwhatsThis(QWidget* o) const { return o->whatsThis(); }
     Q_INVOKABLE int Mwidth(QWidget* o) const { return o->width(); }
+    Q_INVOKABLE WId MwinId(QWidget* o) const { return o->winId(); }
     Q_INVOKABLE QWidget* Mwindow(QWidget* o) const { return o->window(); }
     Q_INVOKABLE QString MwindowFilePath(QWidget* o) const { return o->windowFilePath(); }
     Q_INVOKABLE int MwindowFlags(QWidget* o) const { return o->windowFlags(); }
@@ -2010,9 +2012,11 @@ public:
     Q_INVOKABLE int MwindowType(QWidget* o) const { return o->windowType(); }
     Q_INVOKABLE int Mx(QWidget* o) const { return o->x(); }
     Q_INVOKABLE int My(QWidget* o) const { return o->y(); }
+    Q_INVOKABLE void Mcreate(QWidget* o, WId x1 = 0, bool x2 = true, bool x3 = true) { ((LWidget*)o)->create(x1, x2, x3); }
     Q_INVOKABLE void Mdestroy(QWidget* o, bool x1 = true, bool x2 = true) { ((LWidget*)o)->destroy(x1, x2); }
     Q_INVOKABLE bool MfocusNextChild(QWidget* o) { return ((LWidget*)o)->focusNextChild(); }
     Q_INVOKABLE bool MfocusPreviousChild(QWidget* o) { return ((LWidget*)o)->focusPreviousChild(); }
+    Q_INVOKABLE QWidget* Sfind(WId x1) { return QWidget::find(x1); }
     Q_INVOKABLE QWidget* SkeyboardGrabber() { return QWidget::keyboardGrabber(); }
     Q_INVOKABLE QWidget* SmouseGrabber() { return QWidget::mouseGrabber(); }
     Q_INVOKABLE void SsetTabOrder(QWidget* x1, QWidget* x2) { QWidget::setTabOrder(x1, x2); }

@@ -1,5 +1,8 @@
 (in-package :eql)
 
+(defun |encryptionMethod| (object &rest arguments)
+  (%qinvoke-method object nil "encryptionMethod" arguments))
+
 (defun |endArray| (object &rest arguments)
   (%qinvoke-method object nil "endArray" arguments))
 
@@ -464,6 +467,9 @@
 
 (defun |find.QPixmapCache| (&rest arguments)
   (%qinvoke-method "QPixmapCache" nil "find" arguments))
+
+(defun |find.QWidget| (&rest arguments)
+  (%qinvoke-method "QWidget" nil "find" arguments))
 
 (defun |findAllElements| (object &rest arguments)
   (%qinvoke-method object nil "findAllElements" arguments))
@@ -1040,6 +1046,9 @@
 
 (defun |grabWidget.QPixmap| (&rest arguments)
   (%qinvoke-method "QPixmap" nil "grabWidget" arguments))
+
+(defun |grabWindow.QPixmap| (&rest arguments)
+  (%qinvoke-method "QPixmap" nil "grabWindow" arguments))
 
 (defun |gradient| (object &rest arguments)
   (%qinvoke-method object nil "gradient" arguments))
@@ -3590,12 +3599,3 @@
 
 (defun |menu| (object &rest arguments)
   (%qinvoke-method object nil "menu" arguments))
-
-(defun |mergeBlockCharFormat| (object &rest arguments)
-  (%qinvoke-method object nil "mergeBlockCharFormat" arguments))
-
-(defun |mergeBlockFormat| (object &rest arguments)
-  (%qinvoke-method object nil "mergeBlockFormat" arguments))
-
-(defun |mergeCells| (object &rest arguments)
-  (%qinvoke-method object nil "mergeCells" arguments))

@@ -88,6 +88,7 @@ META_TYPE (T_QVector_QRgb,                     QVector<QRgb>)
 META_TYPE (T_QVector_QTextFormat,              QVector<QTextFormat>)
 META_TYPE (T_QVector_QTextLength,              QVector<QTextLength>)
 META_TYPE (T_QVector_qreal,                    QVector<qreal>)
+META_TYPE (T_WId,                              WId)
 
 void iniCLFunctions() {
     cl_object eql(STRING("EQL"));
@@ -1180,6 +1181,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         else if(T_QVector_QTextFormat == n)              p = new QVector<QTextFormat>(toQTextFormatVector(l_arg));
         else if(T_QVector_QTextLength == n)              p = new QVector<QTextLength>(toQTextLengthVector(l_arg));
         else if(T_QVector_qreal == n)                    p = new QVector<qreal>(toqrealVector(l_arg));
+        else if(T_WId == n)                              p = new WId((WId)toUInt<ulong>(l_arg));
         // module types
         else if((n >= LObjects::T_GLenum) &&
                 (n <= LObjects::T_QGLFramebufferObjectFormat)) {
@@ -1337,6 +1339,7 @@ cl_object to_lisp_arg(const MetaArg& arg) {
             else if(T_QVector_QTextFormat == n)              l_ret = from_qtextformatvector(*(QVector<QTextFormat>*)p);
             else if(T_QVector_QTextLength == n)              l_ret = from_qtextlengthvector(*(QVector<QTextLength>*)p);
             else if(T_QVector_qreal == n)                    l_ret = from_qrealvector(*(QVector<qreal>*)p);
+            else if(T_WId == n)                              l_ret = ecl_make_unsigned_integer(*(ulong*)p);
             // module types
             else if((n >= LObjects::T_GLenum) &&
                     (n <= LObjects::T_QGLFramebufferObjectFormat)) {

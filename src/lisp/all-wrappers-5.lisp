@@ -1,5 +1,8 @@
 (defpackage :eql
   (:export
+   #:|textIndent|
+   #:|textInteractionFlags|
+   #:|textKeys|
    #:|textLength|
    #:|textList|
    #:|textMargins|
@@ -401,6 +404,7 @@
    #:|widthF|
    #:|widthMM|
    #:|width|
+   #:|winId|
    #:|windowActivated|
    #:|windowCloseRequested|
    #:|windowCreated|

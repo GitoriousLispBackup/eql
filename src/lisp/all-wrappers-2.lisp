@@ -1,5 +1,6 @@
 (defpackage :eql
   (:export
+   #:|encryptionMethod|
    #:|endArray|
    #:|endEditBlock|
    #:|endFrame|
@@ -155,6 +156,7 @@
    #:|find(QString,int...)|
    #:|find(QString...)|
    #:|find.QPixmapCache|
+   #:|find.QWidget|
    #:|findAllElements|
    #:|findAll|
    #:|findBlockByLineNumber|
@@ -347,6 +349,7 @@
    #:|grabWidget(QWidget*,QRect).QPixmap|
    #:|grabWidget(QWidget*,int).QPixmap|
    #:|grabWidget.QPixmap|
+   #:|grabWindow.QPixmap|
    #:|gradient|
    #:|graphicsEffect|
    #:|graphicsItem|
@@ -1196,7 +1199,4 @@
    #:|menuBar|
    #:|menuRole|
    #:|menuWidget|
-   #:|menu|
-   #:|mergeBlockCharFormat|
-   #:|mergeBlockFormat|
-   #:|mergeCells|))
+   #:|menu|))

@@ -1,5 +1,8 @@
 (defpackage :eql
   (:export
+   #:|mergeBlockCharFormat|
+   #:|mergeBlockFormat|
+   #:|mergeCells|
    #:|mergeCharFormat|
    #:|mergeCurrentCharFormat|
    #:|mergeWith|
@@ -1196,7 +1199,4 @@
    #:|setFeatures|
    #:|setFieldGrowthPolicy|
    #:|setField|
-   #:|setFile(QFile)|
-   #:|setFile(QString)|
-   #:|setFileMode|
-   #:|setFileNameAndVersion(QString,QString)|))
+   #:|setFile(QFile)|))

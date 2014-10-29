@@ -1,6 +1,6 @@
 ;;; Define wrapper functions for all Qt methods/signals/slots using case
 ;;; preserving symbol names, and resolving type ambiguous argument lists
-;;; (gives 5272 unique symbols for Qt 4.7, including all modules).
+;;; (gives 5276 unique symbols for Qt 4.7, including all modules).
 
 (dolist (module '(:help :network :opengl :sql :svg :webkit))
   (eql:qrequire module))

@@ -2365,6 +2365,7 @@
    "static QPixmap fromImage ( const QImage & , Qt::ImageConversionFlags = Qt::AutoColor )"
    "static QPixmap grabWidget ( QWidget * , const QRect & )"
    "static QPixmap grabWidget ( QWidget * , int = 0, int = 0, int = -1, int = -1 )"
+   "static QPixmap grabWindow ( WId , int = 0, int = 0, int = -1, int = -1 )"
    "static QTransform trueMatrix ( const QTransform & , int , int )"
    "static QMatrix trueMatrix ( const QMatrix & , int , int )")
   (("QPixmapCache" . NIL)
