@@ -700,6 +700,7 @@ static QList<QTextEdit::ExtraSelection> toQTextEditExtraSelectionList(cl_object 
     return l; }
 
 // implicit pointer types
+TO_QT_TYPE_PTR  (QBitmap, qbitmap)
 TO_QT_TYPE_PTR2 (QBrush, qbrush)
 TO_QT_TYPE_PTR2 (QCursor, qcursor)
 TO_QT_TYPE_PTR2 (QDate, qdate)
@@ -717,6 +718,7 @@ TO_QT_TYPE_PTR  (QPainterPath, qpainterpath)
 TO_QT_TYPE_PTR2 (QPalette, qpalette)
 TO_QT_TYPE_PTR2 (QPen, qpen)
 TO_QT_TYPE_PTR2 (QPixmap, qpixmap)
+TO_QT_TYPE_PTR  (QRegion, qregion)
 TO_QT_TYPE_PTR2 (QSizePolicy, qsizepolicy)
 TO_QT_TYPE_PTR2 (QTableWidgetSelectionRange, qtablewidgetselectionrange)
 TO_QT_TYPE_PTR2 (QTextBlock, qtextblock)
@@ -1057,6 +1059,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case QMetaType::UInt:                    p = new uint(toUInt(l_arg)); break;
         case QMetaType::ULong:                   p = new ulong(toUInt<ulong>(l_arg)); break;
         case QMetaType::ULongLong:               p = new qulonglong(toUInt<qulonglong>(l_arg)); break;
+        case QMetaType::QBitmap:                 p = new QBitmap(*toQBitmapPointer(l_arg)); break;
         case QMetaType::QByteArray:              p = new QByteArray(toQByteArray(l_arg)); break;
         case QMetaType::QChar:                   p = new QChar(toQChar(l_arg)); break;
         case QMetaType::QColor:                  p = new QColor(toQColor(l_arg)); break;
@@ -1077,6 +1080,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
         case QMetaType::QPolygon:                p = new QPolygon(toQPolygon(l_arg)); break;
         case QMetaType::QRect:                   p = new QRect(toQRect(l_arg)); break;
         case QMetaType::QRectF:                  p = new QRectF(toQRectF(l_arg)); break;
+        case QMetaType::QRegion:                 p = new QRegion(*toQRegionPointer(l_arg)); break;
         case QMetaType::QSize:                   p = new QSize(toQSize(l_arg)); break;
         case QMetaType::QSizeF:                  p = new QSizeF(toQSizeF(l_arg)); break;
         case QMetaType::QSizePolicy:             p = new QSizePolicy(*toQSizePolicyPointer(l_arg)); break;
@@ -1222,6 +1226,7 @@ cl_object to_lisp_arg(const MetaArg& arg) {
             case QMetaType::UInt:                    l_ret = ecl_make_unsigned_integer(*(uint*)p); break;
             case QMetaType::ULong:                   l_ret = ecl_make_unsigned_integer(*(ulong*)p); break;
             case QMetaType::ULongLong:               l_ret = ecl_make_unsigned_integer(*(qulonglong*)p); break;
+            case QMetaType::QBitmap:                 l_ret = from_qbitmap(*(QBitmap*)p); break;
             case QMetaType::QBrush:                  l_ret = from_qbrush(*(QBrush*)p); break;
             case QMetaType::QByteArray:              l_ret = from_qbytearray(*(QByteArray*)p); break;
             case QMetaType::QChar:                   l_ret = from_qchar(*(QChar*)p); break;
@@ -1248,6 +1253,7 @@ cl_object to_lisp_arg(const MetaArg& arg) {
             case QMetaType::QPolygon:                l_ret = from_qpolygon(*(QPolygon*)p); break;
             case QMetaType::QRect:                   l_ret = from_qrect(*(QRect*)p); break;
             case QMetaType::QRectF:                  l_ret = from_qrectf(*(QRectF*)p); break;
+            case QMetaType::QRegion:                 l_ret = from_qregion(*(QRegion*)p); break;
             case QMetaType::QSize:                   l_ret = from_qsize(*(QSize*)p); break;
             case QMetaType::QSizePolicy:             l_ret = from_qsizepolicy(*(QSizePolicy*)p); break;
             case QMetaType::QSizeF:                  l_ret = from_qsizef(*(QSizeF*)p); break;
