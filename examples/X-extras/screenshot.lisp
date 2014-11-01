@@ -5,18 +5,13 @@
 #-qt-wrapper-functions
 (load (in-home "src/lisp/all-wrappers"))
 
-(defvar *pixmap* (x:let-it (qnew "QPixmap(QSize)" '(100 100))
-                   (|fill| x:it "transparent")
-                   (qlet ((p "QPainter(QPixmap*)" x:it))
-                     (dotimes (i 25)
-                       (let* ((x (* 2 i))
-                              (w (- 99 (* 2 x))))
-                         (|drawRect(QRect)| p (list x x w w)))))))
+(defvar *pixmap* (qnew "QPixmap(QString)" (in-home "examples/data/camera.png")))
 
 (defvar *splash* (qnew "QSplashScreen(QPixmap,Qt::WindowFlags)" *pixmap* |Qt.WindowStaysOnTopHint|
                        "font" (x:let-it (|font.QApplication|)
-                                (|setPointSize| x:it (+ 48 (|pointSize| x:it)))
-                                (|setBold| x:it t))))
+                                (|setPointSize| x:it (+ 12 (|pointSize| x:it)))
+                                (|setBold| x:it t))
+                       "windowOpacity" 8/10))
 
 (defun countdown (seconds)
   (if (zerop seconds)
