@@ -27,6 +27,6 @@
         (qsingle-shot 1000 (lambda () (countdown (1- seconds)))))))
 
 (progn
-  (|setMask(QBitmap)| *splash* (|mask| *pixmap*))
+  (|setMask(QBitmap)| *splash* (|mask| *pixmap*)) ; transparent pixels
   (|show| *splash*)
   (countdown 9))

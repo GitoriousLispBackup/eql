@@ -1,4 +1,5 @@
-;;; write all external EQL symbols in a file
+;;; write all external EQL symbols in a file.
+;;; (includes both Qt enums and Qt wrapper functions)
 
 (in-package :eql)
 

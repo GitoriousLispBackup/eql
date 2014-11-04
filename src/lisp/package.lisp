@@ -32,6 +32,7 @@
    #:qeval
    #:qexec
    #:qexit
+   #:qfind-bound
    #:qfind-child
    #:qfind-children
    #:qfrom-utf8

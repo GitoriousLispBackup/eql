@@ -148,6 +148,21 @@
 (defun qenums (class-name &optional enum-name)
   (%qenums class-name enum-name))
 
+(defun qfind-bound (&optional class-name)
+  "args: (&optional class-name)
+   Returns a list of pairs of both the Qt class name and the Lisp variable bound to it.<br>Optionally finds the occurrencies of the passed Qt class name only."
+  (let (qt-objects)
+    (do-all-symbols (s)
+      (when (and (boundp s)
+                 (qt-object-p (symbol-value s))
+                 (or (not class-name)
+                     (string= class-name (qt-object-name (symbol-value s)))))
+        (pushnew s qt-objects)))
+    (stable-sort (sort (mapcar (lambda (s) (cons (qt-object-name (symbol-value s)) s))
+                               qt-objects)
+                       'string< :key 'cdr)
+                 'string< :key 'car)))
+
 ;;; top-level / slime-mode processing Qt events (command line options "-qtpl" and "-slime")
 
 (defvar *slime-hook-file* nil)
@@ -564,6 +579,7 @@
                   (cons 'qeql                 '(object1 object2))
                   (cons 'qescape              '(string))
                   (cons 'qexec                '(&optional milliseconds))
+                  (cons 'qfind-bound          '(&optional class-name))
                   (cons 'qfind-child          '(object object-name))
                   (cons 'qfind-children       '(object &optional object-name class-name))
                   (cons 'qfrom-utf8           '(byte-array))

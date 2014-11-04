@@ -127,6 +127,10 @@
 <p>Calls <code>QEventLoop::exit()</code>, in order to exit event processing after a call to <code>qexec</code> with a timeout.<br>Returns <code>T</code> if the event loop has effectively been exited.</p>
 </p><br>
 <p>
+<b>QFIND-BOUND (&optional class-name)</b>
+<p>Returns a list of pairs of both the Qt class name and the Lisp variable bound to it.<br>Optionally finds the occurrencies of the passed Qt class name only.</p>
+</p><br>
+<p>
 <b>QFIND-CHILD (object object-name)</b>
 <p>Calls <code>qFindChild&lt;QObject*&gt;()</code>.<br>Can be used to get the child objects of any Qt object (typically from a UI, see <code>qload-ui</code>), identified by <code>QObject::objectName()</code>.</p>
 <pre>
