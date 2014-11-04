@@ -154,7 +154,7 @@
   (let (qt-objects)
     (do-all-symbols (s)
       (when (and (boundp s)
-                 (qt-object-p (symbol-value s))
+                 (ignore-errors (ensure-qt-object (symbol-value s)))
                  (or (not class-name)
                      (string= class-name (qt-object-name (symbol-value s)))))
         (pushnew s qt-objects)))
