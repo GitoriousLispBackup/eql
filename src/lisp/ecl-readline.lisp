@@ -1,4 +1,5 @@
-;;;; *** Please see "N.B." comments ***
+;;;;
+;;;; *** PLEASE SEE "N.B." COMMENTS ***
 ;;;;
 ;;;; -------------------------------------------------------------------------------
 ;;;;
@@ -35,7 +36,7 @@
 (in-package :ecl-readline)
 
 (load-foreign-library "readline" :system-library t)
-(load-foreign-library "ncurses"  :system-library t) ; N.B: only needed for newer versions of readline
+(load-foreign-library "ncurses"  :system-library t) ; N.B. (1) may or may not be needed (depending on version)
 
 (defvar *history-size* 100)
 (defvar *history-file* (concatenate 'base-string (si::getenv "HOME") "/.ecl-history"))
@@ -48,7 +49,7 @@
 
 (ffi:clines "#include <stdio.h>")
 (ffi:clines "#include <readline/readline.h>")
-(ffi:clines "#include <readline/history.h>") ; N.B: only needed for older versions of readline
+(ffi:clines "#include <readline/history.h>")        ; N.B. (2) may or may not be needed (depending on version)
 
 (defun rl-readline (prompt)
   (ffi:c-inline (prompt) (:cstring) :object

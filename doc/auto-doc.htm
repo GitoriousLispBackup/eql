@@ -128,7 +128,11 @@
 </p><br>
 <p>
 <b>QFIND-BOUND (&optional class-name)</b>
-<p>Returns a list of pairs of both the Qt class name and the Lisp variable bound to it.<br>Optionally finds the occurrencies of the passed Qt class name only.</p>
+<p>Returns both the Qt class names and the Lisp variables bound to it.<br>Optionally finds the occurrencies of the passed Qt class name only.</p>
+</p><br>
+<p>
+<b>QFIND-BOUND* (&optional class-name)</b>
+<p>Like <code>qfind-bound</code>, but returning the results as list of conses.</p>
 </p><br>
 <p>
 <b>QFIND-CHILD (object object-name)</b>

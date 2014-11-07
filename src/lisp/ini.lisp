@@ -150,7 +150,16 @@
 
 (defun qfind-bound (&optional class-name)
   "args: (&optional class-name)
-   Returns a list of pairs of both the Qt class name and the Lisp variable bound to it.<br>Optionally finds the occurrencies of the passed Qt class name only."
+   Returns both the Qt class names and the Lisp variables bound to it.<br>Optionally finds the occurrencies of the passed Qt class name only."
+  (let ((found (qfind-bound* class-name)))
+    (when found
+      (let ((tab-stop (1+ (apply 'max (mapcar (lambda (x) (length (car x))) found)))))
+        (dolist (el found)
+          (format t "~%~A~VT~(~S~)" (car el) tab-stop (cdr el)))))))
+
+(defun qfind-bound* (&optional class-name)
+  "args: (&optional class-name)
+   Like <code>qfind-bound</code>, but returning the results as list of conses."
   (let (qt-objects)
     (do-all-symbols (s)
       (when (and (boundp s)
@@ -580,6 +589,7 @@
                   (cons 'qescape              '(string))
                   (cons 'qexec                '(&optional milliseconds))
                   (cons 'qfind-bound          '(&optional class-name))
+                  (cons 'qfind-bound*         '(&optional class-name))
                   (cons 'qfind-child          '(object object-name))
                   (cons 'qfind-children       '(object &optional object-name class-name))
                   (cons 'qfrom-utf8           '(byte-array))
