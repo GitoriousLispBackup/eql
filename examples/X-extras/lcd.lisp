@@ -13,6 +13,8 @@
                                 255))))
     (qoverride widget "mousePressEvent(QMouseEvent*)" (lambda (event) (qquit)))
     (! "setPos" "QCursor" '(0 0))
-    (! "showFullScreen" widget)))
+    (! "showFullScreen" widget)
+    #+darwin
+    (! "raise" widget)))
 
 (lcd-test)

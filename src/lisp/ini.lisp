@@ -150,7 +150,7 @@
 
 (defun qfind-bound (&optional class-name)
   "args: (&optional class-name)
-   Returns both the Qt class names and the Lisp variables bound to it.<br>Optionally finds the occurrencies of the passed Qt class name only."
+   Returns both the Qt class names and the respective Lisp variables.<br>Optionally finds the occurrencies of the passed Qt class name only."
   (let ((found (qfind-bound* class-name)))
     (when found
       (let ((tab-stop (1+ (apply 'max (mapcar (lambda (x) (length (car x))) found)))))
