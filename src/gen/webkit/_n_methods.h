@@ -13,7 +13,6 @@ QT_BEGIN_NAMESPACE
 class N193 : public QObject { // QWebDatabase
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LWebDatabase* o) { return new LWebDatabase(u, *o); }
     Q_INVOKABLE void* C(uint u, const QWebDatabase& x1) { return new LWebDatabase(u, x1); }
     Q_INVOKABLE QString MdisplayName(QWebDatabase* o) const { return o->displayName(); }
     Q_INVOKABLE qlonglong MexpectedSize(QWebDatabase* o) const { return o->expectedSize(); }
@@ -28,7 +27,6 @@ public:
 class N194 : public QObject { // QWebElement
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LWebElement* o) { return new LWebElement(u, *o); }
     Q_INVOKABLE void* C(uint u) { return new LWebElement(u); }
     Q_INVOKABLE void* C(uint u, const QWebElement& x1) { return new LWebElement(u, x1); }
     Q_INVOKABLE void MaddClass(QWebElement* o, const QString& x1) { o->addClass(x1); }
@@ -96,7 +94,6 @@ public:
 class N195 : public QObject { // QWebElementCollection
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LWebElementCollection* o) { return new LWebElementCollection(u, *o); }
     Q_INVOKABLE void* C(uint u) { return new LWebElementCollection(u); }
     Q_INVOKABLE void* C(uint u, const QWebElement& x1, const QString& x2) { return new LWebElementCollection(u, x1, x2); }
     Q_INVOKABLE void* C(uint u, const QWebElementCollection& x1) { return new LWebElementCollection(u, x1); }
@@ -133,7 +130,6 @@ public:
 class N197 : public QObject { // QWebHistoryItem
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LWebHistoryItem* o) { return new LWebHistoryItem(u, *o); }
     Q_INVOKABLE void* C(uint u, const QWebHistoryItem& x1) { return new LWebHistoryItem(u, x1); }
     Q_INVOKABLE QIcon Micon(QWebHistoryItem* o) const { return o->icon(); }
     Q_INVOKABLE bool MisValid(QWebHistoryItem* o) const { return o->isValid(); }
@@ -148,7 +144,6 @@ public:
 class N198 : public QObject { // QWebHitTestResult
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LWebHitTestResult* o) { return new LWebHitTestResult(u, *o); }
     Q_INVOKABLE void* C(uint u) { return new LWebHitTestResult(u); }
     Q_INVOKABLE void* C(uint u, const QWebHitTestResult& x1) { return new LWebHitTestResult(u, x1); }
     Q_INVOKABLE QString MalternateText(QWebHitTestResult* o) const { return o->alternateText(); }
@@ -173,7 +168,6 @@ public:
 class N199 : public QObject { // QWebSecurityOrigin
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LWebSecurityOrigin* o) { return new LWebSecurityOrigin(u, *o); }
     Q_INVOKABLE void* C(uint u, const QWebSecurityOrigin& x1) { return new LWebSecurityOrigin(u, x1); }
     Q_INVOKABLE qlonglong MdatabaseQuota(QWebSecurityOrigin* o) const { return o->databaseQuota(); }
     Q_INVOKABLE qlonglong MdatabaseUsage(QWebSecurityOrigin* o) const { return o->databaseUsage(); }

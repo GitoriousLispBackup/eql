@@ -1422,8 +1422,6 @@ static StrList metaInfo(const QByteArray& type, const QByteArray& qclass, const 
                 QMetaMethod mm(mo->method(i));
                 if(mm.methodType() == QMetaMethod::Method) {
                     QString sig(mm.signature());
-                    if(sig.startsWith("CC")) { // copy constructor
-                        continue; }
                     bool constructor = sig.startsWith('C');
                     QString ret;
                     if(constructor) {
@@ -1644,23 +1642,23 @@ cl_object qnew_instance2(cl_object l_name, cl_object l_args) {
 
 cl_object qcopy(cl_object l_obj) {
     /// args: (object)
-    /// Copies object if possible (non QObject derived classes only).<br>This function can be used for all classes providing a constructor like this (using copy-on-write):<br><code>QClass(const QClass &)</code>
+    /// Copies <code>object</code> using copy-on-write, if such a constructor is available (non QObject derived classes only).<br>This function is short for e.g: <code>(qnew "QPixmap(QPixmap)" pixmap)</code>
     ///     (qcopy pixmap) ; QPen, QBrush, QFont, QPalette, QPixmap, QImage...
     ecl_process_env()->nvalues = 1;
     QtObject o = toQtObject(l_obj);
     if(!o.isQObject()) {
         if(o.pointer) {
-            // qt_metacall to copy constructor "CC(uint,<object*>)"
+            // qt_metacall to constructor "C(uint,<object>)"
             QObject* caller = LObjects::N[-o.id - 1];
             const QMetaObject* mo = caller->metaObject();
-            int n = mo->indexOfMethod(QByteArray("CC(uint,L") + o.className().mid(1) + "*)");
+            int n = mo->indexOfMethod(QByteArray("C(uint,") + o.className() + ")");
             if(n != -1) {
                 void* args[] = { 0, 0, 0 };
                 void* pointer = 0;
                 args[0] = &pointer; // return value
                 uint unique = LObjects::unique();
                 args[1] = &unique;
-                args[2] = &o.pointer;
+                args[2] = o.pointer;
                 caller->qt_metacall(QMetaObject::InvokeMetaMethod, n, args);
                 if(pointer) {
                     cl_object l_ret = new_qt_object(pointer, unique, o.id);

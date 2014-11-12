@@ -40,7 +40,7 @@
   (string-trim " " s))
 
 (defun trim* (name)
-  (string-left-trim "/=" name))
+  (string-left-trim "/" name))
 
 (let ((classes (make-hash-table :test 'equal)))
   (defun add-class-modules ()
@@ -187,12 +187,11 @@
 (defun split-class (class)
   (let* ((p1 (position #\( class))
          (no-new (starts-with "//" class))
-         (copy (starts-with "=" class))
-         (class* (list (string-trim " /=" (subseq class 0 p1))
+         (class* (list (string-trim " /" (subseq class 0 p1))
                        (when p1
                          (split-args (trim (subseq class (1+ p1) (position #\) class :from-end t))))))))
-    (if (or no-new copy)
-        (append class* (list (if no-new :no-new :copy)))
+    (if no-new
+        (append class* (list :no-new))
         class*)))
 
 (defun args-to-simple-c (args)
@@ -342,9 +341,6 @@
 
 (defun new-p (x)
   (not (find :no-new (caar x))))
-
-(defun copy-p (x)
-  (find :copy (caar x)))
 
 (defun pointer-p (x)
   (find :ptr (rest x)))
@@ -655,9 +651,6 @@
                                                               (error (format t "~%Class missing: ~S~%~%" super)))))
                                               "QObject")
                                           class)
-                                  (when (copy-p obj)
-                                    (format s "    Q_INVOKABLE void* CC(uint u, ~A* o) { return new ~A(u, *o); }~%"
-                                            sub-class sub-class))
                                   (dolist (fun (rest obj))
                                     (unless (and (not (new-p obj))
                                                  (protected-p fun))

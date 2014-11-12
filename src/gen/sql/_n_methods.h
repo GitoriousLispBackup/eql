@@ -13,7 +13,6 @@ QT_BEGIN_NAMESPACE
 class N135 : public QObject { // QSqlDatabase
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LSqlDatabase* o) { return new LSqlDatabase(u, *o); }
     Q_INVOKABLE void* C(uint u) { return new LSqlDatabase(u); }
     Q_INVOKABLE void* C(uint u, const QSqlDatabase& x1) { return new LSqlDatabase(u, x1); }
     Q_INVOKABLE void Mclose(QSqlDatabase* o) { o->close(); }
@@ -62,7 +61,6 @@ public:
 class N136 : public QObject { // QSqlError
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LSqlError* o) { return new LSqlError(u, *o); }
     Q_INVOKABLE void* C(uint u, const QString& x1 = QString(), const QString& x2 = QString(), QSqlError::ErrorType x3 = QSqlError::NoError, int x4 = -1) { return new LSqlError(u, x1, x2, x3, x4); }
     Q_INVOKABLE void* C(uint u, const QSqlError& x1) { return new LSqlError(u, x1); }
     Q_INVOKABLE QString MdatabaseText(QSqlError* o) const { return o->databaseText(); }
@@ -80,7 +78,6 @@ public:
 class N137 : public QObject { // QSqlField
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LSqlField* o) { return new LSqlField(u, *o); }
     Q_INVOKABLE void* C(uint u, const QString& x1 = QString(), QVariant::Type x2 = QVariant::Invalid) { return new LSqlField(u, x1, x2); }
     Q_INVOKABLE void* C(uint u, const QSqlField& x1) { return new LSqlField(u, x1); }
     Q_INVOKABLE void Mclear(QSqlField* o) { o->clear(); }
@@ -112,7 +109,6 @@ public:
 class N139 : public QObject { // QSqlQuery
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LSqlQuery* o) { return new LSqlQuery(u, *o); }
     Q_INVOKABLE void* C(uint u, QSqlResult* x1) { return new LSqlQuery(u, x1); }
     Q_INVOKABLE void* C(uint u, const QString& x1 = QString(), QSqlDatabase x2 = QSqlDatabase()) { return new LSqlQuery(u, x1, x2); }
     Q_INVOKABLE void* C(uint u, QSqlDatabase x1) { return new LSqlQuery(u, x1); }
@@ -158,7 +154,6 @@ public:
 class N140 : public QObject { // QSqlRecord
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LSqlRecord* o) { return new LSqlRecord(u, *o); }
     Q_INVOKABLE void* C(uint u) { return new LSqlRecord(u); }
     Q_INVOKABLE void* C(uint u, const QSqlRecord& x1) { return new LSqlRecord(u, x1); }
     Q_INVOKABLE void Mappend(QSqlRecord* o, const QSqlField& x1) { o->append(x1); }
@@ -228,7 +223,6 @@ public:
 class N138 : public N140 { // QSqlIndex
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LSqlIndex* o) { return new LSqlIndex(u, *o); }
     Q_INVOKABLE void* C(uint u, const QString& x1 = QString(), const QString& x2 = QString()) { return new LSqlIndex(u, x1, x2); }
     Q_INVOKABLE void* C(uint u, const QSqlIndex& x1) { return new LSqlIndex(u, x1); }
     Q_INVOKABLE void Mappend(QSqlIndex* o, const QSqlField& x1) { o->append(x1); }

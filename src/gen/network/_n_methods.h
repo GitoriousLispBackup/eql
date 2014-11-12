@@ -13,7 +13,6 @@ QT_BEGIN_NAMESPACE
 class N8 : public QObject { // QAuthenticator
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LAuthenticator* o) { return new LAuthenticator(u, *o); }
     Q_INVOKABLE void* C(uint u) { return new LAuthenticator(u); }
     Q_INVOKABLE void* C(uint u, const QAuthenticator& x1) { return new LAuthenticator(u, x1); }
     Q_INVOKABLE bool MisNull(QAuthenticator* o) const { return o->isNull(); }
@@ -27,7 +26,6 @@ public:
 class N75 : public QObject { // QHostAddress
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LHostAddress* o) { return new LHostAddress(u, *o); }
     Q_INVOKABLE void* C(uint u) { return new LHostAddress(u); }
     Q_INVOKABLE void* C(uint u, quint8* x1) { return new LHostAddress(u, x1); }
     Q_INVOKABLE void* C(uint u, const Q_IPV6ADDR& x1) { return new LHostAddress(u, x1); }
@@ -54,7 +52,6 @@ public:
 class N76 : public QObject { // QHostInfo
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LHostInfo* o) { return new LHostInfo(u, *o); }
     Q_INVOKABLE void* C(uint u, int x1 = -1) { return new LHostInfo(u, x1); }
     Q_INVOKABLE void* C(uint u, const QHostInfo& x1) { return new LHostInfo(u, x1); }
     Q_INVOKABLE QList<QHostAddress> Maddresses(QHostInfo* o) const { return o->addresses(); }
@@ -77,7 +74,6 @@ public:
 class N100 : public QObject { // QNetworkAddressEntry
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LNetworkAddressEntry* o) { return new LNetworkAddressEntry(u, *o); }
     Q_INVOKABLE void* C(uint u) { return new LNetworkAddressEntry(u); }
     Q_INVOKABLE void* C(uint u, const QNetworkAddressEntry& x1) { return new LNetworkAddressEntry(u, x1); }
     Q_INVOKABLE QHostAddress Mbroadcast(QNetworkAddressEntry* o) const { return o->broadcast(); }
@@ -93,7 +89,6 @@ public:
 class N101 : public QObject { // QNetworkCacheMetaData
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LNetworkCacheMetaData* o) { return new LNetworkCacheMetaData(u, *o); }
     Q_INVOKABLE void* C(uint u) { return new LNetworkCacheMetaData(u); }
     Q_INVOKABLE void* C(uint u, const QNetworkCacheMetaData& x1) { return new LNetworkCacheMetaData(u, x1); }
     Q_INVOKABLE QDateTime MexpirationDate(QNetworkCacheMetaData* o) const { return o->expirationDate(); }
@@ -110,7 +105,6 @@ public:
 class N102 : public QObject { // QNetworkCookie
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LNetworkCookie* o) { return new LNetworkCookie(u, *o); }
     Q_INVOKABLE void* C(uint u, const QByteArray& x1 = QByteArray(), const QByteArray& x2 = QByteArray()) { return new LNetworkCookie(u, x1, x2); }
     Q_INVOKABLE void* C(uint u, const QNetworkCookie& x1) { return new LNetworkCookie(u, x1); }
     Q_INVOKABLE QString Mdomain(QNetworkCookie* o) const { return o->domain(); }
@@ -135,7 +129,6 @@ public:
 class N103 : public QObject { // QNetworkInterface
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LNetworkInterface* o) { return new LNetworkInterface(u, *o); }
     Q_INVOKABLE void* C(uint u) { return new LNetworkInterface(u); }
     Q_INVOKABLE void* C(uint u, const QNetworkInterface& x1) { return new LNetworkInterface(u, x1); }
     Q_INVOKABLE QList<QNetworkAddressEntry> MaddressEntries(QNetworkInterface* o) const { return o->addressEntries(); }
@@ -154,7 +147,6 @@ public:
 class N104 : public QObject { // QNetworkProxy
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LNetworkProxy* o) { return new LNetworkProxy(u, *o); }
     Q_INVOKABLE void* C(uint u) { return new LNetworkProxy(u); }
     Q_INVOKABLE void* C(uint u, QNetworkProxy::ProxyType x1, const QString& x2 = QString(), quint16 x3 = 0, const QString& x4 = QString(), const QString& x5 = QString()) { return new LNetworkProxy(u, x1, x2, x3, x4, x5); }
     Q_INVOKABLE void* C(uint u, const QNetworkProxy& x1) { return new LNetworkProxy(u, x1); }
@@ -190,7 +182,6 @@ public:
 class N106 : public QObject { // QNetworkProxyQuery
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LNetworkProxyQuery* o) { return new LNetworkProxyQuery(u, *o); }
     Q_INVOKABLE void* C(uint u) { return new LNetworkProxyQuery(u); }
     Q_INVOKABLE void* C(uint u, const QUrl& x1, QNetworkProxyQuery::QueryType x2 = QNetworkProxyQuery::UrlRequest) { return new LNetworkProxyQuery(u, x1, x2); }
     Q_INVOKABLE void* C(uint u, const QString& x1, int x2, const QString& x3 = QString(), QNetworkProxyQuery::QueryType x4 = QNetworkProxyQuery::TcpSocket) { return new LNetworkProxyQuery(u, x1, x2, x3, x4); }
@@ -213,7 +204,6 @@ public:
 class N107 : public QObject { // QNetworkRequest
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LNetworkRequest* o) { return new LNetworkRequest(u, *o); }
     Q_INVOKABLE void* C(uint u, const QUrl& x1 = QUrl()) { return new LNetworkRequest(u, x1); }
     Q_INVOKABLE void* C(uint u, const QNetworkRequest& x1) { return new LNetworkRequest(u, x1); }
     Q_INVOKABLE QVariant Mattribute(QNetworkRequest* o, QNetworkRequest::Attribute x1, const QVariant& x2 = QVariant()) const { return o->attribute(x1, x2); }
@@ -235,7 +225,6 @@ public:
 class N143 : public QObject { // QSslCertificate
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LSslCertificate* o) { return new LSslCertificate(u, *o); }
     Q_INVOKABLE void* C(uint u, const QByteArray& x1 = QByteArray(), QSsl::EncodingFormat x2 = QSsl::Pem) { return new LSslCertificate(u, x1, x2); }
     Q_INVOKABLE void* C(uint u, const QSslCertificate& x1) { return new LSslCertificate(u, x1); }
     Q_INVOKABLE QMultiMap<QSsl::AlternateNameEntryType,QString> MalternateSubjectNames(QSslCertificate* o) const { return o->alternateSubjectNames(); }
@@ -261,7 +250,6 @@ public:
 class N144 : public QObject { // QSslCipher
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LSslCipher* o) { return new LSslCipher(u, *o); }
     Q_INVOKABLE void* C(uint u) { return new LSslCipher(u); }
     Q_INVOKABLE void* C(uint u, const QString& x1, QSsl::SslProtocol x2) { return new LSslCipher(u, x1, x2); }
     Q_INVOKABLE void* C(uint u, const QSslCipher& x1) { return new LSslCipher(u, x1); }
@@ -279,7 +267,6 @@ public:
 class N145 : public QObject { // QSslConfiguration
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LSslConfiguration* o) { return new LSslConfiguration(u, *o); }
     Q_INVOKABLE void* C(uint u) { return new LSslConfiguration(u); }
     Q_INVOKABLE void* C(uint u, const QSslConfiguration& x1) { return new LSslConfiguration(u, x1); }
     Q_INVOKABLE QList<QSslCertificate> McaCertificates(QSslConfiguration* o) const { return o->caCertificates(); }
@@ -307,7 +294,6 @@ public:
 class N146 : public QObject { // QSslError
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LSslError* o) { return new LSslError(u, *o); }
     Q_INVOKABLE void* C(uint u) { return new LSslError(u); }
     Q_INVOKABLE void* C(uint u, QSslError::SslError x1) { return new LSslError(u, x1); }
     Q_INVOKABLE void* C(uint u, QSslError::SslError x1, const QSslCertificate& x2) { return new LSslError(u, x1, x2); }
@@ -320,7 +306,6 @@ public:
 class N147 : public QObject { // QSslKey
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LSslKey* o) { return new LSslKey(u, *o); }
     Q_INVOKABLE void* C(uint u) { return new LSslKey(u); }
     Q_INVOKABLE void* C(uint u, const QByteArray& x1, QSsl::KeyAlgorithm x2, QSsl::EncodingFormat x3 = QSsl::Pem, QSsl::KeyType x4 = QSsl::PrivateKey, const QByteArray& x5 = QByteArray()) { return new LSslKey(u, x1, x2, x3, x4, x5); }
     Q_INVOKABLE void* C(uint u, const QSslKey& x1) { return new LSslKey(u, x1); }
@@ -336,7 +321,6 @@ public:
 class N188 : public QObject { // QUrlInfo
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LUrlInfo* o) { return new LUrlInfo(u, *o); }
     Q_INVOKABLE void* C(uint u) { return new LUrlInfo(u); }
     Q_INVOKABLE void* C(uint u, const QUrlInfo& x1) { return new LUrlInfo(u, x1); }
     Q_INVOKABLE void* C(uint u, const QString& x1, int x2, const QString& x3, const QString& x4, qint64 x5, const QDateTime& x6, const QDateTime& x7, bool x8, bool x9, bool x10, bool x11, bool x12, bool x13) { return new LUrlInfo(u, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13); }

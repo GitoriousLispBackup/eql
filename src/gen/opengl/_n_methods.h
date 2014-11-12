@@ -13,7 +13,6 @@ QT_BEGIN_NAMESPACE
 class N40 : public QObject { // QGLColormap
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LGLColormap* o) { return new LGLColormap(u, *o); }
     Q_INVOKABLE void* C(uint u) { return new LGLColormap(u); }
     Q_INVOKABLE void* C(uint u, const QGLColormap& x1) { return new LGLColormap(u, x1); }
     Q_INVOKABLE QColor MentryColor(QGLColormap* o, int x1) const { return o->entryColor(x1); }
@@ -65,7 +64,6 @@ public:
 class N42 : public QObject { // QGLFormat
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LGLFormat* o) { return new LGLFormat(u, *o); }
     Q_INVOKABLE void* C(uint u) { return new LGLFormat(u); }
     Q_INVOKABLE void* C(uint u, QGL::FormatOptions x1, int x2 = 0) { return new LGLFormat(u, x1, x2); }
     Q_INVOKABLE void* C(uint u, const QGLFormat& x1) { return new LGLFormat(u, x1); }
@@ -123,7 +121,6 @@ public:
 class N44 : public QObject { // QGLFramebufferObjectFormat
     Q_OBJECT
 public:
-    Q_INVOKABLE void* CC(uint u, LGLFramebufferObjectFormat* o) { return new LGLFramebufferObjectFormat(u, *o); }
     Q_INVOKABLE void* C(uint u) { return new LGLFramebufferObjectFormat(u); }
     Q_INVOKABLE void* C(uint u, const QGLFramebufferObjectFormat& x1) { return new LGLFramebufferObjectFormat(u, x1); }
     Q_INVOKABLE int Mattachment(QGLFramebufferObjectFormat* o) const { return o->attachment(); }
