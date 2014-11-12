@@ -656,8 +656,8 @@
                                               "QObject")
                                           class)
                                   (when (copy-p obj)
-                                    (format s "    Q_INVOKABLE void* CC(uint u, ~A* o) { ~A* copy = new ~A(u); *copy = *o; return copy; }~%"
-                                            sub-class sub-class sub-class))
+                                    (format s "    Q_INVOKABLE void* CC(uint u, ~A* o) { return new ~A(u, *o); }~%"
+                                            sub-class sub-class))
                                   (dolist (fun (rest obj))
                                     (unless (and (not (new-p obj))
                                                  (protected-p fun))

@@ -5,10 +5,10 @@
 ;;;     "=QPalette"
 
 (defparameter *opengl-n-names*
-  (list "QGLColormap"
+  (list "=QGLColormap"
         "QGLContext"
-        "QGLFormat"
+        "=QGLFormat"
         "QGLFramebufferObject"
-        "QGLFramebufferObjectFormat"
+        "=QGLFramebufferObjectFormat"
         "QGLPixelBuffer"
         ))

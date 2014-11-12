@@ -70,9 +70,9 @@
 </p><br>
 <p>
 <b>QCOPY (object)</b>
-<p>Copies object if possible. Only few Qt classes allow copying.</p>
+<p>Copies object if possible (non QObject derived classes only).<br>This function can be used for all classes providing a constructor like this (using copy-on-write):<br><code>QClass(const QClass &)</code></p>
 <pre>
-  (qcopy pixmap)
+  (qcopy pixmap) ; QPen, QBrush, QFont, QPalette, QPixmap, QImage...
 </pre>
 </p><br>
 <p>

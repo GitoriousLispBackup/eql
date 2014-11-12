@@ -5,12 +5,12 @@
 ;;;     "=QPalette"
 
 (defparameter *webkit-n-names*
-  (list "QWebDatabase"
-        "QWebElement"
-        "QWebElementCollection"
+  (list "=QWebDatabase"
+        "=QWebElement"
+        "=QWebElementCollection"
         "//QWebHistory"
-        "QWebHistoryItem"
-        "QWebHitTestResult"
-        "QWebSecurityOrigin"
+        "=QWebHistoryItem"
+        "=QWebHitTestResult"
+        "=QWebSecurityOrigin"
         "//QWebSettings"
         ))

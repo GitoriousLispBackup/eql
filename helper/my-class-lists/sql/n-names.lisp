@@ -5,12 +5,12 @@
 ;;;     "=QPalette"
 
 (defparameter *sql-n-names*
-  (list "QSqlDatabase"
-        "QSqlError"
-        "QSqlField"
-        "QSqlIndex"
-        "QSqlQuery"
-        "QSqlRecord"
+  (list "=QSqlDatabase"
+        "=QSqlError"
+        "=QSqlField"
+        "=QSqlIndex"
+        "=QSqlQuery"
+        "=QSqlRecord"
         "QSqlRelation"
         "QSqlResult"
         ))

@@ -1644,8 +1644,8 @@ cl_object qnew_instance2(cl_object l_name, cl_object l_args) {
 
 cl_object qcopy(cl_object l_obj) {
     /// args: (object)
-    /// Copies object if possible. Only few Qt classes allow copying.
-    ///     (qcopy pixmap)
+    /// Copies object if possible (non QObject derived classes only).<br>This function can be used for all classes providing a constructor like this (using copy-on-write):<br><code>QClass(const QClass &)</code>
+    ///     (qcopy pixmap) ; QPen, QBrush, QFont, QPalette, QPixmap, QImage...
     ecl_process_env()->nvalues = 1;
     QtObject o = toQtObject(l_obj);
     if(!o.isQObject()) {
