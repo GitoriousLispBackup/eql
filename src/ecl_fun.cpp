@@ -2672,25 +2672,25 @@ cl_object qversion() {
     l_env->values[1] = from_cstring(qVersion());
     return l_env->values[0]; }
 
-cl_object qrun_in_gui_thread2(cl_object l_fun, cl_object l_block) {
+cl_object qrun_in_gui_thread2(cl_object l_function_or_closure, cl_object l_blocking) {
     /// args: (function &optional (blocking t))
     /// alias: qrun
     /// Runs <code>function</code> in GUI thread while (by default) blocking the calling thread (if called from main thread, <code>function</code> will simply be called directly).<br>This is needed to run GUI code from ECL threads other than the main thread.<br>Returns <code>T</code> on success.<br><br>There are 2 reasons to always wrap any EQL function like this, if called from another ECL thread:<ul><li>Qt GUI methods always need to run in the GUI thread<li>EQL functions are not designed to be reentrant (not needed for GUI code)</ul>See also macro <code>qrun*</code>.
     ///     (qrun 'update-view-data)
-    if(l_fun != Cnil) {
+    if(l_function_or_closure != Cnil) {
         QObject o;
         if(o.thread() == QApplication::instance()->thread()) {
             // direct call
-            LObjects::eql->runInGuiThread(l_fun);
+            LObjects::eql->runInGuiThread(l_function_or_closure);
             return Ct; }
         else {
-            // queued call
+            // queued call in main event loop (GUI thread)
             QMetaObject::invokeMethod(LObjects::eql,
                                       "runInGuiThread",
-                                      (l_block != Cnil) ? Qt::BlockingQueuedConnection : Qt::QueuedConnection,
-                                      Q_ARG(void*, l_fun)); 
+                                      (l_blocking != Cnil) ? Qt::BlockingQueuedConnection : Qt::QueuedConnection,
+                                      Q_ARG(void*, l_function_or_closure)); 
             return Ct; }}
-    error_msg("QRUN-IN-GUI-THREAD", LIST1(l_fun));
+    error_msg("QRUN-IN-GUI-THREAD", LIST1(l_function_or_closure));
     return Cnil; }
 
 

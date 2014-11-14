@@ -163,11 +163,11 @@ void EQL::exec(QWidget* widget, const QString& lispFile, const QString& slimeHoo
     if(exec_with_simple_restart) {
         eval("(eql::exec-with-simple-restart)"); }}
 
-void EQL::runInGuiThread(void* function) {
+void EQL::runInGuiThread(void* function_or_closure) {
     const cl_env_ptr l_env = ecl_process_env();
     CL_CATCH_ALL_BEGIN(l_env) {
         CL_UNWIND_PROTECT_BEGIN(l_env) {
-            cl_funcall(1, (cl_object)function); }
+            cl_funcall(1, (cl_object)function_or_closure); }
         CL_UNWIND_PROTECT_EXIT {}
         CL_UNWIND_PROTECT_END; }
     CL_CATCH_ALL_END; }

@@ -8,22 +8,19 @@
 
 (defvar *start-time*)
 
-(defun new-item (text)
-  ;; in "primes" thread
-  (let ((column (or (parse-integer (symbol-name (mp:process-name mp:*current-process*)) :junk-allowed t)
-                    1)))
-    ;; in GUI/main thread (safe because queued and blocking)
-    (qrun* (let ((item (qnew "QTreeWidgetItem")))
-             (x:do-with item
-               ("setTextAlignment" 0 |Qt.AlignRight|)
-               ("setText" 0 (format nil "~:D" (- (get-internal-real-time) *start-time*)))
-               ("setText" column text))
-             (x:do-with *tree-widget*
-               ("addTopLevelItem" item)
-               ("resizeColumnToContents" 0)
-               ("resizeColumnToContents" column)
-               ("scrollToBottom"))))))
-
+(defun new-item (column text)
+  ;; QRUN* body runs in GUI/main thread (safe because queued and blocking)
+  (qrun* (let ((item (qnew "QTreeWidgetItem")))
+           (x:do-with item
+             ("setTextAlignment" 0 |Qt.AlignRight|)
+             ("setText" 0 (format nil "~:D" (- (get-internal-real-time) *start-time*)))
+             ("setText" column text))
+           (x:do-with *tree-widget*
+             ("addTopLevelItem" item)
+             ("resizeColumnToContents" 0)
+             ("resizeColumnToContents" column)
+             ("scrollToBottom")))))
+  
 (defun primep (x)
   ;; slow/dumb
   (or (= 2 x)
@@ -32,28 +29,29 @@
            (not (zerop (mod x 2)))
            (loop :for i :from 3 :to (isqrt x) :by 2 :never (zerop (mod x i))))))
 
-(defun primes (start number)
+(defun primes (column start number)
   (qrun* (! "clear" *tree-widget*))
   (setf *start-time* (get-internal-real-time))
   (do ((i start (1+ i))
        (found 0))
-    ((= found number) (new-item "Done"))
+    ((= found number) (new-item column "Done"))
     (when (primep i)
       (incf found)
-      (new-item (princ-to-string i)))))
+      (new-item column (princ-to-string i)))))
 
 (defun list-all-threads ()
   (format t "~%Threads:~%~%~{  ~S~%~}~%" (reverse (mp:all-processes))))
 
 (defun run (&optional (number-threads 2))
   (x:do-with *tree-widget*
-    ("setColumnCount" (1+ number-threads))
+             ("setColumnCount" (1+ number-threads))
     ("setHeaderLabels" (cons "Time"
                              (loop :for i :from 1 :to number-threads
-                                   :collect (format nil "Thread ~D" i)))))
-  (dotimes (n number-threads)
-    (let ((name (make-symbol (princ-to-string (1+ n)))))
-      (mp:process-run-function name (lambda () (primes #.(expt 10 12) 15)))))
+                               :collect (format nil "Thread ~D" i)))))
+  (let ((column 0)) ; needed because of thread race condition
+    (dotimes (n number-threads)
+      (mp:process-run-function (format nil "Primes ~D" (1+ n))
+                               (lambda () (primes (incf column) #.(expt 10 12) 15)))))
   (x:do-with *tree-widget* "show" "raise")
   (list-all-threads))
 
