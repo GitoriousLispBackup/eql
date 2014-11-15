@@ -54,7 +54,7 @@
 
 (defun indicate-start (parent child)
   (let ((indicate (qnew "QLabel"
-                    "size" (nthcdr 2 (qget parent "geometry")))))
+                        "size" (nthcdr 2 (qget parent "geometry")))))
     (! "setParent" indicate parent)
     (! "move" indicate '(0 0))
     (let* ((pix (! "grabWidget" "QPixmap" parent))

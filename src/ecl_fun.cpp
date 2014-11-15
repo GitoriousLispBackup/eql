@@ -605,8 +605,8 @@ static cl_object new_qt_object(void* pointer, uint unique, int id, bool finalize
     STATIC_SYMBOL_PKG (s_new_qt_object, "NEW-QT-OBJECT", "EQL")
     cl_object l_qt_object = cl_funcall(5,
                                        s_new_qt_object,
-                                       ecl_make_unsigned_integer((cl_index)pointer),
-                                       ecl_make_unsigned_integer((cl_index)unique),
+                                       ecl_make_unsigned_integer((ulong)pointer),
+                                       ecl_make_unsigned_integer(unique),
                                        MAKE_FIXNUM(id),
                                        finalize ? Ct : Cnil);
     return l_qt_object; }
@@ -1277,7 +1277,7 @@ cl_object to_lisp_arg(const MetaArg& arg) {
                 else if("const char*" == sType) {
                     l_ret = STRING_COPY(*(char**)p); }
                 else {
-                    l_ret = ecl_make_unsigned_integer((cl_index)*(void**)p); }}
+                    l_ret = ecl_make_unsigned_integer((ulong)*(void**)p); }}
 #if QT_VERSION < 0x040700
             else if(T_QEasingCurve == n)                     l_ret = from_qeasingcurve(*(QEasingCurve*)p);
 #endif
@@ -1642,7 +1642,7 @@ cl_object qnew_instance2(cl_object l_name, cl_object l_args) {
 
 cl_object qcopy(cl_object l_obj) {
     /// args: (object)
-    /// Copies <code>object</code> using copy-on-write, if such a constructor is available (non QObject derived classes only).<br>This function is short for e.g: <code>(qnew "QPixmap(QPixmap)" pixmap)</code>
+    /// Copies <code>object</code> using copy-on-write, if such a constructor is available (non QObject derived classes only).<br>This function is short for e.g: <code>(qnew "QPixmap(QPixmap)" pixmap)</code><br><br>Note that the returned value will not be garbage collected (analogous to <code>qnew</code>).
     ///     (qcopy pixmap) ; QPen, QBrush, QFont, QPalette, QPixmap, QImage...
     ecl_process_env()->nvalues = 1;
     QtObject o = toQtObject(l_obj);

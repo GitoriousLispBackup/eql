@@ -70,7 +70,7 @@
 </p><br>
 <p>
 <b>QCOPY (object)</b>
-<p>Copies <code>object</code> using copy-on-write, if such a constructor is available (non QObject derived classes only).<br>This function is short for e.g: <code>(qnew "QPixmap(QPixmap)" pixmap)</code></p>
+<p>Copies <code>object</code> using copy-on-write, if such a constructor is available (non QObject derived classes only).<br>This function is short for e.g: <code>(qnew "QPixmap(QPixmap)" pixmap)</code><br><br>Note that the returned value will not be garbage collected (analogous to <code>qnew</code>).</p>
 <pre>
   (qcopy pixmap) ; QPen, QBrush, QFont, QPalette, QPixmap, QImage...
 </pre>

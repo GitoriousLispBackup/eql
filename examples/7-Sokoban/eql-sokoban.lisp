@@ -22,7 +22,7 @@
 (load (eql:in-home "examples/7-Sokoban/3rd-party/levels"))
 
 (defpackage :eql-sokoban
-  (:use :common-lisp :eql :cl-sokoban)
+  (:use :common-lisp :eql)
   (:export
    #:start))
 
@@ -38,7 +38,7 @@
 (defparameter *items*           nil)
 (defparameter *item-size*       nil)
 (defparameter *maze*            nil)
-(defparameter *my-mazes*        (mapcar 'copy-maze *mazes*))
+(defparameter *my-mazes*        (mapcar 'sokoban:copy-maze sokoban:*mazes*))
 (defparameter *scene-size*      '(650 550))
 (defparameter *print-text-maze* nil "additionally print maze to terminal")
 
@@ -110,7 +110,7 @@
              (let ((item (create-item type)))
                (push item (cdr (assoc type *items*)))
                (! "addItem" *scene* item)))))
-    (dolist (row (maze-text *maze*))
+    (dolist (row (sokoban:maze-text *maze*))
       (x:do-string (char row)
         (unless (char= #\Space char)
           (let ((type (char-type char)))
@@ -138,13 +138,13 @@
            (qset *level* "value" (+ x (qget *level* "value")))))
     (case (! "key" event)
       (#.|Qt.Key_Up|
-         (move :north *maze*))
+         (sokoban:move :north *maze*))
       (#.|Qt.Key_Down|
-         (move :south *maze*))
+         (sokoban:move :south *maze*))
       (#.|Qt.Key_Left|
-         (move :west *maze*))
+         (sokoban:move :west *maze*))
       (#.|Qt.Key_Right|
-         (move :east *maze*))
+         (sokoban:move :east *maze*))
       (#.|Qt.Key_N|
          (change-level 1))
       (#.|Qt.Key_P|
@@ -152,7 +152,7 @@
       (#.|Qt.Key_R|
          (let ((level (qget *level* "value")))
            (setf (nth level *my-mazes*)
-                 (copy-maze (nth level *mazes*)))
+                 (sokoban:copy-maze (nth level sokoban:*mazes*)))
            (set-maze)))
       (t (return-from key-pressed)))
     (draw)
@@ -165,7 +165,7 @@
     (unless (eql :wall type)
       (dolist (item items)
         (! "setVisible" item nil)))
-    (dolist (row (maze-text *maze*))
+    (dolist (row (sokoban:maze-text *maze*))
       (let ((x 0))
         (x:do-string (curr-char row)
           (when (char= char curr-char)
@@ -180,7 +180,7 @@
   (dolist (type '(:player :object :goal :player2 :object2))
     (draw-items type))
   (when *print-text-maze*
-    (format t "~{~&~A~%~}" (maze-text *maze*))))
+    (format t "~{~&~A~%~}" (sokoban:maze-text *maze*))))
 
 (defun zoom (direction)
   (let ((f (if (eql :in direction) 3/2 2/3)))

@@ -10,6 +10,8 @@
 
 (defun new-item (column text)
   ;; QRUN* body runs in GUI/main thread (safe because queued and blocking)
+  ;; - queued: asynchroneous call in thread of main event loop
+  ;; - blocking: for return value(s)
   (qrun* (let ((item (qnew "QTreeWidgetItem")))
            (x:do-with item
              ("setTextAlignment" 0 |Qt.AlignRight|)
@@ -34,7 +36,7 @@
   (setf *start-time* (get-internal-real-time))
   (do ((i start (1+ i))
        (found 0))
-    ((= found number) (new-item column "Done"))
+      ((= found number) (new-item column "Done"))
     (when (primep i)
       (incf found)
       (new-item column (princ-to-string i)))))
@@ -44,10 +46,10 @@
 
 (defun run (&optional (number-threads 2))
   (x:do-with *tree-widget*
-             ("setColumnCount" (1+ number-threads))
+    ("setColumnCount" (1+ number-threads))
     ("setHeaderLabels" (cons "Time"
                              (loop :for i :from 1 :to number-threads
-                               :collect (format nil "Thread ~D" i)))))
+                                   :collect (format nil "Thread ~D" i)))))
   (let ((column 0)) ; needed because of thread race condition
     (dotimes (n number-threads)
       (mp:process-run-function (format nil "Primes ~D" (1+ n))
