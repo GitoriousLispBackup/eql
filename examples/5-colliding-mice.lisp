@@ -7,6 +7,9 @@
 ;;; The good news: if a seg.fault happens (in C++), just choose the restart option "Abort" (below "Continue"),
 ;;; and the application will continue to run.
 
+#-qt-wrapper-functions ; see README-OPTIONAL.txt
+(load (in-home "src/lisp/all-wrappers"))
+
 (defpackage :colliding-mice
   (:nicknames :mice)
   (:use :common-lisp :eql)
@@ -24,7 +27,7 @@
 
 (defstruct mouse ; DEFSTRUCT (instead of DEFCLASS) is simpler in this case
   (item          (qnew "QGraphicsItem"))
-  (brush         (brush (! "fromRgb" "QColor" (random 256) (random 256) (random 256))))
+  (brush         (brush (|fromRgb.QColor| (random 256) (random 256) (random 256))))
   (angle         0)
   (speed         0)
   (eye-direction 0))
@@ -33,11 +36,11 @@
   (mouse-item object))
 
 (let ((shape (x:let-it (qnew "QPainterPath")
-               (! "addRect" x:it '(-10 -20 20 40)))))
+               (|addRect| x:it '(-10 -20 20 40)))))
   (defun new-mouse ()
     (incf *mouse-count*)
     (let ((mouse (make-mouse)))
-      (! "setRotation" mouse (random (* 360 16)))
+      (|setRotation| mouse (random (* 360 16)))
       (x:do-with (qoverride mouse)
         ("boundingRect()"
          (lambda () '(-18.5 -22.5 36.5 60.5)))
@@ -51,44 +54,46 @@
 
 (defun brush (color &optional (style |Qt.SolidPattern|))
   (x:let-it (qnew "QBrush")
-    (! "setStyle" x:it style)
+    (|setStyle| x:it style)
     (when color
-      (! "setColor(QColor)" x:it color))))
+      (|setColor(QColor)| x:it color))))
 
-(let ((white (brush "white"))
-      (black (brush "black"))
-      (olive (brush "olive"))
-      (red   (brush "red"))
-      (no-brush (brush nil |Qt.NoBrush|))
-      (tail (x:let-it (qnew "QPainterPath")
-              (x:do-with x:it
-                ("moveTo" '(0 20))
-                ("cubicTo" '(-5 22) '(-5 22) '(0 25))
-                ("cubicTo" '(5  27) '(5  32) '(0 30))
-                ("cubicTo" '(-5 32) '(-5 42) '(0 35))))))
-  (defun paint (mouse painter)
-    (! "setBrush(QBrush)" painter (mouse-brush mouse))
-    (! "drawEllipse(QRect)" painter '(-10 -20 20 40))
-    ;; eyes
-    (! "setBrush(QBrush)" painter white)
-    (! "drawEllipse(QRect)" painter '(-10 -17 8 8))
-    (! "drawEllipse(QRect)" painter '(2 -17 8 8))
-    ;; nose
-    (! "setBrush(QBrush)" painter black)
-    (! "drawEllipse(QRect)" painter '(-2 -22 4 4))
-    ;; pupils
-    (let ((dir (mouse-eye-direction mouse)))
-      (! "drawEllipse(QRectF)" painter (list (- dir 8) -17 4 4))
-      (! "drawEllipse(QRectF)" painter (list (+ dir 4) -17 4 4)))
-    ;; ears
-    (! "setBrush(QBrush)" painter (if (null (! "collidingItems" (! "scene" mouse) mouse))
-                                      olive
-                                      red))
-    (! "drawEllipse(QRect)" painter '(-17 -12 16 16))
-    (! "drawEllipse(QRect)" painter '(1 -12 16 16))
-    ;; tail
-    (! "setBrush(QBrush)" painter no-brush)
-    (! "drawPath" painter tail)))
+(defparameter *brush-eyes*      (brush "white"))
+(defparameter *brush-nose*      (brush "black"))
+(defparameter *brush-ears*      (brush "olive"))
+(defparameter *brush-colliding* (brush "red"))
+(defparameter *brush-tail*      (brush nil |Qt.NoBrush|))
+
+(defparameter *painter-path-tail* (x:let-it (qnew "QPainterPath")
+                                    (x:do-with x:it
+                                      (|moveTo| '(0 20))
+                                      (|cubicTo| '(-5 22) '(-5 22) '(0 25))
+                                      (|cubicTo| '(5  27) '(5  32) '(0 30))
+                                      (|cubicTo| '(-5 32) '(-5 42) '(0 35)))))
+
+(defun paint (mouse painter)
+  (|setBrush(QBrush)| painter (mouse-brush mouse))
+  (|drawEllipse(QRect)| painter '(-10 -20 20 40))
+  ;; eyes
+  (|setBrush(QBrush)| painter *brush-eyes*)
+  (|drawEllipse(QRect)| painter '(-10 -17 8 8))
+  (|drawEllipse(QRect)| painter '(2 -17 8 8))
+  ;; nose
+  (|setBrush(QBrush)| painter *brush-nose*)
+  (|drawEllipse(QRect)| painter '(-2 -22 4 4))
+  ;; pupils
+  (let ((dir (mouse-eye-direction mouse)))
+    (|drawEllipse(QRectF)| painter (list (- dir 8) -17 4 4))
+    (|drawEllipse(QRectF)| painter (list (+ dir 4) -17 4 4)))
+  ;; ears
+  (|setBrush(QBrush)| painter (if (null (|collidingItems| (|scene| mouse) mouse))
+                                   *brush-ears*
+                                   *brush-colliding*))
+  (|drawEllipse(QRect)| painter '(-17 -12 16 16))
+  (|drawEllipse(QRect)| painter '(1 -12 16 16))
+  ;; tail
+  (|setBrush(QBrush)| painter *brush-tail*)
+  (|drawPath| painter *painter-path-tail*))
 
 (defun advance (mouse step)
   (unless (zerop step)
@@ -107,9 +112,9 @@
                      (y (dy line)))
                  (sqrt (+ (* x x) (* y y)))))
              (map-from (p)
-               (! "mapFromScene(QPointF)" mouse p))
+               (|mapFromScene(QPointF)| mouse p))
              (map-to (p)
-               (! "mapToScene(QPointF)" mouse p)))
+               (|mapToScene(QPointF)| mouse p)))
       (let ((line-to-center (append '(0 0) (map-from '(0 0)))))
         (if (> (len line-to-center) 150)
             (let ((angle-to-center (acos (/ (dx line-to-center) (len line-to-center)))))
@@ -131,17 +136,16 @@
                                               ((plusp sin) -0.25)
                                               (t 0))))))
       ;; try not to crash with any other mice
-      (let ((danger-mice (! "items(QPolygonF...)" (! "scene" mouse)
-                            (append (map-to '(0 0))
-                                    (map-to '(-30 -50))
-                                    (map-to '(30 -50)))
-                            |Qt.IntersectsItemShape|
-                            |Qt.AscendingOrder|)))
+      (let ((danger-mice (|items(QPolygonF...)| (|scene| mouse)
+                                                (append (map-to '(0 0))
+                                                        (map-to '(-30 -50))
+                                                        (map-to '(30 -50)))
+                                                |Qt.IntersectsItemShape|
+                                                |Qt.AscendingOrder|)))
         (dolist (danger-mouse danger-mice)
           (unless (qeql mouse danger-mouse)
             (let* ((line-to-mouse (append '(0 0)
-                                          (! "mapFromItem(const QGraphicsItem*,QPointF)" mouse
-                                             danger-mouse '(0 0))))
+                                          (|mapFromItem(const QGraphicsItem*,QPointF)| mouse danger-mouse '(0 0))))
                    (angle-to-mouse (acos (/ (dx line-to-mouse) (len line-to-mouse)))))
               (when (minusp (dy line-to-mouse))
                 (setf angle-to-mouse (- +2pi+ angle-to-mouse)))
@@ -166,37 +170,34 @@
         (let ((dx (* 10 (sin (mouse-angle mouse)))))
           (setf (mouse-eye-direction mouse)
                 (if (< (abs (/ dx 5)) 1) 0 (/ dx 5)))
-          (! "setRotation" mouse
-             (+ dx (! "rotation" mouse)))
-          (! "setPos" mouse
-             (! "mapToParent(QPointF)" mouse
-                (list 0 (- (+ 3 (* 3 (sin (mouse-speed mouse)))))))))))))
+          (|setRotation| mouse (+ dx (|rotation| mouse)))
+          (|setPos| mouse (|mapToParent(QPointF)| mouse (list 0 (- (+ 3 (* 3 (sin (mouse-speed mouse)))))))))))))
 
 (defun start ()
   (setf *random-state* (make-random-state t))
   (let ((view (qnew "QGraphicsView"
                     "windowTitle" "Colliding Mice"
                     "size" '(400 300))))
-    (! "setItemIndexMethod" *graphics-scene* |QGraphicsScene.NoIndex|)
+    (|setItemIndexMethod| *graphics-scene* |QGraphicsScene.NoIndex|)
     (x:do-with view
-      ("setScene" *graphics-scene*)
-      ("setRenderHint" |QPainter.Antialiasing|)
-      ("setBackgroundBrush" (qnew "QBrush(QPixmap)"
+      (|setScene| *graphics-scene*)
+      (|setRenderHint| |QPainter.Antialiasing|)
+      (|setBackgroundBrush| (qnew "QBrush(QPixmap)"
                                   (qnew "QPixmap(QString)"
                                         (in-home "examples/data/icons/cheese.jpg"))))
-      ("setCacheMode" |QGraphicsView.CacheBackground|)
-      ("setViewportUpdateMode" |QGraphicsView.BoundingRectViewportUpdate|)
-      ("setDragMode" |QGraphicsView.ScrollHandDrag|))
+      (|setCacheMode| |QGraphicsView.CacheBackground|)
+      (|setViewportUpdateMode| |QGraphicsView.BoundingRectViewportUpdate|)
+      (|setDragMode| |QGraphicsView.ScrollHandDrag|))
     (let ((count 7))
       (dotimes (i count)
         (flet ((pos (fun)
                  (truncate (* 200 (funcall fun (/ (* i +2pi+) count))))))
           (let ((item (new-mouse)))
-            (! "setPos" item (list (pos 'sin) (pos 'cos)))
-            (! "addItem" *graphics-scene* item)))))
+            (|setPos| item (list (pos 'sin) (pos 'cos)))
+            (|addItem| *graphics-scene* item)))))
     (qconnect *timer* "timeout()" *graphics-scene* "advance()")
-    (! "start" *timer* 30)
-    (x:do-with view "show" "raise")))
+    (|start| *timer* 30)
+    (x:do-with view |show| |raise|)))
 
 ;;; for playing around interactively
 
@@ -204,8 +205,8 @@
   "Add n mice."
   (dotimes (i n)
     (let ((item (new-mouse)))
-      (! "setPos" item (list (- 100 (random 200)) (- 100 (random 200))))
-      (! "addItem" *graphics-scene* item)))
+      (|setPos| item (list (- 100 (random 200)) (- 100 (random 200))))
+      (|addItem| *graphics-scene* item)))
   *mouse-count*)
 
 (defun m- (&optional (n 1))
@@ -214,16 +215,16 @@
     (when (zerop *mouse-count*)
       (return))
     (decf *mouse-count*)
-    (qdel (first (last (! "items" *graphics-scene*)))))
+    (qdel (first (last (|items| *graphics-scene*)))))
   *mouse-count*)
 
 (defun iv (&optional (ms 30))
   "Change move interval."
-  (qset *timer* "interval" ms))
+  (|setInterval| *timer* ms))
 
 (defun ? ()
   ;; demo of QSLEEP (a SLEEP processing Qt events)
-  (let ((max (print (length (! "items" *graphics-scene*)))))
+  (let ((max (print (length (|items| *graphics-scene*)))))
     (dotimes (n max)
       (print (m-))
       (qsleep 1))

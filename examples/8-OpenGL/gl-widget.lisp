@@ -37,13 +37,13 @@
 
 (defun ini-gl-widget ()
   (x:do-with (qoverride *gl-widget*)
-    ("initializeGL()"                'initialize-gl)
-    ("paintGL()"                     'paint-gl)
-    ("resizeGL(int,int)"             'resize-gl)
-    ("mousePressEvent(QMouseEvent*)" 'mouse-press-event)
-    ("mouseMoveEvent(QMouseEvent*)"  'mouse-move-event))
+    (|initializeGL()|                'initialize-gl)
+    (|paintGL()|                     'paint-gl)
+    (|resizeGL(int,int)|             'resize-gl)
+    (|mousePressEvent(QMouseEvent*)| 'mouse-press-event)
+    (|mouseMoveEvent(QMouseEvent*)|  'mouse-move-event))
   (qconnect *timer* "timeout()" 'advance-gears)
-  (! "start" *timer* 20))
+  (|start| *timer* 20))
 
 (defmacro set-rotation (axis)
   (flet ((axis-symbol (frm)
@@ -56,7 +56,7 @@
            (setf ,rot angle)
            (when ,changed
              (funcall ,changed angle))
-           (! "updateGL" *gl-widget*))))))
+           (|updateGL| *gl-widget*))))))
 
 (set-rotation :x)
 (set-rotation :y)
@@ -86,7 +86,7 @@
   (gl:pop-matrix))
 
 (defun resize-gl (width height)
-  (if (qget *gl-widget* "visible") ; needed in OSX
+  (if (|isVisible| *gl-widget*) ; needed in OSX
       (let ((side (min width height)))
         (gl:viewport (/ (- width side) 2) (/ (- height side) 2) side side)
         (gl:matrix-mode :projection)
@@ -95,15 +95,15 @@
         (gl:matrix-mode :modelview)
         (gl:load-identity)
         (gl:translate 0 0 -40))
-      (qsingle-shot 0 (lambda () (apply 'resize-gl (qget *gl-widget* "size"))))))
+      (qsingle-shot 0 (lambda () (apply 'resize-gl (|size| *gl-widget*))))))
 
 (defun mouse-press-event (event)
-  (setf *last-pos* (! "pos" event)))
+  (setf *last-pos* (|pos| event)))
 
 (defun mouse-move-event (event)
-  (let ((dx (- (! "x" event) (first  *last-pos*)))
-        (dy (- (! "y" event) (second *last-pos*)))
-        (buttons (! "buttons" event)))
+  (let ((dx (- (|x| event) (first  *last-pos*)))
+        (dy (- (|y| event) (second *last-pos*)))
+        (buttons (|buttons| event)))
     (flet ((button (enum)
              (plusp (logand enum buttons))))
       (cond ((button |Qt.LeftButton|)
@@ -112,11 +112,11 @@
             ((button |Qt.RightButton|)
              (set-x-rotation (+ *x-rot* (* 8 dy)))
              (set-z-rotation (+ *z-rot* (* 8 dx)))))
-      (setf *last-pos* (! "pos" event)))))
+      (setf *last-pos* (|pos| event)))))
 
 (defun advance-gears ()
   (incf *gear1-rot* (* 2 16))
-  (! "updateGL" *gl-widget*))
+  (|updateGL| *gl-widget*))
 
 (defun make-gear (reflectance inner-radius outer-radius thickness tooth-size tooth-count)
   (let ((list (gl:gen-lists 1))

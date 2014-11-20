@@ -1,5 +1,8 @@
 ;;; This is a port of Qt example "webkit/domtraversal/"
 
+#-qt-wrapper-functions ; see README-OPTIONAL.txt
+(load (in-home "src/lisp/all-wrappers"))
+
 (qrequire :webkit)
 
 (in-package :eql-user)
@@ -13,22 +16,22 @@
 
 (defun set-url (string)
   (qlet ((url "QUrl(QString)" string))
-    (! "setUrl" ui:*web-view* url)))
+    (|setUrl| ui:*web-view* url)))
 
 (defun load-finished (ok)
-  (! "clear" ui:*tree-widget*)
-  (examine-child-elements (! ("documentElement" "mainFrame" "page" ui:*web-view*))
-                          (! "invisibleRootItem" ui:*tree-widget*)))
+  (|clear| ui:*tree-widget*)
+  (examine-child-elements (|documentElement| (|mainFrame| (|page| ui:*web-view*)))
+                          (|invisibleRootItem| ui:*tree-widget*)))
 
 (defun examine-child-elements (parent-element parent-item)
-  (let ((element (! "firstChild" parent-element)))
-    (x:while (not (! "isNull" element))
+  (let ((element (|firstChild| parent-element)))
+    (x:while (not (|isNull| element))
       (let ((item (qnew "QTreeWidgetItem")))
-        (! "setText" item 0 (! "tagName" element))
-        (! "addChild" parent-item item)
+        (|setText| item 0 (|tagName| element))
+        (|addChild| parent-item item)
         (examine-child-elements element item)
-        (setf element (! "nextSibling" element))))))
+        (setf element (|nextSibling| element))))))
 
-(ini (or (third (! "arguments" "QApplication"))
+(ini (or (third (|arguments.QCoreApplication|))
          "../../../doc/index.html"))
 

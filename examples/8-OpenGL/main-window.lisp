@@ -1,5 +1,8 @@
 ;;; This is a port of the Qt OpenGL Example "Grabber"
 
+#-qt-wrapper-functions ; see README-OPTIONAL.txt
+(load (in-home "src/lisp/all-wrappers"))
+
 (require :gl-widget (eql:in-home "examples/8-OpenGL/gl-widget"))
 
 (defpackage :main-window
@@ -30,37 +33,37 @@
         (x-slider (create-slider '*x-rotation-changed* 'set-x-rotation))
         (y-slider (create-slider '*y-rotation-changed* 'set-y-rotation))
         (z-slider (create-slider '*z-rotation-changed* 'set-z-rotation)))
-    (! "setCentralWidget" *me* central-widget)
-    (! "setWidget" widget-area *gl-widget*)
-    (! "setWidget" *pixmap-label-area* *pixmap-label*)
+    (|setCentralWidget| *me* central-widget)
+    (|setWidget| widget-area *gl-widget*)
+    (|setWidget| *pixmap-label-area* *pixmap-label*)
     (create-menus (create-actions))
-    (x:do-with (! "addWidget" central-layout)
+    (x:do-with (|addWidget| central-layout)
       (widget-area         0 0)
       (*pixmap-label-area* 0 1)
       (x-slider            1 0 1 2)
       (y-slider            2 0 1 2)
       (z-slider            3 0 1 2))
-    (! "setLayout" central-widget central-layout)
-    (qset x-slider "value" (* 15  16))
-    (qset y-slider "value" (* 345 16))
-    (qset z-slider "value" 0)
-    (x:do-with (qset *me*)
-      ("windowTitle" (tr "Grabber"))
-      ("size" (list 400 300)))))
+    (|setLayout| central-widget central-layout)
+    (|setValue| x-slider (* 15  16))
+    (|setValue| y-slider (* 345 16))
+    (|setValue| z-slider 0)
+    (x:do-with *me*
+      (|setWindowTitle| (tr "Grabber"))
+      (|resize| (list 400 300)))))
 
 (defun render-into-pixmap ()
   (let ((size (get-size)))
     (when (every 'plusp size)
-      (set-pixmap (! "renderPixmap" *gl-widget* (first size) (second size))))))
+      (set-pixmap (|renderPixmap| *gl-widget* (first size) (second size))))))
 
 (defun grab-frame-buffer ()
-  (set-pixmap (! "fromImage" "QPixmap" (! "grabFrameBuffer" *gl-widget*))))
+  (set-pixmap (|fromImage| "QPixmap" (|grabFrameBuffer| *gl-widget*))))
 
 (defun clear-pixmap ()
   (set-pixmap (qnew "QPixmap")))
 
 (defun about ()
-  (! "about" "QMessageBox"
+  (|about| "QMessageBox"
      *me*
      (tr "About Grabber")
      (tr "The <b>Grabber</b> example demonstrates two approaches for rendering OpenGL into a Qt pixmap.")))
@@ -71,32 +74,32 @@
              (let ((action (qnew "QAction(QObject*)" *me*
                                  "text" text)))
                (when shortcut
-                 (qset action "shortcut" (qnew "QKeySequence(QString)" shortcut)))
+                 (|setShorcut| action (qnew "QKeySequence(QString)" shortcut)))
                (qconnect action "triggered()" slot)
                (push (cons name action) actions))))
       (action :render-into-pixmap (tr "&Render into Pixmap...") "Ctrl+R" 'render-into-pixmap)
       (action :grab-frame-buffer  (tr "&Grab Frame Buffer")     "Ctrl+G" 'grab-frame-buffer)
       (action :clear-pixmap       (tr "&Clear Pixmap")          "Ctrl+L" 'clear-pixmap)
-      (action :exit               (tr "E&xit")                  "Ctrl+Q" (lambda () (! "close" *me*)))
+      (action :exit               (tr "E&xit")                  "Ctrl+Q" (lambda () (|close| *me*)))
       (action :about    (tr "&About")    nil 'about)
-      (action :about-qt (tr "About &Qt") nil (lambda () (! "aboutQt" (qapp)))))
+      (action :about-qt (tr "About &Qt") nil (lambda () (|aboutQt| (qapp)))))
     actions))
 
 (defun create-menus (actions)
   (flet ((action (name)
            (cdr (assoc name actions))))
-    (let* ((menu-bar (! "menuBar" *me*))
-           (file-menu (! "addMenu(QString)" menu-bar (tr "&File")))
-           (help-menu (! "addMenu(QString)" menu-bar (tr "&Help"))))
+    (let* ((menu-bar (|menuBar| *me*))
+           (file-menu (|addMenu(QString)| menu-bar (tr "&File")))
+           (help-menu (|addMenu(QString)| menu-bar (tr "&Help"))))
       (x:do-with file-menu
-        ("addAction(QAction*)" (action :render-into-pixmap))
-        ("addAction(QAction*)" (action :grab-frame-buffer))
-        ("addAction(QAction*)" (action :clear-pixmap))
-        ("addSeparator")
-        ("addAction(QAction*)" (action :exit)))
+        (|addAction(QAction*)| (action :render-into-pixmap))
+        (|addAction(QAction*)| (action :grab-frame-buffer))
+        (|addAction(QAction*)| (action :clear-pixmap))
+        (|addSeparator|)
+        (|addAction(QAction*)| (action :exit)))
       (x:do-with help-menu
-        ("addAction(QAction*)" (action :about))
-        ("addAction(QAction*)" (action :about-qt))))))
+        (|addAction(QAction*)| (action :about))
+        (|addAction(QAction*)| (action :about-qt))))))
 
 (defun create-slider (changed setter)
   (let ((slider (qnew "QSlider(Qt::Orientation)" |Qt.Horizontal|
@@ -107,40 +110,40 @@
                       "tickInterval" (* 15  16)
                       "tickPosition" |QSlider.TicksRight|)))
     (qconnect slider "valueChanged(int)" setter)
-    (setf (symbol-value changed) (lambda (x) (qset slider "value" x)))
+    (setf (symbol-value changed) (lambda (x) (|setValue| slider x)))
     slider))
 
 (defun set-pixmap (pixmap)
-  (qset *pixmap-label* "pixmap" pixmap)
-  (let* ((size (! "size" pixmap))
+  (|setPixmap| *pixmap-label* pixmap)
+  (let* ((size (|size| pixmap))
          (width (first size)))
     (when (equal (list (1- width) (second size))
-                 (! "maximumViewportSize" *pixmap-label-area*))
+                 (|maximumViewportSize| *pixmap-label-area*))
       (setf (first size) (1- width)))
-    (qset *pixmap-label* "size" size)))
+    (|resize| *pixmap-label* size)))
 
 (defun get-size ()
-  (let ((text (! "getText" "QInputDialog"
+  (let ((text (|getText| "QInputDialog"
                  *me*
                  (tr "Grabber")
                  (tr "Enter pixmap size:")
                  |QLineEdit.Normal|
-                 (format nil "~{~D~^ x ~}" (qget *gl-widget* "size"))
+                 (format nil "~{~D~^ x ~}" (|size| *gl-widget*))
                  nil))) ; ok
     (if (qok)
         (progn
           (qlet ((reg-exp "QRegExp(QString)" "([0-9]+) *x *([0-9]+)"))
             (flet ((cap (n)
-                     (parse-integer (! "cap" reg-exp n))))
-              (when (! "exactMatch" reg-exp text)
+                     (parse-integer (|cap| reg-exp n))))
+              (when (|exactMatch| reg-exp text)
                 (let ((width  (cap 1))
                       (height (cap 2)))
                   (when (and (< 0 width  2048)
                              (< 0 height 2048))
                     (return-from get-size (list width height)))))))
-          (qget *gl-widget* "size"))
+          (|size| *gl-widget*))
         '(0 0))))
 
 (defun start ()
   (ini)
-  (x:do-with *me* "show" "raise"))
+  (x:do-with *me* |show| |raise|))

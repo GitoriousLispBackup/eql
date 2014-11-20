@@ -1,6 +1,9 @@
 ;;; Note: the long startup time of this example is caused
 ;;; by all the different font encodings envolved.
 
+#-qt-wrapper-functions ; see README-OPTIONAL.txt
+(load (in-home "src/lisp/all-wrappers"))
+
 (defpackage :main-window
   (:use :common-lisp :eql)
   (:export
@@ -26,8 +29,8 @@
       str)))
 
 (defun set-icon (action name)
-  (qset action "icon" (qnew "QIcon(QString)"
-                            (in-home (format nil "examples/data/icons/~A.png" name)))))
+  (|setIcon| action (qnew "QIcon(QString)"
+                          (in-home (format nil "examples/data/icons/~A.png" name)))))
 
 (defun start ()
   (x:do-with (qset *main*)
@@ -37,18 +40,18 @@
   (set-icon *action-save* "save")
   (qconnect *action-open* "triggered()" 'file-open)
   (qconnect *action-save* "triggered()" 'file-save)
-  (qset *editor* "html" (read-file (in-home "examples/data/utf8.htm")))
-  (x:do-with *main* "show" "raise"))
+  (|setHtml| *editor* (read-file (in-home "examples/data/utf8.htm")))
+  (x:do-with *main* |show| |raise|))
 
 (defun file-open ()
-  (let ((file (! "getOpenFileName" "QFileDialog")))
+  (let ((file (|getOpenFileName.QFileDialog|)))
     (unless (x:empty-string file)
-      (qset *editor* "html" (read-file file)))))
+      (|setHtml| *editor* (read-file file)))))
 
 (defun file-save ()
-  (let ((file (! "getSaveFileName" "QFileDialog")))
+  (let ((file (|getSaveFileName.QFileDialog|)))
     (unless (x:empty-string file)
       (with-open-file (s (os-pathname file) :direction :output :if-exists :supersede)
-        (write-string (qget *editor* "html") s)))))
+        (write-string (|html| *editor*) s)))))
 
 (start)

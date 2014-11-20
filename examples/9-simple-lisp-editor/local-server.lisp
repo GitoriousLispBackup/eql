@@ -1,5 +1,8 @@
 ;;; copyright (c) 2010-2013 Polos Ruetz
 
+#-qt-wrapper-functions ; see README-OPTIONAL.txt
+(load (in-home "src/lisp/all-wrappers"))
+
 (unless (eql:qrequire :network)
   (error "[EQL] module :network required")
   (eql:qq))

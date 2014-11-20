@@ -1,8 +1,11 @@
+#-qt-wrapper-functions ; see README-OPTIONAL.txt
+(load (in-home "src/lisp/all-wrappers"))
+
 (in-package :eql-user)
 
 (require :definitions "definitions")
 
-(dolist (arg (mapcar 'read-from-string (! "arguments" "QApplication")))
+(dolist (arg (mapcar 'read-from-string (|arguments.QCoreApplication|)))
   (when (numberp arg)
     (if (integerp arg)
         (setf *window-width* arg)
@@ -37,7 +40,7 @@
         (setf curve (cond ((directory "*easing_curve.*")
                            (! "easingCurve" (:qt (qload-c++ "easing_curve"))))
                           ((string= "Qt_EQL_Application"
-                                    (! ("className" "metaObject" (qapp))))
+                                    (|className| (|metaObject| (qapp))))
                            (! "easingCurve" (:qt (qapp))))
                           (t
                            (qnew "QEasingCurve(QEasingCurve::Type)" |QEasingCurve.Linear|))))))) ; fallback
@@ -65,7 +68,7 @@
     (qoverride trans "eventTest(QEvent*)"
                (lambda (event)
                  (and (= +state-switch-event+
-                         (! "type" event))
+                         (|type| event))
                       (= (transition-number trans)
                          (event-number)))))
     trans))
@@ -92,25 +95,26 @@
                      (when ini
                        (setf ini nil)
                        (incf n)
-                       (qset *timer* "interval" (* 2 *duration*)))
+                       (|setInterval| *timer* (* 2 *duration*)))
                      (setf (switcher-last-index switch) n)
-                     (! (("postEvent" (new-state-switch-event n)) "machine" switch)))))
+                     (|postEvent| (|machine| switch)
+                                  (new-state-switch-event n)))))
       switch)))
 
 ;;; main
 
-(let ((font (x:let-it (! "font" "QApplication")
-              (! "setBold" x:it t)))
+(let ((font (x:let-it (|font.QApplication|)
+              (|setBold| x:it t)))
       items items*)
   (defun new-graphics-item (text color id)
     (let ((item (qnew "QGraphicsWidget")))
       (qoverride item "paint(QPainter*,QStyleOptionGraphicsItem*,QWidget*)"
                  (lambda (painter _ _)
                    (x:do-with painter
-                     ("fillRect(QRectF,QColor)" (mapcar '+ (! "rect" item) '(1 1 -2 -2)) color)
+                     ("fillRect(QRectF,QColor)" (mapcar '+ (|rect| item) '(1 1 -2 -2)) color)
                      ("setFont" font)
                      ("setPen(QColor)" "black")
-                     ("drawText(QRectF,int,QString)" (! "rect" item) |Qt.AlignCenter| text))))
+                     ("drawText(QRectF,int,QString)" (|rect| item) |Qt.AlignCenter| text))))
       (push (cons id item) items*)
       item))
   (defun id-item (id)
@@ -123,7 +127,7 @@
 (defun create-geometry-state (parent objects positions)
   (let ((result (qnew "QState(QState*)" parent)))
     (mapc (lambda (object pos)
-            (! "assignProperty" result object "geometry" (qnew "QVariant(QRect)"
+            (|assignProperty| result object "geometry" (qnew "QVariant(QRect)"
                                                                (append (mapcar '* (mapcar '- pos '(1 1)) *item-size*)
                                                                        *item-size*))))
           objects positions)
@@ -134,14 +138,14 @@
     (x:do-with trans
       ("setTargetState" state)
       ("addAnimation" animation))
-    (! "addTransition(QAbstractTransition*)" state-switcher trans)))
+    (|addTransition(QAbstractTransition*)| state-switcher trans)))
 
 (let (animations groups)
   (defun add-property-animation (anim-group button property curve-type duration &optional pause)
     (let ((anim (qnew "QPropertyAnimation(QObject*,QByteArray)" button (x:string-to-bytes property)))
           (group (if pause
                      (let ((group (qnew "QSequentialAnimationGroup(QObject*)" anim-group)))
-                       (! "addPause" group pause)
+                       (|addPause| group pause)
                        (push* group groups)
                        group)
                      anim-group)))
@@ -151,7 +155,7 @@
                               (custom-easing-curve)
                               (qnew "QEasingCurve(QEasingCurve::Type)" curve-type))))
       (push* anim animations)
-      (! "addAnimation" group anim)
+      (|addAnimation| group anim)
       anim))
   (defun change-easing-curve (curve)
     (let* ((type (etypecase curve
@@ -164,24 +168,24 @@
                       (qnew "QEasingCurve(QEasingCurve::Type)" type))))
       (setf *easing-curve* curve)
       (dolist (anim animations)
-        (! "setEasingCurve" anim curve))))
+        (|setEasingCurve| anim curve))))
   (defun change-duration (msec)
     (setf *duration* msec)
     (dolist (anim animations)
-      (! "setDuration" anim msec))
+      (|setDuration| anim msec))
     (update-timer))
   (defun change-pause (msec)
     (setf *pause* msec)
     (let ((n 0))
       (dolist (group groups)
-        (let ((anim (! "takeAnimation" group 1)))
+        (let ((anim (|takeAnimation| group 1)))
           (x:do-with group
             ("clear")
             ("addPause" (* (incf n) msec))
             ("addAnimation" anim)))))
     (update-timer))
   (defun update-timer ()
-    (qset *timer* "interval" (+ *duration* (* 4 *pause*) 1000))))
+    (|setInterval| *timer* (+ *duration* (* 4 *pause*) 1000))))
 
 (defun create-geometry-states (group)
   (flet ((item-count ()
@@ -219,18 +223,18 @@
         (anim-group (qnew "QParallelAnimationGroup"))
         (layout     (qnew "QHBoxLayout(QWidget*)" *main*)))
     (qset-color *main* |QPalette.Window| *background*)
-    (! "setBackgroundBrush" scene (qnew "QBrush(QColor)" *background*))
+    (|setBackgroundBrush| scene (qnew "QBrush(QColor)" *background*))
     (x:do-with layout
       ("addStretch")
       ("addWidget" *view*)
       ("addStretch"))
-    (! "setScene" *view* scene)
+    (|setScene| *view* scene)
     (dolist (item (items))
-      (! "addItem" scene item))
+      (|addItem| scene item))
     (let ((pause 0))
       (dolist (item (items))
         (add-property-animation anim-group item "geometry" *easing-curve* *duration* (incf pause *pause*))))
-    (qset *timer* "interval" (/ *duration* 2))
+    (|setInterval| *timer* (/ *duration* 2))
     (let ((states (create-geometry-states group))
           (state-switcher (new-state-switcher machine "stateSwitcher")))
       (dolist (state states)
@@ -245,25 +249,25 @@
     (qconnect group "entered()" *timer* "start()")
     (qoverride *view* "resizeEvent(QResizeEvent*)"
                (lambda (event)
-                 (! "fitInView(QRectF)" *view* (! "sceneRect" scene))
+                 (|fitInView(QRectF)| *view* (|sceneRect| scene))
                  (qcall-default)))
     ;; change background color on mouse move events outside of view
     (qoverride *main* "mouseMoveEvent(QMouseEvent*)"
                (lambda (event)
-                 (qlet ((brush "QBrush(QColor)" (if (< (! "x" event)
-                                                       (/ (! "width" *main*) 2))
+                 (qlet ((brush "QBrush(QColor)" (if (< (|x| event)
+                                                       (/ (|width| *main*) 2))
                                                     *background*
                                                     *color-m*)))
-                   (! "setBackgroundBrush" scene brush))))
+                   (|setBackgroundBrush| scene brush))))
     ;; change background color on mouse move events inside of view
     (qoverride *view* "mouseMoveEvent(QMouseEvent*)"
                (lambda (event)
                  (qlet ((brush "QBrush(QColor)"
-                               (! "fromHsv" "QColor"
-                                  (floor (* 359 (/ (! "x" event) (! "width" *view*))))
-                                  (floor (* 255 (/ (! "y" event) (! "height" *view*))))
+                               (|fromHsv.QColor|
+                                  (floor (* 359 (/ (|x| event) (|width| *view*))))
+                                  (floor (* 255 (/ (|y| event) (|height| *view*))))
                                   255)))
-                   (! "setBackgroundBrush" scene brush))))
+                   (|setBackgroundBrush| scene brush))))
     ;; quit on mouse click
     (dolist (w (list *main* *view*))
       (qoverride w "mousePressEvent(QMouseEvent*)" (lambda (event) (qquit))))
@@ -272,29 +276,29 @@
     ;; quit on key Escape
     (qadd-event-filter nil |QEvent.KeyPress|
                        (lambda (_ event)
-                         (let ((key (! "key" event)))
+                         (let ((key (|key| event)))
                            (case key
                              (#.|Qt.Key_Space|
-                                (let ((active (qget *timer* "active")))
+                                (let ((active (|active| *timer*)))
                                   (if active
-                                      (! "stop" *timer*)
+                                      (|stop| *timer*)
                                       (x:do-with *timer*
                                         ("timeout")
                                         ("start")))
                                   (qset-color *main* |QPalette.Window| (if active *color-pause* *background*))))
                              (#.|Qt.Key_S|
-                                (let ((widget (! "viewport" *view*)))
-                                  (! (("save" "screenshot.png" "PNG")
-                                      ("grabWidget(QWidget*,QRect)" widget (! "rect" widget))
-                                      "QPixmap"))))
+                                (let ((widget (|viewport| *view*)))
+                                  (|save| (|grabWidget(QWidget*,QRect).QPixmap| widget (|rect| widget))
+                                          "screenshot.png")))
                              (#.|Qt.Key_Escape|
                                 (qquit))))))
     (if *window-width*
-        (! "setFixedSize" *view* (list *window-width* *window-width*))
-        (! "setFixedWidth" *view* (apply 'min (nthcdr 2 (! ("screenGeometry" "desktop" "QApplication"))))))
-    (qsingle-shot 0 (lambda () (! "setPos" "QCursor" (! "pos" *main*))))
-    (x:do-with *main*
-      ((if *window-width* "show" "showFullScreen"))
-      ("raise"))))
+        (|setFixedSize| *view* (list *window-width* *window-width*))
+        (|setFixedWidth| *view* (apply 'min (nthcdr 2 (|screenGeometry| (|desktop.QApplication|))))))
+    (qsingle-shot 0 (lambda () (|setPos.QCursor| (|pos| *main*))))
+    (if *window-width*
+        (|show| *main*)
+        (|showFullScreen| *main*))
+    (|raise| *main*)))
 
 (ini)

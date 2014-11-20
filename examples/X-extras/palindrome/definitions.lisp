@@ -10,10 +10,10 @@
 ;;; colors
 
 (defparameter *background*  "black")
-(defparameter *color-1*     (! "lighter" (qnew "QColor(QString)" "gray")   190))
-(defparameter *color-2*     (! "lighter" (qnew "QColor(QString)" "blue")   170))
-(defparameter *color-3*     (! "lighter" (qnew "QColor(QString)" "red")    170))
-(defparameter *color-4*     (! "lighter" (qnew "QColor(QString)" "yellow") 170))
+(defparameter *color-1*     (|lighter| (qnew "QColor(QString)" "gray")   190))
+(defparameter *color-2*     (|lighter| (qnew "QColor(QString)" "blue")   170))
+(defparameter *color-3*     (|lighter| (qnew "QColor(QString)" "red")    170))
+(defparameter *color-4*     (|lighter| (qnew "QColor(QString)" "yellow") 170))
 (defparameter *color-pause* *color-2*)
 
 (defparameter *items*

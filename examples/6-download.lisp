@@ -1,3 +1,6 @@
+#-qt-wrapper-functions ; see README-OPTIONAL.txt
+(load (in-home "src/lisp/all-wrappers"))
+
 (unless (eql:qrequire :network)
   (error "EQL module :network could not be found/loaded")
   (eql:qq))
@@ -19,16 +22,16 @@
     (qconnect *manager* "finished(QNetworkReply*)" 'download-finished))
   (qlet ((url "QUrl(QString)" name)
          (request "QNetworkRequest(QUrl)" url))
-    (! "get" *manager* request)))
+    (|get| *manager* request)))
 
 (defun download-finished (reply)
-  (! "deleteLater" reply) ; QNetworkReply*: heap result, delete manually
-  (let ((error (! "error" reply)))
+  (|deleteLater| reply) ; QNetworkReply*: heap result, delete manually
+  (let ((error (|error| reply)))
     (if (= |QNetworkReply.NoError| error)
-        (let ((data (! "readAll" reply)))
+        (let ((data (|readAll| reply)))
           (save-data data)
-          (! "information" "QMessageBox" nil "EQL"
-             (format nil (tr "Downloaded ~:D bytes, see \"download.data\".") (length data))))
+          (|information.QMessageBox| nil "EQL"
+                                     (format nil (tr "Downloaded ~:D bytes, see \"download.data\".") (length data))))
         (show-error error))))
 
 (defun save-data (data)
@@ -40,6 +43,6 @@
   (let ((msg (x:when-it (find error (cdadr (qenums "QNetworkReply" "NetworkError")) :key 'cdr)
                (format nil (tr "Download error: <span style='color:red; font-weight:bold;'>~A</span>")
                        (car x:it)))))
-    (! "critical" "QMessageBox" nil "EQL" (or msg (tr "Unknown download error.")))))
+    (|critical.QMessageBox| nil "EQL" (or msg (tr "Unknown download error.")))))
 
 (download "http://planet.lisp.org/")

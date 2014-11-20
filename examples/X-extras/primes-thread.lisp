@@ -2,6 +2,9 @@
 ;;;
 ;;; Calculate primes in threads and update QTreeWidget directly from threads.
 
+#-qt-wrapper-functions ; see README-OPTIONAL.txt
+(load (in-home "src/lisp/all-wrappers"))
+
 (defvar *tree-widget* (qnew "QTreeWidget"
                             "alternatingRowColors" t
                             "size" '(500 300)))
@@ -14,14 +17,14 @@
   ;; - blocking: for return value(s)
   (qrun* (let ((item (qnew "QTreeWidgetItem")))
            (x:do-with item
-             ("setTextAlignment" 0 |Qt.AlignRight|)
-             ("setText" 0 (format nil "~:D" (- (get-internal-real-time) *start-time*)))
-             ("setText" column text))
+             (|setTextAlignment| 0 |Qt.AlignRight|)
+             (|setText| 0 (format nil "~:D" (- (get-internal-real-time) *start-time*)))
+             (|setText| column text))
            (x:do-with *tree-widget*
-             ("addTopLevelItem" item)
-             ("resizeColumnToContents" 0)
-             ("resizeColumnToContents" column)
-             ("scrollToBottom")))))
+             (|addTopLevelItem| item)
+             (|resizeColumnToContents| 0)
+             (|resizeColumnToContents| column)
+             (|scrollToBottom|)))))
   
 (defun primep (x)
   ;; slow/dumb
@@ -32,7 +35,7 @@
            (loop :for i :from 3 :to (isqrt x) :by 2 :never (zerop (mod x i))))))
 
 (defun primes (column start number)
-  (qrun* (! "clear" *tree-widget*))
+  (qrun* (|clear| *tree-widget*))
   (setf *start-time* (get-internal-real-time))
   (do ((i start (1+ i))
        (found 0))
@@ -46,15 +49,15 @@
 
 (defun run (&optional (number-threads 2))
   (x:do-with *tree-widget*
-    ("setColumnCount" (1+ number-threads))
-    ("setHeaderLabels" (cons "Time"
+    (|setColumnCount| (1+ number-threads))
+    (|setHeaderLabels| (cons "Time"
                              (loop :for i :from 1 :to number-threads
                                    :collect (format nil "Thread ~D" i)))))
   (let ((column 0)) ; needed because of thread race condition
     (dotimes (n number-threads)
       (mp:process-run-function (format nil "Primes ~D" (1+ n))
                                (lambda () (primes (incf column) #.(expt 10 12) 15)))))
-  (x:do-with *tree-widget* "show" "raise")
+  (x:do-with *tree-widget* |show| |raise|)
   (list-all-threads))
 
 (run)

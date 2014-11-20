@@ -1,3 +1,6 @@
+#-qt-wrapper-functions
+(load (in-home "src/lisp/all-wrappers"))
+
 ;;; Ported Qt Widgets Tutorial - Nested Layouts
 
 (in-package :eql-user)
@@ -12,16 +15,16 @@
         (query-layout (qnew "QHBoxLayout"))
         (main-layout  (qnew "QVBoxLayout")))
     (dolist (w (list query-label query-edit))
-      (! "addWidget" query-layout w))
-    (! "addLayout" main-layout query-layout)
-    (! "addWidget" main-layout result-view)
-    (! "setLayout" window main-layout)
+      (|addWidget| query-layout w))
+    (|addLayout| main-layout query-layout)
+    (|addWidget| main-layout result-view)
+    (|setLayout| window main-layout)
     (setup-model-and-view result-view)
-    (! "show" window)))
+    (|show| window)))
 
 (defun setup-model-and-view (view)
   (let ((model (qnew "QStandardItemModel")))
-    (! "setHorizontalHeaderLabels" model '("Name" "Office"))
+    (|setHorizontalHeaderLabels| model '("Name" "Office"))
     (dolist (row '(("Verne Nilsen" "123")
                    ("Carlos Tang" "77")
                    ("Bronwyn Hawcroft" "119")
@@ -32,11 +35,11 @@
                    ("David Bradley" "42")
                    ("Knut Walters" "25")
                    ("Andrea Jones" "34")))
-      (! "appendRow(QList<QStandardItem*>)" model
+      (|appendRow(QList<QStandardItem*>)| model
          (loop :for text :in row
                :collect (qnew "QStandardItem(QString)" text))))
-    (! "setModel" view model)
-    (! ("hide" "verticalHeader" view))                          ; see "0.lisp"
-    (! (("setStretchLastSection" t) "horizontalHeader" view)))) ; see "0.lisp"
+    (|setModel| view model)
+    (|hide| (|verticalHeader| view))
+    (|setStretchLastSection| (|horizontalHeader| view) t)))
 
 (start)

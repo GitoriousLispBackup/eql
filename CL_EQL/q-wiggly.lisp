@@ -1,79 +1,81 @@
 ;;; "Wiggly Widget" example, directly loadable into any CL + CFFI.
 ;;;
-;;; Slime note: for 'eval region', wrap #Q in PROGN (see *SINUS*).
+;;; Slime note: for 'eval region', wrap #Q in PROGN (see DEFPARAMETER *CURVE*).
 
 (load "q")
 
 #q
-(defpackage :wiggly
+(defpackage :wiggly-widget
+  (:nicknames :wiggly)
   (:use :common-lisp :eql)
   (:export
-   *sinus*
-   *wiggly*
-   *edit*
-   *timer*
    #:start))
 
-#q 
-(in-package :wiggly)
-
-(progn ; for 'eval region' in Slime
-  #q (defparameter *sinus* #(0 38 71 92 100 92 71 38 0 -38 -71 -92 -100 -92 -71 -38)))
-   
 #q
-(progn
-  (defvar *wiggly* (qnew "QWidget" "autoFillBackground" t))
-  (defvar *edit*   (qnew "QLineEdit" "alignment" |Qt.AlignCenter|))
-  (defvar *timer*  (qnew "QTimer"))
+(in-package :wiggly-widget)
 
-  (defparameter *step* 0))
-   
+(progn #q
+  (defparameter *curve* #.(coerce (loop :for i :below 16 :collect (round (* 100 (sin (* i (/ pi 8))))))
+                                  'vector)
+    "Vector of 16 values ranging from -100 to 100."))
+
+#q
+(defvar *wiggly* (qnew "QWidget"
+                       "font" (x:let-it (|font.QApplication|)
+                                (|setPointSize| x:it (+ 20 (|pointSize| x:it))))
+                       "autoFillBackground" t))
+
+#q
+(defvar *edit*   (qnew "QLineEdit" "alignment" |Qt.AlignCenter|))
+
+#q
+(defvar *timer*  (qnew "QTimer"))
+
+#q
+(defparameter *step* 0)
+
 #q
 (defun start ()
-  (qset *wiggly* "font" (let ((font (qnew "QFont(QFont)" (! "font" "QApplication"))))
-                          (! "setPointSize" font
-                             (+ 10 (! "pointSize" font)))
-                          font))
-  (! "setBackgroundRole" *wiggly* |QPalette.Light|)
-  (let ((dlg (qnew "QDialog" "size" (list 700 200)))
+  (|setBackgroundRole| *wiggly* |QPalette.Light|)
+  (let ((dlg (qnew "QDialog" "size" '(600 200)))
         (vbox (qnew "QVBoxLayout")))
-    (! "setLayout" dlg vbox)
+    (|setLayout| dlg vbox)
     (dolist (w (list *wiggly* *edit*))
-      (! "addWidget" vbox w))
-    (qoverride *wiggly* "paintEvent(QPaintEvent*)" 'paint)
+      (|addWidget| vbox w))
     (qconnect *timer* "timeout()" 'timeout)
-    (! "start" *timer* 42)
-    (qset *edit* "text" "Some Lisps are more Common than others.")
-    (! "show" dlg)
-    (! "raise" dlg)))
+    (qoverride *wiggly* "paintEvent(QPaintEvent*)" 'paint)
+    (|start| *timer* 50)
+    (|setText| *edit* "= never odd or even =")
+    (x:do-with dlg |show| |raise|)))
 
 #q
 (defun paint (ev)
   (qlet ((painter "QPainter(QWidget*)" *wiggly*) ; local QPainter variable: no need to call "begin", "end"
          (pen "QPen")
-         (metrics "QFontMetrics(QFont)" (qget *wiggly* "font")))
-    (let* ((txt (qget *edit* "text"))
-           (x (/ (- (qget *wiggly* "width")
-                    (! "width(QString)" metrics txt))
+         (metrics "QFontMetrics(QFont)" (|font| *wiggly*)))
+    (let* ((txt (|text| *edit*))
+           (x (/ (- (|width| *wiggly*)
+                    (|width(QString)| metrics txt))
                  2))
-           (y (/ (- (+ (qget *wiggly* "height") (! "ascent" metrics))
-                    (! "descent" metrics))
+           (y (/ (- (+ (|height| *wiggly*) (|ascent| metrics))
+                    (|descent| metrics))
                  2))
-           (h (! "height" metrics)))
+           (h (|height| metrics)))
       (dotimes (i (length txt))
         (let ((ix (mod (+ i *step*) 16))
               (ch (char txt i)))
-          (! "setColor" pen (! "fromHsv" "QColor" (* 16 (- 15 ix)) 255 191))
-          (! "setPen(QPen)" painter pen)
-          (! "drawText(QPoint,QString)" painter (list (floor x)
-                                                         (floor (- y (/ (* h (svref *sinus* ix)) 400))))
-                (string ch))
-          (incf x (! "width(QChar)" metrics ch)))))))
+          (|setColor| pen (|fromHsv.QColor| (* 16 (- 15 ix)) 255 191))
+          (x:do-with painter
+            (|setPen(QPen)| pen)
+            (|drawText(QPoint...)| (list (floor x)
+                                         (floor (- y (/ (* h (svref *curve* ix)) 400))))
+                                   (string ch)))
+          (incf x (|width(QChar)| metrics ch)))))))
 
-#q 
+#q
 (defun timeout ()
   (incf *step*)
-  (! "update" *wiggly*))
+  (|update| *wiggly*))
 
 #q
 (start)

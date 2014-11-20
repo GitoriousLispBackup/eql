@@ -2,6 +2,9 @@
 ;;; Contributed by Mark Cox, please see LICENSE-MAKE-QIMAGE.txt
 ;;;
 
+#-qt-wrapper-functions ; see README-OPTIONAL.txt
+(load (in-home "src/lisp/all-wrappers"))
+
 (defpackage "MAKE-QIMAGE-EXAMPLE"
   (:use "COMMON-LISP"
         "EQL")
@@ -320,8 +323,8 @@ APPLICATION-WINDOW when the user selects a test."))
   "Convert the INT-VALUE to the double value used by the
 DOUBLE-SLIDER."
   (with-slots (slider) double-slider
-    (let* ((int-minimum (! "minimum" slider))
-           (int-maximum (! "maximum" slider))
+    (let* ((int-minimum (|minimum| slider))
+           (int-maximum (|maximum| slider))
            (m  (/ (- (maximum-value double-slider)
                      (minimum-value double-slider))
                   (- int-maximum int-minimum)))
@@ -333,8 +336,8 @@ DOUBLE-SLIDER."
   "Conver the double VALUE to an integer value that can be used by a
 QSlider instance."
   (with-slots (slider) double-slider
-    (let* ((y1 (! "maximum" slider))
-           (y2 (! "minimum" slider))
+    (let* ((y1 (|maximum| slider))
+           (y2 (|minimum| slider))
            (x1 (maximum-value double-slider))
            (x2 (minimum-value double-slider))
            (m  (/ (- y1 y2) (- x1 x2)))
@@ -343,7 +346,7 @@ QSlider instance."
 
 (defmethod (setf value) :after (value (slider double-slider))
   "Change the value displayed by the QSlider instance."
-  (! "setValue(int)" (widget slider) (double-slider/to-int-value slider value)))
+  (|setValue| (widget slider) (double-slider/to-int-value slider value)))
 
 (defmethod (setf value) :around (value (slider double-slider))
   "Call the ON-VALUE-CHANGE callback when the value of the
@@ -361,9 +364,9 @@ DOUBLE-SLIDER changes."
 
   (with-slots (slider) self
     (setf slider (qnew "QSlider(Qt::Orientation,QWidget*)" orientation nil))
-    (! "setMinimum" slider 0)
-    (! "setMaximum" slider number-of-steps)
-    (! "setValue" slider 0)
+    (|setMinimum| slider 0)
+    (|setMaximum| slider number-of-steps)
+    (|setValue| slider 0)
     (qconnect slider "valueChanged(int)" (lambda (new-value)
                                            (setf (value self) (double-slider/from-int-value self new-value)))))
 
@@ -391,7 +394,7 @@ changes."
     (let ((current (zoom self)))
       (call-next-method)
       (unless (= current new-value)
-        (! "setTransform" graphics-view (! "fromScale" "QTransform" new-value new-value))))))
+        (|setTransform| graphics-view (|fromScale.QTransform| new-value new-value))))))
 
 (defmethod (setf image) :after (new-value (self image-viewer))
   "Change the pixmap displayed by the PIXMAP-ITEM."
@@ -400,19 +403,19 @@ changes."
      (setf (image self) (qnew "QImage")))
     (t
      (with-slots (pixmap-item graphics-view) self
-       (! "setPixmap" pixmap-item (! "fromImage" "QPixmap" (image self)))
-       (! "setPos" pixmap-item
-          (/ (! "width" (image self)) -2)
-          (/ (! "height" (image self)) -2))
-       (! "centerOn(qreal,qreal)" graphics-view 0 0)))))
+       (|setPixmap| pixmap-item (|fromImage.QPixmap| (image self)))
+       (|setPos| pixmap-item
+          (/ (|width| (image self)) -2)
+          (/ (|height| (image self)) -2))
+       (|centerOn| graphics-view 0 0)))))
 
 (defmethod initialize-instance :after ((self image-viewer) &key)
   (with-slots (window graphics-view pixmap-item text-item zoom-slider) self
     (let ((graphics-scene (qnew "QGraphicsScene")))
       (setf graphics-view  (qnew "QGraphicsView"))
       (setf pixmap-item (qnew "QGraphicsPixmapItem"))
-      (! "addItem" graphics-scene pixmap-item)
-      (! "setScene" graphics-view graphics-scene))))
+      (|addItem| graphics-scene pixmap-item)
+      (|setScene| graphics-view graphics-scene))))
 
 ;; test list widget
 (defclass qimage-test-list-view ()
@@ -440,25 +443,25 @@ changes."
 (defmethod initialize-instance :after ((self qimage-test-list-view) &key)
   (with-slots (list-view) self
     (setf list-view (qnew "QListView"))
-    (! "setEditTriggers" list-view |QAbstractItemView.NoEditTriggers|)
+    (|setEditTriggers| list-view |QAbstractItemView.NoEditTriggers|)
     (qconnect list-view "clicked(QModelIndex)" (lambda (index)
                                                  (when (on-selection self)
-                                                   (funcall (on-selection self) (! "row" index)))))))
+                                                   (funcall (on-selection self) (|row| index)))))))
 
 (defmethod model ((view-object qimage-test-list-view))
-  (! "model" (widget view-object)))
+  (|model| (widget view-object)))
 
 (defmethod (setf model) (new-value (view-object qimage-test-list-view))
-  (! "setModel" (widget view-object) new-value))
+  (|setModel| (widget view-object) new-value))
 
 (defmethod current-index ((view-object qimage-test-list-view))
-  (! "currentIndex" (widget view-object)))
+  (|currentIndex| (widget view-object)))
 
 (defmethod (setf current-index) (value (view-object qimage-test-list-view))
   (declare (type (integer 0) value))
-  (let* ((model (! "model" (widget view-object)))
-         (model-index (! "index" model value 0)))
-    (! "setCurrentIndex" (widget view-object) model-index)))
+  (let* ((model (|model| (widget view-object)))
+         (model-index (|index| model value 0)))
+    (|setCurrentIndex| (widget view-object) model-index)))
 
 (defclass application-window ()
   ((widget
@@ -483,7 +486,7 @@ changes."
 
 (defmethod (setf description) (new-value (window application-window))
   (with-slots (description) window
-    (! "setText" description new-value)))
+    (|setText| description new-value)))
 
 (defmethod test-selected ((application-window application-window) index)  
   (with-slots (items test-list-view) application-window
@@ -492,10 +495,11 @@ changes."
 
 (defmethod add-item ((window application-window) short-description on-selection)
   (with-slots (test-list-model items) window
-    (! "columnCount" test-list-model)
-    (! "insertRow" ("QAbstractItemModel" test-list-model) (! "rowCount" test-list-model))
-    (! "setData" ("QAbstractItemModel" test-list-model) (! "index" test-list-model (1- (! "rowCount" test-list-model)) 0)
-           (qnew "QVariant(QString)" short-description))
+    (|columnCount| test-list-model)
+    (|insertRow| test-list-model (|rowCount| test-list-model))
+    (|setData| test-list-model
+               (|index| test-list-model (1- (|rowCount| test-list-model)) 0)
+               (qnew "QVariant(QString)" short-description))
     (setf items (append items (cons on-selection nil)))))
 
 (defmethod initialize-instance :after ((self application-window) &key)
@@ -509,35 +513,35 @@ changes."
           test-list-model (qnew "QStringListModel")
           description (qnew "QLabel"))
 
-    (! "setWordWrap" description t)
-    (! "setMaximumWidth" description 250)
-    (! "setMinimumHeight" (widget test-list-view) 150)
-    (! "setMaximumHeight" (widget test-list-view) 150)
-    (! "setModel" (widget test-list-view) test-list-model)
+    (|setWordWrap| description t)
+    (|setMaximumWidth| description 250)
+    (|setMinimumHeight| (widget test-list-view) 150)
+    (|setMaximumHeight| (widget test-list-view) 150)
+    (|setModel| (widget test-list-view) test-list-model)
 
     (let ((layout (qnew "QHBoxLayout")))
       (let ((v (qnew "QVBoxLayout")))
-        (! "addWidget" v (qnew "QLabel" "text" "QImage format"))
-        (! "addWidget" v (widget test-list-view))
-        (! "addWidget" v description)
-        (! "addStretch" v)
-        (! "addLayout" layout v 0))
+        (|addWidget| v (qnew "QLabel" "text" "QImage format"))
+        (|addWidget| v (widget test-list-view))
+        (|addWidget| v description)
+        (|addStretch| v)
+        (|addLayout| layout v 0))
       (let ((v (qnew "QVBoxLayout")))
-        (! "addWidget" v (widget image-viewer))
+        (|addWidget| v (widget image-viewer))
         (let ((h (qnew "QHBoxLayout")))
-          (! "addStretch" h)
-          (! "addWidget" h (Widget zoom-slider))
-          (! "addLayout" v h))
-        (! "addLayout" layout v 1))
-      (! "setLayout" widget layout))))
+          (|addStretch| h)
+          (|addWidget| h (Widget zoom-slider))
+          (|addLayout| v h))
+        (|addLayout| layout v 1))
+      (|setLayout| widget layout))))
 
 ;; common method implementations
 
 (defmethod resize (object width height)
-  (! "resize" (widget object) width height))
+  (|resize| (widget object) width height))
 
 (defmethod show (object)
-  (! "show" (widget object)))
+  (|show| (widget object)))
 
 (main)
 

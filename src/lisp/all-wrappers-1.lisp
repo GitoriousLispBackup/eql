@@ -1206,7 +1206,7 @@
 (pushnew :qt-wrapper-functions *features*)
 
 (defun %auto-cast (object)
-  (when (find (qt-object-id object)
+  (when (find (qt-object-id (ensure-qt-object object))
               '#.(list (qid "QGraphicsSvgItem")
                        (qid "QGraphicsTextItem")
                        (qid "QGraphicsWidget")))

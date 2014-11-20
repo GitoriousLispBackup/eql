@@ -3,6 +3,9 @@
 ;;; - displays exact value + float value
 ;;; - runs visual automations
 
+#-qt-wrapper-functions ; see README-OPTIONAL.txt
+(load (in-home "src/lisp/all-wrappers"))
+
 (defpackage :calculator
   (:nicknames :clc)
   (:use :common-lisp :eql)
@@ -18,8 +21,8 @@
                       "frameShape" |QFrame.Box|))
 (defvar *float* (qnew "QLineEdit"
                       "readOnly" t
-                      "font" (x:let-it (! "font" "QApplication")
-                               (! "setPointSize" x:it (+ 6 (! "pointSize" x:it))))))
+                      "font" (x:let-it (|font.QApplication|)
+                               (|setPointSize| x:it (+ 6 (|pointSize| x:it))))))
 
 (defvar *precision* 0f0) ; f = float, d = double, l = long
 (defvar *value1*    nil)
@@ -37,19 +40,19 @@
       (ignore-errors (apply fun args))
     (or val
         (progn
-          (! "critical" "QMessageBox" nil "Error" (error-to-string err))
+          (|critical.QMessageBox| nil "Error" (error-to-string err))
           0))))
 
 (defun display-number (n)
   (flet ((str (x)
            (format nil "~:D" x)))
     (x:when-it (funcall-protect (lambda (x) (float x *precision*)) n)
-      (qset *float* "text" (princ-to-string x:it)))
+      (|setText| *float* (princ-to-string x:it)))
     (let* ((num (str (numerator n)))
            (den (str (denominator n)))
            (dif (- (length den) (length num))))
-      (qset *real* "text" (format nil "<pre><u>~A~A</u><br>~A" (if (plusp dif) (make-string dif) "") num den))
-      (qset (qfind-child *main* "blah") "enabled" (= 1 (denominator n))))))
+      (|setText| *real* (format nil "<pre><u>~A~A</u><br>~A" (if (plusp dif) (make-string dif) "") num den))
+      (|setEnabled| (qfind-child *main* "blah") (= 1 (denominator n))))))
 
 (defun clear-display ()
   (setf *value1* 0
@@ -63,7 +66,7 @@
   (when *reset*
     (clear-display)
     (setf *reset* nil))
-  (let ((clicked (parse-integer (qget (qsender) "text"))))
+  (let ((clicked (parse-integer (|text| (qsender)))))
     (setf *value1* (if *decimals*
                        (+ (* clicked (expt 10 (- (incf *decimals*))))
                           *value1*)
@@ -96,7 +99,7 @@
 (defun clear-clicked ()
   (setf *value2* nil)
   (clear-display)
-  (! "adjustSize" *main*))
+  (|adjustSize| *main*))
 
 (defun operate ()
   (x:when-it (funcall-protect *operation* *value2* *value1*)
@@ -107,7 +110,7 @@
   (if *value2*
       (operate)
       (setf *value2* *value1*))
-  (setf *operation* (intern (qget (qsender) "text"))
+  (setf *operation* (intern (|text| (qsender)))
         *reset* t))
 
 (defun equal-clicked ()
@@ -124,7 +127,7 @@
                  "minimumSize" '(35 25)
                  "sizePolicy" #.(qnew "QSizePolicy(QSizePolicy::Policy,QSizePolicy::Policy)"
                                       |QSizePolicy.Expanding| |QSizePolicy.Expanding|))))
-    (let* ((layout* (! "layout" *main*))
+    (let* ((layout* (|layout| *main*))
            (layout (if (qnull layout*) ; for multiple call of RUN
                        (qnew "QGridLayout(QWidget*)" *main*)
                        (qt-object-? layout*)))
@@ -133,7 +136,7 @@
            (point (b)) (clear (b)) (back (b)) (words (b)) (equal (b)))
       (dotimes (n 10)
         (setf (svref digits n) (b)))
-      (x:do-with (! "addWidget" layout)
+      (x:do-with (|addWidget| layout)
         (reci     2 0)
         (divide   2 1)
         (multiply 2 2)
@@ -151,7 +154,7 @@
       (let ((n 0))
         (dotimes (r 3)
           (dotimes (c 3)
-            (! "addWidget" layout (svref digits (incf n)) (- 5 r) c))))
+            (|addWidget| layout (svref digits (incf n)) (- 5 r) c))))
       (dolist (btn (list (list plus     "+")
                          (list minus    "-")
                          (list multiply "*")
@@ -169,8 +172,6 @@
             ("text" s)
             ("objectName" s)
             ("shortcut" (qnew "QKeySequence(QString)" (or (third btn) s))))))
-      (dolist (w (list *float* *real*))
-        (qset w "alignment" |Qt.AlignRight|))
       (dotimes (n 10)
         (let ((w (svref digits n))
               (s (princ-to-string n)))
@@ -178,6 +179,8 @@
             ("text" s)
             ("objectName" s)
             ("shortcut" (qnew "QKeySequence(QString)" s)))))
+      (dolist (w (list *float* *real*))
+        (|setAlignment| w |Qt.AlignRight|))
       (dotimes (n 10)
         (qconnect (svref digits n) "clicked()" 'digit-clicked))
       (dolist (w (list plus minus multiply divide))
@@ -187,8 +190,8 @@
             (list clear back sign point reci words equal)
             (list 'clear-clicked 'back-clicked 'sign-clicked 'point-clicked 'reci-clicked 'words-clicked 'equal-clicked))
       (clear-display)
-      (! "setFocus" *real*)
-      (x:do-with *main* "show" "raise"))))
+      (|setFocus| *real*)
+      (x:do-with *main* |show| |raise|))))
 
 (run)
 
@@ -201,7 +204,7 @@
                                 (unless (char= #\Space ch)
                                   (format s "~C " ch)))))))
     (let ((buttons* (normalize buttons)))
-      (dolist (name (sort (mapcar (lambda (o) (qget o "objectName"))
+      (dolist (name (sort (mapcar (lambda (o) (|objectName| o))
                                   (qfind-children *main* nil "QToolButton"))
                           '> :key 'length))
         (setf buttons* (x:string-substitute name (normalize name) buttons*)))
@@ -212,13 +215,13 @@
   (when (stringp buttons)
     (setf buttons (prepare buttons)))
   (when buttons
-    (! "animateClick" (qfind-child *main* (first buttons)) milliseconds)
+    (|animateClick| (qfind-child *main* (first buttons)) milliseconds)
     (qsingle-shot (* 2 milliseconds) (lambda () (auto (rest buttons) milliseconds)))))
 
 ;;; example / eql calculator -a
 
 (defun qarg (argument)
-  (find argument (! "arguments" "QApplication") :test 'string=))
+  (find argument (|arguments.QCoreApplication|) :test 'string=))
 
 (when (qarg "-a")
   (auto "AC 1.25 + 3.75 = *= *= 1/x 1/x +- blah"))

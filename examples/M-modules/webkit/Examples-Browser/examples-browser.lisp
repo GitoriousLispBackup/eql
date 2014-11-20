@@ -9,6 +9,9 @@
 ;;;
 ;;; Once downloaded, the application files are cached locally (to be run offline).
 
+#-qt-wrapper-functions ; see README-OPTIONAL.txt
+(load (in-home "src/lisp/all-wrappers"))
+
 (qrequire :webkit)
 (qrequire :network)
 
@@ -27,15 +30,15 @@
 (defvar *ini-file*)
 
 (defun frame ()
-  (! ("mainFrame" "page" *web-view*)))
+  (|mainFrame| (|page| *web-view*)))
 
 (defun ini ()
   (qconnect (frame) "javaScriptWindowObjectCleared()"
             (lambda ()
-              (! "addToJavaScriptWindowObject" (frame) "Lisp" *webkit-bridge*)))
+              (|addToJavaScriptWindowObject| (frame) "Lisp" *webkit-bridge*)))
   (qconnect *network-manager* "finished(QNetworkReply*)" 'download-finished)
-  (! "setUrl" *web-view* (qnew "QUrl(QString)" "examples-browser.htm"))
-  (! "showMaximized" *web-view*))
+  (|setUrl| *web-view* (qnew "QUrl(QString)" "examples-browser.htm"))
+  (|showMaximized| *web-view*))
 
 ;;; download
 
@@ -44,14 +47,14 @@
          (request "QNetworkRequest(QUrl)" qurl)
          (qid "QVariant(QString)" id)
          (qname "QVariant(QString)" name))
-    (let ((reply (! "get" *network-manager* request)))
+    (let ((reply (|get| *network-manager* request)))
       ;; dynamic properties
-      (! "setProperty" reply "id" qid)
-      (! "setProperty" reply "cache-name" qname))))
+      (|setProperty| reply "id" qid)
+      (|setProperty| reply "cache-name" qname))))
 
 (defun download-finished (reply)
-  (! "deleteLater" reply) ; QNetworkReply*: heap result, delete manually
-  (let ((error (! "error" reply)))
+  (|deleteLater| reply) ; QNetworkReply*: heap result, delete manually
+  (let ((error (|error| reply)))
     (if (= |QNetworkReply.NoError| error)
         (save-data reply)
         (show-download-error error))))
@@ -60,35 +63,37 @@
   (format nil "cache/~A" name))
 
 (defun save-data (reply)
-  (let ((file (cache-file (! ("toString" ("property" "cache-name") reply))))) ; dynamic property
+  (let ((file (cache-file (|toString| (|property| reply "cache-name"))))) ; dynamic property
     (ensure-directories-exist file)
     (with-open-file (s file :direction :output :if-exists :supersede
                        :element-type '(signed-byte 8))
-      (write-sequence (! "readAll" reply) s)))
+      (write-sequence (|readAll| reply) s)))
   (when (zerop (decf *files-left*))
-    (load* (! ("toString" ("property" "id") reply)) ; dynamic property
+    (load* (|toString| (|property| reply "id")) ; dynamic property
            *ini-file*)))
 
 (let (top-level-widgets)
   (defun load* (id file)
     (load file)
-    (let ((latest (first (sort (! "topLevelWidgets" "QApplication") '> :key 'qt-object-unique))))
+    (let ((latest (first (sort (|topLevelWidgets.QApplication|) '> :key 'qt-object-unique))))
       (push (cons id latest)
             top-level-widgets)
-      (x:do-with latest "show" "raise")))
+      (x:do-with latest |show| |raise|)))
   (defun load/show (id file)
     (let ((widget (cdr (find id top-level-widgets :test 'string= :key 'car))))
       (if widget
           (progn
-            (! (if (qget widget "minimized") "showNormal" "show") widget)
-            (! "raise" widget))
+            (if (|isMinimized| widget)
+                (|showNormal| widget)
+                (|show| widget))
+            (|raise| widget))
           (load* id file)))))
 
 (defun show-download-error (error)
   (let ((msg (x:when-it (find error (cdadr (qenums "QNetworkReply" "NetworkError")) :key 'cdr)
                (format nil (tr "Download error: <span style='color:red; font-weight:bold;'>~A</span>")
                        (car x:it)))))
-    (! "critical" "QMessageBox" nil "EQL" (or msg (tr "Unknown download error.")))))
+    (|critical.QMessageBox| nil "EQL" (or msg (tr "Unknown download error.")))))
 
 ;;; These functions can be called from JavaScript (see "README-GLUE-CODE.txt")
 
@@ -119,7 +124,7 @@
                                 :key (lambda (dir) (count #\/ (namestring dir))))))
       (when (ignore-errors (delete-file dir))
         (incf ds)))
-    (! "setPlainText" (! "findFirstElement" (frame) "#message")
+    (|setPlainText| (|findFirstElement| (frame) "#message")
        (format nil "deleted: ~D file~:P, ~D director~:@P" fs ds))))
 
 (ini)

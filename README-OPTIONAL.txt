@@ -29,7 +29,7 @@ If you want to add the wrappers permanently, build EQL as usual, then run
 
 Re-link EQL doing something like:
 
-  touch eql.cpp
+  touch eql.cpp (or remove "tmp/eql.o*")
   qmake eql_lib.pro
   make
 

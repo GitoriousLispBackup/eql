@@ -15,6 +15,16 @@ Change to eql/src/ and do:
     module_network.pro
     module_...
 
+Optionally (integrate wrapper functions):
+
+4) eql make-eql-lib-wrappers.lisp
+
+5) re-link EQL library:
+
+    touch eql.cpp (or remove "tmp/eql.o*")
+    qmake eql_lib.pro
+    make
+
 
 
 IMPORTANT NOTES

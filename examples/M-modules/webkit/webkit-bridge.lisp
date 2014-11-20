@@ -2,6 +2,9 @@
 ;;;
 ;;; depends on small plugin, see "lib/"
 
+#-qt-wrapper-functions ; see README-OPTIONAL.txt
+(load (in-home "src/lisp/all-wrappers"))
+
 #+win32 (si:trap-fpe 'floating-point-underflow nil) ; for QWebInspector
 
 (qrequire :webkit)
@@ -14,17 +17,17 @@
 (defvar eql-user::*clone-count*   0)                               ; (see above)
 
 (defun frame ()
-  (! ("mainFrame" "page" *web-view*)))
+  (|mainFrame| (|page| *web-view*)))
 
 (defun ini ()
   (qconnect (frame) "javaScriptWindowObjectCleared()"
             (lambda ()
-              (! "addToJavaScriptWindowObject" (frame) "Lisp"    eql-user::*webkit-bridge*) ; for examples 1, 2, 3
-              (! "addToJavaScriptWindowObject" (frame) "WebView" *web-view*)))              ; for examples 4, 5
-  (! "setUrl" *web-view* (qnew "QUrl(QString)" "webkit-bridge.htm"))
-  (when (find "debug" (! "arguments" "QApplication") :test 'string=)
+              (|addToJavaScriptWindowObject| (frame) "Lisp"    eql-user::*webkit-bridge*) ; for examples 1, 2, 3
+              (|addToJavaScriptWindowObject| (frame) "WebView" *web-view*)))              ; for examples 4, 5
+  (|setUrl| *web-view* (qnew "QUrl(QString)" "webkit-bridge.htm"))
+  (when (find "debug" (|arguments.QCoreApplication|) :test 'string=)
     (inspector))
-  (! "show" *web-view*))
+  (|show| *web-view*))
 
 ;;; clone me
 
@@ -35,7 +38,7 @@
   (in-package #.*clone-name*)
   (use-package :eql)
   (load "webkit-bridge")
-  (! "setWindowTitle" (symbol-value (find-symbol "*WEB-VIEW*" #.*clone-name*))
+  (|setWindowTitle| (symbol-value (find-symbol "*WEB-VIEW*" #.*clone-name*))
      #.*clone-name*)
   "(clone)")
 
@@ -51,7 +54,7 @@
   (qmsg (cons now arguments))
   (mapcar (lambda (arg)
             (if (qt-object-p arg)
-                (! "toString" arg)
+                (|toString| arg)
                 (princ-to-string arg)))
           (cons now arguments)))
 
@@ -67,7 +70,7 @@
   "Qt: void flipValue(QWebElement)"
   ;; indirection fun: a 'value' of an <input> element can only be changed through JavaScript
   (flet ((js (code)
-           (! ("toString" ("evaluateJavaScript" code) web-element))))
+           (|toString| (|evaluateJavaScript| web-element code))))
     (js (format nil "this.value = ~S" (reverse (js "this.value"))))))
 
 (ini)

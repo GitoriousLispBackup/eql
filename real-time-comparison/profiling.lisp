@@ -14,6 +14,11 @@
 ;;; would be much slower than EQL.
 ;;;
 
+#+eql
+(progn
+  #-qt-wrapper-functions ; see README-OPTIONAL.txt
+  (load (in-home "src/lisp/all-wrappers")))
+
 #-eql
 (pushnew :common-qt *features*)
 
@@ -96,10 +101,10 @@
 #+eql
 (defun new-wiggly ()
   (x:let-it (qnew "QWidget"
-                  "font" (x:let-it (! "font" "QApplication")
-                           (! "setPointSize" x:it (+ 20 (! "pointSize" x:it))))
+                  "font" (x:let-it (|font.QApplication|)
+                           (|setPointSize| x:it (+ 20 (|pointSize| x:it))))
                   "autoFillBackground" t)
-    (! "setBackgroundRole" x:it |QPalette.Light|)
+    (|setBackgroundRole| x:it |QPalette.Light|)
     (qoverride x:it "paintEvent(QPaintEvent*)" 'paint)))
 
 #+eql
@@ -109,13 +114,13 @@
         *timer*  (qnew "QTimer"))
   (let ((dlg  (qnew "QDialog" "size" (list 600 200)))
         (vbox (qnew "QVBoxLayout")))
-    (! "setLayout" dlg vbox)
+    (|setLayout| dlg vbox)
     (dolist (w (list *wiggly* *edit*))
-      (! "addWidget" vbox w))
-    (qset *edit* "text" "1234567890987654321")
+      (|addWidget| vbox w))
+    (|setText| *edit* "1234567890987654321")
     (qconnect *timer* "timeout()" 'timeout)
-    (! "start" *timer* 10)
-    (x:do-with dlg "show" "raise")))
+    (|start| *timer* 10)
+    (x:do-with dlg |show| |raise|)))
 
 #+common-qt
 (let (painter pen metrics)
@@ -150,26 +155,26 @@
     (unless painter
       (setf painter (qnew "QPainter")
             pen     (qnew "QPen")
-            metrics (qnew "QFontMetrics(QFont)" (qget *wiggly* "font"))))
-    (let* ((text (qget *edit* "text"))
-           (x (/ (- (qget *wiggly* "width")
-                    (! "width(QString)" metrics text))
+            metrics (qnew "QFontMetrics(QFont)" (|font| *wiggly*))))
+    (let* ((text (|text| *edit*))
+           (x (/ (- (|width| *wiggly*)
+                    (|width(QString)| metrics text))
                  2))
-           (y (/ (- (+ (qget *wiggly* "height") (! "ascent" metrics))
-                    (! "descent" metrics))
+           (y (/ (- (+ (|height| *wiggly*) (|ascent| metrics))
+                    (|descent| metrics))
                  2))
-           (h (! "height" metrics)))
-      (! "begin(QWidget*)" painter *wiggly*)
+           (h (|height| metrics)))
+      (|begin(QWidget*)| painter *wiggly*)
       (dotimes (i (length text))
         (let ((ix (mod (+ i *step*) 16))
               (ch (char text i)))
-          (! "setColor" pen (! "fromHsv" "QColor" (* 16 (- 15 ix)) 255 191))
+          (|setColor| pen (|fromHsv.QColor| (* 16 (- 15 ix)) 255 191))
           (x:do-with painter
-            ("setPen(QPen)" pen)
-            ("drawText(QPoint,QString)" (list (floor x) (floor (- y (/ (* h (svref *sinus* ix)) 400))))
-                                        (string ch)))
-          (incf x (! "width(QChar)" metrics ch))))
-      (! "end" painter))))
+            (|setPen(QPen)| pen)
+            (|drawText(QPoint...)| (list (floor x) (floor (- y (/ (* h (svref *sinus* ix)) 400))))
+                                   (string ch)))
+          (incf x (|width(QChar)| metrics ch))))
+      (|end| painter))))
 
 (defvar *count* 0)
 (defvar *max*   1000)
@@ -188,7 +193,7 @@
     (report)
     (qq))
   (incf *step*)
-  (! "update" *wiggly*))
+  (|update| *wiggly*))
 
 (profile
   paint

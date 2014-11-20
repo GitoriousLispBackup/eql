@@ -29,7 +29,7 @@
 ;;;
 ;;; ITERATE ------------------------------------------------------------
 ;;;
-;;; (iterate-elements "A" (! "setOuterXml" element text)) ; unlink
+;;; (iterate-elements "A" (|setOuterXml| element text)) ; unlink
 ;;;
 
 #+win32 (si:trap-fpe 'floating-point-underflow nil) ; for QWebInspector
@@ -45,10 +45,10 @@
 (defmacro iterate-elements (tag/selector &body body)
   "Iterates over web elements of QWebFrame, locally binding ELEMENT to QWebElement, and TEXT to its plain text."
   (let ((i (gensym)))
-    `(let ((elements (! "findAllElements" (frame) ,tag/selector)))
-       (dotimes (,i (! "count" elements))
-         (let* ((element (! "at" elements ,i))
-                (text (! "toPlainText" element)))
+    `(let ((elements (|findAllElements| (frame) ,tag/selector)))
+       (dotimes (,i (|count| elements))
+         (let* ((element (|at| elements ,i))
+                (text (|toPlainText| element)))
            ,@body)))))
 
 (defun os-pathname (name)
@@ -59,31 +59,31 @@
 
 (defun set-url (name)
   (unless (x:empty-string name)
-    (! "setWindowTitle" *web-view* name)
+    (|setWindowTitle| *web-view* name)
     (qlet ((url "QUrl(QString)" name))
       (x:do-with *web-view*
-        ("load(QUrl)" url)
-        ("show")))))
+        (|load(QUrl)| url)
+        (|show|)))))
 
 (defun open-url ()
-  (let ((name (! "getText" "QInputDialog" *web-view* nil (tr "Enter URL:") |QLineEdit.Normal|
-                 "http://planet.lisp.org/"
-                 nil))) ; ok
+  (let ((name (|getText.QInputDialog| *web-view* nil (tr "Enter URL:") |QLineEdit.Normal|
+                                      "http://planet.lisp.org/"
+                                      nil))) ; ok
     (when (qok)
       (set-url name))))
 
 (let ((filter "Html files (*.htm *.html)"))
   (defun open-file ()
-    (set-url (! "getOpenFileName" "QFileDialog" nil nil nil filter)))
+    (set-url (|getOpenFileName.QFileDialog| nil nil nil filter)))
   (defun save-file ()
-    (let ((file (! "getSaveFileName" "QFileDialog" nil nil nil filter)))
+    (let ((file (|getSaveFileName.QFileDialog| nil nil nil filter)))
       (unless (x:empty-string file)
         (with-open-file (s (os-pathname file) :direction :output :if-exists :supersede)
-          (write-string (! "toHtml" (frame)) s)
+          (write-string (|toHtml| (frame)) s)
           file)))))
 
 (defun frame ()
-  (! ("mainFrame" "page" *web-view*)))
+  (|mainFrame| (|page| *web-view*)))
 
 (defun to-string (x)
   (cond ((stringp x)
@@ -94,21 +94,21 @@
          "*")))
 
 (defun count* (&optional (tag/selector "*"))
-  (! ("count" ("findAllElements" (to-string tag/selector)) (frame))))
+  (|count| (|findAllElements| (frame) (to-string tag/selector))))
 
 (defun strip (tag/selector &optional attribute value)
   "Removes all web elements matching tag/selector. Returns number of removed elements."
   (let ((removed 0))
     (flet ((rm (el)
              (incf removed)
-             (! "removeFromDocument" el)))
+             (|removeFromDocument| el)))
       (let ((attr (to-string attribute)))
         (iterate-elements (to-string tag/selector)
           (if (eql :text attribute)
               (when (search value text :test 'string-equal)
                 (rm element))
               (when (or (not attribute)
-                        (string-equal value (! "attribute" element attr)))
+                        (string-equal value (|attribute| element attr)))
                 (rm element))))))
     removed))
 
@@ -117,14 +117,14 @@
   (qlet ((dialog "QDialog")
          (layout "QVBoxLayout(QWidget*)" dialog)
          (view   "QWebView"))
-    (! "addWidget" layout view)
-    (! "setHtml" view html)
-    (! "exec" dialog))) ; delete on closing (see QLET)
+    (|addWidget| layout view)
+    (|setHtml| view html)
+    (|exec| dialog))) ; delete on closing (see QLET)
 
 (defun view (tag/selector &optional attribute value)
   "Displays 'outerHtml' of first tag/selector found."
   (flet ((view* (el)
-           (web-view-dialog (! "toOuterXml" el))
+           (web-view-dialog (|toOuterXml| el))
            (return-from view)))
     (let ((attr (to-string attribute)))
       (iterate-elements (to-string tag/selector)
@@ -132,7 +132,7 @@
             (when (search value text :test 'string-equal)
               (view* element))
             (when (or (not attribute)
-                      (string-equal value (! "attribute" element attr)))
+                      (string-equal value (|attribute| element attr)))
               (view* element)))))))
 
 (open-url)
