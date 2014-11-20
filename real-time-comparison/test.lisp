@@ -4,12 +4,12 @@
 
 (in-package :eql-user)
 
-(defvar *size* 2000) ; choose a number so that C++ will run at least several seconds
+(defvar *repeat* 2000) ; choose a number so that C++ will run at least several seconds
 
 (defun test ()
-  (let ((table (qnew "QTableWidget(int,int)" *size* 1))
+  (let ((table (qnew "QTableWidget(int,int)" 1000 1))
         (start (get-internal-real-time)))
-    (dotimes (n *size*)
+    (dotimes (n *repeat*)
       (dotimes (i 1000)
         (|setItem| table i 0 (qnew "QTableWidgetItem(QString)" "X")))
       (|clear| table))
@@ -30,7 +30,7 @@
                                      #+darwin "./test.app/Contents/MacOS/test ~A"
                                      #+linux  "./test ~A"
                                      #+win32  "test.exe ~A"
-                                     *size*))
+                                     *repeat*))
                     (|waitForReadyRead|)
                     (|readAllStandardOutput|))))))))
   (qmsg (princ (format nil "~%~%Real time EQL / C++: ~A / ~A = ~A~%~%"
