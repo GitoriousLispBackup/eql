@@ -155,7 +155,8 @@
     (when found
       (let ((tab-stop (1+ (apply 'max (mapcar (lambda (x) (length (car x))) found)))))
         (dolist (el found)
-          (format t "~%~A~VT~(~S~)" (car el) tab-stop (cdr el)))))))
+          (princ (format nil "~%~A~VT~(~S~)" ; "~VT" doesn't work on all terminals
+                         (car el) tab-stop (cdr el))))))))
 
 (defun qfind-bound* (&optional class-name)
   "args: (&optional class-name)
