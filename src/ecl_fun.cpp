@@ -1769,15 +1769,15 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
     ///     (qfun item "setText" 0 "Some objects are EQL.")
     ///     (qfun "QDateTime" "currentDateTime")            ; static method
     ///     (qfun slider "valueChanged" 10)                 ; emit signal
-    ///     ;;;
-    ///     ;;; alternative 1: (macro '!')
-    ///     ;;;
+    ///     
+    ///     ;; alternative 1: (macro '!')
+    ///     
     ///     (! "setText" item 0 "Some objects are EQL.")
     ///     (! "currentDateTime" "QDateTime")
     ///     (! "valueChanged" slider 10)
-    ///     ;;;
-    ///     ;;; alternative 2: (wrapper functions)
-    ///     ;;;
+    ///     
+    ///     ;; alternative 2: (wrapper functions)
+    ///     
     ///     (|setText| item 0 "Some objects are EQL.")
     ///     (|currentDateTime.QDateTime|)
     ///     (|valueChanged| slider 10)
@@ -2056,7 +2056,7 @@ void callConnectFun(void* fun, const StrList& types, void** args) {
 cl_object qoverride(cl_object l_obj, cl_object l_name, cl_object l_fun) {
     /// args: (object name function)
     /// Sets a Lisp function to be called on a virtual Qt method.<br>To remove a function, pass <code>NIL</code> instead of the function argument.<br><br>If you call <code>qcall-default</code> anywhere inside your overridden function, the base implementation will be called <b>afterwards</b>.<br>Instead of <code>qcall-default</code> you can directly call the base implementation, which is useful if you want to do post-processing of the returned value.
-    ///     (qoverride edit "keyPressEvent(QKeyEvent*)" (lambda (ev) (print (! "key" ev)) (qcall-default)))
+    ///     (qoverride edit "keyPressEvent(QKeyEvent*)" (lambda (ev) (print (|key| ev)) (qcall-default)))
     ecl_process_env()->nvalues = 1;
     QtObject o = toQtObject(l_obj);
     void* fun = (Cnil == l_fun) ? 0 : getLispFun(l_fun);
@@ -2252,7 +2252,9 @@ cl_object qload_cpp(cl_object l_lib_name, cl_object l_unload) { /// qload-c++
     /// args: (library-name &optional unload)
     /// Loads a custom Qt/C++ plugin (see <code>Qt_EQL_dynamic/</code>).<br>The <code>library-name</code> has to be passed as path to the plugin, without file ending.<br><br>This offers a simple way to extend your application with your own Qt/C++ functions.<br>The plugin will be reloaded (if supported by the OS) every time you call this function (Linux: see also <code>qauto-reload-c++</code>).<br>If the <code>unload</code> argument is not <code>NIL</code>, the plugin will be unloaded (if supported by the OS).
     ///     (defparameter *c++* (qload-c++ "eql_cpp")) ; load (Linux: see also QAUTO-RELOAD-C++)
+    ///     
     ///     (qapropos nil *c++*)                       ; documentation
+    ///     
     ///     (! "mySpeedyQtFunction" (:qt *c++*))       ; call library function (note :qt)
     static QHash<QString, QLibrary*> libraries;
     QString libName = toQString(l_lib_name);
@@ -2352,8 +2354,8 @@ cl_object qt_object_name(cl_object l_obj) {
 cl_object qt_object_x(cl_object l_obj) { /// qt-object-?
     /// args: (object)
     /// Returns the specific <code>qt-object</code> of a generic <code>qt-object</code>.<br>Works for QObject and QEvent inherited classes only.
-    ///     (qt-object-? (! "parentWidget" widget))
-    ///     (qt-object-? (! ("widget" ("itemAt" 0) box-layout))
+    ///     (qt-object-? (|parentWidget| widget))
+    ///     (qt-object-? (|widget| (|itemAt| box-layout 0)))
     ///     (qt-object-? event)
     ecl_process_env()->nvalues = 1;
     QtObject o = toQtObject(l_obj);
@@ -2635,7 +2637,9 @@ cl_object qsingle_shot2(cl_object l_msec, cl_object l_fun) {
     /// args: (milliseconds function)
     /// A single shot timer similar to <code>QTimer::singleShot()</code>.
     ///     (qsingle-shot 0 'on-qt-idle)
-    ///     (let ((ms 500)) (qsingle-shot ms (lambda () (qmsg ms))))
+    ///     
+    ///     (let ((ms 500))
+    ///     &nbsp;&nbsp;(qsingle-shot ms (lambda () (qmsg ms))))
     ecl_process_env()->nvalues = 1;
     if(l_fun != Cnil) {
         new SingleShot(toInt(l_msec), l_fun); // see "delete this;" in "single_shot.h"
@@ -2647,6 +2651,8 @@ cl_object qok() {
     /// args: ()
     /// Needed to get the boolean <b>ok</b> value in cases like this:
     ///    (! "getFont(bool*)" "QFontDialog" nil)
+    ///
+    ///    (|getFont.QFontDialog| nil) ; NIL needed for &lt;bool*&gt;
     ecl_process_env()->nvalues = 1;
     return _ok_ ? Ct : Cnil; }
 

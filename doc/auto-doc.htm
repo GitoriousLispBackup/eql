@@ -3,6 +3,7 @@
 <p>Defines Lisp methods for all Qt methods/signals/slots of given library.<br>(See example <code>Qt_EQL_dynamic/trafficlight/</code>).</p>
 <pre>
   (define-qt-wrappers *c++*) ; generate wrappers (see "Qt_EQL_dynamic/")
+  
   (my-qt-function *c++* x y) ; instead of: (! "myQtFunction" (:qt *c++*) x y)
 </pre>
 </p><br>
@@ -10,8 +11,14 @@
 <b>DEFVAR-UI (main-widget &rest variables)</b>
 <p>This macro simplifies the definition of UI variables:</p>
 <pre>
-  (defvar-ui *main* *line-edit* ...) ; this will expand to:
-  (progn (defvar *line-edit* (qfind-child *main* "line_edit")) ...)
+  (defvar-ui *main* *label* *line-edit*...)
+  
+  ;; the above will expand to:
+  
+  (progn
+  &nbsp;&nbsp;(defvar *label*     (qfind-child *main* "label"))
+  &nbsp;&nbsp;(defvar *line-edit* (qfind-child *main* "line_edit"))
+  &nbsp;&nbsp;...)
 </pre>
 </p><br>
 <p>
@@ -49,6 +56,7 @@
 <p><b>Linux only.</b><br>Extends <code>qload-c++</code> (see <code>Qt_EQL_dynamic/</code>).<br>Defines a global variable (see return value of <code>qload-c++</code>), which will be updated on every change of the C++ plugin (e.g. after recompiling, the plugin will automatically be reloaded, and the <code>variable</code> will be set to its new value).<br>If you want to be notified on every change of the plugin, set <code>*&lt;variable&gt;-reloaded*</code>. It will then be called after reloading, passing both the variable name and the plugin name.<br>See <code>qload-c++</code> for an example how to call plugin functions.</p>
 <pre>
   (qauto-reload-c++ *c++* "eql_cpp")
+  
   (setf *c++-reloaded* (lambda (var lib) (qapropos nil (symbol-value var)))) ; optional: set a notifier
 </pre>
 </p><br>
@@ -172,15 +180,15 @@
   (qfun item "setText" 0 "Some objects are EQL.")
   (qfun "QDateTime" "currentDateTime")            ; static method
   (qfun slider "valueChanged" 10)                 ; emit signal
-  ;;;
-  ;;; alternative 1: (macro '!')
-  ;;;
+  
+  ;; alternative 1: (macro '!')
+  
   (! "setText" item 0 "Some objects are EQL.")
   (! "currentDateTime" "QDateTime")
   (! "valueChanged" slider 10)
-  ;;;
-  ;;; alternative 2: (wrapper functions)
-  ;;;
+  
+  ;; alternative 2: (wrapper functions)
+  
   (|setText| item 0 "Some objects are EQL.")
   (|currentDateTime.QDateTime|)
   (|valueChanged| slider 10)
@@ -190,15 +198,19 @@
 <b>QINVOKE-METHOD* (object cast-class-name function-name &rest arguments)</b>
 <br>
 <b>QFUN*</b>
-<p>Similar to <code>qinvoke-method</code>, additionally passing a class name, enforcing a cast to that class.<br>Note that this cast is not type safe (the same as a C cast, so dirty hacks are possible).</p>
+<p>Similar to <code>qinvoke-method</code>, additionally passing a class name, enforcing a cast to that class.<br>Note that this cast is not type safe (the same as a C cast, so dirty hacks are possible).<br><br>Note: using the (recommended) wrapper functions (see <code>qfun</code>), casts are applied automatically where needed.</p>
 <pre>
   (qfun* graphics-text-item "QGraphicsItem" "setPos" (list x y)) ; multiple inheritance problem
-  (qfun* event "QKeyEvent" "key") ; not needed with QADD-EVENT-FILTER (see also QT-OBJECT-?)
-  ;;;
-  ;;; alternatively:
-  ;;;
-  (! "setPos" ("QGraphicsItem" graphics-text-item) (list x y)) ; multiple inheritance problem
-  (! "key" ("QKeyEvent" event)) ; not needed with QADD-EVENT-FILTER (see also QT-OBJECT-?)
+  (qfun* event "QKeyEvent" "key")                                ; not needed with QADD-EVENT-FILTER
+  
+  ;; alternatively:
+  
+  (! "setPos" ("QGraphicsItem" graphics-text-item) (list x y))
+  (! "key" ("QKeyEvent" event))
+  
+  ;; better/recommended:
+  
+  (|setPos| graphics-text-item (list x y))
 </pre>
 </p><br>
 <p>
@@ -208,9 +220,9 @@
 <p>Use this variant to call user defined functions (declared <code>Q_INVOKABLE</code>), slots, signals from external C++ classes.<br><br>In order to call ordinary functions, slots, signals from external C++ classes, just use the ordinary <code>qfun</code>.</p>
 <pre>
   (qfun+ *qt-main* "foo") ; see Qt_EQL, Qt_EQL_dynamic
-  ;;;
-  ;;; alternatively:
-  ;;;
+  
+  ;; alternatively:
+  
   (! "foo" (:qt *qt-main*))
 </pre>
 </p><br>
@@ -224,21 +236,31 @@
   (qfuns object ("funA" 1) ("funB" a b c)) ; expands to: (qfun (qfun object "funA" 1) "funB" a b c)
   (qfuns "QApplication" "font" "family")
   (qfuns *table-view* "model" ("index" 0 2) "data" "toString")
-  ;;;
-  ;;; alternatively:
-  ;;;
-  (! ("funC" "funB" "funA" object))      ; expands to: (qfun (qfun (qfun object "funA") "funB") "funC")
-  (! (("funB" a b c) ("funA" 1) object)) ; expands to: (qfun (qfun object "funA" 1) "funB" a b c)
+  
+  ;; alternatively:
+  
+  (! ("funC" "funB" "funA" object))
+  (! (("funB" a b c) ("funA" 1) object))
   (! ("family" "font" "QApplication"))
   (! ("toString" "data" ("index" 0 2) "model" *table-view*))
+  
+  ;; using wrapper functions, the above reads:
+  
+  (|funC| (|funB| (|funA| object)))
+  (|funB| (|funA| object 1) a b c)
+  (|family| (|font.QApplication|))
+  (|toString| (|data| (|index| (|model| *table-view*) 0 2)))
 </pre>
 </p><br>
 <p>
 <b>QLET (((var exp) ...) ...)</b>
 <p>Similar to <code>let*</code>. Creates temporary Qt objects, deleting them at the end of the <code>qlet</code> body.<br>If <code>exp</code> is a string, it will be substituted with <code>(qnew exp)</code>, optionally including constructor arguments.</p>
 <pre>
-  (qlet ((painter "QPainter")) ...)
-  (qlet ((reg-exp "QRegExp(QString)" "^\\S+$")) ...)
+  (qlet ((painter "QPainter"))
+  &nbsp;&nbsp;/* body */)
+  
+  (qlet ((reg-exp "QRegExp(QString)" "^\\S+$"))
+  &nbsp;&nbsp;/* body */)
 </pre>
 </p><br>
 <p>
@@ -246,7 +268,9 @@
 <p>Loads a custom Qt/C++ plugin (see <code>Qt_EQL_dynamic/</code>).<br>The <code>library-name</code> has to be passed as path to the plugin, without file ending.<br><br>This offers a simple way to extend your application with your own Qt/C++ functions.<br>The plugin will be reloaded (if supported by the OS) every time you call this function (Linux: see also <code>qauto-reload-c++</code>).<br>If the <code>unload</code> argument is not <code>NIL</code>, the plugin will be unloaded (if supported by the OS).</p>
 <pre>
   (defparameter *c++* (qload-c++ "eql_cpp")) ; load (Linux: see also QAUTO-RELOAD-C++)
+  
   (qapropos nil *c++*)                       ; documentation
+  
   (! "mySpeedyQtFunction" (:qt *c++*))       ; call library function (note :qt)
 </pre>
 </p><br>
@@ -294,13 +318,15 @@
 <p>Needed to get the boolean <b>ok</b> value in cases like this:</p>
 <pre>
   (! "getFont(bool*)" "QFontDialog" nil)
+  
+  (|getFont.QFontDialog| nil) ; NIL needed for &lt;bool*&gt;
 </pre>
 </p><br>
 <p>
 <b>QOVERRIDE (object name function)</b>
 <p>Sets a Lisp function to be called on a virtual Qt method.<br>To remove a function, pass <code>NIL</code> instead of the function argument.<br><br>If you call <code>qcall-default</code> anywhere inside your overridden function, the base implementation will be called <b>afterwards</b>.<br>Instead of <code>qcall-default</code> you can directly call the base implementation, which is useful if you want to do post-processing of the returned value.</p>
 <pre>
-  (qoverride edit "keyPressEvent(QKeyEvent*)" (lambda (ev) (print (! "key" ev)) (qcall-default)))
+  (qoverride edit "keyPressEvent(QKeyEvent*)" (lambda (ev) (print (|key| ev)) (qcall-default)))
 </pre>
 </p><br>
 <p>
@@ -352,8 +378,10 @@
 <b>QRUN*</b>
 <p>Convenience macro for <code>qrun</code>, wrapping <code>body</code> in a closure (passing arguments, return values).</p>
 <pre>
-  (qrun* (qset ui:*progress-bar* "value" value))
-  (let ((item (qrun* (qnew "QTableWidgetItem")))) ...) ; return value(s)
+  (qrun* (|setValue| ui:*progress-bar* value))
+  
+  (let ((item (qrun* (qnew "QTableWidgetItem")))) ; return value(s)
+  &nbsp;&nbsp;/* body */)
 </pre>
 </p><br>
 <p>
@@ -395,7 +423,9 @@
 <p>A single shot timer similar to <code>QTimer::singleShot()</code>.</p>
 <pre>
   (qsingle-shot 0 'on-qt-idle)
-  (let ((ms 500)) (qsingle-shot ms (lambda () (qmsg ms))))
+  
+  (let ((ms 500))
+  &nbsp;&nbsp;(qsingle-shot ms (lambda () (qmsg ms))))
 </pre>
 </p><br>
 <p>
@@ -424,8 +454,8 @@
 <b>QT-OBJECT-? (object)</b>
 <p>Returns the specific <code>qt-object</code> of a generic <code>qt-object</code>.<br>Works for QObject and QEvent inherited classes only.</p>
 <pre>
-  (qt-object-? (! "parentWidget" widget))
-  (qt-object-? (! ("widget" ("itemAt" 0) box-layout))
+  (qt-object-? (|parentWidget| widget))
+  (qt-object-? (|widget| (|itemAt| box-layout 0)))
   (qt-object-? event)
 </pre>
 </p><br>

@@ -12,8 +12,11 @@
 (defmacro qlet ((&rest pairs) &body body)
   "args: (((var exp) ...) ...)
    Similar to <code>let*</code>. Creates temporary Qt objects, deleting them at the end of the <code>qlet</code> body.<br>If <code>exp</code> is a string, it will be substituted with <code>(qnew exp)</code>, optionally including constructor arguments.
-       (qlet ((painter \"QPainter\")) ...)
-       (qlet ((reg-exp \"QRegExp(QString)\" \"^\\\\S+$\")) ...)"
+       (qlet ((painter \"QPainter\"))
+       &nbsp;&nbsp;/* body */)
+       
+       (qlet ((reg-exp \"QRegExp(QString)\" \"^\\\\S+$\"))
+       &nbsp;&nbsp;/* body */)"
   (let ((vars (mapcar (lambda (x) (if (consp x) (first x) x)) pairs))
         (exps (mapcar (lambda (x)
                         (if (consp x)
@@ -40,13 +43,20 @@
        (qfuns object (\"funA\" 1) (\"funB\" a b c)) ; expands to: (qfun (qfun object \"funA\" 1) \"funB\" a b c)
        (qfuns \"QApplication\" \"font\" \"family\")
        (qfuns *table-view* \"model\" (\"index\" 0 2) \"data\" \"toString\")
-       ;;;
-       ;;; alternatively:
-       ;;;
-       (! (\"funC\" \"funB\" \"funA\" object))      ; expands to: (qfun (qfun (qfun object \"funA\") \"funB\") \"funC\")
-       (! ((\"funB\" a b c) (\"funA\" 1) object)) ; expands to: (qfun (qfun object \"funA\" 1) \"funB\" a b c)
+       
+       ;; alternatively:
+       
+       (! (\"funC\" \"funB\" \"funA\" object))
+       (! ((\"funB\" a b c) (\"funA\" 1) object))
        (! (\"family\" \"font\" \"QApplication\"))
-       (! (\"toString\" \"data\" (\"index\" 0 2) \"model\" *table-view*))"
+       (! (\"toString\" \"data\" (\"index\" 0 2) \"model\" *table-view*))
+       
+       ;; using wrapper functions, the above reads:
+       
+       (|funC| (|funB| (|funA| object)))
+       (|funB| (|funA| object 1) a b c)
+       (|family| (|font.QApplication|))
+       (|toString| (|data| (|index| (|model| *table-view*) 0 2)))"
   (let (form)
     (dolist (fun functions)
       (setf form (append (list 'qfun (or form object)) (x:ensure-list fun))))
@@ -94,8 +104,14 @@
 (defmacro defvar-ui (main &rest names)
   "args: (main-widget &rest variables)
    This macro simplifies the definition of UI variables:
-       (defvar-ui *main* *line-edit* ...) ; this will expand to:
-       (progn (defvar *line-edit* (qfind-child *main* \"line_edit\")) ...)"
+       (defvar-ui *main* *label* *line-edit*...)
+       
+       ;; the above will expand to:
+       
+       (progn
+       &nbsp;&nbsp;(defvar *label*     (qfind-child *main* \"label\"))
+       &nbsp;&nbsp;(defvar *line-edit* (qfind-child *main* \"line_edit\"))
+       &nbsp;&nbsp;...)"
   `(progn
      ,@(mapcar (lambda (name)
                  `(defvar ,name (qfind-child ,main ,(string-downcase (substitute #\_ #\- (string-trim "*" (symbol-name name)))))))
@@ -369,14 +385,18 @@
 (defun qinvoke-method* (object cast-class-name function-name &rest arguments)
   "args: (object cast-class-name function-name &rest arguments)
    alias: qfun*
-   Similar to <code>qinvoke-method</code>, additionally passing a class name, enforcing a cast to that class.<br>Note that this cast is not type safe (the same as a C cast, so dirty hacks are possible).
+   Similar to <code>qinvoke-method</code>, additionally passing a class name, enforcing a cast to that class.<br>Note that this cast is not type safe (the same as a C cast, so dirty hacks are possible).<br><br>Note: using the (recommended) wrapper functions (see <code>qfun</code>), casts are applied automatically where needed.
        (qfun* graphics-text-item \"QGraphicsItem\" \"setPos\" (list x y)) ; multiple inheritance problem
-       (qfun* event \"QKeyEvent\" \"key\") ; not needed with QADD-EVENT-FILTER (see also QT-OBJECT-?)
-       ;;;
-       ;;; alternatively:
-       ;;;
-       (! \"setPos\" (\"QGraphicsItem\" graphics-text-item) (list x y)) ; multiple inheritance problem
-       (! \"key\" (\"QKeyEvent\" event)) ; not needed with QADD-EVENT-FILTER (see also QT-OBJECT-?)"
+       (qfun* event \"QKeyEvent\" \"key\")                                ; not needed with QADD-EVENT-FILTER
+       
+       ;; alternatively:
+       
+       (! \"setPos\" (\"QGraphicsItem\" graphics-text-item) (list x y))
+       (! \"key\" (\"QKeyEvent\" event))
+       
+       ;; better/recommended:
+       
+       (|setPos| graphics-text-item (list x y))"
   (%qinvoke-method object cast-class-name function-name arguments))
 
 (defun qinvoke-method+ (object function-name &rest arguments)
@@ -384,9 +404,9 @@
    alias: qfun+
    Use this variant to call user defined functions (declared <code>Q_INVOKABLE</code>), slots, signals from external C++ classes.<br><br>In order to call ordinary functions, slots, signals from external C++ classes, just use the ordinary <code>qfun</code>.
        (qfun+ *qt-main* \"foo\") ; see Qt_EQL, Qt_EQL_dynamic
-       ;;;
-       ;;; alternatively:
-       ;;;
+       
+       ;; alternatively:
+       
        (! \"foo\" (:qt *qt-main*))"
    (%qinvoke-method object :qt function-name arguments))
 
@@ -463,6 +483,7 @@
   "args: (qt-library)
    Defines Lisp methods for all Qt methods/signals/slots of given library.<br>(See example <code>Qt_EQL_dynamic/trafficlight/</code>).
        (define-qt-wrappers *c++*) ; generate wrappers (see \"Qt_EQL_dynamic/\")
+       
        (my-qt-function *c++* x y) ; instead of: (! \"myQtFunction\" (:qt *c++*) x y)"
   (let ((all-functions (cdar (qapropos* nil (ensure-qt-object qt-library)))))
     (dolist (functions '("Methods:" "Signals:" "Slots:"))
@@ -494,6 +515,7 @@
   "args: (variable library-name)
    <b>Linux only.</b><br>Extends <code>qload-c++</code> (see <code>Qt_EQL_dynamic/</code>).<br>Defines a global variable (see return value of <code>qload-c++</code>), which will be updated on every change of the C++ plugin (e.g. after recompiling, the plugin will automatically be reloaded, and the <code>variable</code> will be set to its new value).<br>If you want to be notified on every change of the plugin, set <code>*&lt;variable&gt;-reloaded*</code>. It will then be called after reloading, passing both the variable name and the plugin name.<br>See <code>qload-c++</code> for an example how to call plugin functions.
        (qauto-reload-c++ *c++* \"eql_cpp\")
+       
        (setf *c++-reloaded* (lambda (var lib) (qapropos nil (symbol-value var)))) ; optional: set a notifier"
   (let* ((name     (string-trim "*" (symbol-name variable)))
          (reloaded (intern (format nil "*~A-RELOADED*" name)))
@@ -517,8 +539,10 @@
   "args: (&body body)
    alias: qrun*
    Convenience macro for <code>qrun</code>, wrapping <code>body</code> in a closure (passing arguments, return values).
-       (qrun* (qset ui:*progress-bar* \"value\" value))
-       (let ((item (qrun* (qnew \"QTableWidgetItem\")))) ...) ; return value(s)"
+       (qrun* (|setValue| ui:*progress-bar* value))
+       
+       (let ((item (qrun* (qnew \"QTableWidgetItem\")))) ; return value(s)
+       &nbsp;&nbsp;/* body */)"
   (let ((values (gensym)))
     `(let (,values)
        (qrun (lambda ()
