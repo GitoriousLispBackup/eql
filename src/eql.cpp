@@ -16,7 +16,7 @@ EQL::EQL() : QObject() {
         cl_boot(1, QCoreApplication::argv()); }
     iniCLFunctions();
     LObjects::ini(this);
-    read_VV(OBJNULL, ini_EQL); } // see src/make-eql-lib.lisp
+    read_VV(OBJNULL, ini_EQL); } // see "src/make-eql-lib.lisp"
 
 EQL::~EQL() {
     LObjects::cleanUp();

@@ -136,7 +136,10 @@
 </p><br>
 <p>
 <b>QFIND-BOUND (&optional class-name)</b>
-<p>Returns both the Qt class names and the respective Lisp variables.<br>Optionally finds the occurrencies of the passed Qt class name only.</p>
+<p>Finds all symbols bound to Qt objects, returning both the Qt class names and the respective Lisp variables.<br>Optionally finds the occurrencies of the passed Qt class name only.</p>
+<pre>
+  (qfind-bound "QLineEdit")
+</pre>
 </p><br>
 <p>
 <b>QFIND-BOUND* (&optional class-name)</b>

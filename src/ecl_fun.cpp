@@ -95,6 +95,7 @@ void iniCLFunctions() {
     if(cl_find_package(eql) == Cnil) {
         cl_make_package(1, eql); }
     si_select_package(eql);
+    DEFUN ("%error-msg",             error_msg2,            2)
     DEFUN ("%make-qimage/dangerous", make_qimage_dangerous, 5)
     DEFUN ("no-qexec",               no_qexec,              0)
     DEFUN ("qadd-event-filter",      qadd_event_filter,     3)
@@ -153,6 +154,19 @@ QByteArray QtObject::className() const {
 
 // *** utilities ***
 
+static QByteArray toCString(cl_object l_str) {
+    QByteArray ba;
+    if(ECL_STRINGP(l_str)) {
+        if(ECL_BASE_STRING_P(l_str)) {
+            ba = QByteArray((char*)l_str->base_string.self, l_str->base_string.fillp); }
+        else {
+            uint l = l_str->string.fillp;
+            ba.reserve(l);
+            ecl_character* l_s = l_str->string.self;
+            for(uint i = 0; i < l; ++i) {
+                ba[i] = l_s[i]; }}}
+    return ba; }
+
 static cl_object from_cstring(const QByteArray& s) {
     cl_object l_s = ecl_alloc_simple_base_string(s.length());
     memcpy(l_s->base_string.self, s.constData(), s.length());
@@ -176,7 +190,7 @@ static void type_msg(const QByteArray& wanted, const QByteArray& got) {
 void error_msg(const char* fun, cl_object l_args) {
     STATIC_SYMBOL_PKG (s_break_on_errors, "*BREAK-ON-ERRORS*", "EQL")
     if(cl_symbol_value(s_break_on_errors) != Cnil) {
-        STATIC_SYMBOL_PKG (s_break, "%BREAK", "EQL") // see lisp/ini.lisp
+        STATIC_SYMBOL_PKG (s_break, "%BREAK", "EQL") // see "lisp/ini.lisp"
         cl_funcall(4,
                    s_break,
                    STRING("~%[EQL:err] ~A ~{~S~^ ~}~%"),
@@ -189,6 +203,11 @@ void error_msg(const char* fun, cl_object l_args) {
                   STRING("~%[EQL:err] ~A ~{~S~^ ~}~%"),
                   STRING(fun),
                   l_args); }}
+
+cl_object error_msg2(cl_object l_fun, cl_object l_args) { // to be called from Lisp (see "lisp/ini.lisp")
+    ecl_process_env()->nvalues = 1;
+    error_msg(toCString(l_fun), l_args);
+    return Cnil; }
 
 static char** to_cstring_ptr(cl_object l_str) {
     if(ECL_BASE_STRING_P(l_str)) {
@@ -232,7 +251,7 @@ static bool inherits(const QByteArray& sub, const QByteArray& super) {
         return true; }
     QByteArray upper(sub);
     while(!(upper = superClassName(upper)).isEmpty()) {
-        // multiple inheritance exceptions (see helper/multiple-inheritance.txt)
+        // multiple inheritance exceptions (see "helper/multiple-inheritance.txt")
         if("QGraphicsObject" == upper) {
             if("QObject" == super) {
                 return true; }
@@ -307,7 +326,7 @@ static cl_object qt_keyword() {
     return s_qt; }
 
 static cl_object make_vector() {
-    STATIC_SYMBOL_PKG (s_make_vector, "%MAKE-VECTOR", "EQL") // see lisp/ini.lisp
+    STATIC_SYMBOL_PKG (s_make_vector, "%MAKE-VECTOR", "EQL") // see "lisp/ini.lisp"
     cl_object l_vector = cl_funcall(1, s_make_vector);
     return l_vector; }
 
@@ -383,19 +402,6 @@ static QByteArray toQByteArray(cl_object l_vec) {
         ba.reserve(len);
         for(int i = 0; i < len; ++i) {
             ba[i] = toInt(ecl_aref(l_vec, i)); }}
-    return ba; }
-
-static QByteArray toCString(cl_object l_str) {
-    QByteArray ba;
-    if(ECL_STRINGP(l_str)) {
-        if(ECL_BASE_STRING_P(l_str)) {
-            ba = QByteArray((char*)l_str->base_string.self, l_str->base_string.fillp); }
-        else {
-            uint l = l_str->string.fillp;
-            ba.reserve(l);
-            ecl_character* l_s = l_str->string.self;
-            for(uint i = 0; i < l; ++i) {
-                ba[i] = l_s[i]; }}}
     return ba; }
 
 static QString toQString(cl_object l_str) {
@@ -1944,13 +1950,9 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
     error_msg("QINVOKE-METHOD", LIST4(l_obj, l_cast, l_name, l_args));
     return Cnil; }
 
-static void* getLispFun(cl_object l_fun) {
-    STATIC_SYMBOL (s_package, "*PACKAGE*");
-    STATIC_SYMBOL_PKG (s_get_function, "%GET-FUNCTION", "EQL") // see lisp/ini.lisp
-    cl_object l_ret = cl_funcall(3,
-                                 s_get_function,
-                                 l_fun,
-                                 cl_find_package(cl_symbol_value(s_package)));
+static void* ensurePersistentFunction(cl_object l_fun) {
+    STATIC_SYMBOL_PKG (s_ensure_persistent_function, "%ENSURE-PERSISTENT-FUNCTION", "EQL") // see "lisp/ini.lisp"
+    cl_object l_ret = cl_funcall(2, s_ensure_persistent_function, l_fun);
     return (Cnil == l_ret) ? 0 : (void*)l_ret; }
 
 cl_object qconnect2(cl_object l_caller, cl_object l_signal, cl_object l_receiver, cl_object l_slot) {
@@ -1971,7 +1973,7 @@ cl_object qconnect2(cl_object l_caller, cl_object l_signal, cl_object l_receiver
                         if(QObject::connect((QObject*)o1.pointer, SIG + signal, (QObject*)o2.pointer, SLO + slot)) {
                             return Ct; }}}}
             else if(Cnil == l_slot) {
-                void* fun = getLispFun(l_receiver);
+                void* fun = ensurePersistentFunction(l_receiver);
                 if(fun) {
                     if(DynObject::connect((QObject*)o1.pointer, SIG + signal, LObjects::dynObject, fun)) {
                         return Ct; }}}}}
@@ -1998,7 +2000,7 @@ cl_object qdisconnect2(cl_object l_caller, cl_object l_signal, cl_object l_recei
             slot = QMetaObject::normalizedSignature(slot);
             slot.prepend(SLO); }
         bool lisp = (l_receiver != Cnil) && !o2.pointer;
-        void* lisp_fun = lisp ? getLispFun(l_receiver) : 0;
+        void* lisp_fun = lisp ? ensurePersistentFunction(l_receiver) : 0;
         bool disconnected = false;
         if(!lisp) {
             if(QObject::disconnect((QObject*)o1.pointer,
@@ -2059,7 +2061,7 @@ cl_object qoverride(cl_object l_obj, cl_object l_name, cl_object l_fun) {
     ///     (qoverride edit "keyPressEvent(QKeyEvent*)" (lambda (ev) (print (|key| ev)) (qcall-default)))
     ecl_process_env()->nvalues = 1;
     QtObject o = toQtObject(l_obj);
-    void* fun = (Cnil == l_fun) ? 0 : getLispFun(l_fun);
+    void* fun = (Cnil == l_fun) ? 0 : ensurePersistentFunction(l_fun);
     if(o.pointer) {
         QByteArray name(QMetaObject::normalizedSignature(toCString(l_name)));
         uint id = LObjects::override_function_ids.value(name, 0);
@@ -2141,7 +2143,7 @@ cl_object qadd_event_filter(cl_object l_obj, cl_object l_ev, cl_object l_fun) {
     /// Convenience function. Adds a Lisp function to be called on a given event type.<br>If the object argument is <code>NIL</code>, the event will be captured for the whole application.<br>If the Lisp function returns <code>NIL</code>, the event will be processed by Qt afterwards.<br><br>Returns a handle which can be used to remove the filter, see <code>qremove-event-filter</code>.<br><br>See also <code>qoverride</code> for <code>QObject::eventFilter(QObject*,QEvent*)</code> and <br><code>QObject::installEventFilter(QObject*)</code>,<br><code>QObject::removeEventFilter(QObject*)</code>.<br><br>The event class corresponds to the respective event type (no cast needed).
     ///     (qadd-event-filter nil |QEvent.MouseButtonPress| (lambda (object mouse-event) (print object) nil))
     ecl_process_env()->nvalues = 1;
-    void* fun = getLispFun(l_fun);
+    void* fun = ensurePersistentFunction(l_fun);
     if(fun) {
         QObject* obj = 0;
         if(l_obj != Cnil) {
@@ -2704,7 +2706,7 @@ cl_object qrun_in_gui_thread2(cl_object l_function_or_closure, cl_object l_block
 // *** special extensions ***
 
 //
-// Contributed by Mark Cox, please see LICENSE-MAKE-QIMAGE.txt
+// Contributed by Mark Cox, please see "LICENSE-MAKE-QIMAGE.txt"
 //
 
 cl_object make_qimage_dangerous(cl_object l_vector, cl_object l_width, cl_object l_height, cl_object l_bytes_per_line, cl_object l_format) {

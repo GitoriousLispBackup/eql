@@ -117,24 +117,27 @@
                  `(defvar ,name (qfind-child ,main ,(string-downcase (substitute #\_ #\- (string-trim "*" (symbol-name name)))))))
                names)))
 
+(defun %reference-name ()
+  (format nil "%~A%" (gensym)))
+
 (defmacro qsingle-shot (ms fun)
+  ;; check for LAMBDA, #'LAMBDA
   (if (or (eql 'lambda (first fun))
           (and (listp (second fun))
-               (eql 'lambda (caadr fun)))) ; #'(lambda ())
-      (let ((fun* (gensym)))
-        `(let ((,fun* (intern ,(symbol-name fun*))))
-           (setf (symbol-function ,fun*) ,fun)
-           (%qsingle-shot ,ms ,fun*)))
-      `(%qsingle-shot ,ms ,fun)))
+               (eql 'lambda (caadr fun))))
+      ;; hold a reference (will be called later from Qt event loop)
+      `(%qsingle-shot ,ms (setf (symbol-function (intern ,(%reference-name))) ; lambda
+                                ,fun))
+      `(%qsingle-shot ,ms ,fun)))                                             ; 'foo
 
-(defun %get-function (fun pkg)
+(defun %ensure-persistent-function (fun)
   (typecase fun
-    (symbol
+    (symbol   ; 'foo
      fun)
-    (function
-     (let ((var (intern (symbol-name (gensym)) pkg)))
-       (setf (symbol-function var) fun)
-       var))))
+    (function ; lambda
+     ;; hold a reference (will be called later from Qt event loop)
+     (setf (symbol-function (intern (%reference-name)))
+           fun))))
 
 (defun %make-vector ()
   (make-array 0 :adjustable t :fill-pointer t))
@@ -166,7 +169,8 @@
 
 (defun qfind-bound (&optional class-name)
   "args: (&optional class-name)
-   Returns both the Qt class names and the respective Lisp variables.<br>Optionally finds the occurrencies of the passed Qt class name only."
+   Finds all symbols bound to Qt objects, returning both the Qt class names and the respective Lisp variables.<br>Optionally finds the occurrencies of the passed Qt class name only.
+       (qfind-bound \"QLineEdit\")"
   (let ((found (qfind-bound* class-name)))
     (when found
       (let ((tab-stop (1+ (apply 'max (mapcar (lambda (x) (length (car x))) found)))))
@@ -177,17 +181,20 @@
 (defun qfind-bound* (&optional class-name)
   "args: (&optional class-name)
    Like <code>qfind-bound</code>, but returning the results as list of conses."
-  (let (qt-objects)
-    (do-all-symbols (s)
-      (when (and (boundp s)
-                 (ignore-errors (ensure-qt-object (symbol-value s)))
-                 (or (not class-name)
-                     (string= class-name (qt-object-name (symbol-value s)))))
-        (pushnew s qt-objects)))
-    (stable-sort (sort (mapcar (lambda (s) (cons (qt-object-name (symbol-value s)) s))
-                               qt-objects)
-                       'string< :key 'cdr)
-                 'string< :key 'car)))
+  (if (and class-name
+           (not (qid class-name)))
+      (%error-msg "QFIND-BOUND" (list class-name))
+      (let (qt-objects)
+        (do-all-symbols (s)
+          (when (and (boundp s)
+                     (ignore-errors (ensure-qt-object (symbol-value s)))
+                     (or (not class-name)
+                         (string= class-name (qt-object-name (symbol-value s)))))
+            (pushnew s qt-objects)))
+        (stable-sort (sort (mapcar (lambda (s) (cons (qt-object-name (symbol-value s)) s))
+                                   qt-objects)
+                           'string< :key 'cdr)
+                     'string< :key 'car))))
 
 ;;; top-level / slime-mode processing Qt events (command line options "-qtpl" and "-slime")
 

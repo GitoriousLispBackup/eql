@@ -222,6 +222,7 @@ class QByteArray;
 class QObject;
 class QEvent;
 
+cl_object error_msg2            (cl_object, cl_object);
 cl_object make_qimage_dangerous (cl_object, cl_object, cl_object, cl_object, cl_object);
 cl_object no_qexec              ();
 cl_object qadd_event_filter     (cl_object, cl_object, cl_object);
