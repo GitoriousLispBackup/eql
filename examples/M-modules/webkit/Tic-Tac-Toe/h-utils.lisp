@@ -392,15 +392,21 @@
     (js "Lisp.pixmap().assignToHTMLImageElement(this)" element)))
 
 (defun to-pixmap (web-element &optional scale-factor)
-  "Get pixmap (screenshot) from web element, optionally scaling it. With shown scrollbars, the web element must be entirely visible for this to work."
-  (qrun* (let* ((rect (geometry web-element))
-                (pixmap (! "grabWidget(QWidget*,QRect)" "QPixmap"
-                           *web-view*
-                           (mapcar '- rect (append (! "scrollPosition" (frame)) '(0 0))))))
+  "Render web element into a pixmap, optionally scaling it."
+  (qrun* (let* ((element (ensure-web-element web-element))
+                (size (nthcdr 2 (! "geometry" element)))
+                (pixmap (qnew "QPixmap(QSize)" size)))
+           (! "fill" pixmap "transparent")
+           (qlet ((painter "QPainter(QPixmap*)" pixmap))
+             (x:do-with (! "setRenderHint" painter)
+               (|QPainter.Antialiasing| t)
+               (|QPainter.TextAntialiasing| t)
+               (|QPainter.SmoothPixmapTransform| t))
+             (! "render" element painter))
            (if scale-factor
                (! "scaled(QSize,Qt::AspectRatioMode,Qt::TransformationMode)" pixmap
                   (mapcar (lambda (x) (truncate (+ 0.5 (* scale-factor x))))
-                          (nthcdr 2 rect))
+                          size)
                   |Qt.IgnoreAspectRatio| |Qt.SmoothTransformation|)
                pixmap))))
 
