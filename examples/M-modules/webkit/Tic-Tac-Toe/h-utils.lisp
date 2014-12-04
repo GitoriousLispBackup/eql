@@ -425,7 +425,7 @@
 (defun append-html (text/html &optional scroll-to-bottom)
   (append-inside "BODY" text/html)
   (when scroll-to-bottom
-    (qrun* (qsingle-shot 0 'scroll-to-bottom))))
+    (qrun* (qlater 'scroll-to-bottom))))
 
 ;;; wrappers for some QFrame methods
 

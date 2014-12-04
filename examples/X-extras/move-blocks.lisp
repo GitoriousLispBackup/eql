@@ -93,7 +93,7 @@
     (|setSelectionMode| |QAbstractItemView.ExtendedSelection|))
   (|hide| (|header| *items*))
   (|setStretchLastSection| (|header| *items*) t)
-  (qsingle-shot 0 (lambda () (|resizeColumnToContents| *items* 0)))
+  (qlater (lambda () (|resizeColumnToContents| *items* 0)))
   ;; graph
   (qlet ((curve "QEasingCurve(QEasingCurve::Type)" |QEasingCurve.OutElastic|))
     (update-graph-pixmap curve :ini))
@@ -115,9 +115,9 @@
   (|setMinimumWidth| *items* 200)
   (|setMinimumWidth| *custom* 250)
   (|resize| *main* '(0 0))
-  (qsingle-shot 0 (lambda ()
-                    (|show| *main*)
-                    (|setMinimumSize| *view* '(10 10)))))
+  (qlater (lambda ()
+            (|show| *main*)
+            (|setMinimumSize| *view* '(10 10)))))
 
 (let ((n 0))
   (defun add-to-items (color)

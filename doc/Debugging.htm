@@ -127,7 +127,7 @@ You might want to put this in your <code>~/.eclrc</code> file:
 </pre>
 <br>
 <p>In order to automatically switch the REPL to a given package after loading a file, add this line:</p>
-<pre>  (qsingle-shot 0 (lambda () (in-package :my-package)))</pre>
+<pre>  (qlater (lambda () (in-package :my-package)))</pre>
 <br>
 <p>If you use ECL readline (see <code>ecl-readline.lisp</code> in sources):<br>After entering <code>:qq</code> (quitting the top-level), the console/shell should always be reset (but you won't probably see the command while typing it; an <code>alias</code> might help):</p>
 <pre>

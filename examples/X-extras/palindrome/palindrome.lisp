@@ -295,7 +295,7 @@
     (if *window-width*
         (|setFixedSize| *view* (list *window-width* *window-width*))
         (|setFixedWidth| *view* (apply 'min (nthcdr 2 (|screenGeometry| (|desktop.QApplication|))))))
-    (qsingle-shot 0 (lambda () (|setPos.QCursor| (|pos| *main*))))
+    (qlater (lambda () (|setPos.QCursor| (|pos| *main*))))
     (if *window-width*
         (|show| *main*)
         (|showFullScreen| *main*))

@@ -2638,7 +2638,7 @@ cl_object qsuper_class_name(cl_object l_name) {
 cl_object qsingle_shot2(cl_object l_msec, cl_object l_fun) {
     /// args: (milliseconds function)
     /// A single shot timer similar to <code>QTimer::singleShot()</code>.
-    ///     (qsingle-shot 0 'on-qt-idle)
+    ///     (qsingle-shot 1000 'one-second-later)
     ///     
     ///     (let ((ms 500))
     ///     &nbsp;&nbsp;(qsingle-shot ms (lambda () (qmsg ms))))

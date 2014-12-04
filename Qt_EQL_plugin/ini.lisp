@@ -15,7 +15,7 @@
       (! "addWidget" layout w))
     (! "setWidget" *qt-main* widget)
     (qconnect *edit* "returnPressed()" 'eval-edit)
-    (qsingle-shot 0 'delayed-ini)))
+    (qlater 'delayed-ini)))
 
 (defun delayed-ini ()
   (qset *edit* "text" "(in-package :eql-user)")

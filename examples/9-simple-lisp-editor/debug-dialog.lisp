@@ -30,7 +30,7 @@
     (qconnect box "accepted()" dlg "accept()")
     (qconnect box "rejected()" dlg "reject()")
     (! "setFocus" cmd)
-    (qsingle-shot 0 (lambda () (x:do-with dlg "activateWindow" "raise")))
+    (qlater (lambda () (x:do-with dlg "activateWindow" "raise")))
     (add-messages msg messages)
     (if (= |QDialog.Accepted| (! "exec" dlg))
         (qget cmd "text")

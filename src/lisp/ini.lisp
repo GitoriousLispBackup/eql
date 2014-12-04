@@ -13,10 +13,10 @@
   "args: (((var exp) ...) ...)
    Similar to <code>let*</code>. Creates temporary Qt objects, deleting them at the end of the <code>qlet</code> body.<br>If <code>exp</code> is a string, it will be substituted with <code>(qnew exp)</code>, optionally including constructor arguments.
        (qlet ((painter \"QPainter\"))
-       &nbsp;&nbsp;/* body */)
+       &nbsp;&nbsp;...)
        
        (qlet ((reg-exp \"QRegExp(QString)\" \"^\\\\S+$\"))
-       &nbsp;&nbsp;/* body */)"
+       &nbsp;&nbsp;...)"
   (let ((vars (mapcar (lambda (x) (if (consp x) (first x) x)) pairs))
         (exps (mapcar (lambda (x)
                         (if (consp x)
@@ -120,15 +120,19 @@
 (defun %reference-name ()
   (format nil "%~A%" (gensym)))
 
-(defmacro qsingle-shot (ms fun)
+(defmacro qsingle-shot (milliseconds function)
   ;; check for LAMBDA, #'LAMBDA
-  (if (or (eql 'lambda (first fun))
-          (and (listp (second fun))
-               (eql 'lambda (caadr fun))))
+  (if (find (first function) '(lambda function))
       ;; hold a reference (will be called later from Qt event loop)
-      `(%qsingle-shot ,ms (setf (symbol-function (intern ,(%reference-name))) ; lambda
-                                ,fun))
-      `(%qsingle-shot ,ms ,fun)))                                             ; 'foo
+      `(%qsingle-shot ,milliseconds (setf (symbol-function (intern ,(%reference-name))) ; lambda
+                                          ,function))
+      `(%qsingle-shot ,milliseconds ,function)))                                        ; 'foo
+
+(defmacro qlater (function)
+  "args: (function)
+   Convenience macro: a <code>qsingle-shot</code> with a <code>0</code> timeout.<br>This will call <code>function</code> as soon as the Qt event loop is idle.
+       (qlater 'delayed-ini)"
+  `(%qsingle-shot 0 ,function))
 
 (defun %ensure-persistent-function (fun)
   (typecase fun
@@ -549,7 +553,7 @@
        (qrun* (|setValue| ui:*progress-bar* value))
        
        (let ((item (qrun* (qnew \"QTableWidgetItem\")))) ; return value(s)
-       &nbsp;&nbsp;/* body */)"
+       &nbsp;&nbsp;...)"
   (let ((values (gensym)))
     `(let (,values)
        (qrun (lambda ()
@@ -636,6 +640,7 @@
                   (cons 'qinvoke-method*      '(object cast-class-name function-name &rest arguments))
                   (cons 'qinvoke-method+      '(object function-name &rest arguments))
                   (cons 'qinvoke-methods      '(object &rest functions))
+                  (cons 'qlater               '(function))
                   (cons 'qload-c++            '(library-name &optional unload))
                   (cons 'qload-ui             '(file-name))
                   (cons 'qlocal8bit           '(string))

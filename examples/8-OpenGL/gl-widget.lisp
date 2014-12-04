@@ -95,7 +95,7 @@
         (gl:matrix-mode :modelview)
         (gl:load-identity)
         (gl:translate 0 0 -40))
-      (qsingle-shot 0 (lambda () (apply 'resize-gl (|size| *gl-widget*))))))
+      (qlater (lambda () (apply 'resize-gl (|size| *gl-widget*))))))
 
 (defun mouse-press-event (event)
   (setf *last-pos* (|pos| event)))

@@ -61,11 +61,11 @@
   (qconnect *flip-v* "clicked()" (lambda () (flip :v)))
   (qoverride *display* "paintEvent(QPaintEvent*)" 'paint)
   (reset)
-  (qsingle-shot 0 (lambda ()
-                    (when (minusp (|x| *main*))
-                      (|move| *main* (list 0 (|y| *main*))))
-                    (|resize| *main* '(0 0))
-                    (in-package :img)))
+  (qlater (lambda ()
+            (when (minusp (|x| *main*))
+              (|move| *main* (list 0 (|y| *main*))))
+            (|resize| *main* '(0 0))
+            (in-package :img)))
   (x:do-with *main* |show| |raise|))
 
 (defun paint (event)
@@ -99,7 +99,7 @@
 
 (defun adjust-size ()
   (|setFixedSize| *display* (display-size))
-  (qsingle-shot 0 (lambda () (|resize| *main* '(0 0)))))
+  (qlater (lambda () (|resize| *main* '(0 0)))))
 
 (defun change-values ()
   (flet ((adjust-1 (x)

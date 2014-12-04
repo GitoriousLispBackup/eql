@@ -256,4 +256,4 @@
 
 (progn
   (ini "tic-tac-toe.htm" '(350 450))
-  (qsingle-shot 0 (lambda () (in-package :tic-tac-toe))))
+  (qlater (lambda () (in-package :tic-tac-toe))))

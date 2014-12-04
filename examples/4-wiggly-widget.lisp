@@ -67,5 +67,5 @@
 
 (progn
   (start)
-  (qsingle-shot 0 (lambda () (in-package :wiggly))))
+  (qlater (lambda () (in-package :wiggly))))
 

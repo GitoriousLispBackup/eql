@@ -244,5 +244,5 @@
 
 (progn
   (start)
-  (qsingle-shot 0 (lambda () (in-package :mice))))
+  (qlater (lambda () (in-package :mice))))
 

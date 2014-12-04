@@ -18,7 +18,7 @@
       ("setLabelText" message)
       ("setTextValue" *default-text*)
       ("resize" '(400 0)))
-    (qsingle-shot 0 (lambda () (x:do-with dlg "activateWindow" "raise")))
+    (qlater (lambda () (x:do-with dlg "activateWindow" "raise")))
     (if (= |QDialog.Accepted| (! "exec" dlg))
         (! "textValue" dlg)
         "")))

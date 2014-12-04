@@ -256,14 +256,21 @@
 </pre>
 </p><br>
 <p>
+<b>QLATER (function)</b>
+<p>Convenience macro: a <code>qsingle-shot</code> with a <code>0</code> timeout.<br>This will call <code>function</code> as soon as the Qt event loop is idle.</p>
+<pre>
+  (qlater 'delayed-ini)
+</pre>
+</p><br>
+<p>
 <b>QLET (((var exp) ...) ...)</b>
 <p>Similar to <code>let*</code>. Creates temporary Qt objects, deleting them at the end of the <code>qlet</code> body.<br>If <code>exp</code> is a string, it will be substituted with <code>(qnew exp)</code>, optionally including constructor arguments.</p>
 <pre>
   (qlet ((painter "QPainter"))
-  &nbsp;&nbsp;/* body */)
+  &nbsp;&nbsp;...)
   
   (qlet ((reg-exp "QRegExp(QString)" "^\\S+$"))
-  &nbsp;&nbsp;/* body */)
+  &nbsp;&nbsp;...)
 </pre>
 </p><br>
 <p>
@@ -384,7 +391,7 @@
   (qrun* (|setValue| ui:*progress-bar* value))
   
   (let ((item (qrun* (qnew "QTableWidgetItem")))) ; return value(s)
-  &nbsp;&nbsp;/* body */)
+  &nbsp;&nbsp;...)
 </pre>
 </p><br>
 <p>
@@ -425,7 +432,7 @@
 <b>QSINGLE-SHOT (milliseconds function)</b>
 <p>A single shot timer similar to <code>QTimer::singleShot()</code>.</p>
 <pre>
-  (qsingle-shot 0 'on-qt-idle)
+  (qsingle-shot 1000 'one-second-later)
   
   (let ((ms 500))
   &nbsp;&nbsp;(qsingle-shot ms (lambda () (qmsg ms))))

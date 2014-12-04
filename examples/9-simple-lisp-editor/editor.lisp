@@ -177,7 +177,7 @@
                                (! (("toString" |QKeySequence.NativeText|) "shortcut" *action-eval-region*)))
                        :html)
   (! "show" *main*)
-  (qsingle-shot 0 'delayed-ini))
+  (qlater 'delayed-ini))
 
 (defun ini-actions ()
   (flet ((ini (action keys &optional fun)
@@ -822,9 +822,9 @@
                 (spaces (indentation (! "text" curr))))
            (if (zerop spaces)
                (qcall-default)
-               (qsingle-shot 0 (lambda ()
-                                 (! "insertText" cursor (format nil "~%~A" (make-string spaces)))
-                                 (! "ensureCursorVisible" *editor*)))))))
+               (qlater (lambda ()
+                         (! "insertText" cursor (format nil "~%~A" (make-string spaces)))
+                         (! "ensureCursorVisible" *editor*)))))))
     (#.|Qt.Key_Tab|
      (if (zerop (! "modifiers" key-event))
          (update-tab-completer nil :show)
@@ -1290,7 +1290,7 @@
     (! "hide" *symbol-popup*)
     (delete-file-completer)
     (setf current nil)
-    (qsingle-shot 0 (lambda () (! "setFocus" *current-editor*)))))
+    (qlater (lambda () (! "setFocus" *current-editor*)))))
 
 (defun insert-file ()
   (let ((file (! "getOpenFileName" "QFileDialog")))

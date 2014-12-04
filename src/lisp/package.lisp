@@ -48,6 +48,7 @@
    #:qinvoke-method*
    #:qinvoke-method+
    #:qinvoke-methods
+   #:qlater
    #:qlet
    #:qload-c++
    #:qload-ui
