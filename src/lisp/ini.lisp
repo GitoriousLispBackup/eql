@@ -490,14 +490,18 @@
 (defun qload-c++ (library-name &optional unload)
   (%qload-c++ library-name unload))
 
-(defun define-qt-wrappers (qt-library)
-  "args: (qt-library)
+(defun define-qt-wrappers (qt-library &rest what)
+  "args: (qt-library &rest what)
    Defines Lisp methods for all Qt methods/signals/slots of given library.<br>(See example <code>Qt_EQL_dynamic/trafficlight/</code>).
-       (define-qt-wrappers *c++*) ; generate wrappers (see \"Qt_EQL_dynamic/\")
+       (define-qt-wrappers *c++*)        ; generate wrappers (see \"Qt_EQL_dynamic/\")
+       (define-qt-wrappers *c++* :slots) ; Qt slots only (any of :methods :slots :signals)
        
        (my-qt-function *c++* x y) ; instead of: (! \"myQtFunction\" (:qt *c++*) x y)"
   (let ((all-functions (cdar (qapropos* nil (ensure-qt-object qt-library)))))
-    (dolist (functions '("Methods:" "Signals:" "Slots:"))
+    (unless what
+      (setf what '(:methods :slots :signals)))
+    (dolist (functions (loop :for el :in what :collect
+                             (concatenate 'string (string-capitalize el) ":")))
       (dolist (fun (rest (find functions all-functions
                                :key 'first :test 'string=)))
         (let* ((p (position #\( fun))
@@ -607,7 +611,7 @@
 
 ;; add property :function-lambda-list to plist of EQL functions (inspired by ext:function-lambda-list)
 
-(dolist (el (list (cons 'define-qt-wrappers   '(qt-library))
+(dolist (el (list (cons 'define-qt-wrappers   '(qt-library &rest what))
                   (cons 'defvar-ui            '(main-widget &rest variables))
                   (cons 'ensure-qt-object     '(object))
                   (cons 'in-home              '(&rest file-names))

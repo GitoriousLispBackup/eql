@@ -1,8 +1,9 @@
 <html><body><p>
-<b>DEFINE-QT-WRAPPERS (qt-library)</b>
+<b>DEFINE-QT-WRAPPERS (qt-library &rest what)</b>
 <p>Defines Lisp methods for all Qt methods/signals/slots of given library.<br>(See example <code>Qt_EQL_dynamic/trafficlight/</code>).</p>
 <pre>
-  (define-qt-wrappers *c++*) ; generate wrappers (see "Qt_EQL_dynamic/")
+  (define-qt-wrappers *c++*)        ; generate wrappers (see "Qt_EQL_dynamic/")
+  (define-qt-wrappers *c++* :slots) ; Qt slots only (any of :methods :slots :signals)
   
   (my-qt-function *c++* x y) ; instead of: (! "myQtFunction" (:qt *c++*) x y)
 </pre>
