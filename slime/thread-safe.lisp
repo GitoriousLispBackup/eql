@@ -106,7 +106,8 @@
 
 ;; ensure compiled file
 
-(unless (directory (in-home "slime/thread-safe.fas*"))
-  (compile-file *load-pathname*)
-  (load (in-home "slime/thread-safe")))
+(let ((fas (in-home "slime/thread-safe.fas*"))) ; for Windows
+  (unless (directory fas)
+    (compile-file (in-home "slime/thread-safe.lisp"))
+    (load (first (directory fas)))))
 
