@@ -1,57 +1,112 @@
 ;;;
-;;; *** EXPERIMENTAL ***
-;;;
-;;;
 ;;; SIMPLE AND SAFE SLIME MODE
 ;;; ==========================
 ;;;
 ;;; Loading this file before loading EQL code guarantees running EQL functions in the GUI thread.
 ;;;
-;;; This means that we don't need a Slime REPL-hook, making it safe to evaluate any EQL code in Slime, both
-;;; on the REPL and using 'eval-region'.
+;;; This means that we don't need a Slime REPL-hook, making it safe to evaluate any EQL code in Slime,
+;;; both on the REPL and using 'eval-region'.
 ;;;
 ;;; This is very convenient during development, and the only drawbacks are more consing and a small
 ;;; performance overhead -- but guaranteeing thread safety for all EQL functions wrapped this way.
 ;;;
-;;; Currently only these functions are wrapped:
-;;;
-;;; QNEW, QFUN, QGET, QSET, QCONNECT, QDISCONNECT, QOVERRIDE
-;;; (QFUN includes both the macro '!' and all wrapper functions)
-;;;
-;;; (this is sufficient to run "eql/real-time-comparison/profiling.lisp" for testing)
 
 (in-package :eql)
 
-;; keep reference to original EQL functions
+(setf *slime-mode* :thread-safe)
 
-(defvar %qnew-instance-orig  (symbol-function '%qnew-instance))
-(defvar %qinvoke-method-orig (symbol-function '%qinvoke-method))
-(defvar qproperty-orig       (symbol-function 'qproperty))
-(defvar qset-property-orig   (symbol-function 'qset-property))
-(defvar %qconnect-orig       (symbol-function '%qconnect))
-(defvar %qdisconnect-orig    (symbol-function '%qdisconnect))
-(defvar qoverride-orig       (symbol-function 'qoverride))
+(defmacro wrap-in-qrun* (function &rest arguments)
+  (let ((orig (intern (format nil "%~A-ORIG%" (string-left-trim "%" (symbol-name function))))))
+   `(progn
+      (defvar ,orig (symbol-function ',function)) ; hold a reference to original
+      (setf (symbol-function ',orig) ,orig)
+      (defun ,function (,@arguments)              ; re-define function
+        (qrun* ,(if arguments
+                    `(,orig ,@(remove '&optional (mapcar (lambda (x) (if (atom x) x (first x)))
+                                                         arguments)))
+                    `(,orig)))))))
 
-;; redefine EQL functions, wrapping them in QRUN*
+(wrap-in-qrun*
+  %qnew-instance name arguments)
 
-(defun %qnew-instance (name arguments)
-  (qrun* (funcall %qnew-instance-orig name arguments)))
+(wrap-in-qrun*
+  %qinvoke-method object cast function arguments)
 
-(defun %qinvoke-method (object cast function arguments)
-  (qrun* (funcall %qinvoke-method-orig object cast function arguments)))
+(wrap-in-qrun*
+  qproperty object name)
 
-(defun qproperty (object name)
-  (qrun* (funcall qproperty-orig object name)))
+(wrap-in-qrun*
+  qset-property object name value)
 
-(defun qset-property (object name value)
-  (qrun* (funcall qset-property-orig object name value)))
+(wrap-in-qrun*
+  %qconnect caller signal receiver slot)
 
-(defun %qconnect (caller signal receiver slot)
-  (qrun* (funcall %qconnect-orig caller signal receiver slot)))
+(wrap-in-qrun*
+  %qdisconnect caller signal receiver slot)
 
-(defun %qdisconnect (caller signal receiver slot)
-  (qrun* (funcall %qdisconnect-orig caller signal receiver slot)))
+(wrap-in-qrun*
+  qoverride object name function)
 
-(defun qoverride (object name function)
-  (qrun* (funcall qoverride-orig object name function)))
+(wrap-in-qrun*
+  qadd-event-filter object event function)
+
+(wrap-in-qrun*
+  %qapropos search class type)
+
+(wrap-in-qrun*
+  qcall-default)
+
+(wrap-in-qrun*
+  qclear-event-filters)
+
+(wrap-in-qrun*
+  qcopy object)
+
+(wrap-in-qrun*
+  %qdelete object later)
+
+(wrap-in-qrun*
+  %qexec milliseconds)
+
+(wrap-in-qrun*
+  qexit)
+
+(wrap-in-qrun*
+  qgui &optional process-events)
+
+(wrap-in-qrun*
+  %qload-c++ library-name unload)
+
+(wrap-in-qrun*
+  qload-ui file-name)
+
+(wrap-in-qrun*
+  qmessage-box x)
+
+(wrap-in-qrun*
+  qprocess-events)
+
+(wrap-in-qrun*
+  qquit &optional (exit-status 0) (kill-all-threads t))
+
+(wrap-in-qrun*
+  qremove-event-filter handle)
+
+(wrap-in-qrun*
+  %qrequire name quiet)
+
+(wrap-in-qrun*
+  qselect &optional on-selected)
+
+(wrap-in-qrun*
+  qset-null object)
+
+(wrap-in-qrun*
+  %qsingle-shot milliseconds function)
+
+;; ensure compiled file
+
+(unless (directory (in-home "slime/thread-safe.fas*"))
+  (compile-file *load-pathname*)
+  (load (in-home "slime/thread-safe")))
 

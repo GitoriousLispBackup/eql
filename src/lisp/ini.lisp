@@ -204,12 +204,14 @@
 
 (defvar *slime-hook-file* nil)
 
-(defun load-slime-hook-file ()
-  (if (and (find-package :swank)
-           (find-symbol "*SLIME-REPL-EVAL-HOOKS*" :swank))
-      (load (or *slime-hook-file* (in-home "slime/repl-hook")))
-      (qsingle-shot 500 'load-slime-hook-file))) ; we need to wait for Emacs "slime-connect"
-           
+(defun load-slime-auxiliary-file ()
+  (if (eql :repl-hook *slime-mode*) ; to set in "eql-start-swank.lisp"
+      (if (and (find-package :swank)
+               (find-symbol "*SLIME-REPL-EVAL-HOOKS*" :swank))
+          (load (or *slime-hook-file* (in-home "slime/repl-hook"))) ; Slime mode "REPL hook"
+          (qsingle-shot 500 'load-slime-auxiliary-file))            ; we need to wait for Emacs "slime-connect"
+      (load (in-home "slime/thread-safe"))))                        ; Slime mode "thread safe" (default)
+
 #+threads
 (defun %read-thread ()
   (si::tpl-prompt)
@@ -238,7 +240,7 @@
 (defun exec-with-simple-restart ()
   (if *slime-mode*
       (progn
-        (load-slime-hook-file)
+        (load-slime-auxiliary-file)
         (loop
           (with-simple-restart (restart-qt-events "Last resort only - prefer \"Return to SLIME's top level\"")
             (qexec))))
@@ -256,7 +258,7 @@
 (defmacro qeval (&rest forms)
   ;; this macro will be redefined in Slime mode (see "../../slime/repl-hook.lisp")
   "args: (&rest forms)
-   Slime mode only: evaluate forms in GUI thread. Defaults to a simple <code>progn</code> outside of Slime."
+   Slime mode <code>:repl-hook</code> only (not needed in default Slime mode): evaluate forms in GUI thread. Defaults to a simple <code>progn</code> outside of Slime."
   (if (second forms)
       (cons 'progn forms)
       (first forms)))

@@ -14,6 +14,9 @@
  :reload nil         ; reload SWANK, even if the SWANK package already exists
  :load-contribs nil) ; load all contribs
 
+;; uncomment for Slime mode "REPL Hook"
+;; (setf eql:*slime-mode* :repl-hook)
+
 (mp:process-run-function :swank (lambda ()
                                   (swank:create-server
                                     :port 4005

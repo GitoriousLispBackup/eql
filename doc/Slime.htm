@@ -8,15 +8,13 @@ Requires <b>ECL threads</b>.
 This should work with any Slime version that plays together with ECL.
 <br>Tested with ECL 12.7.1 (Windows: ECL 12.12.1)
 </p>
-<ul>
+<br>
 <h3>Prepare</h3>
 <ul>
 <li>Add to your <code>~/.emacs</code> file:
 <pre>
-(add-to-list 'load-path "~/slime/")         ; slime path
-(add-to-list 'load-path "~/slime/contrib/") ; slime/contrib path
+(add-to-list 'load-path "~/slime/") ; slime path
 (require 'slime)
-(slime-require 'swank-listener-hooks)       ; EQL requires a listener hook
 (slime-setup '(slime-fancy))
 </pre>
 <li>Add to your <code>~/.swank.lisp</code> file (or copy file <code>eql/slime/.swank.lisp</code> in your home directory):
@@ -43,58 +41,12 @@ use <code>slime-connect</code>) and hit <code>Return</code> 2 times
     connect to the same Swank/EQL you left when quitting Emacs.</p>
 </ul>
 <br>
-<h3>Notes</h3>
-<h4>Eval Region</h4>
-<ul>
-<li><b>Load</b> your Lisp file <b>from the Slime REPL</b>: <code>(load "file.lisp")</code>
-<li><b>Run</b> your program <b>from the Slime REPL</b> (not using Eval Region).
-<li>Only at this point you may use Eval Region for re-defining functions etc.
-</ul>
-<p>The point here is: if you directly try to Eval Region an expression containing an
-  EQL function, your swank server <b>will crash</b>, because it will not be
-  evaluated in the GUI thread (Qt GUI methods need to be called from the GUI thread).
-</p>
-<p>So, only run EQL functions <b>directly</b> from the <b>Slime REPL</b>.
-<br>If you want to use <b>Eval Region</b> containing EQL functions, use the
-method described above.
-</p>
-<hr>
-<p>You may use the macro <code>qeval</code> if you want to ensure evaluation
-  in the GUI thread (this is meant to be used together with Eval Region only).
-<br>It behaves like a <code>progn</code>, so you can do something like this:
-<pre>
-(qeval
-  (defvar *label* (qnew "QLabel"))
-  (defvar *edit*  (qnew "QLineEdit")))
-</pre>
-Wrapping forms in <code>qeval</code> will have no effect if you
-run your code outside of Slime (so there's no need to
-remove <code>qeval</code> in your final program).</p>
-<hr>
-<p>But note: the advantage using <b>Eval Region</b>
-  (<i>without</i> <code>qeval</code>) is that Lisp error conditions (not
-  driven by Qt events) will not stop/pause your EQL program (that is, Qt event
-  processing will continue).</p>
-<p>Instead, if there is an error in code you either enter in the Slime REPL, or
-  run with Eval Region wrapped in <code>qeval</code>, the
-program will always pause (Qt event processing will be stopped until you take some
-  action).</p>
-<br>
-<h4>Abort / Restart</h4>
-<p>Be careful after entering the Slime debugger. If you see this:
-<br>
-<br><code>[ABORT] Return to SLIME's top level.</code>
-<br><code>[RESTART-QT-EVENTS] Last resort only - prefer "Return to SLIME's top level"</code>
-<br>
-<br>Always choose the first one, otherwise you'll be stuck.
-</p>
-<br>
-<h4>Help</h4>
+<h3>Help</h3>
 <p>For help see the <code>qapropos</code> and <code>qgui</code> functions.</p>
-</ul>
 <br>
-<hr>
-<p><i>For a simple alternative, see <code>CL_EQL/</code>.
-</i></p>
+<h3>Notes</h3>
+<p>All EQL functions are wrapped in <code>qrun*</code> (see <code>eql/slime/thread-safe.lisp</code>), so it's safe to call them either directly from the REPL or using 'eval region'.
+<br>This Slime mode is both convenient and simple to use, but has a small performance overhead and conses more than native EQL function calls.</p>
+<p>If you need fully native EQL function calls, please see the less convenient <a href="Slime-REPL-hook.htm">Slime REPL Hook</a> mode.</p>
 </br>
 </html>

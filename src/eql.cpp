@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QStringList>
 
-const char EQL::version[] = "14.11.1"; // Nov 2014
+const char EQL::version[] = "14.12.1"; // Dec 2014
 
 extern "C" void ini_EQL(cl_object);
 
@@ -62,8 +62,9 @@ void EQL::exec(const QStringList& args) {
             swankFile = arguments.at(i_swank);
             arguments.removeAt(i_swank); }
         QApplication::setQuitOnLastWindowClosed(false);
-        forms << "(setf eql:*slime-mode* t"
-                 "      eql:*qtpl*       nil)";
+        forms << "(unless eql:*slime-mode*" // see mode :REPL-HOOK in "slime/eql-start-swank.lisp"
+                 "  (setf eql:*slime-mode* t))"
+                 "(setf eql:*qtpl* nil)";
         if(arguments.length() == 2) {
             QString fileName(QDir::fromNativeSeparators(arguments.at(1)));
             forms << QString("(load \"%1\")").arg(fileName);
