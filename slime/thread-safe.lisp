@@ -72,6 +72,9 @@
   qexit)
 
 (wrap-in-qrun*
+  qfind-bound* &optional class-name)
+
+(wrap-in-qrun*
   qgui &optional process-events)
 
 (wrap-in-qrun*
