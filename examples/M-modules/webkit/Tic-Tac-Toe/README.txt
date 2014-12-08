@@ -28,8 +28,8 @@ automate GUI testing:
         (h:find-first-element "#c5"))
 
 
-SLIME / THREADS NOTE
-====================
+THREADS NOTE
+============
 
 Using the functions in "h-utils.lisp", you don't need to
 care about "eval in GUI thread" (all EQL functions are wrapped

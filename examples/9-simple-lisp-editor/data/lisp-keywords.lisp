@@ -746,6 +746,7 @@
                 "do-string"
                 "do-with"
                 "empty-string"
+                "ensure-compiled"
                 "ensure-list"
                 "ends-with"
                 "it"

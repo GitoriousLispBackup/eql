@@ -104,10 +104,3 @@
 (wrap-in-qrun*
   %qsingle-shot milliseconds function)
 
-;; ensure compiled file
-
-(let ((fas (in-home "slime/thread-safe.fas*"))) ; for Windows
-  (unless (directory fas)
-    (compile-file (in-home "slime/thread-safe.lisp"))
-    (load (first (directory fas)))))
-

@@ -210,7 +210,7 @@
                (find-symbol "*SLIME-REPL-EVAL-HOOKS*" :swank))
           (load (or *slime-hook-file* (in-home "slime/repl-hook"))) ; Slime mode "REPL hook"
           (qsingle-shot 500 'load-slime-auxiliary-file))            ; we need to wait for Emacs "slime-connect"
-      (load (in-home "slime/thread-safe"))))                        ; Slime mode "thread safe" (default)
+      (load (x:ensure-compiled (in-home "slime/thread-safe")))))    ; Slime mode "thread safe" (default)
 
 #+threads
 (defun %read-thread ()
@@ -469,9 +469,10 @@
 
 (let (loaded)
   (defun qselect (&optional on-selected)
-    "args: ()
+    "args: (&optional on-selected)
      alias: qsel
-     Allows to select (by clicking) any (child) widget.<br>The variable <code>qsel:*q*</code> is set to the latest selected widget."
+     Allows to select (by clicking) any (child) widget.<br>The variable <code>qsel:*q*</code> is set to the latest selected widget.<br><br>Optionally pass a function to be called upon selecting, with the selected widget as argument.
+         (qsel (lambda (widget) (qmsg widget)))"
     (unless loaded
       (setf loaded t)
       (load (in-home "src/lisp/qselect")))

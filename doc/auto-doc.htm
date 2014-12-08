@@ -396,10 +396,13 @@
 </pre>
 </p><br>
 <p>
-<b>QSELECT ()</b>
+<b>QSELECT (&optional on-selected)</b>
 <br>
 <b>QSEL</b>
-<p>Allows to select (by clicking) any (child) widget.<br>The variable <code>qsel:*q*</code> is set to the latest selected widget.</p>
+<p>Allows to select (by clicking) any (child) widget.<br>The variable <code>qsel:*q*</code> is set to the latest selected widget.<br><br>Optionally pass a function to be called upon selecting, with the selected widget as argument.</p>
+<pre>
+  (qsel (lambda (widget) (qmsg widget)))
+</pre>
 </p><br>
 <p>
 <b>QSENDER ()</b>
