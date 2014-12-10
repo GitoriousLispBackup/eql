@@ -2714,7 +2714,7 @@ cl_object make_qimage_dangerous(cl_object l_vector, cl_object l_width, cl_object
 
     // make sure all the input data is of the correct type.
     if (!ECL_VECTORP(l_vector) || !ECL_FIXNUMP(l_width) || !ECL_FIXNUMP(l_height) || !ECL_FIXNUMP(l_bytes_per_line) || !ECL_FIXNUMP(l_format)) {
-      error_msg("%MAKE-QIMAGE/DANGEROUS", LIST5(l_vector, l_width, l_height, l_bytes_per_line, l_format));
+      error_msg("MAKE-QIMAGE", LIST5(l_vector, l_width, l_height, l_bytes_per_line, l_format));
       return Cnil; }
 
     ecl_vector *v = &l_vector->vector;
@@ -2725,7 +2725,7 @@ cl_object make_qimage_dangerous(cl_object l_vector, cl_object l_width, cl_object
     case aet_b32:
       break;
     default:
-      error_msg("%MAKE-QIMAGE/DANGEROUS", LIST5(l_vector, l_width, l_height, l_bytes_per_line, l_format));
+      error_msg("MAKE-QIMAGE", LIST5(l_vector, l_width, l_height, l_bytes_per_line, l_format));
       return Cnil; }
 
     int width                   = toInt<int>(l_width);

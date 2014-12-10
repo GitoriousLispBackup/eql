@@ -15,16 +15,20 @@
 
 (setf *slime-mode* :thread-safe)
 
-(defmacro wrap-in-qrun* (function &rest arguments)
-  (let ((orig (intern (format nil "%~A-ORIG%" (string-left-trim "%" (symbol-name function))))))
+(defmacro wrap-in-qrun* (names &rest arguments)
+  (let* ((fun (if (atom names) names (first names)))
+         (alias (unless (atom names) (second names)))
+         (orig (intern (format nil "%~A-ORIG%" (string-left-trim "%" (symbol-name fun))))))
    `(progn
-      (defvar ,orig (symbol-function ',function)) ; hold a reference to original
+      (defvar ,orig (symbol-function ',fun)) ; hold a reference to original
       (setf (symbol-function ',orig) ,orig)
-      (defun ,function (,@arguments)              ; re-define function
+      (defun ,fun (,@arguments)              ; re-define function
         (qrun* ,(if arguments
                     `(,orig ,@(remove '&optional (mapcar (lambda (x) (if (atom x) x (first x)))
                                                          arguments)))
-                    `(,orig)))))))
+                    `(,orig))))
+      ,(when alias
+        `(setf (symbol-function ',alias) #',fun)))))
 
 (wrap-in-qrun*
   %qnew-instance name arguments)
@@ -33,10 +37,10 @@
   %qinvoke-method object cast function arguments)
 
 (wrap-in-qrun*
-  qproperty object name)
+  (qproperty qget) object name)
 
 (wrap-in-qrun*
-  qset-property object name value)
+  (qset-property qset) object name value)
 
 (wrap-in-qrun*
   %qconnect caller signal receiver slot)
@@ -81,13 +85,13 @@
   qload-ui file-name)
 
 (wrap-in-qrun*
-  qmessage-box x)
+  (qmessage-box qmsg) x)
 
 (wrap-in-qrun*
   qprocess-events)
 
 (wrap-in-qrun*
-  qquit &optional (exit-status 0) (kill-all-threads t))
+  (qquit qq) &optional (exit-status 0) (kill-all-threads t))
 
 (wrap-in-qrun*
   qremove-event-filter handle)
@@ -96,7 +100,7 @@
   %qrequire name quiet)
 
 (wrap-in-qrun*
-  qselect &optional on-selected)
+  (qselect qsel) &optional on-selected)
 
 (wrap-in-qrun*
   qset-null object)
