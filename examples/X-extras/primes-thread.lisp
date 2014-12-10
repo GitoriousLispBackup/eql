@@ -1,6 +1,16 @@
+;;;
 ;;; A simple demo for macro QRUN-IN-GUI-THREAD* / QRUN*
 ;;;
 ;;; Calculate primes in threads and update QTreeWidget directly from threads.
+;;;
+;;; ---------------------------------------------------------------------------
+;;;
+;;; Note:
+;;;
+;;; Alternatively you could just load the file "eql/slime/thread-safe.fas", and
+;;; forget about QRUN* (that is, every EQL function call would be automatically
+;;; thread-safe). The only drawback is more consing.
+;;;
 
 #-qt-wrapper-functions ; see README-OPTIONAL.txt
 (load (in-home "src/lisp/all-wrappers"))

@@ -563,12 +563,16 @@
        (let ((item (qrun* (qnew \"QTableWidgetItem\")))) ; return value(s)
        &nbsp;&nbsp;...)"
   (let ((values (gensym)))
-    `(let (,values)
-       (qrun (lambda ()
-               (setf ,values (multiple-value-list ,(if (second body)
-                                                       (cons 'progn body)
-                                                       (first body))))))
-       (values-list ,values))))
+    `(if (eql 'si:top-level (mp:process-name mp:*current-process*)) ; in GUI thread?
+         ,(if (second body)
+              (cons 'progn body)
+              (first body))
+         (let (,values)
+           (qrun (lambda ()
+                   (setf ,values (multiple-value-list ,(if (second body)
+                                                           (cons 'progn body)
+                                                           (first body))))))
+           (values-list ,values)))))
 
 (defmacro qrun* (&body body) ; alias
   `(qrun-in-gui-thread* ,@body))

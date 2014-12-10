@@ -142,12 +142,15 @@
 (defun string-to-bytes (s)
   (map 'vector 'char-code s))
 
-(defun ensure-compiled (file)
-  (let ((fas (format nil "~A.fas*" file))) ; for *.fas, *.fasb, *.fasc (Unix, Windows)
+(defun ensure-compiled (file-name)
+  "Expects file name without file ending, and returns (re-)compiled file name."
+  (let ((lisp (concatenate 'string file-name ".lisp"))
+        (fasl (concatenate 'string file-name ".fas*"))) ; for *.fas, *.fasb, *.fasc (Unix, Windows)
     (flet ((compiled ()
-             (first (directory fas))))
-      (or (compiled)
-          (progn
-            (compile-file (format nil "~A.lisp" file))
-            (compiled))))))
+             (first (directory fasl))))
+      (unless (and (compiled)
+                   (>= (file-write-date (compiled))
+                       (file-write-date lisp)))
+        (compile-file lisp))
+      (compiled))))
 
