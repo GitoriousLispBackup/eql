@@ -4,11 +4,16 @@
 ;;;
 ;;; Loading this file before loading EQL code guarantees running EQL functions in the GUI thread.
 ;;;
-;;; This means that we don't need a Slime REPL-hook, making it safe to evaluate any EQL code in Slime,
-;;; both on the REPL and using 'eval-region'.
+;;; This means that we don't need a Slime REPL-hook, making it safe to evaluate any EQL code in
+;;; Slime, both on the REPL and using 'eval-region'.
 ;;;
-;;; This is very convenient during development, and the only drawbacks are more consing and a small
-;;; performance overhead -- but guaranteeing thread safety for all EQL functions wrapped this way.
+;;; The only drawback is a little more consing for every EQL function call, but allowing to safely
+;;; call GUI functions from any ECL thread.
+;;;
+;;; Note also that wrapping functions in QRUN* is basically the same as a direct call, if called
+;;; from the ECL main thread (GUI thread), so it will add almost no overhead.
+;;; Since most EQL function calles are driven by the Qt event loop anyway, you won't even notice
+;;; the presence of macro QRUN* (performance wise).
 ;;;
 
 (in-package :eql)

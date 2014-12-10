@@ -3,13 +3,17 @@
 ;;;
 ;;; Calculate primes in threads and update QTreeWidget directly from threads.
 ;;;
-;;; ---------------------------------------------------------------------------
+;;; -----------------------------------------------------------------------------
 ;;;
 ;;; Note:
 ;;;
 ;;; Alternatively you could just load the file "eql/slime/thread-safe.fas", and
 ;;; forget about QRUN* (that is, every EQL function call would be automatically
-;;; thread-safe). The only drawback is more consing.
+;;; thread-safe).
+;;;
+;;; The advantage of using QRUN* manually is that you can group together several
+;;; function calls, which will add only one thread switch instead of several ones
+;;; (resulting in better performance).
 ;;;
 
 #-qt-wrapper-functions ; see README-OPTIONAL.txt
