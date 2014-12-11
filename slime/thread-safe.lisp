@@ -12,7 +12,7 @@
 ;;;
 ;;; Note also that wrapping functions in QRUN* is basically the same as a direct call, if called
 ;;; from the ECL main thread (GUI thread), so it will add almost no overhead.
-;;; Since most EQL function calles are driven by the Qt event loop anyway, you won't even notice
+;;; Since most EQL function calls are driven by the Qt event loop anyway, you won't even notice
 ;;; the presence of macro QRUN* (performance wise).
 ;;;
 
