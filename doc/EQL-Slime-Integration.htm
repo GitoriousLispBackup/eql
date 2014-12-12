@@ -10,7 +10,7 @@ code   { color: black; }
 <h2>EQL (ECL + Qt) in Slime -- how does it work?</h2>
 <ul>
   <li><p>Start swank using the EQL executable, running the swank server in an ECL thread, and using the main thread for the Qt main event loop.</p>
-  <li><p>Wrap every internal EQL function in a macro, which will call the function either directly (if called form GUI/main thread), or, if called from another ECL thread, will wrap the function call in a closure.</p>
+  <li><p>Wrap every internal EQL function in a macro, which will call the function either directly (if called from GUI/main thread), or, if called from another ECL thread, will wrap the function call in a closure.</p>
   <li><p>This closure will be passed to a queued, blocking Qt function running in the GUI thread, which will in turn call the closure.</p>
 </ul>
 <p>The crucial part is passing a Lisp closure from an ECL thread to Qt and calling it from C++ in the GUI/main thread.</p>

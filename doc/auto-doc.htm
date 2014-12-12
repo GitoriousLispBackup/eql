@@ -275,6 +275,10 @@
 </pre>
 </p><br>
 <p>
+<b>QLOAD (file-name)</b>
+<p>Convenience function for Slime (or when loading EQL files from an ECL thread).<br>Loading files that create many Qt objects can be slow on the Slime REPL (many thread switches).<br>This function reduces all thread switches (GUI related) to a single one.</p>
+</p><br>
+<p>
 <b>QLOAD-C++ (library-name &optional unload)</b>
 <p>Loads a custom Qt/C++ plugin (see <code>Qt_EQL_dynamic/</code>).<br>The <code>library-name</code> has to be passed as path to the plugin, without file ending.<br><br>This offers a simple way to extend your application with your own Qt/C++ functions.<br>The plugin will be reloaded (if supported by the OS) every time you call this function (Linux: see also <code>qauto-reload-c++</code>).<br>If the <code>unload</code> argument is not <code>NIL</code>, the plugin will be unloaded (if supported by the OS).</p>
 <pre>

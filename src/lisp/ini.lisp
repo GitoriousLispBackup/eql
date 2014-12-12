@@ -577,6 +577,11 @@
 (defmacro qrun* (&body body) ; alias
   `(qrun-in-gui-thread* ,@body))
 
+(defun qload (file-name)
+  "args: (file-name)
+   Convenience function for Slime (or when loading EQL files from an ECL thread).<br>Loading files that create many Qt objects can be slow on the Slime REPL (many thread switches).<br>This function reduces all thread switches (GUI related) to a single one."
+  (qrun* (load file-name)))
+
 (defun qquit (&optional (exit-status 0) (kill-all-threads t))
   "args: (&optional (exit-status 0) (kill-all-threads t))
    alias: qq
@@ -653,6 +658,7 @@
                   (cons 'qinvoke-method+      '(object function-name &rest arguments))
                   (cons 'qinvoke-methods      '(object &rest functions))
                   (cons 'qlater               '(function))
+                  (cons 'qload                '(file-name))
                   (cons 'qload-c++            '(library-name &optional unload))
                   (cons 'qload-ui             '(file-name))
                   (cons 'qlocal8bit           '(string))

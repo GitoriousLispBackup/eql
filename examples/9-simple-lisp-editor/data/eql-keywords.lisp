@@ -40,6 +40,7 @@
   "qinvoke-methods"
   "qlater"
   "qlet"
+  "qload"
   "qload-c++"
   "qload-ui"
   "qlocal8bit"
