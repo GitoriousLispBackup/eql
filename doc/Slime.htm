@@ -27,7 +27,7 @@ This should work with any Slime version that plays together with ECL.
 <br>
 <h3>Run</h3>
 <ul>
-<li>Run the Swank server (the command line option <code>-slime</code> can be omitted if the file name contains "start-swank"), optionally passing a Lisp file:
+<li>Run the swank server (the command line option <code>-slime</code> can be omitted if the file name contains "start-swank"), optionally passing a Lisp file:
 <pre>
 eql &lt;path-to-slime&gt;/eql-start-swank.lisp [file.lisp]
 </pre>
@@ -38,15 +38,19 @@ use <code>slime-connect</code>) and hit <code>Return</code> 2 times
 <p>Please note: if <code>:dont-close</code> is set to <code>T</code>
     in <code>eql-start-swank.lisp</code>, quitting/restarting Emacs will not
     affect a running EQL program, that is: if you quit/restart Emacs, you can
-    connect to the same Swank/EQL you left when quitting Emacs.</p>
+    connect to the same swank/EQL you left when quitting Emacs.</p>
 </ul>
+<br>
+<h3>Loading files</h3>
+<p>If you experience slow loading of files (compared to direct loading), use <code>qload</code> instead of <code>load</code>, which will reduce all thread switches during the load process to a single one.</p>
+<p>Another case where you need to use <code>qload</code> is when you use Qt classes which use threads internally (see e.g. <code>examples/X-extras/move-blocks.lisp</code>).</p>
 <br>
 <h3>Help</h3>
 <p>For help see the <code>qapropos</code> and <code>qgui</code> functions.</p>
+<p>To kill the swank process (Slime), use function <code>qquit</code> / <code>qq</code> (since quitting Emacs will not kill it.)</p>
 <br>
 <h3>Notes</h3>
 <p>All EQL functions are wrapped in <code>qrun*</code> (see <code>eql/slime/thread-safe.lisp</code>), so it's safe to call them either directly from the REPL or using 'eval region' (or from any other ECL thread).</p>
-<p>If you experience slow loading of files on the Slime REPL (compared to direct loading), use <code>qload</code> instead of <code>load</code>, which will reduce all thread switches during the load process to a single one.</p>
 <p>This Slime mode is both convenient and simple to use, but conses a little more for every EQL function call.
 <br>If you absolutely want direct EQL function calls, please see the less convenient <a href="Slime-REPL-hook.htm">Slime REPL Hook</a> mode.</p>
 </br>

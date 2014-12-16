@@ -1,9 +1,8 @@
 <html>
 <head>
 <style>
-body   { font-family: sans-serif; font-size: 14px; }
-pre    { color: black; background-color: #F4F4F4; }
-code   { color: black; }
+body { font-family: sans-serif; font-size: 14px; }
+pre  { background-color: #F4F4F4; }
 </style>
 </head>
 <div style="width: 700px; margin: 20px;">
@@ -37,7 +36,7 @@ code   { color: black; }
   cl_object run_in_gui_thread(cl_object closure) // define ECL function
   {
       QMetaObject::invokeMethod(
-          caller,                       // any object from GUI thread
+          object,                       // any QObject from GUI thread
           "runInGuiThread",             // see Q_INVOKABLE
           Qt::BlockingQueuedConnection, // blocking for return values
           Q_ARG(void*, closure));       // 'closure' is just a pointer
@@ -55,9 +54,9 @@ code   { color: black; }
   }
 
 </pre>
-<p>After introducing a macro <code>qrun*</code>, and wrapping all EQL functions int it (see <nobr><code>"slime/thread-safe.lisp"</code></nobr>), we are done!</p>
-<p>(Please note that the above code is a stripped down version, see sources for the
-actual implementation.)</p>
+<p>After introducing a macro <code>qrun*</code>, and wrapping all EQL functions in it (see <nobr><code>"slime/thread-safe.lisp"</code></nobr>), we are done!</p>
+<p>(Please note that the above code is a stripped down version, see sources for the actual implementation.)</p>
 <br>
 </div>
 </html>
+
