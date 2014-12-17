@@ -37,11 +37,11 @@
 
 (defun ini-gl-widget ()
   (x:do-with (qoverride *gl-widget*)
-    (|initializeGL()|                'initialize-gl)
-    (|paintGL()|                     'paint-gl)
-    (|resizeGL(int,int)|             'resize-gl)
-    (|mousePressEvent(QMouseEvent*)| 'mouse-press-event)
-    (|mouseMoveEvent(QMouseEvent*)|  'mouse-move-event))
+    ("initializeGL()"                'initialize-gl)
+    ("paintGL()"                     'paint-gl)
+    ("resizeGL(int,int)"             'resize-gl)
+    ("mousePressEvent(QMouseEvent*)" 'mouse-press-event)
+    ("mouseMoveEvent(QMouseEvent*)"  'mouse-move-event))
   (qconnect *timer* "timeout()" 'advance-gears)
   (|start| *timer* 20))
 

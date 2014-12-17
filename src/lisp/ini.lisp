@@ -10,8 +10,8 @@
   `(setf (symbol-function ',s1) (function ,s2)))
 
 (defmacro qlet ((&rest pairs) &body body)
-  "args: (((var exp) ...) ...)
-   Similar to <code>let*</code>. Creates temporary Qt objects, deleting them at the end of the <code>qlet</code> body.<br>If <code>exp</code> is a string, it will be substituted with <code>(qnew exp)</code>, optionally including constructor arguments.
+  "args: (((variable-1 expression-1) (variable-2 expression-2)) &body body)
+   Similar to <code>let*</code> (and to local C++ variables).<br><br>Creates temporary Qt objects, deleting them at the end of the <code>qlet</code> body.<br>If <code>expression</code> is a string, it will be substituted with <code>(qnew expression)</code>, optionally including constructor arguments.
        (qlet ((painter \"QPainter\"))
        &nbsp;&nbsp;...)
        
@@ -532,7 +532,7 @@
 #+linux
 (defmacro qauto-reload-c++ (variable library-name)
   "args: (variable library-name)
-   <b>Linux only.</b><br>Extends <code>qload-c++</code> (see <code>Qt_EQL_dynamic/</code>).<br>Defines a global variable (see return value of <code>qload-c++</code>), which will be updated on every change of the C++ plugin (e.g. after recompiling, the plugin will automatically be reloaded, and the <code>variable</code> will be set to its new value).<br>If you want to be notified on every change of the plugin, set <code>*&lt;variable&gt;-reloaded*</code>. It will then be called after reloading, passing both the variable name and the plugin name.<br>See <code>qload-c++</code> for an example how to call plugin functions.
+   <b>Linux only.</b><br><br>Extends <code>qload-c++</code> (see <code>Qt_EQL_dynamic/</code>).<br><br>Defines a global variable (see return value of <code>qload-c++</code>), which will be updated on every change of the C++ plugin (e.g. after recompiling, the plugin will automatically be reloaded, and the <code>variable</code> will be set to its new value).<br><br>If you want to be notified on every change of the plugin, set <code>*&lt;variable&gt;-reloaded*</code>. It will then be called after reloading, passing both the variable name and the plugin name.<br>See <code>qload-c++</code> for an example how to call plugin functions.
        (qauto-reload-c++ *c++* \"eql_cpp\")
        
        (setf *c++-reloaded* (lambda (var lib) (qapropos nil (symbol-value var)))) ; optional: set a notifier"

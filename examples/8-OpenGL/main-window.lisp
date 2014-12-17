@@ -57,16 +57,16 @@
       (set-pixmap (|renderPixmap| *gl-widget* (first size) (second size))))))
 
 (defun grab-frame-buffer ()
-  (set-pixmap (|fromImage| "QPixmap" (|grabFrameBuffer| *gl-widget*))))
+  (set-pixmap (|fromImage.QPixmap| (|grabFrameBuffer| *gl-widget*))))
 
 (defun clear-pixmap ()
   (set-pixmap (qnew "QPixmap")))
 
 (defun about ()
-  (|about| "QMessageBox"
-     *me*
-     (tr "About Grabber")
-     (tr "The <b>Grabber</b> example demonstrates two approaches for rendering OpenGL into a Qt pixmap.")))
+  (|about.QMessageBox|
+    *me*
+    (tr "About Grabber")
+    (tr "The <b>Grabber</b> example demonstrates two approaches for rendering OpenGL into a Qt pixmap.")))
 
 (defun create-actions ()
   (let (actions)
@@ -74,7 +74,7 @@
              (let ((action (qnew "QAction(QObject*)" *me*
                                  "text" text)))
                (when shortcut
-                 (|setShorcut| action (qnew "QKeySequence(QString)" shortcut)))
+                 (|setShortcut| action (qnew "QKeySequence(QString)" shortcut)))
                (qconnect action "triggered()" slot)
                (push (cons name action) actions))))
       (action :render-into-pixmap (tr "&Render into Pixmap...") "Ctrl+R" 'render-into-pixmap)
@@ -123,7 +123,7 @@
     (|resize| *pixmap-label* size)))
 
 (defun get-size ()
-  (let ((text (|getText| "QInputDialog"
+  (let ((text (|getText.QInputDialog|
                  *me*
                  (tr "Grabber")
                  (tr "Enter pixmap size:")

@@ -54,7 +54,7 @@
 </p><br>
 <p>
 <b>QAUTO-RELOAD-C++ (variable library-name)</b>
-<p><b>Linux only.</b><br>Extends <code>qload-c++</code> (see <code>Qt_EQL_dynamic/</code>).<br>Defines a global variable (see return value of <code>qload-c++</code>), which will be updated on every change of the C++ plugin (e.g. after recompiling, the plugin will automatically be reloaded, and the <code>variable</code> will be set to its new value).<br>If you want to be notified on every change of the plugin, set <code>*&lt;variable&gt;-reloaded*</code>. It will then be called after reloading, passing both the variable name and the plugin name.<br>See <code>qload-c++</code> for an example how to call plugin functions.</p>
+<p><b>Linux only.</b><br><br>Extends <code>qload-c++</code> (see <code>Qt_EQL_dynamic/</code>).<br><br>Defines a global variable (see return value of <code>qload-c++</code>), which will be updated on every change of the C++ plugin (e.g. after recompiling, the plugin will automatically be reloaded, and the <code>variable</code> will be set to its new value).<br><br>If you want to be notified on every change of the plugin, set <code>*&lt;variable&gt;-reloaded*</code>. It will then be called after reloading, passing both the variable name and the plugin name.<br>See <code>qload-c++</code> for an example how to call plugin functions.</p>
 <pre>
   (qauto-reload-c++ *c++* "eql_cpp")
   
@@ -264,8 +264,8 @@
 </pre>
 </p><br>
 <p>
-<b>QLET (((var exp) ...) ...)</b>
-<p>Similar to <code>let*</code>. Creates temporary Qt objects, deleting them at the end of the <code>qlet</code> body.<br>If <code>exp</code> is a string, it will be substituted with <code>(qnew exp)</code>, optionally including constructor arguments.</p>
+<b>QLET (((variable-1 expression-1) (variable-2 expression-2)) &body body)</b>
+<p>Similar to <code>let*</code> (and to local C++ variables).<br><br>Creates temporary Qt objects, deleting them at the end of the <code>qlet</code> body.<br>If <code>expression</code> is a string, it will be substituted with <code>(qnew expression)</code>, optionally including constructor arguments.</p>
 <pre>
   (qlet ((painter "QPainter"))
   &nbsp;&nbsp;...)
