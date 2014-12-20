@@ -2319,16 +2319,16 @@ cl_object qtranslate(cl_object l_con, cl_object l_src, cl_object l_n) {
 
 cl_object qlocal8bit(cl_object l_str) {
     /// args: (string)
-    /// Returns the string converted using <code>QString::toLocal8Bit()</code> (see <code>QLocale</code> settings).<br>Depending on the OS, this may be necessary if you get a filename from Qt and want to use it in Lisp.
+    /// Converts a Unicode pathname to a simple ECL base string, using <code>QString::toLocal8Bit()</code> (see <code>QLocale</code> settings).<br>Depending on the OS (namely Windows), this is necessary if you get a filename from Qt and want to use it in ECL.<br><br>See also <b>QUTF8</b>.
     ecl_process_env()->nvalues = 1;
-    cl_object l_ret = from_cstring(toQString(l_str).toLocal8Bit());
+    cl_object l_ret = from_cstring(toQString(l_str).toLocal8Bit()); // returns 'ecl_simple_base_string', not Unicode
     return l_ret; }
 
 cl_object qutf8(cl_object l_str) {
     /// args: (string)
-    /// Returns the string converted using <code>QString::toUtf8()</code>.<br>Depending on the OS, this may be necessary if you get a filename from Qt and want to use it in Lisp.
+    /// Converts a Unicode pathname to a simple ECL base string, using <code>QString::toUtf8()</code>.<br>Depending on the OS (namely OSX, Linux), this is necessary if you get a filename from Qt and want to use it in ECL.<br><br>See also <b>QLOCAL8BIT</b>.
     ecl_process_env()->nvalues = 1;
-    cl_object l_ret = from_cstring(toQString(l_str).toUtf8());
+    cl_object l_ret = from_cstring(toQString(l_str).toUtf8()); // returns 'ecl_simple_base_string', not Unicode
     return l_ret; }
 
 cl_object qfrom_utf8(cl_object l_ba) {

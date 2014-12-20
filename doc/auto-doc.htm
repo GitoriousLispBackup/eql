@@ -298,7 +298,7 @@
 </p><br>
 <p>
 <b>QLOCAL8BIT (string)</b>
-<p>Returns the string converted using <code>QString::toLocal8Bit()</code> (see <code>QLocale</code> settings).<br>Depending on the OS, this may be necessary if you get a filename from Qt and want to use it in Lisp.</p>
+<p>Converts a Unicode pathname to a simple ECL base string, using <code>QString::toLocal8Bit()</code> (see <code>QLocale</code> settings).<br>Depending on the OS (namely Windows), this is necessary if you get a filename from Qt and want to use it in ECL.<br><br>See also <b>QUTF8</b>.</p>
 </p><br>
 <p>
 <b>QMESSAGE-BOX (x)</b>
@@ -501,7 +501,7 @@
 </p><br>
 <p>
 <b>QUTF8 (string)</b>
-<p>Returns the string converted using <code>QString::toUtf8()</code>.<br>Depending on the OS, this may be necessary if you get a filename from Qt and want to use it in Lisp.</p>
+<p>Converts a Unicode pathname to a simple ECL base string, using <code>QString::toUtf8()</code>.<br>Depending on the OS (namely OSX, Linux), this is necessary if you get a filename from Qt and want to use it in ECL.<br><br>See also <b>QLOCAL8BIT</b>.</p>
 </p><br>
 <p>
 <b>QVERSION ()</b>
