@@ -17,6 +17,7 @@
 (defvar *action-save* (qfind-child *main* "action_save"))
 
 (defun os-pathname (name)
+  "Needed because ECL uses base strings (not Unicode) for pathnames internally."
   #+(or darwin linux)
   (qutf8 name)
   #+win32

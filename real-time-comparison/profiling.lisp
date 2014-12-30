@@ -10,8 +10,8 @@
 ;;; In my tests, CommonQt/SBCL was a little faster than EQL
 ;;; (except on Windows).
 ;;;
-;;; But note that CommonQt/ECL (if you get it to work)
-;;; would be much slower than EQL.
+;;; But note that CommonQt/ECL is currently (2014) several times
+;;; slower than EQL, and conses a lot more.
 ;;;
 
 #+eql

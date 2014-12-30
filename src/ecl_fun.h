@@ -21,7 +21,7 @@ QT_BEGIN_NAMESPACE
 
 #define STRING(s) make_constant_base_string((char*)s)
 
-#define STRING_COPY(s) make_base_string_copy((char*)s)
+#define STRING_COPY(s) (s ? make_base_string_copy((char*)s) : Cnil)
 
 #define PRINT(x) cl_print(1, x)
 
