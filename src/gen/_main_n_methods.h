@@ -775,7 +775,6 @@ public:
     Q_INVOKABLE void Mshow(QGraphicsItem* o) { o->show(); }
     Q_INVOKABLE void MstackBefore(QGraphicsItem* o, const QGraphicsItem* x1) { o->stackBefore(x1); }
     Q_INVOKABLE QGraphicsObject* MtoGraphicsObject(QGraphicsItem* o) { return o->toGraphicsObject(); }
-    Q_INVOKABLE const QGraphicsObject* MtoGraphicsObject(QGraphicsItem* o) const { return o->toGraphicsObject(); }
     Q_INVOKABLE QString MtoolTip(QGraphicsItem* o) const { return o->toolTip(); }
     Q_INVOKABLE QGraphicsItem* MtopLevelItem(QGraphicsItem* o) const { return o->topLevelItem(); }
     Q_INVOKABLE QGraphicsWidget* MtopLevelWidget(QGraphicsItem* o) const { return o->topLevelWidget(); }

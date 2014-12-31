@@ -1072,7 +1072,6 @@
    "void show ()"
    "void stackBefore ( const QGraphicsItem * )"
    "QGraphicsObject * toGraphicsObject ()"
-   "const QGraphicsObject * toGraphicsObject () const"
    "QString toolTip () const"
    "QGraphicsItem * topLevelItem () const"
    "QGraphicsWidget * topLevelWidget () const"

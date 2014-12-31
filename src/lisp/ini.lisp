@@ -204,22 +204,24 @@
 (defun qproperties (object)
   "args: (object)
    Prints all current properties of <code>object</code>, searching both all Qt properties and all Qt methods which don't require arguments.
-       (qproperties (|font.QApplication|))"
+       (qproperties (|font.QApplication|))
+       (qproperties (qnew \"QVariant(QString)\" \"42\"))"
   (let ((object* (ensure-qt-object object)))
     (when (qt-object-p object*)
       (flet ((readable (object)
                (if (qt-object-p object)
                    (let ((name (qt-object-name object)))
                      (cond ((string= "QColor" name)
-                            (|name| object))
+                            (! "name" object))
                            ((search name "QDate QTime QDateTime QFont QUrl")
-                            (|toString| object))
+                            (! "toString" object))
                            ((search name "QPixmap QImage QPicture QIcon QTextCursor QVariant")
-                            (if (|isNull| object)
+                            (if (and (not (zerop (qt-object-pointer object)))
+                                     (! "isNull" object))
                                 (qt-object 0 0 (qt-object-id object))   ; print '0' pointer
                                 object))
                            ((search name "QModelIndex QRegExp")
-                            (if (|isValid| object)
+                            (if (! "isValid" object)
                                 object
                                 (qt-object 0 0 (qt-object-id object)))) ; print '0' pointer
                            (t

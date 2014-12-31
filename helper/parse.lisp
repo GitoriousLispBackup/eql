@@ -91,6 +91,7 @@
         "QFont getFont ( bool * , const QFont & , QWidget * , const char * )" ; "const char *" is ignored
         "QString nativeArguments () const"
         "void setNativeArguments ( const QString & )"
+        "const QGraphicsObject * toGraphicsObject () const"
         ))
 
 (defparameter *check* nil)
