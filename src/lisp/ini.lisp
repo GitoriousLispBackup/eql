@@ -201,11 +201,12 @@
                            'string< :key 'cdr)
                      'string< :key 'car))))
 
-(defun qproperties (object)
-  "args: (object)
-   Prints all current properties of <code>object</code>, searching both all Qt properties and all Qt methods which don't require arguments.
+(defun qproperties (object &optional (depth 1))
+  "args: (object &optional (depth 1))
+   Prints all current properties of <code>object</code>, searching both all Qt properties and all Qt methods which don't require arguments.<br>Optionally pass a <code>depth</code> indicating how many super-classes to include. Pass <code>T</code> to include all super-classes.
        (qproperties (|font.QApplication|))
-       (qproperties (qnew \"QVariant(QString)\" \"42\"))"
+       (qproperties (qnew \"QVariant(QString)\" \"42\"))
+       (qproperties *tool-button* 2)                 ; depth 2: both QToolButton and QAbstractButton"
   (let ((object* (ensure-qt-object object)))
     (when (qt-object-p object*)
       (flet ((readable (object)
@@ -213,7 +214,7 @@
                    (let ((name (qt-object-name object)))
                      (cond ((string= "QColor" name)
                             (! "name" object))
-                           ((search name "QDate QTime QDateTime QFont QUrl")
+                           ((search name "QDate QTime QDateTime QFont QUrl QKeySequence")
                             (! "toString" object))
                            ((search name "QPixmap QImage QPicture QIcon QTextCursor QVariant")
                             (if (and (not (zerop (qt-object-pointer object)))
@@ -227,16 +228,24 @@
                            (t
                             object)))
                    object)))
-        (let ((docu (qapropos* nil (qt-object-name object*)))
-              functions)
-          (dolist (type '("Properties:" "Methods:"))
-            (dolist (fun (rest (find type (rest (first docu)) :key 'first :test 'string=)))
-              (when (and (not (x:starts-with "void " fun))
-                         (not (x:starts-with "constructor " fun))
-                         (not (x:ends-with " static" fun))
-                         (or (not (find #\( fun))
-                             (search "()" fun)))
-                (push fun functions))))
+        (let ((name (qt-object-name object*))
+              documentations functions methods)
+          (x:while (and name (not (eql 0 depth)))
+            (push (first (qapropos* nil name)) documentations)
+            (setf name (qsuper-class-name name))
+            (when (numberp depth)
+              (decf depth)))
+          (dolist (docu documentations)
+            (dolist (type '("Properties:" "Methods:"))
+              (dolist (fun (rest (find type (rest docu) :key 'first :test 'string=)))
+                (when (and (not (x:starts-with "void " fun))
+                           (not (x:starts-with "constructor " fun))
+                           (not (x:ends-with " static" fun))
+                           (or (not (find #\( fun))
+                               (search "()" fun)))
+                  (push fun functions)
+                  (when (char= #\M (char type 0))
+                    (push fun methods))))))
           (setf functions (mapcar (lambda (fun)
                                     (setf fun (x:string-substitute "" "const " fun)
                                           fun (x:string-substitute "" " const" fun))
@@ -244,8 +253,7 @@
                                       (subseq fun (1+ (position #\Space fun :from-end t :end p)) p)))
                                   functions))
           (setf functions (sort (remove-duplicates functions :test 'string=) 'string<))
-          (let ((tab-stop (1+ (apply 'max (mapcar 'length functions))))
-                (methods (rest (find "Methods:" (rest (first docu)) :key 'first :test 'string=))))
+          (let ((tab-stop (1+ (apply 'max (mapcar 'length functions)))))
             (dolist (fun functions)
               (princ (format nil "~%~A~VT~S" ; "~VT" doesn't work on all terminals
                              fun tab-stop (readable (if (find (format nil " ~A(" fun) methods :test 'search)
@@ -608,6 +616,7 @@
 (defun qrun-in-gui-thread (function &optional (blocking t))
   (%qrun-in-gui-thread function blocking))
 
+#+threads
 (defvar *gui-thread* mp:*current-process*)
 
 (defmacro qrun-in-gui-thread* (&body body)
@@ -618,6 +627,7 @@
        
        (let ((item (qrun* (qnew \"QTableWidgetItem\")))) ; return value(s)
        &nbsp;&nbsp;...)"
+  #+threads
   (let ((values (gensym)))
     `(if (eql *gui-thread* mp:*current-process*)
          ,(if (second body)
@@ -628,7 +638,11 @@
                    (setf ,values (multiple-value-list ,(if (second body)
                                                            (cons 'progn body)
                                                            (first body))))))
-           (values-list ,values)))))
+           (values-list ,values))))
+  #-threads
+  (if (second body)
+      (cons 'progn body)
+      (first body)))
 
 (defmacro qrun* (&body body) ; alias
   `(qrun-in-gui-thread* ,@body))
@@ -726,7 +740,7 @@
                   (cons 'qnull-object         '(object))
                   (cons 'qobject-names        '(&optional type))
                   (cons 'qoverride            '(object name function))
-                  (cons 'qproperties          '(object))
+                  (cons 'qproperties          '(object &optional (depth 1)))
                   (cons 'qproperty            '(object name))
                   (cons 'qquit                '(&optional (exit-status 0) (kill-all-threads t)))
                   (cons 'qremove-event-filter '(handle))
