@@ -59,6 +59,7 @@ META_TYPE (T_QList_QWidget,                    QList<QWidget*>)
 META_TYPE (T_QWidgetList,                      QWidgetList)
 META_TYPE (T_QList_int,                        QList<int>)
 META_TYPE (T_QList_qreal,                      QList<qreal>)
+META_TYPE (T_QMargins,                         QMargins)
 META_TYPE (T_QModelIndex,                      QModelIndex)
 META_TYPE (T_QPainterPath,                     QPainterPath)
 META_TYPE (T_QPolygonF,                        QPolygonF)
@@ -719,6 +720,7 @@ TO_QT_TYPE_PTR2 (QImage, qimage)
 TO_QT_TYPE_PTR2 (QKeySequence, qkeysequence)
 TO_QT_TYPE_PTR2 (QLocale, qlocale)
 TO_QT_TYPE_PTR2 (QMatrix, qmatrix)
+TO_QT_TYPE_PTR  (QMargins, qmargins)
 TO_QT_TYPE_PTR2 (QModelIndex, qmodelindex)
 TO_QT_TYPE_PTR  (QPainterPath, qpainterpath)
 TO_QT_TYPE_PTR2 (QPalette, qpalette)
@@ -1162,6 +1164,7 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
             p = new QList<QWidget*>(toQWidgetList(l_arg));
         else if(T_QList_int == n)                        p = new QList<int>(toIntList(l_arg));
         else if(T_QList_qreal == n)                      p = new QList<qreal>(toRealList(l_arg));
+        else if(T_QMargins == n)                         p = new QMargins(*toQMarginsPointer(l_arg));
         else if(T_QModelIndex == n)                      p = new QModelIndex(*toQModelIndexPointer(l_arg));
         else if(T_QPainterPath == n)                     p = new QPainterPath(*toQPainterPathPointer(l_arg));
         else if(T_QPolygonF == n)                        p = new QPolygonF(toQPolygonF(l_arg));
@@ -1322,6 +1325,7 @@ cl_object to_lisp_arg(const MetaArg& arg) {
                 l_ret = from_qwidgetlist(*(QList<QWidget*>*)p);
             else if(T_QList_int == n)                        l_ret = from_intlist(*(QList<int>*)p);
             else if(T_QList_qreal == n)                      l_ret = from_qreallist(*(QList<qreal>*)p);
+            else if(T_QMargins == n)                         l_ret = from_qmargins(*(QMargins*)p);
             else if(T_QModelIndex == n)                      l_ret = from_qmodelindex(*(QModelIndex*)p);
             else if(T_QPainterPath == n)                     l_ret = from_qpainterpath(*(QPainterPath*)p);
             else if(T_QPolygonF == n)                        l_ret = from_qpolygonf(*(QPolygonF*)p);

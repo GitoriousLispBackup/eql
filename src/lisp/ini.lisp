@@ -216,7 +216,7 @@
                             (! "name" object))
                            ((search name "QDate QTime QDateTime QFont QUrl QKeySequence")
                             (! "toString" object))
-                           ((search name "QPixmap QImage QPicture QIcon QTextCursor QVariant")
+                           ((search name "QPixmap QImage QPicture QIcon QTextCursor QVariant QMargins")
                             (if (and (not (zerop (qt-object-pointer object)))
                                      (! "isNull" object))
                                 (qt-object 0 0 (qt-object-id object))   ; print '0' pointer
