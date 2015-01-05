@@ -242,7 +242,10 @@
                            (not (x:starts-with "constructor " fun))
                            (not (x:ends-with " static" fun))
                            (or (not (find #\( fun))
-                               (search "()" fun)))
+                               (search "()" fun))
+                           ;; desctructive functions
+                           (notany (lambda (x) (search x fun))
+                                   '(" clear" " take" " delete" " remove" " rm" " cut()" " del()")))
                   (push fun functions)
                   (when (char= #\M (char type 0))
                     (push fun methods))))))
