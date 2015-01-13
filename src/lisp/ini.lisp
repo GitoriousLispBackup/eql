@@ -216,7 +216,7 @@
                             (! "name" object))
                            ((search name "QDate QTime QDateTime QFont QUrl QKeySequence")
                             (! "toString" object))
-                           ((search name "QPixmap QImage QPicture QIcon QTextCursor QVariant QMargins")
+                           ((search name "QPixmap QImage QPicture QIcon QTextCursor QVariant QMargins QWebElement")
                             (if (and (not (zerop (qt-object-pointer object)))
                                      (! "isNull" object))
                                 (qt-object 0 0 (qt-object-id object))   ; print '0' pointer
@@ -243,9 +243,9 @@
                            (not (x:ends-with " static" fun))
                            (or (not (find #\( fun))
                                (search "()" fun))
-                           ;; desctructive functions
+                           ;; state changing or copying functions
                            (notany (lambda (x) (search x fun))
-                                   '(" clear" " take" " delete" " remove" " rm" " cut()" " del()")))
+                                   '(" clone" " copy" " disconnect" " take")))
                   (push fun functions)
                   (when (char= #\M (char type 0))
                     (push fun methods))))))

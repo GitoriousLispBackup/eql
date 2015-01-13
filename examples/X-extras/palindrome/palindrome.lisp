@@ -111,10 +111,10 @@
       (qoverride item "paint(QPainter*,QStyleOptionGraphicsItem*,QWidget*)"
                  (lambda (painter _ _)
                    (x:do-with painter
-                     ("fillRect(QRectF,QColor)" (mapcar '+ (|rect| item) '(1 1 -2 -2)) color)
-                     ("setFont" font)
-                     ("setPen(QColor)" "black")
-                     ("drawText(QRectF,int,QString)" (|rect| item) |Qt.AlignCenter| text))))
+                     (|fillRect(QRectF,QColor)| (mapcar '+ (|rect| item) '(1 1 -2 -2)) color)
+                     (|setFont| font)
+                     (|setPen(QColor)| "black")
+                     (|drawText(QRectF,int...)| (|rect| item) |Qt.AlignCenter| text))))
       (push (cons id item) items*)
       item))
   (defun id-item (id)
@@ -128,16 +128,16 @@
   (let ((result (qnew "QState(QState*)" parent)))
     (mapc (lambda (object pos)
             (|assignProperty| result object "geometry" (qnew "QVariant(QRect)"
-                                                               (append (mapcar '* (mapcar '- pos '(1 1)) *item-size*)
-                                                                       *item-size*))))
+                                                             (append (mapcar '* (mapcar '- pos '(1 1)) *item-size*)
+                                                                     *item-size*))))
           objects positions)
     result))
 
 (defun add-state (state-switcher state animation)
   (let ((trans (new-state-switch-transition (incf (switcher-state-count state-switcher)))))
     (x:do-with trans
-      ("setTargetState" state)
-      ("addAnimation" animation))
+      (|setTargetState| state)
+      (|addAnimation| animation))
     (|addTransition(QAbstractTransition*)| state-switcher trans)))
 
 (let (animations groups)
@@ -150,8 +150,8 @@
                        group)
                      anim-group)))
       (x:do-with anim
-        ("setDuration" duration)
-        ("setEasingCurve" (if (= |QEasingCurve.Custom| curve-type)
+        (|setDuration| duration)
+        (|setEasingCurve| (if (= |QEasingCurve.Custom| curve-type)
                               (custom-easing-curve)
                               (qnew "QEasingCurve(QEasingCurve::Type)" curve-type))))
       (push* anim animations)
@@ -180,9 +180,9 @@
       (dolist (group groups)
         (let ((anim (|takeAnimation| group 1)))
           (x:do-with group
-            ("clear")
-            ("addPause" (* (incf n) msec))
-            ("addAnimation" anim)))))
+            (|clear|)
+            (|addPause| (* (incf n) msec))
+            (|addAnimation| anim)))))
     (update-timer))
   (defun update-timer ()
     (|setInterval| *timer* (+ *duration* (* 4 *pause*) 1000))))
@@ -225,9 +225,9 @@
     (qset-color *main* |QPalette.Window| *background*)
     (|setBackgroundBrush| scene (qnew "QBrush(QColor)" *background*))
     (x:do-with layout
-      ("addStretch")
-      ("addWidget" *view*)
-      ("addStretch"))
+      (|addStretch|)
+      (|addWidget| *view*)
+      (|addStretch|))
     (|setScene| *view* scene)
     (dolist (item (items))
       (|addItem| scene item))
@@ -240,12 +240,12 @@
       (dolist (state states)
         (add-state state-switcher state anim-group))
       (x:do-with group
-        ("setInitialState" (first states))
-        ("addTransition" *timer* (qsignal "timeout()") state-switcher)))
+        (|setInitialState| (first states))
+        (|addTransition| *timer* (qsignal "timeout()") state-switcher)))
     (x:do-with machine
-      ("addState" group)
-      ("setInitialState" group)
-      ("start"))
+      (|addState| group)
+      (|setInitialState| group)
+      (|start|))
     (qconnect group "entered()" *timer* "start()")
     (qoverride *view* "resizeEvent(QResizeEvent*)"
                (lambda (event)
@@ -283,8 +283,8 @@
                                   (if active
                                       (|stop| *timer*)
                                       (x:do-with *timer*
-                                        ("timeout")
-                                        ("start")))
+                                        (|timeout|)
+                                        (|start|)))
                                   (qset-color *main* |QPalette.Window| (if active *color-pause* *background*))))
                              (#.|Qt.Key_S|
                                 (let ((widget (|viewport| *view*)))

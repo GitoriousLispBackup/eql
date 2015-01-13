@@ -130,7 +130,7 @@
 
 (defun save (&optional (name "image.png") (format "PNG"))
   (let ((*saving* t))
-    (|save| (|grabWidget(QWidget*,QRect)| "QPixmap" *display* (|rect| *image*))
+    (|save| (|grabWidget(QWidget*,QRect).QPixmap| *display* (|rect| *image*))
             name format)))
 
 (start)
