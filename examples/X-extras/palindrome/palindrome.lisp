@@ -5,11 +5,18 @@
 
 (require :definitions "definitions")
 
+(defvar *generate-html/js-version* nil) ; command line option :html
+
 (dolist (arg (mapcar 'read-from-string (|arguments.QCoreApplication|)))
-  (when (numberp arg)
-    (if (integerp arg)
-        (setf *window-width* arg)
-        (setf *window-opacity* arg))))
+  (if (numberp arg)
+      (if (integerp arg)
+          (setf *window-width* arg)
+          (setf *window-opacity* arg))
+      (when (eql :html arg)
+        (setf *generate-html/js-version* t)))
+  (when (and *generate-html/js-version*
+             (not *window-width*))
+    (setf *window-width* 450)))
 
 (defconstant +state-switch-event+ (+ |QEvent.User| 256))
 (defconstant +size+               20)
@@ -101,27 +108,32 @@
                                   (new-state-switch-event n)))))
       switch)))
 
+;;;
 ;;; main
+;;;
 
-(let ((font (x:let-it (|font.QApplication|)
-              (|setBold| x:it t)))
-      items items*)
+(defvar *font*           (x:let-it (|font.QApplication|) (|setBold| x:it t)))
+(defvar *graphics-items* nil)
+
+(let (items)
   (defun new-graphics-item (text color id)
+    (when *generate-html/js-version*
+      (save-item-pixmap text color id))
     (let ((item (qnew "QGraphicsWidget")))
       (qoverride item "paint(QPainter*,QStyleOptionGraphicsItem*,QWidget*)"
                  (lambda (painter _ _)
                    (x:do-with painter
                      (|fillRect(QRectF,QColor)| (mapcar '+ (|rect| item) '(1 1 -2 -2)) color)
-                     (|setFont| font)
+                     (|setFont| *font*)
                      (|setPen(QColor)| "black")
                      (|drawText(QRectF,int...)| (|rect| item) |Qt.AlignCenter| text))))
-      (push (cons id item) items*)
+      (push (cons id item) *graphics-items*)
       item))
   (defun id-item (id)
-    (cdr (assoc id items*)))
+    (cdr (assoc id *graphics-items*)))
   (defun items ()
     (or items (setf items
-                    (loop :for i :to (1- (length items*))
+                    (loop :for i :to (1- (length *graphics-items*))
                       :collect (id-item (intern (string (code-char (+ i #.(char-code #\A)))))))))))
 
 (defun create-geometry-state (parent objects positions)
@@ -301,4 +313,73 @@
         (|showFullScreen| *main*))
     (|raise| *main*)))
 
-(ini)
+;;;
+;;; for *generate-html/js-version* (command line option :html)
+;;;
+
+(defvar *positions-timer* (qnew "QTimer"))
+(defvar *item-positions*  nil)
+
+(defun normalize (x)
+  (truncate (+ 0.5 (/ (* x *window-width*) 300))))
+
+(defun save-item-pixmap (text color id)
+  (qlet ((pixmap "QPixmap(QSize)" (mapcar 'normalize *item-size*)))
+    (|fill| pixmap "transparent")
+    (qlet ((painter "QPainter(QPixmap*)" pixmap)
+           (font* (qcopy *font*)))
+      (|setPointSize| font* (normalize (|pointSize| font*)))
+      (x:do-with painter
+        (|fillRect(QRectF,QColor)| (mapcar '+ (|rect| pixmap) '(1 1 -2 -2)) color)
+        (|setFont| font*)
+        (|setPen(QColor)| "black")
+        (|drawText(QRectF,int...)| (|rect| pixmap) |Qt.AlignCenter| text)))
+    (|save| pixmap (ensure-directories-exist (format nil "html/img/~D.png"
+                                                     (1+ (- (char-code (char (symbol-name id) 0))
+                                                            (char-code #\A))))))))
+
+(let (ex-pos)
+  (defun collect-item-positions ()
+    (let ((pos (mapcar (lambda (it) (cons (car it) (mapcar 'normalize (|pos| (cdr it)))))
+                       *graphics-items*)))
+      (unless (equal pos ex-pos)
+        (push pos *item-positions*)
+        (setf ex-pos pos)))))
+
+(let (num)
+  (defun save-item-positions ()
+    (if num
+        (progn
+          (let (pos)
+            (dolist (p *item-positions*)
+              (push (sort p 'string< :key 'first) pos))
+            (with-open-file (s "meta/positions.js"
+                               :direction :output :if-exists :append :if-does-not-exist :create)
+              (format s "~%  var p~D = [" (incf num))
+              (dolist (p pos)
+                (dolist (xy p)
+                  (format s "~D,~D," (second xy) (third xy))))
+              (format s "null];~%")))
+          (format t "~%[html] positions ~D/12" num)
+          (when (= 12 num)
+            (load "meta/generate.lisp")
+            (funcall (find-symbol "GENERATE-HTML") *window-width*)
+            (format t "~%[html] please see \"html/palindrome.htm\"~%~%")
+            (qq))
+          (setf *item-positions* nil))
+        (progn
+          (setf num 0)
+          (when (probe-file "meta/positions.js")
+            (delete-file "meta/positions.js"))))))
+
+(defun ini-generate-html/js ()
+  (|setInterval| *positions-timer* 50)
+  (qconnect *positions-timer* "timeout()" 'collect-item-positions)
+  (qconnect *timer* "timeout()" 'save-item-positions)
+  (|start| *positions-timer*))
+
+(progn
+  (ini)
+  (when *generate-html/js-version*
+    (ini-generate-html/js)))
+
