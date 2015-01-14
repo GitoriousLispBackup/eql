@@ -36,6 +36,7 @@
   *n-override*
   *n-super-classes*
   *package-name*
+  *properties*
   *primitives*
   *q-methods*
   *q-names*
@@ -84,6 +85,7 @@
   (qconnect *n-names* "activated(QString)" 'change-n-object)
   (qconnect *edit* "returnPressed()" 'eval-edit)
   (qconnect *select* "clicked()" (lambda () (qselect 'widget-selected)))
+  (qconnect *properties* "clicked()" 'show-properties-dialog)
   (qconnect *search-help* "textChanged(QString)" 'search-help)
   (qconnect *search-help* "returnPressed()" 'search-help)
   (qoverride *edit* "keyPressEvent(QKeyEvent*)" 'history-move)
@@ -347,9 +349,15 @@
 
 (defun widget-selected (widget)
   (setf *q* widget)
-  (qset *selected-widget* "text" (prin1-to-string *q*))
+  (! "setText" *selected-widget* (prin1-to-string *q*))
+  (! "setEnabled" *properties* t)
   (change-class-q-object (qt-object-name *q*) :super)
   (focus-me))
+
+(defun show-properties-dialog ()
+  (unless (find-package :properties)
+    (load (in-home "gui/properties")))
+  (funcall (find-symbol "SHOW" :properties) *q*))
 
 (gui)
 

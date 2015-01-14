@@ -245,7 +245,7 @@
                                (search "()" fun))
                            ;; state changing or copying functions
                            (notany (lambda (x) (search x fun))
-                                   '(" clone" " copy" " disconnect" " take")))
+                                   '(" clone" " copy" " disconnect" " take" " create")))
                   (push fun functions)
                   (when (char= #\M (char type 0))
                     (push fun methods))))))
