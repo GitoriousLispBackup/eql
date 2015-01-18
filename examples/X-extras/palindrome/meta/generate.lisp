@@ -1,14 +1,19 @@
+;;;
 ;;; generate Html5; uses <canvas>, JS
+;;;
 
-(defun generate-html (width)
+(defun generate-html (width &optional (resizable t))
   (let ((width/2 (truncate (+ 0.5 (/ width 2)))))
     (with-open-file (s "html/palindrome.htm" :direction :output :if-exists :supersede)
       (format s "~%<!-- best viewed in full screen mode -->~
                  ~%~
                  ~%<html>~
                  ~%<head></head>~
-                 ~%<body style=\"background-color: black;\" onload=\"draw()\">~
-                 ~%<div style=\"position: absolute; width: ~D; height: ~D; left: 50%; top: 50%; margin: -~D 0 0 -~D;\">~
+                 ~%<body style=\"background-color: black;\" onload=\"draw()\">")
+      (when resizable
+        (format s "~%<input id=\"size\" type=\"text\" value=\"~D\" size=\"3\" onkeyup=\"resize()\">"
+                width))
+      (format s "~%<div style=\"position: absolute; width: ~D; height: ~D; left: 50%; top: 50%; margin: -~D 0 0 -~D;\">~
                  ~%<canvas id=\"cv\" width=\"~D\" height=\"~D\"></canvas>~
                  ~%</div>~
                  ~%<script>
@@ -31,6 +36,7 @@
           (read-sequence buf in)
           (write-sequence buf s)))
       (format s "~%  var positions = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, null];~
+                 ~%  p = positions[0];~
                  ~%~
                  ~%  function draw() {~
                  ~%    ct.fill();~
@@ -49,10 +55,23 @@
                  ~%        setTimeout(draw, 1000); }}~
                  ~%    else {~
                  ~%      setTimeout(draw, 50); }}~
-                 ~%~
-                 ~%  p = positions[0];~
-                 ~%~
-                 ~%</script>~
+                 ~%")
+      (when resizable
+        (format s "~%    var size = document.getElementById(\"size\");~
+                   ~%~
+                   ~%    function resize() {~
+                   ~%      var s = size.value;~
+                   ~%      if(s < 1) {~
+                   ~%        s = ~D; }~
+                   ~%      var p = (~D - s) / 2;~
+                   ~%      cv.style.position = \"absolute\";~
+                   ~%      cv.style.width = s;~
+                   ~%      cv.style.height = s;~
+                   ~%      cv.style.left = p;~
+                   ~%      cv.style.top = p; }~
+                   ~%"
+                width width))
+      (format s "~%</script>~
                  ~%</body>~
                  ~%</html>"))))
 

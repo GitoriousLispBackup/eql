@@ -291,7 +291,7 @@
                          (let ((key (|key| event)))
                            (case key
                              (#.|Qt.Key_Space|
-                                (let ((active (|active| *timer*)))
+                                (let ((active (|isActive| *timer*)))
                                   (if active
                                       (|stop| *timer*)
                                       (x:do-with *timer*
