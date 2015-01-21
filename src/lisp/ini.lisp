@@ -209,25 +209,28 @@
        (qproperties *tool-button* 2)                 ; depth 2: both QToolButton and QAbstractButton"
   (let ((object* (ensure-qt-object object)))
     (when (qt-object-p object*)
-      (flet ((readable (object)
-               (if (qt-object-p object)
-                   (let ((name (qt-object-name object)))
-                     (cond ((search name "QColor QLocale")
-                            (! "name" object))
-                           ((search name "QDate QTime QDateTime QFont QUrl QKeySequence")
-                            (! "toString" object))
-                           ((search name "QPixmap QImage QPicture QIcon QTextCursor QVariant QMargins QWebElement")
-                            (if (and (not (zerop (qt-object-pointer object)))
-                                     (! "isNull" object))
-                                (qt-object 0 0 (qt-object-id object))   ; print '0' pointer
-                                object))
-                           ((search name "QModelIndex QRegExp")
-                            (if (! "isValid" object)
-                                object
-                                (qt-object 0 0 (qt-object-id object)))) ; print '0' pointer
-                           (t
-                            object)))
-                   object)))
+      (flet ((readable (obj fun)
+               (cond ((string= "dynamicPropertyNames" fun)
+                      (mapcar 'x:bytes-to-string obj))
+                     ((qt-object-p obj)
+                      (let ((name (qt-object-name obj)))
+                        (cond ((search name "QColor QLocale")
+                               (! "name" obj))
+                              ((search name "QDate QTime QDateTime QFont QUrl QKeySequence")
+                               (! "toString" obj))
+                              ((search name "QPixmap QImage QPicture QIcon QTextCursor QVariant QMargins QWebElement")
+                               (if (and (not (zerop (qt-object-pointer obj)))
+                                        (! "isNull" obj))
+                                   (qt-object 0 0 (qt-object-id obj))   ; print '0' pointer
+                                   obj))
+                              ((search name "QModelIndex QRegExp")
+                               (if (! "isValid" obj)
+                                   obj
+                                   (qt-object 0 0 (qt-object-id obj)))) ; print '0' pointer
+                              (t
+                               obj))))
+                     (t
+                      obj))))
         (let ((name (qt-object-name object*))
               documentations functions methods)
           (x:while (and name (not (eql 0 depth)))
@@ -262,7 +265,8 @@
                 (princ (format nil "~%~A~VT~S" ; "~VT" doesn't work on all terminals
                                fun tab-stop (readable (if (find (format nil " ~A(" fun) methods :test 'search)
                                                           (! fun object*)
-                                                          (qget object* fun)))))))
+                                                          (qget object* fun))
+                                                      fun)))))
             (terpri)
             (terpri)
             (values)))))))

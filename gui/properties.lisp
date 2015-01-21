@@ -48,7 +48,8 @@
       (! "setWindowTitle" *main* name)
       (x:while (setf name (qsuper-class-name name))
         (incf depth))
-      (! "setMaximum" *depth* depth)))
+      (! "setMaximum" *depth* depth)
+      (! "setValue" *depth* 1)))
   (! "setHtml" *view* (format nil
                               "<pre style='~A'>~A</pre>"
                               *font*
