@@ -15,9 +15,9 @@ RUN
 HTML VERSION
 ============
 
-Since this is a relatively complex application, it would
-be convenient to generate a Html5 version using the
-<canvas> element and JS.
+Since this is a relatively complex application, it would be
+convenient to generate a 'lazy' (pre-calculated) Html5 version,
+using the <canvas> element and JS.
 
 Use command line option :html to have it generated:
 

@@ -13,30 +13,30 @@
       (when resizable
         (format s "~%<input id=\"size\" type=\"text\" value=\"~D\" size=\"3\" onkeyup=\"resize()\">"
                 width))
-      (format s "~%<div style=\"position: absolute; width: ~D; height: ~D; left: 50%; top: 50%; margin: -~D 0 0 -~D;\">~
+      (format s "~%<div style=\"position: absolute; left: 50%; top: 50%; width: ~D; height: ~D; margin: -~D 0 0 -~D;\">~
                  ~%<canvas id=\"cv\" width=\"~D\" height=\"~D\"></canvas>~
                  ~%</div>~
-                 ~%<script>
-                 ~%  var cv = document.getElementById(\"cv\");~
-                 ~%  var ct = cv.getContext(\"2d\");~
-                 ~%  ct.rect(0, 0, ~D, ~D);~
-                 ~%  var i = 0;~
-                 ~%  var j = 0;~
-                 ~%  var p;~
+                 ~%<script>~
+                 ~%~
                  ~%  var images = new Array(25);~
                  ~%~
                  ~%  for(var n = 0; n < 25; n++) {~
                  ~%    images[n] = new Image;~
                  ~%    images[n].src = \"img/\" + (n + 1) + \".png\"; }~%"
               width width width/2 width/2
-              width width
               width width)
       (with-open-file (in "meta/positions.js" :direction :input)
         (let ((buf (make-string (file-length in))))
           (read-sequence buf in)
           (write-sequence buf s)))
       (format s "~%  var positions = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, null];~
-                 ~%  p = positions[0];~
+                 ~%  var p = positions[0];~
+                 ~%  var cv = document.getElementById(\"cv\");~
+                 ~%  var ct = cv.getContext(\"2d\");~
+                 ~%  var i = 0;~
+                 ~%  var j = 0;~
+                 ~%~
+                 ~%  ct.rect(0, 0, ~D, ~D);~
                  ~%~
                  ~%  function draw() {~
                  ~%    ct.fill();~
@@ -55,7 +55,8 @@
                  ~%        setTimeout(draw, 1000); }}~
                  ~%    else {~
                  ~%      setTimeout(draw, 50); }}~
-                 ~%")
+                 ~%"
+              width width)
       (when resizable
         (format s "~%    var size = document.getElementById(\"size\");~
                    ~%~
@@ -65,10 +66,10 @@
                    ~%        s = ~D; }~
                    ~%      var p = (~D - s) / 2;~
                    ~%      cv.style.position = \"absolute\";~
-                   ~%      cv.style.width = s;~
-                   ~%      cv.style.height = s;~
                    ~%      cv.style.left = p;~
-                   ~%      cv.style.top = p; }~
+                   ~%      cv.style.top = p;~
+                   ~%      cv.style.width = s;~
+                   ~%      cv.style.height = s; }~
                    ~%"
                 width width))
       (format s "~%</script>~

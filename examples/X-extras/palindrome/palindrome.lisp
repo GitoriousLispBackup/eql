@@ -359,7 +359,7 @@
               (dolist (p pos)
                 (dolist (xy p)
                   (format s "~D,~D," (second xy) (third xy))))
-              (format s "null];~%")))
+              (format s "null];")))
           (format t "~%[html] positions ~D/12" num)
           (when (= 12 num)
             (load "meta/generate.lisp")

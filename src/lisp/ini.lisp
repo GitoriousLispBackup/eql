@@ -209,28 +209,34 @@
        (qproperties *tool-button* 2)                 ; depth 2: both QToolButton and QAbstractButton"
   (let ((object* (ensure-qt-object object)))
     (when (qt-object-p object*)
-      (flet ((readable (obj fun)
-               (cond ((string= "dynamicPropertyNames" fun)
-                      (mapcar 'x:bytes-to-string obj))
-                     ((qt-object-p obj)
-                      (let ((name (qt-object-name obj)))
-                        (cond ((search name "QColor QLocale")
-                               (! "name" obj))
-                              ((search name "QDate QTime QDateTime QFont QUrl QKeySequence")
-                               (! "toString" obj))
-                              ((search name "QPixmap QImage QPicture QIcon QTextCursor QVariant QMargins QWebElement")
-                               (if (and (not (zerop (qt-object-pointer obj)))
-                                        (! "isNull" obj))
-                                   (qt-object 0 0 (qt-object-id obj))   ; print '0' pointer
-                                   obj))
-                              ((search name "QModelIndex QRegExp")
-                               (if (! "isValid" obj)
-                                   obj
-                                   (qt-object 0 0 (qt-object-id obj)))) ; print '0' pointer
-                              (t
-                               obj))))
-                     (t
-                      obj))))
+      (labels ((null-qt-object (obj)
+                 (qt-object 0 0 (qt-object-id obj)))
+               (readable (obj fun)
+                 (cond ((string= "dynamicPropertyNames" fun)
+                        (mapcar 'x:bytes-to-string obj))
+                       ((qt-object-p obj)
+                        (let ((name (qt-object-name obj)))
+                          (cond ((search name "QColor QLocale")
+                                 (! "name" obj))
+                                ((search name "QDate QTime QDateTime QFont QUrl QKeySequence")
+                                 (! "toString" obj))
+                                ((search name "QPixmap QImage QPicture QIcon QTextCursor QVariant QMargins QWebElement")
+                                 (if (and (not (zerop (qt-object-pointer obj)))
+                                          (! "isNull" obj))
+                                     (null-qt-object obj)
+                                     obj))
+                                ((search name "QModelIndex")
+                                 (if (! "isValid" obj)
+                                     obj
+                                     (null-qt-object obj)))
+                                ((search name "QRegExp")
+                                 (if (! "isEmpty" obj)
+                                     (null-qt-object obj)
+                                     obj))
+                                (t
+                                 obj))))
+                       (t
+                        obj))))
         (let ((name (qt-object-name object*))
               documentations functions methods)
           (x:while (and name (not (eql 0 depth)))
@@ -348,18 +354,26 @@
       (ext:set-finalizer obj 'qdelete))
     obj))
 
-(defmethod print-object ((obj qt-object) s)
-  (print-unreadable-object (obj s :type nil :identity nil)
-    (let ((unique (qt-object-unique obj)))
-      (format s "~A~A 0x~X~A~A"
-              (qt-object-name obj)
-              (if (and (plusp (qt-object-id obj))
-                       (plusp (qt-object-pointer obj)))
-                  (format nil " ~S" (qfun obj "objectName"))
+(defmethod print-object ((object qt-object) s)
+  (print-unreadable-object (object s :type nil :identity nil)
+    (let* ((unique (qt-object-unique object))
+           (pointer (qt-object-pointer object))
+           (nullp (zerop pointer)))
+      (format s "~A~A ~A~A~A"
+              (qt-object-name object)
+              (if (and (plusp (qt-object-id object))
+                       (plusp pointer))
+                  (format nil " ~S" (qfun object "objectName"))
                   "")
-              (qt-object-pointer obj)
-              (if (zerop unique) "" (format nil " [~D]" unique))
-              (if (qt-object-finalize obj) " GC" "")))))
+              (if nullp
+                  "NULL"
+                  (format nil "0x~X" pointer))
+              (if (or (zerop unique) nullp)
+                  ""
+                  (format nil " [~D]" unique))
+              (if (qt-object-finalize object)
+                  " GC"
+                  "")))))
 
 (defmacro tr (src &optional con (n -1))
   "args: (source &optional context plural-number)
