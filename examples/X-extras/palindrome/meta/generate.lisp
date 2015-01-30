@@ -14,15 +14,15 @@
         (format s "~%<input id=\"size\" type=\"text\" value=\"~D\" size=\"3\" onkeyup=\"resize()\">"
                 width))
       (format s "~%<div style=\"position: absolute; left: 50%; top: 50%; width: ~D; height: ~D; margin: -~D 0 0 -~D;\">~
-                 ~%<canvas id=\"cv\" width=\"~D\" height=\"~D\"></canvas>~
+                 ~%<canvas id=\"canvas\" width=\"~D\" height=\"~D\"></canvas>~
                  ~%</div>~
                  ~%<script>~
                  ~%~
                  ~%  var images = new Array(25);~
                  ~%~
                  ~%  for(var n = 0; n < 25; n++) {~
-                 ~%    images[n] = new Image;~
-                 ~%    images[n].src = \"img/\" + (n + 1) + \".png\"; }~%"
+                 ~%      images[n] = new Image;~
+                 ~%      images[n].src = \"img/\" + (n + 1) + \".png\"; }~%"
               width width width/2 width/2
               width width)
       (with-open-file (in "meta/positions.js" :direction :input)
@@ -31,45 +31,41 @@
           (write-sequence buf s)))
       (format s "~%  var positions = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, null];~
                  ~%  var p = positions[0];~
-                 ~%  var cv = document.getElementById(\"cv\");~
-                 ~%  var ct = cv.getContext(\"2d\");~
+                 ~%  var canvas = document.getElementById(\"canvas\");~
+                 ~%  var painter = canvas.getContext(\"2d\");~
                  ~%  var i = 0;~
                  ~%  var j = 0;~
                  ~%~
-                 ~%  ct.rect(0, 0, ~D, ~D);~
+                 ~%  painter.rect(0, 0, ~D, ~D);~
                  ~%~
                  ~%  function draw() {~
-                 ~%    ct.fill();~
-                 ~%    for(var n = 0; n < 25; n++) {~
-                 ~%      ct.drawImage(images[n], p[i++], p[i++]); }~
-                 ~%    if(p[i] == null) {~
-                 ~%      j++;~
-                 ~%      if(positions[j] == null) {~
-                 ~%        i = 0;~
-                 ~%        j = 0;~
-                 ~%        p = positions[0];~
-                 ~%        setTimeout(draw, 1000); }~
+                 ~%      painter.fill();~
+                 ~%      for(var n = 0; n < 25; n++) {~
+                 ~%          painter.drawImage(images[n], p[i++], p[i++]); }~
+                 ~%      if(p[i] == null) {~
+                 ~%          i = 0;~
+                 ~%          j++;~
+                 ~%          if(positions[j] == null) {~
+                 ~%              j = 0; }~
+                 ~%          p = positions[j];~
+                 ~%          setTimeout(draw, 1000); }~
                  ~%      else {~
-                 ~%        i = 0;~
-                 ~%        p = positions[j];~
-                 ~%        setTimeout(draw, 1000); }}~
-                 ~%    else {~
-                 ~%      setTimeout(draw, 50); }}~
+                 ~%          setTimeout(draw, 50); }}~
                  ~%"
               width width)
       (when resizable
-        (format s "~%    var size = document.getElementById(\"size\");~
+        (format s "~%  var size = document.getElementById(\"size\");~
                    ~%~
-                   ~%    function resize() {~
-                   ~%      var s = size.value;~
-                   ~%      if(s < 1) {~
-                   ~%        s = ~D; }~
-                   ~%      var p = (~D - s) / 2;~
-                   ~%      cv.style.position = \"absolute\";~
-                   ~%      cv.style.left = p;~
-                   ~%      cv.style.top = p;~
-                   ~%      cv.style.width = s;~
-                   ~%      cv.style.height = s; }~
+                   ~%  function resize() {~
+                   ~%      var w = size.value;~
+                   ~%      if(w < 1) {~
+                   ~%          w = ~D; }~
+                   ~%      var x = (~D - w) / 2;~
+                   ~%      canvas.style.position = \"absolute\";~
+                   ~%      canvas.style.left = x;~
+                   ~%      canvas.style.top = x;~
+                   ~%      canvas.style.width = w;~
+                   ~%      canvas.style.height = w; }~
                    ~%"
                 width width))
       (format s "~%</script>~

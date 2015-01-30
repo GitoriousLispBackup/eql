@@ -203,7 +203,7 @@
 
 (defun qproperties (object &optional (depth 1))
   "args: (object &optional (depth 1))
-   Prints all current properties of <code>object</code>, searching both all Qt properties and all Qt methods which don't require arguments.<br>Optionally pass a <code>depth</code> indicating how many super-classes to include. Pass <code>T</code> to include all super-classes.
+   Prints all current properties of <code>object</code>, searching both all Qt properties and all Qt methods which don't require arguments (marked with '<b>*</b>').<br>Optionally pass a <code>depth</code> indicating how many super-classes to include. Pass <code>T</code> to include all super-classes.
        (qproperties (|font.QApplication|))
        (qproperties (qnew \"QVariant(QString)\" \"42\"))
        (qproperties *tool-button* 2)                 ; depth 2: both QToolButton and QAbstractButton"
@@ -238,7 +238,7 @@
                        (t
                         obj))))
         (let ((name (qt-object-name object*))
-              documentations functions methods)
+              documentations functions properties)
           (x:while (and name (not (eql 0 depth)))
             (push (first (qapropos* nil name)) documentations)
             (setf name (qsuper-class-name name))
@@ -256,8 +256,9 @@
                            (notany (lambda (x) (search x fun))
                                    '(" clone" " copy" " disconnect" " take" " create")))
                   (push fun functions)
-                  (when (char= #\M (char type 0))
-                    (push fun methods))))))
+                  (when (char= #\P (char type 0)) ; "Properties:"
+                    (push (x:string-substitute "" " const" (subseq fun (1+ (position #\Space fun))))
+                          properties))))))
           (when functions
             (setf functions (mapcar (lambda (fun)
                                       (setf fun (x:string-substitute "" "const " fun)
@@ -266,13 +267,15 @@
                                         (subseq fun (1+ (position #\Space fun :from-end t :end p)) p)))
                                     functions))
             (setf functions (sort (remove-duplicates functions :test 'string=) 'string<))
-            (let ((tab-stop (1+ (apply 'max (mapcar 'length functions)))))
+            (let ((tab-stop (+ 2 (apply 'max (mapcar 'length functions)))))
               (dolist (fun functions)
-                (princ (format nil "~%~A~VT~S" ; "~VT" doesn't work on all terminals
-                               fun tab-stop (readable (if (find (format nil " ~A(" fun) methods :test 'search)
-                                                          (! fun object*)
-                                                          (qget object* fun))
-                                                      fun)))))
+                (let ((prop-p (find fun properties :test 'string=)))
+                  (princ (format nil "~%~A~C~VT~S" ; "~VT" doesn't work on all terminals
+                                 fun
+                                 (if prop-p #\Space #\*)
+                                 tab-stop
+                                 (readable (if prop-p (qget object* fun) (! fun object*))
+                                           fun))))))
             (terpri)
             (terpri)
             (values)))))))

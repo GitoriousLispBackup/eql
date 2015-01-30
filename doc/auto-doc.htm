@@ -350,7 +350,7 @@
 </p><br>
 <p>
 <b>QPROPERTIES (object &optional (depth 1))</b>
-<p>Prints all current properties of <code>object</code>, searching both all Qt properties and all Qt methods which don't require arguments.<br>Optionally pass a <code>depth</code> indicating how many super-classes to include. Pass <code>T</code> to include all super-classes.</p>
+<p>Prints all current properties of <code>object</code>, searching both all Qt properties and all Qt methods which don't require arguments (marked with '<b>*</b>').<br>Optionally pass a <code>depth</code> indicating how many super-classes to include. Pass <code>T</code> to include all super-classes.</p>
 <pre>
   (qproperties (|font.QApplication|))
   (qproperties (qnew "QVariant(QString)" "42"))
