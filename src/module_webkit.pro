@@ -1,4 +1,4 @@
-QT          += webkit
+QT          += webkit network phonon
 TEMPLATE    = lib
 CONFIG      += dll no_keywords uitools release
 LIBS        += -L.. -leql
