@@ -8,6 +8,8 @@ TARGET      = webkit_bridge
 OBJECTS_DIR = ./tmp/
 MOC_DIR     = ./tmp/
 
+macx:QT     += network phonon
+
 include(../../../../../src/windows.pri)
 
 HEADERS += _invokables.h \

@@ -139,9 +139,9 @@
 
 (defun blink-row ()
   (dotimes (n 2)
-    (qsleep 1/7) ; a SLEEP processing Qt events
+    (h:pause 1/7)
     (unmark-row nil)
-    (qsleep 1/7)
+    (h:pause 1/7)
     (unmark-row nil "orange")))
 
 (defun img-id (i)
@@ -193,7 +193,7 @@
       *level-o*))
 
 (defun computer-move ()
-  (qsleep 1/7)
+  (h:pause 1/7)
   (flet ((mv (i)
            (when (and i (x:empty-string (cell-text i)))
              i))

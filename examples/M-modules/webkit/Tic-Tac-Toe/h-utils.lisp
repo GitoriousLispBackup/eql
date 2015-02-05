@@ -53,6 +53,7 @@
    #:namespace-uri
    #:next-sibling
    #:parent
+   #:pause
    #:prefix
    #:prepend-inside
    #:prepend-outside
@@ -432,6 +433,9 @@
   (append-inside "BODY" text/html)
   (when scroll-to-bottom
     (qrun* (qlater 'scroll-to-bottom))))
+
+(defun pause (seconds)
+  (qrun* (qsleep seconds)))
 
 ;;; wrappers for some QFrame methods
 
