@@ -397,19 +397,22 @@
   (qrun* (let* ((element (ensure-web-element web-element))
                 (size (nthcdr 2 (! "geometry" element)))
                 (pixmap (qnew "QPixmap(QSize)" size)))
-           (! "fill" pixmap "transparent")
-           (qlet ((painter "QPainter(QPixmap*)" pixmap))
-             (x:do-with (! "setRenderHint" painter)
-               (|QPainter.Antialiasing| t)
-               (|QPainter.TextAntialiasing| t)
-               (|QPainter.SmoothPixmapTransform| t))
-             (! "render" element painter))
-           (if scale-factor
-               (! "scaled(QSize,Qt::AspectRatioMode,Qt::TransformationMode)" pixmap
-                  (mapcar (lambda (x) (truncate (+ 0.5 (* scale-factor x))))
-                          size)
-                  |Qt.IgnoreAspectRatio| |Qt.SmoothTransformation|)
-               pixmap))))
+           (if (find 0 size)
+               pixmap
+               (progn
+                 (! "fill" pixmap "transparent")
+                 (qlet ((painter "QPainter(QPixmap*)" pixmap))
+                   (x:do-with (! "setRenderHint" painter)
+                     (|QPainter.Antialiasing| t)
+                     (|QPainter.TextAntialiasing| t)
+                     (|QPainter.SmoothPixmapTransform| t))
+                   (! "render" element painter))
+                 (if scale-factor
+                     (! "scaled(QSize,Qt::AspectRatioMode,Qt::TransformationMode)" pixmap
+                        (mapcar (lambda (x) (truncate (+ 0.5 (* scale-factor x))))
+                                size)
+                        |Qt.IgnoreAspectRatio| |Qt.SmoothTransformation|)
+                     pixmap))))))
 
 (let (dummy)
   (defun clear-pixmap (web-element)

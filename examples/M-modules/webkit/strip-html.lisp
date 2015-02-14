@@ -17,7 +17,7 @@
 ;;;
 ;;; (strip "*")                ; oops! (see context menu / reload)
 ;;; 
-;;; (view :div :id "main ")    ; displays "outerHtml" of single element
+;;; (view :div :id "main")     ; displays "outerHtml" of single element
 ;;;
 ;;; (save-file)
 ;;;
@@ -31,6 +31,9 @@
 ;;;
 ;;; (iterate-elements "A" (|setOuterXml| element text)) ; unlink
 ;;;
+
+#-qt-wrapper-functions ; see README-OPTIONAL.txt
+(load (in-home "src/lisp/all-wrappers"))
 
 #+win32 (si:trap-fpe 'floating-point-underflow nil) ; for QWebInspector
 
