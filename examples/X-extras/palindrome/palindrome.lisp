@@ -123,10 +123,10 @@
       (qoverride item "paint(QPainter*,QStyleOptionGraphicsItem*,QWidget*)"
                  (lambda (painter _ _)
                    (x:do-with painter
-                     (|fillRect(QRectF,QColor)| (mapcar '+ (|rect| item) '(1 1 -2 -2)) color)
+                     (|fillRect| (mapcar '+ (|rect| item) '(1 1 -2 -2)) color)
                      (|setFont| *font*)
-                     (|setPen(QColor)| "black")
-                     (|drawText(QRectF,int...)| (|rect| item) |Qt.AlignCenter| text))))
+                     (|setPen| "black")
+                     (|drawText| (|rect| item) |Qt.AlignCenter| text))))
       (push (cons id item) *graphics-items*)
       item))
   (defun id-item (id)
@@ -150,7 +150,7 @@
     (x:do-with trans
       (|setTargetState| state)
       (|addAnimation| animation))
-    (|addTransition(QAbstractTransition*)| state-switcher trans)))
+    (|addTransition| state-switcher trans)))
 
 (let (animations groups)
   (defun add-property-animation (anim-group button property curve-type duration &optional pause)
@@ -261,7 +261,7 @@
     (qconnect group "entered()" *timer* "start()")
     (qoverride *view* "resizeEvent(QResizeEvent*)"
                (lambda (event)
-                 (|fitInView(QRectF)| *view* (|sceneRect| scene))
+                 (|fitInView| *view* (|sceneRect| scene))
                  (qcall-default)))
     ;; change background color on mouse move events outside of view
     (qoverride *main* "mouseMoveEvent(QMouseEvent*)"
@@ -330,10 +330,10 @@
            (font* (qcopy *font*)))
       (|setPointSize| font* (normalize (|pointSize| font*)))
       (x:do-with painter
-        (|fillRect(QRectF,QColor)| (mapcar '+ (|rect| pixmap) '(1 1 -2 -2)) color)
+        (|fillRect| (mapcar '+ (|rect| pixmap) '(1 1 -2 -2)) color)
         (|setFont| font*)
-        (|setPen(QColor)| "black")
-        (|drawText(QRectF,int...)| (|rect| pixmap) |Qt.AlignCenter| text)))
+        (|setPen| "black")
+        (|drawText| (|rect| pixmap) |Qt.AlignCenter| text)))
     (|save| pixmap (ensure-directories-exist (format nil "html/img/~D.png"
                                                      (1+ (- (char-code (char (symbol-name id) 0))
                                                             (char-code #\A))))))))

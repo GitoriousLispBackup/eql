@@ -56,7 +56,7 @@
   (x:let-it (qnew "QBrush")
     (|setStyle| x:it style)
     (when color
-      (|setColor(QColor)| x:it color))))
+      (|setColor| x:it color))))
 
 (defparameter *brush-eyes*      (brush "white"))
 (defparameter *brush-nose*      (brush "black"))
@@ -72,27 +72,27 @@
                                       (|cubicTo| '(-5 32) '(-5 42) '(0 35)))))
 
 (defun paint (mouse painter)
-  (|setBrush(QBrush)| painter (mouse-brush mouse))
-  (|drawEllipse(QRect)| painter '(-10 -20 20 40))
+  (|setBrush| painter (mouse-brush mouse))
+  (|drawEllipse| painter '(-10 -20 20 40))
   ;; eyes
-  (|setBrush(QBrush)| painter *brush-eyes*)
-  (|drawEllipse(QRect)| painter '(-10 -17 8 8))
-  (|drawEllipse(QRect)| painter '(2 -17 8 8))
+  (|setBrush| painter *brush-eyes*)
+  (|drawEllipse| painter '(-10 -17 8 8))
+  (|drawEllipse| painter '(2 -17 8 8))
   ;; nose
-  (|setBrush(QBrush)| painter *brush-nose*)
-  (|drawEllipse(QRect)| painter '(-2 -22 4 4))
+  (|setBrush| painter *brush-nose*)
+  (|drawEllipse| painter '(-2 -22 4 4))
   ;; pupils
   (let ((dir (mouse-eye-direction mouse)))
-    (|drawEllipse(QRectF)| painter (list (- dir 8) -17 4 4))
-    (|drawEllipse(QRectF)| painter (list (+ dir 4) -17 4 4)))
+    (|drawEllipse| painter (list (- dir 8) -17 4 4))
+    (|drawEllipse| painter (list (+ dir 4) -17 4 4)))
   ;; ears
-  (|setBrush(QBrush)| painter (if (null (|collidingItems| (|scene| mouse) mouse))
+  (|setBrush| painter (if (null (|collidingItems| (|scene| mouse) mouse))
                                    *brush-ears*
                                    *brush-colliding*))
-  (|drawEllipse(QRect)| painter '(-17 -12 16 16))
-  (|drawEllipse(QRect)| painter '(1 -12 16 16))
+  (|drawEllipse| painter '(-17 -12 16 16))
+  (|drawEllipse| painter '(1 -12 16 16))
   ;; tail
-  (|setBrush(QBrush)| painter *brush-tail*)
+  (|setBrush| painter *brush-tail*)
   (|drawPath| painter *painter-path-tail*))
 
 (defun advance (mouse step)
@@ -112,9 +112,9 @@
                      (y (dy line)))
                  (sqrt (+ (* x x) (* y y)))))
              (map-from (p)
-               (|mapFromScene(QPointF)| mouse p))
+               (|mapFromScene| mouse p))
              (map-to (p)
-               (|mapToScene(QPointF)| mouse p)))
+               (|mapToScene| mouse p)))
       (let ((line-to-center (append '(0 0) (map-from '(0 0)))))
         (if (> (len line-to-center) 150)
             (let ((angle-to-center (acos (/ (dx line-to-center) (len line-to-center)))))
@@ -136,16 +136,16 @@
                                               ((plusp sin) -0.25)
                                               (t 0))))))
       ;; try not to crash with any other mice
-      (let ((danger-mice (|items(QPolygonF...)| (|scene| mouse)
-                                                (append (map-to '(0 0))
-                                                        (map-to '(-30 -50))
-                                                        (map-to '(30 -50)))
-                                                |Qt.IntersectsItemShape|
-                                                |Qt.AscendingOrder|)))
+      (let ((danger-mice (|items| (|scene| mouse)
+                                  (append (map-to '(0 0))
+                                          (map-to '(-30 -50))
+                                          (map-to '(30 -50)))
+                                  |Qt.IntersectsItemShape|
+                                  |Qt.AscendingOrder|)))
         (dolist (danger-mouse danger-mice)
           (unless (qeql mouse danger-mouse)
             (let* ((line-to-mouse (append '(0 0)
-                                          (|mapFromItem(const QGraphicsItem*,QPointF)| mouse danger-mouse '(0 0))))
+                                          (|mapFromItem| mouse danger-mouse '(0 0))))
                    (angle-to-mouse (acos (/ (dx line-to-mouse) (len line-to-mouse)))))
               (when (minusp (dy line-to-mouse))
                 (setf angle-to-mouse (- +2pi+ angle-to-mouse)))
@@ -171,7 +171,7 @@
           (setf (mouse-eye-direction mouse)
                 (if (< (abs (/ dx 5)) 1) 0 (/ dx 5)))
           (|setRotation| mouse (+ dx (|rotation| mouse)))
-          (|setPos| mouse (|mapToParent(QPointF)| mouse (list 0 (- (+ 3 (* 3 (sin (mouse-speed mouse)))))))))))))
+          (|setPos| mouse (|mapToParent| mouse (list 0 (- (+ 3 (* 3 (sin (mouse-speed mouse)))))))))))))
 
 (defun start ()
   (setf *random-state* (make-random-state t))

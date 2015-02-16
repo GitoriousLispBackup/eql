@@ -74,14 +74,14 @@
       (let ((scale (/ (|value| *scale*)
                       (|maximum| *scale*))))
         (|scale| painter scale scale)))
-    (|drawPixmap(QPoint...)| painter '(0 0) *pixmap*)
+    (|drawPixmap| painter '(0 0) *pixmap*)
     (when (|isSliderDown| *scale*)
       (|showText.QToolTip| (mapcar '+ (|pos| *display*) (|pos| *main*))
                            (format nil "~{~D~^ x ~}" (display-size))))
     (let ((color (|text| *color*)))
       (when (= #.(length "#RRGGBB") (length color))
         (|setOpacity| painter (/ (|value| *opacity*) 100))
-        (|fillRect(QRect,QColor)| painter (|rect| *pixmap*) color)))))
+        (|fillRect| painter (|rect| *pixmap*) color)))))
 
 (defun update (&optional arg)
   (|update| *display*))
@@ -130,7 +130,7 @@
 
 (defun save (&optional (name "image.png") (format "PNG"))
   (let ((*saving* t))
-    (|save| (|grabWidget(QWidget*,QRect).QPixmap| *display* (|rect| *image*))
+    (|save| (|grabWidget.QPixmap| *display* (|rect| *image*))
             name format)))
 
 (start)

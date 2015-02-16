@@ -149,23 +149,23 @@
       (|fill| pixmap "lightyellow")
       (x:do-with painter
         (|setRenderHint| |QPainter.Antialiasing|)
-        (|setPen(QPen)| pen1)
-        (|drawLine(QLine)| (list bx by (+ bx steps) by))
-        (|drawLine(QLine)| (let ((y (+ steps by))) (list bx y (+ bx steps) y)))
-        (|setPen(QPen)| pen2))
+        (|setPen| pen1)
+        (|drawLine| (list bx by (+ bx steps) by))
+        (|drawLine| (let ((y (+ steps by))) (list bx y (+ bx steps) y)))
+        (|setPen| pen2))
       (let (p*)
         (dotimes (x (1+ steps))
           (let ((p (list (+ bx x) (- (+ by steps)
                                      (* steps (|valueForProgress| curve (/ x steps)))))))
-            (|drawLine(QLineF)| painter (append (or p* p) p))
+            (|drawLine| painter (append (or p* p) p))
             (setf p* p))))))
   (defun paint-graph (event)
     (qlet ((p "QPainter(QWidget*)" *graph*))
-      (|drawPixmap(QPoint...)| p '(0 0) pixmap)
+      (|drawPixmap| p '(0 0) pixmap)
       (when progress
         (x:do-with p
-          (|setPen(QColor)| "red")
-          (|drawLine(QLineF)| (list progress 0 progress (+ (* 2 by) steps)))))))
+          (|setPen| "red")
+          (|drawLine| (list progress 0 progress (+ (* 2 by) steps)))))))
   (defun update-graph-progress (ms)
     (let ((max (|value| *duration*)))
       (setf progress (if (= max ms)
@@ -240,7 +240,7 @@
   (let ((grect (qnew "QGraphicsWidget")))
     (qoverride grect "paint(QPainter*,QStyleOptionGraphicsItem*,QWidget*)"
                (lambda (painter _ _)
-                 (|fillRect(QRectF,QColor)| painter (|rect| grect) color)))
+                 (|fillRect| painter (|rect| grect) color)))
     (add-to-items color) ; see *items*
     grect))
 
@@ -256,7 +256,7 @@
     (x:do-with trans
       (|setTargetState| state)
       (|addAnimation| animation))
-    (|addTransition(QAbstractTransition*)| state-switcher trans)))
+    (|addTransition| state-switcher trans)))
 
 (defmacro push* (item list)
   `(setf ,list (nconc ,list (list ,item))))
@@ -384,7 +384,7 @@
     (qconnect group "entered()" *timer* "start()")
     (qoverride *view* "resizeEvent(QResizeEvent*)"
                (lambda (event)
-                 (|fitInView(QRectF)| *view* (|sceneRect| scene))
+                 (|fitInView| *view* (|sceneRect| scene))
                  (qcall-default)))))
 
 (progn

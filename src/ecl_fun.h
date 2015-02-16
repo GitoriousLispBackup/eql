@@ -217,6 +217,7 @@ typedef QPair<QByteArray, void*> MetaArg;
 typedef QList<MetaArg>           MetaArgList;
 typedef QListIterator<MetaArg>   MetaArgIterator;
 typedef QList<QByteArray>        StrList;
+typedef QList<int>               IntList;
 
 class QByteArray;
 class QObject;

@@ -89,7 +89,7 @@
       (|addWidget| hbox2 w))
     (dolist (l (list hbox1 hbox2))
       (!"addLayout" layout l))
-    (|setStretchFactor(QWidget*...)| hbox2 help 1)
+    (|setStretchFactor| hbox2 help 1)
     (|setLayout| main layout)
     (qconnect *level* "valueChanged(int)" (lambda (val) (set-maze) (draw)))
     (qconnect zoom-in  "clicked()" (lambda () (zoom :in)))

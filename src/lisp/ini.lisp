@@ -692,17 +692,20 @@
 (defgeneric the-qt-object (object)
   (:documentation "Return the QT-OBJECT to be used whenever OBJECT is used as argument to any EQL function."))
 
-(defun ensure-qt-object (object)
+(defun ensure-qt-object (object &optional quiet)
   "args: (object)
    Returns the <code>qt-object</code> of the given class/struct (see method <code>the-qt-object</code> in example <code>X-extras/CLOS-encapsulation.lisp</code>).<br>This function is used internally whenever a <code>qt-object</code> argument is expected."
   (cond ((null object) ; e.g. passing NIL as parent widget: (qnew "QWidget(QWidget*)" nil)
          nil)
         ((qt-object-p object)
          object)
-        ((let ((object* (the-qt-object object)))
+        ((let ((object* (if quiet
+                            (ignore-errors (the-qt-object object))
+                            (the-qt-object object))))
            (if (qt-object-p object*)
                object*
-               (error "THE-QT-OBJECT returned ~S for class ~A, which is not of required type QT-OBJECT." object* object))))))
+               (unless quiet
+                 (error "THE-QT-OBJECT returned ~S for class ~A, which is not of required type QT-OBJECT." object* object)))))))
 
 (alias qnew  qnew-instance)
 (alias qdel  qdelete)

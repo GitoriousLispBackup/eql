@@ -65,7 +65,7 @@
     (|setWindowTitle| *web-view* name)
     (qlet ((url "QUrl(QString)" name))
       (x:do-with *web-view*
-        (|load(QUrl)| url)
+        (|load| url)
         (|show|)))))
 
 (defun open-url ()

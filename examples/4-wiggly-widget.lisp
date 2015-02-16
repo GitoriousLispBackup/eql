@@ -44,7 +44,7 @@
          (metrics "QFontMetrics(QFont)" (|font| *wiggly*)))
     (let* ((txt (|text| *edit*))
            (x (/ (- (|width| *wiggly*)
-                    (|width(QString)| metrics txt))
+                    (|width| metrics txt))
                  2))
            (y (/ (- (+ (|height| *wiggly*) (|ascent| metrics))
                     (|descent| metrics))
@@ -55,11 +55,11 @@
               (ch (char txt i)))
           (|setColor| pen (|fromHsv.QColor| (* 16 (- 15 ix)) 255 191))
           (x:do-with painter
-            (|setPen(QPen)| pen)
-            (|drawText(QPoint...)| (list (floor x)
-                                         (floor (- y (/ (* h (svref *curve* ix)) 400))))
-                                   (string ch)))
-          (incf x (|width(QChar)| metrics ch)))))))
+            (|setPen| pen)
+            (|drawText| (list (floor x)
+                              (floor (- y (/ (* h (svref *curve* ix)) 400))))
+                        (string ch)))
+          (incf x (|width| metrics ch)))))))
 
 (defun timeout ()
   (incf *step*)
@@ -68,4 +68,3 @@
 (progn
   (start)
   (qlater (lambda () (in-package :wiggly))))
-

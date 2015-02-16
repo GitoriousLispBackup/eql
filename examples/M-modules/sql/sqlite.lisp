@@ -7,7 +7,7 @@
 
 (qrequire :sql)
 
-(defvar *database*   (|addDatabase(QString).QSqlDatabase| "QSQLITE"))
+(defvar *database*   (|addDatabase.QSqlDatabase| "QSQLITE"))
 (defvar *table-view* (qnew "QTableView"
                            "windowTitle" "sqlite"))
 

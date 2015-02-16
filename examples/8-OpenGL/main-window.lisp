@@ -89,17 +89,17 @@
   (flet ((action (name)
            (cdr (assoc name actions))))
     (let* ((menu-bar (|menuBar| *me*))
-           (file-menu (|addMenu(QString)| menu-bar (tr "&File")))
-           (help-menu (|addMenu(QString)| menu-bar (tr "&Help"))))
+           (file-menu (|addMenu| menu-bar (tr "&File")))
+           (help-menu (|addMenu| menu-bar (tr "&Help"))))
       (x:do-with file-menu
-        (|addAction(QAction*)| (action :render-into-pixmap))
-        (|addAction(QAction*)| (action :grab-frame-buffer))
-        (|addAction(QAction*)| (action :clear-pixmap))
+        (|addAction| (action :render-into-pixmap))
+        (|addAction| (action :grab-frame-buffer))
+        (|addAction| (action :clear-pixmap))
         (|addSeparator|)
-        (|addAction(QAction*)| (action :exit)))
+        (|addAction| (action :exit)))
       (x:do-with help-menu
-        (|addAction(QAction*)| (action :about))
-        (|addAction(QAction*)| (action :about-qt))))))
+        (|addAction| (action :about))
+        (|addAction| (action :about-qt))))))
 
 (defun create-slider (changed setter)
   (let ((slider (qnew "QSlider(Qt::Orientation)" |Qt.Horizontal|
