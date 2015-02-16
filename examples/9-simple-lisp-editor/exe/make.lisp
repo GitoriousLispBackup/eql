@@ -3,8 +3,6 @@
 
 (require :cmp)
 
-(setf *break-on-signals* 'error)
-
 #+msvc
 (setf c::*compile-in-constants* t)
 
