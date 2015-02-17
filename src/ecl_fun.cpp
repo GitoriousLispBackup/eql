@@ -611,7 +611,8 @@ static const char* eventName(QEvent::Type type) {
             name = "QEvent"; }
     return name; }
 
-static QByteArray qtObjectName(cl_object l_obj) {
+static QByteArray qtObjectName(cl_object l_obj, const QByteArray& type = QByteArray()) {
+    STATIC_SYMBOL_PKG (s_qt_object_p,      "QT-OBJECT-P",      "EQL")
     STATIC_SYMBOL_PKG (s_ensure_qt_object, "ENSURE-QT-OBJECT", "EQL")
     STATIC_SYMBOL_PKG (s_qt_object_id,     "QT-OBJECT-ID",     "EQL")
     // 'primitives'
@@ -632,9 +633,11 @@ static QByteArray qtObjectName(cl_object l_obj) {
     else if(cl_vectorp(l_obj) == Ct) {
         name = "QVector"; }
     // qt-object
-    cl_object l_obj2 = cl_funcall(3, s_ensure_qt_object, l_obj, Ct);
-    if(l_obj2 != Cnil) {
-        name = QtObject::idToClassName(toInt(cl_funcall(2, s_qt_object_id, l_obj2))); }
+    // (this is carefully optimized, in a probably non-obvious way, because THE-QT-OBJECT is really slow)
+    if(type.isNull() || LObjects::q_names.contains(type) || LObjects::n_names.contains(type)) {
+        l_obj = cl_funcall(3, s_ensure_qt_object, l_obj, Ct); }
+    if(cl_funcall(2, s_qt_object_p, l_obj) == Ct) {
+        name = QtObject::idToClassName(toInt(cl_funcall(2, s_qt_object_id, l_obj))); }
     return name; }
 
 QtObject toQtObject(cl_object l_obj, cl_object l_cast, bool* qobject_align) {
@@ -1963,6 +1966,29 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
                     // type ambiguity: find method for matching type list
                     // (can be avoided by passing the type list on ambiguity, resulting in better performance)
                     if(method_i.size() > 1) {
+                        // verify if first option matches already, since latest matching option will be put in front of
+                        // the list, resulting in auto-optimaziation of inner loops (e.g. "examples/4-wiggly-widget")
+                        int m1 = method_i.at(0);
+                        StrList types1(mo->method(m1).parameterTypes());
+                        while((l_do_args != Cnil) && (i < MAX_ARGS)) {
+                            ++i;
+                            QByteArray curr(types1.at(i));
+                            if(curr.endsWith('*')) {
+                                curr.truncate(curr.length() - 1); }
+                            QByteArray typeName(qtObjectName(cl_car(l_do_args), curr));
+                            bool match = (inherits(typeName, curr) ||
+                                         typeName.contains(curr) ||
+                                         (curr.contains("::") && (typeName == "int")) ||
+                                         (curr.contains("QList") && typeName.contains("QList")) ||
+                                         (curr.contains("QVector") && typeName.contains("QVector")));
+                            if(!match) {
+                                goto ok1; }
+                            l_do_args = cl_cdr(l_do_args); }
+                        goto ok3;
+ok1:
+                        i = i_start;
+                        l_do_args = l_args;
+                        IntList method_i_orig = method_i;
                         while((l_do_args != Cnil) && (i < MAX_ARGS)) {
                             ++i;
                             cl_object l_arg = cl_car(l_do_args);
@@ -1983,13 +2009,22 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
                                     mm = mo->method(method_index);
                                     types = types_i;
                                     if(types.size() == (i + 1)) { // last argument
-                                        goto ok; }}}
+                                        goto ok2; }}}
                             if(matches.size() == 1) {
-                                goto ok; }
+                                goto ok2; }
                             else if(matches.size() > 1) {
                                 method_i = matches; }
-                            l_do_args = cl_cdr(l_do_args); }}
-ok:
+                            l_do_args = cl_cdr(l_do_args); }
+ok2:
+                        // put method_index on first place (optimitazion)
+                        method_i = method_i_orig;
+                        method_i.removeOne(method_index);
+                        method_i.prepend(method_index);
+                        if(method || qt_eql) {
+                            i_method[cacheName] = method_i; }
+                        else {
+                            i_slot[cacheName] = method_i; }}
+ok3:
                     l_do_args = l_args;
                     already_checked = i;
                     i = i_start;
@@ -2008,7 +2043,7 @@ ok:
                                         QByteArray name1(types.at(i));
                                         if(name1.endsWith('*')) {
                                             name1.truncate(name1.length() - 1); }
-                                        QByteArray name2(qtObjectName(l_arg));
+                                        QByteArray name2(qtObjectName(l_arg, name1));
                                         if(!inherits(name2, name1)) {
                                             type_msg(name1, name2);
                                             types_ok = false;

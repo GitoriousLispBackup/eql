@@ -14,6 +14,13 @@
 ;;; slower than EQL, and conses a lot more.
 ;;;
 
+;;; Note for function PAINT:
+;;;
+;;; the difference between providing (ambiguous) type lists and omitting them is marginal,
+;;; because inner loops are auto-optimizing, see "ecl_fun.cpp::qinvoke_method2()"
+#+eql
+(pushnew :type-lists *features*)
+
 #+eql
 (progn
   #-qt-wrapper-functions ; see README-OPTIONAL.txt
@@ -158,22 +165,31 @@
             metrics (qnew "QFontMetrics(QFont)" (|font| *wiggly*))))
     (let* ((text (|text| *edit*))
            (x (/ (- (|width| *wiggly*)
-                    (|width(QString)| metrics text))
+                    (|width| metrics text))
                  2))
            (y (/ (- (+ (|height| *wiggly*) (|ascent| metrics))
                     (|descent| metrics))
                  2))
            (h (|height| metrics)))
-      (|begin(QWidget*)| painter *wiggly*)
+      (|begin| painter *wiggly*)
       (dotimes (i (length text))
         (let ((ix (mod (+ i *step*) 16))
               (ch (char text i)))
           (|setColor| pen (|fromHsv.QColor| (* 16 (- 15 ix)) 255 191))
-          (x:do-with painter
-            (|setPen(QPen)| pen)
-            (|drawText(QPoint...)| (list (floor x) (floor (- y (/ (* h (svref *sinus* ix)) 400))))
-                                   (string ch)))
-          (incf x (|width(QChar)| metrics ch))))
+          #+type-lists
+          (progn
+            (x:do-with painter
+              (|setPen(QPen)| pen)
+              (|drawText(QPoint...)| (list (floor x) (floor (- y (/ (* h (svref *sinus* ix)) 400))))
+                                     (string ch)))
+            (incf x (|width(QChar)| metrics ch)))
+          #-type-lists
+          (progn
+            (x:do-with painter
+              (|setPen| pen)
+              (|drawText| (list (floor x) (floor (- y (/ (* h (svref *sinus* ix)) 400))))
+                          (string ch)))
+            (incf x (|width| metrics ch)))))
       (|end| painter))))
 
 (defvar *count* 0)
