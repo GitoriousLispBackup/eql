@@ -1,4 +1,4 @@
-;;; copyright (c) 2010-2013 Polos Ruetz
+;;; copyright (c) Polos Ruetz
 ;;;
 ;;; Allows to visually select (mouse click) any (child) widget.
 ;;; On selecting, the widget will be highlighted, and qsel:*q* will be set to the latest selected widget. 

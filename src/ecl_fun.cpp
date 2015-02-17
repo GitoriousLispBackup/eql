@@ -1,4 +1,4 @@
-// copyright (c) 2010-2014 Polos Ruetz
+// copyright (c) Polos Ruetz
 
 #include "ecl_fun.h"
 #include "eql.h"

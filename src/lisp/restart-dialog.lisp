@@ -1,4 +1,4 @@
-;;; copyright (c) 2010-2013 Polos Ruetz
+;;; copyright (c) Polos Ruetz
 ;;;
 ;;; Needed for command line option "-qtpl", where READ runs in its own thread.
 ;;; All debug input is handled in a GUI dialog.

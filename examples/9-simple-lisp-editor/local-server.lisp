@@ -1,4 +1,4 @@
-;;; copyright (c) 2010-2013 Polos Ruetz
+;;; copyright (c) Polos Ruetz
 
 #-qt-wrapper-functions ; see README-OPTIONAL.txt
 (load (in-home "src/lisp/all-wrappers"))

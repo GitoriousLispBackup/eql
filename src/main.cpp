@@ -1,4 +1,4 @@
-// copyright (c) 2010-2013 Polos Ruetz
+// copyright (c) Polos Ruetz
 
 #include <QApplication>
 #include <QtCore>

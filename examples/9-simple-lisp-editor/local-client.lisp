@@ -1,4 +1,4 @@
-;;; copyright (c) 2010-2013 Polos Ruetz
+;;; copyright (c) Polos Ruetz
 
 (unless (eql:qrequire :network)
   (error "[EQL] module :network required")

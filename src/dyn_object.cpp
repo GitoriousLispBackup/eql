@@ -1,4 +1,4 @@
-// copyright (c) 2010-2013 Polos Ruetz
+// copyright (c) Polos Ruetz
 
 #include "dyn_object.h"
 #include "ecl_fun.h"

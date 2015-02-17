@@ -1,4 +1,6 @@
-;;; copyright (c) 2010-2013 Polos Ruetz
+;;; copyright (c) Polos Ruetz
+;;;
+;;; (please note that this is an outdated experiment)
 ;;;
 ;;; A basic and experimental(!) Lisp editor, featuring:
 ;;;
