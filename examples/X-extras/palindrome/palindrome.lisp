@@ -228,7 +228,8 @@
           (color (second item)))
       (dolist (id (third item))
         (new-graphics-item text (if (eql 'm id) (setf *color-m* color) color) id))))
-  (let ((scene      (qnew "QGraphicsScene(QRectF)" (append '(0 0) *view-size*)))
+  (let ((scene      (qnew "QGraphicsScene"
+                          "sceneRect" (append '(0 0) *view-size*)))
         (machine    (qnew "QStateMachine"))
         (group      (qnew "QState"
                           "objectName" "group"))

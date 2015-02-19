@@ -311,7 +311,8 @@
          (item3 (new-graphics-rect-widget "lightblue"))
          (item4 (new-graphics-rect-widget "lightyellow"))
          (items (list item1 item2 item3 item4))
-         (scene      (qnew "QGraphicsScene(qreal...)" 0 0 300 300))
+         (scene      (qnew "QGraphicsScene"
+                           "sceneRect" '(0 0 300 300)))
          (machine    (qnew "QStateMachine"))
          (group      (qnew "QState"
                            "objectName" "group"))

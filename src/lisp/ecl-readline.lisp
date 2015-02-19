@@ -1,4 +1,6 @@
 ;;;;
+;;;  *** TO BE RECOMPILED ON EVERY UPGRADE OF YOUR ECL VERSION ***
+;;;
 ;;;; *** PLEASE SEE "N.B." COMMENTS ***
 ;;;;
 ;;;; -------------------------------------------------------------------------------

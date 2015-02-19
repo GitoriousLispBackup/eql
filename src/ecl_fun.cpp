@@ -17,6 +17,7 @@ static bool _garbage_collection_ =   true;
 static const char SIG = '2';
 static const char SLO = '1';
 static bool _ok_ = false;
+static StrList _static_cstrings_;
 static const QMetaObject* staticQtMetaObject = QtMetaObject::get();
 
 META_TYPE (T_bool_ok_pointer,                  bool*)
@@ -211,11 +212,6 @@ cl_object error_msg2(cl_object l_fun, cl_object l_args) { // to be called from L
     ecl_process_env()->nvalues = 1;
     error_msg(toCString(l_fun), l_args);
     return Cnil; }
-
-static char** to_cstring_ptr(cl_object l_str) {
-    if(ECL_BASE_STRING_P(l_str)) {
-        return (char**)&l_str->base_string.self; }
-    return 0; }
 
 static const QMetaObject* staticMetaObject(QtObject o) {
     return LObjects::staticMetaObject(QByteArray(), o.id); }
@@ -615,7 +611,7 @@ static QByteArray qtObjectName(cl_object l_obj, const QByteArray& type = QByteAr
     STATIC_SYMBOL_PKG (s_qt_object_p,      "QT-OBJECT-P",      "EQL")
     STATIC_SYMBOL_PKG (s_ensure_qt_object, "ENSURE-QT-OBJECT", "EQL")
     STATIC_SYMBOL_PKG (s_qt_object_id,     "QT-OBJECT-ID",     "EQL")
-    // 'primitives'
+    // 'primitives' first
     QByteArray name;
     if(cl_integerp(l_obj) == Ct) {
         name = "int"; }
@@ -1179,7 +1175,13 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
                 void** v = new void*((void*)l);
                 p = v; }
             else if("const char*" == sType) {
-                p = to_cstring_ptr(l_arg); }}
+                QByteArray ba(toCString(l_arg));
+                int i = _static_cstrings_.indexOf(ba);
+                if(i == -1) {
+                    i = _static_cstrings_.size();
+                    _static_cstrings_ << ba; }
+                const char** s = new const char*(_static_cstrings_.at(i).constData());
+                p = s; }}
 #if QT_VERSION < 0x040700
         else if(T_QEasingCurve == n)                     p = new QEasingCurve(*toQEasingCurvePointer(l_arg));
 #endif
@@ -1434,7 +1436,7 @@ cl_object to_lisp_arg(const MetaArg& arg) {
                 l_ret = ecl_make_integer(*i); }}}
     return l_ret; }
 
-static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
+static void clearMetaArg(const MetaArg& arg) {
     void* p = arg.second;
     QByteArray sType(arg.first);
     const int n = QMetaType::type(sType);
@@ -1443,8 +1445,7 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
         delete (void**)p; }
     else if(sType.endsWith('*')) {
         if("const char*" == sType) {
-            if(is_ret) {
-                delete (char**)p; }}
+            delete (char**)p; }
         else {
             delete (void**)p; }}
     // enums
@@ -1963,11 +1964,10 @@ cl_object qinvoke_method2(cl_object l_obj, cl_object l_cast, cl_object l_name, c
                     bool types_ok = true;
                     int i_start = i;
                     int already_checked = -1;
-                    // type ambiguity: find method for matching type list
-                    // (can be avoided by passing the type list on ambiguity, resulting in better performance)
+                    // type ambiguity (same number of arguments): find method for matching type list
                     if(method_i.size() > 1) {
-                        // verify if first option matches already, since latest matching option will be put in front of
-                        // the list, resulting in auto-optimaziation of inner loops (e.g. "examples/4-wiggly-widget")
+                        // verify if first option already matches, since latest matching option will be put
+                        // in front of the list (auto-optimization of inner loops)
                         int m1 = method_i.at(0);
                         StrList types1(mo->method(m1).parameterTypes());
                         while((l_do_args != Cnil) && (i < MAX_ARGS)) {
@@ -2016,7 +2016,7 @@ ok1:
                                 method_i = matches; }
                             l_do_args = cl_cdr(l_do_args); }
 ok2:
-                        // put method_index on first place (optimitazion)
+                        // put method_index in front (optimization for repeated calls)
                         method_i = method_i_orig;
                         method_i.removeOne(method_index);
                         method_i.prepend(method_index);
@@ -2068,7 +2068,7 @@ ok3:
                                 EQL::return_value_p = true;
                                 l_ret = to_lisp_arg(ret);
                                 EQL::return_value_p = false;
-                                clearMetaArg(ret, true); }
+                                clearMetaArg(ret); }
                             const cl_env_ptr l_env = ecl_process_env();
                             l_env->nvalues = 2;
                             l_env->values[0] = l_ret;

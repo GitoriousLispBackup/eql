@@ -3,8 +3,6 @@
 
 (require :cmp)
 
-(setf *break-on-signals* 'error)
-
 (defparameter *lisp-files* '("input-hook"
                              "top-level"
                              "query-dialog"

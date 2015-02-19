@@ -3,8 +3,6 @@
 
 (require :cmp)
 
-(setf *break-on-signals* 'error)
-
 (defparameter *lisp-files* '("local-client"
                              "settings"
                              "editor"))

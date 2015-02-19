@@ -155,18 +155,15 @@
   (defun in-home (&rest files)
     (apply 'concatenate 'string home files)))
 
-(defun %signal/slot (ch name)
-  (values (read-from-string (format nil "\"~C~A\"" ch name)))) ; force creation of simple-string literal
-
 (defun qsignal (name)
   "args: (name)
    Needed in functions which expect a <code>const char*</code> Qt signal (not needed in <code>qconnect</code>)."  
-  (%signal/slot #\2 name))
+  (concatenate 'string "2" name))
 
 (defun qslot (name)
   "args: (name)
    Needed in functions which expect a <code>const char*</code> Qt slot (not needed in <code>qconnect</code>)."  
-  (%signal/slot #\1 name))
+  (concatenate 'string "1" name))
 
 (defun qenums (class-name &optional enum-name)
   (%qenums class-name enum-name))

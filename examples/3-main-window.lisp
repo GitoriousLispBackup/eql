@@ -53,6 +53,6 @@
   (let ((file (|getSaveFileName.QFileDialog|)))
     (unless (x:empty-string file)
       (with-open-file (s (os-pathname file) :direction :output :if-exists :supersede)
-        (write-string (|html| *editor*) s)))))
+        (write-string (|toHtml| *editor*) s)))))
 
 (start)
