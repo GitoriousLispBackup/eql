@@ -17,7 +17,7 @@ static bool _garbage_collection_ =   true;
 static const char SIG = '2';
 static const char SLO = '1';
 static bool _ok_ = false;
-static StrList _static_cstrings_;
+static StrList _cstring_buffer_;
 static const QMetaObject* staticQtMetaObject = QtMetaObject::get();
 
 META_TYPE (T_bool_ok_pointer,                  bool*)
@@ -1176,11 +1176,8 @@ static MetaArg toMetaArg(const QByteArray& sType, cl_object l_arg) {
                 p = v; }
             else if("const char*" == sType) {
                 QByteArray ba(toCString(l_arg));
-                int i = _static_cstrings_.indexOf(ba);
-                if(i == -1) {
-                    i = _static_cstrings_.size();
-                    _static_cstrings_ << ba; }
-                const char** s = new const char*(_static_cstrings_.at(i).constData());
+                _cstring_buffer_ << ba;
+                const char** s = new const char*(ba.constData());
                 p = s; }}
 #if QT_VERSION < 0x040700
         else if(T_QEasingCurve == n)                     p = new QEasingCurve(*toQEasingCurvePointer(l_arg));
@@ -1436,7 +1433,7 @@ cl_object to_lisp_arg(const MetaArg& arg) {
                 l_ret = ecl_make_integer(*i); }}}
     return l_ret; }
 
-static void clearMetaArg(const MetaArg& arg) {
+static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
     void* p = arg.second;
     QByteArray sType(arg.first);
     const int n = QMetaType::type(sType);
@@ -1445,6 +1442,9 @@ static void clearMetaArg(const MetaArg& arg) {
         delete (void**)p; }
     else if(sType.endsWith('*')) {
         if("const char*" == sType) {
+            if(!is_ret) {
+                if(!_cstring_buffer_.isEmpty()) {
+                    _cstring_buffer_.removeLast(); }}
             delete (char**)p; }
         else {
             delete (void**)p; }}
@@ -2068,7 +2068,7 @@ ok3:
                                 EQL::return_value_p = true;
                                 l_ret = to_lisp_arg(ret);
                                 EQL::return_value_p = false;
-                                clearMetaArg(ret); }
+                                clearMetaArg(ret, true); }
                             const cl_env_ptr l_env = ecl_process_env();
                             l_env->nvalues = 2;
                             l_env->values[0] = l_ret;
