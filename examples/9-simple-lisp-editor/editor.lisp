@@ -460,10 +460,10 @@
                             (set-current-item item begin)
                             (! "clearSelection" *eql-completer*)))))
                 (let ((fun (qt-fun pos)))
-                  (if (find fun '(:qnew :qfun))
+                  (if (find fun '(:qnew :qnew* :qfun))
                       ;; show object name completer?
                       (when (char= #\" pos-char)
-                        (completer (qobject-names) (if (eql :qnew fun) :qnew :qfun-static))
+                        (completer (qobject-names) (if (find fun '(:qnew :qnew*)) :qnew :qfun-static))
                         (return-from cursor-position-changed))
                       (flet ((ending (start)
                                (if (< start pos)
@@ -483,7 +483,8 @@
                                                  global))))
                         (case pos-char
                           (#\(
-                           (cond ((x:when-it (qt-pos :qnew)
+                           (cond ((x:when-it (or (qt-pos :qnew)
+                                                 (qt-pos :qnew*))
                                     ;; show QNEW constructor completer?
                                     (when (> pos x:it)
                                       (x:when-it* (position #\Q line :start x:it)
@@ -708,7 +709,7 @@
                          (when (and (find (first el) '(defconstant defparameter defvar))
                                     (eql var (second el)))
                            (case (first (third el))
-                             (qnew
+                             ((qnew qnew*)
                               (return-from find-in-source
                                 (class-only (second (third el)))))
                              (qload-ui
@@ -725,7 +726,7 @@
                                   (unless (atom curr)
                                     (when (eql var (first curr))
                                       (case (first (second curr))
-                                        (qnew
+                                        ((qnew qnew*)
                                            (setf found (second (second curr))))
                                         (qfind-child
                                            (setf found (qui-class (eval (second (find-in-source (second (second curr)) code nil :exp)))

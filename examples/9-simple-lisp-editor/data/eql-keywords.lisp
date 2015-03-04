@@ -48,6 +48,8 @@
   "qmsg"
   "qnew"
   "qnew-instance"
+  "qnew*"
+  "qnew-instance*"
   "qnull"
   "qnull-object"
   "qobject-names"

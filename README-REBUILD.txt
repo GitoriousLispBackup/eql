@@ -4,6 +4,8 @@ REBUILD STEPS
 Change to eql/src/ and do:
 
 1) remove directory tmp/
+   remove slime/thread-safe.fas*
+   remove src/lisp/ecl-readline.fas* (only on upgrading ECL; to recompile manually)
 
 2) ecl -shell make-eql-lib.lisp
 

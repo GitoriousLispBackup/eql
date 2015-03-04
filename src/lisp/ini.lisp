@@ -474,8 +474,19 @@
    Similar to <code>qapropos</code>, returning the results as nested list."
   (%qapropos (%string-or-nil name) class type))
 
-(defun qnew-instance (name &rest args)
-  (%qnew-instance name args))
+(defun qnew-instance (name &rest arguments)
+  (%qnew-instance name arguments))
+
+(defun qnew-instance* (name &rest arguments)
+  "args: (class-name &rest arguments/properties)
+   alias: qnew*
+   Convenience function for the REPL.<br>Same as <code>qnew</code>, but showing the object immediately (if of type <code>QWidget</code>)."
+  (let ((obj (%qnew-instance name arguments)))
+    (when (and obj
+               (plusp (qt-object-id obj))
+               (! "isWidgetType" obj))
+      (! "show" obj))
+    obj))
 
 (defun qinvoke-method (object function-name &rest arguments)
   (%qinvoke-method object nil function-name arguments))
@@ -705,6 +716,7 @@
                  (error "THE-QT-OBJECT returned ~S for class ~A, which is not of required type QT-OBJECT." object* object)))))))
 
 (alias qnew  qnew-instance)
+(alias qnew* qnew-instance*)
 (alias qdel  qdelete)
 (alias qget  qproperty)
 (alias qset  qset-property)
@@ -761,6 +773,8 @@
                   (cons 'qmsg                 '(x))
                   (cons 'qnew                 '(class-name &rest arguments/properties))
                   (cons 'qnew-instance        '(class-name &rest arguments/properties))
+                  (cons 'qnew*                '(class-name &rest arguments/properties))
+                  (cons 'qnew-instance*       '(class-name &rest arguments/properties))
                   (cons 'qnull                '(object))
                   (cons 'qnull-object         '(object))
                   (cons 'qobject-names        '(&optional type))

@@ -8,7 +8,7 @@
 TESTED WITH
 ===========
 
-* ECL 11.1.1 / 12.7.1 / 12.12.1 / 13.5.1 / git 2015-02-18 (all: threads + unicode)
+* ECL 11.1.1 / 12.7.1 / 12.12.1 / 13.5.1 / 15.2.21 (all: threads + unicode)
 * Qt 4.6 (not recommended), 4.7, 4.8
 * Linux / OSX 10.4 / Windows XP, 7 (MSVC 2008, 2010)
 

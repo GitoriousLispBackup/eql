@@ -96,6 +96,9 @@
   qprocess-events)
 
 (wrap-in-qrun*
+  qproperties object &optional (depth 1))
+
+(wrap-in-qrun*
   (qquit qq) &optional (exit-status 0) (kill-all-threads t))
 
 (wrap-in-qrun*

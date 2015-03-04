@@ -213,12 +213,12 @@ cl_object error_msg2(cl_object l_fun, cl_object l_args) { // to be called from L
     error_msg(toCString(l_fun), l_args);
     return Cnil; }
 
-static const QMetaObject* staticMetaObject(QtObject o) {
-    return LObjects::staticMetaObject(QByteArray(), o.id); }
+static const QMetaObject* staticMetaObject(const QtObject& qt) {
+    return LObjects::staticMetaObject(QByteArray(), qt.id); }
 
-static const QMetaObject* methodMetaObject(QtObject q) {
-    QObject* o = q.isQObject() ? LObjects::Q[q.id - 1] : LObjects::N[-q.id - 1];
-    return o ? o->metaObject() : 0; }
+static const QMetaObject* methodMetaObject(const QtObject& qt) {
+    QObject* obj = qt.isQObject() ? LObjects::Q[qt.id - 1] : LObjects::N[-qt.id - 1];
+    return obj ? obj->metaObject() : 0; }
 
 static const QMetaObject* methodMetaObjectFromName(const QByteArray& name, bool qobject) {
     const QMetaObject* mo = 0;
@@ -1442,9 +1442,8 @@ static void clearMetaArg(const MetaArg& arg, bool is_ret = false) {
         delete (void**)p; }
     else if(sType.endsWith('*')) {
         if("const char*" == sType) {
-            if(!is_ret) {
-                if(!_cstring_buffer_.isEmpty()) {
-                    _cstring_buffer_.removeLast(); }}
+            if(!is_ret && !_cstring_buffer_.isEmpty()) {
+                _cstring_buffer_.removeLast(); }
             delete (char**)p; }
         else {
             delete (void**)p; }}
